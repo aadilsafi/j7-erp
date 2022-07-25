@@ -29,7 +29,26 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class SiteConfigrations extends Model
+class SiteConfigration extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'site_id',
+        'site_max_floors',
+        'floor_prefix',
+        'unit_number_digits',
+    ];
+
+    public $requestRules = [
+        'site_id' => 'required',
+        'site_max_floors' => 'required',
+        'floor_prefix' => 'required',
+        'unit_number_digits' => 'required',
+    ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 }

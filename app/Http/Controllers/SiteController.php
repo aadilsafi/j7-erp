@@ -174,9 +174,12 @@ class SiteController extends Controller
     public function configView(Request $request, $id)
     {
         try {
-            $site = (new Site())->find(decryptParams($id))->with('siteConfiguration')->first();
+            $site = (new Site())->find(decryptParams($id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {
-                // dd($site);
+
+                // foreach ($site->statuses as $key => $value) {
+                //     // dd($value->name);
+                // }
                 return view('app.sites.configs', ['site' => $site]);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));

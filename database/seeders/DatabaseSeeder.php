@@ -19,11 +19,13 @@ class DatabaseSeeder extends Seeder
             PermissionTableSeeder::class,
             UserTableSeeder::class,
             CountryTableSeeder::class,
+            StatusTableSeeder::class,
             StatesTableSeeder::class,
             CityTableSeeder::class,
             SiteTableSeeder::class,
             TypeSeeder::class,
             AdditionalCostsTableSeeder::class,
+            SiteStatusPivotTableSeeder::class,
         ]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Status
@@ -27,5 +28,25 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Status extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'default',
+    ];
+
+    public $requestRules = [
+        'name' => 'required',
+        'default' => 'required',
+    ];
+
+        /*
+    **
+    * The roles that belong to the user.
+    */
+    public function site()
+    {
+        return $this->belongsToMany(Site::class);
+    }
+
 }

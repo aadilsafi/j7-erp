@@ -74,7 +74,15 @@ class Site extends Model
 
     public function siteConfiguration()
     {
-        return $this->hasOne(SiteConfigration::class);
+        return $this->hasOne(SiteConfigration::class, 'site_id');
     }
 
+    /*
+    **
+    * The roles that belong to the status.
+    */
+    public function statuses()
+    {
+        return $this->belongsToMany(Status::class);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Site;
+use App\Models\Status;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,10 @@ class SiteTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Site())->create([
+
+        $statuses = (new Status())->all();
+
+        $site = (new Site())->create([
             'name' => 'Aadil Heights',
             'city_id' => 1,
             'address' => 'some random address',

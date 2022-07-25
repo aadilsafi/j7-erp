@@ -163,4 +163,19 @@ class SiteController extends Controller
             return redirect()->route('sites.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
+
+    public function configView(Request $request, $id)
+    {
+        try {
+            $site = (new Site())->find(decryptParams($id));
+            if ($site && !empty($site)) {
+
+                dd($site);
+                return view('app.sites.configs', ['site' => $site]);
+            }
+            return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
+        } catch (Exception $ex) {
+            return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
 }

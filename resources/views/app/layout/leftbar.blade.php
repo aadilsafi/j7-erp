@@ -65,6 +65,7 @@
                     <span class="menu-title text-truncate" data-i18n="Email">{{ __('lang.leftbar.dashboard') }}</span>
                 </a>
             </li>
+
             <li class="navigation-header">
                 <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
                 <i data-feather="more-horizontal"></i>
@@ -152,7 +153,7 @@
             </li>
 
             {{-- Sites Menu --}}
-            <li class="nav-item ">
+            {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather="shield"></i>
                     <span class="menu-title text-truncate" data-i18n="Sites">Sites</span>
@@ -173,7 +174,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             {{-- Additional Costs Menu --}}
             <li class="nav-item ">
@@ -198,6 +199,20 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="navigation-header">
+                <span data-i18n="Others">Configurations</span>
+                <i data-feather="more-horizontal"></i>
+            </li>
+
+            <li
+                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>

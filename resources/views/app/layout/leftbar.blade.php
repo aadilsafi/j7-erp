@@ -124,6 +124,20 @@
                 </ul>
             </li>
 
+
+            <li class="navigation-header">
+                <span data-i18n="Others">Configurations</span>
+                <i data-feather="more-horizontal"></i>
+            </li>
+
+            <li
+                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
+                </a>
+            </li>
+
             <li class="navigation-header">
                 <span data-i18n="Others">Others</span>
                 <i data-feather="more-horizontal"></i>
@@ -199,20 +213,6 @@
                     </li>
                 </ul>
             </li>
-
-            <li class="navigation-header">
-                <span data-i18n="Others">Configurations</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
-
-            <li
-                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
-                    <i data-feather="home"></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
-                </a>
-            </li>
-
         </ul>
     </div>
 </div>

@@ -40,7 +40,7 @@ Route::group([
         return redirect()->route('login.view');
     });
 
-    Route::group(['middleware' => ['auth']], function () {
+    Route::group(['middleware' => ['auth', 'permission']], function () {
         // Route::group(['middleware' => ['auth']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -82,8 +82,8 @@ Route::group([
                 Route::get('delete', [PermissionController::class, 'destroy'])->name('destroy');
             });
 
-            Route::get('role-has-permission', [PermissionController::class, 'roleHasPermission']);
-            Route::get('refresh-permissions', [PermissionController::class, 'refreshPermissions']);
+            // Route::get('role-has-permission', [PermissionController::class, 'roleHasPermission']);
+            // Route::get('refresh-permissions', [PermissionController::class, 'refreshPermissions']);
 
             Route::post('assign-permission', [PermissionController::class, 'assignPermissionToRole'])->name('assign-permission');
             Route::post('revoke-permission', [PermissionController::class, 'revokePermissionToRole'])->name('revoke-permission');

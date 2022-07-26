@@ -8,6 +8,7 @@ interface AdditionalCostInterface
 
     public function getByAll();
     public function getById($id);
+    public function getAllWithTree();
 
     public function store($inputs);
     public function update($inputs, $id);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AdditionalCostsDataTable;
+use App\Models\AdditionalCost;
 use App\Services\Interfaces\AdditionalCostInterface;
 use Illuminate\Http\Request;
 
@@ -35,9 +36,9 @@ class AdditionalCostController extends Controller
         if (!request()->ajax()) {
 
             $data = [
-                'types' => $this->additionalCostInterface->getAllWithTree(),
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree(),
             ];
-            return view('app.types.create', $data);
+            return view('app.additional-costs.create', $data);
         } else {
             abort(403);
         }

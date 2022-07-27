@@ -2,7 +2,7 @@
     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
         <label class="form-label" style="font-size: 15px" for="typesTree">Types</label>
         <select class="select2-size-lg form-select" id="typesTree" name="type">
-            <option value=0 selected>Parent Type</option>
+            <option value="0" selected>Parent Type</option>
             @foreach ($types as $typeRow)
                 <option value="{{ $typeRow['id'] }}"
                     {{ (isset($type) ? $type->parent_id : old('type')) == $typeRow['id'] ? 'selected' : '' }}>

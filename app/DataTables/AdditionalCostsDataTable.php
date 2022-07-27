@@ -25,20 +25,20 @@ class AdditionalCostsDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('parent_id', function ($type) {
-                return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
+            ->editColumn('parent_id', function ($additionalCost) {
+                return Str::of(getAdditionalCostByParentId($additionalCost->parent_id))->ucfirst();
             })
-            ->editColumn('created_at', function ($type) {
-                return editDateColumn($type->created_at);
+            ->editColumn('created_at', function ($additionalCost) {
+                return editDateColumn($additionalCost->created_at);
             })
-            ->editColumn('updated_at', function ($type) {
-                return editDateColumn($type->updated_at);
+            ->editColumn('updated_at', function ($additionalCost) {
+                return editDateColumn($additionalCost->updated_at);
             })
-            ->editColumn('actions', function ($type) {
-                return view('app.types.actions', ['id' => $type->id]);
+            ->editColumn('actions', function ($additionalCost) {
+                return view('app.types.actions', ['id' => $additionalCost->id]);
             })
-            ->editColumn('check', function ($type) {
-                return $type;
+            ->editColumn('check', function ($additionalCost) {
+                return $additionalCost;
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -109,7 +109,7 @@ class AdditionalCostsDataTable extends DataTable
             ])
             ->orders([
                 [2, 'asc'],
-                // [4, 'desc'],
+                [4, 'desc'],
             ]);
     }
 

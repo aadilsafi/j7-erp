@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\additionalCosts;
 
-use App\Models\Type;
+use App\Models\AdditionalCost;
 use Illuminate\Foundation\Http\FormRequest;
 
 class updateRequest extends FormRequest
@@ -24,7 +24,10 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Type())->requestRules;
+        $rules = (new AdditionalCost())->rules;
+        $rules['slug'] = 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug,' . decryptParams($this->id);
+        // dd($rules);
+        return $rules;
     }
 
     /**
@@ -37,11 +40,11 @@ class updateRequest extends FormRequest
     {
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
-                $typeId = $this->input('type');
-                if ($typeId != 0) {
-                    $type = (new Type)->where('id', $typeId)->first();
-                    if (!$type) {
-                        $validator->errors()->add('type', 'This type does not exists');
+                $additionalCost = $this->input('additionalCost');
+                if ($additionalCost != 0) {
+                    $additionalCost = (new AdditionalCost())->where('id', $additionalCost)->first();
+                    if (!$additionalCost) {
+                        $validator->errors()->add('additionalCost', 'This additional cost does not exists');
                     }
                 }
             });

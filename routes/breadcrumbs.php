@@ -87,3 +87,20 @@ Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail
     $trail->parent('sites.additional-costs.index', ['site_id' => encryptParams(1)]);
     $trail->push('Edit Additional Cost');
 });
+
+
+//Floor Breadcrumbs
+Breadcrumbs::for('sites.floors.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Floors', route('sites.floors.index', ['site_id' => encryptParams(1)]));
+});
+
+Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+    $trail->push('Create Floor');
+});
+
+Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+    $trail->push('Edit Floor');
+});

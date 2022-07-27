@@ -5,6 +5,8 @@
         <select class="select2-size-lg form-select" id="additionalCost" name="additionalCost">
             <option value="0" selected>Parent Additional Cost</option>
             @foreach ($additionalCosts as $row)
+                @continue(isset($additionalCost) && $additionalCost->id == $row['id'])
+
                 <option value="{{ $row['id'] }}"
                     {{ (isset($additionalCost) ? $additionalCost->parent_id : old('additionalCost')) == $row['id'] ? 'selected' : '' }}>
                     {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
@@ -19,9 +21,8 @@
 <div class="row mb-1">
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="name">Name</label>
-        <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
-            id="name" name="name" placeholder="Name"
-            value="{{ isset($additionalCost) ? $additionalCost->name : old('name') }}"
+        <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
+            name="name" placeholder="Name" value="{{ isset($additionalCost) ? $additionalCost->name : old('name') }}"
             onkeyup="convertToSlug(this.value);" />
         @error('name')
             <div class="invalid-tooltip">{{ $message }}</div>
@@ -30,8 +31,8 @@
 
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="slug">Slug</label>
-        <input type="text" class="form-control form-control-lg @error('slug') is-invalid @enderror"
-            id="slug" name="slug" placeholder="Slug" readonly
+        <input type="text" class="form-control form-control-lg @error('slug') is-invalid @enderror" id="slug"
+            name="slug" placeholder="Slug" readonly
             value="{{ isset($additionalCost) ? $additionalCost->slug : old('slug') }}" />
         @error('slug')
             <div class="invalid-tooltip">{{ $message }}</div>
@@ -45,7 +46,7 @@
         <div class="form-check form-check-primary">
             <input type="hidden" name="has_child" value="0">
             <input type="checkbox" class="form-check-input" id="has_child" name="has_child" value="1"
-                {{ isset($additionalCost) ? ($additionalCost->has_child == 1 ? 'checked' : 'unchecked') : (is_null(old('has_child')) ? 'checked' : (old('has_child') == 1 ? 'checked' : 'unchecked'))  }} />
+                {{ isset($additionalCost) ? ($additionalCost->has_child == 1 ? 'checked' : 'unchecked') : (is_null(old('has_child')) ? 'checked' : (old('has_child') == 1 ? 'checked' : 'unchecked')) }} />
             <label class="form-check-label" for="has_child">Has child</label>
         </div>
     </div>
@@ -64,7 +65,7 @@
                                 <input type="hidden" name="applicable_on_site" value="0">
                                 <input type="checkbox" class="form-check-input" name="applicable_on_site"
                                     id="applicable_on_site" value="1"
-                                    {{ (isset($additionalCost) ? $additionalCost->applicable_on_site : old('applicable_on_site')) == 1 ? 'selected' : '' }} />
+                                    {{ isset($additionalCost) ? ($additionalCost->applicable_on_site == 1 ? 'checked' : 'unchecked') : (is_null(old('has_child')) ? '' : (old('has_child') == 1 ? 'checked' : 'unchecked')) }} />
                                 <label class="form-check-label" for="applicable_on_site">Applicable On Site</label>
                             </div>
                         </div>
@@ -89,7 +90,7 @@
                                 <input type="hidden" name="applicable_on_floor" value="0">
                                 <input type="checkbox" class="form-check-input" name="applicable_on_floor"
                                     id="applicable_on_floor" value="1"
-                                    {{ (isset($additionalCost) ? $additionalCost->applicable_on_floor : old('applicable_on_floor')) == 1 ? 'selected' : '' }} />
+                                    {{ isset($additionalCost) ? ($additionalCost->applicable_on_floor == 1 ? 'checked' : 'unchecked') : (is_null(old('has_child')) ? '' : (old('has_child') == 1 ? 'checked' : 'unchecked')) }} />
                                 <label class="form-check-label" for="applicable_on_floor">Applicable On Floor</label>
                             </div>
                         </div>
@@ -114,7 +115,7 @@
                                 <input type="hidden" name="applicable_on_unit" value="0">
                                 <input type="checkbox" class="form-check-input" name="applicable_on_unit"
                                     id="applicable_on_unit" value="1"
-                                    {{ (isset($additionalCost) ? $additionalCost->applicable_on_unit : old('applicable_on_unit')) == 1 ? 'selected' : '' }} />
+                                    {{ isset($additionalCost) ? ($additionalCost->applicable_on_unit == 1 ? 'checked' : 'unchecked') : (is_null(old('has_child')) ? '' : (old('has_child') == 1 ? 'checked' : 'unchecked')) }} />
                                 <label class="form-check-label" for="applicable_on_unit">Applicable On Unit</label>
                             </div>
                         </div>

@@ -132,7 +132,8 @@
 
             <li
                 class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                <a class="d-flex align-items-center"
+                    href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
                     <i data-feather="home"></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                 </a>
@@ -197,15 +198,19 @@
                     <span class="menu-title text-truncate" data-i18n="Additional Costs">Additional Costs</span>
                 </a>
                 <ul class="menu-content">
-                    <li class="{{ request()->routeIs('additional-costs.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('additional-costs.index') }}">
+                    <li
+                        class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
                             <i data-feather="shield"></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
-                    <li class="{{ request()->routeIs('additional-costs.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('additional-costs.create') }}">
+                    <li
+                        class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams(1)]) }}">
                             <i data-feather="shield"></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>

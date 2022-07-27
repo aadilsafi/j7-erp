@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\AdditionalCost;
 use App\Models\Type;
 use Carbon\Carbon;
 use Illuminate\Support\{Collection};
@@ -119,7 +120,7 @@ if (!function_exists('getTreeData')) {
         }
 
         return $typesTmp;
-        dd($typesTmp);
+        // dd($typesTmp);
     }
 }
 
@@ -300,6 +301,17 @@ if (!function_exists('getTypeParentByParentId')) {
         $type = (new Type())->where('id', $parent_id)->first();
         if ($type) {
             return $type->name;
+        }
+        return 'parent';
+    }
+}
+
+if (!function_exists('getAdditionalCostByParentId')) {
+    function getAdditionalCostByParentId($parent_id)
+    {
+        $additionalCost = (new AdditionalCost())->where('id', $parent_id)->first();
+        if ($additionalCost) {
+            return $additionalCost->name;
         }
         return 'parent';
     }

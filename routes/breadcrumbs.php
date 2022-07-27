@@ -73,17 +73,17 @@ Breadcrumbs::for('types.edit', function (BreadcrumbTrail $trail) {
 });
 
 //Additional Costs Breadcrumbs
-Breadcrumbs::for('additional-costs.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.additional-costs.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Additional Costs', route('additional-costs.index'));
+    $trail->push('Additional Costs', route('sites.additional-costs.index', ['site_id' => encryptParams(1)]));
 });
 
-Breadcrumbs::for('additional-costs.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('additional-costs.index');
+Breadcrumbs::for('sites.additional-costs.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.additional-costs.index', ['site_id' => encryptParams(1)]);
     $trail->push('Create Additional Cost');
 });
 
-Breadcrumbs::for('additional-costs.edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('additional-costs.index');
+Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.additional-costs.index', ['site_id' => encryptParams(1)]);
     $trail->push('Edit Additional Cost');
 });

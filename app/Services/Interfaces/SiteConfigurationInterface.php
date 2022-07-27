@@ -13,5 +13,5 @@ interface SiteConfigurationInterface
     public function store($inputs);
     public function update($inputs, $id);
 
-    public function destroy($id);
+    // public function destroy($id);
 }

@@ -63,7 +63,7 @@ class UnitTypeService implements UnitTypeInterface
     {
         $id = decryptParams($id);
 
-        $types = getTypeLinkedTypes($id);
+        $types = getLinkedTreeData($this->model(), $id);
 
         $typesIDs = array_merge($id, array_column($types, 'id'));
 

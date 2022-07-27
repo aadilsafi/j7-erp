@@ -11,6 +11,11 @@ class DashboardController extends Controller
         return view('app.dashboard');
     }
 
+    public function cacheFlush(Request $request){
+        cache()->flush();
+        return redirect()->back()->withSuccess('Site cache refreshed.');
+    }
+
     public function logout(Request $request)
     {
         auth()->logout();

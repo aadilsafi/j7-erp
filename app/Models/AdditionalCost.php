@@ -69,9 +69,21 @@ class AdditionalCost extends Model
         'applicable_on_unit',
     ];
 
+    protected $casts = [
+        'site_id' => 'integer',
+        'parent_id' => 'integer',
+        'has_child' => 'boolean',
+        'site_percentage' => 'float',
+        'applicable_on_site' => 'boolean',
+        'floor_percentage' => 'float',
+        'applicable_on_floor' => 'boolean',
+        'unit_percentage' => 'float',
+        'applicable_on_unit' => 'boolean',
+    ];
+
     public $rules = [
         'name' => 'required|string|min:1|max:255',
-        'slug' => 'required|string|min:1|max:255|unique:additional_costs,slug',
+        'slug' => 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug',
         'additionalCost' => 'required|integer',
         'has_child' => 'boolean|in:0,1',
         'applicable_on_site' => 'required|boolean|in:0,1',

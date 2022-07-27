@@ -8,6 +8,7 @@ use App\Http\Controllers\{
     TypeController,
     SiteController,
     CountryController,
+    FloorController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -124,6 +125,19 @@ Route::group([
                     });
                 });
 
+                //Floors Routes
+                Route::group(['prefix' => 'floors', 'as' => 'floors.'], function () {
+                    Route::get('/', [FloorController::class, 'index'])->name('index');
+
+                    Route::get('create', [FloorController::class, 'create'])->name('create');
+                    Route::post('store', [FloorController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [FloorController::class, 'edit'])->name('edit');
+                        Route::put('update', [FloorController::class, 'update'])->name('update');
+                    });
+                });
             });
         });
 

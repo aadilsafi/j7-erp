@@ -74,14 +74,14 @@
             {{-- Roles & Permission Menu --}}
             <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather="shield"></i>
+                    <i data-feather='shield'></i>
                     <span class="menu-title text-truncate"
                         data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
                 </a>
                 <ul class="menu-content">
                     <li class="">
                         <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='shield'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.leftbar.roles') }}">{{ __('lang.leftbar.roles') }}</span>
                         </a>
@@ -102,7 +102,7 @@
                     </li>
                     <li class="">
                         <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='shield'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.leftbar.permissions') }}">{{ __('lang.leftbar.permissions') }}</span>
                         </a>
@@ -134,7 +134,7 @@
                 class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
                 <a class="d-flex align-items-center"
                     href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
-                    <i data-feather="home"></i>
+                    <i data-feather='settings'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                 </a>
             </li>
@@ -146,20 +146,20 @@
             {{-- Types Menu --}}
             <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather="shield"></i>
+                    <i data-feather='menu'></i>
                     <span class="menu-title text-truncate" data-i18n="Types">Types</span>
                 </a>
                 <ul class="menu-content">
                     <li class="{{ request()->routeIs('types.index') ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('types.index') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
                     <li class="{{ request()->routeIs('types.create') ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('types.create') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
                         </a>
@@ -170,20 +170,20 @@
             {{-- Sites Menu --}}
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather="shield"></i>
+                    <i data-feather='circle'></i>
                     <span class="menu-title text-truncate" data-i18n="Sites">Sites</span>
                 </a>
                 <ul class="menu-content">
                     <li class="{{ request()->routeIs('sites.index') ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('sites.index') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
                     <li class="{{ request()->routeIs('sites.create') ? 'active' : null }}">
                         <a class="d-flex align-items-center" href="{{ route('sites.create') }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
                         </a>
@@ -194,7 +194,7 @@
             {{-- Additional Costs Menu --}}
             <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather="shield"></i>
+                    <i data-feather='dollar-sign'></i>
                     <span class="menu-title text-truncate" data-i18n="Additional Costs">Additional Costs</span>
                 </a>
                 <ul class="menu-content">
@@ -202,7 +202,7 @@
                         class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
                             href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
@@ -211,7 +211,35 @@
                         class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
                             href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather="shield"></i>
+                            <i data-feather='circle'></i>
+                            <span class="menu-item text-truncate"
+                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Floors Menu --}}
+            <li class="nav-item ">
+                <a class="d-flex align-items-center" href="javascript:void(0)">
+                    <i data-feather='layers'></i>
+                    <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
+                </a>
+                <ul class="menu-content">
+                    <li
+                        class="{{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='circle'></i>
+                            <span class="menu-item text-truncate"
+                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
+                        </a>
+                    </li>
+                    <li
+                        class="{{ request()->routeIs('sites.floors.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.floors.create', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
                         </a>

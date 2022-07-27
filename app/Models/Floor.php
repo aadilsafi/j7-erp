@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Floor
@@ -31,5 +32,32 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Floor extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'width',
+        'length',
+        'site_id',
+        'order',
+    ];
+
+    protected $casts = [
+        'width' => 'float',
+        'length' => 'float',
+        'site_id' => 'integer',
+        'order' => 'integer',
+    ];
+
+    public $rules = [
+        'name' => 'required|string|max:255',
+        'width' => 'required|numeric',
+        'length' => 'required|numeric',
+        'floor_order' => 'nullable|integer',
+    ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->float('width');
             $table->float('length');
+            $table->tinyInteger('order')->default(0);
             $table->foreignId('site_id')->constrained();
             $table->timestamps();
             $table->softDeletes();

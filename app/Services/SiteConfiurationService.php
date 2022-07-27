@@ -59,16 +59,16 @@ class SiteConfiurationService implements SiteConfigurationInterface
         return $type;
     }
 
-    public function destroy($id)
-    {
-        $id = decryptParams($id);
+    // public function destroy($id)
+    // {
+    //     $id = decryptParams($id);
 
-        $types = getTypeLinkedTypes($id);
+    //     $types = getTypeLinkedTypes($id);
 
-        $typesIDs = array_merge($id, array_column($types, 'id'));
+    //     $typesIDs = array_merge($id, array_column($types, 'id'));
 
-        $this->model()->whereIn('id', $typesIDs)->delete();
+    //     $this->model()->whereIn('id', $typesIDs)->delete();
 
-        return true;
-    }
+    //     return true;
+    // }
 }

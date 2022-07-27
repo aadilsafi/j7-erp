@@ -45,10 +45,7 @@ Route::group([
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-        Route::get('cache/flush', function () {
-            cache()->flush();
-            return redirect()->back()->withSuccess('Site cache refreshed.');
-        })->name('cache.flush');
+        Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');
 
         //Role Routes
         Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {

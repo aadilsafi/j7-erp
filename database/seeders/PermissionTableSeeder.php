@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\{Role, Permission};
+
 class PermissionTableSeeder extends Seeder
 {
     /**
@@ -15,6 +16,12 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         (new Permission())->insert([
+            [
+                'name' => 'site.cache.flush',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'name' => 'roles.index',
                 'guard_name' => 'web',

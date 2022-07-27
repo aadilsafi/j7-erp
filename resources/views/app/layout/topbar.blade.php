@@ -12,7 +12,7 @@
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
                 <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link" href="{{ route('cache.flush') }}" data-bs-toggle="tooltip"
+                    <a class="nav-link" href="{{ route('site.cache.flush') }}" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" title="Click to clear cache (Automatically resets in 10 minutes)">
                         <i class="ficon spin-hover" data-feather="refresh-cw"></i>
                     </a>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\additionalCosts;
 
+use App\Models\AdditionalCost;
 use App\Models\Type;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -24,7 +25,7 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Type())->requestRules;
+        return (new AdditionalCost())->rules;
     }
 
     /**
@@ -37,11 +38,11 @@ class storeRequest extends FormRequest
     {
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
-                $typeId = $this->input('type');
-                if ($typeId != 0) {
-                    $type = (new Type)->where('id', $typeId)->first();
-                    if (!$type) {
-                        $validator->errors()->add('type', 'This type does not exists');
+                $additionalCost = $this->input('additionalCost');
+                if ($additionalCost != 0) {
+                    $additionalCost = (new AdditionalCost())->where('id', $additionalCost)->first();
+                    if (!$additionalCost) {
+                        $validator->errors()->add('additionalCost', 'This additional cost does not exists');
                     }
                 }
             });

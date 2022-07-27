@@ -109,7 +109,7 @@ class AdditionalCostsDataTable extends DataTable
             ])
             ->orders([
                 [2, 'asc'],
-                // [4, 'desc'],
+                [4, 'desc'],
             ]);
     }
 

@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'additional-costs.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.index') }}
 @endsection
 
 @section('page-title', 'Additional Costs List')
@@ -34,7 +34,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Additional Costs</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('additional-costs.index') }}
+                    {{ Breadcrumbs::render('sites.additional-costs.index') }}
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('additional-costs.destroy.selected') }}" id="additional-costs-table-form" method="get">
+            <form action="{{ route('sites.additional-costs.destroy.selected', ['site_id' => encryptParams(1)]) }}" id="additional-costs-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -117,13 +117,13 @@
                 confirmButtonClass: 'btn-danger',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    location.href = '{{ route('additional-costs.destroy', ['id' => ':id']) }}'.replace(':id', id);
+                    location.href = '{{ route('sites.additional-costs.destroy', ['site_id' => encryptParams(1), 'id' => ':id']) }}'.replace(':id', id);
                 }
             });
         }
 
         function addNew() {
-            location.href = '{{ route('additional-costs.create') }}';
+            location.href = '{{ route('sites.additional-costs.create', ['site_id' => encryptParams(1)]) }}';
         }
     </script>
 @endsection

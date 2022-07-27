@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AdditionalCostsDataTable;
-use App\Models\AdditionalCost;
 use App\Services\Interfaces\AdditionalCostInterface;
 use Illuminate\Http\Request;
+use App\Http\Requests\additionalCosts\{
+    storeRequest as additionalCostStoreRequest,
+    updateRequest as additionalCostUpdateRequest
+};
+use Exception;
 
 class AdditionalCostController extends Controller
 {
@@ -31,12 +35,12 @@ class AdditionalCostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
         if (!request()->ajax()) {
-
             $data = [
-                'additionalCosts' => $this->additionalCostInterface->getAllWithTree(),
+                'site_id' => $site_id,
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
             ];
             return view('app.additional-costs.create', $data);
         } else {
@@ -50,18 +54,18 @@ class AdditionalCostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(typeStoreRequest $request)
+    public function store(additionalCostStoreRequest $request, $site_id)
     {
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                $record = $this->unitTypeInterface->store($inputs);
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_saved'));
+                $record = $this->additionalCostInterface->store($site_id, $inputs);
+                return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -82,24 +86,26 @@ class AdditionalCostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $site_id, $id)
     {
         try {
-            $type = $this->unitTypeInterface->getById($id);
+            $additionalCost = $this->additionalCostInterface->getById($site_id, $id);
 
-            if ($type && !empty($type)) {
-
+            if ($additionalCost && !empty($additionalCost)) {
                 $data = [
-                    'types' => $this->unitTypeInterface->getAllWithTree(),
-                    'type' => $type,
+                    'site_id' => $site_id,
+                    'additionalCost' => $additionalCost,
+                    'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 ];
 
-                return view('app.types.edit', $data);
+dd($data);
+
+                return view('app.additional-costs.edit', $data);
             }
 
-            return redirect()->route('types.index')->withWarning(__('lang.commons.data_not_found'));
+            return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -116,12 +122,12 @@ class AdditionalCostController extends Controller
             if (!request()->ajax()) {
                 $inputs = $request->validated();
                 $record = $this->unitTypeInterface->update($inputs, $id);
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_updated'));
+                return redirect()->route('additional-costs.index')->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('additional-costs.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -137,11 +143,11 @@ class AdditionalCostController extends Controller
             $record = (new Type())->destroyType([$id]);
 
             if (is_a($record, 'Exception')) {
-                return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $record->getMessage());
+                return redirect()->route('additional-costs.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $record->getMessage());
             } else if ($record) {
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_deleted'));
+                return redirect()->route('additional-costs.index')->withSuccess(__('lang.commons.data_deleted'));
             } else {
-                return redirect()->route('types.index')->withDanger(__('lang.commons.data_not_found'));
+                return redirect()->route('additional-costs.index')->withDanger(__('lang.commons.data_not_found'));
             }
         } else {
             abort(403);
@@ -157,9 +163,9 @@ class AdditionalCostController extends Controller
                     $record = $this->unitTypeInterface->destroy(encryptParams($request->chkRole));
 
                     if ($record) {
-                        return redirect()->route('types.index')->withSuccess(__('lang.commons.data_deleted'));
+                        return redirect()->route('additional-costs.index')->withSuccess(__('lang.commons.data_deleted'));
                     } else {
-                        return redirect()->route('types.index')->withDanger(__('lang.commons.data_not_found'));
+                        return redirect()->route('additional-costs.index')->withDanger(__('lang.commons.data_not_found'));
                     }
                 }
             } else {

@@ -97,15 +97,36 @@ Route::group([
             Route::post('store', [SiteController::class, 'store'])->name('store');
 
             Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy.selected');
+
+            Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
+                Route::get('/', [SiteController::class, 'configView'])->name('configView');
+                Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
+            });
+
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [SiteController::class, 'edit'])->name('edit');
                 Route::put('update', [SiteController::class, 'update'])->name('update');
                 Route::get('delete', [SiteController::class, 'destroy'])->name('destroy');
             });
 
-            Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
-                Route::get('/', [SiteController::class, 'configView'])->name('configView');
-                Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
+            Route::group(['prefix' => '/{site_id}'], function () {
+
+                //Additional Costs Routes
+                Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
+                    Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
+
+                    Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
+                    Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
+                        Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
+
+                        Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
             });
         });
 
@@ -130,20 +151,20 @@ Route::group([
             });
         });
 
-        //Additional Costs Routes
-        Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
-            Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
+        // //Additional Costs Routes
+        // Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
+        //     Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
 
-            Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
-            Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
+        //     Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
+        //     Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
-            Route::group(['prefix' => '/{id}'], function () {
-                Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
-                Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
+        //     Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
+        //     Route::group(['prefix' => '/{id}'], function () {
+        //         Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
+        //         Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
 
-                Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
-            });
-        });
+        //         Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
+        //     });
+        // });
     });
 });

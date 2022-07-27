@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'additional-costs.create') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.create') }}
 @endsection
 
 @section('page-title', 'Create Additional Cost')
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Additional Cost</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('additional-costs.create') }}
+                    {{ Breadcrumbs::render('sites.additional-costs.create') }}
                 </div>
             </div>
         </div>
@@ -31,7 +31,8 @@
 
 @section('content')
     <div class="card">
-        <form class="form form-vertical" action="{{ route('additional-costs.store') }}" method="POST">
+        <form class="form form-vertical"
+            action="{{ route('sites.additional-costs.store', ['site_id' => $site_id]) }}" method="POST">
 
             <div class="card-header">
             </div>
@@ -39,7 +40,6 @@
             <div class="card-body">
 
                 @csrf
-
                 {{ view('app.additional-costs.form-fields', ['additionalCosts' => $additionalCosts]) }}
 
             </div>
@@ -49,7 +49,7 @@
                     <i data-feather='save'></i>
                     Save Additional Cost
                 </button>
-                <a href="{{ route('additional-costs.index') }}"
+                <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>
                     {{ __('lang.commons.cancel') }}
@@ -68,8 +68,13 @@
 
 @section('custom-js')
     <script>
+        $(document).ready(function() {
+            $('#has_child').trigger('change');
+        });
+
+
         function convertToSlug(text) {
-            let slug = $('#additional_cost_slug');
+            let slug = $('#slug');
             slug.val(text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, ''));
         }
 
@@ -83,25 +88,25 @@
 
         $('#applicable_on_site').on('change', function() {
             if ($(this).is(':checked')) {
-                $('#site_percentage').attr('disabled', false);
+                $('#site_percentage').attr('readonly', false);
             } else {
-                $('#site_percentage').attr('disabled', true).val(0);
+                $('#site_percentage').attr('readonly', true).val(0);
             }
         });
 
         $('#applicable_on_floor').on('change', function() {
             if ($(this).is(':checked')) {
-                $('#floor_percentage').attr('disabled', false);
+                $('#floor_percentage').attr('readonly', false);
             } else {
-                $('#floor_percentage').attr('disabled', true).val(0);
+                $('#floor_percentage').attr('readonly', true).val(0);
             }
         });
 
         $('#applicable_on_unit').on('change', function() {
             if ($(this).is(':checked')) {
-                $('#unit_percentage').attr('disabled', false);
+                $('#unit_percentage').attr('readonly', false);
             } else {
-                $('#unit_percentage').attr('disabled', true).val(0);
+                $('#unit_percentage').attr('readonly', true).val(0);
             }
         });
     </script>

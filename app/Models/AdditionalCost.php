@@ -70,17 +70,16 @@ class AdditionalCost extends Model
     ];
 
     public $rules = [
-        'site_id' => 'required|integer',
         'name' => 'required|string|min:1|max:255',
         'slug' => 'required|string|min:1|max:255|unique:additional_costs,slug',
-        'parent_id' => 'required|integer',
-        'has_child' => 'required|boolean',
-        'site_percentage' => 'required|numeric',
-        'applicable_on_site' => 'required|boolean',
-        'floor_percentage' => 'required|numeric',
-        'applicable_on_floor' => 'required|boolean',
-        'unit_percentage' => 'required|numeric',
-        'applicable_on_unit' => 'required|boolean',
+        'additionalCost' => 'required|integer',
+        'has_child' => 'boolean|in:0,1',
+        'applicable_on_site' => 'required|boolean|in:0,1',
+        'site_percentage' => 'required_if:applicable_on_site,1|numeric',
+        'applicable_on_floor' => 'required|boolean|in:0,1',
+        'floor_percentage' => 'required_if:applicable_on_floor,1|numeric',
+        'applicable_on_unit' => 'required|boolean|in:0,1',
+        'unit_percentage' => 'required_if:applicable_on_unit,1|numeric',
     ];
 
     public function site()

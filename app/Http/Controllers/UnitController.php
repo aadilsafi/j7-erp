@@ -36,13 +36,15 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $site_id)
+    public function create(Request $request, $site_id, $floor_id)
     {
         if (!request()->ajax()) {
             $data = [
-                'site_id' => $site_id,
+                'site' => (new Site())->find(decryptParams($site_id)),
+                'floor' => (new Floor())->find(decryptParams($floor_id))
             ];
-            return view('app.sites.floors.create', $data);
+
+            return view('app.sites.floors.units.create', $data);
         } else {
             abort(403);
         }

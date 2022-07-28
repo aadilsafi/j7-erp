@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index') }}
+{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
 @endsection
 
-@section('page-title', 'Create Floor')
+@section('page-title', 'Create Unit')
 
 @section('page-vendor')
 @endsection
@@ -20,9 +20,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Floor</h2>
+                <h2 class="content-header-title float-start mb-0">Create Unit</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.index') }}
+                    {{ Breadcrumbs::render('sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
 
 @section('content')
     <div class="card">
-        <form class="form form-vertical" action="{{ route('sites.floors.store', ['site_id' => $site_id]) }}" method="POST">
+        <form class="form form-vertical" action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}" method="POST">
 
             <div class="card-header">
             </div>
@@ -39,7 +39,7 @@
             <div class="card-body">
 
                 @csrf
-                {{ view('app.sites.floors.form-fields') }}
+                {{ view('app.sites.floors.units.form-fields') }}
 
             </div>
 
@@ -48,7 +48,7 @@
                     <i data-feather='save'></i>
                     Save Floor
                 </button>
-                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
+                <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>
                     {{ __('lang.commons.cancel') }}

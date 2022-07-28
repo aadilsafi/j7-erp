@@ -52,7 +52,7 @@ class FloorService implements FloorInterface
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
-        // dd($inputs, $site_id, $id);
+
         $data = [
             'site_id' => $site_id,
             'name' => filter_strip_tags($inputs['name']),
@@ -60,7 +60,7 @@ class FloorService implements FloorInterface
             'length' => filter_strip_tags($inputs['length']),
             'order' => filter_strip_tags($inputs['floor_order']),
         ];
-        // dd($data);
+
         $floor = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,

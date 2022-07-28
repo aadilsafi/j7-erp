@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     SiteController,
     CountryController,
     FloorController,
+    UnitController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -136,6 +137,22 @@ Route::group([
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
+                    });
+
+                    // //Units Routes
+                    Route::group(['prefix' => '/{floor_id}'], function () {
+                        Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
+                            Route::get('/', [UnitController::class, 'index'])->name('index');
+
+                            Route::get('create', [UnitController::class, 'create'])->name('create');
+                            Route::post('store', [UnitController::class, 'store'])->name('store');
+
+                            Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [UnitController::class, 'edit'])->name('edit');
+                                Route::put('update', [UnitController::class, 'update'])->name('update');
+                            });
+                        });
                     });
                 });
             });

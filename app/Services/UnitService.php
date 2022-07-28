@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\Floor;
-use App\Services\Interfaces\FloorInterface;
+use App\Models\Unit;
+use App\Services\Interfaces\UnitInterface;
 use Illuminate\Support\Str;
 
-class FloorService implements FloorInterface
+class UnitService implements UnitInterface
 {
 
     public function model()
     {
-        return new Floor();
+        return new Unit();
     }
 
     // Get

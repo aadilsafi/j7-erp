@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\{
+    AdditionalCostController,
     DashboardController,
     RoleController,
     PermissionController,
     TypeController,
     SiteController,
     CountryController,
+    FloorController,
+    UnitController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -40,14 +43,11 @@ Route::group([
     });
 
     Route::group(['middleware' => ['auth', 'permission']], function () {
-    // Route::group(['middleware' => ['auth']], function () {
+        // Route::group(['middleware' => ['auth']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-        Route::get('cache/flush', function () {
-            cache()->flush();
-            return redirect()->back()->withSuccess('Site cache refreshed.');
-        })->name('cache.flush');
+        Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');
 
         //Role Routes
         Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
@@ -81,8 +81,8 @@ Route::group([
                 Route::get('delete', [PermissionController::class, 'destroy'])->name('destroy');
             });
 
-            Route::get('role-has-permission', [PermissionController::class, 'roleHasPermission']);
-            Route::get('refresh-permissions', [PermissionController::class, 'refreshPermissions']);
+            // Route::get('role-has-permission', [PermissionController::class, 'roleHasPermission']);
+            // Route::get('refresh-permissions', [PermissionController::class, 'refreshPermissions']);
 
             Route::post('assign-permission', [PermissionController::class, 'assignPermissionToRole'])->name('assign-permission');
             Route::post('revoke-permission', [PermissionController::class, 'revokePermissionToRole'])->name('revoke-permission');
@@ -96,10 +96,65 @@ Route::group([
             Route::post('store', [SiteController::class, 'store'])->name('store');
 
             Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy.selected');
+
+            Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
+                Route::get('/', [SiteController::class, 'configView'])->name('configView');
+                Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
+            });
+
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [SiteController::class, 'edit'])->name('edit');
                 Route::put('update', [SiteController::class, 'update'])->name('update');
                 Route::get('delete', [SiteController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::group(['prefix' => '/{site_id}'], function () {
+
+                //Additional Costs Routes
+                Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
+                    Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
+
+                    Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
+                    Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
+                        Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
+
+                        Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                //Floors Routes
+                Route::group(['prefix' => 'floors', 'as' => 'floors.'], function () {
+                    Route::get('/', [FloorController::class, 'index'])->name('index');
+
+                    Route::get('create', [FloorController::class, 'create'])->name('create');
+                    Route::post('store', [FloorController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [FloorController::class, 'edit'])->name('edit');
+                        Route::put('update', [FloorController::class, 'update'])->name('update');
+                    });
+
+                    // //Units Routes
+                    Route::group(['prefix' => '/{floor_id}'], function () {
+                        Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
+                            Route::get('/', [UnitController::class, 'index'])->name('index');
+
+                            Route::get('create', [UnitController::class, 'create'])->name('create');
+                            Route::post('store', [UnitController::class, 'store'])->name('store');
+
+                            Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [UnitController::class, 'edit'])->name('edit');
+                                Route::put('update', [UnitController::class, 'update'])->name('update');
+                            });
+                        });
+                    });
+                });
             });
         });
 
@@ -124,20 +179,20 @@ Route::group([
             });
         });
 
-        //Additional Costs Routes
-        Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
-            Route::get('/', [TypeController::class, 'index'])->name('index');
+        // //Additional Costs Routes
+        // Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
+        //     Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
 
-            Route::get('create', [TypeController::class, 'create'])->name('create');
-            Route::post('store', [TypeController::class, 'store'])->name('store');
+        //     Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
+        //     Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy.selected');
-            Route::group(['prefix' => '/{id}'], function () {
-                Route::get('edit', [TypeController::class, 'edit'])->name('edit');
-                Route::put('update', [TypeController::class, 'update'])->name('update');
+        //     Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
+        //     Route::group(['prefix' => '/{id}'], function () {
+        //         Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
+        //         Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
 
-                Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
-            });
-        });
+        //         Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
+        //     });
+        // });
     });
 });

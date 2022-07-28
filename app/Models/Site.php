@@ -32,6 +32,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Floor[] $floors
+ * @property-read int|null $floors_count
+ * @property-read \App\Models\SiteConfigration|null $siteConfiguration
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Status[] $statuses
+ * @property-read int|null $statuses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
+ * @property-read int|null $units_count
  */
 class Site extends Model
 {
@@ -42,7 +49,6 @@ class Site extends Model
         'address',
         'area_width',
         'area_length',
-        'max_floors',
     ];
 
     public $requestRules = [
@@ -51,7 +57,6 @@ class Site extends Model
         'address'       => 'required',
         'area_width'    => 'required',
         'area_length'   => 'required',
-        'max_floors'    => 'required',
     ];
 
     public function city()
@@ -62,5 +67,29 @@ class Site extends Model
     public function country()
     {
         return $this->hasOneThrough(Country::class, State::class, 'country_id', 'id');
+    }
+
+    public function floors()
+    {
+        return $this->hasMany(Floor::class);
+    }
+
+    public function units()
+    {
+        return $this->hasManyThrough(Unit::class, Floor::class);
+    }
+
+    public function siteConfiguration()
+    {
+        return $this->hasOne(SiteConfigration::class, 'site_id');
+    }
+
+    /*
+    **
+    * The roles that belong to the status.
+    */
+    public function statuses()
+    {
+        return $this->belongsToMany(Status::class)->withPivot('percentage');
     }
 }

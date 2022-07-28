@@ -69,18 +69,29 @@ class AdditionalCost extends Model
         'applicable_on_unit',
     ];
 
+    protected $casts = [
+        'site_id' => 'integer',
+        'parent_id' => 'integer',
+        'has_child' => 'boolean',
+        'site_percentage' => 'float',
+        'applicable_on_site' => 'boolean',
+        'floor_percentage' => 'float',
+        'applicable_on_floor' => 'boolean',
+        'unit_percentage' => 'float',
+        'applicable_on_unit' => 'boolean',
+    ];
+
     public $rules = [
-        'site_id' => 'required|integer',
         'name' => 'required|string|min:1|max:255',
-        'slug' => 'required|string|min:1|max:255|unique:additional_costs,slug',
-        'parent_id' => 'required|integer',
-        'has_child' => 'required|boolean',
-        'site_percentage' => 'required|numeric',
-        'applicable_on_site' => 'required|boolean',
-        'floor_percentage' => 'required|numeric',
-        'applicable_on_floor' => 'required|boolean',
-        'unit_percentage' => 'required|numeric',
-        'applicable_on_unit' => 'required|boolean',
+        'slug' => 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug',
+        'additionalCost' => 'required|integer',
+        'has_child' => 'boolean|in:0,1',
+        'applicable_on_site' => 'required|boolean|in:0,1',
+        'site_percentage' => 'required_if:applicable_on_site,1|numeric',
+        'applicable_on_floor' => 'required|boolean|in:0,1',
+        'floor_percentage' => 'required_if:applicable_on_floor,1|numeric',
+        'applicable_on_unit' => 'required|boolean|in:0,1',
+        'unit_percentage' => 'required_if:applicable_on_unit,1|numeric',
     ];
 
     public function site()
@@ -90,11 +101,11 @@ class AdditionalCost extends Model
 
     public function parent()
     {
-        return $this->belongsTo(AdditionalCost::class, 'parent_id');
+        return $this->belongsTo(self::class, 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany(AdditionalCost::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id', 'id');
     }
 }

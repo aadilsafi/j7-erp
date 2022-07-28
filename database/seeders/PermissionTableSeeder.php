@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\{Role, Permission};
+
 class PermissionTableSeeder extends Seeder
 {
     /**
@@ -15,6 +16,14 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         (new Permission())->insert([
+            [
+                'name' => 'site.cache.flush',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Roles Routes
             [
                 'name' => 'roles.index',
                 'guard_name' => 'web',
@@ -63,6 +72,8 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Permissions Routes
             [
                 'name' => 'permissions.index',
                 'guard_name' => 'web',
@@ -123,6 +134,8 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Sites Routes
             [
                 'name' => 'sites.index',
                 'guard_name' => 'web',
@@ -166,6 +179,20 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.configurations.configView',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.configurations.configStore',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Types Routes
+            [
                 'name' => 'types.index',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -207,44 +234,116 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Additional Costs Routes
             [
-                'name' => 'additional-costs.index',
+                'name' => 'sites.additional-costs.index',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.create',
+                'name' => 'sites.additional-costs.create',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.store',
+                'name' => 'sites.additional-costs.store',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.edit',
+                'name' => 'sites.additional-costs.edit',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.update',
+                'name' => 'sites.additional-costs.update',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.destroy',
+                'name' => 'sites.additional-costs.destroy.selected',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Floor Routes
+            [
+                'name' => 'sites.floors.index',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'additional-costs.destroy.selected',
+                'name' => 'sites.floors.create',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.store',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.edit',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.update',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.destroy.selected',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Unit Routes
+            [
+                'name' => 'sites.floors.units.index',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.create',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.store',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.edit',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.update',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.destroy.selected',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Status
@@ -24,8 +25,33 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Status whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Site[] $site
+ * @property-read int|null $site_count
+ * @method static \Illuminate\Database\Query\Builder|Status onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Status withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Status withoutTrashed()
  */
 class Status extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'default',
+    ];
+
+    public $requestRules = [
+        'name' => 'required',
+        'default' => 'required',
+    ];
+
+        /*
+    **
+    * The roles that belong to the user.
+    */
+    public function site()
+    {
+        return $this->belongsToMany(Site::class);
+    }
+
 }

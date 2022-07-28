@@ -12,7 +12,7 @@
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
                 <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link" href="{{ route('cache.flush') }}" data-bs-toggle="tooltip"
+                    <a class="nav-link" href="{{ route('site.cache.flush') }}" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" title="Click to clear cache (Automatically resets in 10 minutes)">
                         <i class="ficon spin-hover" data-feather="refresh-cw"></i>
                     </a>
@@ -87,7 +87,7 @@
                     </li>
                     <li class="scrollable-container media-list">
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="../../../app-assets/images/pages/eCommerce/1.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/1.png" alt="donuts" width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -104,7 +104,7 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="../../../app-assets/images/pages/eCommerce/7.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/7.png" alt="donuts" width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="../../../app-assets/images/pages/eCommerce/2.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/2.png" alt="donuts" width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -138,7 +138,7 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="../../../app-assets/images/pages/eCommerce/3.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/3.png" alt="donuts" width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -155,7 +155,7 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="../../../app-assets/images/pages/eCommerce/5.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/5.png" alt="donuts" width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -194,7 +194,7 @@
                             <div class="list-item d-flex align-items-start">
                                 <div class="me-1">
                                     <div class="avatar"><img
-                                            src="../../../app-assets/images/portrait/small/avatar-s-15.jpg"
+                                            src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-15.jpg"
                                             alt="avatar" width="32" height="32"></div>
                                 </div>
                                 <div class="list-item-body flex-grow-1">
@@ -207,7 +207,7 @@
                             <div class="list-item d-flex align-items-start">
                                 <div class="me-1">
                                     <div class="avatar"><img
-                                            src="../../../app-assets/images/portrait/small/avatar-s-3.jpg"
+                                            src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-3.jpg"
                                             alt="avatar" width="32" height="32"></div>
                                 </div>
                                 <div class="list-item-body flex-grow-1">
@@ -295,7 +295,7 @@
                         <span class="user-status">{{ $user->roles }}</span>
                     </div>
                     <span class="avatar">
-                        <img class="round" src="../../../app-assets/images/portrait/small/avatar-s-11.jpg"
+                        <img class="round" src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-11.jpg"
                             alt="avatar" height="40" width="40">
                         <span class="avatar-status-online"></span>
                     </span>
@@ -338,7 +338,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
             href="app-file-manager.html">
             <div class="d-flex">
-                <div class="me-75"><img src="../../../app-assets/images/icons/xls.png" alt="png"
+                <div class="me-75"><img src="{{ asset('app-assets') }}/images/icons/xls.png" alt="png"
                         height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">Two new item submitted</p><small class="text-muted">Marketing
@@ -349,7 +349,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
             href="app-file-manager.html">
             <div class="d-flex">
-                <div class="me-75"><img src="../../../app-assets/images/icons/jpg.png" alt="png"
+                <div class="me-75"><img src="{{ asset('app-assets') }}/images/icons/jpg.png" alt="png"
                         height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">52 JPG file Generated</p><small class="text-muted">FontEnd
@@ -360,7 +360,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
             href="app-file-manager.html">
             <div class="d-flex">
-                <div class="me-75"><img src="../../../app-assets/images/icons/pdf.png" alt="png"
+                <div class="me-75"><img src="{{ asset('app-assets') }}/images/icons/pdf.png" alt="png"
                         height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">25 PDF File Uploaded</p><small class="text-muted">Digital
@@ -371,7 +371,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between w-100"
             href="app-file-manager.html">
             <div class="d-flex">
-                <div class="me-75"><img src="../../../app-assets/images/icons/doc.png" alt="png"
+                <div class="me-75"><img src="{{ asset('app-assets') }}/images/icons/doc.png" alt="png"
                         height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">Anna_Strong.doc</p><small class="text-muted">Web
@@ -385,7 +385,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
             href="app-user-view-account.html">
             <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img src="../../../app-assets/images/portrait/small/avatar-s-8.jpg"
+                <div class="avatar me-75"><img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg"
                         alt="png" height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">John Doe</p><small class="text-muted">UI designer</small>
@@ -395,7 +395,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
             href="app-user-view-account.html">
             <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img src="../../../app-assets/images/portrait/small/avatar-s-1.jpg"
+                <div class="avatar me-75"><img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-1.jpg"
                         alt="png" height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">Michal Clark</p><small class="text-muted">FontEnd
@@ -406,7 +406,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
             href="app-user-view-account.html">
             <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img src="../../../app-assets/images/portrait/small/avatar-s-14.jpg"
+                <div class="avatar me-75"><img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-14.jpg"
                         alt="png" height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">Milena Gibson</p><small class="text-muted">Digital Marketing
@@ -417,7 +417,7 @@
     <li class="auto-suggestion"><a class="d-flex align-items-center justify-content-between py-50 w-100"
             href="app-user-view-account.html">
             <div class="d-flex align-items-center">
-                <div class="avatar me-75"><img src="../../../app-assets/images/portrait/small/avatar-s-6.jpg"
+                <div class="avatar me-75"><img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg"
                         alt="png" height="32"></div>
                 <div class="search-data">
                     <p class="search-data-title mb-0">Anna Strong</p><small class="text-muted">Web

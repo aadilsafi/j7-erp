@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SitesDataTable;
-use App\Http\Requests\sites\storeRequest;
-use App\Models\Country;
-use App\Models\Site;
+use App\Http\Requests\sites\{storeRequest};
+use App\Models\{Site, Country};
+use App\Services\SiteConfiurationService;
 use Exception;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
+
+    private $siteConfiurationService;
+
+    public function __construct(SiteConfiurationService $siteConfiurationService)
+    {
+        $this->siteConfiurationService = $siteConfiurationService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -161,6 +168,36 @@ class SiteController extends Controller
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function configView(Request $request, $id)
+    {
+        try {
+            $site = (new Site())->find(decryptParams($id))->with('siteConfiguration', 'statuses')->first();
+            if ($site && !empty($site)) {
+
+                // foreach ($site->statuses as $key => $value) {
+                //     // dd($value->name);
+                // }
+                return view('app.sites.configs', ['site' => $site]);
+            }
+            return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
+        } catch (Exception $ex) {
+            return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function configStore(Request $request, $id)
+    {
+        try {
+
+            $inputs = $request->post();
+
+            $this->siteConfiurationService->update($inputs, $id);
+            return redirect()->route('sites.configurations.configView', ['id' => encryptParams($id)])->withSuccess(__('lang.commons.data_saved'));
+        } catch (Exception $ex) {
+            return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 }

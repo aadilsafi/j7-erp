@@ -142,7 +142,7 @@ class TypeController extends Controller
     public function destroy($id)
     {
         if (!request()->ajax()) {
-            $record = (new Type())->destroyType([$id]);
+            $record = $this->unitTypeInterface->destroy(encryptParams($id));
 
             if (is_a($record, 'Exception')) {
                 return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $record->getMessage());

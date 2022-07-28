@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\AdditionalCost;
 use App\Models\Type;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\{Crypt, File};
 
@@ -119,45 +121,49 @@ if (!function_exists('getTreeData')) {
         }
 
         return $typesTmp;
-        dd($typesTmp);
+        // dd($typesTmp);
     }
 }
 
-function getTypeParentTreeElequent($model, $row, $name, collection $parent, $dbTypes)
-{
-    if ($row->parent_id == 0) {
-        return $name;
-    }
-
-    $nextRow = $model::find($row->parent_id);
-    $name = $nextRow->name . ' > ' . $name;
-
-    return getTypeParentTreeElequent($model, $nextRow, $name, $parent, $dbTypes);
-}
-
-function getTypeParentTreeCollection($row, $name, collection $parent): string
-{
-    if ($row->parent_id == 0) {
-        return $name;
-    }
-
-    $nextRow = $parent->firstWhere('id', $row->parent_id);
-    $name = (is_null($nextRow) ?? empty($nextRow) ? '' : $nextRow->name) . ' > ' . $name;
-    if (is_null($nextRow) ?? empty($nextRow)) {
-        return $name;
-    }
-
-    return getTypeParentTreeCollection($nextRow, $name, $parent, $parent);
-}
-
-if (!function_exists('getTypeLinkedTypes')) {
-    function getTypeLinkedTypes($types = [])
+if (!function_exists('getTypeParentTreeElequent')) {
+    function getTypeParentTreeElequent($model, $row, $name, collection $parent, $dbTypes)
     {
-        $types = (new Type())->whereIn('parent_id', $types)->get()->toArray();
-        if (count($types) > 0) {
-            return array_merge($types, getTypeLinkedTypes(array_column($types, 'id')));
+        if ($row->parent_id == 0) {
+            return $name;
         }
-        return $types;
+
+        $nextRow = $model::find($row->parent_id);
+        $name = $nextRow->name . ' > ' . $name;
+
+        return getTypeParentTreeElequent($model, $nextRow, $name, $parent, $dbTypes);
+    }
+}
+
+if (!function_exists('getTypeParentTreeCollection')) {
+    function getTypeParentTreeCollection($row, $name, collection $parent): string
+    {
+        if ($row->parent_id == 0) {
+            return $name;
+        }
+
+        $nextRow = $parent->firstWhere('id', $row->parent_id);
+        $name = (is_null($nextRow) ?? empty($nextRow) ? '' : $nextRow->name) . ' > ' . $name;
+        if (is_null($nextRow) ?? empty($nextRow)) {
+            return $name;
+        }
+
+        return getTypeParentTreeCollection($nextRow, $name, $parent, $parent);
+    }
+}
+
+if (!function_exists('getLinkedTreeData')) {
+    function getLinkedTreeData(Model $model, $id = [])
+    {
+        $id = $model::whereIn('parent_id', $id)->get()->toArray();
+        if (count($id) > 0) {
+            return array_merge($id, getLinkedTreeData($model, array_column($id, 'id')));
+        }
+        return $id;
     }
 }
 
@@ -300,6 +306,17 @@ if (!function_exists('getTypeParentByParentId')) {
         $type = (new Type())->where('id', $parent_id)->first();
         if ($type) {
             return $type->name;
+        }
+        return 'parent';
+    }
+}
+
+if (!function_exists('getAdditionalCostByParentId')) {
+    function getAdditionalCostByParentId($parent_id)
+    {
+        $additionalCost = (new AdditionalCost())->where('id', $parent_id)->first();
+        if ($additionalCost) {
+            return $additionalCost->name;
         }
         return 'parent';
     }

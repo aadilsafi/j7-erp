@@ -21,53 +21,81 @@ class AdditionalCostService implements AdditionalCostInterface
         return $this->model()->all();
     }
 
-    public function getById($id)
+    public function getById($site_id, $id)
     {
+        $site_id = decryptParams($site_id);
         $id = decryptParams($id);
-        return $this->model()->find($id);
+
+        return $this->model()->where([
+            'site_id' => $site_id,
+            'id' => $id,
+        ])->first();
     }
 
-    public function getAllWithTree()
+    public function getAllWithTree($site_id)
     {
-        $additionalCosts = $this->model()->all();
+        $site_id = decryptParams($site_id);
+        $additionalCosts = $this->model()->whereSiteId($site_id)->get();
         return getTreeData(collect($additionalCosts), $this->model());
     }
 
     // Store
-    public function store($inputs)
+    public function store($site_id, $inputs)
     {
         $data = [
-            'name' => $inputs['type_name'],
-            'slug' => Str::of($inputs['type_name'])->slug(),
-            'parent_id' => $inputs['type'],
+            'site_id' => decryptParams($site_id),
+            'name' => filter_strip_tags($inputs['name']),
+            'slug' => Str::of(filter_strip_tags($inputs['slug']))->slug(),
+            'parent_id' => filter_strip_tags($inputs['additionalCost']),
+            'has_child' => filter_strip_tags($inputs['has_child']),
+            'site_percentage' => filter_strip_tags($inputs['site_percentage']),
+            'applicable_on_site' => filter_strip_tags($inputs['applicable_on_site']),
+            'floor_percentage' => filter_strip_tags($inputs['floor_percentage']),
+            'applicable_on_floor' => filter_strip_tags($inputs['applicable_on_floor']),
+            'unit_percentage' => filter_strip_tags($inputs['unit_percentage']),
+            'applicable_on_unit' => filter_strip_tags($inputs['applicable_on_unit']),
         ];
-        $type = $this->model()->create($data);
-        return $type;
+
+        // dd($data);
+        $additionalCost = $this->model()->create($data);
+        return $additionalCost;
     }
 
-    public function update($inputs, $id)
+    public function update($site_id, $inputs, $id)
     {
-
+        $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 
         $data = [
-            'name' => $inputs['type_name'],
-            'slug' => Str::of($inputs['type_name'])->slug(),
-            'parent_id' => $inputs['type'],
+            'name' => filter_strip_tags($inputs['name']),
+            'slug' => Str::of(filter_strip_tags($inputs['slug']))->slug(),
+            'parent_id' => filter_strip_tags($inputs['additionalCost']),
+            'has_child' => filter_strip_tags($inputs['has_child']),
+            'site_percentage' => filter_strip_tags($inputs['site_percentage']),
+            'applicable_on_site' => filter_strip_tags($inputs['applicable_on_site']),
+            'floor_percentage' => filter_strip_tags($inputs['floor_percentage']),
+            'applicable_on_floor' => filter_strip_tags($inputs['applicable_on_floor']),
+            'unit_percentage' => filter_strip_tags($inputs['unit_percentage']),
+            'applicable_on_unit' => filter_strip_tags($inputs['applicable_on_unit']),
         ];
-        $type = $this->model()->where('id', $id)->update($data);
-        return $type;
+
+        $additionalCost = $this->model()->where([
+            'site_id' => $site_id,
+            'id' => $id,
+        ])->update($data);
+
+        return $additionalCost;
     }
 
-    public function destroy($id)
+    public function destroy($site_id, $id)
     {
+        $site_id = decryptParams($site_id);
         $id = decryptParams($id);
+        $additionalCosts = getLinkedTreeData($this->model(), $id);
 
-        $types = getTypeLinkedTypes($id);
-
-        $typesIDs = array_merge($id, array_column($types, 'id'));
-
-        $this->model()->whereIn('id', $typesIDs)->delete();
+        $additionalCostsIDs = array_merge($id, array_column($additionalCosts, 'id'));
+        // dd($additionalCostsIDs);
+        $this->model()->whereIn('id', $additionalCostsIDs)->delete();
 
         return true;
     }

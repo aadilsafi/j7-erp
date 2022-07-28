@@ -15,18 +15,12 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('floor_id')->constrained();
             $table->string('name')->nullable();
             $table->float('width')->default(0);
             $table->float('length')->default(0);
             $table->tinyInteger('unit_number')->default(0);
-            $table->foreignId('agent_id')->constrained();
-            $table->boolean('is_corner')->default(0);
-            $table->float('corner_percentage')->default(0);
-            $table->float('corner_amount')->default(0);
-            $table->boolean('is_facing')->default(0);
-            $table->foreignId('facing_id')->constrained();
-            $table->float('facing_percentage')->default(0);
-            $table->float('facing_amount')->default(0);
+            $table->float('price')->default(0);
             $table->foreignId('type_id')->constrained();
             $table->foreignId('status_id')->constrained();
             $table->timestamps();

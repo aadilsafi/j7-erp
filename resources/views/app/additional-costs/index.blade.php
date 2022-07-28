@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'additional-costs.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.index') }}
 @endsection
 
 @section('page-title', 'Additional Costs List')
@@ -16,8 +16,7 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -34,7 +33,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Additional Costs</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('additional-costs.index') }}
+                    {{ Breadcrumbs::render('sites.additional-costs.index') }}
                 </div>
             </div>
         </div>
@@ -43,12 +42,12 @@
 
 @section('content')
     <p class="mb-2">
-
     </p>
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('additional-costs.destroy.selected') }}" id="additional-costs-table-form" method="get">
+            <form action="{{ route('sites.additional-costs.destroy.selected', ['site_id' => $site_id]) }}"
+                id="additional-costs-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -91,7 +90,11 @@
                     showCancelButton: true,
                     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
                     confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                    confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#additional-costs-table-form').submit();
@@ -101,29 +104,39 @@
                 Swal.fire({
                     icon: 'warning',
                     title: 'Warning',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-primary waves-effect waves-float waves-light me-1',
+                    },
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
                 });
             }
         }
 
-        function deleteByID(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: '{{ __('lang.commons.are_you_sure') }}',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                confirmButtonClass: 'btn-danger',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.href = '{{ route('additional-costs.destroy', ['id' => ':id']) }}'.replace(':id', id);
-                }
-            });
-        }
+        // function deleteByID(site_id, id) {
+        //     Swal.fire({
+        //         icon: 'warning',
+        //         title: 'Warning',
+        //         text: '{{ __('lang.commons.are_you_sure') }}',
+        //         showCancelButton: true,
+        //         cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+        //         confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+        //         buttonsStyling: false,
+        //         customClass: {
+        //             confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+        //             cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+        //         },
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             location.href =
+        //                 '{{ route('sites.additional-costs.destroy', ['site_id' => ':site_id', 'id' => ':id']) }}'
+        //                 .replace(':id', id).replace(':site_id', site_id);
+        //         }
+        //     });
+        // }
 
         function addNew() {
-            location.href = '{{ route('additional-costs.create') }}';
+            location.href = '{{ route('sites.additional-costs.create', ['site_id' => $site_id]) }}';
         }
     </script>
 @endsection

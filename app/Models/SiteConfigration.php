@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereUnitNumberDigits($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Site $site
  */
 class SiteConfigration extends Model
 {

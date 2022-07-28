@@ -32,6 +32,13 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Site whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Floor[] $floors
+ * @property-read int|null $floors_count
+ * @property-read \App\Models\SiteConfigration|null $siteConfiguration
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Status[] $statuses
+ * @property-read int|null $statuses_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
+ * @property-read int|null $units_count
  */
 class Site extends Model
 {

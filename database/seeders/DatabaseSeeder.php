@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             AdditionalCostsTableSeeder::class,
             SiteStatusPivotTableSeeder::class,
             FloorTableSeeder::class,
+            UnitTableSeeder::class,
         ]);
     }
 }

@@ -149,8 +149,8 @@
     <script src="{{ asset('app-assets') }}/js/core/app.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/customizer.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/select/select2.full.min.js"></script>
-    {{-- <script src="{{ asset('app-assets') }}/vendors/datatables/buttons.server-side.js"></script> --}}
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-select2.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/components/components-tooltips.min.js"></script>
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->

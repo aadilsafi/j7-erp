@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Floor;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
@@ -11,7 +12,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Support\Str;
 
-class FloorsDataTable extends DataTable
+class UnitsDataTable extends DataTable
 {
 
     /**
@@ -20,27 +21,22 @@ class FloorsDataTable extends DataTable
      * @param QueryBuilder $query Results from query() method.
      * @return \Yajra\DataTables\EloquentDataTable
      */
+
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('check', function ($floor) {
-                return $floor;
+            ->editColumn('check', function ($unit) {
+                return $unit;
             })
-            ->editColumn('width', function ($floor) {
-                return $floor->width . '\'\'';
+            ->editColumn('created_at', function ($unit) {
+                return editDateColumn($unit->created_at);
             })
-            ->editColumn('length', function ($floor) {
-                return $floor->length . '\'\'';
+            ->editColumn('updated_at', function ($unit) {
+                return editDateColumn($unit->updated_at);
             })
-            ->editColumn('created_at', function ($floor) {
-                return editDateColumn($floor->created_at);
-            })
-            ->editColumn('updated_at', function ($floor) {
-                return editDateColumn($floor->updated_at);
-            })
-            ->editColumn('actions', function ($floor) {
-                return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
+            ->editColumn('actions', function ($unit) {
+                return view('app.sites.floors.units.actions', ['site_id' => $unit->site_id, 'id' => $unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -49,18 +45,18 @@ class FloorsDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Floor $model
+     * @param \App\Models\Unit $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Floor $model): QueryBuilder
+    public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->whereFloorId($this->floor->id);
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('floors-table')
+            ->setTableId('floors-units-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->serverSide()
@@ -113,7 +109,7 @@ class FloorsDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [5, 'desc'],
+                [1, 'desc'],
             ]);
     }
 
@@ -126,13 +122,10 @@ class FloorsDataTable extends DataTable
     {
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('name')->title('Floors'),
-            Column::make('order'),
-            Column::make('width'),
-            Column::make('length'),
+            Column::make('name')->title('Units'),
             Column::make('created_at'),
             Column::make('updated_at'),
-            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1'),
+            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center'),
         ];
     }
 
@@ -143,6 +136,6 @@ class FloorsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Floors_' . date('YmdHis');
+        return 'Units_' . date('YmdHis');
     }
 }

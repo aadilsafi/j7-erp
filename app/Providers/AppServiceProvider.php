@@ -6,12 +6,14 @@ use App\Services\Interfaces\{
     AdditionalCostInterface,
     FloorInterface,
     PermissionInterface,
+    UnitInterface,
     UnitTypeInterface
 };
 use App\Services\{
     AdditionalCostService,
     FloorService,
     PermissionService,
+    UnitService,
     UnitTypeService
 };
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(PermissionInterface::class, PermissionService::class);
         $this->app->bind(AdditionalCostInterface::class, AdditionalCostService::class);
         $this->app->bind(FloorInterface::class, FloorService::class);
+        $this->app->bind(UnitInterface::class, UnitService::class);
     }
 
     /**

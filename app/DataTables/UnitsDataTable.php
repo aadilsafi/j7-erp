@@ -109,7 +109,7 @@ class UnitsDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [1, 'desc'],
+                [3, 'desc'],
             ]);
     }
 

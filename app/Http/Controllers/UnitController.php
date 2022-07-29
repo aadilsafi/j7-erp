@@ -3,17 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UnitsDataTable;
-use App\Models\{Floor, Site};
-use App\Services\Interfaces\UnitInterface;
+use App\Models\{Floor, Site, Status, Type};
+use App\Services\Interfaces\{AdditionalCostInterface, UnitInterface, UnitTypeInterface};
 use Illuminate\Http\Request;
+use App\Http\Requests\units\{
+    storeRequest as unitStoreRequest,
+    updateRequest as unitUpdateRequest
+};
+use Exception;
 
 class UnitController extends Controller
 {
     private $unitInterface;
+    private $additionalCostInterface;
+    private $unitTypeInterface;
 
-    public function __construct(UnitInterface $unitInterface)
-    {
+    public function __construct(
+        UnitInterface $unitInterface,
+        AdditionalCostInterface $additionalCostInterface,
+        UnitTypeInterface $unitTypeInterface,
+    ) {
         $this->unitInterface = $unitInterface;
+        $this->additionalCostInterface = $additionalCostInterface;
+        $this->unitTypeInterface = $unitTypeInterface;
     }
 
     /**
@@ -41,7 +53,11 @@ class UnitController extends Controller
         if (!request()->ajax()) {
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
-                'floor' => (new Floor())->find(decryptParams($floor_id))
+                'floor' => (new Floor())->find(decryptParams($floor_id)),
+                'siteConfiguration' => getSiteConfiguration(decryptParams($site_id)),
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                'types' => $this->unitTypeInterface->getAllWithTree(),
+                'statuses' => (new Status())->all(),
             ];
 
             return view('app.sites.floors.units.create', $data);
@@ -56,19 +72,20 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(floorStoreRequest $request, $site_id)
+    public function store(unitStoreRequest $request, $site_id, $floor_id)
+    // public function store(Request $request, $site_id)
     {
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                $record = $this->floorInterface->store($site_id, $inputs);
+                $record = $this->unitInterface->store($site_id, $floor_id, $inputs);
 
-                return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+                return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 

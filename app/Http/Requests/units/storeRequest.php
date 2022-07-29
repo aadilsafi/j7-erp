@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\units;
 
-use App\Models\Floor;
+use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
 
 class storeRequest extends FormRequest
@@ -24,6 +24,16 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Floor())->rules;
+        return (new Unit())->rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Unit())->ruleMessages;
     }
 }

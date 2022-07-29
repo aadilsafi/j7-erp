@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
 @endsection
 
 @section('page-title', 'Create Unit')
@@ -31,7 +31,9 @@
 
 @section('content')
     <div class="card">
-        <form class="form form-vertical" action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}" method="POST">
+        <form class="form form-vertical"
+            action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
+            method="POST">
 
             <div class="card-header">
             </div>
@@ -39,14 +41,14 @@
             <div class="card-body">
 
                 @csrf
-                {{ view('app.sites.floors.units.form-fields') }}
+                {{ view('app.sites.floors.units.form-fields', ['site' => $site, 'floor' => $floor, 'siteConfiguration' => $siteConfiguration, 'additionalCosts' => $additionalCosts, 'types' => $types, 'statuses' => $statuses]) }}
 
             </div>
 
             <div class="card-footer d-flex align-items-center justify-content-end">
                 <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                     <i data-feather='save'></i>
-                    Save Floor
+                    Save Unit
                 </button>
                 <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -66,5 +68,28 @@
 @endsection
 
 @section('custom-js')
-    <script></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#is_corner').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#corner_id').attr('disabled', false);
+                } else {
+                    $('#corner_id').attr('disabled', true);
+                }
+            });
+
+            $('#is_facing').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#facing_id').attr('disabled', false);
+                } else {
+                    $('#facing_id').attr('disabled', true);
+                }
+            });
+
+            $('#is_corner').trigger('change');
+            $('#is_facing').trigger('change');
+
+        });
+    </script>
 @endsection

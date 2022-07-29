@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use App\DataTables\SitesDataTable;
 use App\Http\Requests\sites\{storeRequest};
 use App\Models\{Site, Country};
-use App\Services\SiteConfiurationService;
+use App\Services\Interfaces\SiteConfigurationInterface;
 use Exception;
 use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {
 
-    private $siteConfiurationService;
+    private $SiteConfigurationInterface;
 
-    public function __construct(SiteConfiurationService $siteConfiurationService)
+    public function __construct(SiteConfigurationInterface $SiteConfigurationInterface)
     {
-        $this->siteConfiurationService = $siteConfiurationService;
+        $this->SiteConfigurationInterface = $SiteConfigurationInterface;
     }
 
     /**
@@ -194,7 +194,7 @@ class SiteController extends Controller
 
             $inputs = $request->post();
 
-            $this->siteConfiurationService->update($inputs, $id);
+            $this->SiteConfigurationInterface->update($inputs, $id);
             return redirect()->route('sites.configurations.configView', ['id' => encryptParams($id)])->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
             return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());

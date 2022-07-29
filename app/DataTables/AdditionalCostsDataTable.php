@@ -34,6 +34,15 @@ class AdditionalCostsDataTable extends DataTable
             ->editColumn('applicable_on_unit', function ($additionalCost) {
                 return editBooleanColumn($additionalCost->applicable_on_unit);
             })
+            ->editColumn('site_percentage', function ($additionalCost) {
+                return $additionalCost->site_percentage > 0 ? $additionalCost->site_percentage . '%' : '-';
+            })
+            ->editColumn('floor_percentage', function ($additionalCost) {
+                return $additionalCost->floor_percentage > 0 ? $additionalCost->floor_percentage . '%' : '-';
+            })
+            ->editColumn('unit_percentage', function ($additionalCost) {
+                return $additionalCost->unit_percentage > 0 ? $additionalCost->unit_percentage . '%' : '-';
+            })
             ->editColumn('parent_id', function ($additionalCost) {
                 return Str::of(getAdditionalCostByParentId($additionalCost->parent_id))->ucfirst();
             })

@@ -47,7 +47,6 @@ class SiteConfiurationService implements SiteConfigurationInterface
 
     public function update($inputs, $id)
     {
-
         $id = decryptParams($id);
         dd($inputs, $id);
         $data = [

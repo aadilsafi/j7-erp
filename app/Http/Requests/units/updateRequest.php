@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\units;
 
-use App\Models\Floor;
+use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
 
 class updateRequest extends FormRequest
@@ -24,7 +24,16 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = (new Floor())->rules;
-        return $rules;
+        return (new Unit())->rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Unit())->ruleMessages;
     }
 }

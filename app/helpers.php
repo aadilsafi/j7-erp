@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\AdditionalCost;
+use App\Models\Site;
+use App\Models\SiteConfigration;
 use App\Models\Type;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -329,5 +331,19 @@ if (!function_exists('getAuthentacatedUserInfo')) {
         $user->data = auth()->user();
         $user->roles = implode(', ', auth()->user()->roles->pluck('name')->toArray());
         return $user;
+    }
+}
+
+if (!function_exists('getSiteConfiguration')) {
+    function getSiteConfiguration($site_id)
+    {
+        return (new SiteConfigration())->whereSiteId($site_id)->first() ?? [];
+    }
+}
+
+if (!function_exists('getNHeightestNumber')) {
+    function getNHeightestNumber($numberOfDigits = 1)
+    {
+        return (int)str_repeat('9', $numberOfDigits);
     }
 }

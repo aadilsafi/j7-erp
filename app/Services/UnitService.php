@@ -15,69 +15,88 @@ class UnitService implements UnitInterface
     }
 
     // Get
-    public function getByAll($site_id)
+    public function getByAll($site_id, $floor_id,)
     {
         $site_id = decryptParams($site_id);
+        $floor_id = decryptParams($floor_id);
 
-        return $this->model()->where('site_id', $site_id)->get();
+        return $this->model()->where('floor_id', $floor_id)->get();
     }
 
-    public function getById($site_id, $id)
+    public function getById($site_id, $floor_id, $id)
     {
         $site_id = decryptParams($site_id);
+        $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
         return $this->model()->where([
-            'site_id' => $site_id,
+            'floor_id' => $floor_id,
             'id' => $id,
         ])->first();
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $floor_id, $inputs, $isUnitActive = true)
     {
+        $site_id = decryptParams($site_id);
+        $floor_id = decryptParams($floor_id);
+
         $data = [
-            'site_id' => decryptParams($site_id),
+            'floor_id' => $floor_id,
             'name' => filter_strip_tags($inputs['name']),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
-            'order' => filter_strip_tags($inputs['floor_order']),
+            'unit_number' => filter_strip_tags($inputs['unit_number']),
+            'price' => filter_strip_tags($inputs['price']),
+            'is_corner' => filter_strip_tags($inputs['is_corner']),
+            'corner_id' => isset($inputs['corner_id']) ? filter_strip_tags($inputs['corner_id']) : null,
+            'is_facing' => filter_strip_tags($inputs['is_facing']),
+            'facing_id' => isset($inputs['facing_id']) ? filter_strip_tags($inputs['facing_id']) : null,
+            'type_id' => filter_strip_tags($inputs['type_id']),
+            'status_id' => filter_strip_tags($inputs['status_id']),
+            'active' => $isUnitActive,
         ];
 
         $floor = $this->model()->create($data);
         return $floor;
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $floor_id, $id, $inputs)
     {
         $site_id = decryptParams($site_id);
+        $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
         $data = [
-            'site_id' => $site_id,
             'name' => filter_strip_tags($inputs['name']),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
-            'order' => filter_strip_tags($inputs['floor_order']),
+            'price' => filter_strip_tags($inputs['price']),
+            'is_corner' => filter_strip_tags($inputs['is_corner']),
+            'corner_id' => filter_strip_tags($inputs['corner_id']),
+            'is_facing' => filter_strip_tags($inputs['is_facing']),
+            'facing_id' => filter_strip_tags($inputs['facing_id']),
+            'type_id' => filter_strip_tags($inputs['type_id']),
+            'status_id' => filter_strip_tags($inputs['status_id']),
         ];
 
-        $floor = $this->model()->where([
-            'site_id' => $site_id,
+        // dd($data);
+
+        $unit = $this->model()->where([
+            'floor_id' => $floor_id,
             'id' => $id,
         ])->update($data);
 
-        return $floor;
+        return $unit;
     }
 
-    public function destroy($site_id, $id)
+    public function destroy($site_id, $floor_id, $id)
     {
         $site_id = decryptParams($site_id);
+        $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
-        $this->model()->where([
-            'site_id' => $site_id,
-            'id' => $id,
-        ])->delete();
+        $this->model()->where('floor_id', $floor_id)->whereIn('id', $id)->delete();
 
         return true;
     }

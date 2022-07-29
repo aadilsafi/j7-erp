@@ -10,58 +10,52 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * App\Models\Unit
  *
  * @property int $id
+ * @property int $floor_id
  * @property string|null $name
  * @property float $width
  * @property float $length
  * @property int $unit_number
- * @property int $agent_id
- * @property bool $is_corner
- * @property float $corner_percentage
- * @property float $corner_amount
- * @property bool $is_facing
- * @property int $facing_id
- * @property float $facing_percentage
- * @property float $facing_amount
+ * @property float $price
  * @property int $type_id
  * @property int $status_id
+ * @property bool $active
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|Unit newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit query()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereAgentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCornerAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCornerPercentage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFacingAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFacingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFacingPercentage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsCorner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsFacing($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereLength($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereWidth($value)
- * @mixin \Eloquent
- * @property int $floor_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property bool $is_corner
  * @property int|null $corner_id
+ * @property bool $is_facing
+ * @property int|null $facing_id
  * @property-read \App\Models\User|null $agent
  * @property-read \App\Models\AdditionalCost|null $corner
  * @property-read \App\Models\AdditionalCost|null $facing
  * @property-read \App\Models\Floor $floor
  * @property-read \App\Models\Status $status
  * @property-read \App\Models\Type $type
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit newQuery()
  * @method static \Illuminate\Database\Query\Builder|Unit onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereActive($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCornerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFacingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFloorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsCorner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsFacing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereLength($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereWidth($value)
  * @method static \Illuminate\Database\Query\Builder|Unit withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Unit withoutTrashed()
+ * @mixin \Eloquent
  */
 class Unit extends Model
 {
@@ -74,13 +68,13 @@ class Unit extends Model
         'length',
         'unit_number',
         'price',
-        'agent_id',
         'is_corner',
         'corner_id',
         'is_facing',
         'facing_id',
         'type_id',
         'status_id',
+        'active',
     ];
 
     protected $casts = [
@@ -89,7 +83,6 @@ class Unit extends Model
         'width' => 'float',
         'length' => 'float',
         'unit_number' => 'integer',
-        'agent_id' => 'integer',
         'price' => 'float',
         'is_corner' => 'boolean',
         'corner_id' => 'integer',
@@ -97,6 +90,27 @@ class Unit extends Model
         'facing_id' => 'integer',
         'type_id' => 'integer',
         'status_id' => 'integer',
+        'active' => 'boolean',
+    ];
+
+    public $rules = [
+        'name' => 'required|string|max:255',
+        'width' => 'required|numeric',
+        'length' => 'required|numeric',
+        'unit_number' => 'nullable|integer',
+        'price' => 'required|numeric',
+        'is_corner' => 'required|boolean|in:0,1',
+        'corner_id' => 'required_if:is_corner,1|integer',
+        'is_facing' => 'required|boolean|in:0,1',
+        'facing_id' => 'nullable|integer',
+        'type_id' => 'nullable|integer',
+        'status_id' => 'nullable|integer',
+        'active' => 'nullable|boolean',
+    ];
+
+    public $ruleMessages = [
+        'corner_id.required_if' => 'The Corner charges field is required when :other is checked.',
+        'facing_id.required_if' => 'The Facing charges field is required when :other is checked.',
     ];
 
     public function agent()

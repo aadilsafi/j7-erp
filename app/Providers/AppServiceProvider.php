@@ -6,6 +6,7 @@ use App\Services\Interfaces\{
     AdditionalCostInterface,
     FloorInterface,
     PermissionInterface,
+    SiteConfigurationInterface,
     UnitInterface,
     UnitTypeInterface
 };
@@ -13,6 +14,7 @@ use App\Services\{
     AdditionalCostService,
     FloorService,
     PermissionService,
+    SiteConfiurationService,
     UnitService,
     UnitTypeService
 };
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AdditionalCostInterface::class, AdditionalCostService::class);
         $this->app->bind(FloorInterface::class, FloorService::class);
         $this->app->bind(UnitInterface::class, UnitService::class);
+        $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
     }
 
     /**

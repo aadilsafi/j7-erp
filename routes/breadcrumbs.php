@@ -107,15 +107,15 @@ Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail) {
 //Units Breadcrumbs
 Breadcrumbs::for('sites.floors.units.index', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
     $trail->parent('sites.floors.index');
-    $trail->push('Units', route('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]));
+    $trail->push('Units', route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id]));
 });
 
 Breadcrumbs::for('sites.floors.units.create', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
-    $trail->parent('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]);
+    $trail->parent('sites.floors.units.index', $site_id, $floor_id);
     $trail->push('Create Unit');
 });
 
 Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
-    $trail->parent('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]);
+    $trail->parent('sites.floors.units.index', $site_id, $floor_id);
     $trail->push('Edit Unit');
 });

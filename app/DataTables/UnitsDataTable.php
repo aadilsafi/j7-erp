@@ -36,7 +36,7 @@ class UnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                return view('app.sites.floors.units.actions', ['site_id' => $unit->site_id, 'id' => $unit->id]);
+                return view('app.sites.floors.units.actions', ['site_id' => $unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -109,7 +109,7 @@ class UnitsDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [1, 'desc'],
+                [3, 'desc'],
             ]);
     }
 

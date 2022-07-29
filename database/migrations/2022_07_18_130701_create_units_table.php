@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('price')->default(0);
             $table->foreignId('type_id')->constrained();
             $table->foreignId('status_id')->constrained();
+            $table->boolean('active')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

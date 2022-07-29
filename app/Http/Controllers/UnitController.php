@@ -73,7 +73,6 @@ class UnitController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(unitStoreRequest $request, $site_id, $floor_id)
-    // public function store(Request $request, $site_id)
     {
         try {
             if (!request()->ajax()) {
@@ -106,24 +105,27 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $site_id, $id)
+    public function edit(Request $request, $site_id, $floor_id, $id)
     {
         try {
-            $floor = $this->floorInterface->getById($site_id, $id);
-            if ($floor && !empty($floor)) {
+            $unit = $this->unitInterface->getById($site_id, $floor_id, $id);
+            if ($unit && !empty($unit)) {
                 $data = [
-                    'site_id' => $site_id,
-                    'floor' => $floor,
+                    'site' => (new Site())->find(decryptParams($site_id)),
+                    'floor' => (new Floor())->find(decryptParams($floor_id)),
+                    'siteConfiguration' => getSiteConfiguration(decryptParams($site_id)),
+                    'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                    'types' => $this->unitTypeInterface->getAllWithTree(),
+                    'statuses' => (new Status())->all(),
+                    'unit' => $unit,
                 ];
 
-                // dd($data);
-
-                return view('app.sites.floors.edit', $data);
+                return view('app.sites.floors.units.edit', $data);
             }
 
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withWarning(__('lang.commons.data_not_found'));
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -134,41 +136,41 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(floorUpdateRequest $request, $site_id, $id)
+    public function update(unitUpdateRequest $request, $site_id, $floor_id, $id)
     {
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                // return [$site_id, $id, $inputs];
-                $record = $this->floorInterface->update($site_id, $id, $inputs);
-                return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_updated'));
+                $record = $this->unitInterface->update($site_id, $floor_id, $id, $inputs);
+
+                return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
-    public function destroySelected(Request $request, $site_id)
+    public function destroySelected(Request $request, $site_id, $floor_id)
     {
         try {
             if (!request()->ajax()) {
                 if ($request->has('chkTableRow')) {
 
-                    $record = $this->floorInterface->destroy($site_id, encryptParams($request->chkTableRow));
+                    $record = $this->unitInterface->destroy($site_id, $floor_id, encryptParams($request->chkTableRow));
 
                     if ($record) {
-                        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_deleted'));
+                        return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_deleted'));
                     } else {
-                        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.data_not_found'));
+                        return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.data_not_found'));
                     }
                 }
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 }

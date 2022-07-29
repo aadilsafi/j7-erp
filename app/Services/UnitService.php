@@ -68,11 +68,9 @@ class UnitService implements UnitInterface
         $id = decryptParams($id);
 
         $data = [
-            'floor_id' => $floor_id,
             'name' => filter_strip_tags($inputs['name']),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
-            'unit_number' => filter_strip_tags($inputs['unit_number']),
             'price' => filter_strip_tags($inputs['price']),
             'is_corner' => filter_strip_tags($inputs['is_corner']),
             'corner_id' => filter_strip_tags($inputs['corner_id']),
@@ -80,15 +78,16 @@ class UnitService implements UnitInterface
             'facing_id' => filter_strip_tags($inputs['facing_id']),
             'type_id' => filter_strip_tags($inputs['type_id']),
             'status_id' => filter_strip_tags($inputs['status_id']),
-            'active' => filter_strip_tags($inputs['active']),
         ];
 
-        $floor = $this->model()->where([
-            'site_id' => $site_id,
+        // dd($data);
+
+        $unit = $this->model()->where([
+            'floor_id' => $floor_id,
             'id' => $id,
         ])->update($data);
 
-        return $floor;
+        return $unit;
     }
 
     public function destroy($site_id, $floor_id, $id)
@@ -97,10 +96,7 @@ class UnitService implements UnitInterface
         $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
-        $this->model()->where([
-            'site_id' => $site_id,
-            'id' => $id,
-        ])->delete();
+        $this->model()->where('floor_id', $floor_id)->whereIn('id', $id)->delete();
 
         return true;
     }

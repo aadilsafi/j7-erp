@@ -34,7 +34,7 @@
             id="unit_number" name="unit_number" min="1"
             max="{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}" placeholder="Unit Number"
             oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-            value="{{ isset($unit) ? $unit->unit_number : old('unit_number') ?? 1 }}" />
+            value="{{ isset($unit) ? $unit->unit_number : old('unit_number') ?? 1 }}" {{ isset($unit) ? 'disabled' : '' }} />
         @error('name')
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror
@@ -96,8 +96,8 @@
                         <select class="select2-size-lg form-select" id="corner_id" name="corner_id" disabled>
                             <option value="" selected>Select Corner Charges</option>
                             @foreach ($additionalCosts as $row)
-                                <option value="{{ $row['id'] }}"
-                                    {{ (isset($unit) ? $unit->corner_id : old('corner_id')) == $row['id'] ? 'selected' : '' }}>
+                                <option value="{{ $row['id'] }}" {{ $row->has_child ? 'disabled' : '' }}
+                                    {{ (isset($unit) ? $unit->corner_id : old('corner_id')) == $row->id ? 'selected' : '' }}>
                                     {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
                             @endforeach
                         </select>
@@ -125,8 +125,8 @@
                         <select class="select2-size-lg form-select" id="facing_id" name="facing_id" disabled />
                         <option value="" selected>Select Facing Charges</option>
                         @foreach ($additionalCosts as $row)
-                            <option value="{{ $row['id'] }}"
-                                {{ (isset($unit) ? $unit->corner_id : old('corner_id')) == $row['id'] ? 'selected' : '' }}>
+                            <option value="{{ $row['id'] }}" {{ $row->has_child ? 'disabled' : '' }}
+                                {{ (isset($unit) ? $unit->facing_id : old('facing_id')) == $row['id'] ? 'selected' : '' }}>
                                 {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
                         @endforeach
                         </select>

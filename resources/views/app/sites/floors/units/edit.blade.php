@@ -68,5 +68,28 @@
 @endsection
 
 @section('custom-js')
-    <script></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#is_corner').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#corner_id').attr('disabled', false);
+                } else {
+                    $('#corner_id').attr('disabled', true);
+                }
+            });
+
+            $('#is_facing').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#facing_id').attr('disabled', false);
+                } else {
+                    $('#facing_id').attr('disabled', true);
+                }
+            });
+
+            $('#is_corner').trigger('change');
+            $('#is_facing').trigger('change');
+
+        });
+    </script>
 @endsection

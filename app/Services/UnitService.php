@@ -15,7 +15,7 @@ class UnitService implements UnitInterface
     }
 
     // Get
-    public function getByAll($site_id, $floor_id,)
+    public function getByAll($site_id, $floor_id)
     {
         $site_id = decryptParams($site_id);
         $floor_id = decryptParams($floor_id);

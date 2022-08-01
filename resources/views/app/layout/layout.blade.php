@@ -58,13 +58,13 @@
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <!-- END: Custom CSS-->
 
     @yield('custom-css')
-    <script src="{{ asset('app-assets') }}/vendors/js/vendors.min.js"></script>
+
 </head>
 <!-- END: Head-->
 
@@ -138,6 +138,7 @@
 
 
     <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets') }}/vendors/js/vendors.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/components/components-tooltips.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/sweetalert2.all.min.js"></script>

@@ -45,6 +45,6 @@ class Type extends Model
     public $requestRules = [
         'type' => 'required|numeric',
         'type_name' => 'required|string|min:1|max:255',
-        'type_slug' => 'required|string|min:1|max:255|unique:types,slug',
+        // 'type_slug' => 'required|string|min:1|max:255|unique:types,slug',
     ];
 }

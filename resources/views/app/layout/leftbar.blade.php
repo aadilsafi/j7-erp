@@ -124,11 +124,10 @@
                 </ul>
             </li>
 
-
-            <li class="navigation-header">
+            {{-- <li class="navigation-header">
                 <span data-i18n="Others">Configurations</span>
                 <i data-feather="more-horizontal"></i>
-            </li>
+            </li> --}}
 
             <li
                 class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">

@@ -40,7 +40,10 @@ class PermissionsDataTable extends DataTable
                 return $permission;
             })
             ->editColumn('roles', function ($permission) {
-                return $permission->id;
+                return [
+                    'permission_id' => $permission->id,
+                    'roles' => $permission->roles->pluck('id')->toArray()
+                ];
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -128,8 +131,8 @@ class PermissionsDataTable extends DataTable
 
         foreach ($roles as $key => $role) {
 
-            if ($role->id == 1)
-                continue;
+            // if ($role->id == 1)
+            //     continue;
 
             $colArray[] = Column::computed('roles')
                 ->title($role->name)
@@ -137,7 +140,20 @@ class PermissionsDataTable extends DataTable
                 ->exportable(false)
                 ->printable(false)
                 ->addClass('text-center')
-                ->render('function () { return "<div class=\'form-check d-flex justify-content-center\'> <input class=\'form-check-input\' type=\'checkbox\'  onchange=\'changeRolePermission(' . $role->id . ', " + data + ")\'  id=\'chkRolePermission_' . $role->id . '_' . '" + data + "\' /><label class=\'form-check-label\' for=\'chkRolePermission_' . $role->id . '\'></label></div>"; }');
+                ->render('function () {
+                    var roles = data.roles;
+                    var isPermissionAssigned = roles.includes(' . $role->id . ');
+
+                    var checkbox = "<div class=\'form-check d-flex justify-content-center\'>";
+                    if(isPermissionAssigned) {
+                        checkbox += "<input class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role->id . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role->id . '_' . '" + data.permission_id + "\' checked />";
+                    } else {
+                        checkbox += "<input class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role->id . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role->id . '_' . '" + data.permission_id + "\' />";
+                    }
+                    checkbox += "<label class=\'form-check-label\' for=\'chkRolePermission_' . $role->id . '\'></label></div>";
+
+                    return checkbox;
+                 }');
         }
 
         $colArray[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');

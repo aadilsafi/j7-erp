@@ -159,5 +159,9 @@
                 }
             });
         }
+
+        function permissionCheck(roles){
+            console.log(roles);
+        }
     </script>
 @endsection

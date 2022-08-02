@@ -83,7 +83,7 @@ class AdditionalCost extends Model
 
     public $rules = [
         'name' => 'required|string|min:1|max:255',
-        'slug' => 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug',
+        // 'slug' => 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug',
         'additionalCost' => 'required|integer',
         'has_child' => 'boolean|in:0,1',
         'applicable_on_site' => 'required|boolean|in:0,1',

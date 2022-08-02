@@ -58,13 +58,14 @@
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/loader/machine/machine.min.css">
     <!-- END: Custom CSS-->
 
     @yield('custom-css')
-    <script src="{{ asset('app-assets') }}/vendors/js/vendors.min.js"></script>
+
 </head>
 <!-- END: Head-->
 
@@ -84,6 +85,8 @@
         <div class="content-wrapper container-xxl p-0">
 
             {{ view('app.layout.alerts') }}
+
+            {{ json_encode(session()) }}
 
             @if (!request()->routeIs('dashboard'))
                 <div class="content-header row">
@@ -131,6 +134,8 @@
 
     {{ view('app.layout.customizer') }}
 
+    {{ view('app.layout.loader') }}
+
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
 
@@ -138,6 +143,7 @@
 
 
     <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('app-assets') }}/vendors/js/vendors.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/components/components-tooltips.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/sweetalert2.all.min.js"></script>

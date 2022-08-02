@@ -11,6 +11,41 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav bookmark-icons">
+
+                {{-- <li class="nav-item d-none d-lg-block">
+                    <div class="position-relative">
+                        <div class="machine-wrap">
+                            <div class="machine">
+                                <div class="machine-roof">
+                                    <div class="machine-silencer">
+                                        <div class="machine-smoke"></div>
+                                    </div>
+                                </div>
+                                <div class="machine-main">
+                                    <div class="machine-body"></div>
+                                    <div class="machine-back"></div>
+                                    <div class="machine-front"></div>
+                                </div>
+                            </div>
+                            <div class="road">
+                                <div class="mud-wrap clearfix">
+                                    <div class="mud"></div>
+                                    <div class="mud"></div>
+                                    <div class="mud"></div>
+                                    <div class="mud"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li> --}}
+
+                <li class="nav-item d-none d-lg-block">
+                    <a class="nav-link" href="javascript:void(0);" data-bs-toggle="offcanvas"
+                        data-bs-target="#queuesLoadingOffCanvas" aria-controls="queuesLoadingOffCanvas">
+                        <i class="ficon spin-hover" style="color: #7367f0;" data-feather="refresh-cw"></i>
+                    </a>
+                </li>
+
                 <li class="nav-item d-none d-lg-block">
                     <a class="nav-link" href="{{ route('site.cache.flush') }}" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" title="Click to clear cache (Automatically resets in 10 minutes)">
@@ -87,7 +122,8 @@
                     </li>
                     <li class="scrollable-container media-list">
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="{{ asset('app-assets') }}/images/pages/eCommerce/1.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/1.png" alt="donuts"
+                                width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -104,7 +140,8 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="{{ asset('app-assets') }}/images/pages/eCommerce/7.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/7.png" alt="donuts"
+                                width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -121,7 +158,8 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="{{ asset('app-assets') }}/images/pages/eCommerce/2.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/2.png" alt="donuts"
+                                width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -138,7 +176,8 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="{{ asset('app-assets') }}/images/pages/eCommerce/3.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/3.png" alt="donuts"
+                                width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -155,7 +194,8 @@
                             </div>
                         </div>
                         <div class="list-item align-items-center"><img class="d-block rounded me-1"
-                                src="{{ asset('app-assets') }}/images/pages/eCommerce/5.png" alt="donuts" width="62">
+                                src="{{ asset('app-assets') }}/images/pages/eCommerce/5.png" alt="donuts"
+                                width="62">
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
@@ -427,10 +467,13 @@
         </a></li>
 </ul>
 <ul class="main-search-list-defaultlist-other-list d-none">
-    <li class="auto-suggestion justify-content-between"><a
-            class="d-flex align-items-center justify-content-between w-100 py-50">
-            <div class="d-flex justify-content-start"><span class="me-75"
-                    data-feather="alert-circle"></span><span>No results found.</span></div>
-        </a></li>
+    <li class="auto-suggestion justify-content-between">
+        <a class="d-flex align-items-center justify-content-between w-100 py-50">
+            <div class="d-flex justify-content-start">
+                <span class="me-75" data-feather="alert-circle"></span>
+                <span>No results found.</span>
+            </div>
+        </a>
+    </li>
 </ul>
 <!-- END: Header-->

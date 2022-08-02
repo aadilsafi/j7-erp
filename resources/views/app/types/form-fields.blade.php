@@ -27,7 +27,7 @@
         @enderror
     </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+    {{-- <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="type_name">Slug</label>
         <input type="text" class="form-control form-control-lg @error('type_slug') is-invalid @enderror"
             id="type_slug" name="type_slug" placeholder="Slug" readonly
@@ -35,6 +35,6 @@
         @error('type_slug')
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror
-    </div>
+    </div> --}}
 
 </div>

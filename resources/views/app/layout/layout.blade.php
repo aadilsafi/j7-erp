@@ -61,6 +61,7 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/loader/machine/machine.min.css">
     <!-- END: Custom CSS-->
 
     @yield('custom-css')
@@ -84,6 +85,8 @@
         <div class="content-wrapper container-xxl p-0">
 
             {{ view('app.layout.alerts') }}
+
+            {{ json_encode(session()) }}
 
             @if (!request()->routeIs('dashboard'))
                 <div class="content-header row">
@@ -130,6 +133,8 @@
     <!-- END: Content-->
 
     {{ view('app.layout.customizer') }}
+
+    {{ view('app.layout.loader') }}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>

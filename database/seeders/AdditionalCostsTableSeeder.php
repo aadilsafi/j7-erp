@@ -29,6 +29,8 @@ class AdditionalCostsTableSeeder extends Seeder
                 'applicable_on_floor' => 0,
                 'unit_percentage' => 0,
                 'applicable_on_unit' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'site_id' => 1,
@@ -42,6 +44,8 @@ class AdditionalCostsTableSeeder extends Seeder
                 'applicable_on_floor' => 0,
                 'unit_percentage' => 15,
                 'applicable_on_unit' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'site_id' => 1,
@@ -55,6 +59,8 @@ class AdditionalCostsTableSeeder extends Seeder
                 'applicable_on_floor' => 0,
                 'unit_percentage' => 15,
                 'applicable_on_unit' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
             ],
             [
                 'site_id' => 1,
@@ -68,6 +74,8 @@ class AdditionalCostsTableSeeder extends Seeder
                 'applicable_on_floor' => 0,
                 'unit_percentage' => 10,
                 'applicable_on_unit' => 1,
+                'created_at' => now(),
+                'updated_at' => now()
             ],
         ]);
     }

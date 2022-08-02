@@ -107,7 +107,7 @@ span.input-group-text.is-valid {
     font-size: 13px !important;
 }
 
-.spin-hover {
+.spin-hover:hover {
     animation: icon-spin 2s infinite linear;
 }
 
@@ -221,4 +221,8 @@ div#queuesLoadingOffCanvas {
     height: fit-content;
     max-height: 300px;
     overflow-y: auto;
+}
+
+.progress {
+    height: 10px;
 }

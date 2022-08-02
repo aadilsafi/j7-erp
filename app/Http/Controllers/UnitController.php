@@ -11,6 +11,7 @@ use App\Http\Requests\units\{
     updateRequest as unitUpdateRequest
 };
 use Exception;
+use Illuminate\Support\Facades\Session;
 
 class UnitController extends Controller
 {
@@ -72,14 +73,23 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(unitStoreRequest $request, $site_id, $floor_id)
-    public function store(Request $request, $site_id, $floor_id)
+    public function store(unitStoreRequest $request, $site_id, $floor_id)
     {
-        return $request->input();
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                $record = $this->unitInterface->store($site_id, $floor_id, $inputs);
+                // dd($inputs);
+                if ($inputs['add_bulk_unit']) {
+                    $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
+
+                    session([
+                        'queueBatchID' => $record->id
+                    ]);
+
+                    return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
+                } else {
+                    $record = $this->unitInterface->store($site_id, $floor_id, $inputs);
+                }
 
                 return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));
             } else {

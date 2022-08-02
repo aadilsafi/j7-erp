@@ -10,6 +10,8 @@ interface UnitInterface
     public function getById($site_id, $floor_id, $id);
 
     public function store($site_id, $floor_id, $inputs, $isUnitActive = true);
+    public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = true);
+
     public function update($site_id, $floor_id, $id, $inputs);
 
     public function destroy($site_id, $floor_id, $id);

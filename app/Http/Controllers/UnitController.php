@@ -72,8 +72,10 @@ class UnitController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(unitStoreRequest $request, $site_id, $floor_id)
+    // public function store(unitStoreRequest $request, $site_id, $floor_id)
+    public function store(Request $request, $site_id, $floor_id)
     {
+        return $request->input();
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();

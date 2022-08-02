@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     SiteController,
     CountryController,
     FloorController,
+    testController,
     UnitController,
 };
 use Illuminate\Support\Facades\Route;
@@ -80,9 +81,6 @@ Route::group([
 
                 Route::get('delete', [PermissionController::class, 'destroy'])->name('destroy');
             });
-
-            // Route::get('role-has-permission', [PermissionController::class, 'roleHasPermission']);
-            // Route::get('refresh-permissions', [PermissionController::class, 'refreshPermissions']);
 
             Route::post('assign-permission', [PermissionController::class, 'assignPermissionToRole'])->name('assign-permission');
             Route::post('revoke-permission', [PermissionController::class, 'revokePermissionToRole'])->name('revoke-permission');
@@ -178,21 +176,12 @@ Route::group([
                 Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
             });
         });
-
-        // //Additional Costs Routes
-        // Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
-        //     Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
-
-        //     Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
-        //     Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
-
-        //     Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
-        //     Route::group(['prefix' => '/{id}'], function () {
-        //         Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
-        //         Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
-
-        //         Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
-        //     });
-        // });
     });
+});
+
+Route::group(['prefix' => 'tests'], function () {
+    Route::get('jobs', [testController::class, 'jobs'])->name('jobs');
+    Route::get('/batch/{batchId}', [testController::class, 'getBatchByID'])->name('batch');
+    Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
+    Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });

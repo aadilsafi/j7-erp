@@ -107,7 +107,7 @@ span.input-group-text.is-valid {
     font-size: 13px !important;
 }
 
-.spin-hover:hover {
+.spin-hover {
     animation: icon-spin 2s infinite linear;
 }
 
@@ -212,4 +212,13 @@ span.input-group-text.is-valid {
 .valid-tooltip {
     right: 1rem;
     top: -7px !important;
+}
+
+div#queuesLoadingOffCanvas {
+    width: 70%;
+    margin: auto;
+    border-radius: 15px 15px 0px 0px;
+    height: fit-content;
+    max-height: 300px;
+    overflow-y: auto;
 }

@@ -29,15 +29,15 @@
         @enderror
     </div>
 
-    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+    {{-- <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="slug">Slug</label>
         <input type="text" class="form-control form-control-lg @error('slug') is-invalid @enderror" id="slug"
             name="slug" placeholder="Slug" readonly
-            value="{{ isset($additionalCost) ? $additionalCost->slug : old('slug') }}" />
+            value="{{ isset($additionalCost) ? $additionalCost->slug : old('slug') }}"  />
         @error('slug')
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror
-    </div>
+    </div> --}}
 
 </div>
 

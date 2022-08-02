@@ -11,6 +11,7 @@ use App\Http\Requests\units\{
     updateRequest as unitUpdateRequest
 };
 use Exception;
+use Illuminate\Support\Facades\Session;
 
 class UnitController extends Controller
 {
@@ -80,7 +81,10 @@ class UnitController extends Controller
                 // dd($inputs);
                 if ($inputs['add_bulk_unit']) {
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
-                    setKeyInSession('queueBatchId', $record);
+
+                    session([
+                        'queueBatchID' => $record->id
+                    ]);
 
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {

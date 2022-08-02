@@ -86,7 +86,7 @@
 
             {{ view('app.layout.alerts') }}
 
-            {{ json_encode(session()) }}
+            {{ json_encode(session()->get('queueBatchID')) }}
 
             @if (!request()->routeIs('dashboard'))
                 <div class="content-header row">
@@ -171,7 +171,11 @@
                     height: 14
                 });
             }
-            showOffCanvas('queuesLoadingOffCanvas');
+
+            @if (session()->has('queueBatchID'))
+                showOffCanvas('queuesLoadingOffCanvas');
+                startQueueInterval();
+            @endif
         })
 
         $.ajaxSetup({
@@ -226,20 +230,17 @@
 
         var intervalID, index = 0;
 
-        function sayHello() {
-            index++;
-            console.log(index);
+        function checkQueueBatchProgress(batchID) {
+
             setProgressTo('queueProgressBar', index);
         }
 
-        function start() {
+        function startQueueInterval() {
             console.log('start');
-            intervalID = setInterval(sayHello, 100);
+            intervalID = setInterval(checkQueueBatchProgress, 100);
         }
 
-        function stop() {
-            console.log('stop');
-            index = 0;
+        function stopQueueInterval() {
             clearInterval(intervalID);
         }
     </script>

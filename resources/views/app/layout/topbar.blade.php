@@ -73,11 +73,13 @@
             </ul>
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
-            <li class="nav-item d-block">
-                <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
-                    <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
-                </a>
-            </li>
+            @if (session()->has('queueBatchID'))
+                <li class="nav-item d-block">
+                    <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
+                        <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
+                    </a>
+                </li>
+            @endif
 
             <li class="nav-item dropdown dropdown-language">
                 <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"

@@ -65,8 +65,6 @@ class UnitService implements UnitInterface
 
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = true)
     {
-
-        // dd($inputs, 'bulk');
         $batch = Bus::batch([
             new MainUnitJob($site_id, $floor_id, $inputs, false),
         ])->dispatch();
@@ -92,8 +90,6 @@ class UnitService implements UnitInterface
             'type_id' => filter_strip_tags($inputs['type_id']),
             'status_id' => filter_strip_tags($inputs['status_id']),
         ];
-
-        // dd($data);
 
         $unit = $this->model()->where([
             'floor_id' => $floor_id,

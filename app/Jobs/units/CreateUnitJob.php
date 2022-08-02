@@ -2,6 +2,7 @@
 
 namespace App\Jobs\units;
 
+use App\Models\Unit;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -15,17 +16,15 @@ class CreateUnitJob implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $site_id, $floor_id, $data;
+    private $data;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($site_id, $floor_id, $data)
+    public function __construct($data)
     {
-        $this->site_id = decryptParams($site_id);
-        $this->floor_id = decryptParams($floor_id);
         $this->data = $data;
     }
 
@@ -36,7 +35,7 @@ class CreateUnitJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::info('CreateUnitJob: ' . $this->site_id . ' ' . $this->floor_id . ' ' . json_encode($this->data));
+        (new Unit())->insert($this->data);
         sleep(1);
     }
 }

@@ -171,6 +171,7 @@
                     height: 14
                 });
             }
+            showOffCanvas('queuesLoadingOffCanvas');
         })
 
         $.ajaxSetup({
@@ -190,6 +191,16 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
+
+
+        function showOffCanvas(element, autoClose = true) {
+            $('#' + element).offcanvas('show');
+            if (autoClose) {
+                setTimeout(function() {
+                    $('#' + element).offcanvas('hide');
+                }, 2500);
+            }
+        }
 
         function setProgressTo(progressBarID, progress) {
             var progressBar = $('#' + progressBarID);
@@ -214,6 +225,7 @@
         }
 
         var intervalID, index = 0;
+
         function sayHello() {
             index++;
             console.log(index);

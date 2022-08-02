@@ -40,13 +40,6 @@
                 </li> --}}
 
                 <li class="nav-item d-none d-lg-block">
-                    <a class="nav-link" href="javascript:void(0);" data-bs-toggle="offcanvas"
-                        data-bs-target="#queuesLoadingOffCanvas" aria-controls="queuesLoadingOffCanvas">
-                        <i class="ficon spin-hover" style="color: #7367f0;" data-feather="refresh-cw"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item d-none d-lg-block">
                     <a class="nav-link" href="{{ route('site.cache.flush') }}" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" title="Click to clear cache (Automatically resets in 10 minutes)">
                         <i class="ficon spin-hover" data-feather="refresh-cw"></i>
@@ -80,6 +73,12 @@
             </ul>
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
+            <li class="nav-item d-block">
+                <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
+                    <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
+                </a>
+            </li>
+
             <li class="nav-item dropdown dropdown-language">
                 <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
@@ -98,8 +97,14 @@
 
                 </div>
             </li>
-            <li class="nav-item d-none d-lg-block"><a class="nav-link nav-link-style"><i class="ficon"
-                        data-feather="moon"></i></a></li>
+
+            <li class="nav-item d-none d-lg-block">
+                <a class="nav-link nav-link-style">
+                    <i class="ficon" data-feather="moon"></i>
+                </a>
+            </li>
+
+
             <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon"
                         data-feather="search"></i></a>
                 <div class="search-input">

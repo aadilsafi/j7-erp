@@ -59,10 +59,12 @@ class MainUnitJob implements ShouldQueue
                 'type_id' => $this->inputs['type_id'],
                 'status_id' => $this->inputs['status_id'],
                 'active' => $this->isUnitActive,
+                'created_at' => now(),
+                'updated_at' => now()
             ];
 
             if ($i % 5 == 0) {
-                $jobs[] = new CreateUnitJob(encryptParams($this->site_id), encryptParams($this->floor_id), $data);
+                $jobs[] = new CreateUnitJob($data);
                 $data = [];
             }
         }

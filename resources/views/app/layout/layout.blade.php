@@ -134,7 +134,7 @@
 
     {{ view('app.layout.customizer') }}
 
-    {{ view('app.layout.loader') }}
+    {{ view('app.layout.offcanvas') }}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -191,6 +191,45 @@
             }
         })
 
+        function setProgressTo(progressBarID, progress) {
+            var progressBar = $('#' + progressBarID);
+            switch (progress) {
+                case 0:
+                    progressBar.addClass('progress-bar-animated').css('width', '100%');
+                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    break;
+
+                case 100:
+                    progressBar.addClass('progress-bar-animated').css('width', '100%');
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                    stop();
+                    break;
+
+                default:
+                    progressBar.removeClass('progress-bar-animated').css('width',
+                        progress + '%');
+                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    break;
+            }
+        }
+
+        var intervalID, index = 0;
+        function sayHello() {
+            index++;
+            console.log(index);
+            setProgressTo('queueProgressBar', index);
+        }
+
+        function start() {
+            console.log('start');
+            intervalID = setInterval(sayHello, 100);
+        }
+
+        function stop() {
+            console.log('stop');
+            index = 0;
+            clearInterval(intervalID);
+        }
     </script>
     @yield('custom-js')
 </body>

@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Jobs\units\MainUnitJob;
 use App\Models\Unit;
 use App\Services\Interfaces\UnitInterface;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
 class UnitService implements UnitInterface
@@ -59,6 +61,17 @@ class UnitService implements UnitInterface
 
         $floor = $this->model()->create($data);
         return $floor;
+    }
+
+    public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = true)
+    {
+
+        // dd($inputs, 'bulk');
+        $batch = Bus::batch([
+            new MainUnitJob($site_id, $floor_id, $inputs, false),
+        ])->dispatch();
+
+        return $batch;
     }
 
     public function update($site_id, $floor_id, $id, $inputs)

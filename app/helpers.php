@@ -347,3 +347,15 @@ if (!function_exists('getNHeightestNumber')) {
         return (int)str_repeat('9', $numberOfDigits);
     }
 }
+
+function setKeyInSession(string $key, string $value)
+{
+    session($key, $value);
+    return true;
+}
+
+function unsetKeyInSession(string $key)
+{
+    session()->forget($key);
+    return true;
+}

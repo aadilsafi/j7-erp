@@ -106,11 +106,16 @@ class Unit extends Model
         'type_id' => 'nullable|integer',
         'status_id' => 'nullable|integer',
         'active' => 'nullable|boolean',
+        'add_bulk_unit' => 'required|boolean|in:0,1',
+        'slider_input_1' => 'required_if:add_bulk_unit,1|integer',
+        'slider_input_2' => 'required_if:add_bulk_unit,1|integer',
     ];
 
     public $ruleMessages = [
         'corner_id.required_if' => 'The Corner charges field is required when :other is checked.',
         'facing_id.required_if' => 'The Facing charges field is required when :other is checked.',
+        'slider_input_1.required_if' => 'The units is required when :other is checked.',
+        'slider_input_2.required_if' => 'The units is required when :other is checked.',
     ];
 
     public function agent()

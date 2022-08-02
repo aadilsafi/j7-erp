@@ -86,7 +86,7 @@
 
             {{ view('app.layout.alerts') }}
 
-            {{ json_encode(session()) }}
+            {{ json_encode(session()->get('queueBatchID')) }}
 
             @if (!request()->routeIs('dashboard'))
                 <div class="content-header row">
@@ -134,7 +134,7 @@
 
     {{ view('app.layout.customizer') }}
 
-    {{ view('app.layout.loader') }}
+    {{ view('app.layout.offcanvas') }}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -171,6 +171,11 @@
                     height: 14
                 });
             }
+
+            @if (session()->has('queueBatchID'))
+                showOffCanvas('queuesLoadingOffCanvas');
+                startQueueInterval();
+            @endif
         })
 
         $.ajaxSetup({
@@ -191,6 +196,53 @@
             }
         })
 
+
+        function showOffCanvas(element, autoClose = true) {
+            $('#' + element).offcanvas('show');
+            if (autoClose) {
+                setTimeout(function() {
+                    $('#' + element).offcanvas('hide');
+                }, 2500);
+            }
+        }
+
+        function setProgressTo(progressBarID, progress) {
+            var progressBar = $('#' + progressBarID);
+            switch (progress) {
+                case 0:
+                    progressBar.addClass('progress-bar-animated').css('width', '100%');
+                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    break;
+
+                case 100:
+                    progressBar.addClass('progress-bar-animated').css('width', '100%');
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                    stop();
+                    break;
+
+                default:
+                    progressBar.removeClass('progress-bar-animated').css('width',
+                        progress + '%');
+                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    break;
+            }
+        }
+
+        var intervalID, index = 0;
+
+        function checkQueueBatchProgress(batchID) {
+
+            setProgressTo('queueProgressBar', index);
+        }
+
+        function startQueueInterval() {
+            console.log('start');
+            intervalID = setInterval(checkQueueBatchProgress, 100);
+        }
+
+        function stopQueueInterval() {
+            clearInterval(intervalID);
+        }
     </script>
     @yield('custom-js')
 </body>

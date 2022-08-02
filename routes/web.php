@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     SiteController,
     CountryController,
     FloorController,
+    JobBatchController,
     testController,
     UnitController,
 };
@@ -175,6 +176,9 @@ Route::group([
 
                 Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
             });
+        });
+        Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
+            Route::get('/{batchId}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
         });
     });
 });

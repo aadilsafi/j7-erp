@@ -41,7 +41,16 @@
             <div class="card-body">
                 @method('PUT')
                 @csrf
-                {{ view('app.sites.floors.units.form-fields', ['site' => $site, 'floor' => $floor, 'siteConfiguration' => $siteConfiguration, 'additionalCosts' => $additionalCosts, 'types' => $types, 'statuses' => $statuses, 'unit' => $unit]) }}
+                {{ view('app.sites.floors.units.form-fields', [
+                    'site' => $site,
+                    'floor' => $floor,
+                    'siteConfiguration' => $siteConfiguration,
+                    'additionalCosts' => $additionalCosts,
+                    'types' => $types,
+                    'statuses' => $statuses,
+                    'unit' => $unit,
+                    'bulkOptions' => false,
+                ]) }}
 
             </div>
 

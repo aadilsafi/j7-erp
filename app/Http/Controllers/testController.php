@@ -12,13 +12,13 @@ class testController extends Controller
 {
     public function jobs(Request $request)
     {
-        $batch = Bus::batch([
-            new MainUnitJob(),
-        ])->dispatch();
+        // $batch = Bus::batch([
+        //     new MainUnitJob(),
+        // ])->dispatch();
 
-        return [
-            'batch' => $batch,
-        ];
+        // return [
+        //     'batch' => $batch,
+        // ];
     }
 
     function getBatchByID(string $batchId)

@@ -86,7 +86,6 @@
 
             {{ view('app.layout.alerts') }}
 
-            {{ json_encode(session()->get('queueBatchID')) }}
 
             @if (!request()->routeIs('dashboard'))
                 <div class="content-header row">

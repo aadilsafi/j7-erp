@@ -55,7 +55,6 @@ class UnitController extends Controller
      */
     public function create(Request $request, $site_id, $floor_id)
     {
-        return UserBatchActionsEnum::COPY_FLOORS->name;
         if (!request()->ajax()) {
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),

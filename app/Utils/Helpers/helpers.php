@@ -1,9 +1,11 @@
 <?php
 
-use App\Models\AdditionalCost;
-use App\Models\Site;
-use App\Models\SiteConfigration;
-use App\Models\Type;
+use App\Models\{
+    AdditionalCost,
+    SiteConfigration,
+    Type,
+    UserBatch,
+};
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
@@ -345,5 +347,54 @@ if (!function_exists('getNHeightestNumber')) {
     function getNHeightestNumber($numberOfDigits = 1)
     {
         return (int)str_repeat('9', $numberOfDigits);
+    }
+}
+
+if (!function_exists('getbatchesByUserID')) {
+    function getbatchesByUserID($user_id, $action_id = 0)
+    {
+
+        $user_id = decryptParams($user_id);
+
+        $batches = (new UserBatch())->whereUserId($user_id);
+        if ($action_id > 0) {
+            $batches = $batches->whereActionId($action_id);
+        }
+
+        return $batches->get() ?? null;
+    }
+}
+
+if (!function_exists('apiErrorResponse')) {
+    function apiErrorResponse($message = 'data not found', $key = 'error')
+    {
+        return response()->json(
+            [
+                'status' => false,
+                'message' => [
+                    $key => $message,
+                ],
+                'data' => null,
+                'stauts_code' => '200'
+            ],
+            200
+        );
+    }
+}
+
+if (!function_exists('apiSuccessResponse')) {
+    function apiSuccessResponse($data = null, $message = 'data found', $key = 'success')
+    {
+        return response()->json(
+            [
+                'status' => true,
+                'message' => [
+                    $key => $message,
+                ],
+                'data' => $data,
+                'stauts_code' => '200'
+            ],
+            200
+        );
     }
 }

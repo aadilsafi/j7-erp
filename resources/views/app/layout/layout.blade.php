@@ -74,6 +74,11 @@
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
     data-menu="vertical-menu-modern" data-col="">
 
+    @php
+        $batches = getbatchesByUserID(encryptParams(auth()->user()->id));
+    @endphp
+
+
     {{ view('app.layout.topbar') }}
 
     {{ view('app.layout.leftbar') }}
@@ -133,7 +138,7 @@
 
     {{ view('app.layout.customizer') }}
 
-    {{ view('app.layout.offcanvas') }}
+    {{ view('app.layout.offcanvas', ['batches' => $batches]) }}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -170,11 +175,10 @@
                     height: 14
                 });
             }
-
-            @if (session()->has('queueBatchID'))
-                showOffCanvas('queuesLoadingOffCanvas');
-                startQueueInterval();
-            @endif
+            @forelse ($batches as $key => $batch)
+                startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
+            @empty
+            @endforelse
         })
 
         $.ajaxSetup({
@@ -205,45 +209,69 @@
             }
         }
 
-        function setProgressTo(progressBarID, progress) {
-            var progressBar = $('#' + progressBarID);
+        function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs) {
+            var progressBar = $('#queueProgressBar_' + progressBarID);
+
             switch (progress) {
                 case 0:
                     progressBar.addClass('progress-bar-animated').css('width', '100%');
                     progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    $('#queueProgressBarProgress_' + progressBarID).text('Initializing...');
                     break;
 
                 case 100:
                     progressBar.addClass('progress-bar-animated').css('width', '100%');
                     progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
-                    stop();
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
                     break;
 
                 default:
                     progressBar.removeClass('progress-bar-animated').css('width',
                         progress + '%');
                     progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
                     break;
             }
         }
 
-        var intervalID, index = 0;
+        var intervalIDs = []
 
-        function checkQueueBatchProgress(batchID) {
+        function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
 
-            setProgressTo('queueProgressBar', index);
+            $.ajax({
+                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id', batch_id),
+                type: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response.data.processedJobs, response.data.totalJobs);
+
+                        if (response.data.progress == 100) {
+                            stopQueueInterval(interval_id);
+                        }
+                    }
+                }
+            });
+
+            setProgressTo('queueProgressBar', 50);
         }
 
-        function startQueueInterval() {
-            console.log('start');
-            intervalID = setInterval(checkQueueBatchProgress, 100);
+        function startQueueInterval(batch_id, progressBarID) {
+
+            var interval_id = setInterval(function() {
+                checkQueueBatchProgress(interval_id, batch_id, progressBarID);
+            }, 1500);
+
+            intervalIDs.push(interval_id);
         }
 
-        function stopQueueInterval() {
-            clearInterval(intervalID);
+        function stopQueueInterval(interval_id) {
+
+            clearInterval(intervalIDs[interval_id]);
         }
     </script>
+
     @yield('custom-js')
+
 </body>
 <!-- END: Body-->
 

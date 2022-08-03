@@ -74,12 +74,12 @@
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
             @if (session()->has('queueBatchID'))
-                <li class="nav-item d-block">
-                    <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
-                        <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
-                    </a>
-                </li>
             @endif
+            <li class="nav-item d-block">
+                <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
+                    <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
+                </a>
+            </li>
 
             <li class="nav-item dropdown dropdown-language">
                 <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
@@ -107,8 +107,10 @@
             </li>
 
 
-            <li class="nav-item nav-search"><a class="nav-link nav-link-search"><i class="ficon"
-                        data-feather="search"></i></a>
+            <li class="nav-item nav-search">
+                <a class="nav-link nav-link-search">
+                    <i class="ficon" data-feather="search"></i>
+                </a>
                 <div class="search-input">
                     <div class="search-input-icon"><i data-feather="search"></i></div>
                     <input class="form-control input" type="text" placeholder="Explore Vuexy..." tabindex="-1"
@@ -117,6 +119,7 @@
                     <ul class="search-list search-list-main"></ul>
                 </div>
             </li>
+            {{-- {{ json_encode(getbatchesByUserID(encryptParams(auth()->user()->id))) }} --}}
             <li class="nav-item dropdown dropdown-cart me-25"><a class="nav-link" href="#"
                     data-bs-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span
                         class="badge rounded-pill bg-primary badge-up cart-item-count">6</span></a>

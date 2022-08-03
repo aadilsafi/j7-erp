@@ -178,7 +178,7 @@ Route::group([
             });
         });
         Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
-            Route::get('/{batchId}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
+            Route::get('/{batch_id}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
         });
     });
 });

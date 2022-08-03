@@ -3,30 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UnitsDataTable;
-use App\Models\{Floor, Site, Status, Type};
-use App\Services\Interfaces\{AdditionalCostInterface, UnitInterface, UnitTypeInterface};
+use App\Models\{Floor, Site, Status};
+use App\Services\Interfaces\{AdditionalCostInterface, UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
     storeRequest as unitStoreRequest,
     updateRequest as unitUpdateRequest
 };
+use App\Utils\Enums\UserBatchActionsEnum;
+use App\Utils\Enums\UserBatchStatusEnum;
 use Exception;
-use Illuminate\Support\Facades\Session;
 
 class UnitController extends Controller
 {
     private $unitInterface;
     private $additionalCostInterface;
     private $unitTypeInterface;
+    private $userBatchInterface;
 
     public function __construct(
         UnitInterface $unitInterface,
         AdditionalCostInterface $additionalCostInterface,
         UnitTypeInterface $unitTypeInterface,
+        UserBatchInterface $userBatchInterface,
     ) {
         $this->unitInterface = $unitInterface;
         $this->additionalCostInterface = $additionalCostInterface;
         $this->unitTypeInterface = $unitTypeInterface;
+        $this->userBatchInterface = $userBatchInterface;
     }
 
     /**
@@ -51,6 +55,7 @@ class UnitController extends Controller
      */
     public function create(Request $request, $site_id, $floor_id)
     {
+        return UserBatchActionsEnum::COPY_FLOORS->name;
         if (!request()->ajax()) {
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
@@ -82,7 +87,7 @@ class UnitController extends Controller
                 if ($inputs['add_bulk_unit']) {
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
 
-
+                    $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_UNITS, UserBatchStatusEnum::PENDING);
 
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {

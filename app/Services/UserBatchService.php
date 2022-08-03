@@ -27,25 +27,21 @@ class UserBatchService implements UserBatchInterface
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $user_id, $job_batch_id, $actions, $status)
     {
+        $site_id = decryptParams($site_id);
+        $user_id = decryptParams($user_id);
+
         $data = [
-            'site_id' => decryptParams($site_id),
-            'name' => filter_strip_tags($inputs['name']),
-            'slug' => Str::of(filter_strip_tags($inputs['slug']))->slug(),
-            'parent_id' => filter_strip_tags($inputs['additionalCost']),
-            'has_child' => filter_strip_tags($inputs['has_child']),
-            'site_percentage' => filter_strip_tags($inputs['site_percentage']),
-            'applicable_on_site' => filter_strip_tags($inputs['applicable_on_site']),
-            'floor_percentage' => filter_strip_tags($inputs['floor_percentage']),
-            'applicable_on_floor' => filter_strip_tags($inputs['applicable_on_floor']),
-            'unit_percentage' => filter_strip_tags($inputs['unit_percentage']),
-            'applicable_on_unit' => filter_strip_tags($inputs['applicable_on_unit']),
+            'site_id' => $site_id,
+            'user_id' => $user_id,
+            'job_batch_id' => $job_batch_id,
+            'actions' => $actions,
+            'batch_status' => $status,
         ];
 
-        // dd($data);
-        $additionalCost = $this->model()->create($data);
-        return $additionalCost;
+        $userBatchRecord = $this->model()->create($data);
+        return $userBatchRecord;
     }
 
     public function update($site_id, $inputs, $id)

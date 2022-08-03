@@ -10,9 +10,11 @@ class UserBatch extends Model
     use HasFactory;
 
     protected $fillable = [
+        'site_id',
         'user_id',
         'job_batch_id',
         'actions',
+        'batch_status',
     ];
 
     public function user()
@@ -24,5 +26,4 @@ class UserBatch extends Model
     {
         return $this->belongsTo(JobBatch::class);
     }
-
 }

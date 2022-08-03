@@ -38,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UnitInterface::class, UnitService::class);
         $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
         $this->app->bind(UserBatchInterface::class, UserBatchService::class);
+
+        if ($this->app->environment('local')) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 
     /**

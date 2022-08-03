@@ -82,9 +82,7 @@ class UnitController extends Controller
                 if ($inputs['add_bulk_unit']) {
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
 
-                    session([
-                        'queueBatchID' => $record->id
-                    ]);
+
 
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {

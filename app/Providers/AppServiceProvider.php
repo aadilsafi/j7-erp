@@ -8,7 +8,8 @@ use App\Services\Interfaces\{
     PermissionInterface,
     SiteConfigurationInterface,
     UnitInterface,
-    UnitTypeInterface
+    UnitTypeInterface,
+    UserBatchInterface
 };
 use App\Services\{
     AdditionalCostService,
@@ -16,7 +17,8 @@ use App\Services\{
     PermissionService,
     SiteConfiurationService,
     UnitService,
-    UnitTypeService
+    UnitTypeService,
+    UserBatchService
 };
 use Illuminate\Support\ServiceProvider;
 
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FloorInterface::class, FloorService::class);
         $this->app->bind(UnitInterface::class, UnitService::class);
         $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
+        $this->app->bind(UserBatchInterface::class, UserBatchService::class);
     }
 
     /**

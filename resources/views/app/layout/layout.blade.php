@@ -205,7 +205,7 @@
             if (autoClose) {
                 setTimeout(function() {
                     $('#' + element).offcanvas('hide');
-                }, 2500);
+                }, 100);
             }
         }
 
@@ -244,7 +244,7 @@
                 success: function(response) {
                     if (response.status) {
                         setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response.data.processedJobs, response.data.totalJobs);
-
+                        console.log(response.data.progress);
                         if (response.data.progress == 100) {
                             stopQueueInterval(interval_id);
                         }

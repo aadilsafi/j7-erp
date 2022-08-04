@@ -10,7 +10,6 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
 
 class UnitsDataTable extends DataTable
 {
@@ -28,6 +27,12 @@ class UnitsDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->editColumn('check', function ($unit) {
                 return $unit;
+            })
+            ->editColumn('status_id', function ($unit) {
+                return editBadgeColumn($unit->status->name);
+            })
+            ->editColumn('type_id', function ($unit) {
+                return $unit->type->name;
             })
             ->editColumn('created_at', function ($unit) {
                 return editDateColumn($unit->created_at);
@@ -50,17 +55,15 @@ class UnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->whereFloorId($this->floor->id);
+        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereFloorId($this->floor->id);
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
+            ->addTableClass(['table-striped', 'table-hover'])
             ->setTableId('floors-units-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->serverSide()
-            ->processing()
             ->deferRender()
             ->scrollX()
             ->dom('BlfrtipC')
@@ -98,7 +101,7 @@ class UnitsDataTable extends DataTable
                     'width' => '10%',
                     'orderable' => false,
                     'searchable' => false,
-                    'responsivePriority' => 3,
+                    'responsivePriority' => 0,
                     'render' => "function (data, type, full, setting) {
                         var tableRow = JSON.parse(data);
                         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
@@ -109,8 +112,9 @@ class UnitsDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [3, 'desc'],
+                [5, 'desc'],
             ]);
+
     }
 
     /**
@@ -123,6 +127,8 @@ class UnitsDataTable extends DataTable
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Units'),
+            Column::make('type_id')->name('type.name')->title('Type'),
+            Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
             Column::make('created_at'),
             Column::make('updated_at'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center'),

@@ -293,6 +293,17 @@ if (!function_exists('editDateColumn')) {
     }
 }
 
+if (!function_exists('getTypeNameByID')) {
+    function getTypeNameByID($type_id)
+    {
+        $type = (new Type())->where('id', $type_id)->first();
+        if ($type) {
+            return $type->name;
+        }
+        return 'parent';
+    }
+}
+
 if (!function_exists('editBooleanColumn')) {
     function editBooleanColumn($boolean)
     {
@@ -301,6 +312,13 @@ if (!function_exists('editBooleanColumn')) {
         } else {
             return "<span class='badge rounded-pill badge-light-danger me-1'>" . __('lang.commons.no') . "</span>";
         }
+    }
+}
+
+if (!function_exists('editBadgeColumn')) {
+    function editBadgeColumn($value)
+    {
+        return "<span class='badge rounded-pill badge-light-primary me-1'>" . $value . "</span>";
     }
 }
 

@@ -63,16 +63,16 @@ if (!function_exists('decryptParams')) {
     }
 }
 
-// if (!function_exists('getSettings')) {
-//     function getSettings($key)
-//     {
-//         //		return cache()->remember( 'settings.' . $key, 600, function () use ( $key ) {
-//         //			return ( new Setting() )->getByKey( $key )->value ?? 'Not Found';
-//         //		} );
-//         $setting = (new Setting())->getByKey($key);
-//         return $setting->value ?? 'Not Found';
-//     }
-// }
+if (!function_exists('getSiteConfiguration')) {
+    function getSiteConfiguration($site_id)
+    {
+
+        $site_id = decryptParams($site_id);
+
+        $siteConfiguration = (new SiteConfigration())->whereSiteId($site_id)->first();
+        return $siteConfiguration ?? null;
+    }
+}
 
 if (!function_exists('getAllModels')) {
     function getAllModels($path = null): array
@@ -351,13 +351,6 @@ if (!function_exists('getAuthentacatedUserInfo')) {
         $user->data = auth()->user();
         $user->roles = implode(', ', auth()->user()->roles->pluck('name')->toArray());
         return $user;
-    }
-}
-
-if (!function_exists('getSiteConfiguration')) {
-    function getSiteConfiguration($site_id)
-    {
-        return (new SiteConfigration())->whereSiteId($site_id)->first() ?? [];
     }
 }
 

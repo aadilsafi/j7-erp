@@ -33,11 +33,26 @@ class FloorsDataTable extends DataTable
             ->editColumn('length', function ($floor) {
                 return $floor->length . '\'\'';
             })
+            ->editColumn('units_count', function ($floor) {
+                return $floor->units->count();
+            })
+            ->editColumn('units_open_count', function ($floor) {
+                return $floor->units->where('status_id', 1)->count();
+            })
+            ->editColumn('units_sold_count', function ($floor) {
+                return $floor->units->where('status_id', 5)->count();
+            })
+            ->editColumn('units_token_count', function ($floor) {
+                return $floor->units->where('status_id', 2)->count();
+            })
+            ->editColumn('units_hold_count', function ($floor) {
+                return $floor->units->where('status_id', 4)->count();
+            })
+            ->editColumn('units_dp_count', function ($floor) {
+                return $floor->units->where('status_id', 3)->count();
+            })
             ->editColumn('created_at', function ($floor) {
                 return editDateColumn($floor->created_at);
-            })
-            ->editColumn('updated_at', function ($floor) {
-                return editDateColumn($floor->updated_at);
             })
             ->editColumn('actions', function ($floor) {
                 return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
@@ -54,7 +69,7 @@ class FloorsDataTable extends DataTable
      */
     public function query(Floor $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('units');
     }
 
     public function html(): HtmlBuilder
@@ -113,7 +128,7 @@ class FloorsDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [5, 'desc'],
+                [9, 'desc'],
             ]);
     }
 
@@ -128,10 +143,13 @@ class FloorsDataTable extends DataTable
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Floors'),
             Column::make('order'),
-            Column::make('width'),
-            Column::make('length'),
+            Column::computed('units_count')->title('Units'),
+            Column::computed('units_open_count')->title('Open'),
+            Column::computed('units_sold_count')->title('Sold'),
+            Column::computed('units_token_count')->title('Token'),
+            Column::computed('units_hold_count')->title('Hold'),
+            Column::computed('units_dp_count')->title('Partial DP'),
             Column::make('created_at'),
-            Column::make('updated_at'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1'),
         ];
     }

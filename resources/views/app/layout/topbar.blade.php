@@ -77,12 +77,12 @@
             @endif
             <li class="nav-item d-block">
                 <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
-                    <i class="ficon spinner" style="color: #7367f0;" data-feather="refresh-cw"></i>
+                    <i class="ficon spinner" style="color: #7367f0;" data-feather="aperture"></i>
                 </a>
             </li>
 
-            <li class="nav-item dropdown dropdown-language">
-                <a class="nav-link dropdown-toggle" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
+            <li class="nav-item dropdown dropdown-language d-lg-block">
+                <a class="nav-link dropdown-toggle d-lg-block" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <i class="flag-icon flag-icon-{{ LaravelLocalization::getCurrentLocale() }}"></i>
                     <span class="selected-language">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>

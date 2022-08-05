@@ -71,7 +71,7 @@
             <div class="card-footer d-flex align-items-center justify-content-end">
                 <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                     <i data-feather='save'></i>
-                    Save Unit
+                    <span id="create_unit_button_span">Save Unit</span>
                 </button>
                 <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -120,10 +120,12 @@
                     $('#bulkOptionSlider').show();
                     $('#bulk_units_checkbox_column').addClass('mb-3');
                     $('#unit_number_div').hide().children("#unit_number").prop('disabled', true);
+                    mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
                 } else {
                     $('#bulkOptionSlider').hide();
                     $('#bulk_units_checkbox_column').removeClass('mb-3');
                     $('#unit_number_div').show().children("#unit_number").prop('disabled', false);
+                    $('#create_unit_button_span').html('Save Unit');
                 }
             });
 
@@ -167,7 +169,7 @@
                 inputs[handle].value = parseInt(values[handle]);
             });
 
-            mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
+            // mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
 
             function mergeTooltips(slider, threshold, separator) {
 
@@ -185,6 +187,11 @@
                 });
 
                 slider.noUiSlider.on('update', function(values, handle, unencoded, tap, positions) {
+
+                    if ($('#add_bulk_unit').is(':checked')) {
+                        $('#create_unit_button_span').html('Save Units [' + parseInt(
+                            getDifference(values[0], values[1]) + 1) + ']');
+                    }
 
                     var pools = [
                         []
@@ -241,9 +248,10 @@
                                 // Center this tooltip over the affected handles
 
                                 tooltips[handleNumber].innerHTML = poolValues[poolIndex].map(
-                                    function(item) {
-                                        return parseInt(item, 10);
-                                    }).join(separator) + ' <i class="bi bi-door-open" class="m-10"></i>';
+                                        function(item) {
+                                            return parseInt(item, 10);
+                                        }).join(separator) +
+                                    ' <i class="bi bi-door-open" class="m-10"></i>';
                                 tooltips[handleNumber].style.display = 'block';
                                 tooltips[handleNumber].style[direction] = offset + '%';
                             } else {
@@ -253,6 +261,10 @@
                         }
                     });
                 });
+            }
+
+            function getDifference(a, b) {
+                return Math.abs(a - b);
             }
         });
     </script>

@@ -1,6 +1,8 @@
-<!-- BEGIN: Customizer-->
-<div class="customizer d-none d-md-block"><a class="customizer-toggle d-flex align-items-center justify-content-center"
-        href="#"><i class="spinner" data-feather="settings"></i></a>
+{{-- <!-- BEGIN: Customizer-->
+<div class="customizer d-none d-md-block">
+    <a class="customizer-toggle d-flex align-items-center justify-content-center" href="#">
+        <i class="spinner" data-feather="settings"></i>
+    </a>
     <div class="customizer-content">
         <!-- Customizer header -->
         <div class="customizer-header px-2 pt-1 pb-0 position-relative">
@@ -129,4 +131,4 @@
     </div>
 
 </div>
-<!-- End: Customizer-->
+<!-- End: Customizer--> --}}

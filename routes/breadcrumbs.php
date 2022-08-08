@@ -99,6 +99,11 @@ Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail) {
     $trail->push('Create Floor');
 });
 
+Breadcrumbs::for('sites.floors.copy', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+    $trail->push('Copy Floor');
+});
+
 Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail) {
     $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
     $trail->push('Edit Floor');

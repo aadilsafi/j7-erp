@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class MainUnitJob implements ShouldQueue
 {
@@ -62,12 +63,11 @@ class MainUnitJob implements ShouldQueue
                 'created_at' => now(),
                 'updated_at' => now()
             ];
-
-            if ($i % 5 == 0) {
-                $jobs[] = new CreateUnitJob($data);
-                $data = [];
-            }
         }
+
+        $jobs = array_map(function ($data) {
+            return new CreateUnitJob($data);
+        }, array_chunk($data, 5));
 
         $this->batch()->add($jobs);
     }

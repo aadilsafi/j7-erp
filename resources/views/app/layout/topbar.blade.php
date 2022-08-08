@@ -73,17 +73,20 @@
             </ul>
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
-            @if (session()->has('queueBatchID'))
-            @endif
             <li class="nav-item d-block">
+
                 <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
-                    <i class="ficon spinner" style="color: #7367f0;" data-feather="aperture"></i>
+                    @if (!empty($batches))
+                        <i style="color: #7367f0 !important;" class="ficon spinner" data-feather="refresh-cw"></i>
+                    @else
+                        <i style="color: #28C76F !important; font-size: 23px;" class="bi bi-check2-circle"></i>
+                    @endif
                 </a>
             </li>
 
-            <li class="nav-item dropdown dropdown-language d-lg-block">
-                <a class="nav-link dropdown-toggle d-lg-block" id="dropdown-flag" href="#" data-bs-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+            {{-- <li class="nav-item dropdown dropdown-language d-lg-block">
+                <a class="nav-link dropdown-toggle d-lg-block" id="dropdown-flag" href="#"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="flag-icon flag-icon-{{ LaravelLocalization::getCurrentLocale() }}"></i>
                     <span class="selected-language">{{ LaravelLocalization::getCurrentLocaleNative() }}</span>
                 </a>
@@ -98,7 +101,7 @@
                     @endforeach
 
                 </div>
-            </li>
+            </li> --}}
 
             <li class="nav-item d-none d-lg-block">
                 <a class="nav-link nav-link-style">
@@ -137,9 +140,8 @@
                             <div class="list-item-body flex-grow-1"><i class="ficon cart-item-remove"
                                     data-feather="x"></i>
                                 <div class="media-heading">
-                                    <h6 class="cart-item-title"><a class="text-body"
-                                            href="app-ecommerce-details.html"> Apple watch 5</a></h6><small
-                                        class="cart-item-by">By Apple</small>
+                                    <h6 class="cart-item-title"><a class="text-body" href="app-ecommerce-details.html">
+                                            Apple watch 5</a></h6><small class="cart-item-by">By Apple</small>
                                 </div>
                                 <div class="cart-item-qty">
                                     <div class="input-group">

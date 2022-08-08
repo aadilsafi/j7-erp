@@ -63,10 +63,10 @@ class UnitService implements UnitInterface
         return $floor;
     }
 
-    public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = true)
+    public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {
         $batch = Bus::batch([
-            new MainUnitJob($site_id, $floor_id, $inputs, false),
+            new MainUnitJob($site_id, $floor_id, $inputs, $isUnitActive),
         ])->dispatch();
 
         return $batch;

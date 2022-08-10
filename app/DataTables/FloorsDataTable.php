@@ -34,22 +34,28 @@ class FloorsDataTable extends DataTable
                 return $floor->length . '\'\'';
             })
             ->editColumn('units_count', function ($floor) {
-                return $floor->units->count();
+                $count = $floor->units->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('units_open_count', function ($floor) {
-                return $floor->units->where('status_id', 1)->count();
+                $count = $floor->units->where('status_id', 1)->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('units_sold_count', function ($floor) {
-                return $floor->units->where('status_id', 5)->count();
+                $count = $floor->units->where('status_id', 5)->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('units_token_count', function ($floor) {
-                return $floor->units->where('status_id', 2)->count();
+                $count = $floor->units->where('status_id', 2)->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('units_hold_count', function ($floor) {
-                return $floor->units->where('status_id', 4)->count();
+                $count = $floor->units->where('status_id', 4)->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('units_dp_count', function ($floor) {
-                return $floor->units->where('status_id', 3)->count();
+                $count = $floor->units->where('status_id', 3)->count();
+                return $count > 0 ? $count : '-';
             })
             ->editColumn('created_at', function ($floor) {
                 return editDateColumn($floor->created_at);
@@ -81,7 +87,7 @@ class FloorsDataTable extends DataTable
             ->serverSide()
             ->processing()
             ->deferRender()
-            ->scrollX()
+            // ->scrollX()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
@@ -91,6 +97,12 @@ class FloorsDataTable extends DataTable
                     ->text('<i class="bi bi-plus"></i> Add New')
                     ->attr([
                         'onclick' => 'addNew()',
+                    ]),
+                Button::raw('copy-floor')
+                    ->addClass('btn btn-relief-outline-primary')
+                    ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')
+                    ->attr([
+                        'onclick' => 'copyFloor()',
                     ]),
                 Button::make('export')->addClass('btn btn-relief-outline-secondary dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),

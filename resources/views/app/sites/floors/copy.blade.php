@@ -68,7 +68,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        @error('floora')
+                        @error('floor')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
@@ -101,23 +101,22 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="card-footer d-flex align-items-center justify-content-end">
+                <button id="copy_floor_button" type="submit"
+                    class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                    <i data-feather='copy'></i>
+                    <span id="copy_floor_button_span">Copy Floor </span>
+                </button>
+                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
+                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
+                    <i data-feather='x'></i>
+                    {{ __('lang.commons.cancel') }}
+                </a>
+            </div>
+
         </form>
-    </div>
-
-    <div class="card-footer d-flex align-items-center justify-content-end">
-        <button id="copy_floor_button" type="submit"
-            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-            <i data-feather='copy'></i>
-            <span id="copy_floor_button_span">Copy Floor </span>
-        </button>
-        <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
-            class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-            <i data-feather='x'></i>
-            {{ __('lang.commons.cancel') }}
-        </a>
-    </div>
-
-    </form>
     </div>
 
     @php

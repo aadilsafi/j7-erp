@@ -138,7 +138,8 @@
 
     {{ view('app.layout.customizer') }}
 
-    {{ view('app.layout.queueLoading', ['batches' => $batches]) }}
+    @includeWhen(count($batches) > 0, 'app.layout.queueLoading', ['batches' => $batches])
+    {{-- {{ view('app.layout.queueLoading', ['batches' => $batches]) }} --}}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>

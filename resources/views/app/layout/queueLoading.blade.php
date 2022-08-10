@@ -1,4 +1,4 @@
-{{-- <div class="offcanvas offcanvas-bottom" tabindex="-1" id="queuesLoadingOffCanvas"
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="queuesLoadingOffCanvas"
     aria-labelledby="queuesLoadingOffCanvasLabel">
     <div class="offcanvas-header">
         <h4 id="queuesLoadingOffCanvasLabel" class="offcanvas-title">Under Construction</h4>
@@ -33,7 +33,7 @@
             </div>
         @endforelse
     </div>
-</div> --}}
+</div>
 
 <div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100">
     <div class="w-50">
@@ -70,35 +70,29 @@
                 <div id="accordionMarginOne" class="accordion-collapse collapse" aria-labelledby="headingMarginOne"
                     data-bs-parent="#accordionMargin">
                     <div class="accordion-body">
-                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-indicators">
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                    class="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                                    aria-label="Slide 2"></button>
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                                    aria-label="Slide 3"></button>
-                            </div>
-                            <div class="carousel-inner">
-                                @forelse ($batches as $key => $batch)
-                                    <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                        <img src="../../../app-assets/images/slider/02.jpg" class="d-block w-100"
-                                            alt="First slide" />
+                        @forelse ($batches as $key => $batch)
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12">
+                                    <div class="card m-0">
+                                        <div class="card-body">
+                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}</p>
+                                                    <p id="queueProgressBarProgress_{{ $key }}">Initializing...</p>
+                                                </div>
+                                                <div class="progress progress-bar-primary">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                        id="queueProgressBar_{{ $key }}" role="progressbar"
+                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                                        style="width: 100%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                @empty
-                                @endforelse
-                               </div>
-                            <button class="carousel-control-prev" type="button"
-                                data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Previous</span>
-                            </button>
-                            <button class="carousel-control-next" type="button"
-                                data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Next</span>
-                            </button>
-                        </div>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
                     </div>
                 </div>
             </div>

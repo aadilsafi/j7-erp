@@ -47,26 +47,25 @@ class FloorCopyMainJob implements ShouldQueue
             'active' => true,
         ])->first();
 
-        $data = [];
-
         for ($i = $this->inputs['copy_floor_from']; $i <= $this->inputs['copy_floor_to']; $i++) {
-            $data[] = [
+            $data = [
                 'site_id' => $this->site_id,
                 'name' => 'Floor ' . $i,
                 'width' => $floor->width,
                 'length' => $floor->length,
                 'order' => $i,
                 'active' => $this->isFloorActive,
-                'created_at' => now(),
-                'updated_at' => now()
             ];
+
+            $floor = (new Floor())->create($data);
+
+            Log::info(json_encode($floor));
         }
 
-        $newIds = (new Floor())->insert($data)->pluck('id')->toArray();
 
 
 
-        Log::info(json_encode($newIds));
+
 
         // $jobs = array_map(function ($data) {
         //     return new FloorCopyCreateJob($data);

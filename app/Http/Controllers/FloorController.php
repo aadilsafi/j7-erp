@@ -15,8 +15,10 @@ use App\Services\Interfaces\{
     FloorInterface,
     UserBatchInterface,
 };
-use App\Utils\Enums\UserBatchActionsEnum;
-use App\Utils\Enums\UserBatchStatusEnum;
+use App\Utils\Enums\{
+    UserBatchActionsEnum,
+    UserBatchStatusEnum,
+};
 
 class FloorController extends Controller
 {

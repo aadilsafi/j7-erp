@@ -73,7 +73,7 @@
             </ul>
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
-            <li class="nav-item d-block">
+            {{-- <li class="nav-item d-block">
 
                 <a onclick="showOffCanvas('queuesLoadingOffCanvas', false)" class="nav-link">
                     @if (!empty($batches))
@@ -82,7 +82,7 @@
                         <i style="color: #28C76F !important; font-size: 23px;" class="bi bi-check2-circle"></i>
                     @endif
                 </a>
-            </li>
+            </li> --}}
 
             {{-- <li class="nav-item dropdown dropdown-language d-lg-block">
                 <a class="nav-link dropdown-toggle d-lg-block" id="dropdown-flag" href="#"

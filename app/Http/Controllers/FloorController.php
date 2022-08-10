@@ -186,9 +186,10 @@ class FloorController extends Controller
 
             $inputs = $request->validated();
 
-            $record = $this->floorInterface->storeInBulk($site_id, $inputs);
+            $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
+            dd($record);
 
-            $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
+            // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
 
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess('Floor(s) will be contructed shortly!');
         } else {

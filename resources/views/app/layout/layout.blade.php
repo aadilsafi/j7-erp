@@ -61,7 +61,7 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/loader/machine/machine.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <!-- END: Custom CSS-->
 
     @yield('custom-css')
@@ -79,7 +79,7 @@
     @endphp
 
 
-    {{ view('app.layout.topbar') }}
+    {{ view('app.layout.topbar', ['batches' => $batches]) }}
 
     {{ view('app.layout.leftbar') }}
 
@@ -138,7 +138,8 @@
 
     {{ view('app.layout.customizer') }}
 
-    {{ view('app.layout.offcanvas', ['batches' => $batches]) }}
+    @includeWhen(count($batches) > 0, 'app.layout.queueLoading', ['batches' => $batches])
+    {{-- {{ view('app.layout.queueLoading', ['batches' => $batches]) }} --}}
 
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -243,7 +244,8 @@
                 type: 'GET',
                 success: function(response) {
                     if (response.status) {
-                        setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response.data.processedJobs, response.data.totalJobs);
+                        setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response
+                            .data.processedJobs, response.data.totalJobs);
                         console.log(response.data.progress);
                         if (response.data.progress == 100) {
                             stopQueueInterval(interval_id);

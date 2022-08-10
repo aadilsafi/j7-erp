@@ -243,6 +243,14 @@
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
                         </a>
                     </li>
+                    {{-- <li
+                        class="{{ request()->routeIs('sites.floors.copyView', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.floors.copyView', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='copy'></i>
+                            <span class="menu-item text-truncate" data-i18n="Copy Floor">Copy Floor</span>
+                        </a>
+                    </li> --}}
                 </ul>
             </li>
         </ul>

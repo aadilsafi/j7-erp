@@ -138,6 +138,9 @@ Route::group([
                         Route::put('update', [FloorController::class, 'update'])->name('update');
                     });
 
+                    Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
+                    Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
+
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {

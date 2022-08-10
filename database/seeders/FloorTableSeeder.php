@@ -22,6 +22,7 @@ class FloorTableSeeder extends Seeder
                 'length' => 1300,
                 'site_id' => 1,
                 'order' => 0,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -31,6 +32,7 @@ class FloorTableSeeder extends Seeder
                 'length' => 1300,
                 'site_id' => 1,
                 'order' => 1,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -40,6 +42,7 @@ class FloorTableSeeder extends Seeder
                 'length' => 1300,
                 'site_id' => 1,
                 'order' => 2,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -49,6 +52,7 @@ class FloorTableSeeder extends Seeder
                 'length' => 1300,
                 'site_id' => 1,
                 'order' => 3,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

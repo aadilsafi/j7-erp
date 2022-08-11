@@ -24,6 +24,12 @@
 @endsection
 
 @section('custom-css')
+    <style>
+        #dataTables {
+            background-color: red;
+            font-family: 'MontSerrat', sans-serif;
+        }
+    </style>
 @endsection
 
 @section('breadcrumbs')
@@ -45,38 +51,34 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}"
-                id="floors-table-form" method="get">
-                {{--  {{ $dataTable->table() }}  --}}
+            <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}" id="floors-table-form"
+                method="get">
+                {{-- {{ $dataTable->table() }} --}}
                 <div class="table-responsive">
-
-                    <table
-                        class="table table-light table-striped table_style floors-index-dataTable data-table "
+                    <table class="table table-light table-striped table_style floors-index-dataTable data-table "
                         id="dataTables">
                         <thead>
-                            <tr>
-                                <th colspan="3">Name</th>
+                            <tr class="text-center">
+                                <td rowspan="2">CHECK</td>
+                                <td rowspan="2">FLOORS</td>
+                                <td rowspan="2">ORDER</td>
+                                <td rowspan="2">WIDTH</td>
+                                <td rowspan="2">LENGTH</td>
+                                <td rowspan="2">UNITS</td>
+                                <td colspan="5">Statuses</td>
+                                <td rowspan="2">CREATED AT</td>
                             </tr>
                             <tr class="text-center">
-                                <td>CHECK</td>
-                                <td>FLOORS</td>
-                                <td>ORDER</td>
-                                <td>WIDTH</td>
-                                <td>LENGTH</td>
-                                <td>UNITS</td>
                                 <td>OPEN</td>
                                 <td>SOLD</td>
                                 <td>TOKEN</td>
                                 <td>HOLD</td>
                                 <td>Partial DP</td>
-                                <td>CREATED AT</td>
-                                <td>ACTION</td>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
-
                 </div>
             </form>
         </div>
@@ -106,44 +108,44 @@
 @endsection
 
 @section('custom-js')
-    <script>
 
-        $(document).ready(function(){
-            var table = $('.floors-index-dataTable').DataTable({
+    <script>
+        $(document).ready(function() {
+            var table = $('#dataTables').DataTable({
                 processing: true,
                 serverSide: true,
-                columnDefs: [
-                    {
-                        targets: 0,
-                        className: 'text-center text-primary',
-                        width: '10%',
-                        orderable : false,
-                        searchable : false,
-                        responsivePriority : 3,
-                        render : function (data, type, full, setting) {
-                            var tableRow = JSON.parse(data);
-                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                        },
-                        checkboxes : {
-                            'selectAllRender' :  '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                        }
+                columnDefs: [{
+                    targets: 0,
+                    className: 'text-center text-primary',
+                    width: '10%',
+                    orderable: false,
+                    searchable: false,
+                    responsivePriority: 3,
+                    render: function(data, type, full, setting) {
+                        var tableRow = JSON.parse(data);
+                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' +
+                            tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' +
+                            tableRow.id +
+                            '\" /><label class=\"form-check-label\" for=\"chkTableRow_' +
+                            tableRow.id + '\"></label></div>';
                     },
-                ],
+                    checkboxes: {
+                        'selectAllRender': '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    }
+                }],
                 ajax: {
-                    url: '{{ route('sites.floors.index',['site_id'=>':site_id']) }}'.replace(':site_id',"{{ $site_id }}"),
+                    url: '{{ route('sites.floors.index', ['site_id' => ':site_id']) }}'.replace(':site_id',
+                        "{{ $site_id }}"),
 
                 },
-                columns: [
-
-                    {
+                columns: [{
                         data: 'check',
                         name: 'check',
-                        orderable: true,
-                        searchable: true
                     },
                     {
                         data: 'name',
                         name: 'name',
+                        title: 'Floors',
                         orderable: true,
                         searchable: true
                     },
@@ -214,7 +216,10 @@
                         searchable: true
                     },
 
-                ]
+                ],
+                order: [
+                    [11, 'desc']
+                ],
             });
         });
 
@@ -259,6 +264,5 @@
         function copyFloor() {
             location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
         }
-
     </script>
 @endsection

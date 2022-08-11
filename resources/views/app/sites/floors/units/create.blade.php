@@ -119,12 +119,14 @@
                 if ($(this).is(':checked')) {
                     $('#bulkOptionSlider').show();
                     $('#bulk_units_checkbox_column').addClass('mb-3');
-                    $('#unit_number_div').hide().children("#unit_number").prop('disabled', true);
+                    $('#hide_div').hide();
+                    $("#unit_number, #name").attr('disabled', true);
                     mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
                 } else {
                     $('#bulkOptionSlider').hide();
                     $('#bulk_units_checkbox_column').removeClass('mb-3');
-                    $('#unit_number_div').show().children("#unit_number").prop('disabled', false);
+                    $('#hide_div').show();
+                    $("#unit_number, #name").attr('disabled', false);
                     $('#create_unit_button_span').html('Save Unit');
                 }
             });
@@ -266,6 +268,22 @@
             function getDifference(a, b) {
                 return Math.abs(a - b);
             }
+
+
+            //Calculate Unit Price and Total Price from Gross Area
+            $('#gross_area, #price_sqft').on('keyup', function() {
+                var total_price = 0;
+                if ($(this).val() > 0) {
+                    var gross_area = parseFloat($('#gross_area').val());
+                    var price_sqft = parseFloat($('#price_sqft').val());
+                    total_price = gross_area * price_sqft;
+                } else {
+                    total_price = 0;
+                    $(this).val('0');
+                }
+                $('#total_price').val('' + parseFloat(total_price).toFixed(2));
+
+            });
         });
     </script>
 @endsection

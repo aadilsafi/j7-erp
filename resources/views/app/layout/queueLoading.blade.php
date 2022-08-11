@@ -1,44 +1,7 @@
-<div class="offcanvas offcanvas-bottom" tabindex="-1" id="queuesLoadingOffCanvas"
-    aria-labelledby="queuesLoadingOffCanvasLabel">
-    <div class="offcanvas-header">
-        <h4 id="queuesLoadingOffCanvasLabel" class="offcanvas-title">Under Construction</h4>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        @forelse ($batches as $key => $batch)
-            <div class="row mb-1">
-                <div class="col-xl-12 col-lg-12">
-                    <div class="card m-0">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}</p>
-                                <p id="queueProgressBarProgress_{{ $key }}">Initializing...</p>
-                            </div>
-                            <div class="progress progress-bar-primary">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                    id="queueProgressBar_{{ $key }}" role="progressbar" aria-valuenow="100"
-                                    aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @empty
-            <div class="row mb-1">
-                <div class="col-xl-12 col-lg-12">
-                    <div class="d-flex justify-content-center align-items-center">
-                        <h3 class="m-0">No Data Found!!</h3>
-                    </div>
-                </div>
-            </div>
-        @endforelse
-    </div>
-</div>
-
 <div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100">
     <div class="w-50">
         <div class="accordion accordion-margin" id="accordionMargin">
-            <div class="accordion-item border-primary">
+            <div class="accordion-item border-primary" style="border-radius: 10px 10px 0 0 !important; overflow: hidden;">
                 <h2 class="accordion-header" id="headingMarginOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#accordionMarginOne" aria-expanded="false" aria-controls="accordionMarginOne">
@@ -70,29 +33,27 @@
                 <div id="accordionMarginOne" class="accordion-collapse collapse" aria-labelledby="headingMarginOne"
                     data-bs-parent="#accordionMargin">
                     <div class="accordion-body">
-                        @forelse ($batches as $key => $batch)
-                            <div class="row">
-                                <div class="col-xl-12 col-lg-12">
-                                    <div class="card m-0">
-                                        <div class="card-body">
-                                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}</p>
-                                                    <p id="queueProgressBarProgress_{{ $key }}">Initializing...</p>
-                                                </div>
-                                                <div class="progress progress-bar-primary">
-                                                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                                        id="queueProgressBar_{{ $key }}" role="progressbar"
-                                                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                                        style="width: 100%"></div>
-                                                </div>
-                                            </div>
+                        <div style="max-height: 285px; overflow-y: auto; padding: 15px;">
+                            @forelse ($batches as $key => $batch)
+                                <div class="card mb-1">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}
+                                            </p>
+                                            <p id="queueProgressBarProgress_{{ $key }}">Initializing...
+                                            </p>
+                                        </div>
+                                        <div class="progress progress-bar-primary">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                                id="queueProgressBar_{{ $key }}" role="progressbar"
+                                                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
+                                                style="width: 100%"></div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @empty
-                        @endforelse
+                            @empty
+                            @endforelse
+                        </div>
                     </div>
                 </div>
             </div>

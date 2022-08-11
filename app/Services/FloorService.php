@@ -51,13 +51,10 @@ class FloorService implements FloorInterface
         return $floor;
     }
 
-    public function storeInBulk($site_id, $inputs, $isFloorActive = false)
+    public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
     {
-        $batch = Bus::batch([
-            new FloorCopyMainJob($site_id, $inputs, false),
-        ])->dispatch();
-
-        return $batch;
+        FloorCopyMainJob::dispatch($site_id, $user_id, $inputs, $isFloorActive);
+        return true;
     }
 
     public function update($site_id, $id, $inputs)

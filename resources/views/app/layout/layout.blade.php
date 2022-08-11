@@ -176,11 +176,7 @@
                     height: 14
                 });
             }
-            @forelse ($batches as $key => $batch)
-                startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
-            @empty
-            @endforelse
-        })
+        });
 
         $.ajaxSetup({
             headers: {
@@ -198,8 +194,7 @@
                 toast.addEventListener('mouseenter', Swal.stopTimer)
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
-        })
-
+        });
 
         function showOffCanvas(element, autoClose = true) {
             $('#' + element).offcanvas('show');
@@ -267,6 +262,11 @@
         }
 
         function stopQueueInterval(interval_id) {
+
+            var index = array.indexOf(item);
+            if (index !== -1) {
+                array.splice(index, 1);
+            }
 
             clearInterval(intervalIDs[interval_id]);
         }

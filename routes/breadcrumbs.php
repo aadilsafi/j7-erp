@@ -109,6 +109,11 @@ Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail) {
     $trail->push('Edit Floor');
 });
 
+Breadcrumbs::for('sites.floors.preview', function (BreadcrumbTrail $trail) {
+    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+    $trail->push('Floors Preview');
+});
+
 //Units Breadcrumbs
 Breadcrumbs::for('sites.floors.units.index', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
     $trail->parent('sites.floors.index');

@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.preview', encryptParams($site->id), encryptParams($floor->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index') }}
 @endsection
 
-@section('page-title', 'Units Preview')
+@section('page-title', 'Floors Preview')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -24,20 +24,15 @@
 @endsection
 
 @section('custom-css')
-    <style>
-        .unit_p_input_div:hover{
-            border: 1px solid rgb(154 152 152 / 30%);
-        }
-    </style>
 @endsection
 
 @section('breadcrumbs')
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Units ({{ $floor->name }})</h2>
+                <h2 class="content-header-title float-start mb-0">Floors Preview</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.preview', encryptParams($site->id), encryptParams($floor->id)) }}
+                    {{ Breadcrumbs::render('sites.floors.preview') }}
                 </div>
             </div>
         </div>
@@ -50,7 +45,59 @@
 
     <div class="card">
         <div class="card-body">
-                {{ $dataTable->table() }}
+            <div class="accordion accordion-margin" id="accordionMargin">
+                @foreach($floors as $key => $value)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                        <button
+                            class="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#accordianFloor{{ $value->id }}"
+                            aria-expanded="false"
+                            aria-controls="accordianFloor{{ $value->id }}"
+                        >
+                            Floor {{ $value->id }}
+                        </button>
+                        </h2>
+                        <div
+                        id="accordianFloor{{ $value->id }}"
+                        class="accordion-collapse collapse"
+                        data-bs-parent="#accordionMargin"
+                        >
+                        <div class="accordion-body">
+                            <div class="table-responsive">
+
+                                <table
+                                    class="table table-light table-striped table_style floor-preview-datatable-{{ $value->id }} data-table "
+                                    id="dataTables">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <td>UNITS</td>
+                                            <td>Type</td>
+                                            <td>Status</td>
+                                            <td>Width</td>
+                                            <td>Length</td>
+                                            <td>Net Area</td>
+                                            <td>Gross Area</td>
+                                            <td>Price Sqft</td>
+                                            <td>Corner</td>
+                                            <td>Facing</td>
+                                            <td>Created at</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                @endforeach
+
+
+              </div>
         </div>
     </div>
 
@@ -78,9 +125,108 @@
 @endsection
 
 @section('custom-js')
-    {{ $dataTable->scripts() }}
     <script>
+        $(document).ready(function(){
+            $(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('floors.pending.get') }}",
+                    success: function (res) {
+                        {{--  console.log(res);  --}}
 
+                        res.forEach(element => {
+                            console.log(element.id);
+                            console.log(element.site_id);
+                            loadFloorPreviewDatatable(element.id,element.site_id);
+                        });
+                    }
+                });
+            });
+
+            function loadFloorPreviewDatatable(id,site_id) {
+
+                var table = $('.floor-preview-datatable-' + id).DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{{ route('sites.floors.preview',['id'=>':id','site_id'=>':site_id']) }}'.replace(':id',id).replace(':site_id',site_id),
+                        data: { id: id },
+                    },
+                    columns: [
+
+
+                        {
+                            data: 'name',
+                            name: 'name',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'type_id',
+                            name: 'type_id',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'status_id',
+                            name: 'status_id',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'width',
+                            name: 'width',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'length',
+                            name: 'length',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'net_area',
+                            name: 'net_area',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'gross_area',
+                            name: 'gross_area',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'price_sqft',
+                            name: 'price_sqft',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'is_corner',
+                            name: 'is_corner',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'is_facing',
+                            name: 'is_facing',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'created_at',
+                            name: 'created_at',
+                            orderable: true,
+                            searchable: true
+                        },
+
+                    ]
+                });
+            };
+
+        });
 
 
         $(document).on('focusout', '.unit-p-text-input', function (e) {

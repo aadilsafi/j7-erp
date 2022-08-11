@@ -46,9 +46,17 @@ class UnitsPreviewDataTable extends DataTable
                 return view('app.components.unit-preview-cell',
                                 ['id'=>$unit->id,'field'=>'length','inputtype'=>'number','value'=>$unit->length]);
             })
-            ->editColumn('price', function ($unit) {
+            ->editColumn('net_area', function ($unit) {
                 return view('app.components.unit-preview-cell',
-                                ['id'=>$unit->id,'field'=>'price','inputtype'=>'number','value'=>$unit->price]);
+                                ['id'=>$unit->id,'field'=>'net_area','inputtype'=>'number','value'=>$unit->net_area]);
+            })
+            ->editColumn('gross_area', function ($unit) {
+                return view('app.components.unit-preview-cell',
+                                ['id'=>$unit->id,'field'=>'gross_area','inputtype'=>'number','value'=>$unit->gross_area]);
+            })
+            ->editColumn('price_sqft', function ($unit) {
+                return view('app.components.unit-preview-cell',
+                                ['id'=>$unit->id,'field'=>'price_sqft','inputtype'=>'number','value'=>$unit->price_sqft]);
             })
             ->editColumn('is_corner', function ($unit) {
                 return view('app.components.checkbox',
@@ -104,7 +112,7 @@ class UnitsPreviewDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [8, 'desc'],
+                [10, 'desc'],
             ])
             ;
     }
@@ -122,7 +130,9 @@ class UnitsPreviewDataTable extends DataTable
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
             Column::make('width'),
             Column::make('length'),
-            Column::make('price'),
+            Column::make('net_area'),
+            Column::make('gross_area'),
+            Column::make('price_sqft'),
             Column::make('is_corner'),
             Column::make('is_facing'),
             Column::make('created_at'),

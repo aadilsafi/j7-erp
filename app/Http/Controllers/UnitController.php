@@ -224,7 +224,12 @@ class UnitController extends Controller
                 else{
                     $facing = 'no';
                 }
-            } else {
+            }
+            elseif($field == 'gross_area' || $field == 'price_sqft'){
+                $unit->{$field} = $value;
+                $unit->total_price = $unit->price_sqft * $unit->gross_area;
+            }
+             else {
                 $unit->{$field} = $value;
             }
             $unit->save();

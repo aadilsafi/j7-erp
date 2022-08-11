@@ -55,7 +55,7 @@ class UnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereFloorId($this->floor->id);
+        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereFloorId($this->floor->id)->whereActive(true);
     }
 
     public function html(): HtmlBuilder
@@ -93,7 +93,7 @@ class UnitsDataTable extends DataTable
                     ]),
 
             )
-            // ->rowGroupDataSrc('parent_id')
+            ->rowGroupDataSrc('type_id')
             ->columnDefs([
                 [
                     'targets' => 0,

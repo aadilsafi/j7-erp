@@ -63,16 +63,16 @@ if (!function_exists('decryptParams')) {
     }
 }
 
-// if (!function_exists('getSettings')) {
-//     function getSettings($key)
-//     {
-//         //		return cache()->remember( 'settings.' . $key, 600, function () use ( $key ) {
-//         //			return ( new Setting() )->getByKey( $key )->value ?? 'Not Found';
-//         //		} );
-//         $setting = (new Setting())->getByKey($key);
-//         return $setting->value ?? 'Not Found';
-//     }
-// }
+if (!function_exists('getSiteConfiguration')) {
+    function getSiteConfiguration($site_id)
+    {
+
+        $site_id = decryptParams($site_id);
+
+        $siteConfiguration = (new SiteConfigration())->whereSiteId($site_id)->first();
+        return $siteConfiguration ?? null;
+    }
+}
 
 if (!function_exists('getAllModels')) {
     function getAllModels($path = null): array
@@ -354,13 +354,6 @@ if (!function_exists('getAuthentacatedUserInfo')) {
     }
 }
 
-if (!function_exists('getSiteConfiguration')) {
-    function getSiteConfiguration($site_id)
-    {
-        return (new SiteConfigration())->whereSiteId($site_id)->first() ?? [];
-    }
-}
-
 if (!function_exists('getNHeightestNumber')) {
     function getNHeightestNumber($numberOfDigits = 1)
     {
@@ -374,9 +367,9 @@ if (!function_exists('getbatchesByUserID')) {
 
         $user_id = decryptParams($user_id);
 
-        $batches = (new UserBatch())->whereUserId($user_id);
+        $batches = (new UserBatch())->whereUserId($user_id)->latest();
         if ($action_id > 0) {
-            $batches = $batches->whereActionId($action_id);
+            $batches = $batches->whereActionId($action_id)->latest();
         }
 
         return $batches->get() ?? null;

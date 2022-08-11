@@ -115,5 +115,9 @@
         function addNew() {
             location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
         }
+
+        function copyFloor() {
+            location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

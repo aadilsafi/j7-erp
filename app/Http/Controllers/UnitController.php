@@ -60,7 +60,7 @@ class UnitController extends Controller
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
-                'siteConfiguration' => getSiteConfiguration(decryptParams($site_id)),
+                'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),

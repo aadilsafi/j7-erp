@@ -17,11 +17,22 @@ class FloorTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Floor 1',
+                'name' => 'Ground Floor',
                 'width' => 1300,
                 'length' => 1300,
                 'site_id' => 1,
                 'order' => 0,
+                'active' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => 'Floor 1',
+                'width' => 1300,
+                'length' => 1300,
+                'site_id' => 1,
+                'order' => 1,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -30,7 +41,8 @@ class FloorTableSeeder extends Seeder
                 'width' => 1300,
                 'length' => 1300,
                 'site_id' => 1,
-                'order' => 0,
+                'order' => 2,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -39,7 +51,8 @@ class FloorTableSeeder extends Seeder
                 'width' => 1300,
                 'length' => 1300,
                 'site_id' => 1,
-                'order' => 0,
+                'order' => 3,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

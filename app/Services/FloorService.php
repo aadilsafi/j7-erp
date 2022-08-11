@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Jobs\floors\FloorCopyMainJob;
 use App\Models\Floor;
 use App\Services\Interfaces\FloorInterface;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
 
 class FloorService implements FloorInterface
@@ -42,10 +44,17 @@ class FloorService implements FloorInterface
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'order' => filter_strip_tags($inputs['floor_order']),
+            'active' => true,
         ];
 
         $floor = $this->model()->create($data);
         return $floor;
+    }
+
+    public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
+    {
+        FloorCopyMainJob::dispatch($site_id, $user_id, $inputs, $isFloorActive);
+        return true;
     }
 
     public function update($site_id, $id, $inputs)

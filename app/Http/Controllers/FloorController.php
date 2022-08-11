@@ -3,21 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
-use App\Services\Interfaces\FloorInterface;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\floors\{
+    copyFloorRequest,
     storeRequest as floorStoreRequest,
     updateRequest as floorUpdateRequest,
+};
+use App\Models\Floor;
+use App\Services\Interfaces\{
+    FloorInterface,
+    UserBatchInterface,
+};
+use App\Utils\Enums\{
+    UserBatchActionsEnum,
+    UserBatchStatusEnum,
 };
 
 class FloorController extends Controller
 {
     private $floorInterface;
+    private $userBatchInterface;
 
-    public function __construct(FloorInterface $floorInterface)
-    {
+    public function __construct(
+        FloorInterface $floorInterface,
+        UserBatchInterface $userBatchInterface,
+    ) {
         $this->floorInterface = $floorInterface;
+        $this->userBatchInterface = $userBatchInterface;
     }
 
     /**
@@ -149,6 +162,38 @@ class FloorController extends Controller
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function copyView(Request $request, $site_id)
+    {
+        if (!request()->ajax()) {
+            $data = [
+                'site_id' => encryptParams(decryptParams($site_id)),
+                'floors' => (new Floor())->whereSiteId(decryptParams($site_id))->withCount('units')->get(),
+            ];
+
+            return view('app.sites.floors.copy', $data);
+        } else {
+            abort(403);
+        }
+    }
+
+    public function copyStore(copyFloorRequest $request, $site_id)
+    {
+        // return $request->input();
+        if (!request()->ajax()) {
+
+            $inputs = $request->validated();
+
+            $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
+            dd($record);
+
+            // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
+
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess('Floor(s) will be contructed shortly!');
+        } else {
+            abort(403);
         }
     }
 }

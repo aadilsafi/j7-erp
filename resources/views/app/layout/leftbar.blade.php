@@ -72,7 +72,7 @@
             </li>
 
             {{-- Roles & Permission Menu --}}
-            <li class="nav-item ">
+            {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='shield'></i>
                     <span class="menu-title text-truncate"
@@ -122,6 +122,32 @@
                         </ul>
                     </li>
                 </ul>
+            </li> --}}
+
+
+            <li class="nav-item ">
+                <a class="d-flex align-items-center" href="javascript:void(0)">
+                    <i data-feather='shield'></i>
+                    <span class="menu-title text-truncate"
+                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
+                </a>
+                <ul class="menu-content">
+                    <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
+                            <i data-feather='shield'></i>
+                            <span class="menu-title text-truncate"
+                                data-i18n="Email">{{ __('lang.leftbar.roles') }}</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
+                            <i data-feather='shield'></i>
+                            <span class="menu-title text-truncate"
+                                data-i18n="Email">{{ __('lang.leftbar.permissions') }}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             {{-- <li class="navigation-header">
@@ -143,7 +169,7 @@
                 <i data-feather="more-horizontal"></i>
             </li>
             {{-- Types Menu --}}
-            <li class="nav-item ">
+            {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='menu'></i>
                     <span class="menu-title text-truncate" data-i18n="Types">Types</span>
@@ -164,7 +190,17 @@
                         </a>
                     </li>
                 </ul>
+            </li> --}}
+
+            <li
+                class="nav-item {{ request()->routeIs('types.index') ? 'active' : null }}">
+                <a class="d-flex align-items-center"
+                    href="{{ route('types.index') }}">
+                    <i data-feather='menu'></i>
+                    <span class="menu-title text-truncate" data-i18n="Email">Types</span>
+                </a>
             </li>
+
 
             {{-- Sites Menu --}}
             {{-- <li class="nav-item ">
@@ -191,7 +227,15 @@
             </li> --}}
 
             {{-- Additional Costs Menu --}}
-            <li class="nav-item ">
+            <li
+                class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                <a class="d-flex align-items-center"
+                    href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
+                    <i data-feather='dollar-sign'></i>
+                    <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
+                </a>
+            </li>
+            {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='dollar-sign'></i>
                     <span class="menu-title text-truncate" data-i18n="Additional Costs">Additional Costs</span>
@@ -216,10 +260,18 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             {{-- Floors Menu --}}
-            <li class="nav-item ">
+            <li
+                class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                <a class="d-flex align-items-center"
+                    href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                    <i data-feather='layers'></i>
+                    <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
+                </a>
+            </li>
+            {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='layers'></i>
                     <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
@@ -243,16 +295,8 @@
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
                         </a>
                     </li>
-                    {{-- <li
-                        class="{{ request()->routeIs('sites.floors.copyView', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.copyView', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='copy'></i>
-                            <span class="menu-item text-truncate" data-i18n="Copy Floor">Copy Floor</span>
-                        </a>
-                    </li> --}}
                 </ul>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </div>

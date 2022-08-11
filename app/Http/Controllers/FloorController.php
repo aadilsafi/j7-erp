@@ -189,7 +189,7 @@ class FloorController extends Controller
             $inputs = $request->validated();
 
             $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
-            dd($record);
+            // dd($record);
 
             // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
 

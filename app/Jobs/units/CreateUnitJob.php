@@ -36,6 +36,6 @@ class CreateUnitJob implements ShouldQueue
     public function handle()
     {
         (new Unit())->insert($this->data);
-        sleep(2);
+        // sleep(2);
     }
 }

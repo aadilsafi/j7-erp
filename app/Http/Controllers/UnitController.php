@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UnitsDataTable;
-use App\Models\{Floor, Site, Status};
+use App\DataTables\UnitsPreviewDataTable;
+use App\Models\{Facing, Floor, Site, Status, Unit};
 use App\Services\Interfaces\{AdditionalCostInterface, UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
@@ -185,6 +186,120 @@ class UnitController extends Controller
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function preview(UnitsPreviewDataTable $dataTable, $site_id, $floor_id)
+    {
+        // $data = [
+        //     'site' => (new Site())->find(decryptParams($site_id)),
+        //     'floor' => (new Floor())->find(decryptParams($floor_id))
+        // ];
+        $data = [
+            'site' => (new Site())->find(1),
+            'floor' => (new Floor())->find(2),
+            'types' => $this->unitTypeInterface->getAllWithTree(),
+        ];
+
+        return $dataTable->with($data)->render('app.sites.floors.units.preview', $data);
+    }
+
+    public function updateUnitName(Request $request)
+    {
+        try {
+            $unit = Unit::find((int)$request->get('id'));
+            $value = $request->get('value');
+            $field = $request->get('field');
+            $facing = '';
+            if ($field == 'is_corner') {
+                $unit->is_corner = !($unit->is_corner);
+            } elseif ($field == 'is_facing') {
+                $unit->is_facing = !($unit->is_facing);
+                if($unit->is_facing){
+                    if($unit->facing_id == null){
+                        $unit->facing_id = 1;
+                    }
+                    $facing = 'yes';
+                }
+                else{
+                    $facing = 'no';
+                }
+            } else {
+                $unit->{$field} = $value;
+            }
+            $unit->save();
+            return response()->json([
+                'message' => "Updated Successfully",
+                'data' => [
+                    'facing' => $facing
+                ]
+            ]);
+        } catch (Exception $ex) {
+            return response()->json([
+                'message' => $ex->getMessage(),
+            ]);
+        }
+    }
+
+    public function getUnitInput(Request $request)
+    {
+        try {
+
+            sleep(1);
+
+            $field = $request->get('field');
+            if($field == 'status_id'){
+                $unit = Unit::find((int)$request->get('id'));
+                $statuses = (new Status())->all();
+                $response = view('app.components.select-dropdown',
+                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->status->id,
+                    'type'=>'status','value'=>$unit->status->name, 'values'=>$statuses])->render();
+            }
+            else if($field == 'type_id'){
+
+                $unit = Unit::find((int)$request->get('id'));
+                $types = $this->unitTypeInterface->getAllWithTree();
+                $response = view('app.components.select-dropdown',
+                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->type->id,
+                    'type'=>'type','value'=>$unit->type->name, 'values'=>$types])->render();
+            }
+            else if($field == 'facing_id'){
+
+                $unit = Unit::find((int)$request->get('id'));
+                $additionalCosts = $this->additionalCostInterface->getAllWithTree(encryptParams($unit->floor->site->id));
+                $response = view('app.components.select-dropdown',
+                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->facing->id,
+                    'type'=>'facing','value'=>$unit->facing->name, 'values'=>$additionalCosts])->render();
+            }
+            else{
+
+                $response = view('app.components.text-number-field', [
+                    'field' => $field,
+                    'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                    'value' => $request->get('value')
+                ])->render();
+            }
+
+            return apiSuccessResponse($response);
+        } catch (Exception $ex) {
+            return apiErrorResponse($ex->getMessage());
+        }
+    }
+
+    public function drawFacingField(Request $request)
+    {
+        try {
+                $unit = Unit::find((int)$request->get('id'));
+                $response = view('app.components.checkbox', [
+                    'id' => $unit->id,
+                    'data' => $unit,
+                    'field' => 'is_facing',
+                    'is_true' => $unit->is_facing
+                ])->render();
+
+            return apiSuccessResponse($response);
+        } catch (Exception $ex) {
+            return apiErrorResponse($ex->getMessage());
         }
     }
 }

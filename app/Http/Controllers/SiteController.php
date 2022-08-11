@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\DataTables\SitesDataTable;
 use App\Http\Requests\sites\{storeRequest};
-use App\Models\{Site, Country};
+use App\Models\{Site, Country, SiteConfigration};
 use App\Services\Interfaces\SiteConfigurationInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Schema;
 
 class SiteController extends Controller
 {
@@ -175,11 +176,9 @@ class SiteController extends Controller
     {
         try {
             $site = (new Site())->find(decryptParams($id))->with('siteConfiguration', 'statuses')->first();
-            if ($site && !empty($site)) {
+            // dd($site);
 
-                // foreach ($site->statuses as $key => $value) {
-                //     // dd($value->name);
-                // }
+            if ($site && !empty($site)) {
                 return view('app.sites.configs', ['site' => $site]);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
@@ -190,12 +189,19 @@ class SiteController extends Controller
 
     public function configStore(Request $request, $id)
     {
+        $inputs = $request->validate([
+            'name' => 'sometimes|between:1,255',
+            'address' => 'sometimes|between:1,255',
+            'area_width' => 'sometimes|numeric',
+            'area_length' => 'sometimes|numeric',
+            'selected_tab' => 'required|in:site,floor,unit',
+            'arr_site' => 'sometimes|array',
+            'arr_floor' => 'sometimes|array',
+            'arr_unit' => 'sometimes|array',
+        ]);
         try {
-
-            $inputs = $request->post();
-
             $this->SiteConfigurationInterface->update($inputs, $id);
-            return redirect()->route('sites.configurations.configView', ['id' => encryptParams($id)])->withSuccess(__('lang.commons.data_saved'));
+            return redirect()->route('sites.configurations.configView', ['id' => encryptParams(decryptParams($id))])->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
             return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }

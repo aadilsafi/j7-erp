@@ -14,6 +14,7 @@ use App\Http\Requests\units\{
 use App\Utils\Enums\UserBatchActionsEnum;
 use App\Utils\Enums\UserBatchStatusEnum;
 use Exception;
+use Illuminate\Support\Facades\Validator;
 
 class UnitController extends Controller
 {
@@ -210,6 +211,122 @@ class UnitController extends Controller
             $unit = Unit::find((int)$request->get('id'));
             $value = $request->get('value');
             $field = $request->get('field');
+
+            //Validation
+            switch ($field) {
+                case 'name':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'name'      => 'required|string|max:255',
+                        ]
+                    );
+                    break;
+
+                case 'width':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'width'      => 'required|numeric',
+                        ]
+                    );
+                    break;
+
+                case 'length':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'length'      => 'required|numeric',
+                        ]
+                    );
+                    break;
+
+                case 'net_area':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'net_area'      => 'required|numeric',
+                        ]
+                    );
+                    break;
+
+                case 'gross_area':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'gross_area'      => 'required|numeric|gte:' . $unit->net_area,
+                        ]
+                    );
+                    break;
+
+                case 'price_sqft':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'price_sqft'      => 'required|numeric',
+                        ]
+                    );
+                    break;
+
+                case 'is_corner':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'is_corner'      => 'required|boolean|in:0,1',
+                        ]
+                    );
+                    break;
+
+                case 'is_facing':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'is_facing'      => 'required|boolean|in:0,1',
+                        ]
+                    );
+                    break;
+
+                case 'facing_id':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'facing_id'      => 'required_if:'.$unit->is_facing.',1|integer',
+                        ]
+                    );
+                    break;
+
+                case 'type_id':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'type_id'      => 'required|integer',
+                        ]
+                    );
+                    break;
+
+                case 'status_id':
+                    $validateRequest = Validator::make(
+                        $request->get('fieldsData'),
+                        [
+                            'status_id'      => 'required|integer',
+                        ]
+                    );
+                    break;
+
+                default:
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Bad Request',
+                    ]);
+            }
+
+            if ($validateRequest->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $validateRequest->errors(),
+                ]);
+            }
+
             $facing = '';
             if ($field == 'is_corner') {
                 $unit->is_corner = !($unit->is_corner);
@@ -234,6 +351,7 @@ class UnitController extends Controller
             }
             $unit->save();
             return response()->json([
+                'status' => true,
                 'message' => "Updated Successfully",
                 'data' => [
                     'facing' => $facing
@@ -241,6 +359,7 @@ class UnitController extends Controller
             ]);
         } catch (Exception $ex) {
             return response()->json([
+                'status' => false,
                 'message' => $ex->getMessage(),
             ]);
         }

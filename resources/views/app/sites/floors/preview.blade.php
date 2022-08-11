@@ -286,51 +286,64 @@
             updateUnitField(id,value,field,$(this));
         });
 
-        function updateUnitField(id,value,field, element=null){
-                var url = "{{ route('unit.name.update') }}";
-                toastr.options = {
-                    "closeButton": true,
-                    "newestOnTop": true,
-                    "positionClass": "toast-top-right"
-                };
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {value:value,
-                        id:id,
-                        field:field
-                    },
-                    success: function (response) {
+        function updateUnitField(id, value, field, element = null) {
+            var url = "{{ route('unit.name.update') }}";
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "positionClass": "toast-top-right"
+            };
+
+            var data = {
+                value: value,
+                id: id,
+                field: field,
+                'fieldsData' : {}
+            };
+
+            data['fieldsData'][field] = value;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    if(response['status']){
                         toastr.success(response['message']);
-                        console.log('response');
-                        if(response['data']['facing'] == 'yes' || response['data']['facing'] == 'no'){
+                        if (response['data']['facing'] == 'yes' || response['data']['facing'] == 'no') {
                             $.ajax({
                                 url: "{{ route('facing.field.draw') }}",
                                 type: 'GET',
                                 data: {
-                                    id:id,
+                                    id: id,
                                 },
-                                success: function (response) {
+                                success: function(response) {
                                     parent = element.parent().parent();
                                     parent.empty();
                                     parent.append(response['data']);
-                                    hideBlockUI('#unit_p_input_div_'+field+id);
+                                    hideBlockUI('#unit_p_input_div_' + field + id);
                                 },
-                                error: function (response) {
+                                error: function(response) {
                                     toastr.error('Failed');
-                                    hideBlockUI('#unit_p_input_div_'+field+id);
+                                    hideBlockUI('#unit_p_input_div_' + field + id);
                                 }
                             });
 
                         }
-                        hideBlockUI('#unit_p_input_div_'+field+id);
-
-                    },
-                    error: function (response) {
-                        toastr.error('Failed');
-                        hideBlockUI('#unit_p_input_div_'+field+id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     }
-                });
+                    else{
+                        toastr.error(response['message'][field]);
+                    }
+
+
+                },
+                error: function(response) {
+                    console.log('response');
+                    toastr.error('Failed');
+                    hideBlockUI('#unit_p_input_div_' + field + id);
+                }
+            });
         }
 
         $(document).on('click', '.unit_p_input_div', function(e){

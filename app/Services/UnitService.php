@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Jobs\units\MainUnitJob;
+use App\Models\Floor;
 use App\Models\Unit;
 use App\Services\Interfaces\UnitInterface;
 use Illuminate\Support\Facades\Bus;
@@ -43,13 +44,21 @@ class UnitService implements UnitInterface
         $site_id = decryptParams($site_id);
         $floor_id = decryptParams($floor_id);
 
+        $totalPrice = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
+
+        $unitNumberDigits = (new Floor())->find($floor_id)->site->siteConfiguration->unit_number_digits;
+
         $data = [
             'floor_id' => $floor_id,
             'name' => filter_strip_tags($inputs['name']),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'unit_number' => filter_strip_tags($inputs['unit_number']),
-            'price' => filter_strip_tags($inputs['price']),
+            // 'floor_unit_number' => $floor_id . Str::padLeft($inputs['unit_number'], $unitNumberDigits, '0'),
+            'net_area' => filter_strip_tags($inputs['net_area']),
+            'gross_area' => filter_strip_tags($inputs['gross_area']),
+            'price_sqft' => filter_strip_tags($inputs['price_sqft']),
+            'total_price' => $totalPrice,
             'is_corner' => filter_strip_tags($inputs['is_corner']),
             'corner_id' => isset($inputs['corner_id']) ? filter_strip_tags($inputs['corner_id']) : null,
             'is_facing' => filter_strip_tags($inputs['is_facing']),
@@ -58,6 +67,8 @@ class UnitService implements UnitInterface
             'status_id' => filter_strip_tags($inputs['status_id']),
             'active' => $isUnitActive,
         ];
+
+        // dd($data);
 
         $floor = $this->model()->create($data);
         return $floor;
@@ -78,15 +89,20 @@ class UnitService implements UnitInterface
         $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
+        $totalPrice = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
+
         $data = [
             'name' => filter_strip_tags($inputs['name']),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
-            'price' => filter_strip_tags($inputs['price']),
+            'net_area' => filter_strip_tags($inputs['net_area']),
+            'gross_area' => filter_strip_tags($inputs['gross_area']),
+            'price_sqft' => filter_strip_tags($inputs['price_sqft']),
+            'total_price' => $totalPrice,
             'is_corner' => filter_strip_tags($inputs['is_corner']),
-            'corner_id' => filter_strip_tags($inputs['corner_id']),
+            'corner_id' => isset($inputs['corner_id']) ? filter_strip_tags($inputs['corner_id']) : null,
             'is_facing' => filter_strip_tags($inputs['is_facing']),
-            'facing_id' => filter_strip_tags($inputs['facing_id']),
+            'facing_id' => isset($inputs['facing_id']) ? filter_strip_tags($inputs['facing_id']) : null,
             'type_id' => filter_strip_tags($inputs['type_id']),
             'status_id' => filter_strip_tags($inputs['status_id']),
         ];

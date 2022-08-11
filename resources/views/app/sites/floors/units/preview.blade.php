@@ -25,7 +25,7 @@
 
 @section('custom-css')
     <style>
-        .unit_p_input_div:hover{
+        .unit_p_input_div:hover {
             border: 1px solid rgb(154 152 152 / 30%);
         }
     </style>
@@ -50,7 +50,7 @@
 
     <div class="card">
         <div class="card-body">
-                {{ $dataTable->table() }}
+            {{ $dataTable->table() }}
         </div>
     </div>
 
@@ -80,28 +80,25 @@
 @section('custom-js')
     {{ $dataTable->scripts() }}
     <script>
-
-
-
-        $(document).on('focusout', '.unit-p-text-input', function (e) {
+        $(document).on('focusout', '.unit-p-text-input', function(e) {
 
             field = $(this).data('field');
             value = $(this).val();
             id = $(this).data('id');
             el = $(this);
             if (value != '') {
-                showBlockUI('#unit_p_input_div_'+field+id);
-                updateUnitField(id,value,field);
-                {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
+                showBlockUI('#unit_p_input_div_' + field + id);
+                updateUnitField(id, value, field);
+                {{-- hideBlockUI('#unit_p_input_div_'+field+id); --}}
                 parent = el.parent();
                 parent.empty();
-                parent.append('<span>'+value+'</span>');
+                parent.append('<span>' + value + '</span>');
                 parent.data('value', value);
                 parent.removeClass('filedrendered');
             }
         });
 
-        $(document).on('change', '.unit-p-type-select', function(e){
+        $(document).on('change', '.unit-p-type-select', function(e) {
 
             value = $(this).val();
             selected = $(this).find('option:selected');
@@ -111,115 +108,129 @@
             field = $(this).data('field');
             el = $(this);
             if (value != '') {
-                showBlockUI('#unit_p_input_div_'+field+id);
-                updateUnitField(id,value,field);
-                {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
+                showBlockUI('#unit_p_input_div_' + field + id);
+                updateUnitField(id, value, field);
+                {{-- hideBlockUI('#unit_p_input_div_'+field+id); --}}
                 parent = el.parent();
-                if(field == 'facing_id'){
+                if (field == 'facing_id') {
                     boxel = parent.children('.unit-p-checkbox');
                     parent.empty();
                     parent.append(boxel);
-                }
-                else{
+                } else {
                     parent.empty();
                 }
 
-                parent.append('<span>'+splitedText[1]+'</span>');
+                parent.append('<span>' + splitedText[1] + '</span>');
                 parent.data('value', splitedText[1]);
                 parent.removeClass('filedrendered');
             }
 
         });
 
-        $(document).on('change', '.unit-p-checkbox', function(e){
+        $(document).on('change', '.unit-p-checkbox', function(e) {
 
             value = 1;
             id = $(this).data('id');
             field = $(this).data('field');
-            showBlockUI('#unit_p_input_div_'+field+id);
-            updateUnitField(id,value,field,$(this));
+            showBlockUI('#unit_p_input_div_' + field + id);
+            updateUnitField(id, value, field, $(this));
         });
 
-        function updateUnitField(id,value,field, element=null){
-                var url = "{{ route('unit.name.update') }}";
-                toastr.options = {
-                    "closeButton": true,
-                    "newestOnTop": true,
-                    "positionClass": "toast-top-right"
-                };
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {value:value,
-                        id:id,
-                        field:field
-                    },
-                    success: function (response) {
+        function updateUnitField(id, value, field, element = null) {
+            var url = "{{ route('unit.name.update') }}";
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "positionClass": "toast-top-right"
+            };
+
+            var data = {
+                value: value,
+                id: id,
+                field: field,
+                'fieldsData' : {}
+            };
+
+            data['fieldsData'][field] = value;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    if(response['status']){
                         toastr.success(response['message']);
-                        console.log('response');
-                        if(response['data']['facing'] == 'yes' || response['data']['facing'] == 'no'){
+                        if (response['data']['facing'] == 'yes' || response['data']['facing'] == 'no') {
                             $.ajax({
                                 url: "{{ route('facing.field.draw') }}",
                                 type: 'GET',
                                 data: {
-                                    id:id,
+                                    id: id,
                                 },
-                                success: function (response) {
+                                success: function(response) {
                                     parent = element.parent().parent();
                                     parent.empty();
                                     parent.append(response['data']);
-                                    hideBlockUI('#unit_p_input_div_'+field+id);
+                                    hideBlockUI('#unit_p_input_div_' + field + id);
                                 },
-                                error: function (response) {
+                                error: function(response) {
                                     toastr.error('Failed');
-                                    hideBlockUI('#unit_p_input_div_'+field+id);
+                                    hideBlockUI('#unit_p_input_div_' + field + id);
                                 }
                             });
 
                         }
-                    },
-                    error: function (response) {
-                        toastr.error('Failed');
-                        hideBlockUI('#unit_p_input_div_'+field+id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     }
-                });
+                    else{
+                        toastr.error(response['message'][field]);
+                    }
+
+
+                },
+                error: function(response) {
+                    console.log('response');
+                    toastr.error('Failed');
+                    hideBlockUI('#unit_p_input_div_' + field + id);
+                }
+            });
         }
 
-        $(document).on('click', '.unit_p_input_div', function(e){
-            if(!$(this).hasClass('filedrendered')){
+        $(document).on('click', '.unit_p_input_div', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                showBlockUI('#unit_p_input_div_'+field+id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
 
                 var url = "{{ route('unit.get.input') }}";
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        data: {value:value,
-                            id:id,
-                            field:field,
-                            inputtype:inputtype
-                        },
-                        success: function (response) {
-                            console.log(response['data']);
-                            if(response['status']){
-                                console.log('insuccess');
-                                el.empty();
-                                el.append(response['data']);
-                                el.addClass('filedrendered');
-                                $(".unit-p-type-select").select2();
-                            }
-                            hideBlockUI('#unit_p_input_div_'+field+id);
-                        },
-                        error: function (response) {
-                            hideBlockUI('#unit_p_input_div_'+field+id);
-                        },
-                    });
-                }
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        value: value,
+                        id: id,
+                        field: field,
+                        inputtype: inputtype
+                    },
+                    success: function(response) {
+                        console.log(response['data']);
+                        if (response['status']) {
+                            console.log('insuccess');
+                            el.empty();
+                            el.append(response['data']);
+                            el.addClass('filedrendered');
+                            $(".unit-p-type-select").select2();
+                        }
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                    error: function(response) {
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                });
+            }
         });
-
     </script>
 @endsection

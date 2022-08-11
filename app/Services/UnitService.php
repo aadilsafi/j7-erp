@@ -50,7 +50,7 @@ class UnitService implements UnitInterface
 
         $data = [
             'floor_id' => $floor_id,
-            'name' => filter_strip_tags($inputs['name']),
+            'name' => filter_strip_tags($inputs['name'] ?? ''),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'unit_number' => filter_strip_tags($inputs['unit_number']),
@@ -76,6 +76,9 @@ class UnitService implements UnitInterface
 
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {
+
+        $inputs['total_price'] = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
+
         $batch = Bus::batch([
             new MainUnitJob($site_id, $floor_id, $inputs, $isUnitActive),
         ])->dispatch();
@@ -92,7 +95,7 @@ class UnitService implements UnitInterface
         $totalPrice = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
 
         $data = [
-            'name' => filter_strip_tags($inputs['name']),
+            'name' => filter_strip_tags($inputs['name'] ?? ''),
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'net_area' => filter_strip_tags($inputs['net_area']),

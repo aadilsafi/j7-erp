@@ -49,7 +49,7 @@ class Unit extends Model
     ];
 
     public $rules = [
-        'name' => 'required|string|max:255',
+        'name' => 'nullable|string|max:255',
         'width' => 'required|numeric',
         'length' => 'required|numeric',
         'unit_number' => 'nullable|integer',

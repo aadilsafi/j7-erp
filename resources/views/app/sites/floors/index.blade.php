@@ -47,7 +47,36 @@
         <div class="card-body">
             <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}"
                 id="floors-table-form" method="get">
-                {{ $dataTable->table() }}
+                {{--  {{ $dataTable->table() }}  --}}
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-light table-striped table_style floors-index-dataTable data-table "
+                        id="dataTables">
+                        <thead>
+                            <tr>
+                                <th colspan="3">Name</th>
+                            </tr>
+                            <tr class="text-center">
+                                <td>CHECK</td>
+                                <td>FLOORS</td>
+                                <td>ORDER</td>
+                                <td>WIDTH</td>
+                                <td>LENGTH</td>
+                                <td>UNITS</td>
+                                <td>OPEN</td>
+                                <td>SOLD</td>
+                                <td>TOKEN</td>
+                                <td>HOLD</td>
+                                <td>Partial DP</td>
+                                <td>CREATED AT</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
             </form>
         </div>
     </div>
@@ -76,8 +105,112 @@
 @endsection
 
 @section('custom-js')
-    {{ $dataTable->scripts() }}
     <script>
+
+        $(document).ready(function(){
+            var table = $('.floors-index-dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                columnDefs: [
+                    {
+                        targets: 0,
+                        className: 'text-center text-primary',
+                        width: '10%',
+                        orderable : false,
+                        searchable : false,
+                        responsivePriority : 3,
+                        render : function (data, type, full, setting) {
+                            var tableRow = JSON.parse(data);
+                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
+                        },
+                        checkboxes : {
+                            'selectAllRender' :  '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        }
+                    },
+                ],
+                ajax: {
+                    url: '{{ route('sites.floors.index',['site_id'=>':site_id']) }}'.replace(':site_id',"{{ $site_id }}"),
+
+                },
+                columns: [
+
+                    {
+                        data: 'check',
+                        name: 'check',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'name',
+                        name: 'name',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'order',
+                        name: 'order',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'width',
+                        name: 'width',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'length',
+                        name: 'length',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_count',
+                        name: 'units_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_open_count',
+                        name: 'units_open_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_sold_count',
+                        name: 'units_sold_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_token_count',
+                        name: 'units_token_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_dp_count',
+                        name: 'units_dp_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'units_hold_count',
+                        name: 'units_hold_count',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        orderable: true,
+                        searchable: true
+                    },
+
+                ]
+            });
+        });
+
         function deleteSelected() {
             var selectedCheckboxes = $('.dt-checkboxes:checked').length;
             if (selectedCheckboxes > 0) {
@@ -119,5 +252,6 @@
         function copyFloor() {
             location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
         }
+
     </script>
 @endsection

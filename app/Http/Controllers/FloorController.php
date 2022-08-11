@@ -40,9 +40,75 @@ class FloorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FloorsDataTable $dataTable, $site_id)
+    public function index(FloorsDataTable $dataTable, $site_id, Request $request)
     {
-        return $dataTable->render('app.sites.floors.index', ['site_id' => $site_id]);
+        // return $dataTable->render('app.sites.floors.index', ['site_id' => $site_id]);
+        if ($request->ajax()) {
+            $id = $request->get('id');
+            $floors = (new Floor())->all()->where('active',1);
+            return DataTables::of($floors)
+                ->addIndexColumn()
+                ->editColumn('check', function ($floor) {
+                    return $floor;
+                })
+                ->editColumn('width', function ($floor) {
+                    return $floor->width . '\'\'';
+                })
+                ->editColumn('length', function ($floor) {
+                    return $floor->length . '\'\'';
+                })
+                ->editColumn('units_count', function ($floor) {
+                    $count = $floor->units->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('units_open_count', function ($floor) {
+                    $count = $floor->units->where('status_id', 1)->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('units_sold_count', function ($floor) {
+                    $count = $floor->units->where('status_id', 5)->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('units_token_count', function ($floor) {
+                    $count = $floor->units->where('status_id', 2)->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('units_hold_count', function ($floor) {
+                    $count = $floor->units->where('status_id', 4)->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('units_dp_count', function ($floor) {
+                    $count = $floor->units->where('status_id', 3)->count();
+                    if (!is_null($count)) {
+                        return $count > 0 ? $count : '-';
+                    }
+                    return '-';
+                })
+                ->editColumn('created_at', function ($floor) {
+                    return editDateColumn($floor->created_at);
+                })
+                ->rawColumns(['created_at','units_dp_count','units_hold_count',
+                'units_token_count', 'units_sold_count','units_open_count',
+                'units_count','width','length','check'])
+                ->make(true);
+        }
+
+        return view('app.sites.floors.index', ['site_id' => $site_id]);
     }
 
     /**

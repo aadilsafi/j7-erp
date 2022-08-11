@@ -42,6 +42,12 @@ class UnitController extends Controller
      */
     public function index(UnitsDataTable $dataTable, $site_id, $floor_id)
     {
+
+        $nonActiveUnits = (new Unit)->where('active', false)->get();
+        if (!empty($nonActiveUnits) && count($nonActiveUnits) > 0) {
+            return redirect()->route('sites.floors.units.preview', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id))]);
+        }
+
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'floor' => (new Floor())->find(decryptParams($floor_id))
@@ -193,15 +199,16 @@ class UnitController extends Controller
 
     public function preview(UnitsPreviewDataTable $dataTable, $site_id, $floor_id)
     {
-        // $data = [
-        //     'site' => (new Site())->find(decryptParams($site_id)),
-        //     'floor' => (new Floor())->find(decryptParams($floor_id))
-        // ];
         $data = [
-            'site' => (new Site())->find(1),
-            'floor' => (new Floor())->find(2),
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'floor' => (new Floor())->find(decryptParams($floor_id)),
             'types' => $this->unitTypeInterface->getAllWithTree(),
         ];
+        // $data = [
+        //     'site' => (new Site())->find(1),
+        //     'floor' => (new Floor())->find(2),
+        //     'types' => $this->unitTypeInterface->getAllWithTree(),
+        // ];
 
         return $dataTable->with($data)->render('app.sites.floors.units.preview', $data);
     }
@@ -291,7 +298,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'facing_id'      => 'required_if:'.$unit->is_facing.',1|integer',
+                            'facing_id'      => 'required_if:' . $unit->is_facing . ',1|integer',
                         ]
                     );
                     break;
@@ -341,12 +348,10 @@ class UnitController extends Controller
                 } else {
                     $facing = 'no';
                 }
-            }
-            elseif($field == 'gross_area' || $field == 'price_sqft'){
+            } elseif ($field == 'gross_area' || $field == 'price_sqft') {
                 $unit->{$field} = $value;
                 $unit->total_price = $unit->price_sqft * $unit->gross_area;
-            }
-             else {
+            } else {
                 $unit->{$field} = $value;
             }
             $unit->save();

@@ -268,6 +268,33 @@
 
             clearInterval(intervalIDs[interval_id]);
         }
+
+        function showBlockUI(element = null) {
+            blockUIOptions = {
+                message: '<div class="spinner-grow text-primary" role="status"></div>',
+                css: {
+                    backgroundColor: 'transparent',
+                    border: '0'
+                },
+                overlayCSS: {
+                    backgroundColor: '#fff',
+                    opacity: 0.8
+                }
+            };
+            if (element) {
+                $(element).block(blockUIOptions);
+            } else {
+                $.blockUI(blockUIOptions);
+            }
+        }
+
+        function hideBlockUI(element = null) {
+            if (element) {
+                $(element).unblock();
+            } else {
+                $.unblockUI();
+            }
+        }
     </script>
 
     @yield('custom-js')

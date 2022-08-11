@@ -110,6 +110,11 @@ Breadcrumbs::for('sites.floors.units.index', function (BreadcrumbTrail $trail, $
     $trail->push('Units', route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id]));
 });
 
+Breadcrumbs::for('sites.floors.units.preview', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
+    $trail->parent('sites.floors.index');
+    $trail->push('Units Preview', route('sites.floors.units.preview', ['site_id' => $site_id, 'floor_id' => $floor_id]));
+});
+
 Breadcrumbs::for('sites.floors.units.create', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
     $trail->push('Create Unit');

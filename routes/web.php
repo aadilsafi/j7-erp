@@ -44,7 +44,7 @@ Route::group([
         return redirect()->route('login.view');
     });
 
-    Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', ]], function () {
         // Route::group(['middleware' => ['auth']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
@@ -146,6 +146,8 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
+                            Route::get('preview', [UnitController::class, 'preview'])->name('preview');
+
                             Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
                             Route::group(['prefix' => '/{id}'], function () {
                                 Route::get('edit', [UnitController::class, 'edit'])->name('edit');
@@ -156,6 +158,10 @@ Route::group([
                 });
             });
         });
+
+        Route::get('get-unit-input', [UnitController::class, 'getUnitInput'])->name('unit.get.input');
+        Route::get('draw-facing-field', [UnitController::class, 'drawFacingField'])->name('facing.field.draw');
+        Route::get('update-unit-name', [UnitController::class, 'updateUnitName'])->name('unit.name.update');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

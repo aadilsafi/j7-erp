@@ -96,15 +96,20 @@ Route::group([
 
             Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy.selected');
 
-            Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
-                Route::get('/', [SiteController::class, 'configView'])->name('configView');
-                Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
-            });
+            // Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
+            //     Route::get('/', [SiteController::class, 'configView'])->name('configView');
+            //     Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
+            // });
 
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [SiteController::class, 'edit'])->name('edit');
                 Route::put('update', [SiteController::class, 'update'])->name('update');
                 Route::get('delete', [SiteController::class, 'destroy'])->name('destroy');
+
+                Route::group(['prefix' => 'configurations', 'as' => 'configurations.'], function () {
+                    Route::get('/', [SiteController::class, 'configView'])->name('configView');
+                    Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
+                });
             });
 
             Route::group(['prefix' => '/{site_id}'], function () {

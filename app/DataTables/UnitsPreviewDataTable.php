@@ -81,7 +81,7 @@ class UnitsPreviewDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status'])->whereFloorId($this->floor->id);
+        return $model->newQuery()->select('units.*')->with(['type', 'status'])->whereFloorId($this->floor->id)->where('active', false);
     }
 
     public function html(): HtmlBuilder
@@ -97,7 +97,11 @@ class UnitsPreviewDataTable extends DataTable
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
                 Button::make('reload')->addClass('btn btn-relief-outline-primary'),
-
+                Button::raw('save-units')
+                ->addClass('btn btn-relief-outline-success')
+                ->text('<i class=""></i> Save Changes')->attr([
+                    'onclick' => 'saveUnits()',
+                ]),
 
             )
             ->columnDefs([

@@ -70,6 +70,7 @@
                                 <td>HOLD</td>
                                 <td>Partial DP</td>
                                 <td>CREATED AT</td>
+                                <td>ACTION</td>
                             </tr>
                         </thead>
                         <tbody>
@@ -203,6 +204,12 @@
                     {
                         data: 'created_at',
                         name: 'created_at',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
                         orderable: true,
                         searchable: true
                     },

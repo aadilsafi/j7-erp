@@ -48,11 +48,14 @@ class MainUnitJob implements ShouldQueue
         for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
             $data[] = [
                 'floor_id' => $this->floor_id,
-                'name' => $this->inputs['name'],
+                'name' => $this->inputs['name'] ?? null,
                 'width' => $this->inputs['width'],
                 'length' => $this->inputs['length'],
                 'unit_number' => $i,
-                'price' => $this->inputs['price'],
+                'net_area' => $this->inputs['net_area'],
+                'gross_area' => $this->inputs['gross_area'],
+                'price_sqft' => $this->inputs['price_sqft'],
+                'total_price' => $this->inputs['total_price'],
                 'is_corner' => $this->inputs['is_corner'],
                 'corner_id' => isset($this->inputs['corner_id']) ? $this->inputs['corner_id'] : null,
                 'is_facing' => $this->inputs['is_facing'],

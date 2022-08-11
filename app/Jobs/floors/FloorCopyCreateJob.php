@@ -39,7 +39,7 @@ class FloorCopyCreateJob implements ShouldQueue
      */
     public function handle()
     {
-        sleep(2);
+        // sleep(2);
         $newFloor = (new Floor())->create($this->data);
 
         $floorUnits = (new Unit())->where([
@@ -55,7 +55,7 @@ class FloorCopyCreateJob implements ShouldQueue
             $unit->floor_id = $newFloor->id;
             $unit->floor_unit_number = $unit->floor_id . Str::padLeft($unit->unit_number, $unitNumberDigits, '0');
             $unit->status_id = 1;
-            $unit->active = true;
+            $unit->active = false;
             $unit->created_at = now();
             $unit->updated_at = now();
 

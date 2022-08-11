@@ -42,6 +42,12 @@ class UnitController extends Controller
      */
     public function index(UnitsDataTable $dataTable, $site_id, $floor_id)
     {
+
+        $nonActiveUnits = (new Unit)->where('active', false)->get();
+        if (!empty($nonActiveUnits) && count($nonActiveUnits) > 0) {
+            return redirect()->route('sites.floors.units.preview', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id))]);
+        }
+
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'floor' => (new Floor())->find(decryptParams($floor_id))
@@ -126,10 +132,11 @@ class UnitController extends Controller
         try {
             $unit = $this->unitInterface->getById($site_id, $floor_id, $id);
             if ($unit && !empty($unit)) {
+                // dd($unit);
                 $data = [
                     'site' => (new Site())->find(decryptParams($site_id)),
                     'floor' => (new Floor())->find(decryptParams($floor_id)),
-                    'siteConfiguration' => getSiteConfiguration(decryptParams($site_id)),
+                    'siteConfiguration' => getSiteConfiguration(encryptParams(decryptParams($site_id))),
                     'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                     'types' => $this->unitTypeInterface->getAllWithTree(),
                     'statuses' => (new Status())->all(),
@@ -192,15 +199,16 @@ class UnitController extends Controller
 
     public function preview(UnitsPreviewDataTable $dataTable, $site_id, $floor_id)
     {
-        // $data = [
-        //     'site' => (new Site())->find(decryptParams($site_id)),
-        //     'floor' => (new Floor())->find(decryptParams($floor_id))
-        // ];
         $data = [
-            'site' => (new Site())->find(1),
-            'floor' => (new Floor())->find(2),
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'floor' => (new Floor())->find(decryptParams($floor_id)),
             'types' => $this->unitTypeInterface->getAllWithTree(),
         ];
+        // $data = [
+        //     'site' => (new Site())->find(1),
+        //     'floor' => (new Floor())->find(2),
+        //     'types' => $this->unitTypeInterface->getAllWithTree(),
+        // ];
 
         return $dataTable->with($data)->render('app.sites.floors.units.preview', $data);
     }
@@ -290,7 +298,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'facing_id'      => 'required_if:'.$unit->is_facing.',1|integer',
+                            'facing_id'      => 'required_if:' . $unit->is_facing . ',1|integer',
                         ]
                     );
                     break;
@@ -332,21 +340,18 @@ class UnitController extends Controller
                 $unit->is_corner = !($unit->is_corner);
             } elseif ($field == 'is_facing') {
                 $unit->is_facing = !($unit->is_facing);
-                if($unit->is_facing){
-                    if($unit->facing_id == null){
+                if ($unit->is_facing) {
+                    if ($unit->facing_id == null) {
                         $unit->facing_id = 1;
                     }
                     $facing = 'yes';
-                }
-                else{
+                } else {
                     $facing = 'no';
                 }
-            }
-            elseif($field == 'gross_area' || $field == 'price_sqft'){
+            } elseif ($field == 'gross_area' || $field == 'price_sqft') {
                 $unit->{$field} = $value;
                 $unit->total_price = $unit->price_sqft * $unit->gross_area;
-            }
-             else {
+            } else {
                 $unit->{$field} = $value;
             }
             $unit->save();
@@ -369,41 +374,42 @@ class UnitController extends Controller
     {
         try {
 
-            sleep(1);
-
             $field = $request->get('field');
-            if($field == 'status_id'){
-                $unit = Unit::find((int)$request->get('id'));
-                $statuses = (new Status())->all();
-                $response = view('app.components.select-dropdown',
-                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->status->id,
-                    'type'=>'status','value'=>$unit->status->name, 'values'=>$statuses])->render();
-            }
-            else if($field == 'type_id'){
+            $unit = (new Unit())->find((int)$request->get('id'));
 
-                $unit = Unit::find((int)$request->get('id'));
-                $types = $this->unitTypeInterface->getAllWithTree();
-                $response = view('app.components.select-dropdown',
-                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->type->id,
-                    'type'=>'type','value'=>$unit->type->name, 'values'=>$types])->render();
-            }
-            else if($field == 'facing_id'){
+            switch ($field) {
+                case 'status_id':
+                    $statuses = (new Status())->all();
+                    $response = view('app.components.select-dropdown', [
+                        'id' => $request->get('id'), 'field' => $field, 'data_id' => $unit->status->id,
+                        'type' => 'status', 'value' => $unit->status->name, 'values' => $statuses
+                    ])->render();
+                    break;
 
-                $unit = Unit::find((int)$request->get('id'));
-                $additionalCosts = $this->additionalCostInterface->getAllWithTree(encryptParams($unit->floor->site->id));
-                $response = view('app.components.select-dropdown',
-                    ['id'=>$request->get('id'),'field'=>$field,'data_id'=>$unit->facing->id,
-                    'type'=>'facing','value'=>$unit->facing->name, 'values'=>$additionalCosts])->render();
-            }
-            else{
+                case 'type_id':
+                    $types = $this->unitTypeInterface->getAllWithTree();
+                    $response = view('app.components.select-dropdown', [
+                        'id' => $request->get('id'), 'field' => $field, 'data_id' => $unit->type->id,
+                        'type' => 'type', 'value' => $unit->type->name, 'values' => $types
+                    ])->render();
+                    break;
 
-                $response = view('app.components.text-number-field', [
-                    'field' => $field,
-                    'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                    'value' => $request->get('value')
-                ])->render();
-            }
+                case 'facing_id':
+                    $additionalCosts = $this->additionalCostInterface->getAllWithTree(encryptParams($unit->floor->site->id));
+                    $response = view('app.components.select-dropdown', [
+                        'id' => $request->get('id'), 'field' => $field, 'data_id' => $unit->facing->id,
+                        'type' => 'facing', 'value' => $unit->facing->name, 'values' => $additionalCosts
+                    ])->render();
+                    break;
 
+                default:
+                    $response = view('app.components.text-number-field', [
+                        'field' => $field,
+                        'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+                    break;
+            }
             return apiSuccessResponse($response);
         } catch (Exception $ex) {
             return apiErrorResponse($ex->getMessage());
@@ -413,13 +419,13 @@ class UnitController extends Controller
     public function drawFacingField(Request $request)
     {
         try {
-                $unit = Unit::find((int)$request->get('id'));
-                $response = view('app.components.checkbox', [
-                    'id' => $unit->id,
-                    'data' => $unit,
-                    'field' => 'is_facing',
-                    'is_true' => $unit->is_facing
-                ])->render();
+            $unit = (new Unit())->find((int)$request->get('id'));
+            $response = view('app.components.checkbox', [
+                'id' => $unit->id,
+                'data' => $unit,
+                'field' => 'is_facing',
+                'is_true' => $unit->is_facing
+            ])->render();
 
             return apiSuccessResponse($response);
         } catch (Exception $ex) {

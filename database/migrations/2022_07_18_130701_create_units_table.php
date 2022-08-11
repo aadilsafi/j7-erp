@@ -20,7 +20,11 @@ return new class extends Migration
             $table->float('width')->default(0);
             $table->float('length')->default(0);
             $table->tinyInteger('unit_number')->default(0);
-            $table->float('price')->default(0);
+            $table->string('floor_unit_number')->nullable();
+            $table->float('net_area')->default(0);
+            $table->float('gross_area')->default(0);
+            $table->float('price_sqft')->default(0);
+            $table->float('total_price')->default(0);
             $table->foreignId('type_id')->constrained();
             $table->foreignId('status_id')->constrained();
             $table->boolean('active')->default(false);

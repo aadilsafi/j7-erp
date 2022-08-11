@@ -10,7 +10,7 @@ interface FloorInterface
     public function getById($site_id, $id);
 
     public function store($site_id, $inputs);
-    public function storeInBulk($site_id, $inputs, $isFloorActive = false);
+    public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false);
 
     public function update($site_id, $id, $inputs);
 

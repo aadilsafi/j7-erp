@@ -3,13 +3,18 @@
 namespace App\Jobs\floors;
 
 use App\Models\Floor;
-use Illuminate\Bus\Batchable;
-use Illuminate\Bus\Queueable;
+use App\Models\UserBatch;
+use App\Utils\Enums\{
+    UserBatchStatusEnum,
+    UserBatchActionsEnum
+};
+use Illuminate\Bus\{Batchable, Queueable};
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
 
 class FloorCopyMainJob implements ShouldQueue
@@ -19,6 +24,7 @@ class FloorCopyMainJob implements ShouldQueue
     private
         $site_id,
         $inputs,
+        $user_id,
         $isFloorActive;
 
     /**
@@ -26,9 +32,10 @@ class FloorCopyMainJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($site_id, $inputs, $isFloorActive)
+    public function __construct($site_id, $user_id, $inputs, $isFloorActive)
     {
         $this->site_id = decryptParams($site_id);
+        $this->user_id = decryptParams($user_id);
         $this->inputs = $inputs;
         $this->isFloorActive = $isFloorActive;
     }
@@ -40,12 +47,13 @@ class FloorCopyMainJob implements ShouldQueue
      */
     public function handle()
     {
-
         $floor = (new Floor())->where([
             'id' => $this->inputs['floor'],
             'site_id' => $this->site_id,
             'active' => true,
         ])->first();
+
+        $jobs = [];
 
         for ($i = $this->inputs['copy_floor_from']; $i <= $this->inputs['copy_floor_to']; $i++) {
             $data = [
@@ -57,46 +65,18 @@ class FloorCopyMainJob implements ShouldQueue
                 'active' => $this->isFloorActive,
             ];
 
-            $floor = (new Floor())->create($data);
+            // sleep(2);
+            $batch = Bus::batch([
+                new FloorCopyCreateJob($floor->id, $data),
+            ])->dispatch();
 
-            Log::info(json_encode($floor));
+            (new UserBatch())->create([
+                'site_id' => $this->site_id,
+                'user_id' => $this->user_id,
+                'job_batch_id' => $batch->id,
+                'actions' => UserBatchActionsEnum::COPY_FLOORS,
+                'batch_status' => UserBatchStatusEnum::PENDING,
+            ]);
         }
-
-
-
-
-
-
-        // $jobs = array_map(function ($data) {
-        //     return new FloorCopyCreateJob($data);
-        // }, $data);
-
-
-
-        // $this->batch()->add($jobs);
-
-
-
-
-
-
-
-
-        // $newFloor = (new Floor())->create([
-        //     'site_id' => $this->site_id,
-        //     'name' => $this->inputs->copy_floor_from,
-        //     'width' => $floor->width,
-        //     'length' => $floor->length,
-        //     'order' => $this->inputs->order,
-        //     'active' => $this->isFloorActive,
-        // ]);
-
-        // // {
-        // //     "_token": "NLgXtMWQeZR6VqYQpXFbDKiRcRrAWiMahkA13Ysq",
-        // //     "floor": "1",
-        // //     "copy_floor_from": "4",
-        // //     "copy_floor_to": "50"
-        // //     }
-        // //
     }
 }

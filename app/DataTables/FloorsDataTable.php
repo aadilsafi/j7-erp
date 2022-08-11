@@ -35,27 +35,45 @@ class FloorsDataTable extends DataTable
             })
             ->editColumn('units_count', function ($floor) {
                 $count = $floor->units->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('units_open_count', function ($floor) {
                 $count = $floor->units->where('status_id', 1)->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('units_sold_count', function ($floor) {
                 $count = $floor->units->where('status_id', 5)->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('units_token_count', function ($floor) {
                 $count = $floor->units->where('status_id', 2)->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('units_hold_count', function ($floor) {
                 $count = $floor->units->where('status_id', 4)->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('units_dp_count', function ($floor) {
                 $count = $floor->units->where('status_id', 3)->count();
-                return $count > 0 ? $count : '-';
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
             })
             ->editColumn('created_at', function ($floor) {
                 return editDateColumn($floor->created_at);

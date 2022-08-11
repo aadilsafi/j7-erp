@@ -189,7 +189,7 @@ class FloorController extends Controller
             $inputs = $request->validated();
 
             $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
-            dd($record);
+            // dd($record);
 
             // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
 
@@ -199,67 +199,93 @@ class FloorController extends Controller
         }
     }
 
-    public function preview(Request $request, $site_id, $id){
+    public function preview(Request $request, $site_id, $id)
+    {
         if ($request->ajax()) {
             $id = $request->get('id');
             $units = Unit::where('floor_id', $id)->where('active', 0)->get();
             return DataTables::of($units)
                 ->addIndexColumn()
                 ->editColumn('type_id', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                        ['id'=>$unit->id,'field'=>'type_id','inputtype'=>'select','value'=>$unit->type->name]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
+                    );
                 })
                 ->editColumn('status_id', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                        ['id'=>$unit->id,'field'=>'status_id','inputtype'=>'select','value'=>$unit->status->name]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'status_id', 'inputtype' => 'select', 'value' => $unit->status->name]
+                    );
                 })
                 ->editColumn('name', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'name','inputtype'=>'text','value'=>$unit->name]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $unit->name]
+                    );
                 })
                 ->editColumn('created_at', function ($unit) {
                     return editDateColumn($unit->created_at);
                 })
                 ->editColumn('width', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'width','inputtype'=>'number','value'=>$unit->width]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'width', 'inputtype' => 'number', 'value' => $unit->width]
+                    );
                 })
                 ->editColumn('length', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'length','inputtype'=>'number','value'=>$unit->length]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'length', 'inputtype' => 'number', 'value' => $unit->length]
+                    );
                 })
                 ->editColumn('is_corner', function ($unit) {
-                    return view('app.components.checkbox',
-                     ['id' => $unit->id, 'data'=> 'null' ,'field' => 'is_corner', 'is_true' => $unit->is_corner]);
+                    return view(
+                        'app.components.checkbox',
+                        ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
+                    );
                 })
                 ->editColumn('is_facing', function ($unit) {
-                    return view('app.components.checkbox',
-                     ['id' => $unit->id,'data'=> $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]);
+                    return view(
+                        'app.components.checkbox',
+                        ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
+                    );
                 })
                 ->editColumn('net_area', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'net_area','inputtype'=>'number','value'=>$unit->net_area]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'net_area', 'inputtype' => 'number', 'value' => $unit->net_area]
+                    );
                 })
                 ->editColumn('gross_area', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'gross_area','inputtype'=>'number','value'=>$unit->gross_area]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'gross_area', 'inputtype' => 'number', 'value' => $unit->gross_area]
+                    );
                 })
                 ->editColumn('price_sqft', function ($unit) {
-                    return view('app.components.unit-preview-cell',
-                                    ['id'=>$unit->id,'field'=>'price_sqft','inputtype'=>'number','value'=>$unit->price_sqft]);
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'price_sqft', 'inputtype' => 'number', 'value' => $unit->price_sqft]
+                    );
                 })
-                ->rawColumns(['name','created_at','width','length','is_corner','is_facing','type_id',
-                'status_id','net_area','gross_area','price_sqft'])
+                ->rawColumns([
+                    'name', 'created_at', 'width', 'length', 'is_corner', 'is_facing', 'type_id',
+                    'status_id', 'net_area', 'gross_area', 'price_sqft'
+                ])
                 ->make(true);
         }
-        $floors = Floor::where('active',0)->select('id')->get();
-        return view('app.sites.floors.preview',
-             ['site_id' => $site_id,'floor_id'=>$id, 'floors'=>$floors]);
+        $floors = (new Floor())->where('active', 0)->select('id')->get();
+        return view(
+            'app.sites.floors.preview',
+            ['site_id' => $site_id, 'floor_id' => $id, 'floors' => $floors]
+        );
     }
 
-    public function getPendingFloors(Request $request){
-        if($request->ajax()){
-            $floors = Floor::where('active',0)->select(['id','site_id'])->get();
+    public function getPendingFloors(Request $request)
+    {
+        if ($request->ajax()) {
+            $floors = (new Floor())->where('active', 0)->select(['id', 'site_id'])->get();
             return response()->json($floors);
         }
     }

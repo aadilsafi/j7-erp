@@ -41,35 +41,35 @@ class FloorsDataTable extends DataTable
                 return '-';
             })
             ->editColumn('units_open_count', function ($floor) {
-                $count = $floor->units->where('status_id', 1)->count();
+                $count = $floor->units->where('status_id', 1)->where('active', true)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_sold_count', function ($floor) {
-                $count = $floor->units->where('status_id', 5)->count();
+                $count = $floor->units->where('status_id', 5)->where('active', true)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_token_count', function ($floor) {
-                $count = $floor->units->where('status_id', 2)->count();
+                $count = $floor->units->where('status_id', 2)->where('active', true)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_hold_count', function ($floor) {
-                $count = $floor->units->where('status_id', 4)->count();
+                $count = $floor->units->where('status_id', 4)->where('active', true)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_dp_count', function ($floor) {
-                $count = $floor->units->where('status_id', 3)->count();
+                $count = $floor->units->where('status_id', 3)->where('active', true)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
@@ -93,7 +93,7 @@ class FloorsDataTable extends DataTable
      */
     public function query(Floor $model): QueryBuilder
     {
-        return $model->newQuery()->with('units');
+        return $model->newQuery()->with('units')->whereActive(true);
     }
 
     public function html(): HtmlBuilder

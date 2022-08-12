@@ -42,10 +42,16 @@ class FloorController extends Controller
      */
     public function index(FloorsDataTable $dataTable, $site_id, Request $request)
     {
+
+        $nonActiveFloors = (new Floor())->where('active', false)->where('site_id', decryptParams($site_id))->get();
+        if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
+            return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
+        }
+
         // return $dataTable->render('app.sites.floors.index', ['site_id' => $site_id]);
         if ($request->ajax()) {
             $id = $request->get('id');
-            $floors = (new Floor())->all()->where('active',1);
+            $floors = (new Floor())->where('active', 1)->where('site_id', decryptParams($site_id))->get();
             return DataTables::of($floors)
                 ->addIndexColumn()
                 ->editColumn('check', function ($floor) {
@@ -108,13 +114,15 @@ class FloorController extends Controller
                 ->editColumn('actions', function ($floor) {
                     return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
                 })
-                ->rawColumns(['created_at','units_dp_count','units_hold_count',
-                'units_token_count', 'units_sold_count','units_open_count',
-                'units_count','width','length','check','actions'])
+                ->rawColumns([
+                    'created_at', 'units_dp_count', 'units_hold_count',
+                    'units_token_count', 'units_sold_count', 'units_open_count',
+                    'units_count', 'width', 'length', 'check', 'actions'
+                ])
                 ->make(true);
         }
 
-        return view('app.sites.floors.index', ['site_id' => $site_id]);
+        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
     }
 
     /**
@@ -271,7 +279,7 @@ class FloorController extends Controller
         }
     }
 
-    public function preview(Request $request, $site_id, $id)
+    public function preview(Request $request, $site_id)
     {
         if ($request->ajax()) {
             $id = $request->get('id');
@@ -347,17 +355,36 @@ class FloorController extends Controller
                 ])
                 ->make(true);
         }
-        $floors = (new Floor())->where('active', 0)->select('id')->get();
+        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select('id')->get();
         return view(
             'app.sites.floors.preview',
-            ['site_id' => $site_id, 'floor_id' => $id, 'floors' => $floors]
+            ['site_id' => encryptParams(decryptParams($site_id)), 'floors' => $floors]
         );
     }
 
-    public function getPendingFloors(Request $request)
+    public function saveChanges(Request $request, $site_id)
+    {
+
+        try {
+
+            $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->get()->pluck('id')->toArray();
+            (new Floor())->where('site_id', decryptParams($site_id))->where('active', false)->update([
+                'active' => true
+            ]);
+            (new Unit())->whereIn('floor_id', $floors)->update([
+                'active' => true
+            ]);
+
+            return redirect()->route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
+        } catch (Exception $th) {
+            return redirect()->route('dashboard')->withDanger($th->getMessage());
+        }
+    }
+
+    public function getPendingFloors(Request $request, $site_id)
     {
         if ($request->ajax()) {
-            $floors = (new Floor())->where('active', 0)->select(['id', 'site_id'])->get();
+            $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select(['id', 'site_id'])->get();
             return response()->json($floors);
         }
     }

@@ -45,6 +45,11 @@
 
     <div class="card">
         <div class="card-body">
+            <div class="dt-action-buttons text-end">
+                <Button class="btn btn-relief-outline-success" onclick="saveFloors()">
+                    <i class=""></i> Save Changes
+                </Button>
+            </div>
             <div class="accordion accordion-margin" id="accordionMargin">
                 @foreach($floors as $key => $value)
                     <div class="accordion-item">
@@ -130,10 +135,8 @@
             $(function () {
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('floors.pending.get') }}",
+                    url: '{{ route('sites.floors.pending.get',['site_id'=>':site_id']) }}'.replace(':site_id',"{{ $site_id }}"),
                     success: function (res) {
-                        {{--  console.log(res);  --}}
-
                         res.forEach(element => {
                             console.log(element.id);
                             console.log(element.site_id);
@@ -222,7 +225,7 @@
                             searchable: true
                         },
 
-                    ]
+                    ],
                 });
             };
 
@@ -381,6 +384,10 @@
                     });
                 }
         });
+
+        function saveFloors(){
+            location.href = '{{ route('sites.floors.changes.save', ['site_id' => ':site_id']) }}'.replace(':site_id',"{{ encryptParams(decryptParams($site_id)) }}");
+        }
 
     </script>
 @endsection

@@ -241,16 +241,64 @@
                 ],
                 dom: 'BlfrtipC',
                 dom: '<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">',
-                buttons: [
-                    {
-                        extend: 'copy', className: 'copyButton',
+                buttons: [{
+                        name: 'add-new',
+                        text: '<i class="bi bi-plus"></i> Add New',
+                        className: 'btn btn-relief-outline-primary',
+                        action: function(e, dt, node, config) {
+                            location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
+                        }
                     },
-                    'csv',
-                    'excel',
-                    'pdf',
-                    'print',
                     {
-                        extend: 'copy', className: 'copyButton'
+                        name: 'copy-floor',
+                        text: '<i class="bi bi-clipboard-check"></i> Copy Floor',
+                        className: 'btn btn-relief-outline-primary',
+                        action: function(e, dt, node, config) {
+                            location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
+                        }
+                    },
+                    {
+                        extend: 'collection',
+                        text: 'Export',
+                        className: 'btn btn-relief-outline-secondary dropdown-toggle',
+                        buttons: [{
+                                extend: 'copy',
+                                className: 'dropdown-item',
+                            },
+                            {
+                                extend: 'csv',
+                                className: 'dropdown-item',
+                            },
+                            {
+                                extend: 'excel',
+                                title: '<i class="fa fa-file-excel-o"></i> Excel',
+                                className: 'dropdown-item',
+                            },
+                            {
+                                extend: 'pdf',
+                                className: 'dropdown-item',
+                            },
+                            {
+                                extend: 'print',
+                                className: 'dropdown-item',
+                            }
+                        ]
+                    },
+                    // {
+                    //     extend: 'reset',
+                    //     className: 'btn btn-relief-outline-danger',
+                    // },
+                    // {
+                    //     extend: 'reload',
+                    //     className: 'btn btn-relief-outline-primary',
+                    // },
+                    {
+                        name: 'delete-selected',
+                        text: '<i class="bi bi-trash3-fill"></i> Delete Selected',
+                        className: 'btn btn-relief-outline-danger',
+                        action: function(e, dt, node, config) {
+                            deleteSelected();
+                        }
                     },
                 ],
                 displayLength: 20,
@@ -298,12 +346,12 @@
             }
         }
 
-        function addNew() {
-            location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
-        }
+        // function addNew() {
+        //     location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
+        // }
 
-        function copyFloor() {
-            location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
-        }
+        // function copyFloor() {
+        //     location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
+        // }
     </script>
 @endsection

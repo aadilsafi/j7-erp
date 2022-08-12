@@ -7,6 +7,15 @@
 @section('page-title', 'Floors List')
 
 @section('page-vendor')
+    {{-- <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css"> --}}
+
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
@@ -15,6 +24,8 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
+
+
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
@@ -24,12 +35,6 @@
 @endsection
 
 @section('custom-css')
-    <style>
-        #dataTables {
-            background-color: red;
-            font-family: 'MontSerrat', sans-serif;
-        }
-    </style>
 @endsection
 
 @section('breadcrumbs')
@@ -49,48 +54,64 @@
     <p class="mb-2">
     </p>
 
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}" id="floors-table-form"
-                method="get">
-                {{-- {{ $dataTable->table() }} --}}
-                <div class="table-responsive">
-                    <table class="table table-light table-striped table_style floors-index-dataTable data-table "
-                        id="dataTables">
-                        <thead>
-                            <tr class="text-center">
-                                <td rowspan="2">CHECK</td>
-                                <td rowspan="2">FLOORS</td>
-                                <td rowspan="2">ORDER</td>
-                                <td rowspan="2">WIDTH</td>
-                                <td rowspan="2">LENGTH</td>
-                                <td rowspan="2">UNITS</td>
-                                <td colspan="5">Statuses</td>
-                                <td rowspan="2">CREATED AT</td>
-                            </tr>
-                            <tr class="text-center">
-                                <td>OPEN</td>
-                                <td>SOLD</td>
-                                <td>TOKEN</td>
-                                <td>HOLD</td>
-                                <td>Partial DP</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}"
+                        id="floors-table-form" method="get">
+                        <div class="table-responsive">
+                            <table class="dt-complex-header table table-hover table-striped">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th rowspan="2">CHECK</th>
+                                        <th rowspan="2">FLOORS</th>
+                                        <th rowspan="2">ORDER</th>
+                                        <th rowspan="2">WIDTH</th>
+                                        <th rowspan="2">LENGTH</th>
+                                        <th rowspan="2">UNITS</th>
+                                        <th colspan="5">Statuses</th>
+                                        <th rowspan="2">CREATED AT</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th>OPEN</th>
+                                        <th>SOLD</th>
+                                        <th>TOKEN</th>
+                                        <th>HOLD</th>
+                                        <th>Partial DP</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr class="text-center">
+                                        <th rowspan="2"></th>
+                                        <th rowspan="2">FLOORS</th>
+                                        <th rowspan="2">ORDER</th>
+                                        <th rowspan="2">WIDTH</th>
+                                        <th rowspan="2">LENGTH</th>
+                                        <th rowspan="2">UNITS</th>
+                                        <th>OPEN</th>
+                                        <th>SOLD</th>
+                                        <th>TOKEN</th>
+                                        <th>HOLD</th>
+                                        <th>Partial DP</th>
+                                        <th rowspan="2">CREATED AT</th>
+                                    </tr>
+                                    <tr class="text-center">
+                                        <th colspan="5">Statuses</th>
+
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-
-
-    <p></p>
-
 @endsection
 
 @section('vendor-js')
-    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
+    {{-- <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/responsive.bootstrap5.min.js"></script>
@@ -103,24 +124,97 @@
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.html5.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.print.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.rowGroup.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script> --}}
+
+
+
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jszip.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.rowGroup.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 @endsection
 
 @section('page-js')
-    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.server-side.js"></script>
+    {{-- <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.server-side.js"></script> --}}
+    {{-- <script src="{{ asset('app-assets') }}/js/scripts/tables/table-datatables-basic.min.js"></script> --}}
 @endsection
 
 @section('custom-js')
 
     <script>
         $(document).ready(function() {
-            var table = $('#dataTables').DataTable({
+
+            $(".dt-complex-header").DataTable({
                 processing: true,
                 serverSide: true,
+                ajax: {
+                    url: '{{ route('sites.floors.index', ['site_id' => ':site_id']) }}'.replace(':site_id',
+                        "{{ $site_id }}"),
+
+                },
+                columns: [{
+                        data: 'check',
+                        name: 'check',
+                    },
+                    {
+                        data: 'name',
+                        name: 'name',
+                        title: 'Floors',
+                    },
+                    {
+                        data: 'order',
+                        name: 'order',
+                    },
+                    {
+                        data: 'width',
+                        name: 'width',
+                    },
+                    {
+                        data: 'length',
+                        name: 'length',
+                    },
+                    {
+                        data: 'units_count',
+                        name: 'units_count',
+                    },
+                    {
+                        data: 'units_open_count',
+                        name: 'units_open_count',
+                    },
+                    {
+                        data: 'units_sold_count',
+                        name: 'units_sold_count',
+                    },
+                    {
+                        data: 'units_token_count',
+                        name: 'units_token_count',
+                    },
+                    {
+                        data: 'units_dp_count',
+                        name: 'units_dp_count',
+                    },
+                    {
+                        data: 'units_hold_count',
+                        name: 'units_hold_count',
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                    },
+
+                ],
                 columnDefs: [{
                     targets: 0,
                     className: 'text-center text-primary',
-                    width: '10%',
                     orderable: false,
                     searchable: false,
                     responsivePriority: 3,
@@ -136,93 +230,21 @@
                         'selectAllRender': '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     }
                 }],
-                ajax: {
-                    url: '{{ route('sites.floors.index', ['site_id' => ':site_id']) }}'.replace(':site_id',
-                        "{{ $site_id }}"),
-
-                },
-                columns: [{
-                        data: 'check',
-                        name: 'check',
-                    },
-                    {
-                        data: 'name',
-                        name: 'name',
-                        title: 'Floors',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'order',
-                        name: 'order',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'width',
-                        name: 'width',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'length',
-                        name: 'length',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_count',
-                        name: 'units_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_open_count',
-                        name: 'units_open_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_sold_count',
-                        name: 'units_sold_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_token_count',
-                        name: 'units_token_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_dp_count',
-                        name: 'units_dp_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'units_hold_count',
-                        name: 'units_hold_count',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'actions',
-                        name: 'actions',
-                        orderable: true,
-                        searchable: true
-                    },
-
-                ],
                 order: [
                     [11, 'desc']
                 ],
+                dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                buttons: [
+                    'copy', 'excel', 'pdf'
+                ],
+                displayLength: 20,
+                lengthMenu: [20, 25, 50, 75, 100],
+                // language: {
+                //     paginate: {
+                //         previous: "&nbsp;",
+                //         next: "&nbsp;"
+                //     }
+                // }
             });
         });
 

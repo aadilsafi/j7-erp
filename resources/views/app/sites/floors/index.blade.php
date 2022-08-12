@@ -72,6 +72,7 @@
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="5">Statuses</th>
                                         <th rowspan="2">CREATED AT</th>
+                                        <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th>OPEN</th>
@@ -95,6 +96,7 @@
                                         <th>HOLD</th>
                                         <th>Partial DP</th>
                                         <th rowspan="2">CREATED AT</th>
+                                        <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th colspan="5">Statuses</th>
@@ -210,6 +212,10 @@
                         data: 'created_at',
                         name: 'created_at',
                     },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                    },
 
                 ],
                 columnDefs: [{
@@ -233,18 +239,28 @@
                 order: [
                     [11, 'desc']
                 ],
-                dom: '<"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+                dom: 'BlfrtipC',
+                dom: '<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">',
                 buttons: [
-                    'copy', 'excel', 'pdf'
+                    {
+                        extend: 'copy', className: 'copyButton',
+                    },
+                    'csv',
+                    'excel',
+                    'pdf',
+                    'print',
+                    {
+                        extend: 'copy', className: 'copyButton'
+                    },
                 ],
                 displayLength: 20,
                 lengthMenu: [20, 25, 50, 75, 100],
-                // language: {
-                //     paginate: {
-                //         previous: "&nbsp;",
-                //         next: "&nbsp;"
-                //     }
-                // }
+                language: {
+                    paginate: {
+                        previous: "&nbsp;",
+                        next: "&nbsp;"
+                    }
+                }
             });
         });
 

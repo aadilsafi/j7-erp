@@ -212,6 +212,12 @@
                         orderable: true,
                         searchable: true
                     },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: true,
+                        searchable: true
+                    },
 
                 ],
                 order: [

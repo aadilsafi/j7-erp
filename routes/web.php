@@ -156,6 +156,7 @@ Route::group([
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
+                            Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
 
                             Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
                             Route::group(['prefix' => '/{id}'], function () {

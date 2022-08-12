@@ -232,5 +232,10 @@
                 });
             }
         });
+
+        function saveUnits(){
+            location.href = '{{ route('sites.floors.units.changes.save',['site_id'=>':site_id','floor_id'=>':floor_id']) }}'.replace(':site_id',"{{ encryptParams($site->id) }}").replace(':floor_id',"{{ encryptParams($floor->id) }}");
+        }
+
     </script>
 @endsection

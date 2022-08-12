@@ -43,7 +43,8 @@ class UnitController extends Controller
     public function index(UnitsDataTable $dataTable, $site_id, $floor_id)
     {
 
-        $nonActiveUnits = (new Unit)->where('active', false)->get();
+        $nonActiveUnits = (new Unit())->where('active', false)->where('floor_id',decryptParams($floor_id))->get();
+
         if (!empty($nonActiveUnits) && count($nonActiveUnits) > 0) {
             return redirect()->route('sites.floors.units.preview', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id))]);
         }
@@ -211,6 +212,19 @@ class UnitController extends Controller
         // ];
 
         return $dataTable->with($data)->render('app.sites.floors.units.preview', $data);
+    }
+
+    public function saveChanges(Request $request,$site_id, $floor_id){
+
+        try {
+            (new Unit())->where('floor_id', decryptParams($floor_id))->update([
+                'active' => true
+            ]);
+            return redirect()->route('sites.floors.units.index',['site_id'=>encryptParams(decryptParams($site_id)), 'floor_id'=>encryptParams(decryptParams($floor_id))]);
+        } catch (Exception $th) {
+            dd('catch');
+            return redirect()->back();
+        }
     }
 
     public function updateUnitName(Request $request)

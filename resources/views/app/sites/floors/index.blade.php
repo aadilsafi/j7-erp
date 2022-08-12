@@ -84,6 +84,9 @@
         </div>
     </div>
 
+
+    <p></p>
+
 @endsection
 
 @section('vendor-js')
@@ -206,6 +209,12 @@
                     {
                         data: 'created_at',
                         name: 'created_at',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
                         orderable: true,
                         searchable: true
                     },

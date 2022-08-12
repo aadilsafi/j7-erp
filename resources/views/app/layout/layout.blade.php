@@ -177,7 +177,10 @@
                 });
             }
 
-
+            @forelse ($batches as $key => $batch)
+                startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
+            @empty
+            @endforelse
         });
 
         $.ajaxSetup({

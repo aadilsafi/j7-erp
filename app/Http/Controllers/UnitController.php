@@ -222,7 +222,6 @@ class UnitController extends Controller
             ]);
             return redirect()->route('sites.floors.units.index',['site_id'=>encryptParams(decryptParams($site_id)), 'floor_id'=>encryptParams(decryptParams($floor_id))]);
         } catch (Exception $th) {
-            dd('catch');
             return redirect()->back();
         }
     }

@@ -72,6 +72,7 @@
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="5">Statuses</th>
                                         <th rowspan="2">CREATED AT</th>
+                                        <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th>OPEN</th>
@@ -95,6 +96,7 @@
                                         <th>HOLD</th>
                                         <th>Partial DP</th>
                                         <th rowspan="2">CREATED AT</th>
+                                        <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th colspan="5">Statuses</th>
@@ -209,6 +211,10 @@
                     {
                         data: 'created_at',
                         name: 'created_at',
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
                     },
 
                 ],

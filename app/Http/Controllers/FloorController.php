@@ -111,9 +111,6 @@ class FloorController extends Controller
                 ->editColumn('actions', function ($floor) {
                     return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
                 })
-                ->editColumn('actions', function ($floor) {
-                    return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
-                })
                 ->rawColumns([
                     'created_at', 'units_dp_count', 'units_hold_count',
                     'units_token_count', 'units_sold_count', 'units_open_count',

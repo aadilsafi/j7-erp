@@ -367,9 +367,9 @@ if (!function_exists('getbatchesByUserID')) {
 
         $user_id = decryptParams($user_id);
 
-        $batches = (new UserBatch())->whereUserId($user_id)->latest();
+        $batches = (new UserBatch())->whereUserId($user_id)->limit(20)->latest();
         if ($action_id > 0) {
-            $batches = $batches->whereActionId($action_id)->latest();
+            $batches = $batches->whereActionId($action_id)->limit(20)->latest();
         }
 
         return $batches->get() ?? null;

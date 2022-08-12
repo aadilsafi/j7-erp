@@ -176,11 +176,11 @@
                     height: 14
                 });
             }
-
             @forelse ($batches as $key => $batch)
                 startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
             @empty
             @endforelse
+
         });
 
         $.ajaxSetup({
@@ -239,6 +239,8 @@
 
         function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
 
+            console.log('Ajax Called');
+
             $.ajax({
                 url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id', batch_id),
                 type: 'GET',
@@ -253,15 +255,13 @@
                     }
                 }
             });
-
-            setProgressTo('queueProgressBar', 50);
         }
 
         function startQueueInterval(batch_id, progressBarID) {
 
             var interval_id = setInterval(function() {
                 checkQueueBatchProgress(interval_id, batch_id, progressBarID);
-            }, 1500);
+            }, 2500);
 
             intervalIDs.push(interval_id);
         }

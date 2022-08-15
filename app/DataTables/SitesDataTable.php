@@ -88,10 +88,10 @@ class SitesDataTable extends DataTable
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
                             var site = JSON.parse(data);
-                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + site.id + '\" name=\"chkSites[]\" id=\"chkSites_' + site.id + '\" /><label class=\"form-check-label\" for=\"chkSites_' + site.id + '\"></label></div>';
+                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + site.id + '\" name=\"chkSites[]\" id=\"chkSites_' + site.id + '\" /><label class=\"form-check-label\" for=\"chkSites_' + site.id + '\"></label></div>';
                         }",
                     'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
             ])->orders([

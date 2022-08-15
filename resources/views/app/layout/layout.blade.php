@@ -238,9 +238,6 @@
         var intervalIDs = []
 
         function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
-
-            console.log('Ajax Called');
-
             $.ajax({
                 url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id', batch_id),
                 type: 'GET',
@@ -248,32 +245,21 @@
                     if (response.status) {
                         setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response
                             .data.processedJobs, response.data.totalJobs);
-                        console.log(response.data.progress);
+                        console.log(response);
                         if (response.data.progress == 100) {
-                            stopQueueInterval(interval_id);
+                            window.clearInterval(interval_id);
                         }
                     }
                 }
             });
+
+            window.clearInterval(interval_id);
         }
 
         function startQueueInterval(batch_id, progressBarID) {
-
             var interval_id = setInterval(function() {
                 checkQueueBatchProgress(interval_id, batch_id, progressBarID);
             }, 2500);
-
-            intervalIDs.push(interval_id);
-        }
-
-        function stopQueueInterval(interval_id) {
-
-            var index = array.indexOf(item);
-            if (index !== -1) {
-                array.splice(index, 1);
-            }
-
-            clearInterval(intervalIDs[interval_id]);
         }
 
         function showBlockUI(element = null) {
@@ -301,6 +287,18 @@
             } else {
                 $.unblockUI();
             }
+        }
+
+        function changeTableRowColor(element) {
+            if ($(element).is(':checked'))
+                $(element).closest('tr').addClass('table-primary');
+            else {
+                $(element).closest('tr').removeClass('table-primary');
+            }
+        }
+
+        function changeAllTableRowColor() {
+            $('.dt-checkboxes').trigger('change');
         }
     </script>
 

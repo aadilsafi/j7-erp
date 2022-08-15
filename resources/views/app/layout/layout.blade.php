@@ -288,6 +288,18 @@
                 $.unblockUI();
             }
         }
+
+        function changeTableRowColor(element) {
+            if ($(element).is(':checked'))
+                $(element).closest('tr').addClass('table-primary');
+            else {
+                $(element).closest('tr').removeClass('table-primary');
+            }
+        }
+
+        function changeAllTableRowColor() {
+            $('.dt-checkboxes').trigger('change');
+        }
     </script>
 
     @yield('custom-js')

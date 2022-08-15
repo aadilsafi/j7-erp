@@ -96,7 +96,7 @@ class UnitController extends Controller
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
 
                     $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_UNITS, UserBatchStatusEnum::PENDING);
-
+                    // dd('true');
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {
                     $record = $this->unitInterface->store($site_id, $floor_id, $inputs);
@@ -222,7 +222,6 @@ class UnitController extends Controller
             ]);
             return redirect()->route('sites.floors.units.index',['site_id'=>encryptParams(decryptParams($site_id)), 'floor_id'=>encryptParams(decryptParams($floor_id))]);
         } catch (Exception $th) {
-            dd('catch');
             return redirect()->back();
         }
     }

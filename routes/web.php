@@ -141,9 +141,11 @@ Route::group([
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
-                        Route::get('preview', [FloorController::class, 'preview'])->name('preview');
                     });
 
+                    Route::get('get-pending-floors', [FloorController::class, 'getPendingFloors'])->name('pending.get');
+                    Route::get('preview', [FloorController::class, 'preview'])->name('preview');
+                    Route::get('save-changes', [FloorController::class, 'saveChanges'])->name('changes.save');
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
@@ -172,7 +174,6 @@ Route::group([
         Route::get('get-unit-input', [UnitController::class, 'getUnitInput'])->name('unit.get.input');
         Route::get('draw-facing-field', [UnitController::class, 'drawFacingField'])->name('facing.field.draw');
         Route::get('update-unit-name', [UnitController::class, 'updateUnitName'])->name('unit.name.update');
-        Route::get('get-pending-floors', [FloorController::class, 'getPendingFloors'])->name('floors.pending.get');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

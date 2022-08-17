@@ -53,7 +53,7 @@ class FloorCopyCreateJob implements ShouldQueue
 
             unset($unit->id);
             $unit->floor_id = $newFloor->id;
-            $unit->floor_unit_number = $unit->floor_id . Str::padLeft($unit->unit_number, $prevFloor->site->siteConfiguration->unit_number_digits, '0');
+            $unit->floor_unit_number = strtoupper($newFloor->short_label) . Str::padLeft($unit->unit_number, $prevFloor->site->siteConfiguration->unit_number_digits, '0');
             $unit->status_id = 1;
             $unit->active = false;
             $unit->created_at = now();

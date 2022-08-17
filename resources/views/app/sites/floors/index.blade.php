@@ -68,9 +68,9 @@
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
-                                        <th rowspan="2">PREFIX</th>
+                                        <th rowspan="2">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
-                                        <th colspan="5">Statuses</th>
+                                        <th colspan="5">STATUSES</th>
                                         <th rowspan="2">CREATED AT</th>
                                         <th rowspan="2">ACTIONS</th>
                                     </tr>
@@ -84,11 +84,11 @@
                                 </thead>
                                 <tfoot>
                                     <tr class="text-center">
-                                        <th rowspan="2">CHECK</th>
+                                        <th rowspan="2"></th>
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
-                                        <th rowspan="2">PREFIX</th>
+                                        <th rowspan="2">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
                                         <th>OPEN</th>
                                         <th>SOLD</th>
@@ -99,7 +99,7 @@
                                         <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
-                                        <th colspan="5">Statuses</th>
+                                        <th colspan="5">STATUSES</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -170,43 +170,53 @@
                     {
                         data: 'name',
                         name: 'name',
+                        className: 'text-center',
                         title: 'Floors',
                     },
                     {
                         data: 'order',
                         name: 'order',
+                        className: 'text-center',
                     },
                     {
                         data: 'floor_area',
                         name: 'floor_area',
+                        className: 'text-center',
                     },
                     {
-                        data: 'prefix',
-                        name: 'prefix',
+                        data: 'short_label',
+                        name: 'short_label',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_count',
                         name: 'units_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_open_count',
                         name: 'units_open_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_sold_count',
                         name: 'units_sold_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_token_count',
                         name: 'units_token_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_dp_count',
                         name: 'units_dp_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'units_hold_count',
                         name: 'units_hold_count',
+                        className: 'text-center',
                     },
                     {
                         data: 'created_at',

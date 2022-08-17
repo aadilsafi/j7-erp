@@ -100,6 +100,16 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row mt-2">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+
+                        <div id="shortLabelForm">
+
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
 
@@ -173,11 +183,9 @@
             document.getElementById('copy_floor_from'),
             document.getElementById('copy_floor_to')
         ];
-
         unitSlider.noUiSlider.on('update', function(values, handle, unencoded) {
             inputs[handle].value = parseInt(values[handle]);
         });
-
         mergeTooltips(unitSlider, 5, ' <i class="bi bi-stack m-10"></i> - ');
 
         function mergeTooltips(slider, threshold, separator) {
@@ -270,6 +278,7 @@
         }
 
         function getDifference(a, b) {
+            shortLabel(a,b);
             return Math.abs(a - b);
         }
 
@@ -289,5 +298,14 @@
             //     }
             // });
         }
+
+        function shortLabel(a,b){
+            $('#shortLabelForm').empty();
+            // $('#shortLabelForm').append('<label class="form-label" style="font-size: 15px" for="floor">Enter Short Labels for floor ('+parseInt(a)+' to '+parseInt(b)+')*</label>')
+            for(let i = parseInt(a); i<=parseInt(b); i++){
+                $('#shortLabelForm').append('<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor ('+i+')*</label><input type="text" required class="form-control mb-2" name="shortLabel['+i+']" placeholder="Short label for floor '+i+'">');
+            }
+        }
+
     </script>
 @endsection

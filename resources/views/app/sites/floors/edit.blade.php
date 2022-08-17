@@ -41,7 +41,7 @@
             <div class="card-body">
                 @method('PUT')
                 @csrf
-                {{ view('app.sites.floors.form-fields', ['floor' => $floor]) }}
+                {{ view('app.sites.floors.form-fields', ['floor' => $floor, 'floorShortLable' => $floorShortLable]) }}
 
             </div>
 

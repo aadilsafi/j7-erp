@@ -59,8 +59,8 @@ class FloorCopyMainJob implements ShouldQueue
             $data = [
                 'site_id' => $this->site_id,
                 'name' => 'Floor ' . $i,
-                'width' => $floor->width,
-                'length' => $floor->length,
+                'short_label' => $floor->short_label,
+                'floor_area' => $floor->floor_area,
                 'order' => $i,
                 'active' => $this->isFloorActive,
             ];

@@ -47,13 +47,13 @@ class FloorCopyCreateJob implements ShouldQueue
             'active' => true,
         ])->get();
 
-        $unitNumberDigits = (new Floor())->find($this->prevFloorId)->site->siteConfiguration->unit_number_digits;
+        $prevFloor = (new Floor())->with(['site', 'site.siteConfiguration'])->find($this->prevFloorId);
 
-        $floorUnits = collect($floorUnits)->map(function ($unit, $key) use ($newFloor, $unitNumberDigits) {
+        $floorUnits = collect($floorUnits)->map(function ($unit, $key) use ($newFloor, $prevFloor) {
 
             unset($unit->id);
             $unit->floor_id = $newFloor->id;
-            $unit->floor_unit_number = $unit->floor_id . Str::padLeft($unit->unit_number, $unitNumberDigits, '0');
+            $unit->floor_unit_number = $unit->floor_id . Str::padLeft($unit->unit_number, $prevFloor->site->siteConfiguration->unit_number_digits, '0');
             $unit->status_id = 1;
             $unit->active = false;
             $unit->created_at = now();

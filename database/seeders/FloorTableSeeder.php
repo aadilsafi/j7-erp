@@ -18,8 +18,8 @@ class FloorTableSeeder extends Seeder
         $data = [
             [
                 'name' => 'Ground Floor',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => 'GF',
                 'site_id' => 1,
                 'order' => 0,
                 'active' => true,
@@ -28,8 +28,8 @@ class FloorTableSeeder extends Seeder
             ],
             [
                 'name' => 'Floor 1',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => 'F',
                 'site_id' => 1,
                 'order' => 1,
                 'active' => true,
@@ -38,8 +38,8 @@ class FloorTableSeeder extends Seeder
             ],
             [
                 'name' => 'Floor 2',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => 'F',
                 'site_id' => 1,
                 'order' => 2,
                 'active' => true,
@@ -48,8 +48,8 @@ class FloorTableSeeder extends Seeder
             ],
             [
                 'name' => 'Floor 3',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => 'F',
                 'site_id' => 1,
                 'order' => 3,
                 'active' => true,

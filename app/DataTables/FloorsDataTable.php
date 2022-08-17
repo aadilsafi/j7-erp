@@ -27,11 +27,11 @@ class FloorsDataTable extends DataTable
             ->editColumn('check', function ($floor) {
                 return $floor;
             })
-            ->editColumn('width', function ($floor) {
-                return $floor->width . '\'\'';
+            ->editColumn('floor_area', function ($floor) {
+                return $floor->floor_area . '\'\'';
             })
-            ->editColumn('length', function ($floor) {
-                return $floor->length . '\'\'';
+            ->editColumn('prefix', function ($floor) {
+                return $floor->prefix;
             })
             ->editColumn('units_count', function ($floor) {
                 $count = $floor->units->count();

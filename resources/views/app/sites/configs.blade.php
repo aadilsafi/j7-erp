@@ -42,13 +42,13 @@
                     <li class="nav-item">
                         <a class="nav-link" id="floorCongifTab" data-bs-toggle="tab" href="#floorCongifData"
                             aria-controls="floor" role="tab" aria-selected="false">
-                            <i data-feather="home" class="font-medium-3 me-50"></i>
+                            <i data-feather="layers" class="font-medium-3 me-50"></i>
                             <span class="fw-bold">Floor</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="unitCongifTab" data-bs-toggle="tab" href="#unitCongifData"
                             aria-controls="unit" role="tab" aria-selected="false">
-                            <i data-feather="home" class="font-medium-3 me-50"></i>
+                            <i class="bi bi-door-open font-medium-3 me-50"></i>
                             <span class="fw-bold">Unit</span></a>
                     </li>
                 </ul>

@@ -180,6 +180,8 @@
                 startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
             @empty
             @endforelse
+
+            // toggleAccordian();
         });
 
 
@@ -240,6 +242,8 @@
 
         var intervalIDs = []
 
+        pendingQueueCount = parseInt('{{ $batches->count() }}');
+
         function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
             $.ajax({
                 url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id',
@@ -253,6 +257,20 @@
                         console.log(response);
                         if (response.data.progress == 100) {
                             window.clearInterval(interval_id);
+                            $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
+                            pendingQueueCount--;
+
+                            if (pendingQueueCount == 0) {
+                                $('#queueLoadingTopbarIcon').removeClass('spinner').html(
+                                    '<i style="color: #28C76F !important;" class="ficon" data-feather="check-circle"></i>'
+                                    );
+                                if (feather) {
+                                    feather.replace({
+                                        width: 14,
+                                        height: 14
+                                    });
+                                }
+                            }
                         }
                     }
                 }
@@ -306,9 +324,9 @@
             $('.dt-checkboxes').trigger('change');
         }
 
-        function toggleAccordian() {
+        function toggleAccordian(action = null) {
+
             var accordian = $('#accordionMarginOne');
-            console.log(accordian);
             if (accordian.hasClass('show')) {
                 accordian.collapse('hide');
             } else {

@@ -67,8 +67,8 @@
                                         <th rowspan="2">CHECK</th>
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
-                                        <th rowspan="2">WIDTH</th>
-                                        <th rowspan="2">LENGTH</th>
+                                        <th rowspan="2">AREA</th>
+                                        <th rowspan="2">PREFIX</th>
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="5">Statuses</th>
                                         <th rowspan="2">CREATED AT</th>
@@ -84,11 +84,11 @@
                                 </thead>
                                 <tfoot>
                                     <tr class="text-center">
-                                        <th rowspan="2"></th>
+                                        <th rowspan="2">CHECK</th>
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
-                                        <th rowspan="2">WIDTH</th>
-                                        <th rowspan="2">LENGTH</th>
+                                        <th rowspan="2">AREA</th>
+                                        <th rowspan="2">PREFIX</th>
                                         <th rowspan="2">UNITS</th>
                                         <th>OPEN</th>
                                         <th>SOLD</th>
@@ -100,7 +100,6 @@
                                     </tr>
                                     <tr class="text-center">
                                         <th colspan="5">Statuses</th>
-
                                     </tr>
                                 </tfoot>
                             </table>
@@ -178,12 +177,12 @@
                         name: 'order',
                     },
                     {
-                        data: 'width',
-                        name: 'width',
+                        data: 'floor_area',
+                        name: 'floor_area',
                     },
                     {
-                        data: 'length',
-                        name: 'length',
+                        data: 'prefix',
+                        name: 'prefix',
                     },
                     {
                         data: 'units_count',

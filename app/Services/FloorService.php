@@ -41,8 +41,8 @@ class FloorService implements FloorInterface
         $data = [
             'site_id' => decryptParams($site_id),
             'name' => filter_strip_tags($inputs['name']),
-            'width' => filter_strip_tags($inputs['width']),
-            'length' => filter_strip_tags($inputs['length']),
+            'short_label' => Str::of(filter_strip_tags($inputs['short_label']))->upper(),
+            'floor_area' => filter_strip_tags($inputs['floor_area']),
             'order' => filter_strip_tags($inputs['floor_order']),
             'active' => true,
         ];
@@ -65,8 +65,8 @@ class FloorService implements FloorInterface
         $data = [
             'site_id' => $site_id,
             'name' => filter_strip_tags($inputs['name']),
-            'width' => filter_strip_tags($inputs['width']),
-            'length' => filter_strip_tags($inputs['length']),
+            'short_label' => Str::of(filter_strip_tags($inputs['short_label']))->upper(),
+            'floor_area' => filter_strip_tags($inputs['floor_area']),
             'order' => filter_strip_tags($inputs['floor_order']),
         ];
 

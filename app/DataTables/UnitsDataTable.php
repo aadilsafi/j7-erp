@@ -126,6 +126,7 @@ class UnitsDataTable extends DataTable
     {
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::make('floor_unit_number')->title('Unit Number'),
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type'),
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),

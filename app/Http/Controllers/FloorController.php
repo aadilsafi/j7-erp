@@ -44,14 +44,12 @@ class FloorController extends Controller
      */
     public function index(FloorsDataTable $dataTable, Request $request, $site_id)
     {
-
         $nonActiveFloors = (new Floor())->where('active', false)->where('site_id', decryptParams($site_id))->get();
         if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
             return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
         }
 
         if ($request->ajax()) {
-            $id = $request->get('id');
             $floors = (new Floor())->where('active', 1)->where('site_id', decryptParams($site_id))->get();
             return DataTables::of($floors)
                 ->addIndexColumn()

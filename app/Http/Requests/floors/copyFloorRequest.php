@@ -27,6 +27,7 @@ class copyFloorRequest extends FormRequest
             'floor' => 'required',
             'copy_floor_from' => 'required|gt:0|numeric',
             'copy_floor_to' => 'required|lte:50|numeric',
+            'shortLabel' => 'required',
         ];
     }
 }

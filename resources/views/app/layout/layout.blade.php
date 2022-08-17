@@ -180,8 +180,9 @@
                 startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
             @empty
             @endforelse
-
         });
+
+
 
         $.ajaxSetup({
             headers: {
@@ -223,14 +224,16 @@
                 case 100:
                     progressBar.addClass('progress-bar-animated').css('width', '100%');
                     progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                        totalJobs);
                     break;
 
                 default:
                     progressBar.removeClass('progress-bar-animated').css('width',
                         progress + '%');
                     progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                        totalJobs);
                     break;
             }
         }
@@ -239,11 +242,13 @@
 
         function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
             $.ajax({
-                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id', batch_id),
+                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id',
+                    batch_id),
                 type: 'GET',
                 success: function(response) {
                     if (response.status) {
-                        setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response
+                        setProgressTo(progressBarID, response.data.progress, response.data
+                            .pendingJobs, response
                             .data.processedJobs, response.data.totalJobs);
                         console.log(response);
                         if (response.data.progress == 100) {
@@ -299,6 +304,16 @@
 
         function changeAllTableRowColor() {
             $('.dt-checkboxes').trigger('change');
+        }
+
+        function toggleAccordian() {
+            var accordian = $('#accordionMarginOne');
+            console.log(accordian);
+            if (accordian.hasClass('show')) {
+                accordian.collapse('hide');
+            } else {
+                accordian.collapse('show');
+            }
         }
     </script>
 

@@ -74,7 +74,7 @@
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
             <li class="nav-item d-block">
-                <a href="javascript:void(0)" class="nav-link">
+                <a href="javascript:void(0)" class="nav-link" onclick="toggleAccordian()">
                     @if (!empty($batches))
                         {{-- <i style="color: #28C76F !important; font-size: 23px;" class="bi bi-check2-circle"></i> --}}
                         <i style="color: #7367f0 !important;" class="ficon spinner" data-feather="refresh-cw"></i>

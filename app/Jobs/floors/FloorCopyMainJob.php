@@ -59,12 +59,11 @@ class FloorCopyMainJob implements ShouldQueue
             $data = [
                 'site_id' => $this->site_id,
                 'name' => 'Floor ' . $i,
-                'short_label' => $floor->short_label,
+                'short_label' => strtoupper($this->inputs['shortLabel'][$i]),
                 'floor_area' => $floor->floor_area,
                 'order' => $i,
                 'active' => $this->isFloorActive,
             ];
-
             // sleep(2);
             $batch = Bus::batch([
                 new FloorCopyCreateJob($floor->id, $data),

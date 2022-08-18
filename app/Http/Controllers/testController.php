@@ -12,7 +12,8 @@ class testController extends Controller
 {
     public function jobs(Request $request)
     {
-        return (new Floor())->with(['site', 'site.siteConfiguration'])->find(1)->site->siteConfiguration;
+
+        // return (new Floor())->with(['site', 'site.siteConfiguration'])->find(1)->site->siteConfiguration;
         for($i = 0; $i < 1000; $i++) {
             JobsTestJob::dispatch();
         }

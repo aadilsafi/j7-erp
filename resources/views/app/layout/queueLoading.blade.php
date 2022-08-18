@@ -35,7 +35,7 @@
                     <div class="accordion-body">
                         <div style="max-height: 285px; overflow-y: auto; padding: 15px;">
                             @forelse ($batches as $key => $batch)
-                                <div class="card mb-1">
+                                <div class="card mb-1 queueProgressCard border-primary">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}

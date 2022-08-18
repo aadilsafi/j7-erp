@@ -181,7 +181,10 @@
             @empty
             @endforelse
 
+            // toggleAccordian();
         });
+
+
 
         $.ajaxSetup({
             headers: {
@@ -223,31 +226,51 @@
                 case 100:
                     progressBar.addClass('progress-bar-animated').css('width', '100%');
                     progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                        totalJobs);
                     break;
 
                 default:
                     progressBar.removeClass('progress-bar-animated').css('width',
                         progress + '%');
                     progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' + totalJobs);
+                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                        totalJobs);
                     break;
             }
         }
 
         var intervalIDs = []
 
+        pendingQueueCount = parseInt('{{ $batches->count() }}');
+
         function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
             $.ajax({
-                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id', batch_id),
+                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id',
+                    batch_id),
                 type: 'GET',
                 success: function(response) {
                     if (response.status) {
-                        setProgressTo(progressBarID, response.data.progress, response.data.pendingJobs, response
+                        setProgressTo(progressBarID, response.data.progress, response.data
+                            .pendingJobs, response
                             .data.processedJobs, response.data.totalJobs);
                         console.log(response);
                         if (response.data.progress == 100) {
                             window.clearInterval(interval_id);
+                            $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
+                            pendingQueueCount--;
+
+                            if (pendingQueueCount == 0) {
+                                $('#queueLoadingTopbarIcon').removeClass('spinner').html(
+                                    '<i style="color: #28C76F !important;" class="ficon" data-feather="check-circle"></i>'
+                                    );
+                                if (feather) {
+                                    feather.replace({
+                                        width: 14,
+                                        height: 14
+                                    });
+                                }
+                            }
                         }
                     }
                 }
@@ -299,6 +322,16 @@
 
         function changeAllTableRowColor() {
             $('.dt-checkboxes').trigger('change');
+        }
+
+        function toggleAccordian(action = null) {
+
+            var accordian = $('#accordionMarginOne');
+            if (accordian.hasClass('show')) {
+                accordian.collapse('hide');
+            } else {
+                accordian.collapse('show');
+            }
         }
     </script>
 

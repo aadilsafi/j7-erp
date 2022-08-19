@@ -43,7 +43,7 @@ class TypesDataTable extends DataTable
                 return editDateColumn($type->updated_at);
             })
             ->editColumn('actions', function ($type) {
-                return view('app.types.actions', ['id' => $type->id]);
+                return view('app.sites.types.actions', ['site_id' => decryptParams($this->site_id), 'id' => $type->id]);
             })
             ->editColumn('check', function ($type) {
                 return $type;
@@ -59,13 +59,14 @@ class TypesDataTable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        return $this->unitTypeInterface->model()->newQuery();
+        return $this->unitTypeInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
             ->setTableId('types-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->serverSide()

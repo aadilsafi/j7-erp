@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'types.create') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.types.edit', $site_id) }}
 @endsection
 
-@section('page-title', 'Create Types')
+@section('page-title', 'Edit Type')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -13,7 +13,8 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
-
+    {{-- <link rel="stylesheet" type="text/css"
+        href="{{ asset('public_assets/admin') }}/vendors/css/forms/select/select2.min.css">I --}}
 @endsection
 
 @section('page-css')
@@ -27,9 +28,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Type</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Type</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('types.create') }}
+                    {{ Breadcrumbs::render('sites.types.edit', $site_id) }}
                 </div>
             </div>
         </div>
@@ -38,7 +39,7 @@
 
 @section('content')
     <div class="card">
-        <form class="form form-vertical" action="{{ route('types.store') }}" method="POST">
+        <form action="{{ route('sites.types.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($type->id)]) }}" method="POST">
 
             <div class="card-header">
             </div>
@@ -46,17 +47,18 @@
             <div class="card-body">
 
                 @csrf
+                @method('PUT')
 
-                {{ view('app.types.form-fields', ['types' => $types]) }}
+                {{ view('app.sites.types.form-fields', ['types' => $types, 'type' => $type]) }}
 
             </div>
 
             <div class="card-footer d-flex align-items-center justify-content-end">
                 <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                     <i data-feather='save'></i>
-                    Save Type
+                    Update Type
                 </button>
-                <a href="{{ route('types.index') }}"
+                <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>
                     {{ __('lang.commons.cancel') }}

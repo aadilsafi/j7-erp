@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')->constrained();
             $table->string('name')->nullable();
             $table->string('slug')->unique();
             $table->integer('parent_id')->default(0);

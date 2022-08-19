@@ -29,9 +29,13 @@ class TypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(TypesDataTable $dataTable)
+    public function index(TypesDataTable $dataTable, $site_id)
     {
-        return $dataTable->render('app.types.index');
+        $data = [
+            'site_id' => $site_id
+        ];
+
+        return $dataTable->with($data)->render('app.sites.types.index', $data);
     }
 
     /**
@@ -39,14 +43,16 @@ class TypeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
         if (!request()->ajax()) {
 
             $data = [
+                'site_id' => decryptParams($site_id),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
             ];
-            return view('app.types.create', $data);
+
+            return view('app.sites.types.create', $data);
         } else {
             abort(403);
         }
@@ -58,18 +64,18 @@ class TypeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(typeStoreRequest $request)
+    public function store(typeStoreRequest $request, $site_id)
     {
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                $record = $this->unitTypeInterface->store($inputs);
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_saved'));
+                $record = $this->unitTypeInterface->store($site_id, $inputs);
+                return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -90,24 +96,28 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $site_id, $id)
     {
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
         try {
             $type = $this->unitTypeInterface->getById($id);
 
             if ($type && !empty($type)) {
 
                 $data = [
+                    'site_id' => $site_id,
+                    'id' => $id,
                     'types' => $this->unitTypeInterface->getAllWithTree(),
                     'type' => $type,
                 ];
-
-                return view('app.types.edit', $data);
+                // dd($data);
+                return view('app.sites.types.edit', $data);
             }
 
-            return redirect()->route('types.index')->withWarning(__('lang.commons.data_not_found'));
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -118,63 +128,44 @@ class TypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(typeUpdateRequest $request, $id)
+    public function update(typeUpdateRequest $request, $site_id, $id)
     {
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                $record = $this->unitTypeInterface->update($inputs, $id);
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_updated'));
+                $record = $this->unitTypeInterface->update($site_id, $inputs, $id);
+                return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        if (!request()->ajax()) {
-            $record = $this->unitTypeInterface->destroy(encryptParams($id));
-
-            if (is_a($record, 'Exception')) {
-                return redirect()->route('types.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $record->getMessage());
-            } else if ($record) {
-                return redirect()->route('types.index')->withSuccess(__('lang.commons.data_deleted'));
-            } else {
-                return redirect()->route('types.index')->withDanger(__('lang.commons.data_not_found'));
-            }
-        } else {
-            abort(403);
-        }
-    }
-
-    public function destroySelected(Request $request)
+    public function destroySelected(Request $request, $site_id)
     {
         try {
+            $site_id = decryptParams($site_id);
             if (!request()->ajax()) {
                 if ($request->has('chkRole')) {
 
-                    $record = $this->unitTypeInterface->destroy(encryptParams($request->chkRole));
+                    $record = $this->unitTypeInterface->destroy($site_id, encryptParams($request->chkRole));
 
                     if ($record) {
-                        return redirect()->route('types.index')->withSuccess(__('lang.commons.data_deleted'));
+                        return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_deleted'));
                     } else {
-                        return redirect()->route('types.index')->withDanger(__('lang.commons.data_not_found'));
+                        return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
                     }
                 }
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('roles.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 }

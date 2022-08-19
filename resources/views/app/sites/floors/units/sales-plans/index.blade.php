@@ -20,7 +20,6 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
 @endsection
 
 @section('custom-css')

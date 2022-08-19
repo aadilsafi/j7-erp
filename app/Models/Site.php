@@ -84,12 +84,13 @@ class Site extends Model
         return $this->hasOne(SiteConfigration::class, 'site_id');
     }
 
-    /*
-    **
-    * The roles that belong to the status.
-    */
     public function statuses()
     {
         return $this->belongsToMany(Status::class)->withPivot('percentage');
+    }
+
+    public function types()
+    {
+        return $this->hasMany(Type::class);
     }
 }

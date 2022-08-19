@@ -96,13 +96,12 @@ class UnitsPreviewDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::make('reload')->addClass('btn btn-relief-outline-primary'),
+                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
                 Button::raw('save-units')
                 ->addClass('btn btn-relief-outline-success')
                 ->text('<i class=""></i> Save Changes')->attr([
                     'onclick' => 'saveUnits()',
                 ]),
-
             )
             ->columnDefs([
                 [

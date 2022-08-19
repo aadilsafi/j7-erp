@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index', $site_id) }}
 @endsection
 
 @section('page-title', 'Edit Floor')
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Edit Floor</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.edit') }}
+                    {{ Breadcrumbs::render('sites.floors.edit', $site_id) }}
                 </div>
             </div>
         </div>

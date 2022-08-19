@@ -176,15 +176,15 @@
                     <span class="menu-title text-truncate" data-i18n="Types">Types</span>
                 </a>
                 <ul class="menu-content">
-                    <li class="{{ request()->routeIs('types.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('types.index') }}">
+                    <li class="{{ request()->routeIs('sites.types.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('sites.types.index') }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
-                    <li class="{{ request()->routeIs('types.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('types.create') }}">
+                    <li class="{{ request()->routeIs('sites.types.create') ? 'active' : null }}">
+                        <a class="d-flex align-items-center" href="{{ route('sites.types.create') }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
@@ -194,9 +194,9 @@
             </li> --}}
 
             <li
-                class="nav-item {{ request()->routeIs('types.index') ? 'active' : null }}">
+                class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
                 <a class="d-flex align-items-center"
-                    href="{{ route('types.index') }}">
+                    href="{{ route('sites.types.index', ['site_id' => encryptParams(1)]) }}">
                     <i data-feather='menu'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Types</span>
                 </a>

@@ -45,7 +45,7 @@ Route::group([
     });
 
     Route::group(['middleware' => ['auth', ]], function () {
-        // Route::group(['middleware' => ['auth']], function () {
+        // Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -61,7 +61,7 @@ Route::group([
             Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy.selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [RoleController::class, 'edit'])->name('edit');
-                Route::post('update', [RoleController::class, 'update'])->name('update');
+                Route::put('update', [RoleController::class, 'update'])->name('update');
 
                 Route::get('delete', [RoleController::class, 'destroy'])->name('destroy');
                 Route::get('make-default', [RoleController::class, 'makeDefault'])->name('make-default');

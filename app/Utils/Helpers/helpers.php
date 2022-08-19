@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\{Crypt, File};
+use Spatie\Permission\Models\Role;
 
 if (!function_exists('filter_strip_tags')) {
 
@@ -333,12 +334,12 @@ if (!function_exists('getTypeParentByParentId')) {
     }
 }
 
-if (!function_exists('getAdditionalCostByParentId')) {
-    function getAdditionalCostByParentId($parent_id)
+if (!function_exists('getRoleParentByParentId')) {
+    function getRoleParentByParentId($parent_id)
     {
-        $additionalCost = (new AdditionalCost())->where('id', $parent_id)->first();
-        if ($additionalCost) {
-            return $additionalCost->name;
+        $role =  (new Role())->where('id', $parent_id)->first();
+        if ($role) {
+            return $role->name;
         }
         return 'parent';
     }

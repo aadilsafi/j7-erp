@@ -1,4 +1,21 @@
 <div class="row mb-1">
+
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+        <label class="form-label" style="font-size: 15px" for="roleTypes">Types</label>
+        <select class="select2-size-lg form-select" id="roleTypes" name="parent_id">
+            <option value="0" selected>Parent Type</option>
+            @foreach ($roles as $roleRow)
+                @continue(isset($role) && $role->id == $roleRow['id'])
+                <option value="{{ $roleRow['id'] }}"
+                    {{ (isset($role) ? $role->parent_id : old('type')) == $roleRow['id'] ? 'selected' : '' }}>
+                    {{ $loop->index + 1 }} - {{ $roleRow['tree'] }}</option>
+            @endforeach
+        </select>
+        @error('type')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="role_name">Role Name</label>
         <input type="text" class="form-control form-control-lg @error('role_name') is-invalid @enderror" id="role_name"

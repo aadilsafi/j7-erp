@@ -9,7 +9,8 @@ use App\Services\Interfaces\{
     SiteConfigurationInterface,
     UnitInterface,
     UnitTypeInterface,
-    UserBatchInterface
+    UserBatchInterface,
+    RoleTypesInterface
 };
 use App\Services\{
     AdditionalCostService,
@@ -18,7 +19,8 @@ use App\Services\{
     SiteConfiurationService,
     UnitService,
     UnitTypeService,
-    UserBatchService
+    UserBatchService,
+    RoleTypesService
 };
 use Illuminate\Support\ServiceProvider;
 
@@ -38,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UnitInterface::class, UnitService::class);
         $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
         $this->app->bind(UserBatchInterface::class, UserBatchService::class);
+        $this->app->bind(RoleTypesInterface::class, RoleTypesService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

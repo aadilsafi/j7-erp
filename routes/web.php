@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     AdditionalCostController,
+    ArtisanCommandController,
     DashboardController,
     RoleController,
     PermissionController,
@@ -43,6 +44,7 @@ Route::group([
     Route::get('/', function () {
         return redirect()->route('login.view');
     });
+
 
     Route::group(['middleware' => ['auth', ]], function () {
         // Route::group(['middleware' => ['auth', 'permission']], function () {
@@ -95,11 +97,6 @@ Route::group([
             Route::post('store', [SiteController::class, 'store'])->name('store');
 
             Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy.selected');
-
-            // Route::group(['prefix' => 'configurations/{id}', 'as' => 'configurations.'], function () {
-            //     Route::get('/', [SiteController::class, 'configView'])->name('configView');
-            //     Route::post('store', [SiteController::class, 'configStore'])->name('configStore');
-            // });
 
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [SiteController::class, 'edit'])->name('edit');
@@ -168,6 +165,22 @@ Route::group([
                         });
                     });
                 });
+
+                //Types Routes
+                Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
+                    Route::get('/', [TypeController::class, 'index'])->name('index');
+
+                    Route::get('create', [TypeController::class, 'create'])->name('create');
+                    Route::post('store', [TypeController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [TypeController::class, 'edit'])->name('edit');
+                        Route::put('update', [TypeController::class, 'update'])->name('update');
+
+                        Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
+                    });
+                });
             });
         });
 
@@ -180,23 +193,12 @@ Route::group([
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');
         });
 
-        //Types Routes
-        Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
-            Route::get('/', [TypeController::class, 'index'])->name('index');
-
-            Route::get('create', [TypeController::class, 'create'])->name('create');
-            Route::post('store', [TypeController::class, 'store'])->name('store');
-
-            Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy.selected');
-            Route::group(['prefix' => '/{id}'], function () {
-                Route::get('edit', [TypeController::class, 'edit'])->name('edit');
-                Route::put('update', [TypeController::class, 'update'])->name('update');
-
-                Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
-            });
-        });
         Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
             Route::get('/{batch_id}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
+        });
+
+        Route::group(['prefix' => 'commands', 'as' => 'commands.'], function () {
+            Route::get('/{command}', [ArtisanCommandController::class, 'commands'])->name('command');
         });
     });
 });

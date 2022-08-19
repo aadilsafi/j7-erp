@@ -255,7 +255,7 @@
                 buttons: [{
                         name: 'add-new',
                         text: '<i class="bi bi-plus"></i> Add New',
-                        className: 'btn btn-relief-outline-primary',
+                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
                         }
@@ -263,7 +263,7 @@
                     {
                         name: 'copy-floor',
                         text: '<i class="bi bi-clipboard-check"></i> Copy Floor',
-                        className: 'btn btn-relief-outline-primary',
+                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
                         }
@@ -306,7 +306,7 @@
                     {
                         name: 'delete-selected',
                         text: '<i class="bi bi-trash3-fill"></i> Delete Selected',
-                        className: 'btn btn-relief-outline-danger',
+                        className: 'btn btn-relief-outline-danger waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             deleteSelected();
                         }

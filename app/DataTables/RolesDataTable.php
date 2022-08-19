@@ -69,17 +69,17 @@ class RolesDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::make('export')->addClass('btn btn-relief-outline-secondary dropdown-toggle')->buttons([
+                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
                     Button::make('csv')->addClass('dropdown-item'),
                     Button::make('excel')->addClass('dropdown-item'),
                     Button::make('pdf')->addClass('dropdown-item'),
                 ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary'),
+                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
                 Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
                         'onclick' => 'deleteSelected()',
                     ]),

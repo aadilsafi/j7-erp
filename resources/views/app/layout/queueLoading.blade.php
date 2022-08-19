@@ -38,8 +38,19 @@
                                 <div class="card mb-1 queueProgressCard border-primary">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}
-                                            </p>
+                                            {{-- <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}
+                                            </p> --}}
+                                            <div class="mb-1">
+                                                <div class="spinner-grow text-primary spinner-grow-sm" role="status"
+                                                    id="queueSpinner_{{ $key }}">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <button type="button" id="queueButton_{{ $key }}" style="display: none;"
+                                                    class="btn btn-relief-outline-success btn-sm waves-effect waves-float waves-light me-1">
+                                                    <i data-feather='save'></i>
+                                                    Preview
+                                                </button>
+                                            </div>
                                             <p id="queueProgressBarProgress_{{ $key }}">Initializing...
                                             </p>
                                         </div>
@@ -60,3 +71,104 @@
         </div>
     </div>
 </div>
+
+<script>
+    function showOffCanvas(element, autoClose = true) {
+        $('#' + element).offcanvas('show');
+        if (autoClose) {
+            setTimeout(function() {
+                $('#' + element).offcanvas('hide');
+            }, 100);
+        }
+    }
+
+    function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs) {
+        var progressBar = $('#queueProgressBar_' + progressBarID);
+
+        switch (progress) {
+            case 0:
+                progressBar.addClass('progress-bar-animated').css('width', '100%');
+                progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                $('#queueProgressBarProgress_' + progressBarID).text('Initializing...');
+                break;
+
+            case 100:
+                progressBar.addClass('progress-bar-animated').css('width', '100%');
+                progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                    totalJobs);
+                break;
+
+            default:
+                progressBar.removeClass('progress-bar-animated').css('width',
+                    progress + '%');
+                progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
+                $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
+                    totalJobs);
+                break;
+        }
+    }
+
+    var intervalIDs = []
+
+    pendingQueueCount = parseInt('{{ $batches->count() }}');
+
+    function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
+        $.ajax({
+            url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id',
+                batch_id),
+            type: 'GET',
+            success: function(response) {
+                if (response.status) {
+                    setProgressTo(progressBarID, response.data.progress, response.data
+                        .pendingJobs, response
+                        .data.processedJobs, response.data.totalJobs);
+
+                    if (response.data.progress == 100) {
+                        window.clearInterval(interval_id);
+                        QueueCompletedAction(progressBarID);
+                    }
+                }
+            }
+        });
+
+        window.clearInterval(interval_id);
+    }
+
+    function QueueCompletedAction(progressBarID) {
+        console.log('progressBarID => ' + progressBarID);
+        $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
+        pendingQueueCount--;
+
+        if (pendingQueueCount == 0) {
+            $('#queueLoadingTopbarIcon').removeClass('spinner').html(
+                '<i style="color: #28C76F !important;" class="ficon" data-feather="check-circle"></i>'
+            );
+            if (feather) {
+                feather.replace({
+                    width: 14,
+                    height: 14
+                });
+            }
+
+            $('#queueSpinner_' + progressBarID).hide();
+            $('#queueButton_' + progressBarID).show();
+        }
+    }
+
+    function startQueueInterval(batch_id, progressBarID) {
+        var interval_id = setInterval(function() {
+            checkQueueBatchProgress(interval_id, batch_id, progressBarID);
+        }, 2500);
+    }
+
+    function toggleAccordian(action = null) {
+
+        var accordian = $('#accordionMarginOne');
+        if (accordian.hasClass('show')) {
+            accordian.collapse('hide');
+        } else {
+            accordian.collapse('show');
+        }
+    }
+</script>

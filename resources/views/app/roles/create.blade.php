@@ -46,7 +46,7 @@
 
                 @csrf
 
-                {{ view('app.roles.form-fields') }}
+                {{ view('app.roles.form-fields', ['roles' => $roles]) }}
 
             </div>
 

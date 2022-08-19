@@ -9,6 +9,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Support\Str;
 
 class RolesDataTable extends DataTable
 {
@@ -22,6 +23,9 @@ class RolesDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
+            ->editColumn('parent_id', function ($role) {
+                return Str::of(getRoleParentByParentId($role->parent_id))->ucfirst();
+            })
             ->editColumn('created_at', function ($role) {
                 return editDateColumn($role->created_at);
             })
@@ -80,7 +84,7 @@ class RolesDataTable extends DataTable
                         'onclick' => 'deleteSelected()',
                     ]),
             )
-            ->rowGroupDataSrc('guard_name')
+            ->rowGroupDataSrc('parent_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -99,6 +103,7 @@ class RolesDataTable extends DataTable
                 ],
             ])
             ->orders([
+                [4, 'asc'],
                 [4, 'desc'],
             ]);
     }
@@ -115,6 +120,7 @@ class RolesDataTable extends DataTable
             Column::make('name')->title('Role Name'),
             Column::make('guard_name')->title('Guard Name'),
             Column::make('default')->title('Default')->addClass('text-center'),
+            Column::make('parent_id')->title('Parent'),
             Column::make('created_at'),
             // Column::make('updated_at'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

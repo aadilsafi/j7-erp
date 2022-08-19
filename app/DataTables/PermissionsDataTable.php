@@ -2,15 +2,16 @@
 
 namespace App\DataTables;
 
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\EloquentDataTable;
+use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Services\DataTable;
-use Illuminate\Support\Str;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class PermissionsDataTable extends DataTable
 {
@@ -120,7 +121,7 @@ class PermissionsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $roles = (new Role())->select('id', 'name')->get();
+        $roles = (new Role())->select('id', 'name')->orderBy('id')->get();
 
         $colArray = [
             Column::computed('check')->exportable(false)->printable(false)->width(60),

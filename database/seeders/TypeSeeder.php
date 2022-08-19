@@ -19,6 +19,7 @@ class TypeSeeder extends Seeder
         (new Type())->insert([
             [
                 // 'id' => 1,
+                'site_id' => 1,
                 'name' => 'Shops',
                 'slug' => Str::slug('Shops'),
                 'parent_id' => 0,
@@ -27,6 +28,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 2,
+                'site_id' => 1,
                 'name' => 'Hotels',
                 'slug' => Str::slug('Hotels'),
                 'parent_id' => 0,
@@ -35,6 +37,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 3,
+                'site_id' => 1,
                 'name' => 'Suits',
                 'slug' => Str::slug('Suits'),
                 'parent_id' => 0,
@@ -43,6 +46,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 4,
+                'site_id' => 1,
                 'name' => 'Offices',
                 'slug' => Str::slug('Offices'),
                 'parent_id' => 0,
@@ -51,6 +55,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 5,
+                'site_id' => 1,
                 'name' => 'Executive Suits',
                 'slug' => Str::slug('Executive Suits'),
                 'parent_id' => 3,
@@ -59,6 +64,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 6,
+                'site_id' => 1,
                 'name' => 'Presidentail Suits',
                 'slug' => Str::slug('Presidentail Suits'),
                 'parent_id' => 3,
@@ -67,6 +73,7 @@ class TypeSeeder extends Seeder
             ],
             [
                 // 'id' => 7,
+                'site_id' => 1,
                 'name' => 'King Presidentail Suits',
                 'slug' => Str::slug('King Presidentail Suits'),
                 'parent_id' => 6,

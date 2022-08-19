@@ -193,43 +193,43 @@ class PermissionTableSeeder extends Seeder
 
             // Types Routes
             [
-                'name' => 'types.index',
+                'name' => 'sites.types.index',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.create',
+                'name' => 'sites.types.create',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.store',
+                'name' => 'sites.types.store',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.edit',
+                'name' => 'sites.types.edit',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.update',
+                'name' => 'sites.types.update',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.destroy',
+                'name' => 'sites.types.destroy',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'types.destroy.selected',
+                'name' => 'sites.types.destroy.selected',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

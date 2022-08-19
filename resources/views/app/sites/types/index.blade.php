@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'types.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.types.index', $site_id) }}
 @endsection
 
 @section('page-title', 'Types List')
@@ -16,8 +16,7 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -34,7 +33,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Types</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('types.index') }}
+                    {{ Breadcrumbs::render('sites.types.index', $site_id) }}
                 </div>
             </div>
         </div>
@@ -48,7 +47,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('types.destroy.selected') }}" id="types-table-form" method="get">
+            <form action="{{ route('sites.types.destroy.selected', ['site_id' => $site_id]) }}" id="types-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -106,24 +105,8 @@
             }
         }
 
-        function deleteByID(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: '{{ __('lang.commons.are_you_sure') }}',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                confirmButtonClass: 'btn-danger',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.href = '{{ route('types.destroy', ['id' => ':id']) }}'.replace(':id', id);
-                }
-            });
-        }
-
         function addNew() {
-            location.href = '{{ route('types.create') }}';
+            location.href = '{{ route('sites.types.create', ['site_id' => $site_id]) }}';
         }
     </script>
 @endsection

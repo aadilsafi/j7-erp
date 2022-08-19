@@ -57,71 +57,71 @@ Breadcrumbs::for('sites.edit', function (BreadcrumbTrail $trail) {
 });
 
 //Types Breadcrumbs
-Breadcrumbs::for('types.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.types.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Types', route('types.index'));
+    $trail->push('Types', route('sites.types.index', ['site_id' => $site_id]));
 });
 
-Breadcrumbs::for('types.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('types.index');
+Breadcrumbs::for('sites.types.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.types.index', $site_id);
     $trail->push('Create Type');
 });
 
-Breadcrumbs::for('types.edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('types.index');
+Breadcrumbs::for('sites.types.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.types.index', $site_id);
     $trail->push('Edit Type');
 });
 
 //Additional Costs Breadcrumbs
-Breadcrumbs::for('sites.additional-costs.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.additional-costs.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Additional Costs', route('sites.additional-costs.index', ['site_id' => encryptParams(1)]));
+    $trail->push('Additional Costs', route('sites.additional-costs.index', ['site_id' => $site_id]));
 });
 
-Breadcrumbs::for('sites.additional-costs.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.additional-costs.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.additional-costs.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.additional-costs.index', ['site_id' => $site_id]);
     $trail->push('Create Additional Cost');
 });
 
-Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.additional-costs.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.additional-costs.index', ['site_id' => $site_id]);
     $trail->push('Edit Additional Cost');
 });
 
 //Floor Breadcrumbs
-Breadcrumbs::for('sites.floors.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.floors.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Floors', route('sites.floors.index', ['site_id' => encryptParams(1)]));
+    $trail->push('Floors', route('sites.floors.index', ['site_id' => $site_id]));
 });
 
-Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Create Floor');
 });
 
-Breadcrumbs::for('sites.floors.copy', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.floors.copy', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Copy Floor');
 });
 
-Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Edit Floor');
 });
 
-Breadcrumbs::for('sites.floors.preview', function (BreadcrumbTrail $trail) {
-    $trail->parent('sites.floors.index', ['site_id' => encryptParams(1)]);
+Breadcrumbs::for('sites.floors.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Floors Preview');
 });
 
 //Units Breadcrumbs
 Breadcrumbs::for('sites.floors.units.index', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
-    $trail->parent('sites.floors.index');
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Units', route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id]));
 });
 
 Breadcrumbs::for('sites.floors.units.preview', function (BreadcrumbTrail $trail, $site_id, $floor_id) {
-    $trail->parent('sites.floors.index');
+    $trail->parent('sites.floors.index', $site_id);
     $trail->push('Units Preview', route('sites.floors.units.preview', ['site_id' => $site_id, 'floor_id' => $floor_id]));
 });
 

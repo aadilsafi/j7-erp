@@ -23,7 +23,6 @@ class UnitTypeService implements UnitTypeInterface
 
     public function getById($id)
     {
-        $id = decryptParams($id);
         return $this->model()->find($id);
     }
 
@@ -34,9 +33,10 @@ class UnitTypeService implements UnitTypeInterface
     }
 
     // Store
-    public function store($inputs)
+    public function store($site_id, $inputs)
     {
         $data = [
+            'site_id' => decryptParams($site_id),
             'name' => $inputs['type_name'],
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
@@ -45,12 +45,10 @@ class UnitTypeService implements UnitTypeInterface
         return $type;
     }
 
-    public function update($inputs, $id)
+    public function update($site_id, $inputs, $id)
     {
-
-        $id = decryptParams($id);
-
         $data = [
+            'site_id' => $site_id,
             'name' => $inputs['type_name'],
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
@@ -59,7 +57,7 @@ class UnitTypeService implements UnitTypeInterface
         return $type;
     }
 
-    public function destroy($id)
+    public function destroy($site_id, $id)
     {
         $id = decryptParams($id);
 

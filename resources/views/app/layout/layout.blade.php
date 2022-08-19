@@ -176,15 +176,14 @@
                     height: 14
                 });
             }
+
             @forelse ($batches as $key => $batch)
-                startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
-            @empty
-            @endforelse
+            startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
+        @empty
+        @endforelse
 
-            // toggleAccordian();
+        // toggleAccordian();
         });
-
-
 
         $.ajaxSetup({
             headers: {
@@ -203,87 +202,6 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         });
-
-        function showOffCanvas(element, autoClose = true) {
-            $('#' + element).offcanvas('show');
-            if (autoClose) {
-                setTimeout(function() {
-                    $('#' + element).offcanvas('hide');
-                }, 100);
-            }
-        }
-
-        function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs) {
-            var progressBar = $('#queueProgressBar_' + progressBarID);
-
-            switch (progress) {
-                case 0:
-                    progressBar.addClass('progress-bar-animated').css('width', '100%');
-                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
-                    $('#queueProgressBarProgress_' + progressBarID).text('Initializing...');
-                    break;
-
-                case 100:
-                    progressBar.addClass('progress-bar-animated').css('width', '100%');
-                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
-                        totalJobs);
-                    break;
-
-                default:
-                    progressBar.removeClass('progress-bar-animated').css('width',
-                        progress + '%');
-                    progressBar.parent().removeClass('progress-bar-success').addClass('progress-bar-primary');
-                    $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
-                        totalJobs);
-                    break;
-            }
-        }
-
-        var intervalIDs = []
-
-        pendingQueueCount = parseInt('{{ $batches->count() }}');
-
-        function checkQueueBatchProgress(interval_id, batch_id, progressBarID) {
-            $.ajax({
-                url: '{{ route('batches.byid', ['batch_id' => ':batch_id']) }}'.replace(':batch_id',
-                    batch_id),
-                type: 'GET',
-                success: function(response) {
-                    if (response.status) {
-                        setProgressTo(progressBarID, response.data.progress, response.data
-                            .pendingJobs, response
-                            .data.processedJobs, response.data.totalJobs);
-                        console.log(response);
-                        if (response.data.progress == 100) {
-                            window.clearInterval(interval_id);
-                            $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
-                            pendingQueueCount--;
-
-                            if (pendingQueueCount == 0) {
-                                $('#queueLoadingTopbarIcon').removeClass('spinner').html(
-                                    '<i style="color: #28C76F !important;" class="ficon" data-feather="check-circle"></i>'
-                                    );
-                                if (feather) {
-                                    feather.replace({
-                                        width: 14,
-                                        height: 14
-                                    });
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            window.clearInterval(interval_id);
-        }
-
-        function startQueueInterval(batch_id, progressBarID) {
-            var interval_id = setInterval(function() {
-                checkQueueBatchProgress(interval_id, batch_id, progressBarID);
-            }, 2500);
-        }
 
         function showBlockUI(element = null) {
             blockUIOptions = {
@@ -322,16 +240,6 @@
 
         function changeAllTableRowColor() {
             $('.dt-checkboxes').trigger('change');
-        }
-
-        function toggleAccordian(action = null) {
-
-            var accordian = $('#accordionMarginOne');
-            if (accordian.hasClass('show')) {
-                accordian.collapse('hide');
-            } else {
-                accordian.collapse('show');
-            }
         }
     </script>
 

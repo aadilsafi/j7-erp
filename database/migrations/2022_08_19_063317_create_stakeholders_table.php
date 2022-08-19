@@ -13,15 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('site_configrations', function (Blueprint $table) {
+        Schema::create('stakeholders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->tinyInteger('site_max_floors')->default(0);
-            $table->string('floor_prefix', 5)->default('F');
-            $table->tinyInteger('unit_number_digits')->default(2);
-            $table->tinyInteger('unit_number_of_installments')->default(12);
-            $table->tinyInteger('unit_discount')->default(0);
-            $table->tinyInteger('unit_down_payment')->default(25);
+            $table->string('full_name', 50)->nullable();
+            $table->string('father_name', 50)->nullable();
+            $table->string('occupation', 50)->nullable();
+            $table->string('designation', 50)->nullable();
+            $table->string('cnic', 15)->nullable();
+            $table->string('contact', 20)->nullable();
+            $table->string('address')->nullable();
+            $table->integer('parent_id')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('site_configrations');
+        Schema::dropIfExists('stakeholders');
     }
 };

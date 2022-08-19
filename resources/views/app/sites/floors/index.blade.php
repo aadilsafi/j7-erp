@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index', $site_id) }}
 @endsection
 
 @section('page-title', 'Floors List')
@@ -43,7 +43,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Floors</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.index') }}
+                    {{ Breadcrumbs::render('sites.floors.index', $site_id) }}
                 </div>
             </div>
         </div>
@@ -256,7 +256,7 @@
                 buttons: [{
                         name: 'add-new',
                         text: '<i class="bi bi-plus"></i> Add New',
-                        className: 'btn btn-relief-outline-primary',
+                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             location.href = '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
                         }
@@ -264,7 +264,7 @@
                     {
                         name: 'copy-floor',
                         text: '<i class="bi bi-clipboard-check"></i> Copy Floor',
-                        className: 'btn btn-relief-outline-primary',
+                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             location.href = '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
                         }
@@ -307,7 +307,7 @@
                     {
                         name: 'delete-selected',
                         text: '<i class="bi bi-trash3-fill"></i> Delete Selected',
-                        className: 'btn btn-relief-outline-danger',
+                        className: 'btn btn-relief-outline-danger waves-effect waves-float waves-light',
                         action: function(e, dt, node, config) {
                             deleteSelected();
                         }

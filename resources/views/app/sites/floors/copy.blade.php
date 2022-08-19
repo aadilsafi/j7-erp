@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.copy') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.copy', $site_id) }}
 @endsection
 
 @section('page-title', 'Copy Floor')
@@ -37,7 +37,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Copy Floor</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.copy') }}
+                    {{ Breadcrumbs::render('sites.floors.copy', $site_id) }}
                 </div>
             </div>
         </div>

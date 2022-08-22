@@ -15,7 +15,10 @@ return new class extends Migration
     {
         Schema::create('sales_plans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('unit_id')->constrained();
+            $table->json('additional_costs')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

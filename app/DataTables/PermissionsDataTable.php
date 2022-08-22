@@ -37,9 +37,9 @@ class PermissionsDataTable extends DataTable
             ->editColumn('actions', function ($permission) {
                 return view('app.permissions.actions', ['id' => $permission->id]);
             })
-            ->editColumn('check', function ($permission) {
-                return $permission;
-            })
+            // ->editColumn('check', function ($permission) {
+
+            // })
             ->editColumn('roles', function ($permission) {
                 return [
                     'permission_id' => $permission->id,
@@ -92,23 +92,23 @@ class PermissionsDataTable extends DataTable
             )
             ->rowGroupDataSrc('class')
             ->scrollX()
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var permission = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + permission.id + '\" name=\"chkPermission[]\" id=\"chkPermission_' + permission.id + '\" /><label class=\"form-check-label\" for=\"chkPermission_' + permission.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
+            // ->columnDefs([
+            //     [
+            //         'targets' => 0,
+            //         'className' => 'text-center text-primary',
+            //         'width' => '10%',
+            //         'orderable' => false,
+            //         'searchable' => false,
+            //         'responsivePriority' => 3,
+            //         'render' => "function (data, type, full, setting) {
+            //             var permission = JSON.parse(data);
+            //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + permission.id + '\" name=\"chkPermission[]\" id=\"chkPermission_' + permission.id + '\" /><label class=\"form-check-label\" for=\"chkPermission_' + permission.id + '\"></label></div>';
+            //         }",
+            //         'checkboxes' => [
+            //             'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+            //         ]
+            //     ],
+            // ])
             ->orders([
                 [1, 'asc'],
             ]);
@@ -124,7 +124,7 @@ class PermissionsDataTable extends DataTable
         $roles = (new Role())->select('id', 'name')->orderBy('id')->get();
 
         $colArray = [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            // Column::computed('#'),
             Column::make('name')->title('Permission Name'),
             Column::make('guard_name')->title('Guard Name'),
             Column::computed('class')->title('Class')->visible(false),
@@ -132,7 +132,7 @@ class PermissionsDataTable extends DataTable
 
         foreach ($roles as $key => $role) {
 
-            // if ($role->id == 1)
+            // if (in_array($role->name, ['Director', 'Admin', 'Super Admin']) )
             //     continue;
 
             $colArray[] = Column::computed('roles')

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SalesPlanDataTable;
+use App\Models\{Floor, Site, Unit};
 use Illuminate\Http\Request;
 
 class SalesPlanController extends Controller
@@ -11,9 +13,15 @@ class SalesPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, SalesPlanDataTable $dataTable, $site_id, $floor_id, $unit_id)
     {
-        //
+        $data = [
+            'site' => encryptParams(decryptParams($site_id)),
+            'floor' => encryptParams(decryptParams($floor_id)),
+            'unit' => (new Unit())->find(decryptParams($unit_id))
+        ];
+
+        return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
     }
 
     /**

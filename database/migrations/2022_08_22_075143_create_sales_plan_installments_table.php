@@ -13,11 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('sales_plans', function (Blueprint $table) {
+        Schema::create('sales_plan_installments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('unit_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained();
+            $table->foreignId('sales_plan_id')->constrained();
+            $table->date('date');
+            $table->float('amount')->default(0);
+            $table->string('details')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_plans');
+        Schema::dropIfExists('sales_plan_installments');
     }
 };

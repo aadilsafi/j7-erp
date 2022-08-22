@@ -10,9 +10,19 @@ use App\Http\Requests\roles\{
 use Exception;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Services\Interfaces\{
+    RoleTypesInterface
+};
 
 class RoleController extends Controller
 {
+
+    private $RoleTypesInterface;
+
+    public function __construct(RoleTypesInterface $RoleTypesInterface)
+    {
+        $this->RoleTypesInterface = $RoleTypesInterface;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +42,16 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('app.roles.create');
+        if (!request()->ajax()) {
+
+            $data = [
+                'roles' => $this->RoleTypesInterface->getAllWithTree(),
+            ];
+            return view('app.roles.create',$data);
+        } else {
+            abort(403);
+        }
+
     }
 
     /**
@@ -47,6 +66,7 @@ class RoleController extends Controller
             $record = (new Role())->create([
                 'name' => $request->role_name,
                 'guard_name' => $request->guard_name,
+                'parent_id' => $request->parent_id,
             ]);
 
             if ($request->default) {
@@ -83,7 +103,12 @@ class RoleController extends Controller
             $role = (new Role())->find(decryptParams($id));
 
             if ($role && !empty($role)) {
-                return view('app.roles.edit', ['role' => $role]);
+                $data = [
+                    'roles' => $this->RoleTypesInterface->getAllWithTree(),
+                    'role' => $role,
+                ];
+
+                return view('app.roles.edit', $data);
             }
 
             return redirect()->route('roles.index')->withWarning(__('lang.commons.data_not_found'));
@@ -102,9 +127,10 @@ class RoleController extends Controller
     public function update(roleUpdateRequest $request, $id)
     {
         try {
-            $record = (new Role())->where('id', $id)->update([
+            $record = (new Role())->where('id', decryptParams($id))->update([
                 'name' => $request->role_name,
                 'guard_name' => $request->guard_name,
+                'parent_id' => $request->parent_id,
             ]);
 
             if ($request->default) {

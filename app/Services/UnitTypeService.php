@@ -6,6 +6,7 @@ use App\Models\Type;
 use App\Services\Interfaces\UnitTypeInterface;
 use Exception;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UnitTypeService implements UnitTypeInterface
 {

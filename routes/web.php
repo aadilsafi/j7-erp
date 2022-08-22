@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     CountryController,
     FloorController,
     JobBatchController,
+    SalesPlanController,
     testController,
     UnitController,
 };
@@ -45,8 +46,9 @@ Route::group([
         return redirect()->route('login.view');
     });
 
-    Route::group(['middleware' => ['auth',]], function () {
-        // Route::group(['middleware' => ['auth']], function () {
+
+    Route::group(['middleware' => ['auth', ]], function () {
+        // Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -62,7 +64,7 @@ Route::group([
             Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy.selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [RoleController::class, 'edit'])->name('edit');
-                Route::post('update', [RoleController::class, 'update'])->name('update');
+                Route::put('update', [RoleController::class, 'update'])->name('update');
 
                 Route::get('delete', [RoleController::class, 'destroy'])->name('destroy');
                 Route::get('make-default', [RoleController::class, 'makeDefault'])->name('make-default');
@@ -128,6 +130,7 @@ Route::group([
 
                 //Floors Routes
                 Route::group(['prefix' => 'floors', 'as' => 'floors.'], function () {
+
                     Route::get('/', [FloorController::class, 'index'])->name('index');
 
                     Route::get('create', [FloorController::class, 'create'])->name('create');
@@ -148,7 +151,9 @@ Route::group([
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
-                            Route::get('/', [UnitController::class, 'index'])->name('index');
+                            Route::get('/', [
+                                UnitController::class, 'index'
+                            ])->name('index');
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
@@ -158,8 +163,28 @@ Route::group([
 
                             Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
                             Route::group(['prefix' => '/{id}'], function () {
+
                                 Route::get('edit', [UnitController::class, 'edit'])->name('edit');
                                 Route::put('update', [UnitController::class, 'update'])->name('update');
+                            });
+
+                            Route::group(['prefix' => '/{unit_id}'], function () {
+
+                                Route::group(['prefix' => 'sales-plans', 'as' => 'sales-plans.'], function () {
+
+                                    Route::get('/', [SalesPlanController::class, 'index'])->name('index');
+
+                                    Route::get('create', [SalesPlanController::class, 'create'])->name('create');
+                                    Route::post('store', [SalesPlanController::class, 'storde'])->name('store');
+
+                                    Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy.selected');
+
+                                    Route::group(['prefix' => '/{id}'], function () {
+
+                                        Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
+                                        Route::put('update', [SalesPlanController::class, 'update'])->name('update');
+                                    });
+                                });
                             });
                         });
                     });

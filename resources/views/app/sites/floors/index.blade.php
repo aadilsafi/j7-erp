@@ -84,7 +84,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr class="text-center">
-                                        <th rowspan="2"></th>
+                                        <th rowspan="2">CHECK</th>
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
@@ -181,7 +181,6 @@
                     {
                         data: 'floor_area',
                         name: 'floor_area',
-                        className: 'text-center',
                     },
                     {
                         data: 'short_label',

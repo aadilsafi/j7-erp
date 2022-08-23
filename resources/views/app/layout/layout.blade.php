@@ -64,6 +64,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <!-- END: Custom CSS-->
 
+    <style>
+        .select2-container--default .select2-results>.select2-results__options {
+            max-height: 250px !important;
+        }
+    </style>
+
     @yield('custom-css')
 
 </head>
@@ -178,11 +184,11 @@
             }
 
             @forelse ($batches as $key => $batch)
-            startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
-        @empty
-        @endforelse
+                startQueueInterval('{{ $batch->job_batch_id }}', '{{ $key }}');
+            @empty
+            @endforelse
 
-        // toggleAccordian();
+            // toggleAccordian();
         });
 
         $.ajaxSetup({

@@ -61,7 +61,7 @@
     }), l.each((function () {
         var e = s(this);
         e.wrap('<div class="position-relative"></div>'), e.select2({
-            dropdownAutoWidth: !0, dropdownParent: e.parent(), width: "100%", containerCssClass: "select-lg"
+            dropdownAutoWidth: !0, dropdownParent: e.parent(), width: "100%", containerCssClass: "select-lg",
         })
     })), d.each((function () {
         var e = s(this);

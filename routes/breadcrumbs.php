@@ -134,3 +134,14 @@ Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
     $trail->push('Edit Unit');
 });
+
+//Unit Sales Plan Breadcrumbs
+Breadcrumbs::for('sites.floors.units.sales-plans.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
+    $trail->parent('sites.floors.units.index', $site_id, $floor_id);
+    $trail->push('Sales Plan', route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.floors.units.sales-plans.create', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
+    $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
+    $trail->push('Sales Plan Create');
+});

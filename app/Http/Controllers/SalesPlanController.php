@@ -16,8 +16,8 @@ class SalesPlanController extends Controller
     public function index(Request $request, SalesPlanDataTable $dataTable, $site_id, $floor_id, $unit_id)
     {
         $data = [
-            'site' => encryptParams(decryptParams($site_id)),
-            'floor' => encryptParams(decryptParams($floor_id)),
+            'site' => decryptParams($site_id),
+            'floor' => decryptParams($floor_id),
             'unit' => (new Unit())->find(decryptParams($unit_id))
         ];
 
@@ -29,9 +29,21 @@ class SalesPlanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id, $floor_id, $unit_id)
     {
-        //
+        if (!request()->ajax()) {
+            $data = [
+                'site' => decryptParams($site_id),
+                'floor' => decryptParams($floor_id),
+                'unit' => (new Unit())->find(decryptParams($unit_id))
+            ];
+
+            // dd($data);
+
+            return view('app.sites.floors.units.sales-plan.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**

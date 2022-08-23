@@ -33,7 +33,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="site_name">Site Name</label>
         <input type="text" class="form-control form-control-lg @error('site_name') is-invalid @enderror"
-            id="site_name" name="site_name" placeholder="Site Nmae" readonly value="{{ $site->name }}" />
+            id="site_name" name="site_name" placeholder="Site Name" readonly value="{{ $site->name }}" />
         @error('site_name')
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror

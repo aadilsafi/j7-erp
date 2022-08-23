@@ -27,12 +27,6 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('check', function ($unit) {
                 return $unit;
             })
-            ->editColumn('status_id', function ($unit) {
-                return editBadgeColumn($unit->status->name);
-            })
-            ->editColumn('type_id', function ($unit) {
-                return $unit->type->name;
-            })
             ->editColumn('created_at', function ($unit) {
                 return editDateColumn($unit->created_at);
             })
@@ -65,7 +59,7 @@ class SalesPlanDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->addTableClass(['table-striped', 'table-hover'])
+            ->addTableClass(['table-hover'])
             ->setTableId('floors-units-table')
             ->columns($this->getColumns())
             ->deferRender()
@@ -114,10 +108,10 @@ class SalesPlanDataTable extends DataTable
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
-            ])
-            ->orders([
-                [5, 'desc'],
             ]);
+            // ->orders([
+            //     [5, 'desc'],
+            // ]);
     }
 
     /**
@@ -129,11 +123,8 @@ class SalesPlanDataTable extends DataTable
     {
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('name')->title('Site Name'),
-            // Column::make('city_id')->name('city.name')->title('City'),
-            Column::make('address')->title('Address'),
-            Column::make('area_width')->title('Area Width'),
-            Column::make('area_length')->title('Area Length'),
+            Column::make('user_id')->title('Sales Person'),
+            Column::make('stakeholder_id')->title('Stakeholder'),
             Column::make('created_at')->title('Created At'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];

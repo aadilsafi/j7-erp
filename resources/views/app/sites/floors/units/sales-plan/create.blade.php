@@ -7,6 +7,9 @@
 @section('page-title', 'Create Sales Plan')
 
 @section('page-vendor')
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/forms/spinner/jquery.bootstrap-touchspin.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 @endsection
 
 @section('page-css')
@@ -15,6 +18,8 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
 @endsection
 
 @section('custom-css')
@@ -50,20 +55,47 @@
         method="POST">
 
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9 position-relative">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
                 {{ view('app.sites.floors.units.sales-plan.form-fields') }}
 
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                <div class="card sticky-md-top" style="top: 100px;">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-header">
+                        <h3>Additional Costs</h3>
+                    </div>
                     <div class="card-body">
-                        <button type="submit"
+                        <div class='form-check d-flex flex-column'>
+                            <div class="mb-1">
+                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
+                                <label class='form-check-label' for='chkRolePermission_'>asd</label>
+                            </div>
+                            <div class="mb-1">
+                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
+                                <label class='form-check-label' for='chkRolePermission_'>sss</label>
+                            </div>
+                            <div class="mb-1">
+                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
+                                <label class='form-check-label' for='chkRolePermission_'>dadad</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
+                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-body">
+                        <button type="submit" value="save"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='save'></i>
                             <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                        </button>
+                        <button type="submit" value="save_print"
+                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                            <i data-feather='printer'></i>
+                            <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
                         </button>
                         <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -81,203 +113,153 @@
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/wNumb.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/nouislider.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 @endsection
 
 @section('page-js')
 @endsection
 
 @section('custom-js')
-    {{-- <script>
+    <script>
         $(document).ready(function() {
 
-            $('#is_corner').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#corner_id').attr('disabled', false);
-                } else {
-                    $('#corner_id').attr('disabled', true);
+            var installmentsRowAction = '';
+
+            $(".touchspin-icon").TouchSpin({
+                buttondown_class: "btn btn-primary",
+                buttonup_class: "btn btn-primary",
+                buttondown_txt: feather.icons["chevron-down"].toSvg(),
+                buttonup_txt: feather.icons["chevron-up"].toSvg(),
+                min: 1,
+                max: 50,
+            }).on("touchspin.on.stopupspin", function() {
+                installmentsRowAction = "stopupspin";
+                console.log(installmentsRowAction);
+
+            }).on("touchspin.on.stopdownspin", function() {
+                installmentsRowAction = "stopdownspin";
+                console.log(installmentsRowAction);
+            }).on("touchspin.on.stopspin", function() {
+                var t = $(this);
+                if (installmentsRowAction == "stopupspin") {
+                    // debugger
+                    addInstallmentsRows(t.val());
+                } else if (installmentsRowAction == "stopdownspin") {
+                    addInstallmentsRows(t.val());
+                }
+            }).on("change", function() {
+                var t = $(this);
+                $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
+                1 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
+                    "disabled-max-min");
+                50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
+                    "disabled-max-min")
+            });
+
+            $('.custom-option-item-check').on('change', function() {
+                var ele = $(this);
+
+                switch (ele.val()) {
+                    case 'quarterly':
+                        $('#how_many').text('Quaters');
+                        break;
+
+                    case 'monthly':
+                        $('#how_many').text('Months');
+                        break;
+
+                    default:
+                        break;
                 }
             });
 
-            $('#is_facing').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#facing_id').attr('disabled', false);
-                } else {
-                    $('#facing_id').attr('disabled', true);
-                }
+            $(".flatpickr-basic").flatpickr({
+                defaultDate: "today",
+                minDate: "today",
             });
 
-            $('#is_corner').trigger('change');
-            $('#is_facing').trigger('change');
-
-            $('#add_bulk_unit').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#bulkOptionSlider').show();
-                    $('#bulk_units_checkbox_column').addClass('mb-3');
-                    $('#hide_div').hide();
-                    $("#unit_number, #name").attr('disabled', true);
-                    mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
-                } else {
-                    $('#bulkOptionSlider').hide();
-                    $('#bulk_units_checkbox_column').removeClass('mb-3');
-                    $('#hide_div').show();
-                    $("#unit_number, #name").attr('disabled', false);
-                    $('#create_unit_button_span').html('Save Unit');
-                }
-            });
-
-            var unitSlider = document.getElementById("primary-color-slider");
-
-            noUiSlider.create(unitSlider, {
-                behaviour: "tap-drag",
-                tooltips: wNumb({
-                    decimals: 0,
-                    postfix: ' <i class="bi bi-door-open" class="m-10"></i>'
-                }),
-                connect: !0,
-                step: 1,
-                start: [0, 20],
-                range: {
-                    min: 1,
-                    max: parseInt('{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}') + 1,
-                },
-                pips: {
-                    mode: "range",
-                    stepped: !0,
-                    density: 10,
-                    format: wNumb({
-                        decimals: 0,
-                        postfix: ' <i class="bi bi-door-open" class="m-10"></i>'
-                    })
-                },
-                direction: 'ltr'
-            });
-
-            var inputs = [
-
-            ];
-
-            var inputs = [
-                document.getElementById('slider_input_1'),
-                document.getElementById('slider_input_2')
-            ];
-
-            unitSlider.noUiSlider.on('update', function(values, handle, unencoded) {
-                inputs[handle].value = parseInt(values[handle]);
-            });
-
-            // mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
-
-            function mergeTooltips(slider, threshold, separator) {
-
-                var textIsRtl = getComputedStyle(slider).direction === 'rtl';
-                var isRtl = slider.noUiSlider.options.direction === 'rtl';
-                var isVertical = slider.noUiSlider.options.orientation === 'vertical';
-                var tooltips = slider.noUiSlider.getTooltips();
-                var origins = slider.noUiSlider.getOrigins();
-
-                // Move tooltips into the origin element. The default stylesheet handles this.
-                tooltips.forEach(function(tooltip, index) {
-                    if (tooltip) {
-                        origins[index].appendChild(tooltip);
-                    }
-                });
-
-                slider.noUiSlider.on('update', function(values, handle, unencoded, tap, positions) {
-
-                    if ($('#add_bulk_unit').is(':checked')) {
-                        $('#create_unit_button_span').html('Save Units [' + parseInt(
-                            getDifference(values[0], values[1]) + 1) + ']');
-                    }
-
-                    var pools = [
-                        []
-                    ];
-                    var poolPositions = [
-                        []
-                    ];
-                    var poolValues = [
-                        []
-                    ];
-                    var atPool = 0;
-
-                    // Assign the first tooltip to the first pool, if the tooltip is configured
-                    if (tooltips[0]) {
-                        pools[0][0] = 0;
-                        poolPositions[0][0] = positions[0];
-                        poolValues[0][0] = values[0];
-                    }
-
-                    for (var i = 1; i < positions.length; i++) {
-                        if (!tooltips[i] || (positions[i] - positions[i - 1]) > threshold) {
-                            atPool++;
-                            pools[atPool] = [];
-                            poolValues[atPool] = [];
-                            poolPositions[atPool] = [];
-                        }
-
-                        if (tooltips[i]) {
-                            pools[atPool].push(i);
-                            poolValues[atPool].push(values[i]);
-                            poolPositions[atPool].push(positions[i]);
-                        }
-                    }
-
-                    pools.forEach(function(pool, poolIndex) {
-                        var handlesInPool = pool.length;
-
-                        for (var j = 0; j < handlesInPool; j++) {
-                            var handleNumber = pool[j];
-
-                            if (j === handlesInPool - 1) {
-                                var offset = 0;
-
-                                poolPositions[poolIndex].forEach(function(value) {
-                                    offset += 1000 - value;
-                                });
-
-                                var direction = isVertical ? 'bottom' : 'right';
-                                var last = isRtl ? 0 : handlesInPool - 1;
-                                var lastOffset = 1000 - poolPositions[poolIndex][last];
-                                offset = (textIsRtl && !isVertical ? 100 : 0) + (offset /
-                                    handlesInPool) - lastOffset;
-
-                                // Center this tooltip over the affected handles
-
-                                tooltips[handleNumber].innerHTML = poolValues[poolIndex].map(
-                                        function(item) {
-                                            return parseInt(item, 10);
-                                        }).join(separator) +
-                                    ' <i class="bi bi-door-open" class="m-10"></i>';
-                                tooltips[handleNumber].style.display = 'block';
-                                tooltips[handleNumber].style[direction] = offset + '%';
-                            } else {
-                                // Hide this tooltip
-                                tooltips[handleNumber].style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            }
-
-            function getDifference(a, b) {
-                return Math.abs(a - b);
-            }
-
-
-            //Calculate Unit Price and Total Price from Gross Area
-            $('#gross_area, #price_sqft').on('keyup', function() {
-                var total_price = 0;
-                if ($(this).val() > 0) {
-                    var gross_area = parseFloat($('#gross_area').val());
-                    var price_sqft = parseFloat($('#price_sqft').val());
-                    total_price = gross_area * price_sqft;
-                } else {
-                    total_price = 0;
-                    $(this).val('0');
-                }
-                $('#total_price').val('' + parseFloat(total_price).toFixed(2));
-
-            });
         });
-    </script> --}}
+
+        function addInstallmentsRows(num) {
+            if (num > 0) {
+                var row = "";
+                for (let index = 1; index < num; index++) {
+                    row += `
+                    <tr id="row_${index}">
+                        <th scope="row">${index + 1}</th>
+                        <td>
+                            <div class="">
+                                <input type="text" id="installment_date_${index}"
+                                    name="installments[installments][${index}][date]"
+                                    class="form-control" placeholder="YYYY-MM-DD" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <input type="text" class="form-control form-control-lg"
+                                    id="installment_detail_${index}" name="installments[installments][${index}][detail]"
+                                    placeholder="Detail" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <input type="number" class="form-control form-control-lg"
+                                    id="installment_amount_${index}" name="installments[installments][${index}][amount]"
+                                    placeholder="Amount" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                <input type="text" class="form-control form-control-lg"
+                                    id="installment_remark_${index}" name="installments[installments][${num}][remark]"
+                                    placeholder="Detail" />
+                            </div>
+                        </td>
+                    </tr>`;
+                }
+
+
+                $('#installments_table #dynamic_installment_rows').html(row);
+            }
+            installmentsRowAction = '';
+        }
+
+        function installmentsRemoveRow() {
+            $('#installments_table #dynamic_installment_rows tr:last').remove();
+        }
+
+        function getDatesInRange(startDate, endDate) {
+            const date = new Date(startDate.getTime());
+
+            const dates = [];
+
+            while (date <= endDate) {
+                dates.push(new Date(date));
+                date.setDate(date.getDate() + 1);
+            }
+
+            return dates;
+        }
+        function testdateranger() {
+
+            const d1 = new Date('2022-01-18');
+            const d2 = new Date('2022-01-24');
+
+            console.log(getDatesInRange(d1, d2));
+        }
+    </script>
 @endsection
+
+
+{{-- if (installmentsRowAction == "stopupspin") {
+    // var installment = $(this).val();
+    // var total = $("#total").val();
+    // var installment_value = (total / installment).toFixed(2);
+    // $("#installment_value").val(installment_value);
+} else if (installmentsRowAction == "stopdownspin") {
+    // var installment = $(this).val();
+    // var total = $("#total").val();
+    // var installment_value = (total / installment).toFixed(2);
+    // $("#installment_value").val(installment_value);
+} --}}

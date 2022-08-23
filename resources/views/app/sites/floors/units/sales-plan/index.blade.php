@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.index', encryptParams($site->id), encryptParams($floor->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.index', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
 @endsection
 
-@section('page-title', 'Units List')
+@section('page-title', 'Sales Plan List')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -29,9 +29,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Units ({{ $floor->name }})</h2>
+                <h2 class="content-header-title float-start mb-0">Sales Plan ({{ $unit->name }})</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.index', encryptParams($site->id), encryptParams($floor->id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.index', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
                 </div>
             </div>
         </div>
@@ -45,8 +45,8 @@
     <div class="card">
         <div class="card-body">
             <form
-                action="{{ route('sites.floors.units.destroy.selected', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
-                id="floors-units-table-form" method="get">
+                action="{{ route('sites.floors.units.sales-plans.destroy.selected', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
+                id="floors-units-sales-plan-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -114,7 +114,7 @@
 
         function addNew() {
             location.href =
-                "{{ route('sites.floors.units.create', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}";
+                "{{ route('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
         }
     </script>
 @endsection

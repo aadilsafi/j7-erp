@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
 @endsection
 
-@section('page-title', 'Create Unit')
+@section('page-title', 'Create Sales Plan')
 
 @section('page-vendor')
 @endsection
@@ -35,9 +35,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Unit</h2>
+                <h2 class="content-header-title float-start mb-0">Create Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
                 </div>
             </div>
         </div>
@@ -45,43 +45,37 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <form class="form form-vertical"
-            action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
-            method="POST">
+    <form class="form form-vertical"
+        action="{{ route('sites.floors.units.sales-plans.store', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
+        method="POST">
 
-            <div class="card-header">
-            </div>
-
-            <div class="card-body">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-9 position-relative">
 
                 @csrf
-                {{ view('app.sites.floors.units.form-fields', [
-                    'site' => $site,
-                    'floor' => $floor,
-                    'siteConfiguration' => $siteConfiguration,
-                    'additionalCosts' => $additionalCosts,
-                    'types' => $types,
-                    'statuses' => $statuses,
-                    'bulkOptions' => true,
-                ]) }}
+                {{ view('app.sites.floors.units.sales-plan.form-fields') }}
 
             </div>
 
-            <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                    <i data-feather='save'></i>
-                    <span id="create_unit_button_span">Save Unit</span>
-                </button>
-                <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <div class="card sticky-md-top" style="top: 100px;">
+                    <div class="card-body">
+                        <button type="submit"
+                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                            <i data-feather='save'></i>
+                            <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                        </button>
+                        <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
+                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                            <i data-feather='x'></i>
+                            {{ __('lang.commons.cancel') }}
+                        </a>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        </form>
-    </div>
+    </form>
 @endsection
 
 @section('vendor-js')
@@ -93,7 +87,7 @@
 @endsection
 
 @section('custom-js')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
 
             $('#is_corner').on('change', function() {
@@ -285,5 +279,5 @@
 
             });
         });
-    </script>
+    </script> --}}
 @endsection

@@ -67,10 +67,12 @@
                 </a>
             </li>
 
-            <li class="navigation-header">
-                <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
+            @if(Auth::user()->can('permissions.index') || Auth::user()->can('roles.index') || Auth::user()->can('sites.configurations.configView'))
+                <li class="navigation-header">
+                    <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+            @endif
 
             {{-- Roles & Permission Menu --}}
             {{-- <li class="nav-item ">
@@ -125,50 +127,59 @@
                 </ul>
             </li> --}}
 
+            @if(Auth::user()->can('permissions.index') || Auth::user()->can('roles.index') )
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='shield'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('roles.index')
+                            <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.roles') }}</span>
+                                </a>
+                            </li>
+                        @endcan
 
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='shield'></i>
-                    <span class="menu-title text-truncate"
-                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-title text-truncate"
-                                data-i18n="Email">{{ __('lang.leftbar.roles') }}</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-title text-truncate"
-                                data-i18n="Email">{{ __('lang.leftbar.permissions') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        @can('permissions.index')
+                            <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.permissions') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
 
             {{-- <li class="navigation-header">
                 <span data-i18n="Others">Configurations</span>
                 <i data-feather="more-horizontal"></i>
             </li> --}}
 
-            <li
-                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
-                    <i data-feather='settings'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
-                </a>
-            </li>
+            @can('sites.configurations.configView')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                        <i data-feather='settings'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
+                    </a>
+                </li>
+            @endcan
 
-            <li class="navigation-header">
-                <span data-i18n="Others">Others</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
+            @if(Auth::user()->can('sites.types.index') || Auth::user()->can('sites.additional-costs.index') || Auth::user()->can('sites.floors.index'))
+                <li class="navigation-header">
+                    <span data-i18n="Others">Others</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+            @endif
             {{-- Types Menu --}}
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -193,15 +204,16 @@
                 </ul>
             </li> --}}
 
-            <li
-                class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='menu'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Types</span>
-                </a>
-            </li>
-
+            @can('sites.types.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.types.index', ['site_id' => encryptParams(1)]) }}">
+                        <i data-feather='menu'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Types</span>
+                    </a>
+                </li>
+            @endcan
 
             {{-- Sites Menu --}}
             {{-- <li class="nav-item ">
@@ -228,14 +240,16 @@
             </li> --}}
 
             {{-- Additional Costs Menu --}}
-            <li
-                class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='dollar-sign'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
-                </a>
-            </li>
+            @can('sites.additional-costs.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
+                        <i data-feather='dollar-sign'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
+                    </a>
+                </li>
+            @endcan
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='dollar-sign'></i>
@@ -264,14 +278,16 @@
             </li> --}}
 
             {{-- Floors Menu --}}
-            <li
-                class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='layers'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
-                </a>
-            </li>
+            @can('sites.floors.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                        <i data-feather='layers'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
+                    </a>
+                </li>
+            @endcan
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='layers'></i>

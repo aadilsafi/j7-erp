@@ -2,14 +2,15 @@
 
 namespace App\DataTables;
 
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Spatie\Permission\Models\Role;
-use Yajra\DataTables\EloquentDataTable;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class RolesDataTable extends DataTable
 {
@@ -58,6 +59,7 @@ class RolesDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy.selected');
         return $this->builder()
             ->setTableId('roles-table')
             ->columns($this->getColumns())
@@ -78,11 +80,20 @@ class RolesDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
+                ($selectedDeletePermission  ?
+                    Button::raw('delete-selected')
                     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
                         'onclick' => 'deleteSelected()',
-                    ]),
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
+
+                ),
             )
             ->rowGroupDataSrc('parent_id')
             ->columnDefs([
@@ -115,15 +126,30 @@ class RolesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy.selected');
+        $editPermission =  Auth::user()->hasPermissionTo('roles.edit');
+        $destroyPermission =  Auth::user()->hasPermissionTo('roles.destroy');
+        $defaultPermission =  Auth::user()->hasPermissionTo('roles.make-default');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            (
+                $selectedDeletePermission ?
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
             Column::make('name')->title('Role Name'),
             Column::make('guard_name')->title('Guard Name'),
             Column::make('default')->title('Default')->addClass('text-center'),
             Column::make('parent_id')->title('Parent'),
             Column::make('created_at'),
             // Column::make('updated_at'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            (
+                ($editPermission || $defaultPermission ||  $destroyPermission) ?
+                    Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+                :
+                    Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
+            // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
 

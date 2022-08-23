@@ -39,16 +39,16 @@ class UserTableSeeder extends Seeder
         // ]);
         // // $user->assignRole([2]);
 
-        // $user = (new User())->create([
-        //     'name' => 'Gm Sales',
-        //     'email' => 'gmsales@erp.com',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'),
-        //     'remember_token' => Str::random(10),
-        //     'created_at' => now(),
-        //     'updated_at' => now(),
-        // ]);
+        $user = (new User())->create([
+            'name' => 'Gm Sales',
+            'email' => 'gmsales@erp.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
-        // $user->assignRole([2]);
+        $user->assignRole([2]);
     }
 }

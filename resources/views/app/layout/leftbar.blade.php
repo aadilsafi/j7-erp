@@ -157,9 +157,9 @@
             </li> --}}
 
             <li
-                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
+                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
                 <a class="d-flex align-items-center"
-                    href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                    href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
                     <i data-feather='settings'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                 </a>
@@ -196,7 +196,7 @@
             <li
                 class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
                 <a class="d-flex align-items-center"
-                    href="{{ route('sites.types.index', ['site_id' => encryptParams(1)]) }}">
+                    href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
                     <i data-feather='menu'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Types</span>
                 </a>
@@ -229,9 +229,9 @@
 
             {{-- Additional Costs Menu --}}
             <li
-                class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                 <a class="d-flex align-items-center"
-                    href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
+                    href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
                     <i data-feather='dollar-sign'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
                 </a>
@@ -243,18 +243,18 @@
                 </a>
                 <ul class="menu-content">
                     <li
-                        class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
+                            href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
                     <li
-                        class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams(1)]) }}">
+                            href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams($site_id)]) }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
@@ -265,9 +265,9 @@
 
             {{-- Floors Menu --}}
             <li
-                class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                 <a class="d-flex align-items-center"
-                    href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                    href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
                     <i data-feather='layers'></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
                 </a>
@@ -279,18 +279,18 @@
                 </a>
                 <ul class="menu-content">
                     <li
-                        class="{{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        class="{{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                            href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
                         </a>
                     </li>
                     <li
-                        class="{{ request()->routeIs('sites.floors.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                        class="{{ request()->routeIs('sites.floors.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                         <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.create', ['site_id' => encryptParams(1)]) }}">
+                            href="{{ route('sites.floors.create', ['site_id' => encryptParams($site_id)]) }}">
                             <i data-feather='circle'></i>
                             <span class="menu-item text-truncate"
                                 data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>

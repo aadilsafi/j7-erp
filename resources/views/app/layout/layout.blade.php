@@ -87,7 +87,7 @@
 
     {{ view('app.layout.topbar', ['batches' => $batches]) }}
 
-    {{ view('app.layout.leftbar') }}
+    {{ view('app.layout.leftbar', ['site_id' => 1]) }}
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">

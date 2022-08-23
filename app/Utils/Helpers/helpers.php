@@ -345,6 +345,17 @@ if (!function_exists('getRoleParentByParentId')) {
     }
 }
 
+if (!function_exists('getAdditionalCostByParentId')) {
+    function getAdditionalCostByParentId($parent_id)
+    {
+        $additionalCost = (new AdditionalCost())->where('id', $parent_id)->first();
+        if ($additionalCost) {
+            return $additionalCost->name;
+        }
+        return 'parent';
+    }
+}
+
 if (!function_exists('getAuthentacatedUserInfo')) {
     function getAuthentacatedUserInfo()
     {

@@ -279,27 +279,39 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="row custom-options-checkable g-1">
-                    <div class="col-md-6">
-                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios"
-                            id="customOptionsCheckableRadios1" checked />
-                        <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">
+
+                    <div class="col-md-5">
+                        <input class="custom-option-item-check" type="radio" name="installments[types][type]"
+                            id="installment_quarterly" value="quarterly" checked />
+                        <label class="custom-option-item p-1" for="installment_quarterly">
                             <span class="d-flex justify-content-between flex-wrap mb-50">
-                                <span class="fw-bolder">Basic</span>
-                                <span class="fw-bolder">Free</span>
+                                <span class="fw-bolder">Quarterly</span>
+                                <span class="fw-bolder">3 Months</span>
                             </span>
-                            <small class="d-block">Get 1 project with 1 team member.</small>
+                            <small class="d-block">Installment will be calculated on quarterly basis</small>
                         </label>
                     </div>
-                    <div class="col-md-6">
-                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios"
-                            id="customOptionsCheckableRadios2" value="" />
-                        <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">
+
+                    <div class="col-md-5">
+                        <input class="custom-option-item-check" type="radio" name="installments[types][type]"
+                            id="installment_monthly" value="monthly" />
+                        <label class="custom-option-item p-1" for="installment_monthly">
                             <span class="d-flex justify-content-between flex-wrap mb-50">
-                                <span class="fw-bolder">Premium</span>
-                                <span class="fw-bolder">$ 5.00</span>
+                                <span class="fw-bolder">Monthly</span>
+                                <span class="fw-bolder">1 Month</span>
                             </span>
-                            <small class="d-block">Get 5 projects with 5 team members.</small>
+                            <small class="d-block">Installment will be calculated on montly basis</small>
                         </label>
+                    </div>
+
+                    <div class="col-md-2">
+                        <p class="m-0 fw-bolder d-block mb-1">How Many (<span id="how_many">Quaters</span>)?</p>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <div class="input-group input-group-lg ">
+                                <input type="number" class="touchspin-icon" readonly
+                                    name="installments[types][value]" value="1" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -307,34 +319,54 @@
 
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+
+                <button type="button" onclick="testdateranger()">click me</button>
+
                 <div class="table-responsive">
-                    <table class="table table-hover table-borderless">
+
+                    <table class="table table-hover table-borderless" id="installments_table">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Details</th>
+                                <th scope="col">Amount</th>
+                                <th scope="col">Remarks</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
+                        <tr id="row_0">
+                            <th scope="row">1</th>
+                            <td>
+                                <div class="">
+                                    <input type="text" id="installment_date_0"
+                                        name="installments[installments][0][date]"
+                                        class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control form-control-lg"
+                                        id="installment_detail_0" name="installments[installments][0][details]"
+                                        placeholder="Details" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="position-relative">
+                                    <input type="number" class="form-control form-control-lg"
+                                        id="installment_amount_0" name="installments[installments][0][amount]"
+                                        placeholder="Amount" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="position-relative">
+                                    <input type="text" class="form-control form-control-lg"
+                                        id="installment_remark_0" name="installments[installments][0][remarks]"
+                                        placeholder="Remarks" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tbody id="dynamic_installment_rows">
+
                         </tbody>
                     </table>
                 </div>

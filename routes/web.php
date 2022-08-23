@@ -47,8 +47,8 @@ Route::group([
     });
 
 
-    // Route::group(['middleware' => ['auth', ]], function () {
-        Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', ]], function () {
+        // Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -175,7 +175,7 @@ Route::group([
                                     Route::get('/', [SalesPlanController::class, 'index'])->name('index');
 
                                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
-                                    Route::post('store', [SalesPlanController::class, 'storde'])->name('store');
+                                    Route::post('store', [SalesPlanController::class, 'store'])->name('store');
 
                                     Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy.selected');
 

@@ -431,6 +431,51 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Sales Plan
+            [
+                'name' => 'sales-plans.index',
+                'show_name' => 'View Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sales-plans.create',
+                'show_name' => 'Create Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sales-plans.store',
+                'show_name' => 'Store Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sales-plans.edit',
+                'show_name' => 'Edit Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sales-plans.update',
+                'show_name' => 'Update Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sales-plans.destroy.selected',
+                'show_name' => 'Destroy Selected Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

@@ -14,6 +14,7 @@ use App\Http\Controllers\{
     SalesPlanController,
     testController,
     UnitController,
+    PrintSalesPlanController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -233,3 +234,5 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
+
+Route::get('/print-sale-plan' ,[PrintSalesPlanController::class, 'index'])->name('print');

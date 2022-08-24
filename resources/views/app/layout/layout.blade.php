@@ -60,8 +60,8 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <!-- END: Custom CSS-->
 
     <style>
@@ -87,7 +87,7 @@
 
     {{ view('app.layout.topbar', ['batches' => $batches]) }}
 
-    {{ view('app.layout.leftbar') }}
+    {{ view('app.layout.leftbar', ['site_id' => 1]) }}
 
     <!-- BEGIN: Content-->
     <div class="app-content content ">
@@ -160,6 +160,7 @@
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/polyfill.min.js"></script>
     @yield('vendor-js')
+
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->

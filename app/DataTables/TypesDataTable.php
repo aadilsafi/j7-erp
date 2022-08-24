@@ -66,7 +66,7 @@ class TypesDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
 
         return $this->builder()
             ->setTableId('types-table')
@@ -150,7 +150,7 @@ class TypesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
         return [
             ( $selectedDeletePermission ?

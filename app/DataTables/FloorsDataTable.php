@@ -99,7 +99,7 @@ class FloorsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.floors.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.destroy-selected');
         $CopyPermission =  Auth::user()->hasPermissionTo('sites.floors.copyview');
         return $this->builder()
             ->setTableId('floors-table')

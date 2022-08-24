@@ -29,7 +29,8 @@ class PermissionsDataTable extends DataTable
                 return editDateColumn($permission->created_at);
             })
             ->editColumn('class', function ($permission) {
-                return Str::of(explode('.', $permission->name)[0])->replace('-', ' ')->title();
+                $explodedArray = explode('.', $permission->name);
+                return Str::of($explodedArray[count($explodedArray) > 1 ? count($explodedArray) - 2 : 0])->title();
             })
             ->editColumn('default', function ($permission) {
                 return editBooleanColumn($permission->default);
@@ -38,7 +39,7 @@ class PermissionsDataTable extends DataTable
             //     return view('app.permissions.actions', ['id' => $permission->id]);
             // })
             // ->editColumn('check', function ($permission) {
-
+            //    return $permission;
             // })
             ->editColumn('roles', function ($permission) {
                 return [
@@ -142,13 +143,13 @@ class PermissionsDataTable extends DataTable
             $assignPermssion = 0;
             $revokePermission = 0;
             $editOwnPermission = 0;
-            if($checkAssignPermission){
+            if ($checkAssignPermission) {
                 $assignPermssion = 1;
             }
-            if($checkRevokePermission){
+            if ($checkRevokePermission) {
                 $revokePermission = 1;
             }
-            if($checkEditOwnPermission){
+            if ($checkEditOwnPermission) {
                 $editOwnPermission = 1;
             }
             $colArray[] = Column::computed('roles')
@@ -160,12 +161,12 @@ class PermissionsDataTable extends DataTable
                 ->render('function () {
                     var roles = data.roles;
                     var isPermissionAssigned = roles.includes(' . $role['id'] . ');
-                    if('.$currentAuthentiactedRoleId[0].' == '.$role['id'].'){
+                    if(' . $currentAuthentiactedRoleId[0] . ' == ' . $role['id'] . '){
                         var checkbox = "<div class=\'form-check d-flex justify-content-center\'>";
                         if(isPermissionAssigned) {
-                            if('.$editOwnPermission.')
+                            if(' . $editOwnPermission . ')
                             {
-                                if('.$revokePermission.'){
+                                if(' . $revokePermission . '){
                                 checkbox += "<input  class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' checked />";
                                 }
                                 else{
@@ -176,9 +177,9 @@ class PermissionsDataTable extends DataTable
                                 checkbox += "<input disabled class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' checked />";
                             }
                         } else {
-                            if('.$editOwnPermission.')
+                            if(' . $editOwnPermission . ')
                             {
-                                if('.$assignPermssion.'){
+                                if(' . $assignPermssion . '){
                                     checkbox += "<input class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' />";
                                 }
                                 else
@@ -198,14 +199,14 @@ class PermissionsDataTable extends DataTable
                     {
                         var checkbox = "<div class=\'form-check d-flex justify-content-center\'>";
                         if(isPermissionAssigned) {
-                            if('.$revokePermission.'){
+                            if(' . $revokePermission . '){
                                checkbox += "<input  class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' checked />";
                             }
                             else{
                                 checkbox += "<input disabled class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' checked />";
                             }
                         } else {
-                            if('.$assignPermssion.'){
+                            if(' . $assignPermssion . '){
                                 checkbox += "<input class=\'form-check-input\' type=\'checkbox\' onchange=\'changeRolePermission(' . $role['id'] . ', " + data.permission_id + ")\'  id=\'chkRolePermission_' . $role['id'] . '_' . '" + data.permission_id + "\' />";
                             }
                             else

@@ -46,7 +46,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('permissions.destroy.selected') }}" id="permissions-table-form" method="get">
+            <form action="{{ route('permissions.destroy-selected') }}" id="permissions-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>

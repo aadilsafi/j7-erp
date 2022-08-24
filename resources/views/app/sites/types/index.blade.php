@@ -47,7 +47,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.types.destroy.selected', ['site_id' => $site_id]) }}" id="types-table-form" method="get">
+            <form action="{{ route('sites.types.destroy-selected', ['site_id' => $site_id]) }}" id="types-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>

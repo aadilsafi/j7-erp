@@ -215,7 +215,7 @@
             $('.additional-cost-checkbox').on('change', function() {
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
-console
+                console.log()
                 if ($(this).is(':checked')) {
                     $('#div-' + elementId).show();
                 } else {

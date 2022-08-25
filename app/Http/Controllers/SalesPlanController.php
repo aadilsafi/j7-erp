@@ -3,11 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
-use App\Models\{Floor, Site, Unit};
+use App\Models\{AdditionalCost, Floor, Site, Unit};
+use App\Services\Interfaces\AdditionalCostInterface;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 
 class SalesPlanController extends Controller
 {
+    private $additionalCostInterface;
+
+    public function __construct(AdditionalCostInterface $additionalCostInterface)
+    {
+        $this->additionalCostInterface = $additionalCostInterface;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -33,13 +43,13 @@ class SalesPlanController extends Controller
     {
         if (!request()->ajax()) {
             $data = [
-                'site' => decryptParams($site_id),
-                'floor' => decryptParams($floor_id),
-                'unit' => (new Unit())->find(decryptParams($unit_id))
+                'site' => (new Site())->find(decryptParams($site_id)),
+                'floor' => (new Floor())->find(decryptParams($floor_id)),
+                'unit' => (new Unit())->with('status', 'type')->find(decryptParams($unit_id)),
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
             ];
 
             // dd($data);
-
             return view('app.sites.floors.units.sales-plan.create', $data);
         } else {
             abort(403);
@@ -101,4 +111,54 @@ class SalesPlanController extends Controller
     {
         //
     }
+
+    public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
+    {
+        $data = [
+            'site' => decryptParams($site_id),
+            'floor' => decryptParams($floor_id),
+            'unit' => (new Unit())->find(decryptParams($unit_id))
+        ];
+
+        $inputs = $request->input();
+
+        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['daysCount'], $inputs['rangeBy']);
+
+        // dd($installmentDates);
+
+
+
+
+
+
+
+
+
+
+
+
+        $total = 10708425;
+        $divide = intval($inputs['length']);
+
+        $baseInstallment = $total / intval($inputs['length']);
+
+        $data['amounts'] = round($baseInstallment);
+
+        return apiSuccessResponse($data);
+    }
+
+    private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
+    {
+        $startDate = Carbon::parse($requrestDate);
+
+        $endDate =  (new Carbon($requrestDate))->add((($length - 1) * $daysCount), $rangeBy);
+
+        $period = CarbonPeriod::create($startDate, ($daysCount . ' ' . $rangeBy), $endDate);
+
+        $dates = $period->toArray();
+
+        return $dates;
+    }
+
+    // private function?
 }

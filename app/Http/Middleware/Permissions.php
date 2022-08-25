@@ -12,7 +12,8 @@ class Permissions
     private $exceptNames = [
         'LaravelInstaller*',
         'LaravelUpdater*',
-        'debugbar*'
+        'debugbar*',
+        '*ajax-*',
     ];
 
     private $exceptControllers = [

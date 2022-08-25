@@ -48,8 +48,8 @@ Route::group([
     });
 
 
-    // Route::group(['middleware' => ['auth', ]], function () {
-        Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', ]], function () {
+        // Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -234,5 +234,4 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
-
-Route::get('/print-sale-plan' ,[PrintSalesPlanController::class, 'index'])->name('print');
+Route::get('/preview-sale-plan' ,[PrintSalesPlanController::class, 'index'])->name('print')->middleware('auth');

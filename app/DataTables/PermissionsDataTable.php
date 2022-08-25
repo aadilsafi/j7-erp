@@ -5,6 +5,7 @@ namespace App\DataTables;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
@@ -56,9 +57,16 @@ class PermissionsDataTable extends DataTable
      * @param \Spatie\Permission\Models\Permission $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Permission $model): QueryBuilder
+    public function query(Role $model): QueryBuilder
     {
-        return $model->newQuery();
+        if(Auth::user()->can('permissions.view_all')){
+            $permissions = new Permission;
+            return $permissions->newQuery();
+        }
+        else{
+            $CurrentUserRole = Auth::user()->roles->pluck('id');
+            return $model->newQuery()->where('id',$CurrentUserRole[0])->with('permissions')->first()->permissions->toQuery();
+        }
     }
 
     public function html(): HtmlBuilder

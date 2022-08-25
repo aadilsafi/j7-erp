@@ -59,7 +59,7 @@ class RolesDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
         return $this->builder()
             ->setTableId('roles-table')
             ->columns($this->getColumns())
@@ -126,7 +126,7 @@ class RolesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('roles.edit');
         $destroyPermission =  Auth::user()->hasPermissionTo('roles.destroy');
         $defaultPermission =  Auth::user()->hasPermissionTo('roles.make-default');

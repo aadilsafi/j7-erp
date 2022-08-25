@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('stakeholder_id')->constrained();
+            $table->dateTime('validity')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

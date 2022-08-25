@@ -58,7 +58,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('sites.floors.destroy.selected', ['site_id' => $site_id]) }}"
+                    <form action="{{ route('sites.floors.destroy-selected', ['site_id' => $site_id]) }}"
                         id="floors-table-form" method="get">
                         <div class="table-responsive">
                             <table class="dt-complex-header table table-hover table-striped">

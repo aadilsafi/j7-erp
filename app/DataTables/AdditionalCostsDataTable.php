@@ -77,7 +77,7 @@ class AdditionalCostsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.additional-costs.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return $this->builder()
             ->setTableId('additional-costs-table')
             ->columns($this->getColumns())
@@ -167,7 +167,7 @@ class AdditionalCostsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy.selected');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return [
             (
                 $selectedDeletePermission ?

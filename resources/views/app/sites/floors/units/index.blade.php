@@ -46,7 +46,7 @@
     <div class="card">
         <div class="card-body">
             <form
-                action="{{ route('sites.floors.units.destroy.selected', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
+                action="{{ route('sites.floors.units.destroy-selected', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
                 id="floors-units-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>

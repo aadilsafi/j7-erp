@@ -74,6 +74,11 @@ class Site extends Model
         return $this->hasMany(Floor::class);
     }
 
+    public function additionalCosts()
+    {
+        return $this->hasMany(AdditionalCost::class);
+    }
+
     public function units()
     {
         return $this->hasManyThrough(Unit::class, Floor::class);

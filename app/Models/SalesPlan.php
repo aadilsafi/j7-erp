@@ -13,6 +13,7 @@ class SalesPlan extends Model
         'unit_id',
         'user_id',
         'stakeholder_id',
+        'validity',
     ];
 
     public function unit()

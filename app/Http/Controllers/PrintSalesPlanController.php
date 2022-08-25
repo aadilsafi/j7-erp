@@ -14,7 +14,7 @@ class PrintSalesPlanController extends Controller
     public function index()
     {
         //
-        return view('app.sales-plan.print');
+        return view('app.sites.floors.units.sales-plan.print');
     }
 
     /**

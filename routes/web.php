@@ -48,8 +48,8 @@ Route::group([
     });
 
 
-    // Route::group(['middleware' => ['auth', ]], function () {
-        Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', ]], function () {
+        // Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 

@@ -18,14 +18,15 @@
             $('#date').append('Date : '+today+'');
             $("#btn").click(function () {
                 $('#btn').hide();
-                window.print()
+                window.print();
+                $('#btn').show();
             });
     });
     </script>
 </head>
 <body>
     <a href="#" id="btn">Print</a>
-    <table class="printPlan" style="width:100%;" id="logoTable">
+    <table style="width:100%;" id="logoTable">
         <tr>
             <th style="width:33%; text-align:start;" >
                 <br>
@@ -40,7 +41,7 @@
         </tr>
     </table>
 
-    <div class="printPlan" style="width: 100%;">
+    <div style="width: 100%;">
         <table style="width:35%">
             <tr>
                 <th>
@@ -51,7 +52,7 @@
             </tr>
         </table>
 
-        <table style="width:80%; margin-left:86px;">
+        {{-- <table style="width:80%; margin-left:86px;">
             <tr>
                 <th style="width:15%;">
                     Unit No _________
@@ -76,6 +77,25 @@
                 <th style="width:35%;">
                     Unit Orientation  ___________________
                 </th>
+            </tr>
+        </table> --}}
+
+        <table style="margin-left: 130px; width:70%" >
+            <tr >
+                <th  style="text-align: start;">Unit No </th>
+                <th  style="text-align: start;"> _______</th>
+                <th  style="">Floor </th>
+                <th  style="text-align: start;"> _______</th>
+                <th  style="text-align: start;">Category </th>
+                <th  style="text-align: start;"> _______</th>
+                <th  style="">Size </th>
+                <th  style="text-align: start;"> _______</th>
+            </tr>
+            <tr>
+                <th  style="text-align: start;" colspan="2">Client Sign </th>
+                <th  style="text-align: start;" colspan="2"> ________________</th>
+                <th  style="text-align: start;" colspan="2">Authorized Sign </th>
+                <th  style="text-align: start;" colspan="2"> ________________</th>
             </tr>
         </table>
 

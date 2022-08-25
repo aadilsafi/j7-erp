@@ -84,6 +84,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'permissions.view_all',
+                'guard_name' => 'web',
+                'show_name' => 'View All Site Roles Permissions',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'permissions.create',
                 'guard_name' => 'web',
                 'show_name' => 'Create Permissions',

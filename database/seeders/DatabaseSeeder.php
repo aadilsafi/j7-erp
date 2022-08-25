@@ -28,6 +28,10 @@ class DatabaseSeeder extends Seeder
             SiteStatusPivotTableSeeder::class,
             FloorTableSeeder::class,
             UnitTableSeeder::class,
+            StakeholdersSeeder::class,
+            SalesPlanSeeder::class,
+            SalesPlanAdditionalCostSeeder::class,
+            SalesPlanInstallmentsSeeder::class,
         ]);
     }
 }

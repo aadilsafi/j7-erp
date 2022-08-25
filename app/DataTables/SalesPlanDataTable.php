@@ -2,14 +2,15 @@
 
 namespace App\DataTables;
 
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Spatie\Permission\Models\Role;
-use Yajra\DataTables\EloquentDataTable;
+use App\Models\SalesPlan;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Spatie\Permission\Models\Role;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 
 class SalesPlanDataTable extends DataTable
@@ -46,7 +47,7 @@ class SalesPlanDataTable extends DataTable
      * @param \App\Models\SalesPlanDataTable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(SalesPlanDataTable $model): QueryBuilder
+    public function query(SalesPlan $model): QueryBuilder
     {
         return $model->newQuery();
     }

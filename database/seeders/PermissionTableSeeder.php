@@ -429,16 +429,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
-            // // Batchs Routes
-            // [
-            //     'name' => 'batches.byid',
-            //     'show_name' => 'Batches By id',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-
+            // Batchs Routes
+            [
+                'name' => 'batches.byid',
+                'show_name' => 'Batches By id',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // // Sales Plan
             // [
             //     'name' => 'sites.floors.units.sales-plans.index',

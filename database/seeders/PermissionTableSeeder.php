@@ -439,49 +439,49 @@ class PermissionTableSeeder extends Seeder
             //     'updated_at' => now(),
             // ],
 
-            // Sales Plan
-            [
-                'name' => 'sites.floors.units.sales-plans.index',
-                'show_name' => 'View Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.create',
-                'show_name' => 'Create Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.store',
-                'show_name' => 'Store Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.edit',
-                'show_name' => 'Edit Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.update',
-                'show_name' => 'Update Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.destroy-selected',
-                'show_name' => 'Destroy Selected Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // // Sales Plan
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.index',
+            //     'show_name' => 'View Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.create',
+            //     'show_name' => 'Create Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.store',
+            //     'show_name' => 'Store Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.edit',
+            //     'show_name' => 'Edit Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.update',
+            //     'show_name' => 'Update Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.destroy-selected',
+            //     'show_name' => 'Destroy Selected Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
 
         ]);
 

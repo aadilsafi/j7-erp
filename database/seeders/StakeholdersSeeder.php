@@ -1,0 +1,34 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Stakeholder;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+class StakeholdersSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        (new Stakeholder())->insert([
+            [
+                'site_id' => 1,
+                'full_name' => 'Ali Raza',
+                'father_name' => 'Hassan Raza',
+                'occupation' => 'Web Developer',
+                'designation' => 'Laravel Developer',
+                'cnic' => '1234567890',
+                'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
+                'contact' => '0512226044',
+                'parent_id' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+    }
+}

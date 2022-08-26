@@ -159,7 +159,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     </tr>
                 </thead>
             </table> --}}
-            <form action="{{ route('roles.destroy.selected') }}" id="roles-table-form" method="get">
+            <form action="{{ route('roles.destroy-selected') }}" id="roles-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>

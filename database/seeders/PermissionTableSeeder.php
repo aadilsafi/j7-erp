@@ -28,14 +28,14 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'roles.create',
                 'guard_name' => 'web',
-                'show_name' => 'Create Roles',
+                'show_name' => 'Create Role',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'roles.store',
                 'guard_name' => 'web',
-                'show_name' => 'Store Roles',
+                'show_name' => 'Store Role',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -61,7 +61,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'roles.destroy.selected',
+                'name' => 'roles.destroy-selected',
                 'guard_name' => 'web',
                 'show_name' => 'Destroy Selected Roles',
                 'created_at' => now(),
@@ -80,6 +80,13 @@ class PermissionTableSeeder extends Seeder
                 'name' => 'permissions.index',
                 'guard_name' => 'web',
                 'show_name' => 'View Permissions',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'permissions.view_all',
+                'guard_name' => 'web',
+                'show_name' => 'View All Site Roles Permissions',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -119,7 +126,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'permissions.destroy.selected',
+                'name' => 'permissions.destroy-selected',
                 'guard_name' => 'web',
                 'show_name' => 'Destroy Selected Permissions',
                 'created_at' => now(),
@@ -205,7 +212,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.destroy.selected',
+                'name' => 'sites.destroy-selected',
                 'show_name' => 'Destroy Selected Sites',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -270,7 +277,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.types.destroy.selected',
+                'name' => 'sites.types.destroy-selected',
                 'show_name' => 'Destroy Selected Sites Types',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -314,7 +321,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.additional-costs.destroy.selected',
+                'name' => 'sites.additional-costs.destroy-selected',
                 'show_name' => 'Destroy Selected Sites Additional Costs',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -358,7 +365,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.destroy.selected',
+                'name' => 'sites.floors.destroy-selected',
                 'show_name' => 'Destroy Selected Sites Floors',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -416,7 +423,7 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.units.destroy.selected',
+                'name' => 'sites.floors.units.destroy-selected',
                 'show_name' => 'Destroy Sites Floors Units',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -431,6 +438,51 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Sales Plan
+            [
+                'name' => 'sites.floors.units.sales-plans.index',
+                'show_name' => 'View Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.create',
+                'show_name' => 'Create Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.store',
+                'show_name' => 'Store Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.edit',
+                'show_name' => 'Edit Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.update',
+                'show_name' => 'Update Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.destroy-selected',
+                'show_name' => 'Destroy Selected Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

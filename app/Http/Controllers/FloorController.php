@@ -12,6 +12,7 @@ use App\Http\Requests\floors\{
 };
 use App\Models\Floor;
 use App\Models\Unit;
+use App\Models\Site;
 use App\Services\Interfaces\{
     FloorInterface,
     UserBatchInterface,
@@ -129,9 +130,11 @@ class FloorController extends Controller
      */
     public function create(Request $request, $site_id)
     {
+        $site = Site::where('id',decryptParams($site_id))->with('siteConfiguration')->first();
         if (!request()->ajax()) {
             $data = [
                 'site_id' => $site_id,
+                'floorShortLable' => $site->siteConfiguration->floor_prefix,
             ];
             return view('app.sites.floors.create', $data);
         } else {

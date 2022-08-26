@@ -2,15 +2,16 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Str;
 use App\Models\AdditionalCost;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class AdditionalCostsDataTable extends DataTable
 {
@@ -75,6 +76,8 @@ class AdditionalCostsDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.additional-costs.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return $this->builder()
             ->setTableId('additional-costs-table')
             ->columns($this->getColumns())
@@ -87,12 +90,24 @@ class AdditionalCostsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                (
+                    $createPermission ?
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                    :
+                    Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
                     ->text('<i class="bi bi-plus"></i> Add New')
                     ->attr([
                         'onclick' => 'addNew()',
-                    ]),
+                    ])
+
+                ),
+
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
@@ -102,12 +117,23 @@ class AdditionalCostsDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
+                (
+                    $selectedDeletePermission ?
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                    :
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                ),
+
 
             )
             ->rowGroupDataSrc('parent_id')
@@ -141,8 +167,14 @@ class AdditionalCostsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            (
+                $selectedDeletePermission ?
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
             Column::make('name')->title('Additional Cost'),
             Column::make('parent_id')->title('Parent'),
             Column::make('has_child'),

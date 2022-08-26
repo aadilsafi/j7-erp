@@ -3,15 +3,16 @@
 namespace App\DataTables;
 
 use App\Models\Type;
-use App\Services\Interfaces\UnitTypeInterface;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\EloquentDataTable;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
+use App\Services\Interfaces\UnitTypeInterface;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class TypesDataTable extends DataTable
 {
@@ -64,6 +65,9 @@ class TypesDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+
         return $this->builder()
             ->setTableId('types-table')
             ->addTableClass(['table-hover'])
@@ -76,11 +80,21 @@ class TypesDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('delete-selected')
+                ($createPermission  ?
+                    Button::raw('delete-selected')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-plus"></i> Add New')->attr([
                         'onclick' => 'addNew()',
-                    ]),
+                    ])
+                :
+                Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                    'onclick' => 'addNew()',
+                ])
+
+            ),
+
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
@@ -90,12 +104,20 @@ class TypesDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
 
+                ($selectedDeletePermission ?
+                    Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                        :
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                ),
             )
             ->rowGroupDataSrc('parent_id')
             ->columnDefs([
@@ -128,13 +150,26 @@ class TypesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+        $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            ( $selectedDeletePermission ?
+                Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
+
             Column::make('name')->title('Type Name'),
             Column::make('parent_id')->title('Parent'),
             Column::make('created_at'),
             Column::make('updated_at'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            (
+                $editPermission ?
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+                :
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            )
+
         ];
     }
 

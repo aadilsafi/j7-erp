@@ -46,7 +46,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('permissions.destroy.selected') }}" id="permissions-table-form" method="get">
+            <form action="{{ route('permissions.destroy-selected') }}" id="permissions-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -149,6 +149,7 @@
                                 closeButton: !0,
                                 tapToDismiss: !1,
                             });
+                            $('#permissions-table').DataTable().ajax.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',

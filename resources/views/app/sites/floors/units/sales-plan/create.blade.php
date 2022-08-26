@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }}
 @endsection
 
 @section('page-title', 'Create Sales Plan')
@@ -42,7 +42,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site), encryptParams($floor), encryptParams($unit->id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }}
                 </div>
             </div>
         </div>
@@ -51,42 +51,58 @@
 
 @section('content')
     <form class="form form-vertical"
-        action="{{ route('sites.floors.units.sales-plans.store', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
+        action="{{ route('sites.floors.units.sales-plans.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
         method="POST">
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.floors.units.sales-plan.form-fields') }}
+                {{ view('app.sites.floors.units.sales-plan.form-fields', ['site' => $site, 'floor' => $floor, 'unit' => $unit, 'additionalCosts' => $additionalCosts]) }}
 
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-header">
-                        <h3>Additional Costs</h3>
+                        <h3 class="p-0">Additional Costs</h3>
                     </div>
                     <div class="card-body">
-                        <div class='form-check d-flex flex-column'>
-                            <div class="mb-1">
-                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
-                                <label class='form-check-label' for='chkRolePermission_'>asd</label>
-                            </div>
-                            <div class="mb-1">
-                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
-                                <label class='form-check-label' for='chkRolePermission_'>sss</label>
-                            </div>
-                            <div class="mb-1">
-                                <input class='form-check-input' type='checkbox' id='chkRolePermission_' checked />
-                                <label class='form-check-label' for='chkRolePermission_'>dadad</label>
-                            </div>
+                        <div class="row custom-options-checkable g-1">
+
+                            @foreach ($additionalCosts as $key => $additionalCost)
+                                @continue($additionalCost->has_child)
+                                <div class="col-md-12">
+                                    <input class="custom-option-item-check additional-cost-checkbox" type="checkbox"
+                                        name="additionalCostCheckbox"
+                                        id="checkbox-{{ $additionalCost->slug }}-{{ $key }}" />
+                                    <label class="custom-option-item p-1"
+                                        for="checkbox-{{ $additionalCost->slug }}-{{ $key }}">
+                                        <span class="d-flex justify-content-between flex-wrap">
+                                            <span class="fw-bolder">{{ $key }}.
+                                                {{ $additionalCost->tree }}</span>
+                                        </span>
+                                        <span class="d-flex justify-content-between flex-wrap">
+                                            <span class="fw-bolder"></span>
+                                            <span class="fw-bolder">{{ $additionalCost->site_percentage }}%</span>
+                                        </span>
+                                    </label>
+                                </div>
+                            @endforeach
+
                         </div>
                     </div>
                 </div>
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
+
+                        <div class="d-block mb-1">
+                            <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
+                            <input type="text" id="sales_plan_validity" name="sales_plan_validity"
+                                class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                        </div>
+                        <hr>
                         <button type="submit" value="save"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='save'></i>
@@ -97,7 +113,7 @@
                             <i data-feather='printer'></i>
                             <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
                         </button>
-                        <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
+                        <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -115,6 +131,9 @@
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/nouislider.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/spinner/jquery.bootstrap-touchspin.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+
+    <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -122,6 +141,7 @@
 
 @section('custom-js')
     <script>
+        window['moment-range'].extendMoment(moment);
         $(document).ready(function() {
 
             var installmentsRowAction = '';
@@ -135,19 +155,18 @@
                 max: 50,
             }).on("touchspin.on.stopupspin", function() {
                 installmentsRowAction = "stopupspin";
-                console.log(installmentsRowAction);
-
             }).on("touchspin.on.stopdownspin", function() {
                 installmentsRowAction = "stopdownspin";
-                console.log(installmentsRowAction);
             }).on("touchspin.on.stopspin", function() {
                 var t = $(this);
                 if (installmentsRowAction == "stopupspin") {
-                    // debugger
                     addInstallmentsRows(t.val());
                 } else if (installmentsRowAction == "stopdownspin") {
                     addInstallmentsRows(t.val());
                 }
+
+                populateInstallmentTableRows(installmentsRowAction);
+                installmentsRowAction = '';
             }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
@@ -157,7 +176,7 @@
                     "disabled-max-min")
             });
 
-            $('.custom-option-item-check').on('change', function() {
+            $('.installment_type_radio').on('change', function() {
                 var ele = $(this);
 
                 switch (ele.val()) {
@@ -172,6 +191,7 @@
                     default:
                         break;
                 }
+                populateInstallmentTableRows();
             });
 
             $(".flatpickr-basic").flatpickr({
@@ -179,7 +199,59 @@
                 minDate: "today",
             });
 
+
+            $('#unit_price').on('change', function() {
+                let unit_price = parseFloat($(this).val());
+                let unit_size = parseFloat($('#unit_size').val());
+
+                let unit_price_total = parseFloat(unit_price * unit_size);
+                $('#unit_price_total').val(unit_price_total).trigger('change');
+            });
+
+            $('#unit_price_total').on('change', function() {
+                $('.additional-cost-checkbox').trigger('change');
+            });
+
+            $('.additional-cost-checkbox').on('change', function() {
+                let elementId = $(this).attr('id');
+                elementId = elementId.slice(('checkbox-').length);
+                console.log()
+                if ($(this).is(':checked')) {
+                    $('#div-' + elementId).show();
+                } else {
+                    $('#div-' + elementId).hide();
+                    $('#total-price-' + elementId).val(0);
+                    $('#total-price-' + elementId).val(0);
+                }
+
+
+
+
+
+
+                // let additional_cost = parseFloat($(this).val());
+                // let unit_price_total = parseFloat($('#unit_price_total').val());
+                // let total = parseFloat(unit_price_total + additional_cost);
+                // $('#total').val(total).trigger('change');
+            });
+
         });
+
+        // function applyAdditionalCost(key, slug, percentage) {
+
+        //     var unit_price_total = parseInt($('#unit_price_total').val());
+
+        //     if ($('#additionalCostCheckbox_' + key).is(':checked')) {
+        //         var additionalCost = parseInt(unit_price_total * percentage / 100);
+        //         $('#' + slug + '_total_' + key).val(additionalCost);
+        //         $('#div_additional_cost_' + key).show();
+        //     } else {
+        //         $('#div_additional_cost_' + key).hide();
+        //         $('#' + slug + '_total_' + key).val(0);
+        //     }
+
+
+        // }
 
         function addInstallmentsRows(num) {
             if (num > 0) {
@@ -192,14 +264,14 @@
                             <div class="">
                                 <input type="text" id="installment_date_${index}"
                                     name="installments[installments][${index}][date]"
-                                    class="form-control" placeholder="YYYY-MM-DD" />
+                                    class="form-control" readonly placeholder="YYYY-MM-DD" />
                             </div>
                         </td>
                         <td>
                             <div class="position-relative">
                                 <input type="text" class="form-control form-control-lg"
-                                    id="installment_detail_${index}" name="installments[installments][${index}][detail]"
-                                    placeholder="Detail" />
+                                    id="installment_detail_${index}" name="installments[installments][${index}][details]"
+                                    placeholder="Details" />
                             </div>
                         </td>
                         <td>
@@ -212,8 +284,8 @@
                         <td>
                             <div class="position-relative">
                                 <input type="text" class="form-control form-control-lg"
-                                    id="installment_remark_${index}" name="installments[installments][${num}][remark]"
-                                    placeholder="Detail" />
+                                    id="installment_remark_${index}" name="installments[installments][${index}][remarks]"
+                                    placeholder="Remarks" />
                             </div>
                         </td>
                     </tr>`;
@@ -222,44 +294,54 @@
 
                 $('#installments_table #dynamic_installment_rows').html(row);
             }
-            installmentsRowAction = '';
         }
 
         function installmentsRemoveRow() {
             $('#installments_table #dynamic_installment_rows tr:last').remove();
         }
 
-        function getDatesInRange(startDate, endDate) {
-            const date = new Date(startDate.getTime());
+        function DateRanges(startDate, length = 1, monthsCount = 1, rangeBy = 'months') {
 
-            const dates = [];
+            let endDate = moment(startDate).add(((length - 1) * monthsCount), rangeBy);
 
-            while (date <= endDate) {
-                dates.push(new Date(date));
-                date.setDate(date.getDate() + 1);
-            }
+            let range = moment.range(startDate, endDate);
+            let years = Array.from(range.by(rangeBy, {
+                step: monthsCount
+            }));
 
-            return dates;
+            let datesArray = years.map(m => m.format('YYYY-MM-DD'));
+            // datesArray.shift();
+            return datesArray;
         }
-        function testdateranger() {
 
-            const d1 = new Date('2022-01-18');
-            const d2 = new Date('2022-01-24');
+        function populateInstallmentTableRows(action = '') {
 
-            console.log(getDatesInRange(d1, d2));
+            showBlockUI('#installments_acard');
+
+            // startDate: $("#installment_date_0").val(),
+            let data = {
+                startDate: '2021-12-15',
+                length: parseInt($(".touchspin-icon").val()),
+                daysCount: $(".custom-option-item-check:checked").val() == 'quarterly' ? 90 : 30,
+                rangeBy: 'days',
+            };
+
+            $.ajax({
+                url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    if (response.status) {
+                        console.log(response);
+                        hideBlockUI('#installments_acard');
+                    }
+                },
+                error: function(errors) {
+                    hideBlockUI('#installments_acard');
+                }
+            });
         }
+
+        // console.log(DateRanges('2021-12-15', 10, 30, 'days'));
     </script>
 @endsection
-
-
-{{-- if (installmentsRowAction == "stopupspin") {
-    // var installment = $(this).val();
-    // var total = $("#total").val();
-    // var installment_value = (total / installment).toFixed(2);
-    // $("#installment_value").val(installment_value);
-} else if (installmentsRowAction == "stopdownspin") {
-    // var installment = $(this).val();
-    // var total = $("#total").val();
-    // var installment_value = (total / installment).toFixed(2);
-    // $("#installment_value").val(installment_value);
-} --}}

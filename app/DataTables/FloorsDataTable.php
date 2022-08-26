@@ -98,6 +98,9 @@ class FloorsDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.floors.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.destroy-selected');
+        $CopyPermission =  Auth::user()->hasPermissionTo('sites.floors.copyview');
         return $this->builder()
             ->setTableId('floors-table')
             ->columns($this->getColumns())
@@ -105,23 +108,45 @@ class FloorsDataTable extends DataTable
             ->serverSide()
             ->processing()
             ->deferRender()
-            // ->scrollX()
+            // ->scrollX()s
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ]),
-                Button::raw('copy-floor')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')
-                    ->attr([
-                        'onclick' => 'copyFloor()',
-                    ]),
+                (
+                    $createPermission ?
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                    :
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                ),
+
+                (
+                    $CopyPermission ?
+                        Button::raw('copy-floor')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')
+                        ->attr([
+                            'onclick' => 'copyFloor()',
+                        ])
+                    :
+                        Button::raw('copy-floor')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')
+                        ->attr([
+                            'onclick' => 'copyFloor()',
+                        ])
+                ),
+
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
@@ -131,13 +156,22 @@ class FloorsDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
-
+                (
+                    $selectedDeletePermission ?
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                    :
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                ),
             )
             // ->rowGroupDataSrc('parent_id')
             ->columnDefs([

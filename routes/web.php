@@ -14,6 +14,7 @@ use App\Http\Controllers\{
     SalesPlanController,
     testController,
     UnitController,
+    PrintSalesPlanController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -61,7 +62,7 @@ Route::group([
             Route::get('create', [RoleController::class, 'create'])->name('create');
             Route::post('store', [RoleController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy.selected');
+            Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy-selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [RoleController::class, 'edit'])->name('edit');
                 Route::put('update', [RoleController::class, 'update'])->name('update');
@@ -78,7 +79,7 @@ Route::group([
             Route::get('create', [PermissionController::class, 'create'])->name('create');
             Route::post('store', [PermissionController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [PermissionController::class, 'destroySelected'])->name('destroy.selected');
+            Route::get('delete-selected', [PermissionController::class, 'destroySelected'])->name('destroy-selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [PermissionController::class, 'edit'])->name('edit');
                 Route::put('update', [PermissionController::class, 'update'])->name('update');
@@ -97,7 +98,7 @@ Route::group([
             Route::get('create', [SiteController::class, 'create'])->name('create');
             Route::post('store', [SiteController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy.selected');
+            Route::get('delete-selected', [SiteController::class, 'destroySelected'])->name('destroy-selected');
 
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [SiteController::class, 'edit'])->name('edit');
@@ -119,7 +120,7 @@ Route::group([
                     Route::get('create', [AdditionalCostController::class, 'create'])->name('create');
                     Route::post('store', [AdditionalCostController::class, 'store'])->name('store');
 
-                    Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::get('delete-selected', [AdditionalCostController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [AdditionalCostController::class, 'edit'])->name('edit');
                         Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
@@ -136,7 +137,7 @@ Route::group([
                     Route::get('create', [FloorController::class, 'create'])->name('create');
                     Route::post('store', [FloorController::class, 'store'])->name('store');
 
-                    Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
@@ -161,7 +162,7 @@ Route::group([
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
 
-                            Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy.selected');
+                            Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy-selected');
                             Route::group(['prefix' => '/{id}'], function () {
 
                                 Route::get('edit', [UnitController::class, 'edit'])->name('edit');
@@ -177,7 +178,11 @@ Route::group([
                                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
 
-                                    Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy.selected');
+                                    Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy-selected');
+
+                                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                                        Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
+                                    });
 
                                     Route::group(['prefix' => '/{id}'], function () {
 
@@ -197,7 +202,7 @@ Route::group([
                     Route::get('create', [TypeController::class, 'create'])->name('create');
                     Route::post('store', [TypeController::class, 'store'])->name('store');
 
-                    Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy.selected');
+                    Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [TypeController::class, 'edit'])->name('edit');
                         Route::put('update', [TypeController::class, 'update'])->name('update');
@@ -233,3 +238,4 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
+Route::get('/preview-sale-plan' ,[PrintSalesPlanController::class, 'index'])->name('print')->middleware('auth');

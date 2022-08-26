@@ -71,7 +71,7 @@
 
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number"
+                                    <input type="number" min="0"
                                         class="form-control form-control-lg @error('unit_price') is-invalid @enderror"
                                         id="unit_price" name="unit_price" placeholder="Unit Price"
                                         value="{{ $unit->price_sqft }}" />
@@ -79,13 +79,12 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_price_total">Total Amount</label>
+                                <label class="form-label fs-5" for="total-price-unit">Total Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number"
-                                        class="form-control form-control-lg"
-                                        id="unit_price_total" name="unit_price_total" placeholder="Total Amount"
-                                        value="{{ $unit->total_price }}" />
+                                    <input type="number" min="0" class="form-control form-control-lg"
+                                        id="total-price-unit" name="total-price-unit" placeholder="Total Amount"
+                                        value="{{ $unit->total_price }}.00" />
 
                                 </div>
                             </div>
@@ -109,8 +108,9 @@
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text"><i data-feather='percent'></i></span>
-                                            <input type="number" class="form-control form-control-lg additional-cost-percentage"
-                                                id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
+                                            <input type="number" min="0" max="100"
+                                                class="form-control form-control-lg additional-cost-percentage"
+                                                id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][percentage]"
                                                 placeholder="{{ $additionalCost->name }}"
                                                 value="{{ $additionalCost->site_percentage }}" />
@@ -120,11 +120,14 @@
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
-                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Total Amount</label>
+                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Total
+                                            Amount</label>
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text">Rs. </span>
-                                            <input type="number" class="form-control form-control-lg additional-cost-total-price" readonly
+                                            <input type="number" min="0"
+                                                class="form-control form-control-lg additional-cost-total-price"
+                                                readonly
                                                 id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][total_amount]"
                                                 placeholder="Total Amount"
@@ -137,6 +140,31 @@
 
                         </div>
 
+                        {{-- Discount Row --}}
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="discount_percentage">Discount %</label>
+
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="number" min="0" max="100"
+                                        class="form-control form-control-lg @error('discount_percentage') is-invalid @enderror"
+                                        id="discount_percentage" name="discount_percentage" placeholder="Unit Price"
+                                        value="0.00" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="total-price-discount">Total Amount</label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="number" min="0" class="form-control form-control-lg"
+                                        id="total-price-discount" name="total-price-discount"
+                                        placeholder="Total Discount" value="0.00" />
+                                </div>
+                            </div>
+                        </div>
+
                         {{-- Total Amount Row --}}
                         <div class="row mb-1">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -145,13 +173,11 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <hr>
-                                <label class="form-label fs-5" for="unit_rate_total">Total Amount</label>
+                                <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total</label>
                                 <input type="text"
                                     class="form-control form-control-lg @error('unit_rate_total') is-invalid @enderror"
-                                    id="unit_rate_total" name="unit_rate_total" placeholder="Total Amount" />
-                                @error('unit_rate_total')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                                    id="unit_rate_total" name="unit_rate_total" placeholder="Total Amount"
+                                    value="{{ $unit->total_price }}.00" readonly />
                             </div>
                         </div>
 
@@ -436,8 +462,8 @@
                         <p class="m-0 fw-bolder d-block mb-1">How Many (<span id="how_many">Quaters</span>)?</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="input-group input-group-lg ">
-                                <input type="number" class="touchspin-icon" name="installments[types][value]"
-                                    value="1" />
+                                <input type="number" min="0" class="touchspin-icon"
+                                    name="installments[types][value]" value="1" />
                             </div>
                         </div>
                     </div>
@@ -477,7 +503,7 @@
                             </td>
                             <td>
                                 <div class="position-relative">
-                                    <input type="number" class="form-control form-control-lg"
+                                    <input type="number" min="0" class="form-control form-control-lg"
                                         id="installment_amount_0" name="installments[installments][0][amount]"
                                         placeholder="Amount" />
                                 </div>

@@ -137,6 +137,7 @@
 @endsection
 
 @section('page-js')
+    {{-- <script src="{{ asset('app-assets') }}/pages/create-sales-plan.min.js"></script> --}}
 @endsection
 
 @section('custom-js')
@@ -201,57 +202,76 @@
 
 
             $('#unit_price').on('change', function() {
-                let unit_price = parseFloat($(this).val());
-                let unit_size = parseFloat($('#unit_size').val());
+                let unit_price = parseFloat($(this).val()).toFixed(2);
+                let unit_size = parseFloat($('#unit_size').val()).toFixed(2);
 
-                let unit_price_total = parseFloat(unit_price * unit_size);
-                $('#unit_price_total').val(unit_price_total).trigger('change');
+                let totalPriceUnit = parseFloat(unit_price * unit_size).toFixed(2);
+                $('#total-price-unit').val(totalPriceUnit).trigger('change');
             });
 
-            $('#unit_price_total').on('change', function() {
+            $('#total-price-unit').on('change', function() {
                 $('.additional-cost-checkbox').trigger('change');
             });
 
             $('.additional-cost-checkbox').on('change', function() {
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
-                console.log()
+
+                let unitPriceTotal = parseFloat($('#total-price-unit').val()).toFixed(2);
+
+                let divElement = $(`#div-${elementId}`);
+                let percentageElement = $(`#percentage-${elementId}`);
+                let totalPriceElement = $(`#total-price-${elementId}`);
+
+                let percentage = parseFloat(percentageElement.val()).toFixed(2);
+                let totalPrice = parseFloat(totalPriceElement.val()).toFixed(2);
+
                 if ($(this).is(':checked')) {
-                    $('#div-' + elementId).show();
+                    divElement.show();
+                    totalPriceElement.val(parseFloat(unitPriceTotal * (percentage / 100)).toFixed(2));
                 } else {
-                    $('#div-' + elementId).hide();
-                    $('#total-price-' + elementId).val(0);
-                    $('#total-price-' + elementId).val(0);
+                    divElement.hide();
+                    totalPriceElement.val(0);
                 }
 
-
-
-
-
-
-                // let additional_cost = parseFloat($(this).val());
-                // let unit_price_total = parseFloat($('#unit_price_total').val());
-                // let total = parseFloat(unit_price_total + additional_cost);
-                // $('#total').val(total).trigger('change');
+                totalPriceElement.trigger('change');
             });
 
+
+            $('[id^=percentage-]').on('change', function() {
+
+                let elementId = $(this).attr('id');
+                elementId = elementId.slice(('percentage-').length);
+
+                let percentageElement = $(this);
+                let unitPriceTotalElement = $('#total-price-unit');
+                let totalAmountElement = $(`#total-price-${elementId}`);
+
+                let percentageValue = parseInt($(this).val());
+                let unitPriceTotalValue = parseFloat(unitPriceTotalElement.val()).toFixed(2);
+
+                let calculatedAmount = parseFloat(unitPriceTotalValue * (percentageValue / 100)).toFixed(2);
+
+                $('[id^=total-price-]').trigger('change');
+            });
+
+            $('[id^=total-price-]').on('change', function() {
+                let grandUnitAmount = 0;
+
+                $('[id^=total-price-]').each(function() {
+                    grandUnitAmount += parseFloat($(this).val());
+                });
+
+                $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
+            });
+
+            $('#discount_percentage').on('change', function() {
+                let unitPriceTotalValue = parseFloat($("#total-price-unit").val());
+                let discountPercentage = parseInt($(this).val());
+                let calculatedAmount = parseFloat(unitPriceTotalValue * (discountPercentage / 100));
+                $('#total-price-discount').val(calculatedAmount.toFixed(2))
+            });
         });
-
-        // function applyAdditionalCost(key, slug, percentage) {
-
-        //     var unit_price_total = parseInt($('#unit_price_total').val());
-
-        //     if ($('#additionalCostCheckbox_' + key).is(':checked')) {
-        //         var additionalCost = parseInt(unit_price_total * percentage / 100);
-        //         $('#' + slug + '_total_' + key).val(additionalCost);
-        //         $('#div_additional_cost_' + key).show();
-        //     } else {
-        //         $('#div_additional_cost_' + key).hide();
-        //         $('#' + slug + '_total_' + key).val(0);
-        //     }
-
-
-        // }
 
         function addInstallmentsRows(num) {
             if (num > 0) {
@@ -326,20 +346,20 @@
                 rangeBy: 'days',
             };
 
-            $.ajax({
-                url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
-                type: 'GET',
-                data: data,
-                success: function(response) {
-                    if (response.status) {
-                        console.log(response);
-                        hideBlockUI('#installments_acard');
-                    }
-                },
-                error: function(errors) {
-                    hideBlockUI('#installments_acard');
-                }
-            });
+            // $.ajax({
+            //     url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
+            //     type: 'GET',
+            //     data: data,
+            //     success: function(response) {
+            //         if (response.status) {
+            //             console.log(response);
+            //             hideBlockUI('#installments_acard');
+            //         }
+            //     },
+            //     error: function(errors) {
+            //         hideBlockUI('#installments_acard');
+            //     }
+            // });
         }
 
         // console.log(DateRanges('2021-12-15', 10, 30, 'days'));

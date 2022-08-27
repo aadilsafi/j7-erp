@@ -204,73 +204,98 @@
             $('#unit_price').on('change', function() {
                 let unit_price = parseFloat($(this).val()).toFixed(2);
                 let unit_size = parseFloat($('#unit_size').val()).toFixed(2);
-
                 let totalPriceUnit = parseFloat(unit_price * unit_size).toFixed(2);
+
                 $('#total-price-unit').val(totalPriceUnit).trigger('change');
             });
 
             $('#total-price-unit').on('change', function() {
-                $('.additional-cost-checkbox').trigger('change');
+                $('div[id^="div-"]')
+                    .filter(':visible').each()
+                    .childern('input[id^="percentage-"]')
+                    .trigger('change');
             });
 
             $('.additional-cost-checkbox').on('change', function() {
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
 
-                let unitPriceTotal = parseFloat($('#total-price-unit').val()).toFixed(2);
-
-                let divElement = $(`#div-${elementId}`);
-                let percentageElement = $(`#percentage-${elementId}`);
-                let totalPriceElement = $(`#total-price-${elementId}`);
-
-                let percentage = parseFloat(percentageElement.val()).toFixed(2);
-                let totalPrice = parseFloat(totalPriceElement.val()).toFixed(2);
-
-                if ($(this).is(':checked')) {
-                    divElement.show();
-                    totalPriceElement.val(parseFloat(unitPriceTotal * (percentage / 100)).toFixed(2));
-                } else {
-                    divElement.hide();
-                    totalPriceElement.val(0);
-                }
-
-                totalPriceElement.trigger('change');
-            });
-
-
-            $('[id^=percentage-]').on('change', function() {
-
-                let elementId = $(this).attr('id');
-                elementId = elementId.slice(('percentage-').length);
-
-                let percentageElement = $(this);
-                let unitPriceTotalElement = $('#total-price-unit');
-                let totalAmountElement = $(`#total-price-${elementId}`);
-
-                let percentageValue = parseInt($(this).val());
-                let unitPriceTotalValue = parseFloat(unitPriceTotalElement.val()).toFixed(2);
-
-                let calculatedAmount = parseFloat(unitPriceTotalValue * (percentageValue / 100)).toFixed(2);
-
-                $('[id^=total-price-]').trigger('change');
-            });
-
-            $('[id^=total-price-]').on('change', function() {
-                let grandUnitAmount = 0;
-
-                $('[id^=total-price-]').each(function() {
-                    grandUnitAmount += parseFloat($(this).val());
+                $(`#div-${elementId}`).toggle('fast', 'linear', function() {
+                    $('div[id^="div-"]')
+                        .filter(':visible')
+                        .childern('input[id^="percentage-"]')
+                        .trigger('change');
                 });
 
-                $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
             });
 
-            $('#discount_percentage').on('change', function() {
-                let unitPriceTotalValue = parseFloat($("#total-price-unit").val());
-                let discountPercentage = parseInt($(this).val());
-                let calculatedAmount = parseFloat(unitPriceTotalValue * (discountPercentage / 100));
-                $('#total-price-discount').val(calculatedAmount.toFixed(2))
+
+            $('input[id^="percentage-"]').filter(':visible').on('change', function() {
+
+                // let elementId = $(this).attr('id');
+                // elementId = elementId.slice(('checkbox-').length);
+                // let divElement = $(`#div-${elementId}`);
+
+                // let unitPriceTotal = parseFloat($('#total-price-unit').val()).toFixed(2);
+
+                // let percentageElement = $(`#percentage-${elementId}`);
+                // let totalPriceElement = $(`#total-price-${elementId}`);
+
+                // let percentage = parseFloat(percentageElement.val()).toFixed(2);
+                // let totalPrice = parseFloat(totalPriceElement.val()).toFixed(2);
+
+                // if ($(this).is(':checked')) {
+                //     divElement.show();
+                //     // totalPriceElement.val(parseFloat(unitPriceTotal * (percentage / 100)).toFixed(2));
+                // } else {
+                //     divElement.hide();
+                //     // totalPriceElement.val(0);
+                // }
+                console.log($(this).attr('id'));
+
+                // totalPriceElement.trigger('change');
             });
+
+
+            // $('[id^=percentage-]').on('change', function() {
+
+            //     let elementId = $(this).attr('id');
+            //     elementId = elementId.slice(('percentage-').length);
+
+            //     let percentageElement = $(this);
+            //     let unitPriceTotalElement = $('#total-price-unit');
+            //     let totalAmountElement = $(`#total-price-${elementId}`);
+
+            //     let percentageValue = parseInt($(this).val());
+            //     let unitPriceTotalValue = parseFloat(unitPriceTotalElement.val()).toFixed(2);
+
+            //     let calculatedAmount = parseFloat(unitPriceTotalValue * (percentageValue / 100)).toFixed(2);
+
+            //     // totalAmountElement.val(calculatedAmount);
+
+            //     $('[id^=total-price-]').trigger('change');
+            // });
+
+            // $('[id^=total-price-]').on('change', function() {
+            //     let grandUnitAmount = 0;
+
+            //     grandUnitAmount += parseFloat($(this).val());
+            //     // $('[id^=total-price-]').each(function() {
+            //     //     if ($(this).attr('id') == 'total-price-discount') {
+            //     //         grandUnitAmount -= parseFloat($(this).val());
+            //     //     } else {
+            //     //     }
+            //     // });
+
+            //     $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
+            // });
+
+            // // $('#discount_percentage').on('change', function() {
+            // //     let unitPriceTotalValue = parseFloat($("#total-price-unit").val());
+            // //     let discountPercentage = parseInt($(this).val());
+            // //     let calculatedAmount = parseFloat(unitPriceTotalValue * (discountPercentage / 100));
+            // //     $('#total-price-discount').val(calculatedAmount.toFixed(2))
+            // // });
         });
 
         function addInstallmentsRows(num) {

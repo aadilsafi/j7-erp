@@ -65,7 +65,7 @@
 
                     <div class="card-body">
                         {{-- Unit Rate Row --}}
-                        <div class="row mb-1">
+                        <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_price">Unit Price</label>
 
@@ -108,7 +108,7 @@
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text"><i data-feather='percent'></i></span>
-                                            <input type="number" min="0" max="100"
+                                            <input type="number" min="0" max="100" step="0.1"
                                                 class="form-control form-control-lg additional-cost-percentage"
                                                 id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][percentage]"
@@ -141,13 +141,13 @@
                         </div>
 
                         {{-- Discount Row --}}
-                        <div class="row mb-1">
+                        <div class="row mb-1" id="div-discount">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="percentage-discount">Discount %</label>
 
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" max="100"
+                                    <input type="number" min="0" max="100" step="0.1"
                                         class="form-control form-control-lg @error('percentage-discount') is-invalid @enderror"
                                         id="percentage-discount" name="percentage-discount" placeholder="Unit Price"
                                         value="0.00" />
@@ -158,7 +158,7 @@
                                 <label class="form-label fs-5" for="total-price-discount">Total Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" class="form-control form-control-lg"
+                                    <input type="number" min="0" class="form-control form-control-lg" readonly
                                         id="total-price-discount" name="total-price-discount"
                                         placeholder="Total Discount" value="0.00" />
                                 </div>
@@ -175,7 +175,7 @@
                                 <hr>
                                 <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total</label>
                                 <input type="text"
-                                    class="form-control form-control-lg @error('unit_rate_total') is-invalid @enderror"
+                                    class="form-control form-control-lg"
                                     id="unit_rate_total" name="unit_rate_total" placeholder="Total Amount"
                                     value="{{ $unit->total_price }}.00" readonly />
                             </div>

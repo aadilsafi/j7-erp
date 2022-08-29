@@ -18,8 +18,9 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $user = (new User())->create([
-            'name' => 'Admin',
+            'name' => 'Syed Aizaz Haider Shah',
             'email' => 'admin@erp.com',
+            'phone_no' => '0310-0177771',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -42,6 +43,7 @@ class UserTableSeeder extends Seeder
         $user = (new User())->create([
             'name' => 'Gm Sales',
             'email' => 'gmsales@erp.com',
+            'phone_no' => '0310-0177771',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),

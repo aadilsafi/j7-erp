@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
-use App\Models\{AdditionalCost, Floor, Site, Unit};
+use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
 use App\Services\Interfaces\AdditionalCostInterface;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class SalesPlanController extends Controller
 {
@@ -64,7 +66,30 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request)
     {
-        return $request->all();
+        return $this->printPage(1);
+        // return $request->all();
+    }
+
+    public function printPage($id)
+    {
+        //
+        $salesPlan = SalesPlan::find($id);
+        $data['unit_no'] = $salesPlan->unit->floor_unit_number;
+        $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
+        $data['category'] = $salesPlan->unit->type->name;
+        $data['size'] = $salesPlan->unit->gross_area;
+        $data['client_name'] = 'Ali Raza';
+        $data['rate'] = $salesPlan->unit->price_sqft;
+        $data['sales_person_name'] = Auth::user()->name;
+        $role = Auth::user()->roles->pluck('name');
+        $data['sales_person_contact'] = $salesPlan->stakeholder->contact;
+        $data['sales_person_status'] = $role[0];
+        $data['sales_person_phone_no'] = Auth::user()->phone_no;
+        $data['sales_person_sales_type'] = 'Direct';
+        $data['indirect_source'] = '';
+        $data['instalments'] = $salesPlan->installments;
+        $data['additional_costs'] = $salesPlan->additionalCosts;
+        return view('app.sites.floors.units.sales-plan.print',compact('data'));
     }
 
     /**
@@ -117,34 +142,24 @@ class SalesPlanController extends Controller
         $data = [
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id))
+            'unit' => (new Unit())->find(decryptParams($unit_id)),
+
         ];
 
         $inputs = $request->input();
 
-        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['daysCount'], $inputs['rangeBy']);
+        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
 
-        // dd($installmentDates);
+        $data['amounts'] = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
 
-
-
-
-
-
-
-
-
-
-
-
-        $total = 10708425;
-        $divide = intval($inputs['length']);
-
-        $baseInstallment = $total / intval($inputs['length']);
-
-        $data['amounts'] = round($baseInstallment);
+        dd($inputs, $installmentDates, $data);
 
         return apiSuccessResponse($data);
+    }
+
+    private function baseInstallment($total, $divide)
+    {
+        return round($total / $divide);
     }
 
     private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
@@ -159,6 +174,4 @@ class SalesPlanController extends Controller
 
         return $dates;
     }
-
-    // private function?
 }

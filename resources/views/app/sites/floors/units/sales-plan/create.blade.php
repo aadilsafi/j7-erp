@@ -155,21 +155,9 @@
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
                 min: 1,
                 max: 50,
-            }).on("touchspin.on.stopupspin", function() {
-                installmentsRowAction = "stopupspin";
-            }).on("touchspin.on.stopdownspin", function() {
-                installmentsRowAction = "stopdownspin";
-            }).on("touchspin.on.stopspin", function() {
-                var t = $(this);
-                if (installmentsRowAction == "stopupspin") {
-                    addInstallmentsRows(t.val());
-                } else if (installmentsRowAction == "stopdownspin") {
-                    addInstallmentsRows(t.val());
-                }
-
-                populateInstallmentTableRows(installmentsRowAction);
-                installmentsRowAction = '';
-            }).on("change", function() {
+            }).on("touchspin.on.stopupspin", function() {}).on("touchspin.on.stopdownspin", function() {}).on(
+                "touchspin.on.stopspin",
+                function() {}).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
                 1 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
@@ -193,12 +181,14 @@
                     default:
                         break;
                 }
-                populateInstallmentTableRows();
             });
 
             $(".flatpickr-basic").flatpickr({
                 defaultDate: "today",
                 minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d"
             });
 
             $('#unit_price').on('change', function() {
@@ -249,6 +239,7 @@
                 $('#unit_downpayment_total').val(parseFloat(totalDownPayment).toFixed(2));
             });
 
+            $('#unit_downpayment_percentage').trigger('change');
         });
 
         function calculateUnitGrandAmount() {
@@ -273,97 +264,44 @@
             $('#unit_downpayment_percentage').trigger('change');
         }
 
-        $('#unit_downpayment_percentage').trigger('change');
-
-        function addInstallmentsRows(num) {
-            if (num > 0) {
-                var row = "";
-                for (let index = 1; index < num; index++) {
-                    row += `
-                    <tr id="row_${index}">
-                        <th scope="row">${index + 1}</th>
-                        <td>
-                            <div class="">
-                                <input type="text" id="installment_date_${index}"
-                                    name="installments[installments][${index}][date]"
-                                    class="form-control" readonly placeholder="YYYY-MM-DD" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="position-relative">
-                                <input type="text" class="form-control form-control-lg"
-                                    id="installment_detail_${index}" name="installments[installments][${index}][details]"
-                                    placeholder="Details" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="position-relative">
-                                <input type="number" class="form-control form-control-lg"
-                                    id="installment_amount_${index}" name="installments[installments][${index}][amount]"
-                                    placeholder="Amount" />
-                            </div>
-                        </td>
-                        <td>
-                            <div class="position-relative">
-                                <input type="text" class="form-control form-control-lg"
-                                    id="installment_remark_${index}" name="installments[installments][${index}][remarks]"
-                                    placeholder="Remarks" />
-                            </div>
-                        </td>
-                    </tr>`;
-                }
-
-
-                $('#installments_table #dynamic_installment_rows').html(row);
-            }
-        }
-
-        function installmentsRemoveRow() {
-            $('#installments_table #dynamic_installment_rows tr:last').remove();
-        }
-
-        function DateRanges(startDate, length = 1, monthsCount = 1, rangeBy = 'months') {
-
-            let endDate = moment(startDate).add(((length - 1) * monthsCount), rangeBy);
-
-            let range = moment.range(startDate, endDate);
-            let years = Array.from(range.by(rangeBy, {
-                step: monthsCount
-            }));
-
-            let datesArray = years.map(m => m.format('YYYY-MM-DD'));
-            // datesArray.shift();
-            return datesArray;
-        }
-
-        function populateInstallmentTableRows(action = '') {
+        function calculateInstallments(action = '') {
 
             showBlockUI('#installments_acard');
 
-            // startDate: $("#installment_date_0").val(),
+            let unitDownPayment = parseFloat($('#unit_downpayment_total').val()).toFixed(2);
+            let unit_rate_total = parseFloat($('#unit_rate_total').val()).toFixed(2);
+
+            let installment_amount = parseFloat(Math.abs(unit_rate_total - unitDownPayment));
+
+            let installments_start_date = $('#installments_start_date').val();
+            // length: parseInt($(".touchspin-icon").val()),
+            // startDate: installments_start_date,
+            // installment_amount: installment_amount,
+
             let data = {
                 startDate: '2021-12-15',
-                length: parseInt($(".touchspin-icon").val()),
-                daysCount: $(".custom-option-item-check:checked").val() == 'quarterly' ? 90 : 30,
+                installment_amount: 14277900,
+                length: 16,
+                rangeCount: $(".custom-option-item-check:checked").val() == 'quarterly' ? 90 : 30,
                 rangeBy: 'days',
+                installment_rows_data: [],
             };
 
-            // $.ajax({
-            //     url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
-            //     type: 'GET',
-            //     data: data,
-            //     success: function(response) {
-            //         if (response.status) {
-            //             console.log(response);
-            //             hideBlockUI('#installments_acard');
-            //         }
-            //     },
-            //     error: function(errors) {
-            //         hideBlockUI('#installments_acard');
-            //     }
-            // });
+            $.ajax({
+                url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
+                type: 'GET',
+                data: data,
+                success: function(response) {
+                    if (response.status) {
+                    }
+                    console.log(response);
+                    hideBlockUI('#installments_acard');
+                },
+                error: function(errors) {
+                    console.error(errors);
+                    hideBlockUI('#installments_acard');
+                }
+            });
         }
-
-        // console.log(DateRanges('2021-12-15', 10, 30, 'days'));
     </script>
 @endsection

@@ -218,17 +218,6 @@
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
 
-
-                // if ($(`#div-${elementId}`).is(':visible')) {
-                //     $(`#div-${elementId}`).hide('fast', 'linear', function() {
-                //         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
-                //     });
-                // } else {
-                //     $(`#div-${elementId}`).show('fast', 'linear', function() {
-                //         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
-                //     });
-                // }
-
                 $(`#div-${elementId}`).toggle('fast', 'linear', function() {
                     $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                 });
@@ -250,6 +239,16 @@
                 calculateUnitGrandAmount();
             });
 
+            $('#unit_downpayment_percentage').on('change', function() {
+                let unitPrice = parseFloat(($('#unit_rate_total').val()).replace(/,/g, '')).toFixed(2);
+
+                let percentage = parseFloat($(this).val());
+
+                let totalDownPayment = parseFloat((unitPrice * percentage) / 100);
+
+                $('#unit_downpayment_total').val(parseFloat(totalDownPayment).toFixed(2));
+            });
+
         });
 
         function calculateUnitGrandAmount() {
@@ -260,7 +259,7 @@
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('total-price-').length);
 
-                if($(`#div-${elementId}`).is(':visible')) {
+                if ($(`#div-${elementId}`).is(':visible')) {
                     if ($(this).attr('id') == 'total-price-discount') {
                         grandUnitAmount -= parseFloat($(this).val());
                     } else {
@@ -269,8 +268,12 @@
                 }
             });
 
+            // $('#unit_rate_total').val(new Intl.NumberFormat().format(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
+            $('#unit_downpayment_percentage').trigger('change');
         }
+
+        $('#unit_downpayment_percentage').trigger('change');
 
         function addInstallmentsRows(num) {
             if (num > 0) {

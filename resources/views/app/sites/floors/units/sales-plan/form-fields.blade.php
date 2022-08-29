@@ -79,11 +79,11 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-unit">Total Amount</label>
+                                <label class="form-label fs-5" for="total-price-unit">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="number" min="0" class="form-control form-control-lg" readonly
-                                        id="total-price-unit" name="total-price-unit" placeholder="Total Amount"
+                                        id="total-price-unit" name="total-price-unit" placeholder="Amount"
                                         value="{{ $unit->total_price }}.00" />
 
                                 </div>
@@ -120,8 +120,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
-                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Total
-                                            Amount</label>
+                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount</label>
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text">Rs. </span>
@@ -130,8 +129,7 @@
                                                 readonly
                                                 id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][total_amount]"
-                                                placeholder="Total Amount"
-                                                value="{{ $additionalCostTotalAmount }}" />
+                                                placeholder="Amount" value="{{ $additionalCostTotalAmount }}" />
                                         </div>
 
                                     </div>
@@ -146,21 +144,21 @@
                                 <label class="form-label fs-5" for="percentage-discount">Discount %</label>
 
                                 <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
+                                    <span class="input-group-text"><i data-feather='percent'></i></span>
                                     <input type="number" min="0" max="100" step="0.1"
                                         class="form-control form-control-lg @error('percentage-discount') is-invalid @enderror"
-                                        id="percentage-discount" name="percentage-discount" placeholder="Unit Price"
+                                        id="percentage-discount" name="percentage-discount" placeholder="Discount %"
                                         value="0.00" />
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-discount">Total Amount</label>
+                                <label class="form-label fs-5" for="total-price-discount">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" class="form-control form-control-lg" readonly
-                                        id="total-price-discount" name="total-price-discount"
-                                        placeholder="Total Discount" value="0.00" />
+                                    <input type="number" min="0" class="form-control form-control-lg"
+                                        readonly id="total-price-discount" name="total-price-discount"
+                                        placeholder="Discount" value="0.00" />
                                 </div>
                             </div>
                         </div>
@@ -174,33 +172,38 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <hr>
                                 <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total</label>
-                                <input type="text"
-                                    class="form-control form-control-lg"
-                                    id="unit_rate_total" name="unit_rate_total" placeholder="Total Amount"
-                                    value="{{ $unit->total_price }}.00" readonly />
+
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="text" class="form-control form-control-lg" id="unit_rate_total"
+                                        name="unit_rate_total" placeholder="Total"
+                                        value="{{ $unit->total_price }}.00" readonly />
+                                </div>
                             </div>
                         </div>
 
                         {{-- Downpayment Row --}}
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('unit_size') is-invalid @enderror"
-                                    id="unit_size" name="unit_size" placeholder="Unit Size(sq.ft)" />
-                                @error('unit_size')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                                <label class="form-label fs-5" for="unit_downpayment_percentage">Down Payment
+                                    %</label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text"><i data-feather='percent'></i></span>
+                                    <input type="number" class="form-control form-control-lg"
+                                        id="unit_downpayment_percentage" name="unit_downpayment_percentage"
+                                        placeholder="Down Payment %" min="0" max="100" value="25.0" step="0.1"/>
+                                </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_orientation">Unit Orientation</label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('unit_orientation') is-invalid @enderror"
-                                    id="unit_orientation" name="unit_orientation" placeholder="Unit Orientation" />
-                                @error('unit_orientation')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                                <label class="form-label fs-5" for="unit_downpayment_total">Amount</label>
+
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="text" class="form-control form-control-lg" readonly
+                                        id="unit_downpayment_total" name="unit_downpayment_total"
+                                        placeholder="Amount" />
+                                </div>
                             </div>
                         </div>
                     </div>

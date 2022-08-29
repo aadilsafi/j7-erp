@@ -41,14 +41,6 @@ class SalesPlanAdditionalCostSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'sales_plan_id' => 1,
-                'additional_cost_id' => 4,
-                'percentage' => 10,
-                'amount' => 250000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
         ]);
     }
 }

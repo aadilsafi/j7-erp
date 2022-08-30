@@ -21,7 +21,7 @@
                 window.print();
                 $('#btn').show();
             });
-    });
+        });
     </script>
     <style>
     /* @page {

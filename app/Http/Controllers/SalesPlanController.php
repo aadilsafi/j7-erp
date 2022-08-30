@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SalesPlanDataTable;
+use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
+use App\Services\Interfaces\AdditionalCostInterface;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use App\Models\SalesPlan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\DataTables\SalesPlanDataTable;
-use App\Models\{AdditionalCost, Floor, Site, Unit};
-use App\Services\Interfaces\AdditionalCostInterface;
 
 class SalesPlanController extends Controller
 {
@@ -142,34 +141,24 @@ class SalesPlanController extends Controller
         $data = [
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id))
+            'unit' => (new Unit())->find(decryptParams($unit_id)),
+
         ];
 
         $inputs = $request->input();
 
-        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['daysCount'], $inputs['rangeBy']);
+        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
 
-        // dd($installmentDates);
+        $data['amounts'] = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
 
-
-
-
-
-
-
-
-
-
-
-
-        $total = 10708425;
-        $divide = intval($inputs['length']);
-
-        $baseInstallment = $total / intval($inputs['length']);
-
-        $data['amounts'] = round($baseInstallment);
+        dd($inputs, $installmentDates, $data);
 
         return apiSuccessResponse($data);
+    }
+
+    private function baseInstallment($total, $divide)
+    {
+        return round($total / $divide);
     }
 
     private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
@@ -184,6 +173,4 @@ class SalesPlanController extends Controller
 
         return $dates;
     }
-
-    // private function?
 }

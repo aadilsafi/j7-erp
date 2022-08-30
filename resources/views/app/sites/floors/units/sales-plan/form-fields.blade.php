@@ -65,7 +65,7 @@
 
                     <div class="card-body">
                         {{-- Unit Rate Row --}}
-                        <div class="row mb-1">
+                        <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_price">Unit Price</label>
 
@@ -79,11 +79,11 @@
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-unit">Total Amount</label>
+                                <label class="form-label fs-5" for="total-price-unit">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="number" min="0" class="form-control form-control-lg" readonly
-                                        id="total-price-unit" name="total-price-unit" placeholder="Total Amount"
+                                        id="total-price-unit" name="total-price-unit" placeholder="Amount"
                                         value="{{ $unit->total_price }}.00" />
 
                                 </div>
@@ -108,7 +108,7 @@
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text"><i data-feather='percent'></i></span>
-                                            <input type="number" min="0" max="100"
+                                            <input type="number" min="0" max="100" step="0.1"
                                                 class="form-control form-control-lg additional-cost-percentage"
                                                 id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][percentage]"
@@ -120,8 +120,7 @@
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
-                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Total
-                                            Amount</label>
+                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount</label>
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text">Rs. </span>
@@ -130,8 +129,7 @@
                                                 readonly
                                                 id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="additional_cost[{{ $additionalCost->slug }}][total_amount]"
-                                                placeholder="Total Amount"
-                                                value="{{ $additionalCostTotalAmount }}" />
+                                                placeholder="Amount" value="{{ $additionalCostTotalAmount }}" />
                                         </div>
 
                                     </div>
@@ -141,26 +139,26 @@
                         </div>
 
                         {{-- Discount Row --}}
-                        <div class="row mb-1">
+                        <div class="row mb-1" id="div-discount">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="percentage-discount">Discount %</label>
 
                                 <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" max="100"
+                                    <span class="input-group-text"><i data-feather='percent'></i></span>
+                                    <input type="number" min="0" max="100" step="0.1"
                                         class="form-control form-control-lg @error('percentage-discount') is-invalid @enderror"
-                                        id="percentage-discount" name="percentage-discount" placeholder="Unit Price"
+                                        id="percentage-discount" name="percentage-discount" placeholder="Discount %"
                                         value="0.00" />
                                 </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-discount">Total Amount</label>
+                                <label class="form-label fs-5" for="total-price-discount">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="number" min="0" class="form-control form-control-lg"
-                                        id="total-price-discount" name="total-price-discount"
-                                        placeholder="Total Discount" value="0.00" />
+                                        readonly id="total-price-discount" name="total-price-discount"
+                                        placeholder="Discount" value="0.00" />
                                 </div>
                             </div>
                         </div>
@@ -174,33 +172,39 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <hr>
                                 <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total</label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('unit_rate_total') is-invalid @enderror"
-                                    id="unit_rate_total" name="unit_rate_total" placeholder="Total Amount"
-                                    value="{{ $unit->total_price }}.00" readonly />
+
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="text" class="form-control form-control-lg" id="unit_rate_total"
+                                        name="unit_rate_total" placeholder="Total"
+                                        value="{{ $unit->total_price }}.00" readonly />
+                                </div>
                             </div>
                         </div>
 
                         {{-- Downpayment Row --}}
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('unit_size') is-invalid @enderror"
-                                    id="unit_size" name="unit_size" placeholder="Unit Size(sq.ft)" />
-                                @error('unit_size')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                                <label class="form-label fs-5" for="unit_downpayment_percentage">Down Payment
+                                    %</label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text"><i data-feather='percent'></i></span>
+                                    <input type="number" class="form-control form-control-lg"
+                                        id="unit_downpayment_percentage" name="unit_downpayment_percentage"
+                                        placeholder="Down Payment %" min="0" max="100" value="25.0"
+                                        step="0.1" />
+                                </div>
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_orientation">Unit Orientation</label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('unit_orientation') is-invalid @enderror"
-                                    id="unit_orientation" name="unit_orientation" placeholder="Unit Orientation" />
-                                @error('unit_orientation')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                                <label class="form-label fs-5" for="unit_downpayment_total">Amount</label>
+
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">Rs. </span>
+                                    <input type="text" class="form-control form-control-lg" readonly
+                                        id="unit_downpayment_total" name="unit_downpayment_total"
+                                        placeholder="Amount" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -260,53 +264,49 @@
 
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <div class="table-responsive">
+                <div class="row g-1">
+                    <div class="col-md-9">
+                        <label class="form-label fs-5" for="installments_start_date">Installments Start Date</label>
+                        <input type="text" id="installments_start_date" name="installments_start_date"
+                            class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="h-100 d-flex justify-content-center align-items-end">
+                            <button type="button"
+                                class="btn w-100 btn-relief-outline-primary waves-effect waves-float waves-light"
+                                onclick="calculateInstallments();">
+                                <i class="bi bi-calculator"></i>
+                                <span id="calculate_installments">Calculate Installments</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    <table class="table table-hover table-borderless" id="installments_table">
-                        <thead>
-                            <tr class="text-center">
-                                <th scope="col">#</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Details</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Remarks</th>
-                            </tr>
-                        </thead>
-                        <tr id="row_0">
-                            <th scope="row">1</th>
-                            <td>
-                                <div class="">
-                                    <input type="text" id="installment_date_0"
-                                        name="installments[installments][0][date]"
-                                        class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
-                                </div>
-                            </td>
-                            <td>
-                                <div class="position-relative">
-                                    <input type="text" class="form-control form-control-lg"
-                                        id="installment_detail_0" name="installments[installments][0][details]"
-                                        placeholder="Details" />
-                                </div>
-                            </td>
-                            <td>
-                                <div class="position-relative">
-                                    <input type="number" min="0" class="form-control form-control-lg"
-                                        id="installment_amount_0" name="installments[installments][0][amount]"
-                                        placeholder="Amount" />
-                                </div>
-                            </td>
-                            <td>
-                                <div class="position-relative">
-                                    <input type="text" class="form-control form-control-lg"
-                                        id="installment_remark_0" name="installments[installments][0][remarks]"
-                                        placeholder="Remarks" />
-                                </div>
-                            </td>
-                        </tr>
-                        <tbody id="dynamic_installment_rows">
+        <div class="row mb-1">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                    <div class="card-body">
+                        <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
 
-                        </tbody>
-                    </table>
+                            <table class="table table-hover table-borderless" id="installments_table" style="position: relative;">
+                                <thead style="position: sticky; top: 0; z-index: 10;">
+                                    <tr class="text-center">
+                                        <th scope="col">#</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Details</th>
+                                        <th scope="col">Amount</th>
+                                        <th scope="col">Remarks</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="dynamic_installment_rows">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -379,8 +379,9 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                    id="designation" name="designation" placeholder="Designation" />
+                <input type="text"
+                    class="form-control form-control-lg @error('designation') is-invalid @enderror" id="designation"
+                    name="designation" placeholder="Designation" />
                 @error('designation')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -409,8 +410,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
-                    placeholder="Address" rows="5"></textarea>
+                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address"
+                    name="address" placeholder="Address" rows="5"></textarea>
                 @error('address')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -464,7 +465,8 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
+                <input type="text"
+                    class="form-control form-control-lg @error('father_name') is-invalid @enderror"
                     id="father_name" name="father_name" placeholder="Father Name" />
                 @error('father_name')
                     <div class="invalid-tooltip">{{ $message }}</div>
@@ -473,8 +475,9 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation" />
+                <input type="text"
+                    class="form-control form-control-lg @error('occupation') is-invalid @enderror" id="occupation"
+                    name="occupation" placeholder="Occupation" />
                 @error('occupation')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -485,7 +488,8 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
+                <input type="text"
+                    class="form-control form-control-lg @error('designation') is-invalid @enderror"
                     id="designation" name="designation" placeholder="Designation" />
                 @error('designation')
                     <div class="invalid-tooltip">{{ $message }}</div>
@@ -515,8 +519,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
-                    placeholder="Address" rows="5"></textarea>
+                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address"
+                    name="address" placeholder="Address" rows="5"></textarea>
                 @error('address')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror

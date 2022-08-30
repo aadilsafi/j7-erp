@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SalesPlan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PrintSalesPlanController extends Controller
 {
@@ -58,6 +60,23 @@ class PrintSalesPlanController extends Controller
     public function edit($id)
     {
         //
+        $salesPlan = SalesPlan::find($id);
+        $data['unit_no'] = $salesPlan->unit->floor_unit_number;
+        $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
+        $data['category'] = $salesPlan->unit->type->name;
+        $data['size'] = $salesPlan->unit->gross_area;
+        $data['client_name'] = 'Ali Raza';
+        $data['rate'] = $salesPlan->unit->price_sqft;
+        $data['sales_person_name'] = Auth::user()->name;
+        $role = Auth::user()->roles->pluck('name');
+        $data['sales_person_contact'] = $salesPlan->stakeholder->contact;
+        $data['sales_person_status'] = $role[0];
+        $data['sales_person_phone_no'] = Auth::user()->phone_no;
+        $data['sales_person_sales_type'] = 'Direct';
+        $data['indirect_source'] = '';
+        $data['instalments'] = $salesPlan->installments;
+        $data['additional_costs'] = $salesPlan->additionalCosts;
+        return view('app.sites.floors.units.sales-plan.print',compact('data'));
     }
 
     /**

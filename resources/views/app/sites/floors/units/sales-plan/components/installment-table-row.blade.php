@@ -16,7 +16,7 @@
     </td>
     <td>
         <div class="position-relative">
-            <input type="number" class="form-control form-control-lg"
+            <input type="number" min="0" class="form-control form-control-lg"
                 id="installment_amount_0" name="installments[installments][0][amount]"
                 placeholder="Amount" />
         </div>

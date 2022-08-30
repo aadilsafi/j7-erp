@@ -24,7 +24,7 @@ return new class extends Migration
             $table->float('net_area')->default(0);
             $table->float('gross_area')->default(0);
             $table->float('price_sqft')->default(0);
-            $table->float('total_price')->default(0);
+            $table->double('total_price')->default(0);
             $table->foreignId('type_id')->constrained();
             $table->foreignId('status_id')->constrained();
             $table->boolean('active')->default(false);

@@ -16,7 +16,7 @@ class PrintSalesPlanController extends Controller
     public function index()
     {
         //
-        return view('app.sites.floors.units.sales-plan.print');
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.signature-sales-plan');
     }
 
     /**
@@ -76,7 +76,10 @@ class PrintSalesPlanController extends Controller
         $data['indirect_source'] = '';
         $data['instalments'] = $salesPlan->installments;
         $data['additional_costs'] = $salesPlan->additionalCosts;
-        return view('app.sites.floors.units.sales-plan.print',compact('data'));
+        // $pdf = \App::make('dompdf.wrapper');
+        // $pdf->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.signature-sales-plan',compact('data'));
+        // return $pdf->download('itsolutionstuff.pdf');
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.j7-global-sales-plan',compact('data'));
     }
 
     /**

@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\SalesPlanDataTable;
+use App\Models\{SalesPlan, Floor, Site, Unit};
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Support\Facades\Auth;
-use App\DataTables\SalesPlanDataTable;
-use App\Services\Interfaces\AdditionalCostInterface;
-use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
 
 class SalesPlanController extends Controller
 {
-    private $additionalCostInterface;
+    private $salesPlanInterface;
 
-    public function __construct(AdditionalCostInterface $additionalCostInterface)
+    public function __construct(SalesPlanInterface $salesPlanInterface)
     {
-        $this->additionalCostInterface = $additionalCostInterface;
+        $this->salesPlanInterface = $salesPlanInterface;
     }
 
     /**
@@ -90,7 +90,7 @@ class SalesPlanController extends Controller
         $data['indirect_source'] = '';
         $data['instalments'] = $salesPlan->installments;
         $data['additional_costs'] = $salesPlan->additionalCosts;
-        return view('app.sites.floors.units.sales-plan.sales-plan-templates.'.$template->slug,compact('data'));
+        return view('app.sites.floors.units.sales-plan.print',compact('data'));
     }
 
     /**
@@ -140,13 +140,6 @@ class SalesPlanController extends Controller
 
     public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $data = [
-            'site' => decryptParams($site_id),
-            'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id)),
-
-        ];
-
         $inputs = $request->input();
 
         $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);

@@ -50,7 +50,7 @@
 @endsection
 
 @section('content')
-    <form class="form form-vertical"
+    <form class="form form-vertical" id="create-sales-plan-form"
         action="{{ route('sites.floors.units.sales-plans.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
         method="POST">
 
@@ -153,14 +153,14 @@
                 buttonup_class: "btn btn-primary",
                 buttondown_txt: feather.icons["chevron-down"].toSvg(),
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
-                min: 1,
+                min: 0,
                 max: 50,
             }).on("touchspin.on.stopupspin", function() {}).on("touchspin.on.stopdownspin", function() {}).on(
                 "touchspin.on.stopspin",
                 function() {}).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
-                1 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
+                0 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
                     "disabled-max-min")
@@ -263,6 +263,7 @@
             $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
             $('#unit_downpayment_percentage').trigger('change');
         }
+        var unchangedData = [];
 
         function calculateInstallments(action = '') {
 
@@ -274,17 +275,18 @@
             let installment_amount = parseFloat(Math.abs(unit_rate_total - unitDownPayment));
 
             let installments_start_date = $('#installments_start_date').val();
-            // length: parseInt($(".touchspin-icon").val()),
-            // startDate: installments_start_date,
-            // installment_amount: installment_amount,
+            // startDate: '2021-12-15',
+            // installment_amount: 10708425,
+            // length: 16,
+
 
             let data = {
-                startDate: '2021-12-15',
-                installment_amount: 14277900,
-                length: 16,
+                length: parseInt($(".touchspin-icon").val()),
+                startDate: installments_start_date,
+                installment_amount: installment_amount,
                 rangeCount: $(".custom-option-item-check:checked").val() == 'quarterly' ? 90 : 30,
                 rangeBy: 'days',
-                installment_rows_data: [],
+                unchangedData: unchangedData,
             };
 
             $.ajax({
@@ -292,15 +294,39 @@
                 type: 'GET',
                 data: data,
                 success: function(response) {
+                    let InstallmentRows = '';
                     if (response.status) {
+
+                        for (let row of response.data.installments) {
+                            InstallmentRows += row.row;
+                        }
+
+                        $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
+                        InstallmentRows = '';
+                        hideBlockUI('#installments_acard');
                     }
-                    console.log(response);
-                    hideBlockUI('#installments_acard');
                 },
                 error: function(errors) {
                     console.error(errors);
                     hideBlockUI('#installments_acard');
                 }
+            });
+        }
+
+        function storeUnchangedData(key, field, value) {
+
+            var index = unchangedData.findIndex(function(element) {
+                return element.key == key && element.field == field;
+            });
+
+            if (index > -1) {
+                unchangedData.splice(index, 1);
+            }
+
+            unchangedData.push({
+                key: key,
+                field: field,
+                value: value
             });
         }
     </script>

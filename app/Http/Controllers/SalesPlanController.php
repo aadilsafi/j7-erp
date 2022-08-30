@@ -5,18 +5,20 @@ namespace App\Http\Controllers;
 use App\DataTables\SalesPlanDataTable;
 use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
 use App\Services\Interfaces\AdditionalCostInterface;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use stdClass;
 
 class SalesPlanController extends Controller
 {
-    private $additionalCostInterface;
+    private $salesPlanInterface;
 
-    public function __construct(AdditionalCostInterface $additionalCostInterface)
+    public function __construct(SalesPlanInterface $salesPlanInterface)
     {
-        $this->additionalCostInterface = $additionalCostInterface;
+        $this->salesPlanInterface = $salesPlanInterface;
     }
 
     /**
@@ -88,7 +90,7 @@ class SalesPlanController extends Controller
         $data['indirect_source'] = '';
         $data['instalments'] = $salesPlan->installments;
         $data['additional_costs'] = $salesPlan->additionalCosts;
-        return view('app.sites.floors.units.sales-plan.print',compact('data'));
+        return view('app.sites.floors.units.sales-plan.print', ['data' => $data]);
     }
 
     /**
@@ -138,39 +140,10 @@ class SalesPlanController extends Controller
 
     public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $data = [
-            'site' => decryptParams($site_id),
-            'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id)),
-
-        ];
-
         $inputs = $request->input();
 
-        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
+        $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
-        $data['amounts'] = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
-
-        dd($inputs, $installmentDates, $data);
-
-        return apiSuccessResponse($data);
-    }
-
-    private function baseInstallment($total, $divide)
-    {
-        return round($total / $divide);
-    }
-
-    private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
-    {
-        $startDate = Carbon::parse($requrestDate);
-
-        $endDate =  (new Carbon($requrestDate))->add((($length - 1) * $daysCount), $rangeBy);
-
-        $period = CarbonPeriod::create($startDate, ($daysCount . ' ' . $rangeBy), $endDate);
-
-        $dates = $period->toArray();
-
-        return $dates;
+        return apiSuccessResponse($installments);
     }
 }

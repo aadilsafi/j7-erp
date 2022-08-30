@@ -16,6 +16,9 @@
             today = dd + '/' + mm + '/' + yyyy;
             $('#date').empty();
             $('#date').append('Date : '+today+'');
+            $('#btn').hide();
+                window.print();
+
             $("#btn").click(function () {
                 $('#btn').hide();
                 window.print();
@@ -26,19 +29,22 @@
     <style>
         @media print {
         /* * { margin: 0 !important; padding: 0 !important; } */
-        html, body {
-            height:auto;
-            overflow: hidden;
-            background: #FFF;
-            font-size: 8.5pt;
+            html, body {
+                height:auto;
+                overflow: hidden;
+                background: #FFF;
+                font-size: 8.5pt;
+            }
+            .template { width: auto; left:0; top:0; page-break-after: avoid;}
+            .page-break {
+                page-break-after: always;
+            }
         }
-
-        .template { width: auto; left:0; top:0; page-break-after: avoid;}
-    }
     </style>
 </head>
 <body>
     <a href="#" id="btn">Print</a>
+
     <table style="width:100%;" class="template">
         <tr>
             <th style="width:33%; text-align:start;" >
@@ -53,6 +59,7 @@
             </th>
         </tr>
     </table>
+
     <div style="width: 90%;  margin:auto;" class="template">
 
         <h3 style="text-align:start;text-transform: uppercase;">
@@ -87,7 +94,6 @@
                 <td  style="text-align: start; border-bottom: 1px solid black;" colspan="2"> </td>
             </tr>
         </table>
-
 
         <h3 style="text-align:start;">
             2 . Pricing
@@ -286,6 +292,7 @@
         </table>
 
     </div>
+    <div class="page-break"></div>
 
 </body>
 </html>

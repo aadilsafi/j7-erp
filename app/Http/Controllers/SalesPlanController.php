@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\SalesPlanDataTable;
-use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
-use App\Services\Interfaces\AdditionalCostInterface;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use App\Models\SalesPlanTemplate;
 use Illuminate\Support\Facades\Auth;
+use App\DataTables\SalesPlanDataTable;
+use App\Services\Interfaces\AdditionalCostInterface;
+use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
 
 class SalesPlanController extends Controller
 {
@@ -65,14 +66,15 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->printPage(1);
+        return $this->printPage(1,1);
         // return $request->all();
     }
 
-    public function printPage($id)
+    public function printPage($sales_plan_id,$tempalte_id)
     {
         //
-        $salesPlan = SalesPlan::find($id);
+        $salesPlan = SalesPlan::find($sales_plan_id);
+        $template = SalesPlanTemplate::find($tempalte_id);
         $data['unit_no'] = $salesPlan->unit->floor_unit_number;
         $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
         $data['category'] = $salesPlan->unit->type->name;
@@ -88,7 +90,7 @@ class SalesPlanController extends Controller
         $data['indirect_source'] = '';
         $data['instalments'] = $salesPlan->installments;
         $data['additional_costs'] = $salesPlan->additionalCosts;
-        return view('app.sites.floors.units.sales-plan.print',compact('data'));
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.'.$template->slug,compact('data'));
     }
 
     /**

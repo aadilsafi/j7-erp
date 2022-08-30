@@ -133,9 +133,9 @@
                         <td  style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
                             @if ($additionalCost->additionalCost->site_percentage)
-                            {{ number_format(($additionalCost->additionalCost->site_percentage  / 100)  ( $data['rate']  $data['size']))}}
+                            {{ number_format(($additionalCost->additionalCost->site_percentage  / 100) * ( $data['rate'] * $data['size']))}}
                                 @php
-                                    $charges =($additionalCost->additionalCost->site_percentage  / 100)  ( $data['rate']  $data['size']);
+                                    $charges =($additionalCost->additionalCost->site_percentage  / 100) * ( $data['rate'] * $data['size']);
                                 @endphp
                             @else
                             -

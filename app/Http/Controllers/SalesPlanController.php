@@ -10,7 +10,6 @@ use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class SalesPlanController extends Controller
 {
     private $additionalCostInterface;

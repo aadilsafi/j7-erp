@@ -5,6 +5,7 @@ namespace App\Services\SalesPlan;
 use App\Models\{Floor, SalesPlan, Site, Unit};
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Carbon\{Carbon, CarbonPeriod};
+use Illuminate\Support\LazyCollection;
 
 class SalesPlanService implements SalesPlanInterface
 {
@@ -91,6 +92,7 @@ class SalesPlanService implements SalesPlanInterface
 
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)
     {
+        $start = microtime(true);
 
         $installments = [
             'site' => (new Site())->find(decryptParams($site_id)),
@@ -98,9 +100,7 @@ class SalesPlanService implements SalesPlanInterface
             'unit' => (new Unit())->find(decryptParams($unit_id)),
         ];
 
-        // dd($inputs);
-
-        $unchangedData = $inputs['unchangedData'];
+        $unchangedData = isset($inputs['unchangedData']) ? $inputs['unchangedData'] : [];
 
         $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
 
@@ -108,13 +108,12 @@ class SalesPlanService implements SalesPlanInterface
 
         $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use (&$amount, $unchangedData) {
 
-            $filtered = collect($unchangedData)->where('key', $key + 1)->whereIn('field', ['details', 'amount', 'remarks'])->map(function ($item) {
+            $filteredData = LazyCollection::make($unchangedData)->where('key', $key + 1)->whereIn('field', ['details', 'amount', 'remarks'])->map(function ($item) {
                 return [$item['field'] => $item['value']];
             })->values()->reduce(function ($carry, $item) {
                 return array_merge($carry, $item);
             }, []);
 
-            dd($filtered);
             $installmentRow = [
                 'key' => $key + 1,
                 'date' => $date->format('d/m/Y'),
@@ -136,13 +135,13 @@ class SalesPlanService implements SalesPlanInterface
                 'amountReadonly' => false,
                 'remarks' => $installmentRow['remarks'],
                 'remarksShow' => true,
-                'unchangedData' => $unchangedData,
+                'filteredData' => $filteredData,
             ];
 
             $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', $rowData)->render();
 
             return $installmentRow;
-        });
+        })->toArray();
 
         $installments['installments'][] = [
             'row' => $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', [
@@ -160,6 +159,10 @@ class SalesPlanService implements SalesPlanInterface
                 'remarksShow' => false,
             ])->render(),
         ];
+
+        $time_elapsed_secs = microtime(true) - $start;
+
+        return $installments;
     }
 
 

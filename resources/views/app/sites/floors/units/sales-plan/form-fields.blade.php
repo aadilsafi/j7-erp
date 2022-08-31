@@ -256,13 +256,6 @@
                                 <i class="bi bi-calculator"></i>
                                 <span id="calculate_installments">Calculate Installments</span>
                             </button>
-
-                            <button type="button"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light"
-                                onclick="getFormData();">
-                                <i class="bi bi-calculator"></i>
-                                <span id="calculate_installments">Calculate Installments</span>
-                            </button>
                         </div>
                     </div>
                 </div>

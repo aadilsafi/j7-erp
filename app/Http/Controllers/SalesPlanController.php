@@ -8,16 +8,19 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
+use App\Services\Interfaces\AdditionalCostInterface;
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPlanController extends Controller
 {
     private $salesPlanInterface;
+    private $additionalCostInterface;
 
-    public function __construct(SalesPlanInterface $salesPlanInterface)
+    public function __construct(SalesPlanInterface $salesPlanInterface, AdditionalCostInterface $additionalCostInterface)
     {
         $this->salesPlanInterface = $salesPlanInterface;
+        $this->additionalCostInterface = $additionalCostInterface;
     }
 
     /**

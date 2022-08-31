@@ -265,7 +265,7 @@
         }
         var unchangedData = [];
 
-        function calculateInstallments(action = '') {
+        function calculateInstallments() {
 
             showBlockUI('#installments_acard');
 

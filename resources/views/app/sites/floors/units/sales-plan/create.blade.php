@@ -155,15 +155,16 @@
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
                 min: 0,
                 max: 50,
-            }).on("touchspin.on.stopupspin", function() {}).on("touchspin.on.stopdownspin", function() {}).on(
-                "touchspin.on.stopspin",
-                function() {}).on("change", function() {
+            }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
                 0 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
-                    "disabled-max-min")
+                    "disabled-max-min");
+
+                clearTimeout(t);
+                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
             });
 
             $('.installment_type_radio').on('change', function() {
@@ -185,7 +186,7 @@
 
             $(".flatpickr-basic").flatpickr({
                 defaultDate: "today",
-                // minDate: "today",
+                minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d"
@@ -217,10 +218,6 @@
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
                 }
-                // $(`#div-${elementId}`).toggle('fast', 'linear', function() {
-                //     $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
-                // });
-
             });
 
             $('input[id^="percentage-"]').on('change', function() {
@@ -246,10 +243,6 @@
                 let totalDownPayment = parseFloat((unitPrice * percentage) / 100);
 
                 $('#unit_downpayment_total').val(parseFloat(totalDownPayment).toFixed(2));
-
-                setTimeout(() => {
-                    calculateInstallments();
-                }, 1000);
             });
 
             $('#unit_downpayment_percentage').trigger('change');
@@ -275,14 +268,10 @@
             // $('#unit_rate_total').val(new Intl.NumberFormat().format(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
             $('#unit_downpayment_percentage').trigger('change');
-
-            setTimeout(() => {
-                calculateInstallments();
-            }, 1000);
         }
         var unchangedData = [];
 
-        function calculateInstallments() {
+        function calculateInstallments(action = '') {
 
             showBlockUI('#installments_acard');
 
@@ -328,6 +317,7 @@
                     hideBlockUI('#installments_acard');
                 }
             });
+            console.log(action);
         }
 
         function storeUnchangedData(key, field, value) {
@@ -348,10 +338,18 @@
                     value: value
                 });
             }
-
-            setTimeout(() => {
-                calculateInstallments();
-            }, 1000);
         }
+
+        var t = setTimeout(calculateInstallments, 1000);
+        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
+            function() {
+                clearTimeout(t);
+                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+            });
+
+        $('.installment_type_radio').on('change', function() {
+            clearTimeout(t);
+            t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+        });
     </script>
 @endsection

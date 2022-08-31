@@ -38,6 +38,13 @@
             .page-break {
                 page-break-after: always;
             }
+            .installmenttable{
+                page-break-inside: auto;
+            }
+            .installmenttable tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
         }
     </style>
 </head>
@@ -148,7 +155,7 @@
 
         <h3 style="text-transform: uppercase; text-align:center;">Installment Detail</h3>
 
-        <table  style=" width:100%; text-transform: uppercase; border-collapse: collapse;" >
+        <table class="installmenttable"  style=" width:100%; text-transform: uppercase; border-collapse: collapse;" >
             <tr>
                 <th  style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
                     NO

@@ -8,16 +8,19 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
+use App\Services\Interfaces\AdditionalCostInterface;
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPlanController extends Controller
 {
     private $salesPlanInterface;
+    private $additionalCostInterface;
 
-    public function __construct(SalesPlanInterface $salesPlanInterface)
+    public function __construct(SalesPlanInterface $salesPlanInterface, AdditionalCostInterface $additionalCostInterface)
     {
         $this->salesPlanInterface = $salesPlanInterface;
+        $this->additionalCostInterface = $additionalCostInterface;
     }
 
     /**
@@ -30,9 +33,8 @@ class SalesPlanController extends Controller
         $data = [
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id))
+            'unit' => (new Unit())->find(decryptParams($unit_id)),
         ];
-
         return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
     }
 
@@ -74,23 +76,44 @@ class SalesPlanController extends Controller
     {
         //
         $salesPlan = SalesPlan::find($sales_plan_id);
+
         $template = SalesPlanTemplate::find($tempalte_id);
+
         $data['unit_no'] = $salesPlan->unit->floor_unit_number;
+
         $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
+
         $data['category'] = $salesPlan->unit->type->name;
+
         $data['size'] = $salesPlan->unit->gross_area;
-        $data['client_name'] = 'Ali Raza';
+
+        $data['client_name'] = $salesPlan->stakeholder->full_name;
+
         $data['rate'] = $salesPlan->unit->price_sqft;
+
+        $data['down_payment'] = '25';
+
+        $data['discount'] = '5';
+
         $data['sales_person_name'] = Auth::user()->name;
+
         $role = Auth::user()->roles->pluck('name');
+
         $data['sales_person_contact'] = $salesPlan->stakeholder->contact;
+
         $data['sales_person_status'] = $role[0];
+
         $data['sales_person_phone_no'] = Auth::user()->phone_no;
+
         $data['sales_person_sales_type'] = 'Direct';
+
         $data['indirect_source'] = '';
+
         $data['instalments'] = $salesPlan->installments;
+
         $data['additional_costs'] = $salesPlan->additionalCosts;
-        return view('app.sites.floors.units.sales-plan.print',compact('data'));
+
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.'.$template->slug,compact('data'));
     }
 
     /**

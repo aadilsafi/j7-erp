@@ -238,4 +238,5 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
+
 Route::get('/print_sales_plan/{sales_plan_id}/{sales_plan_template_id}', [SalesPlanController::class, 'printPage']);

@@ -143,6 +143,7 @@
 @section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
+        var t = setTimeout(calculateInstallments, 1000);
         $(document).ready(function() {
 
 
@@ -189,7 +190,11 @@
                 minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
-                dateFormat: "Y-m-d"
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    clearTimeout(t);
+                    t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+                },
             });
 
             $('#unit_price').on('change', function() {
@@ -340,7 +345,6 @@
             }
         }
 
-        var t = setTimeout(calculateInstallments, 1000);
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
             function() {
                 clearTimeout(t);

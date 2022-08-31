@@ -243,20 +243,10 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="row g-1">
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <label class="form-label fs-5" for="installments_start_date">Installments Start Date</label>
                         <input type="text" id="installments_start_date" name="installments_start_date"
                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
-                    </div>
-                    <div class="col-md-3">
-                        <div class="h-100 d-flex justify-content-center align-items-end">
-                            <button type="button"
-                                class="btn w-100 btn-relief-outline-primary waves-effect waves-float waves-light"
-                                onclick="calculateInstallments();">
-                                <i class="bi bi-calculator"></i>
-                                <span id="calculate_installments">Calculate Installments</span>
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>

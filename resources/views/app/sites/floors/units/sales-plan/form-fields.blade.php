@@ -7,30 +7,20 @@
         <div class="row mb-1">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="unit_no">Unit No</label>
-                <input type="text" class="form-control form-control-lg @error('unit_no') is-invalid @enderror"
-                    id="unit_no" name="unit_no" placeholder="Unit No" value="{{ $unit->floor_unit_number }}"
-                    readonly />
-                @error('unit_no')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
+                    placeholder="Unit No" value="{{ $unit->floor_unit_number }}" readonly />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="floor_no">Floor No</label>
-                <input type="text" class="form-control form-control-lg @error('floor_no') is-invalid @enderror"
-                    id="floor_no" name="floor_no" placeholder="Floor No" value="{{ $floor->short_label }}" readonly />
-                @error('floor_no')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                    placeholder="Floor No" value="{{ $floor->short_label }}" readonly />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="unit_type">Unit Type</label>
                 <input type="text" class="form-control form-control-lg @error('unit_type') is-invalid @enderror"
-                    id="unit_type" name="unit_type" placeholder="Unit Type" value="{{ $unit->type->name }}" readonly />
-                @error('unit_type')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                    id="unit_type" name="unit[type]" placeholder="Unit Type" value="{{ $unit->type->name }}" readonly />
             </div>
         </div>
 
@@ -39,21 +29,9 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
                 <input type="text" class="form-control form-control-lg @error('unit_size') is-invalid @enderror"
-                    id="unit_size" name="unit_size" placeholder="Unit Size(sq.ft)" value="{{ $unit->gross_area }}"
+                    id="unit_size" name="unit[size]" placeholder="Unit Size(sq.ft)" value="{{ $unit->gross_area }}"
                     readonly />
-                @error('unit_size')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
             </div>
-            {{-- <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="unit_orientation">Unit Orientation</label>
-                <input type="text"
-                    class="form-control form-control-lg @error('unit_orientation') is-invalid @enderror"
-                    id="unit_orientation" name="unit_orientation" placeholder="Unit Orientation" />
-                @error('unit_orientation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
-            </div> --}}
         </div>
 
         <div class="row">
@@ -254,7 +232,7 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="input-group input-group-lg ">
                                 <input type="number" min="0" class="touchspin-icon"
-                                    name="installments[types][value]" value="1" />
+                                    name="installments[types][value]" value="0" />
                             </div>
                         </div>
                     </div>
@@ -278,6 +256,13 @@
                                 <i class="bi bi-calculator"></i>
                                 <span id="calculate_installments">Calculate Installments</span>
                             </button>
+
+                            <button type="button"
+                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light"
+                                onclick="getFormData();">
+                                <i class="bi bi-calculator"></i>
+                                <span id="calculate_installments">Calculate Installments</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -290,7 +275,8 @@
                     <div class="card-body">
                         <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
 
-                            <table class="table table-hover table-borderless" id="installments_table" style="position: relative;">
+                            <table class="table table-hover table-striped table-borderless" id="installments_table"
+                                style="position: relative;">
                                 <thead style="position: sticky; top: 0; z-index: 10;">
                                     <tr class="text-center">
                                         <th scope="col">#</th>
@@ -379,9 +365,8 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text"
-                    class="form-control form-control-lg @error('designation') is-invalid @enderror" id="designation"
-                    name="designation" placeholder="Designation" />
+                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
+                    id="designation" name="designation" placeholder="Designation" />
                 @error('designation')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -410,8 +395,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address"
-                    name="address" placeholder="Address" rows="5"></textarea>
+                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
+                    placeholder="Address" rows="5"></textarea>
                 @error('address')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -465,8 +450,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text"
-                    class="form-control form-control-lg @error('father_name') is-invalid @enderror"
+                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
                     id="father_name" name="father_name" placeholder="Father Name" />
                 @error('father_name')
                     <div class="invalid-tooltip">{{ $message }}</div>
@@ -475,9 +459,8 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text"
-                    class="form-control form-control-lg @error('occupation') is-invalid @enderror" id="occupation"
-                    name="occupation" placeholder="Occupation" />
+                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                    id="occupation" name="occupation" placeholder="Occupation" />
                 @error('occupation')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
@@ -488,8 +471,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text"
-                    class="form-control form-control-lg @error('designation') is-invalid @enderror"
+                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
                     id="designation" name="designation" placeholder="Designation" />
                 @error('designation')
                     <div class="invalid-tooltip">{{ $message }}</div>
@@ -519,8 +501,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address"
-                    name="address" placeholder="Address" rows="5"></textarea>
+                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
+                    placeholder="Address" rows="5"></textarea>
                 @error('address')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror

@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
-use App\Models\{SalesPlan, AdditionalCost, Floor, Site, Unit};
-use App\Services\Interfaces\AdditionalCostInterface;
+use App\Models\{SalesPlan, Floor, Site, Unit};
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use App\Models\SalesPlanTemplate;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPlanController extends Controller
 {
-    private $additionalCostInterface;
+    private $salesPlanInterface;
 
-    public function __construct(AdditionalCostInterface $additionalCostInterface)
+    public function __construct(SalesPlanInterface $salesPlanInterface)
     {
-        $this->additionalCostInterface = $additionalCostInterface;
+        $this->salesPlanInterface = $salesPlanInterface;
     }
 
     /**
@@ -65,14 +66,15 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->printPage(1);
+        return $this->printPage(1,1);
         // return $request->all();
     }
 
-    public function printPage($id)
+    public function printPage($sales_plan_id,$tempalte_id)
     {
         //
-        $salesPlan = SalesPlan::find($id);
+        $salesPlan = SalesPlan::find($sales_plan_id);
+        $template = SalesPlanTemplate::find($tempalte_id);
         $data['unit_no'] = $salesPlan->unit->floor_unit_number;
         $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
         $data['category'] = $salesPlan->unit->type->name;
@@ -138,39 +140,10 @@ class SalesPlanController extends Controller
 
     public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $data = [
-            'site' => decryptParams($site_id),
-            'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id)),
-
-        ];
-
         $inputs = $request->input();
 
-        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
+        $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
-        $data['amounts'] = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
-
-        dd($inputs, $installmentDates, $data);
-
-        return apiSuccessResponse($data);
-    }
-
-    private function baseInstallment($total, $divide)
-    {
-        return round($total / $divide);
-    }
-
-    private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
-    {
-        $startDate = Carbon::parse($requrestDate);
-
-        $endDate =  (new Carbon($requrestDate))->add((($length - 1) * $daysCount), $rangeBy);
-
-        $period = CarbonPeriod::create($startDate, ($daysCount . ' ' . $rangeBy), $endDate);
-
-        $dates = $period->toArray();
-
-        return $dates;
+        return apiSuccessResponse($installments);
     }
 }

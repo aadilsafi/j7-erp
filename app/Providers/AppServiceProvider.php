@@ -22,6 +22,7 @@ use App\Services\{
     UserBatchService,
     RoleTypesService
 };
+use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
         $this->app->bind(UserBatchInterface::class, UserBatchService::class);
         $this->app->bind(RoleTypesInterface::class, RoleTypesService::class);
+        $this->app->bind(SalesPlanInterface::class, SalesPlanService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

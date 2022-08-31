@@ -256,20 +256,13 @@
                                 <i class="bi bi-calculator"></i>
                                 <span id="calculate_installments">Calculate Installments</span>
                             </button>
-
-                            <button type="button"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light"
-                                onclick="getFormData();">
-                                <i class="bi bi-calculator"></i>
-                                <span id="calculate_installments">Calculate Installments</span>
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mb-1">
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                     <div class="card-body">

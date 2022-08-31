@@ -165,30 +165,8 @@ class SalesPlanController extends Controller
     {
         $inputs = $request->input();
 
-        $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
+        $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
-        $data['amounts'] = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
-
-        dd($inputs, $installmentDates, $data);
-
-        return apiSuccessResponse($data);
-    }
-
-    private function baseInstallment($total, $divide)
-    {
-        return round($total / $divide);
-    }
-
-    private function dateRanges($requrestDate, $length = 1, $daysCount = 1, $rangeBy = 'days')
-    {
-        $startDate = Carbon::parse($requrestDate);
-
-        $endDate =  (new Carbon($requrestDate))->add((($length - 1) * $daysCount), $rangeBy);
-
-        $period = CarbonPeriod::create($startDate, ($daysCount . ' ' . $rangeBy), $endDate);
-
-        $dates = $period->toArray();
-
-        return $dates;
+        return apiSuccessResponse($installments);
     }
 }

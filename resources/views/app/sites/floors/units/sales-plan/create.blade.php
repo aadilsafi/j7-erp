@@ -246,6 +246,10 @@
                 let totalDownPayment = parseFloat((unitPrice * percentage) / 100);
 
                 $('#unit_downpayment_total').val(parseFloat(totalDownPayment).toFixed(2));
+
+                setTimeout(() => {
+                    calculateInstallments();
+                }, 1000);
             });
 
             $('#unit_downpayment_percentage').trigger('change');
@@ -271,6 +275,10 @@
             // $('#unit_rate_total').val(new Intl.NumberFormat().format(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
             $('#unit_downpayment_percentage').trigger('change');
+
+            setTimeout(() => {
+                calculateInstallments();
+            }, 1000);
         }
         var unchangedData = [];
 
@@ -340,6 +348,10 @@
                     value: value
                 });
             }
+
+            setTimeout(() => {
+                calculateInstallments();
+            }, 1000);
         }
     </script>
 @endsection

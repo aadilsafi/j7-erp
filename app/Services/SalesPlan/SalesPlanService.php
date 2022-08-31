@@ -91,7 +91,6 @@ class SalesPlanService implements SalesPlanInterface
 
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)
     {
-        $start = microtime(true);
 
         $installments = [
             'site' => (new Site())->find(decryptParams($site_id)),
@@ -99,18 +98,23 @@ class SalesPlanService implements SalesPlanInterface
             'unit' => (new Unit())->find(decryptParams($unit_id)),
         ];
 
-        dd($inputs);
+        // dd($inputs);
 
         $unchangedData = $inputs['unchangedData'];
-        // dd($unchangedData);
+
         $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
 
         $amount = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
 
-        dd(collect($unchangedData)[1]['remark']);
-
         $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use (&$amount, $unchangedData) {
 
+            $filtered = collect($unchangedData)->where('key', $key + 1)->whereIn('field', ['details', 'amount', 'remarks'])->map(function ($item) {
+                return [$item['field'] => $item['value']];
+            })->values()->reduce(function ($carry, $item) {
+                return array_merge($carry, $item);
+            }, []);
+
+            dd($filtered);
             $installmentRow = [
                 'key' => $key + 1,
                 'date' => $date->format('d/m/Y'),

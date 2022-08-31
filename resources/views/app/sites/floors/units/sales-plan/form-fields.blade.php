@@ -262,7 +262,7 @@
             </div>
         </div>
 
-        <div class="row mb-1">
+        <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                     <div class="card-body">

@@ -104,7 +104,10 @@ class SalesPlanService implements SalesPlanInterface
 
         $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
 
-        $amount = $this->baseInstallment($inputs['installment_amount'], $inputs['length']);
+        $unchangedAmont = LazyCollection::make($unchangedData)->where('field', 'amount')->sum('value');
+        $unchangedAmontCount = LazyCollection::make($unchangedData)->where('field', 'amount')->count();
+// dd($unchangedAmont, $unchangedAmontCount);
+        $amount = $this->baseInstallment(($inputs['installment_amount'] - $unchangedAmont), ($inputs['length'] - $unchangedAmontCount));
 
         $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use (&$amount, $unchangedData) {
 
@@ -142,23 +145,24 @@ class SalesPlanService implements SalesPlanInterface
 
             return $installmentRow;
         })->toArray();
-
-        $installments['installments'][] = [
-            'row' => $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', [
-                'key' => '',
-                'keyShow' => false,
-                'date' => '',
-                'dateShow' => false,
-                'detail' => '',
-                'detailShow' => false,
-                'amount' => $inputs['installment_amount'],
-                'amountName' => false,
-                'amountShow' => true,
-                'amountReadonly' => true,
-                'remarks' => '',
-                'remarksShow' => false,
-            ])->render(),
-        ];
+        if ($inputs['length'] > 0) {
+            $installments['installments'][] = [
+                'row' => $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', [
+                    'key' => '',
+                    'keyShow' => false,
+                    'date' => '',
+                    'dateShow' => false,
+                    'detail' => '',
+                    'detailShow' => false,
+                    'amount' => $inputs['installment_amount'],
+                    'amountName' => false,
+                    'amountShow' => true,
+                    'amountReadonly' => true,
+                    'remarks' => '',
+                    'remarksShow' => false,
+                ])->render(),
+            ];
+        }
 
         $time_elapsed_secs = microtime(true) - $start;
 
@@ -168,6 +172,9 @@ class SalesPlanService implements SalesPlanInterface
 
     private function baseInstallment($total, $divide)
     {
+        if ($divide == 0) {
+            return 0;
+        }
         return round($total / $divide);
     }
 

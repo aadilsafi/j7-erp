@@ -185,7 +185,7 @@
 
             $(".flatpickr-basic").flatpickr({
                 defaultDate: "today",
-                minDate: "today",
+                // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d"
@@ -208,9 +208,18 @@
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
 
-                $(`#div-${elementId}`).toggle('fast', 'linear', function() {
-                    $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
-                });
+                if ($(this).is(':checked')) {
+                    $(`#div-${elementId}`).show('fast', 'linear', function() {
+                        $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
+                    });
+                } else {
+                    $(`#div-${elementId}`).hide('fast', 'linear', function() {
+                        $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
+                    });
+                }
+                // $(`#div-${elementId}`).toggle('fast', 'linear', function() {
+                //     $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
+                // });
 
             });
 
@@ -279,7 +288,6 @@
             // installment_amount: 10708425,
             // length: 16,
 
-
             let data = {
                 length: parseInt($(".touchspin-icon").val()),
                 startDate: installments_start_date,
@@ -295,6 +303,7 @@
                 data: data,
                 success: function(response) {
                     let InstallmentRows = '';
+                    $('#installments_table tbody#dynamic_installment_rows').empty();
                     if (response.status) {
 
                         for (let row of response.data.installments) {
@@ -315,6 +324,7 @@
 
         function storeUnchangedData(key, field, value) {
 
+            console.log(unchangedData);
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -323,11 +333,13 @@
                 unchangedData.splice(index, 1);
             }
 
-            unchangedData.push({
-                key: key,
-                field: field,
-                value: value
-            });
+            if (value.length > 0) {
+                unchangedData.push({
+                    key: key,
+                    field: field,
+                    value: value
+                });
+            }
         }
     </script>
 @endsection

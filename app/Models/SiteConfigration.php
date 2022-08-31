@@ -41,6 +41,8 @@ class SiteConfigration extends Model
         'site_max_floors' => 'required',
         'floor_prefix' => 'required',
         'unit_number_digits' => 'required',
+        'site_token' => 'required|min:0|max:100|numeric',
+        'site_down_payment' => 'required|min:0|max:100|numeric',
     ];
 
     public function site()

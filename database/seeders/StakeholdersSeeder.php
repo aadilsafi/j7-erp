@@ -18,7 +18,7 @@ class StakeholdersSeeder extends Seeder
         (new Stakeholder())->insert([
             [
                 'site_id' => 1,
-                'full_name' => 'Ali Raza',
+                'full_name' => 'Zain Ali',
                 'father_name' => 'Hassan Raza',
                 'occupation' => 'Web Developer',
                 'designation' => 'Laravel Developer',

@@ -37,7 +37,14 @@
             }
             .template { width: auto; left:0; top:0; page-break-after: avoid;}
             .page-break {
-                page-break-after: always;
+                page-break-inside: always;
+            }
+            .installmenttable{
+                page-break-inside: auto;
+            }
+            .installmenttable tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
             }
         }
     </style>
@@ -70,28 +77,50 @@
             <tr >
                 <th  style="text-align: start; white-space: nowrap;">Unit No </th>
                 <td  style="text-align: center; border-bottom: 1px solid black;">
+                    @if ( $data['unit_no'])
                       {{ $data['unit_no'] }}
+                    @else
+                        -
+                    @endif
                 </td>
                 <th  style="">&nbsp;&nbsp;&nbsp;Floor </th>
                 <td  style="text-align: center;border-bottom: 1px solid black;">
-                    &nbsp;&nbsp;{{ $data['floor_short_label'] }}&nbsp;
+                    @if ( $data['floor_short_label'])
+                        &nbsp;&nbsp;{{ $data['floor_short_label'] }}&nbsp;
+                    @else
+                        -
+                    @endif
                 </td>
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Category </th>
                 <td  style="white-space: nowrap; text-align: center;border-bottom: 1px solid black;">
-                      {{ $data['category']}}
+                    @if ( $data['category'])
+                        {{ $data['category']}}
+                    @else
+                        -
+                    @endif
                 </td>
                 <th  style="text-align: start; white-space: nowrap;">&nbsp;&nbsp;&nbsp;Size (sq.ft) </th>
                 <td  style="text-align: center;border-bottom: 1px solid black;">
-                      {{ $data['size']}}
+                        @if ($data['size'])
+                          {{ $data['size'] }}
+                        @else
+                            -
+                        @endif
                 </td>
             </tr>
             <tr>
                 <th  style="text-align: start; white-space: nowrap;" colspan="2">Client Name </th>
                 <td  style="text-align: center; border-bottom: 1px solid black;" colspan="2">
-                    {{ $data['client_name'] }}
+                    @if ($data['client_name'])
+                        {{ $data['client_name'] }}
+                    @else
+                        -
+                    @endif
                 </td>
                 <th  style=" white-space: nowrap;" colspan="2">Unit Orientation </th>
-                <td  style="text-align: start; border-bottom: 1px solid black;" colspan="2"> </td>
+                <td  style="text-align: start; border-bottom: 1px solid black;" colspan="2">
+
+                </td>
             </tr>
         </table>
 
@@ -103,17 +132,31 @@
             <tr style="text-align: start;">
                 <th  style="text-align: start;">Rate </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ number_format($data['rate']) }}&nbsp;&nbsp;
+                    @if ($data['rate'])
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {{ number_format($data['rate']) }}
+                        &nbsp;&nbsp;
+                    @else
+                        -
+                    @endif
+
                 </td>
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ number_format($data['rate'] * $data['size'] ) }}
+                        {{ number_format($data['rate'] * $data['size'] ) }}
                     &nbsp;&nbsp;
                 </td>
             </tr>
             @if ($data['additional_costs'])
+                @php
+                    $totalAdditionalCost = 0.0;
+                    $totalDiscount = 0.0;
+                @endphp
                 @foreach ( $data['additional_costs'] as $additionalCost )
+                    @php
+                        $totalAdditionalCost += ($additionalCost->additionalCost->site_percentage  / 100) * ( $data['rate'] * $data['size']);
+                    @endphp
                     <tr style="text-align: start;">
                         <th  style="text-align: start; white-space: nowrap;">
                             @if ($additionalCost->additionalCost->name)
@@ -130,16 +173,10 @@
                             &nbsp;&nbsp;
                         </td>
                         <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
-                        @php
-                            $charges = 0;
-                        @endphp
                         <td  style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
                             @if ($additionalCost->additionalCost->site_percentage)
                             {{ number_format(($additionalCost->additionalCost->site_percentage  / 100) * ( $data['rate'] * $data['size']))}}
-                                @php
-                                    $charges =($additionalCost->additionalCost->site_percentage  / 100) * ( $data['rate'] * $data['size']);
-                                @endphp
                             @else
                             -
                             @endif
@@ -151,11 +188,25 @@
             <tr>
                 <th  style="text-align: start; ">Discounts </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    0.0 % &nbsp;&nbsp;
+                    @if ($data['discount'])
+                        {{ $data['discount'] }} %
+                    @else
+                        -
+                    @endif
+                    &nbsp;&nbsp;
                 </td>
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    &nbsp;&nbsp; - &nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    @if ($data['discount'])
+                        {{ ($data['discount'] / 100) * ( $data['rate'] * $data['size'])}}
+                        @php
+                            $totalDiscount = ($data['discount'] / 100) * ( $data['rate'] * $data['size']);
+                        @endphp
+                    @else
+                        -
+                    @endif
+                    &nbsp;&nbsp;
                 </td>
             </tr>
             <tr>
@@ -163,26 +214,35 @@
 
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Total </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    &nbsp;&nbsp;
-
-                    - &nbsp;&nbsp;
+                    &nbsp;&nbsp; {{  number_format($totalAdditionalCost + ($data['rate'] * $data['size']) - $totalDiscount)  }} &nbsp;&nbsp;
                 </td>
             </tr>
             <tr>
                 <th  style="text-align: start; ">Down Payment % </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    0.0 % &nbsp;&nbsp;
+                    @if ($data['down_payment'])
+                        {{ $data['down_payment'] }} %
+                    @else
+                        0.0 %
+                    @endif
+                    &nbsp;&nbsp;
                 </td>
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    &nbsp;&nbsp; - &nbsp;&nbsp;
+                    &nbsp;&nbsp;
+                    @if ($data['down_payment'])
+                    {{ number_format(( $data['down_payment']  / 100) * ( $totalAdditionalCost + ($data['rate'] * $data['size']) ) - $totalDiscount)}}
+                    @else
+                        -
+                    @endif
+                    &nbsp;&nbsp;
                 </td>
             </tr>
 
         </table>
 
         <h3 style="text-align: start;">
-            3 . Sales Resource
+            3 . Sales Source
         </h3>
 
         <table style="width:100%;text-transform: uppercase;" >
@@ -218,7 +278,7 @@
             4 . Installment Details
         </h3>
 
-        <table  style=" width:100%; text-transform: uppercase; border-collapse: collapse;" >
+        <table class="installmenttable"  style=" width:100%; text-transform: uppercase; border-collapse: collapse;" >
             <tr>
                 <th  style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
                     NO
@@ -236,6 +296,9 @@
                     Remarks
                 </th>
             </tr>
+            @php
+                $totalInstallmentAmount = 0;
+            @endphp
             @foreach ($data['instalments'] as $key => $instalment )
                 <tr>
                     <th   style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
@@ -262,12 +325,15 @@
                         @endif
                     </td>
                 </tr>
+                @php
+                    $totalInstallmentAmount = $totalInstallmentAmount +  $instalment->amount;
+                @endphp
             @endforeach
                 <tr>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
-                    <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">{{ number_format($data['rate'] * $data['size']) }}</th>
+                    <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;"> {{ number_format($totalInstallmentAmount) }}</th>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                 </tr>
         </table>
@@ -292,7 +358,6 @@
         </table>
 
     </div>
-    <div class="page-break"></div>
 
 </body>
 </html>

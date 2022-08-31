@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\SalesPlan;
 use Illuminate\Support\Str;
+use App\Models\SalesPlanTemplate;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Spatie\Permission\Models\Role;
@@ -28,6 +29,12 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('check', function ($unit) {
                 return $unit;
             })
+            ->editColumn('user_id', function ($unit) {
+                return $unit->user->name;
+            })
+            ->editColumn('stakeholder_id', function ($unit) {
+                return $unit->stakeholder->full_name;
+            })
             ->editColumn('created_at', function ($unit) {
                 return editDateColumn($unit->created_at);
             })
@@ -35,7 +42,8 @@ class SalesPlanDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                return view('app.sites.floors.units.actions', ['site_id' => $unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id]);
+                $sales_plan_template = SalesPlanTemplate::all();
+                return view('app.sites.floors.units.actions', ['site_id' => $unit->unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id ,'sales_plan_templates' =>  $sales_plan_template ]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

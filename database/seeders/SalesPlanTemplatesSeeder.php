@@ -20,15 +20,18 @@ class SalesPlanTemplatesSeeder extends Seeder
             [
                 'name' => 'Signature Sales Plan',
                 'slug' => 'signature-sales-plan',
+                'image' => '/images/SalesTemplate/signature.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'J7-Global Sales Plan',
                 'slug' => 'j7-global-sales-plan',
+                'image' => '/images/SalesTemplate/j7global.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
         ]);
 
     }

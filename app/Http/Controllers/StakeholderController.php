@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Stakeholder\Interface\StakeholderInterface;
 use Illuminate\Http\Request;
 
 class StakeholderController extends Controller
 {
+    private $stakeholderInterface;
+
+    public function __construct(
+        StakeholderInterface $stakeholderInterface
+    ) {
+        $this->stakeholderInterface = $stakeholderInterface;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,5 +89,15 @@ class StakeholderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ajaxGetById(Request $request, $site_id, $stakeholder_id)
+    {
+        if ($request->ajax()) {
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id);
+            return apiSuccessResponse($stakeholder);
+        } else {
+            abort(403);
+        }
     }
 }

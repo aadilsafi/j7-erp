@@ -282,7 +282,7 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" id="stakeholders_card">
     <div class="card-header">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
     </div>
@@ -292,26 +292,13 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                <select class="select2-size-lg form-select" id="stackholders" name="stackholders">
-                    <option value="0" selected>New Stakeholder</option>
-                    <option value="1">Stackholders</option>
-                    <option value="1">Stackholders1</option>
-                    <option value="1">Stackholders2</option>
-                    <option value="1">Stackholders3</option>
-                    <option value="1">Stackholders4</option>
-                    <option value="1">Stackholders5</option>
-                    <option value="1">Stackholders6</option>
-                    <option value="1">Stackholders7</option>
-                    <option value="1">Stackholders8</option>
-                    <option value="1">Stackholders9</option>
-                    <option value="1">Stackholders0</option>
-                    <option value="1">Stackholders12</option>
-                    <option value="1">Stackholders12</option>
-
+                <select class="form-select" id="stackholders" name="stackholders">
+                    <option value="0">Create new Stakeholder...</option>
+                   @forelse ($stakeholders as $stakeholder)
+                    <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }}</option>
+                   @empty
+                   @endforelse
                 </select>
-                @error('stackholders')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
             </div>
         </div>
 
@@ -388,7 +375,7 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" >
     <div class="card-header">
         <h3>4. SALES SOURCE</h3>
     </div>
@@ -397,8 +384,8 @@
 
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                <select class="select2-size-lg form-select" id="stackholders" name="stackholders">
+                <label class="form-label" style="font-size: 15px" for="sales_source">Stakeholders</label>
+                <select class="form-select" id="sales_source" name="sales_source">
                     <option value="0" selected>New Stakeholder</option>
                     <option value="1">Stackholders</option>
                     <option value="1">Stackholders1</option>
@@ -415,9 +402,6 @@
                     <option value="1">Stackholders12</option>
 
                 </select>
-                @error('stackholders')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
             </div>
         </div>
 

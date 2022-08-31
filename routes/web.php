@@ -15,6 +15,7 @@ use App\Http\Controllers\{
     testController,
     UnitController,
     PrintSalesPlanController,
+    StakeholderController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -209,6 +210,25 @@ Route::group([
 
                         Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
                     });
+                });
+
+                //Stakeholders Routes
+                Route::group(['prefix' => 'stakeholders', 'as' => 'stakeholders.'], function () {
+                    Route::get('/', [StakeholderController::class, 'index'])->name('index');
+
+                    Route::get('create', [StakeholderController::class, 'create'])->name('create');
+                    Route::post('store', [StakeholderController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [StakeholderController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
+                        Route::put('update', [StakeholderController::class, 'update'])->name('update');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+
                 });
             });
         });

@@ -58,7 +58,13 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.floors.units.sales-plan.form-fields', ['site' => $site, 'floor' => $floor, 'unit' => $unit, 'additionalCosts' => $additionalCosts]) }}
+                {{ view('app.sites.floors.units.sales-plan.form-fields', [
+                    'site' => $site,
+                    'floor' => $floor,
+                    'unit' => $unit,
+                    'additionalCosts' => $additionalCosts,
+                    'stakeholders' => $stakeholders,
+                ]) }}
 
             </div>
 
@@ -145,6 +151,45 @@
         window['moment-range'].extendMoment(moment);
         var t = setTimeout(calculateInstallments, 1000);
         $(document).ready(function() {
+
+            var e = $("#sales_source");
+            e.wrap('<div class="position-relative"></div>')
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            });
+
+            var e = $("#stackholders");
+            e.wrap('<div class="position-relative"></div>')
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).on("change", function(e) {
+
+                showBlockUI('#stakeholders_card');
+
+                let stakeholder_id = $(this).val();
+                let responseData = {}
+                $.ajax({
+                    url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site->id), 'id' => ':id']) }}"
+                        .replace(':id', stakeholder_id),
+                    type: 'GET',
+                    data: {},
+                    success: function(response) {
+                        console.log(response);
+                        if (response.status) {}
+                        hideBlockUI('#stakeholders_card');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#stakeholders_card');
+                    }
+                });
+            });
 
 
             var installmentsRowAction = '';
@@ -322,7 +367,7 @@
                     hideBlockUI('#installments_acard');
                 }
             });
-            console.log(action);
+            // console.log(action);
         }
 
         function storeUnchangedData(key, field, value) {

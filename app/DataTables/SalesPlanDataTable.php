@@ -43,7 +43,7 @@ class SalesPlanDataTable extends DataTable
             })
             ->editColumn('actions', function ($unit) {
                 $sales_plan_template = SalesPlanTemplate::all();
-                return view('app.sites.floors.units.actions', ['site_id' => $unit->unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id ,'sales_plan_templates' =>  $sales_plan_template ]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $unit->unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id ,'sales_plan_templates' =>  $sales_plan_template ]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

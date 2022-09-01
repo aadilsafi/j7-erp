@@ -49,6 +49,12 @@
                 id="floors-units-sales-plan-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
+
+            {{-- Printing Modal --}}
+
+            @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+                'sales_plan_templates' => $sales_plan_templates,
+            ])
         </div>
     </div>
 

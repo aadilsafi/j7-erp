@@ -64,6 +64,7 @@
                     'unit' => $unit,
                     'additionalCosts' => $additionalCosts,
                     'stakeholders' => $stakeholders,
+                    'user' => $user,
                 ]) }}
 
             </div>
@@ -152,17 +153,8 @@
         var t = setTimeout(calculateInstallments, 1000);
         $(document).ready(function() {
 
-            var e = $("#sales_source");
-            e.wrap('<div class="position-relative"></div>')
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            });
-
             var e = $("#stackholders");
-            e.wrap('<div class="position-relative"></div>')
+            e.wrap('<div class="position-relative"></div>');
             e.select2({
                 dropdownAutoWidth: !0,
                 dropdownParent: e.parent(),
@@ -173,15 +165,37 @@
                 showBlockUI('#stakeholders_card');
 
                 let stakeholder_id = $(this).val();
-                let responseData = {}
+
+                let stakeholderData = {
+                    id: 0,
+                    full_name: '',
+                    father_name: '',
+                    occupation: '',
+                    designation: '',
+                    cnic: '',
+                    contact: '',
+                    address: '',
+                }
+
                 $.ajax({
                     url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site->id), 'id' => ':id']) }}"
                         .replace(':id', stakeholder_id),
                     type: 'GET',
                     data: {},
                     success: function(response) {
-                        console.log(response);
-                        if (response.status) {}
+                        if (response.status) {
+                            if (response.data) {
+                                stakeholderData = response.data;
+                            }
+                            $('#stackholder_id').val(stakeholderData.id);
+                            $('#stackholder_full_name').val(stakeholderData.full_name);
+                            $('#stackholder_father_name').val(stakeholderData.father_name);
+                            $('#stackholder_occupation').val(stakeholderData.occupation);
+                            $('#stackholder_designation').val(stakeholderData.designation);
+                            $('#stackholder_cnic').val(stakeholderData.cnic);
+                            $('#stackholder_contact').val(stakeholderData.contact);
+                            $('#stackholder_address').text(stakeholderData.address);
+                        }
                         hideBlockUI('#stakeholders_card');
                     },
                     error: function(errors) {

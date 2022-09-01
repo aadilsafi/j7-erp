@@ -58,6 +58,7 @@ class SalesPlanController extends Controller
                 'unit' => (new Unit())->with('status', 'type')->find(decryptParams($unit_id)),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'stakeholders' => $this->stakeholderInterface->getByAll(decryptParams($site_id)),
+                'user' => auth()->user(),
             ];
 
             // dd($data);
@@ -75,8 +76,8 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request)
     {
+        return $request->all();
         return $this->printPage(1, 1);
-        // return $request->all();
     }
 
     /**

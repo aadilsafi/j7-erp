@@ -152,10 +152,9 @@ Route::group([
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
+
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
-                            Route::get('/', [
-                                UnitController::class, 'index'
-                            ])->name('index');
+                            Route::get('/', [UnitController::class, 'index'])->name('index');
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
@@ -164,8 +163,8 @@ Route::group([
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
 
                             Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy-selected');
-                            Route::group(['prefix' => '/{id}'], function () {
 
+                            Route::group(['prefix' => '/{id}'], function () {
                                 Route::get('edit', [UnitController::class, 'edit'])->name('edit');
                                 Route::put('update', [UnitController::class, 'update'])->name('update');
                             });
@@ -189,6 +188,8 @@ Route::group([
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
+
+                                        Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
                                     });
                                 });
                             });
@@ -258,5 +259,3 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
-
-Route::get('/print_sales_plan/{sales_plan_id}/{sales_plan_template_id}', [SalesPlanController::class, 'printPage']);

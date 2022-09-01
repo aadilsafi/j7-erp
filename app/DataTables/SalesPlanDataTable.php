@@ -42,7 +42,8 @@ class SalesPlanDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                $sales_plan_template = SalesPlanTemplate::all();
+                $sales_plan_template = (new SalesPlanTemplate())->all();
+                // dd($sales_plan_template);
                 return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $unit->unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id ,'sales_plan_templates' =>  $sales_plan_template ]);
             })
             ->setRowId('id')

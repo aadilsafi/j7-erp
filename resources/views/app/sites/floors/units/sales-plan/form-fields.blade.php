@@ -282,7 +282,8 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" id="stakeholders_card">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+    id="stakeholders_card">
     <div class="card-header">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
     </div>
@@ -294,186 +295,116 @@
                 <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
                 <select class="form-select" id="stackholders" name="stackholders">
                     <option value="0">Create new Stakeholder...</option>
-                   @forelse ($stakeholders as $stakeholder)
-                    <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }}</option>
-                   @empty
-                   @endforelse
+                    @forelse ($stakeholders as $stakeholder)
+                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }}</option>
+                    @empty
+                    @endforelse
                 </select>
             </div>
         </div>
 
         <div class="row mb-1">
+            <input type="hidden" id="stackholder_id" name="stackholder_id" value="0" />
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="full_name">Full Name</label>
-                <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                    id="full_name" name="full_name" placeholder="Full Name" />
-                @error('full_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
+                    name="stackholder_full_name" placeholder="Full Name" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                    id="father_name" name="father_name" placeholder="Father Name" />
-                @error('father_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
+                    name="stackholder_father_name" placeholder="Father Name" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation" />
-                @error('occupation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
+                    name="stackholder_occupation" placeholder="Occupation" />
             </div>
         </div>
 
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                    id="designation" name="designation" placeholder="Designation" />
-                @error('designation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_designation"
+                    name="stackholder_designation" placeholder="Designation" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC" />
-                @error('cnic')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
+                    name="stackholder_cnic" placeholder="CNIC" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="contact">Contact</label>
-                <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                    id="contact" name="contact" placeholder="Contact" />
-                @error('contact')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_contact"
+                    name="stackholder_contact" placeholder="Contact" />
             </div>
         </div>
 
         <div class="row mb-1">
-
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
+                <label class="form-label fs-5" for="stackholder_address">Address</label>
+                <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder_address"
                     placeholder="Address" rows="5"></textarea>
-                @error('address')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
             </div>
         </div>
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" >
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
         <h3>4. SALES SOURCE</h3>
     </div>
 
     <div class="card-body">
-
-        <div class="row mb-1">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label" style="font-size: 15px" for="sales_source">Stakeholders</label>
-                <select class="form-select" id="sales_source" name="sales_source">
-                    <option value="0" selected>New Stakeholder</option>
-                    <option value="1">Stackholders</option>
-                    <option value="1">Stackholders1</option>
-                    <option value="1">Stackholders2</option>
-                    <option value="1">Stackholders3</option>
-                    <option value="1">Stackholders4</option>
-                    <option value="1">Stackholders5</option>
-                    <option value="1">Stackholders6</option>
-                    <option value="1">Stackholders7</option>
-                    <option value="1">Stackholders8</option>
-                    <option value="1">Stackholders9</option>
-                    <option value="1">Stackholders0</option>
-                    <option value="1">Stackholders12</option>
-                    <option value="1">Stackholders12</option>
-
-                </select>
-            </div>
-        </div>
-
         <div class="row mb-1">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="full_name">Full Name</label>
-                <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                    id="full_name" name="full_name" placeholder="Full Name" />
-                @error('full_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_full_name">Sales Person</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_full_name"
+                    placeholder="Sales Person" value="{{ $user->name }}" disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                    id="father_name" name="father_name" placeholder="Father Name" />
-                @error('father_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+
+                @php
+                    $roles = $user->roles->pluck('name')->toArray();
+                    $roles = implode(', ', $roles);
+                @endphp
+
+                <label class="form-label fs-5" for="sales_source_status">Status</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_status"
+                    name="sales_source_status" placeholder="Status" value="{{ $roles }}" disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation" />
-                @error('occupation')
+                <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
+                    name="sales_source_contact_no" placeholder="Contact No" value="{{ $user->phone_no }}" disabled />
+                {{-- @error('occupation')
                     <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                @enderror --}}
             </div>
         </div>
 
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                    id="designation" name="designation" placeholder="Designation" />
-                @error('designation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_sales_type">Sales Type</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_sales_type"
+                    name="sales_source_sales_type" placeholder="Sales Type" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC" />
-                @error('cnic')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_indirect_source">Indirect Source</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_indirect_source"
+                    name="sales_source_indirect_source" placeholder="Indirect Source" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="contact">Contact</label>
-                <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                    id="contact" name="contact" placeholder="Contact" />
-                @error('contact')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
-            </div>
         </div>
 
-        <div class="row mb-1">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
-                    placeholder="Address" rows="5"></textarea>
-                @error('address')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
     </div>
 </div>

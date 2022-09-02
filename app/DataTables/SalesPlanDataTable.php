@@ -56,7 +56,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function query(SalesPlan $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('unit_id', $this->unit->id);
     }
 
     /**

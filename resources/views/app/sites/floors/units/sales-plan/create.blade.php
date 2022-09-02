@@ -144,6 +144,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
     {{-- <script src="{{ asset('app-assets') }}/pages/create-sales-plan.min.js"></script> --}}
 @endsection
 

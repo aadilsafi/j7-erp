@@ -169,7 +169,7 @@
                                     <span class="input-group-text"><i data-feather='percent'></i></span>
                                     <input type="number" class="form-control form-control-lg"
                                         id="unit_downpayment_percentage" name="unit_downpayment_percentage"
-                                        placeholder="Down Payment %" min="0" max="100" value="25.0"
+                                        placeholder="Down Payment %" min="0" max="100" value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
                                         step="0.1" />
                                 </div>
                             </div>

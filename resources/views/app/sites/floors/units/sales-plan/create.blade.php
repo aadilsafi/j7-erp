@@ -217,6 +217,9 @@
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
                 min: 0,
                 max: 50,
+            }).on("touchspin.on.stopspin", function() {
+                clearTimeout(t);
+                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
             }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
@@ -224,9 +227,6 @@
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
                     "disabled-max-min");
-
-                clearTimeout(t);
-                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
             });
 
             $('.installment_type_radio').on('change', function() {
@@ -416,5 +416,38 @@
             clearTimeout(t);
             t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
         });
+
+        // var validator = $("#create-sales-plan-form").validate({
+        //     debug: true,
+        //     rules: {
+        //         'unit[no]': {
+        //             required: true
+        //         },
+        //         'unit[floor_no]': {
+        //             required: true
+        //         },
+        //         'unit[type]': {
+        //             required: true
+        //         },
+        //         'unit[size]': {
+        //             required: true
+        //         },
+        //         'unit[price][unit]': {
+        //             required: true
+        //         },
+        //         'unit[price][total]': {
+        //             required: true
+        //         },
+        //     },
+        //     submitHandler: function(form) {
+        //         // do other things for a valid form
+        //         form.submit();
+        //     }
+        // });
+
+        // validator.resetForm();
+        // validator.showErrors({
+        //     "firstname": "I know that your firstname is Pete, Pete!"
+        // });
     </script>
 @endsection

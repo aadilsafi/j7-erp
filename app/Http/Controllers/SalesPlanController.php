@@ -40,6 +40,7 @@ class SalesPlanController extends Controller
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
             'unit' => (new Unit())->find(decryptParams($unit_id)),
+            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
     }
@@ -61,7 +62,6 @@ class SalesPlanController extends Controller
                 'user' => auth()->user(),
             ];
 
-            // dd($data);
             return view('app.sites.floors.units.sales-plan.create', $data);
         } else {
             abort(403);
@@ -77,7 +77,6 @@ class SalesPlanController extends Controller
     public function store(Request $request)
     {
         return $request->all();
-        return $this->printPage(1, 1);
     }
 
     /**
@@ -128,9 +127,9 @@ class SalesPlanController extends Controller
     public function printPage($sales_plan_id,$tempalte_id)
     {
         //
-        $salesPlan = SalesPlan::find($sales_plan_id);
+        $salesPlan = SalesPlan::find(decryptParams($sales_plan_id));
 
-        $template = SalesPlanTemplate::find($tempalte_id);
+        $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 
         $data['unit_no'] = $salesPlan->unit->floor_unit_number;
 

@@ -50,7 +50,7 @@ Route::group([
 
 
     // Route::group(['middleware' => ['auth', ]], function () {
-        Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -188,8 +188,17 @@ Route::group([
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
+                                    });
 
-                                        Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
+                                    Route::group(['prefix' => '/{sales_plan_id}'], function () {
+
+                                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+
+                                            Route::group(['prefix' => '/{id}'], function () {
+                                                Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
+                                            });
+
+                                        });
                                     });
                                 });
                             });
@@ -229,7 +238,6 @@ Route::group([
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
                         Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
                     });
-
                 });
             });
         });

@@ -51,10 +51,10 @@
             </form>
 
             {{-- Printing Modal --}}
-
             @include('app.sites.floors.units.sales-plan.partials.print-templates', [
-                'sales_plan_templates' => $sales_plan_templates,
+                'salesPlanTemplates' => $salesPlanTemplates,
             ])
+
         </div>
     </div>
 
@@ -121,6 +121,19 @@
         function addNew() {
             location.href =
                 "{{ route('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+        }
+
+        function openTemplatesModal(sales_plan_id) {
+            $('#sales_plan_id').val(sales_plan_id);
+            $('#modal-sales-plan-template').modal('show');
+        }
+
+        function printSalesPlanTemplate(template_id) {
+            let sales_plan_id = $('#sales_plan_id').val();
+            location.href =
+                "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
+                .replace(':sales_plan_id', sales_plan_id)
+                .replace(':id', template_id)
         }
     </script>
 @endsection

@@ -13,7 +13,16 @@ class SalesPlan extends Model
         'unit_id',
         'user_id',
         'stakeholder_id',
+        'unit_price',
+        'total_price',
+        'discount_percentage',
+        'discount_total',
+        'down_payment_percentage',
+        'down_payment_total',
+        'sales_type',
+        'indirect_source',
         'validity',
+        'status',
     ];
 
     public function unit()

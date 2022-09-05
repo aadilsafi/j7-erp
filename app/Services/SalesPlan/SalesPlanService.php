@@ -2,11 +2,13 @@
 
 namespace App\Services\SalesPlan;
 
+use App\Models\Stakeholder;
+use App\Models\AdditionalCost;
+use Carbon\{Carbon, CarbonPeriod};
+use Illuminate\Support\LazyCollection;
+use App\Models\SalesPlanAdditionalCost;
 use App\Models\{Floor, SalesPlan, Site, Unit};
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
-use Carbon\{Carbon, CarbonPeriod};
-use Exception;
-use Illuminate\Support\LazyCollection;
 
 class SalesPlanService implements SalesPlanInterface
 {
@@ -36,20 +38,69 @@ class SalesPlanService implements SalesPlanInterface
     // }
 
     // // Store
-    // public function store($site_id, $inputs)
-    // {
-    //     $data = [
-    //         'site_id' => decryptParams($site_id),
-    //         'name' => filter_strip_tags($inputs['name']),
-    //         'short_label' => Str::of(filter_strip_tags($inputs['short_label']))->upper(),
-    //         'floor_area' => filter_strip_tags($inputs['floor_area']),
-    //         'order' => filter_strip_tags($inputs['floor_order']),
-    //         'active' => true,
-    //     ];
+    public function store($inputs,$site_id)
+    {
+        // dd($inputs['unit']);
 
-    //     $floor = $this->model()->create($data);
-    //     return $floor;
-    // }
+        if($inputs['stackholder']['stackholder_id'] == 0){
+            $stakeholder_data = new Stakeholder;
+        }
+        else{
+            $stakeholder_data = Stakeholder::find($inputs['stackholder']['stackholder_id']);
+        }
+
+        $stakeholder_data->site_id = decryptParams($site_id);
+        $stakeholder_data->full_name = $inputs['stackholder']['full_name'];
+        $stakeholder_data->father_name = $inputs['stackholder']['father_name'];
+        $stakeholder_data->occupation = $inputs['stackholder']['occupation'];
+        $stakeholder_data->designation = $inputs['stackholder']['designation'];
+        $stakeholder_data->cnic = $inputs['stackholder']['cnic'];
+        $stakeholder_data->contact = $inputs['stackholder']['contact'];
+        $stakeholder_data->address = $inputs['stackholder']['address'];
+        $stakeholder_data->save();
+
+        $unit_id = Unit::where('floor_unit_number',$inputs['unit']['no'])->first()->id;
+        $sales_plan_data = [
+            'unit_id' => $unit_id,
+            'stakeholder_id' => $stakeholder_data->id,
+            'user_id' => Auth::user()->id,
+            'unit_price' => $inputs['unit']['price']['unit'],
+            'total_price' => $inputs['unit']['price']['total'],
+            'discount_percentage' => $inputs['unit']['discount']['percentage'],
+            'discount_total' => $inputs['unit']['discount']['total'],
+            'down_payment_percentage' => $inputs['unit']['downpayment']['percentage'],
+            'down_payment_total' => $inputs['unit']['downpayment']['total'],
+            'sales_type' => $inputs['sales_source']['sales_type'],
+            'indirect_source' => $inputs['sales_source']['indirect_source'],
+            'validity' => $inputs['sales_plan_validity'],
+            'status' => true,
+        ];
+
+        $sales_plan = $this->model()->create($sales_plan_data);
+
+        foreach($inputs['unit']['additional_cost'] as $key => $value){
+            $additonal_cost_id =  AdditionalCost::where('slug',$key)->first()->id;
+            $sales_plan_additonal_cost= new SalesPlanAdditionalCost;
+            $sales_plan_additonal_cost->sales_plan_id =  $sales_plan->id;
+            $sales_plan_additonal_cost->additional_cost_id  =  $additonal_cost_id;
+            $sales_plan_additonal_cost->percentage =  $value['percentage'];
+            $sales_plan_additonal_cost->amount =  $value['total'];
+            $sales_plan_additonal_cost->save();
+        }
+
+        foreach($inputs['installments']['table'] as $key => $table_data){
+            $SalesPlanInstallments = new SalesPlanInstallments;
+            $SalesPlanInstallments->sales_plan_id =  $sales_plan->id;
+            $SalesPlanInstallments->date = Carbon::parse(str_replace('/', '-', $table_data['date']));
+            $SalesPlanInstallments->details = $table_data['details'];
+            $SalesPlanInstallments->amount = $table_data['amount'];
+            $SalesPlanInstallments->remarks = $table_data['remarks'];
+            $SalesPlanInstallments->save();
+
+        }
+
+        return $sales_plan;
+    }
 
     // public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
     // {

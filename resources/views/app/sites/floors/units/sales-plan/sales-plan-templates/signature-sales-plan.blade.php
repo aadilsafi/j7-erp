@@ -188,8 +188,8 @@
             <tr>
                 <th  style="text-align: start; ">Discounts </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    @if ($data['discount'])
-                        {{ $data['discount'] }} %
+                    @if ($data['discount_percentage'])
+                        {{ $data['discount_percentage'] }} %
                     @else
                         -
                     @endif
@@ -198,11 +198,8 @@
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
-                    @if ($data['discount'])
-                        {{ ($data['discount'] / 100) * ( $data['rate'] * $data['size'])}}
-                        @php
-                            $totalDiscount = ($data['discount'] / 100) * ( $data['rate'] * $data['size']);
-                        @endphp
+                    @if ($data['discount_total'])
+                        {{ number_format($data['discount_total']) }}
                     @else
                         -
                     @endif
@@ -220,8 +217,8 @@
             <tr>
                 <th  style="text-align: start; ">Down Payment % </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
-                    @if ($data['down_payment'])
-                        {{ $data['down_payment'] }} %
+                    @if ($data['down_payment_percentage'])
+                        {{ $data['down_payment_percentage'] }} %
                     @else
                         0.0 %
                     @endif
@@ -230,8 +227,8 @@
                 <th  style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td  style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
-                    @if ($data['down_payment'])
-                    {{ number_format(( $data['down_payment']  / 100) * ( $totalAdditionalCost + ($data['rate'] * $data['size']) ) - $totalDiscount)}}
+                    @if ($data['down_payment_total'])
+                    {{ number_format($data['down_payment_total'])}}
                     @else
                         -
                     @endif

@@ -74,9 +74,11 @@ class SalesPlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$site_id,$floor_id,$unit_id)
     {
-        return $request->all();
+        $data = $request->all();
+        $record = $this->salesPlanInterface->store($data,$site_id);
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' =>$site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }
 
     /**
@@ -124,10 +126,11 @@ class SalesPlanController extends Controller
         //
     }
 
-    public function printPage($sales_plan_id,$tempalte_id)
+    public function printPage($site_id,$floor_id,$unit_id,$sales_plan_id,$tempalte_id)
     {
         //
         $salesPlan = SalesPlan::find(decryptParams($sales_plan_id));
+        // dd($salesPlan);
 
         $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 
@@ -143,9 +146,13 @@ class SalesPlanController extends Controller
 
         $data['rate'] = $salesPlan->unit->price_sqft;
 
-        $data['down_payment'] = '25';
+        $data['down_payment_percentage'] = $salesPlan->down_payment_percentage;
 
-        $data['discount'] = '5';
+        $data['down_payment_total'] = $salesPlan->down_payment_total;
+
+        $data['discount_percentage'] = $salesPlan->discount_percentage;
+
+        $data['discount_total'] = $salesPlan->discount_total;
 
         $data['sales_person_name'] = Auth::user()->name;
 
@@ -157,9 +164,9 @@ class SalesPlanController extends Controller
 
         $data['sales_person_phone_no'] = Auth::user()->phone_no;
 
-        $data['sales_person_sales_type'] = 'Direct';
+        $data['sales_person_sales_type'] = $salesPlan->sales_type;
 
-        $data['indirect_source'] = '';
+        $data['indirect_source'] = $salesPlan->indirect_source;
 
         $data['instalments'] = $salesPlan->installments;
 

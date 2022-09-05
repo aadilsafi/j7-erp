@@ -130,10 +130,15 @@
 
         function printSalesPlanTemplate(template_id) {
             let sales_plan_id = $('#sales_plan_id').val();
-            location.href =
+            let url =
                 "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
                 .replace(':sales_plan_id', sales_plan_id)
-                .replace(':id', template_id)
+                .replace(':id', template_id);
+            window.open(url, '_blank').focus();
+            // location.href =
+            //     "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
+            //     .replace(':sales_plan_id', sales_plan_id)
+            //     .replace(':id', template_id)
         }
     </script>
 @endsection

@@ -115,11 +115,11 @@
                             <i data-feather='save'></i>
                             <span id="create_sales_plan_button_span">Save Sales Plan</span>
                         </button>
-                        <button type="submit" value="save_print"
+                        {{-- <button type="submit" value="save_print"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='printer'></i>
                             <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
-                        </button>
+                        </button> --}}
                         <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>

@@ -218,8 +218,7 @@
                 min: 0,
                 max: 50,
             }).on("touchspin.on.stopspin", function() {
-                clearTimeout(t);
-                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+                updateTable();
             }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
@@ -253,8 +252,7 @@
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
-                    clearTimeout(t);
-                    t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+                    updateTable();
                 },
             });
 
@@ -366,8 +364,8 @@
                 data: data,
                 success: function(response) {
                     let InstallmentRows = '';
-                    $('#installments_table tbody#dynamic_installment_rows').empty();
                     if (response.status) {
+                        $('#installments_table tbody#dynamic_installment_rows').empty();
 
                         for (let row of response.data.installments) {
                             InstallmentRows += row.row;
@@ -375,8 +373,16 @@
 
                         $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
                         InstallmentRows = '';
-                        hideBlockUI('#installments_acard');
+                        $('#base-installment').val(response.data.baseInstallmentTotal);
+                    } else {
+                        if (response.message.error == 'invalid_amout') {
+                            Toast.fire({
+                                icon: 'error',
+                                title: "Invalid Amount"
+                            });
+                        }
                     }
+                    hideBlockUI('#installments_acard');
                 },
                 error: function(errors) {
                     console.error(errors);
@@ -388,7 +394,31 @@
 
         function storeUnchangedData(key, field, value) {
 
-            console.log(unchangedData);
+            // var baseInstallment = parseInt($('#base-installment').val());
+
+            // // debugger;
+            // if (field === 'amount') {
+
+            //     let installmentAmount = 0, installment_amount_total = 0;
+            //     $('input[id^="installment_amount_"]').each(function() {
+            //         if ($(this).attr('id') !== 'installment_amount_total') {
+            //             installmentAmount += parseFloat($(this).val());
+            //         } else {
+            //             installment_amount_total = parseFloat($(this).val());
+            //         }
+            //     });
+
+            //     console.log(installmentAmount);
+            //     if (installmentAmount > installment_amount_total) {
+            //         Toast.fire({
+            //             icon: 'error',
+            //             title: 'Wrong Input! Only ' + (installment_amount_total - installmentAmount).toFixed(2) + " is allowed"
+            //         });
+
+            //     }
+            //     return;
+            // }
+
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -397,25 +427,29 @@
                 unchangedData.splice(index, 1);
             }
 
-            if (value.length > 0) {
+            if (value > 0 || value.length > 0) {
                 unchangedData.push({
                     key: key,
                     field: field,
                     value: value
                 });
             }
+            updateTable();
         }
 
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
             function() {
-                clearTimeout(t);
-                t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+                updateTable();
             });
 
         $('.installment_type_radio').on('change', function() {
-            clearTimeout(t);
-            t = setTimeout(calculateInstallments, 1000, $(this).attr('id'));
+            updateTable();
         });
+
+        function updateTable() {
+            clearTimeout(t);
+            t = setTimeout(calculateInstallments, 1500, 1);
+        }
 
         // var validator = $("#create-sales-plan-form").validate({
         //     debug: true,

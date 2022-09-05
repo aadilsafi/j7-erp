@@ -31,11 +31,13 @@ class SalesPlan extends Model
         return $this->belongsTo(Stakeholder::class);
     }
 
-    public function additionalCosts(){
+    public function additionalCosts()
+    {
         return $this->hasMany(SalesPlanAdditionalCost::class);
     }
 
-    public function installments(){
+    public function installments()
+    {
         return $this->hasMany(SalesPlanInstallments::class);
     }
 }

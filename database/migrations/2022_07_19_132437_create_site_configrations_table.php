@@ -17,13 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->tinyInteger('site_max_floors')->default(0);
-            $table->tinyInteger('site_token')->default(5);
-            $table->tinyInteger('site_down_payment')->default(25);
+            $table->tinyInteger('site_token_percentage')->default(5);
+            $table->tinyInteger('site_down_payment_percentage')->default(25);
             $table->string('floor_prefix', 5)->default('F');
             $table->tinyInteger('unit_number_digits')->default(2);
-            $table->tinyInteger('unit_number_of_installments')->default(12);
-            $table->tinyInteger('unit_discount')->default(0);
-            $table->tinyInteger('unit_down_payment')->default(25);
             $table->timestamps();
             $table->softDeletes();
         });

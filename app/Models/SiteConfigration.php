@@ -5,31 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * App\Models\SiteConfigration
- *
- * @property int $id
- * @property int $site_id
- * @property int $site_max_floors
- * @property string $floor_prefix
- * @property int $unit_number_digits
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property-read \App\Models\Site $site
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration query()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereFloorPrefix($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereSiteId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereSiteMaxFloors($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereUnitNumberDigits($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigration whereUpdatedAt($value)
- * @mixin \Eloquent
- */
 class SiteConfigration extends Model
 {
     use HasFactory;
@@ -38,11 +13,11 @@ class SiteConfigration extends Model
 
     public $requestRules = [
         'site_id' => 'required',
-        'site_max_floors' => 'required',
-        'floor_prefix' => 'required',
-        'unit_number_digits' => 'required',
-        'site_token' => 'required|min:0|max:100|numeric',
-        'site_down_payment' => 'required|min:0|max:100|numeric',
+        'site_max_floors' => 'required|numeric|min:0',
+        'site_token_percentage' => 'required|numeric|min:0|max:100',
+        'site_down_payment_percentage' => 'required|numeric|min:0|max:100',
+        'floor_prefix' => 'required|string|max:5',
+        'unit_number_digits' => 'required|numeric|in:2,3',
     ];
 
     public function site()

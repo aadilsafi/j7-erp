@@ -19,8 +19,8 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="unit_type">Unit Type</label>
-                <input type="text" class="form-control form-control-lg @error('unit_type') is-invalid @enderror"
-                    id="unit_type" name="unit[type]" placeholder="Unit Type" value="{{ $unit->type->name }}" readonly />
+                <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
+                    placeholder="Unit Type" value="{{ $unit->type->name }}" readonly />
             </div>
         </div>
 
@@ -28,9 +28,8 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
-                <input type="text" class="form-control form-control-lg @error('unit_size') is-invalid @enderror"
-                    id="unit_size" name="unit[size]" placeholder="Unit Size(sq.ft)" value="{{ $unit->gross_area }}"
-                    readonly />
+                <input type="text" class="form-control form-control-lg" id="unit_size" name="unit[size]"
+                    placeholder="Unit Size(sq.ft)" value="{{ $unit->gross_area }}" readonly />
             </div>
         </div>
 
@@ -46,12 +45,10 @@
                         <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_price">Unit Price</label>
-
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0"
-                                        class="form-control form-control-lg @error('unit_price') is-invalid @enderror"
-                                        id="unit_price" name="unit_price" placeholder="Unit Price"
+                                    <input type="number" min="0" class="form-control form-control-lg"
+                                        id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
                                         value="{{ $unit->price_sqft }}" />
                                 </div>
                             </div>
@@ -61,7 +58,7 @@
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="number" min="0" class="form-control form-control-lg" readonly
-                                        id="total-price-unit" name="total-price-unit" placeholder="Amount"
+                                        id="total-price-unit" name="unit[price][total]" placeholder="Amount"
                                         value="{{ $unit->total_price }}.00" />
 
                                 </div>
@@ -85,11 +82,13 @@
                                             for="price-{{ $additionalCost->slug }}-{{ $key }}">{{ $additionalCost->name }}</label>
 
                                         <div class="input-group input-group-lg">
-                                            <span class="input-group-text"><i data-feather='percent'></i></span>
+                                            <span class="input-group-text">
+                                                <i data-feather='percent'></i>
+                                            </span>
                                             <input type="number" min="0" max="100" step="0.1"
                                                 class="form-control form-control-lg additional-cost-percentage"
                                                 id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
-                                                name="additional_cost[{{ $additionalCost->slug }}][percentage]"
+                                                name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
                                                 placeholder="{{ $additionalCost->name }}"
                                                 value="{{ $additionalCost->site_percentage }}" />
                                         </div>
@@ -106,7 +105,7 @@
                                                 class="form-control form-control-lg additional-cost-total-price"
                                                 readonly
                                                 id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
-                                                name="additional_cost[{{ $additionalCost->slug }}][total_amount]"
+                                                name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
                                                 placeholder="Amount" value="{{ $additionalCostTotalAmount }}" />
                                         </div>
 
@@ -122,11 +121,12 @@
                                 <label class="form-label fs-5" for="percentage-discount">Discount %</label>
 
                                 <div class="input-group input-group-lg">
-                                    <span class="input-group-text"><i data-feather='percent'></i></span>
+                                    <span class="input-group-text">
+                                        <i data-feather='percent'></i>
+                                    </span>
                                     <input type="number" min="0" max="100" step="0.1"
-                                        class="form-control form-control-lg @error('percentage-discount') is-invalid @enderror"
-                                        id="percentage-discount" name="percentage-discount" placeholder="Discount %"
-                                        value="0.00" />
+                                        class="form-control form-control-lg" id="percentage-discount"
+                                        name="unit[discount][percentage]" placeholder="Discount %" value="0.00" />
                                 </div>
                             </div>
 
@@ -135,7 +135,7 @@
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="number" min="0" class="form-control form-control-lg"
-                                        readonly id="total-price-discount" name="total-price-discount"
+                                        readonly id="total-price-discount" name="unit[discount][total]"
                                         placeholder="Discount" value="0.00" />
                                 </div>
                             </div>
@@ -154,7 +154,7 @@
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="text" class="form-control form-control-lg" id="unit_rate_total"
-                                        name="unit_rate_total" placeholder="Total"
+                                        name="unit[grand_total]" placeholder="Total"
                                         value="{{ $unit->total_price }}.00" readonly />
                                 </div>
                             </div>
@@ -168,8 +168,9 @@
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text"><i data-feather='percent'></i></span>
                                     <input type="number" class="form-control form-control-lg"
-                                        id="unit_downpayment_percentage" name="unit_downpayment_percentage"
-                                        placeholder="Down Payment %" min="0" max="100" value="25.0"
+                                        id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
+                                        placeholder="Down Payment %" min="0" max="100"
+                                        value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
                                         step="0.1" />
                                 </div>
                             </div>
@@ -180,7 +181,7 @@
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
                                     <input type="text" class="form-control form-control-lg" readonly
-                                        id="unit_downpayment_total" name="unit_downpayment_total"
+                                        id="unit_downpayment_total" name="unit[downpayment][total]"
                                         placeholder="Amount" />
                                 </div>
                             </div>
@@ -243,20 +244,10 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="row g-1">
-                    <div class="col-md-9">
+                    <div class="col-md-12">
                         <label class="form-label fs-5" for="installments_start_date">Installments Start Date</label>
-                        <input type="text" id="installments_start_date" name="installments_start_date"
+                        <input type="text" id="installments_start_date" name="installments[start_date]" readonly
                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
-                    </div>
-                    <div class="col-md-3">
-                        <div class="h-100 d-flex justify-content-center align-items-end">
-                            <button type="button"
-                                class="btn w-100 btn-relief-outline-primary waves-effect waves-float waves-light"
-                                onclick="calculateInstallments();">
-                                <i class="bi bi-calculator"></i>
-                                <span id="calculate_installments">Calculate Installments</span>
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -292,7 +283,8 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+    id="stakeholders_card">
     <div class="card-header">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
     </div>
@@ -302,97 +294,63 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                <select class="select2-size-lg form-select" id="stackholders" name="stackholders">
-                    <option value="0" selected>New Stakeholder</option>
-                    <option value="1">Stackholders</option>
-                    <option value="1">Stackholders1</option>
-                    <option value="1">Stackholders2</option>
-                    <option value="1">Stackholders3</option>
-                    <option value="1">Stackholders4</option>
-                    <option value="1">Stackholders5</option>
-                    <option value="1">Stackholders6</option>
-                    <option value="1">Stackholders7</option>
-                    <option value="1">Stackholders8</option>
-                    <option value="1">Stackholders9</option>
-                    <option value="1">Stackholders0</option>
-                    <option value="1">Stackholders12</option>
-                    <option value="1">Stackholders12</option>
-
+                <select class="form-select" id="stackholders">
+                    <option value="0">Create new Stakeholder...</option>
+                    @forelse ($stakeholders as $stakeholder)
+                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }}</option>
+                    @empty
+                    @endforelse
                 </select>
-                @error('stackholders')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
             </div>
         </div>
 
         <div class="row mb-1">
+            <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" />
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="full_name">Full Name</label>
-                <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                    id="full_name" name="full_name" placeholder="Full Name" />
-                @error('full_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
+                    name="stackholder[full_name]" placeholder="Full Name" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                    id="father_name" name="father_name" placeholder="Father Name" />
-                @error('father_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
+                    name="stackholder[father_name]" placeholder="Father Name" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation" />
-                @error('occupation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
+                    name="stackholder[occupation]" placeholder="Occupation" />
             </div>
         </div>
 
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                    id="designation" name="designation" placeholder="Designation" />
-                @error('designation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_designation"
+                    name="stackholder[designation]" placeholder="Designation" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC" />
-                @error('cnic')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
+                    name="stackholder[cnic]" placeholder="CNIC" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="contact">Contact</label>
-                <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                    id="contact" name="contact" placeholder="Contact" />
-                @error('contact')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_contact"
+                    name="stackholder[contact]" placeholder="Contact" />
             </div>
         </div>
 
         <div class="row mb-1">
-
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
+                <label class="form-label fs-5" for="stackholder_address">Address</label>
+                <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
                     placeholder="Address" rows="5"></textarea>
-                @error('address')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
             </div>
         </div>
     </div>
@@ -404,102 +362,50 @@
     </div>
 
     <div class="card-body">
-
-        <div class="row mb-1">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                <select class="select2-size-lg form-select" id="stackholders" name="stackholders">
-                    <option value="0" selected>New Stakeholder</option>
-                    <option value="1">Stackholders</option>
-                    <option value="1">Stackholders1</option>
-                    <option value="1">Stackholders2</option>
-                    <option value="1">Stackholders3</option>
-                    <option value="1">Stackholders4</option>
-                    <option value="1">Stackholders5</option>
-                    <option value="1">Stackholders6</option>
-                    <option value="1">Stackholders7</option>
-                    <option value="1">Stackholders8</option>
-                    <option value="1">Stackholders9</option>
-                    <option value="1">Stackholders0</option>
-                    <option value="1">Stackholders12</option>
-                    <option value="1">Stackholders12</option>
-
-                </select>
-                @error('stackholders')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
-            </div>
-        </div>
-
         <div class="row mb-1">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="full_name">Full Name</label>
-                <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                    id="full_name" name="full_name" placeholder="Full Name" />
-                @error('full_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_full_name">Sales Person</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_full_name"
+                name="sales_source[full_name]"
+                    placeholder="Sales Person" value="{{ $user->name }}" disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="father_name">Father Name</label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                    id="father_name" name="father_name" placeholder="Father Name" />
-                @error('father_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+
+                @php
+                    $roles = $user->roles->pluck('name')->toArray();
+                    $roles = implode(', ', $roles);
+                @endphp
+
+                <label class="form-label fs-5" for="sales_source_status">Status</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_status"
+                    name="sales_source[status]" placeholder="Status" value="{{ $roles }}" disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation</label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation" />
-                @error('occupation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
+                    name="sales_source_contact_no" placeholder="Contact No" value="{{ $user->phone_no }}"
+                    disabled />
+                {{-- invalid-tooltip">{{ $message }}</div> --}}
             </div>
         </div>
 
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="designation">Designation</label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                    id="designation" name="designation" placeholder="Designation" />
-                @error('designation')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_sales_type">Sales Type</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_sales_type"
+                    name="sales_source_sales_type" placeholder="Sales Type" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC" />
-                @error('cnic')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
+                <label class="form-label fs-5" for="sales_source_indirect_source">Indirect Source</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_indirect_source"
+                    name="sales_source_indirect_source" placeholder="Indirect Source" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="contact">Contact</label>
-                <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                    id="contact" name="contact" placeholder="Contact" />
-                @error('contact')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
-            </div>
         </div>
 
-        <div class="row mb-1">
-
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="address">Address</label>
-                <textarea class="form-control form-control-lg @error('address') is-invalid @enderror" id="address" name="address"
-                    placeholder="Address" rows="5"></textarea>
-                @error('address')
-                    <div class="invalid-tooltip">{{ $message }}</div>
-                @enderror
-            </div>
-        </div>
     </div>
 </div>

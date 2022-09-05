@@ -83,7 +83,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->

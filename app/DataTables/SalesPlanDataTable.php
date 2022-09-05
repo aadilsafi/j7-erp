@@ -26,24 +26,23 @@ class SalesPlanDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('check', function ($unit) {
-                return $unit;
+            ->editColumn('check', function ($salesPlan) {
+                return $salesPlan;
             })
-            ->editColumn('user_id', function ($unit) {
-                return $unit->user->name;
+            ->editColumn('user_id', function ($salesPlan) {
+                return $salesPlan->user->name;
             })
-            ->editColumn('stakeholder_id', function ($unit) {
-                return $unit->stakeholder->full_name;
+            ->editColumn('stakeholder_id', function ($salesPlan) {
+                return $salesPlan->stakeholder->full_name;
             })
-            ->editColumn('created_at', function ($unit) {
-                return editDateColumn($unit->created_at);
+            ->editColumn('created_at', function ($salesPlan) {
+                return editDateColumn($salesPlan->created_at);
             })
-            ->editColumn('updated_at', function ($unit) {
-                return editDateColumn($unit->updated_at);
+            ->editColumn('updated_at', function ($salesPlan) {
+                return editDateColumn($salesPlan->updated_at);
             })
-            ->editColumn('actions', function ($unit) {
-                $sales_plan_template = SalesPlanTemplate::all();
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $unit->unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id ,'sales_plan_templates' =>  $sales_plan_template ]);
+            ->editColumn('actions', function ($salesPlan) {
+                return view('app.sites.floors.units.sales-plan.actions', ['id' => $salesPlan->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -57,7 +56,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function query(SalesPlan $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->where('unit_id', $this->unit->id);
     }
 
     /**
@@ -100,7 +99,7 @@ class SalesPlanDataTable extends DataTable
                     ]),
 
             )
-            ->rowGroupDataSrc('type_id')
+            // ->rowGroupDataSrc('type_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -117,10 +116,10 @@ class SalesPlanDataTable extends DataTable
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
+            ])
+            ->orders([
+                [3, 'desc'],
             ]);
-            // ->orders([
-            //     [5, 'desc'],
-            // ]);
     }
 
     /**

@@ -483,6 +483,15 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            //Sales Plan Print
+            [
+                'name' => 'sites.floors.units.sales-plans.templates.print',
+                'show_name' => 'Print Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

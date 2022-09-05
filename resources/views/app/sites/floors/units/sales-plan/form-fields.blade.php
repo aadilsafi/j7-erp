@@ -396,13 +396,13 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_sales_type">Sales Type</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_sales_type"
-                    name="sales_source_sales_type" placeholder="Sales Type" />
+                    name="sales_source[sales_type]" placeholder="Sales Type" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_indirect_source">Indirect Source</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_indirect_source"
-                    name="sales_source_indirect_source" placeholder="Indirect Source" />
+                    name="sales_source[indirect_source]" placeholder="Indirect Source" />
             </div>
 
         </div>

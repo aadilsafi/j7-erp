@@ -204,6 +204,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="row custom-options-checkable g-1">
 
+                    <input type="hidden" id="base-installment" value="0">
                     <div class="col-md-5">
                         <input class="custom-option-item-check installment_type_radio" type="radio"
                             name="installments[types][type]" id="installment_quarterly" value="quarterly" checked />

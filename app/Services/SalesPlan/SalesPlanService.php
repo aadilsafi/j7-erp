@@ -2,13 +2,11 @@
 
 namespace App\Services\SalesPlan;
 
-use App\Models\Stakeholder;
-use App\Models\AdditionalCost;
 use Carbon\{Carbon, CarbonPeriod};
 use Illuminate\Support\LazyCollection;
-use App\Models\SalesPlanAdditionalCost;
-use App\Models\{Floor, SalesPlan, Site, Unit};
+use App\Models\{Stakeholder, AdditionalCost, SalesPlanAdditionalCost, Floor, SalesPlan, SalesPlanInstallments, Site, Unit};
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
+use Exception;
 
 class SalesPlanService implements SalesPlanInterface
 {
@@ -63,7 +61,7 @@ class SalesPlanService implements SalesPlanInterface
         $sales_plan_data = [
             'unit_id' => $unit_id,
             'stakeholder_id' => $stakeholder_data->id,
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->user()->id,
             'unit_price' => $inputs['unit']['price']['unit'],
             'total_price' => $inputs['unit']['price']['total'],
             'discount_percentage' => $inputs['unit']['discount']['percentage'],
@@ -89,7 +87,7 @@ class SalesPlanService implements SalesPlanInterface
         }
 
         foreach($inputs['installments']['table'] as $key => $table_data){
-            $SalesPlanInstallments = new SalesPlanInstallments;
+            $SalesPlanInstallments = new SalesPlanInstallments();
             $SalesPlanInstallments->sales_plan_id =  $sales_plan->id;
             $SalesPlanInstallments->date = Carbon::parse(str_replace('/', '-', $table_data['date']));
             $SalesPlanInstallments->details = $table_data['details'];

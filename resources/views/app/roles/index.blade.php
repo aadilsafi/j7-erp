@@ -59,7 +59,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
+                        {{-- <div class="d-flex justify-content-between">
                             <span>Total 4 users</span>
                             <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
                                 <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
@@ -83,7 +83,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                                         alt="Avatar" />
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-between align-items-end mt-1 pt-25">
                             <div class="role-heading">
                                 <h4 class="fw-bolder">
@@ -97,9 +97,9 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                                     </a>
                                 @endcan
                             </div>
-                            <a href="javascript:void(0);" class="text-body">
+                            {{-- <a href="javascript:void(0);" class="text-body">
                                 <i data-feather="copy" class="font-medium-5"></i>
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>

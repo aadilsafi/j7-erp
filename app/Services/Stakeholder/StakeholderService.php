@@ -34,19 +34,23 @@ class StakeholderService implements StakeholderInterface
     public function store($site_id, $inputs)
     {
         // dd($site_id,$inputs);
-        // $data = [
-        //     'site_id' => decryptParams($site_id),
-        //     'full_name' => Ahmed Ali,
-        //     'father_name' => Ali RAza,
-        //     'occupation' => developer,
-        //     'designation' => senior,
-        //     'cnic' => 123123123213,
-        //     'contact' => 13123213213,
-        //     'address' => Rawalpindi,
-        //     'parent_id' => 0,
-        //     'relation' => '',
-        //     'attachment' => '',
-        // ];
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'full_name' => $inputs['full_name'],
+            'father_name' => $inputs['father_name'],
+            'occupation' => $inputs['occupation'],
+            'designation' => $inputs['designation'],
+            'cnic' => $inputs['cnic'],
+            'contact' => $inputs['contact'],
+            'address' => $inputs['address'],
+            'parent_id' => $inputs['parent_id'],
+            // 'relation' => '',
+            // 'attachment' => $inputs['full_name'],
+        ];
+
+        $stakeholder = $this->model()->create($data);
+        return $stakeholder;
+
     }
 
     public function update($site_id, $id, $inputs)

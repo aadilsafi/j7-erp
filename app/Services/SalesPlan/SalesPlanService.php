@@ -36,7 +36,7 @@ class SalesPlanService implements SalesPlanInterface
     // }
 
     // // Store
-    public function store($inputs,$site_id)
+    public function store($site_id, $inputs)
     {
         $stakeholderData = [
             'site_id' => decryptParams($site_id),

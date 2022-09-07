@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use Illuminate\Http\Request;
+use App\DataTables\StakeholderDataTable;
+use App\Http\Requests\stakeholders\{
+    storeRequest as stakeholderStoreRequest,
+};
 
 class StakeholderController extends Controller
 {
@@ -20,9 +24,15 @@ class StakeholderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(StakeholderDataTable $dataTable,$site_id)
     {
         //
+        $data = [
+            'site_id' => $site_id
+        ];
+
+        return $dataTable->with($data)->render('app.sites.stakeholders.index', $data);
+
     }
 
     /**
@@ -30,9 +40,20 @@ class StakeholderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
         //
+        if (!request()->ajax()) {
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+            ];
+
+            return view('app.sites.stakeholders.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -41,9 +62,20 @@ class StakeholderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(stakeholderStoreRequest $request,$site_id)
     {
         //
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->validated();
+                $record = $this->stakeholderInterface->store($site_id, $inputs);
+                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

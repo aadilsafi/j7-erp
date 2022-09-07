@@ -233,6 +233,7 @@ Route::group([
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [StakeholderController::class, 'update'])->name('update');
+                        Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {

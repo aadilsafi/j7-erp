@@ -17,8 +17,10 @@ return new class extends Migration
         Schema::create('stakeholder_type', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stakeholder_id')->constrained();
-            $table->tinyInteger('type_id')->default(5);
-            $table->unique(['stakeholder_id', 'type_id']);
+            $table->string('type')->nullable();
+            $table->unique(['stakeholder_id', 'type']);
+            $table->string('stakeholder_code')->nullable();
+            $table->boolean('status');
             $table->timestamps();
         });
     }

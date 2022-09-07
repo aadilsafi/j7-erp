@@ -7,9 +7,9 @@ use Illuminate\Support\Str;
 
 enum StakeholderTypeEnum: int
 {
-    case CUSTOMER = 1;
-    case VENDOR = 2;
-    case DEALER = 3;
-    case NEXT_OF_KIN = 4;
-    case LEAD = 5;
+    case CUSTOMER = 'C';
+    case VENDOR = 'V';
+    case DEALER = 'D';
+    case NEXT_OF_KIN = 'K';
+    case LEAD = 'L';
 }

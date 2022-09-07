@@ -145,3 +145,19 @@ Breadcrumbs::for('sites.floors.units.sales-plans.create', function (BreadcrumbTr
     $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
     $trail->push('Sales Plan Create');
 });
+
+//Stakholders Breadcrumbs
+Breadcrumbs::for('sites.stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.stakeholders.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.stakeholders.index', encryptParams($site_id));
+    $trail->push('Create Stakeholder');
+});
+
+Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.stakeholders.index', encryptParams($site_id));
+    $trail->push('Edit Stakeholder');
+});

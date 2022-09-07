@@ -492,6 +492,57 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // Stakeholders
+            [
+                'name' => 'sites.stakeholders.index',
+                'show_name' => 'View Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.create',
+                'show_name' => 'Create Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.store',
+                'show_name' => 'Store Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.edit',
+                'show_name' => 'Edit Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.update',
+                'show_name' => 'Update Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.destroy',
+                'show_name' => 'Destroy Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

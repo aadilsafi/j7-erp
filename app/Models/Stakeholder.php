@@ -22,10 +22,11 @@ class Stakeholder extends Model implements HasMedia
         'contact',
         'address',
         'parent_id',
+        'relation',
     ];
 
     public $rules = [
-        'site_id' => 'required|numeric',
+        // 'site_id' => 'required|numeric',
         'full_name' => 'required|string|min:1|max:50',
         'father_name' => 'required|string|min:1|max:50',
         'occupation' => 'required|string|min:1|max:50',
@@ -34,6 +35,8 @@ class Stakeholder extends Model implements HasMedia
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'required|numeric',
+        // 'relation' => 'required_if:parent_id,0',
+        'attachment' => 'required',
     ];
 
     protected $casts = [
@@ -46,6 +49,8 @@ class Stakeholder extends Model implements HasMedia
         'contact' => 'string',
         'address' => 'string',
         'parent_id' => 'integer',
+        'relation' => 'string',
+        'attachment' => 'string',
     ];
 
     public function site()

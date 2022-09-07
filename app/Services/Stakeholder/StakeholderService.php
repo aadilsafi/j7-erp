@@ -19,6 +19,12 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->where('site_id', $site_id)->get();
     }
 
+    public function getAllWithTree()
+    {
+        $stakeholders = $this->model()->all();
+        return getStakeholderTreeData(collect($stakeholders), $this->model());
+    }
+
     public function getById($site_id, $id)
     {
         return $this->model()->find($id);
@@ -27,7 +33,20 @@ class StakeholderService implements StakeholderInterface
     // Store
     public function store($site_id, $inputs)
     {
-
+        // dd($site_id,$inputs);
+        // $data = [
+        //     'site_id' => decryptParams($site_id),
+        //     'full_name' => Ahmed Ali,
+        //     'father_name' => Ali RAza,
+        //     'occupation' => developer,
+        //     'designation' => senior,
+        //     'cnic' => 123123123213,
+        //     'contact' => 13123213213,
+        //     'address' => Rawalpindi,
+        //     'parent_id' => 0,
+        //     'relation' => '',
+        //     'attachment' => '',
+        // ];
     }
 
     public function update($site_id, $id, $inputs)

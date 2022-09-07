@@ -130,7 +130,6 @@ class SalesPlanController extends Controller
     {
         //
         $salesPlan = SalesPlan::find(decryptParams($sales_plan_id));
-        // dd($salesPlan);
 
         $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 

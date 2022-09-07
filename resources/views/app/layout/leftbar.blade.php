@@ -204,6 +204,16 @@
                 </ul>
             </li> --}}
 
+            @can('sites.stakeholders.index')
+                <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
+                        <i data-feather='users'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
+                    </a>
+                </li>
+            @endcan
+
             @can('sites.types.index')
                 <li
                     class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">

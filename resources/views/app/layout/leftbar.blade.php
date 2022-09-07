@@ -67,9 +67,12 @@
                 </a>
             </li>
 
-            @if(Auth::user()->can('permissions.index') || Auth::user()->can('roles.index') || Auth::user()->can('sites.configurations.configView'))
+            @if (Auth::user()->can('permissions.index') ||
+                Auth::user()->can('roles.index') ||
+                Auth::user()->can('sites.configurations.configView'))
                 <li class="navigation-header">
-                    <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
+                    <span
+                        data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
                     <i data-feather="more-horizontal"></i>
                 </li>
             @endif
@@ -127,7 +130,7 @@
                 </ul>
             </li> --}}
 
-            @if(Auth::user()->can('permissions.index') || Auth::user()->can('roles.index') )
+            @if (Auth::user()->can('permissions.index') || Auth::user()->can('roles.index'))
                 <li class="nav-item ">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='shield'></i>
@@ -165,155 +168,69 @@
 
             @can('sites.configurations.configView')
                 <li
-                    class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                        href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
                         <i data-feather='settings'></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                     </a>
                 </li>
             @endcan
 
-            @if(Auth::user()->can('sites.types.index') || Auth::user()->can('sites.additional-costs.index') || Auth::user()->can('sites.floors.index'))
+            @canany(['sites.types.index', 'sites.additional-costs.index', 'sites.floors.index'])
                 <li class="navigation-header">
                     <span data-i18n="Others">Others</span>
                     <i data-feather="more-horizontal"></i>
                 </li>
-            @endif
-            {{-- Types Menu --}}
-            {{-- <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='menu'></i>
-                    <span class="menu-title text-truncate" data-i18n="Types">Types</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="{{ request()->routeIs('sites.types.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.types.index') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('sites.types.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.types.create') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li> --}}
+            @endcanany
 
             @can('sites.types.index')
-                <li
-                    class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
+                <li class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.types.index', ['site_id' => encryptParams(1)]) }}">
+                        href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
                         <i data-feather='menu'></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Types</span>
                     </a>
                 </li>
             @endcan
 
-            {{-- Sites Menu --}}
-            {{-- <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='circle'></i>
-                    <span class="menu-title text-truncate" data-i18n="Sites">Sites</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="{{ request()->routeIs('sites.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.index') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('sites.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.create') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li> --}}
-
             {{-- Additional Costs Menu --}}
             @can('sites.additional-costs.index')
                 <li
-                    class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
+                        href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
                         <i data-feather='dollar-sign'></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
                     </a>
                 </li>
             @endcan
-            {{-- <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='dollar-sign'></i>
-                    <span class="menu-title text-truncate" data-i18n="Additional Costs">Additional Costs</span>
-                </a>
-                <ul class="menu-content">
-                    <li
-                        class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li
-                        class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams($site_id)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li> --}}
+
 
             {{-- Floors Menu --}}
             @can('sites.floors.index')
                 <li
-                    class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
+                        href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
                         <i data-feather='layers'></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
                     </a>
                 </li>
             @endcan
-            {{-- <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='layers'></i>
-                    <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
-                </a>
-                <ul class="menu-content">
-                    <li
-                        class="{{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li
-                        class="{{ request()->routeIs('sites.floors.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.create', ['site_id' => encryptParams($site_id)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li> --}}
+
+            {{-- Lead Sources Menu --}}
+            @can('sites.lead-sources.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='trello'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
+                    </a>
+                </li>
+            @endcan
+
         </ul>
     </div>
 </div>

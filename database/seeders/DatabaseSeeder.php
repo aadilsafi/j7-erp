@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             SalesPlanAdditionalCostSeeder::class,
             SalesPlanInstallmentsSeeder::class,
             SalesPlanTemplatesSeeder::class,
+            LeadSourceTableSeeder::class,
         ]);
     }
 }

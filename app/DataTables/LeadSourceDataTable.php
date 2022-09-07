@@ -2,28 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\Type;
-use Illuminate\Support\Str;
+use App\Models\LeadSource;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
-use App\Services\Interfaces\UnitTypeInterface;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class TypesDataTable extends DataTable
+class LeadSourceDataTable extends DataTable
 {
-
-    private $unitTypeInterface;
-
-    public function __construct(UnitTypeInterface $unitTypeInterface)
-    {
-        $this->unitTypeInterface = $unitTypeInterface;
-    }
-
     /**
      * Build DataTable class.
      *
@@ -34,40 +22,37 @@ class TypesDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('parent_id', function ($type) {
-                return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
+            ->editColumn('check', function ($leadSource) {
+                return $leadSource;
             })
-            ->editColumn('created_at', function ($type) {
-                return editDateColumn($type->created_at);
+            ->editColumn('created_at', function ($leadSource) {
+                return editDateColumn($leadSource->created_at);
             })
-            ->editColumn('updated_at', function ($type) {
-                return editDateColumn($type->updated_at);
+            ->editColumn('updated_at', function ($leadSource) {
+                return editDateColumn($leadSource->updated_at);
             })
-            ->editColumn('actions', function ($type) {
-                return view('app.sites.types.actions', ['site_id' => decryptParams($this->site_id), 'id' => $type->id]);
-            })
-            ->editColumn('check', function ($type) {
-                return $type;
+            ->editColumn('actions', function ($leadSource) {
+                return view('app.sites.lead-sources.actions', ['site_id' => $this->site_id, 'id' => $leadSource->id]);
             })
             ->setRowId('id')
-            ->rawColumns(array_merge($columns, ['action', 'check']));
+            ->rawColumns(array_merge($columns, ['actions', 'check']));
     }
 
     /**
      * Get query source of dataTable.
      *
+     * @param \App\Models\LeadSource $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(): QueryBuilder
+    public function query(LeadSource $model): QueryBuilder
     {
-        return $this->unitTypeInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
+        return $model->newQuery()->whereSiteId($this->site_id);
     }
 
     public function html(): HtmlBuilder
     {
-
-        $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+        $createPermission = auth()->user()->can('sites.lead-sources.create');
+        $selectedDeletePermission = auth()->user()->can('sites.lead-sources.destroy-selected');
 
         $buttons = [];
 
@@ -93,7 +78,6 @@ class TypesDataTable extends DataTable
         ]);
 
         if ($selectedDeletePermission) {
-
             $buttons[] = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                 ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
@@ -103,7 +87,7 @@ class TypesDataTable extends DataTable
         }
 
         return $this->builder()
-            ->setTableId('types-table')
+            ->setTableId('lead-source-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -114,7 +98,7 @@ class TypesDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('parent_id')
+            // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -133,8 +117,7 @@ class TypesDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
+                [2, 'desc'],
             ]);
     }
 
@@ -145,25 +128,12 @@ class TypesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
         return [
-            ($selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
-
-            Column::make('name')->title('Type Name'),
-            Column::make('parent_id')->title('Parent'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-            ($editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
-
+            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::make('name')->title('Lead Source'),
+            Column::make('created_at')->title('Created At'),
+            Column::make('updated_at')->title('Updated At'),
+            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
 
@@ -174,6 +144,6 @@ class TypesDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Types_' . date('YmdHis');
+        return 'LeadSource_' . date('YmdHis');
     }
 }

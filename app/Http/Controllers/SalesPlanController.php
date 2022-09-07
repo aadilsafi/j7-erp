@@ -11,6 +11,7 @@ use App\Services\{
     SalesPlan\Interface\SalesPlanInterface,
     Stakeholder\Interface\StakeholderInterface,
 };
+use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
 
 class SalesPlanController extends Controller
@@ -18,15 +19,18 @@ class SalesPlanController extends Controller
     private $salesPlanInterface;
     private $additionalCostInterface;
     private $stakeholderInterface;
+    private $leadSourceInterface;
 
     public function __construct(
         SalesPlanInterface $salesPlanInterface,
         AdditionalCostInterface $additionalCostInterface,
-        StakeholderInterface $stakeholderInterface
+        StakeholderInterface $stakeholderInterface,
+        LeadSourceInterface $leadSourceInterface
     ) {
         $this->salesPlanInterface = $salesPlanInterface;
         $this->additionalCostInterface = $additionalCostInterface;
         $this->stakeholderInterface = $stakeholderInterface;
+        $this->leadSourceInterface = $leadSourceInterface;
     }
 
     /**
@@ -59,8 +63,10 @@ class SalesPlanController extends Controller
                 'unit' => (new Unit())->with('status', 'type')->find(decryptParams($unit_id)),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'stakeholders' => $this->stakeholderInterface->getByAll(decryptParams($site_id)),
+                'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
+            // dd($data);
 
             return view('app.sites.floors.units.sales-plan.create', $data);
         } else {
@@ -76,8 +82,8 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request,$site_id,$floor_id,$unit_id)
     {
-        $data = $request->all();
-        $record = $this->salesPlanInterface->store($data,$site_id);
+        $data = $request->input();
+        $record = $this->salesPlanInterface->store($site_id, $data);
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' =>$site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }
 

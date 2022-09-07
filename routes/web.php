@@ -15,6 +15,7 @@ use App\Http\Controllers\{
     testController,
     UnitController,
     PrintSalesPlanController,
+    StakeholderController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -49,7 +50,7 @@ Route::group([
 
 
     // Route::group(['middleware' => ['auth', ]], function () {
-        Route::group(['middleware' => ['auth', 'permission']], function () {
+    Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
@@ -151,10 +152,9 @@ Route::group([
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
+
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
-                            Route::get('/', [
-                                UnitController::class, 'index'
-                            ])->name('index');
+                            Route::get('/', [UnitController::class, 'index'])->name('index');
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
@@ -163,8 +163,8 @@ Route::group([
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
 
                             Route::get('delete-selected', [UnitController::class, 'destroySelected'])->name('destroy-selected');
-                            Route::group(['prefix' => '/{id}'], function () {
 
+                            Route::group(['prefix' => '/{id}'], function () {
                                 Route::get('edit', [UnitController::class, 'edit'])->name('edit');
                                 Route::put('update', [UnitController::class, 'update'])->name('update');
                             });
@@ -189,6 +189,17 @@ Route::group([
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
                                     });
+
+                                    Route::group(['prefix' => '/{sales_plan_id}'], function () {
+
+                                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+
+                                            Route::group(['prefix' => '/{id}'], function () {
+                                                Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
+                                            });
+
+                                        });
+                                    });
                                 });
                             });
                         });
@@ -208,6 +219,24 @@ Route::group([
                         Route::put('update', [TypeController::class, 'update'])->name('update');
 
                         Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                //Stakeholders Routes
+                Route::group(['prefix' => 'stakeholders', 'as' => 'stakeholders.'], function () {
+                    Route::get('/', [StakeholderController::class, 'index'])->name('index');
+
+                    Route::get('create', [StakeholderController::class, 'create'])->name('create');
+                    Route::post('store', [StakeholderController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [StakeholderController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
+                        Route::put('update', [StakeholderController::class, 'update'])->name('update');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
                     });
                 });
             });
@@ -238,6 +267,3 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
-Route::resources([
-    '/preview-sale-plan' => PrintSalesPlanController::class,
-]);

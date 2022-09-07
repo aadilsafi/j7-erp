@@ -4,42 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * App\Models\Site
- *
- * @property int $id
- * @property string $name
- * @property int $city_id
- * @property string $address
- * @property float $area_width
- * @property float $area_length
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @property-read \App\Models\City $city
- * @property-read \App\Models\Country|null $country
- * @method static \Illuminate\Database\Eloquent\Builder|Site newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Site newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Site query()
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereAreaLength($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereAreaWidth($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereCityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Site whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Floor[] $floors
- * @property-read int|null $floors_count
- * @property-read \App\Models\SiteConfigration|null $siteConfiguration
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Status[] $statuses
- * @property-read int|null $statuses_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
- * @property-read int|null $units_count
- */
 class Site extends Model
 {
     use HasFactory;

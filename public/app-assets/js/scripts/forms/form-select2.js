@@ -1,7 +1,13 @@
 !function (e, t, s) {
     "use strict";
-    var i = s(".select2"), a = s(".select2-icons"), r = s(".max-length"), o = s(".hide-search"),
-        n = s(".select2-data-array"), c = s(".select2-data-ajax"), l = s(".select2-size-lg"), d = s(".select2-size-sm"),
+    var i = s(".select2"),
+        a = s(".select2-icons"),
+        r = s(".max-length"),
+        o = s(".hide-search"),
+        n = s(".select2-data-array"),
+        c = s(".select2-data-ajax"),
+        l = s(".select2-size-lg"),
+        d = s(".select2-size-sm"),
         p = s(".select2InModal");
 
     function u(e) {

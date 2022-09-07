@@ -661,3 +661,7 @@ div#queuesLoadingOffCanvas {
         top: 100px !important;
     }
 }
+
+.border-hover-primary:hover {
+    border: 1px solid #7367F0;
+}

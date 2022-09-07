@@ -58,7 +58,14 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.floors.units.sales-plan.form-fields', ['site' => $site, 'floor' => $floor, 'unit' => $unit, 'additionalCosts' => $additionalCosts]) }}
+                {{ view('app.sites.floors.units.sales-plan.form-fields', [
+                    'site' => $site,
+                    'floor' => $floor,
+                    'unit' => $unit,
+                    'additionalCosts' => $additionalCosts,
+                    'stakeholders' => $stakeholders,
+                    'user' => $user,
+                ]) }}
 
             </div>
 
@@ -108,11 +115,11 @@
                             <i data-feather='save'></i>
                             <span id="create_sales_plan_button_span">Save Sales Plan</span>
                         </button>
-                        <button type="submit" value="save_print"
+                        {{-- <button type="submit" value="save_print"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='printer'></i>
                             <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
-                        </button>
+                        </button> --}}
                         <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
@@ -137,13 +144,68 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
     {{-- <script src="{{ asset('app-assets') }}/pages/create-sales-plan.min.js"></script> --}}
 @endsection
 
 @section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
+        var t = setTimeout(calculateInstallments, 1000);
         $(document).ready(function() {
+
+            var e = $("#stackholders");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).on("change", function(e) {
+
+                showBlockUI('#stakeholders_card');
+
+                let stakeholder_id = $(this).val();
+
+                let stakeholderData = {
+                    id: 0,
+                    full_name: '',
+                    father_name: '',
+                    occupation: '',
+                    designation: '',
+                    cnic: '',
+                    contact: '',
+                    address: '',
+                }
+
+                $.ajax({
+                    url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site->id), 'id' => ':id']) }}"
+                        .replace(':id', stakeholder_id),
+                    type: 'GET',
+                    data: {},
+                    success: function(response) {
+                        if (response.status) {
+                            if (response.data) {
+                                stakeholderData = response.data;
+                            }
+                            $('#stackholder_id').val(stakeholderData.id);
+                            $('#stackholder_full_name').val(stakeholderData.full_name);
+                            $('#stackholder_father_name').val(stakeholderData.father_name);
+                            $('#stackholder_occupation').val(stakeholderData.occupation);
+                            $('#stackholder_designation').val(stakeholderData.designation);
+                            $('#stackholder_cnic').val(stakeholderData.cnic);
+                            $('#stackholder_contact').val(stakeholderData.contact);
+                            $('#stackholder_address').text(stakeholderData.address);
+                        }
+                        hideBlockUI('#stakeholders_card');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#stakeholders_card');
+                    }
+                });
+            });
 
 
             var installmentsRowAction = '';
@@ -155,15 +217,15 @@
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
                 min: 0,
                 max: 50,
-            }).on("touchspin.on.stopupspin", function() {}).on("touchspin.on.stopdownspin", function() {}).on(
-                "touchspin.on.stopspin",
-                function() {}).on("change", function() {
+            }).on("touchspin.on.stopspin", function() {
+                updateTable();
+            }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
                 0 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
-                    "disabled-max-min")
+                    "disabled-max-min");
             });
 
             $('.installment_type_radio').on('change', function() {
@@ -188,7 +250,10 @@
                 minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
-                dateFormat: "Y-m-d"
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    updateTable();
+                },
             });
 
             $('#unit_price').on('change', function() {
@@ -208,10 +273,15 @@
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('checkbox-').length);
 
-                $(`#div-${elementId}`).toggle('fast', 'linear', function() {
-                    $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
-                });
-
+                if ($(this).is(':checked')) {
+                    $(`#div-${elementId}`).show('fast', 'linear', function() {
+                        $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
+                    });
+                } else {
+                    $(`#div-${elementId}`).hide('fast', 'linear', function() {
+                        $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
+                    });
+                }
             });
 
             $('input[id^="percentage-"]').on('change', function() {
@@ -279,7 +349,6 @@
             // installment_amount: 10708425,
             // length: 16,
 
-
             let data = {
                 length: parseInt($(".touchspin-icon").val()),
                 startDate: installments_start_date,
@@ -296,6 +365,7 @@
                 success: function(response) {
                     let InstallmentRows = '';
                     if (response.status) {
+                        $('#installments_table tbody#dynamic_installment_rows').empty();
 
                         for (let row of response.data.installments) {
                             InstallmentRows += row.row;
@@ -303,18 +373,26 @@
 
                         $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
                         InstallmentRows = '';
-                        hideBlockUI('#installments_acard');
+                        $('#base-installment').val(response.data.baseInstallmentTotal);
+                    } else {
+                        if (response.message.error == 'invalid_amout') {
+                            Toast.fire({
+                                icon: 'error',
+                                title: "Invalid Amount"
+                            });
+                        }
                     }
+                    hideBlockUI('#installments_acard');
                 },
                 error: function(errors) {
                     console.error(errors);
                     hideBlockUI('#installments_acard');
                 }
             });
+            // console.log(action);
         }
 
         function storeUnchangedData(key, field, value) {
-
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -323,11 +401,137 @@
                 unchangedData.splice(index, 1);
             }
 
-            unchangedData.push({
-                key: key,
-                field: field,
-                value: value
-            });
+            if (value > 0 || value.length > 0) {
+                unchangedData.push({
+                    key: key,
+                    field: field,
+                    value: value
+                });
+            }
+            updateTable();
         }
+
+        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
+            function() {
+                updateTable();
+            });
+
+        $('.installment_type_radio').on('change', function() {
+            updateTable();
+        });
+
+        function updateTable() {
+            clearTimeout(t);
+            t = setTimeout(calculateInstallments, 1500, 1);
+        }
+
+        var validator = $("#create-sales-plan-form").validate({
+            debug: true,
+            rules: {
+                // 1. PRIMARY DATA
+                'unit[no]': {
+                    required: true
+                },
+                'unit[floor_no]': {
+                    required: true
+                },
+                'unit[type]': {
+                    required: true
+                },
+                'unit[size]': {
+                    required: true
+                },
+                'unit[price][unit]': {
+                    required: true
+                },
+                'unit[price][total]': {
+                    required: true
+                },
+
+                //// Unit Discount
+                'unit[discount][percentage]': {
+                    required: true
+                },
+                'unit[discount][total]': {
+                    required: true
+                },
+
+                //// Unit Grand Total
+                'unit[grand_total]': {
+                    required: true
+                },
+
+                //// Unit Down Payment
+                'unit[downpayment][percentage]': {
+                    required: true
+                },
+                'unit[downpayment][total]': {
+                    required: true
+                },
+
+                // 2. INSTALLMENT DETAILS
+                'installments[types][type]': {
+                    required: true
+                },
+                'installments[types][value]': {
+                    required: true
+                },
+                'installments[start_date]': {
+                    required: true
+                },
+
+                // 3. STAKEHOLDER DATA (LEAD'S DATA)
+                'stackholder[stackholder_id]': {
+                    required: true
+                },
+                'stackholder[full_name]': {
+                    required: true
+                },
+                'stackholder[father_name]': {
+                    required: true
+                },
+                'stackholder[occupation]': {
+                    required: true
+                },
+                'stackholder[designation]': {
+                    required: true
+                },
+                'stackholder[cnic]': {
+                    required: true
+                },
+                'stackholder[contact]': {
+                    required: true
+                },
+                'stackholder[address]': {
+                    required: true
+                },
+
+                // 4. SALES SOURCE
+                'sales_source[full_name]': {
+                    required: true
+                },
+                'sales_source[status]': {
+                    required: true
+                },
+                'sales_source[contact_no]': {
+                    required: true
+                },
+                'sales_source[sales_type]': {
+                    required: true
+                },
+                'sales_source[indirect_source]': {
+                    required: true
+                },
+            },
+            submitHandler: function(form) {
+                // do other things for a valid form
+                console.log(form);
+            }
+        });
+
+        // validator.resetForm();
+        // validator.showErrors({
+        //     "firstname": "I know that your firstname is Pete, Pete!"
+        // });
     </script>
 @endsection

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('sales_plan_installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sales_plan_id')->constrained();
-            $table->date('date');
-            $table->float('amount')->default(0);
+            $table->string('date');
+            $table->double('amount')->default(0);
             $table->string('details')->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();

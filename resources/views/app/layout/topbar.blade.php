@@ -48,7 +48,7 @@
                     </li>
                 @endcan
 
-                <li class="nav-item d-none d-lg-block">
+                {{-- <li class="nav-item d-none d-lg-block">
                     @php
                         $trashedDataCount = getTrashedDataCount();
                     @endphp
@@ -60,9 +60,9 @@
                         <span
                             class="badge rounded-pill {{ $trashedDataCount > 0 ? 'bg-danger' : 'bg-primary' }} badge-up cart-item-count">{{ $trashedDataCount }}</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
-            <ul class="nav navbar-nav">
+            {{-- <ul class="nav navbar-nav">
                 <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon text-warning"
                             data-feather="star"></i></a>
                     <div class="bookmark-input search-input">
@@ -72,7 +72,7 @@
                         <ul class="search-list search-list-bookmark"></ul>
                     </div>
                 </li>
-            </ul>
+            </ul> --}}
         </div>
         <ul class="nav navbar-nav align-items-center ms-auto">
             <li class="nav-item d-block">
@@ -109,7 +109,7 @@
             </li>
 
 
-            <li class="nav-item nav-search">
+            {{-- <li class="nav-item nav-search">
                 <a class="nav-link nav-link-search">
                     <i class="ficon" data-feather="search"></i>
                 </a>
@@ -120,9 +120,9 @@
                     <div class="search-input-close"><i data-feather="x"></i></div>
                     <ul class="search-list search-list-main"></ul>
                 </div>
-            </li>
+            </li> --}}
             {{-- {{ json_encode(getbatchesByUserID(encryptParams(auth()->user()->id))) }} --}}
-            <li class="nav-item dropdown dropdown-cart me-25"><a class="nav-link" href="#"
+            {{-- <li class="nav-item dropdown dropdown-cart me-25"><a class="nav-link" href="#"
                     data-bs-toggle="dropdown"><i class="ficon" data-feather="shopping-cart"></i><span
                         class="badge rounded-pill bg-primary badge-up cart-item-count">6</span></a>
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-end">
@@ -334,7 +334,7 @@
                     <li class="dropdown-menu-footer"><a class="btn btn-primary w-100" href="#">Read all
                             notifications</a></li>
                 </ul>
-            </li>
+            </li> --}}
             <li class="nav-item dropdown dropdown-user"><a class="nav-link dropdown-toggle dropdown-user-link"
                     id="dropdown-user" href="#" data-bs-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
@@ -352,7 +352,7 @@
                     </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
-                    <a class="dropdown-item" href="page-profile.html">
+                    {{-- <a class="dropdown-item" href="page-profile.html">
                         <i class="me-50" data-feather="user"></i> Profile</a>
                     <a class="dropdown-item" href="app-email.html">
                         <i class="me-50" data-feather="mail"></i>
@@ -361,18 +361,21 @@
                         <i class="me-50" data-feather="check-square"></i> Task</a>
                     <a class="dropdown-item" href="app-chat.html"><i class="me-50"
                             data-feather="message-square"></i> Chats</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="page-account-settings-account.html">
-                        <i class="me-50" data-feather="settings"></i>
-                        Settings</a>
-                    <a class="dropdown-item" href="page-pricing.html">
+                    <div class="dropdown-divider"></div> --}}
+                    @can('sites.configurations.configView')
+                        <a class="dropdown-item"
+                            href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                            <i class="me-50" data-feather="settings"></i>
+                            Settings</a>
+                    @endcan
+                    {{-- <a class="dropdown-item" href="page-pricing.html">
                         <i class="me-50" data-feather="credit-card"></i>
                         Pricing
                     </a>
                     <a class="dropdown-item" href="page-faq.html">
                         <i class="me-50" data-feather="help-circle"></i>
                         FAQ
-                    </a>
+                    </a> --}}
                     <a class="dropdown-item" href="{{ route('logout') }}">
                         <i class="me-50" data-feather="power"></i>
                         Logout
@@ -382,7 +385,7 @@
         </ul>
     </div>
 </nav>
-<ul class="main-search-list-defaultlist d-none">
+{{-- <ul class="main-search-list-defaultlist d-none">
     <li class="d-flex align-items-center"><a href="#">
             <h6 class="section-label mt-75 mb-0">Files</h6>
         </a></li>
@@ -486,5 +489,5 @@
             </div>
         </a>
     </li>
-</ul>
+</ul> --}}
 <!-- END: Header-->

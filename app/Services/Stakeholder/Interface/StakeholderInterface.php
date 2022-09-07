@@ -6,11 +6,11 @@ interface StakeholderInterface
 {
     public function model();
 
-    public function getByAll();
+    public function getByAll($site_id);
     public function getById($site_id, $id);
 
     public function store($site_id, $inputs);
-    public function update($site_id, $inputs, $id);
+    public function update($site_id, $id, $inputs);
 
     public function destroy($site_id, $id);
 }

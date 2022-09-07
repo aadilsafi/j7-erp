@@ -161,3 +161,21 @@ Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.stakeholders.index', encryptParams($site_id));
     $trail->push('Edit Stakeholder');
 });
+
+
+//Leads Source Breadcrumbs
+Breadcrumbs::for('sites.lead-sources.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Lead Sources', route('sites.lead-sources.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.lead-sources.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.lead-sources.index', $site_id);
+    $trail->push('Create Lead Source');
+});
+
+Breadcrumbs::for('sites.lead-sources.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.lead-sources.index', $site_id);
+    $trail->push('Edit Lead Source');
+});
+

@@ -48,7 +48,7 @@
                     </li>
                 @endcan
 
-                <li class="nav-item d-none d-lg-block">
+                {{-- <li class="nav-item d-none d-lg-block">
                     @php
                         $trashedDataCount = getTrashedDataCount();
                     @endphp
@@ -60,7 +60,7 @@
                         <span
                             class="badge rounded-pill {{ $trashedDataCount > 0 ? 'bg-danger' : 'bg-primary' }} badge-up cart-item-count">{{ $trashedDataCount }}</span>
                     </a>
-                </li>
+                </li> --}}
             </ul>
             {{-- <ul class="nav navbar-nav">
                 <li class="nav-item d-none d-lg-block"><a class="nav-link bookmark-star"><i class="ficon text-warning"
@@ -362,9 +362,12 @@
                     <a class="dropdown-item" href="app-chat.html"><i class="me-50"
                             data-feather="message-square"></i> Chats</a>
                     <div class="dropdown-divider"></div> --}}
-                    <a class="dropdown-item" href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
-                        <i class="me-50" data-feather="settings"></i>
-                        Settings</a>
+                    @can('sites.configurations.configView')
+                        <a class="dropdown-item"
+                            href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
+                            <i class="me-50" data-feather="settings"></i>
+                            Settings</a>
+                    @endcan
                     {{-- <a class="dropdown-item" href="page-pricing.html">
                         <i class="me-50" data-feather="credit-card"></i>
                         Pricing
@@ -382,7 +385,7 @@
         </ul>
     </div>
 </nav>
-<ul class="main-search-list-defaultlist d-none">
+{{-- <ul class="main-search-list-defaultlist d-none">
     <li class="d-flex align-items-center"><a href="#">
             <h6 class="section-label mt-75 mb-0">Files</h6>
         </a></li>
@@ -486,5 +489,5 @@
             </div>
         </a>
     </li>
-</ul>
+</ul> --}}
 <!-- END: Header-->

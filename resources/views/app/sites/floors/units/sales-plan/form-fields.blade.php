@@ -298,7 +298,7 @@
                 <select class="form-select" id="stackholders">
                     <option value="0">Create new Stakeholder...</option>
                     @forelse ($stakeholders as $stakeholder)
-                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }}</option>
+                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}</option>
                     @empty
                     @endforelse
                 </select>
@@ -386,7 +386,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
-                    name="sales_source_contact_no" placeholder="Contact No" value="{{ $user->phone_no }}"
+                    name="sales_source[contact_no]" placeholder="Contact No" value="{{ $user->phone_no }}"
                     disabled />
                 {{-- invalid-tooltip">{{ $message }}</div> --}}
             </div>

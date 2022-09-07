@@ -192,8 +192,8 @@ class SiteController extends Controller
         $inputs = $request->validate([
             'name' => 'sometimes|between:1,255',
             'address' => 'sometimes|between:1,255',
-            'area_width' => 'sometimes|numeric',
-            'area_length' => 'sometimes|numeric',
+            'area_width' => 'sometimes|numeric|gt:0',
+            'area_length' => 'sometimes|numeric|gt:0',
             'selected_tab' => 'required|in:site,floor,unit',
             'arr_site' => 'sometimes|array',
             'arr_floor' => 'sometimes|array',

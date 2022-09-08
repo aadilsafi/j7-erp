@@ -114,22 +114,6 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             }
         }
 
-        function deleteByID(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: '{{ __('lang.commons.are_you_sure') }}',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                confirmButtonClass: 'btn-danger',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.href = '{{ route('roles.destroy', ['id' => ':id']) }}'.replace(':id', id);
-                }
-            });
-        }
-
         function addNew() {
             location.href = '{{ route('sites.stakeholders.create', ['site_id' => $site_id]) }}';
         }

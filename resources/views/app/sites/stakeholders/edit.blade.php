@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.create', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.edit', $site_id) }}
 @endsection
 
-@section('page-title', 'Create Stakeholder')
+@section('page-title', 'Edit Stakeholder')
 
 @section('page-vendor')
 @endsection
@@ -20,8 +20,7 @@
             color: #7367F0 !important;
         }
 
-        / the background color of the file and file panel (used when dropping an image) /
-        .filepond--item-panel {
+        / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
             background-color: #7367F0;
         }
 
@@ -30,9 +29,8 @@
         }
 
         /* .filepond--item {
-                                width: calc(20% - 0.5em);
-                            } */
-
+                                    width: calc(20% - 0.5em);
+                                } */
     </style>
 @endsection
 
@@ -40,9 +38,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Stakeholder</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Stakeholder</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.stakeholders.create', $site_id) }}
+                    {{ Breadcrumbs::render('sites.stakeholders.edit', $site_id) }}
                 </div>
             </div>
         </div>
@@ -51,57 +49,55 @@
 
 @section('content')
     {{-- <div class="card"> --}}
-        <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data" action="{{ route('sites.stakeholders.store', ['site_id' => encryptParams($site_id)]) }}"
-            method="POST">
+    <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data"
+        action="{{ route('sites.stakeholders.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($stakeholder->id)]) }}"
+        method="POST">
 
-            <div class="card-header">
+        <div class="card-header">
+        </div>
+
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    @csrf
+                    @method('put')
+                    {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholder' => $stakeholder]) }}
+                </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-sm-12 position-relative" >
-                    <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        @csrf
-                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                        style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        <div class="card-body">
-                            <div class="d-block mb-1">
-                                <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
-                                <input id="attachment" type="file"
-                                    class="filepond @error('attachment') is-invalid @enderror"
-                                    name="attachment[]"
-                                    multiple
-                                    accept="image/png, image/jpeg, image/gif"/>
-                                @error('attachment')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <hr>
-                            <input id="saveButton" type="" class="btn text-nowrap  w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1"
-                            value=" Save Stakeholder">
-                                {{-- <i data-feather='save'></i> --}}
-                            <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
-                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                                <i data-feather='x'></i>
-                                {{ __('lang.commons.cancel') }}
-                            </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
+                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-body">
+                        <div class="d-block mb-1">
+                            <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
+                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
+                                name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
+                            @error('attachment')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+                        <hr>
+                        <input id="saveButton" type="" class="btn text-nowrap  w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1"
+                            value=" Save Stakeholder">
+                        <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
+                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                            <i data-feather='x'></i>
+                            {{ __('lang.commons.cancel') }}
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            {{-- <div class="card-body">
+        {{-- <div class="card-body">
 
                 @csrf
                 {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
 
             </div> --}}
 
-            {{-- <div class="card-footer d-flex align-items-center justify-content-end">
+        {{-- <div class="card-footer d-flex align-items-center justify-content-end">
                 <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                     <i data-feather='save'></i>
                     Save Stakeholder
@@ -113,7 +109,7 @@
                 </a>
             </div> --}}
 
-        </form>
+    </form>
     {{-- </div> --}}
 @endsection
 
@@ -121,10 +117,8 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js">
-    </script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js">
-    </script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script>
         FilePond.registerPlugin(
@@ -136,6 +130,20 @@
         );
 
         FilePond.create(document.getElementById('attachment'), {
+            // files: [{
+            //     // the server file reference
+            //     source: 'app-assets/stakeholder/cnic/attachments/1662633952.png',
+
+            //     // set type to local to indicate an already uploaded file
+            //     options: {
+            //         type: 'local',
+
+            //         // file initial metadata
+            //         metadata: {
+            //             date: '2018-10-5T12:00',
+            //         },
+            //     },
+            // }, ],
             styleButtonRemoveItemPosition: 'right',
             imageValidateSizeMinWidth: 1000,
             imageValidateSizeMinHeight: 1000,
@@ -145,9 +153,9 @@
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles:2,
+            maxFiles: 2,
             // required:true,
-            checkValidity:true,
+            checkValidity: true,
             credits: {
                 label: '',
                 url: ''
@@ -157,9 +165,6 @@
 @endsection
 
 @section('page-js')
-@endsection
-
-@section('custom-js')
 <script type="text/javascript">
     $(document).ready(function() {
         $("#saveButton").click(function() {
@@ -201,4 +206,7 @@
         });
     });
 </script>
+@endsection
+
+@section('custom-js')
 @endsection

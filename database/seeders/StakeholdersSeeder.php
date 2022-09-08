@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Stakeholder;
+use App\Models\StakeholderType;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -39,45 +40,6 @@ class StakeholdersSeeder extends Seeder
                 'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
                 'contact' => '0512226044',
                 'parent_id' => 0,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'site_id' => 1,
-                'full_name' => 'Zulqarnain',
-                'father_name' => 'Raza',
-                'occupation' => 'Web Developer',
-                'designation' => 'Laravel Developer',
-                'cnic' => '1234567890',
-                'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
-                'contact' => '0512226044',
-                'parent_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'site_id' => 1,
-                'full_name' => 'Ahmed',
-                'father_name' => 'Raza',
-                'occupation' => 'Web Developer',
-                'designation' => 'Laravel Developer',
-                'cnic' => '1234567890',
-                'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
-                'contact' => '0512226044',
-                'parent_id' => 2,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'site_id' => 1,
-                'full_name' => 'Aqeel',
-                'father_name' => 'Raza',
-                'occupation' => 'Web Developer',
-                'designation' => 'Laravel Developer',
-                'cnic' => '1234567890',
-                'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
-                'contact' => '0512226044',
-                'parent_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

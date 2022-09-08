@@ -160,12 +160,11 @@ class StakeholderDataTable extends DataTable
             ),
 
             Column::make('full_name')->title('Name'),
-            Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
+            Column::make('father_name')->title('Father Name'),
             Column::make('cnic')->title('CNIC'),
             Column::make('contact')->title('Contact'),
-            // Column::make('address')->title('Address'),
-            Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
-            Column::make('relation')->title('Relation')->addClass('text-nowrap'),
+            Column::make('parent_id')->title('Next Of Kin'),
+            Column::make('relation')->title('Relation'),
             (
                 $editPermission ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')

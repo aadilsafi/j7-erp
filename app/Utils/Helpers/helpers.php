@@ -6,6 +6,7 @@ use App\Models\{
     Type,
     UserBatch,
     Stakeholder,
+    StakeholderType,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -172,8 +173,12 @@ if (!function_exists('getStakeholderTreeData')) {
         $dbTypes = ($getFromDB ? $model::all() : $collectionData);
 
         foreach ($collectionData as $key => $row) {
-            $stakeholderTmp[] = $row;
-            $stakeholderTmp[$key]["tree"] = ($getFromDB ? getStakholderParentTreeElequent($model, $row, $row->full_name, $collectionData, $dbTypes) : getStakeholderParentTreeCollection($row, $row->full_name, $collectionData));
+            $stakeholder_type = StakeholderType::where('stakeholder_id',$row->id)->first();
+            if($stakeholder_type && $stakeholder_type->type == 'C' && $stakeholder_type->status == 1)
+            {
+                $stakeholderTmp[] = $row;
+                $stakeholderTmp[$key]["tree"] = ($getFromDB ? getStakholderParentTreeElequent($model, $row, $row->full_name, $collectionData, $dbTypes) : getStakeholderParentTreeCollection($row, $row->full_name, $collectionData));
+            }
         }
         return $stakeholderTmp;
     }

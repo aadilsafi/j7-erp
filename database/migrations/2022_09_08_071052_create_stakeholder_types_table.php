@@ -13,8 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('stakeholder_type', function (Blueprint $table) {
+        Schema::create('stakeholder_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stakeholder_id')->constrained();
             $table->string('type')->nullable();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('stakeholder_types');
     }
 };

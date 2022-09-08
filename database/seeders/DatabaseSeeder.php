@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\SatkeholderTypeSeeder;
 use Database\Seeders\SalesPlanTemplatesSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder
             SalesPlanInstallmentsSeeder::class,
             SalesPlanTemplatesSeeder::class,
             LeadSourceTableSeeder::class,
+            SatkeholderTypeSeeder::class,
         ]);
     }
 }

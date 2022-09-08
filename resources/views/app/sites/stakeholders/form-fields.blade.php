@@ -4,7 +4,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
         <label class="form-label fs-5" for="type_name">Full Name</label>
         <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-            id="stakeholder_name" name="full_name" placeholder="Stakeholder Name"
+            id="full_name" name="full_name" placeholder="Stakeholder Name"
             value="{{ isset($stakeholder) ? $stakeholder->full_name : old('stakeholder_name') }}" onkeyup="convertToSlug(this.value);" />
         @error('full_name')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -68,6 +68,9 @@
     <div class="col-lg-12 col-md-12 col-sm-12 mt-2 position-relative">
         <label class="form-label fs-5" for="type_name">Stakeholder Address</label>
         <textarea class="form-control @error('contact') is-invalid @enderror" name="address" id="address" rows="3" placeholder="Stakeholder Address">
+            @isset($stakeholder)
+                {{ $stakeholder->address }}
+            @endisset
         </textarea>
         @error('address')
             <div class="invalid-feedback">{{ $message }}</div>

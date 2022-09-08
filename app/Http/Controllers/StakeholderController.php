@@ -95,9 +95,29 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $site_id, $id)
     {
         //
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+        try {
+            $stakeholder = $this->stakeholderInterface->getById($site_id,$id);
+
+            if ($stakeholder && !empty($stakeholder)) {
+
+                $data = [
+                    'site_id' => $site_id,
+                    'id' => $id,
+                    'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                    'stakeholder' => $stakeholder,
+                ];
+                return view('app.sites.stakeholders.edit', $data);
+            }
+
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -107,9 +127,22 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request  $request, $site_id, $id)
     {
-        //
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+                $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
+                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -130,6 +163,29 @@ class StakeholderController extends Controller
             return apiSuccessResponse($stakeholder);
         } else {
             abort(403);
+        }
+    }
+
+    public function destroySelected(Request $request, $site_id)
+    {
+        try {
+            $site_id = decryptParams($site_id);
+            if (!request()->ajax()) {
+                if ($request->has('chkRole')) {
+
+                    $record = $this->stakeholderInterface->destroy($site_id, encryptParams($request->chkRole));
+
+                    if ($record) {
+                        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_deleted'));
+                    } else {
+                        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                    }
+                }
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 }

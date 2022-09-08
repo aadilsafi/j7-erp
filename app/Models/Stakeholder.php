@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\StakeholderType;
 use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Stakeholder extends Model implements HasMedia
 {
@@ -61,6 +62,11 @@ class Stakeholder extends Model implements HasMedia
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function stakeholder_types()
+    {
+        return $this->hasMany(StakeholderType::class);
     }
 
 }

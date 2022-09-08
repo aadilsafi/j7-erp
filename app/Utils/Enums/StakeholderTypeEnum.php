@@ -5,7 +5,7 @@ namespace App\Utils\Enums;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
-enum StakeholderTypeEnum: int
+enum StakeholderTypeEnum: string
 {
     case CUSTOMER = 'C';
     case VENDOR = 'V';

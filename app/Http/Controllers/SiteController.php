@@ -189,16 +189,8 @@ class SiteController extends Controller
 
     public function configStore(Request $request, $id)
     {
-        $inputs = $request->validate([
-            'name' => 'sometimes|between:1,255',
-            'address' => 'sometimes|between:1,255',
-            'area_width' => 'sometimes|numeric|gt:0',
-            'area_length' => 'sometimes|numeric|gt:0',
-            'selected_tab' => 'required|in:site,floor,unit',
-            'arr_site' => 'sometimes|array',
-            'arr_floor' => 'sometimes|array',
-            'arr_unit' => 'sometimes|array',
-        ]);
+        $inputs = $request->validate((new SiteConfigration())->rules, (new SiteConfigration())->ruleMessages);
+        dd($inputs);
         try {
             $this->SiteConfigurationInterface->update($inputs, $id);
             return redirect()->route('sites.configurations.configView', ['id' => encryptParams(decryptParams($id))])->withSuccess(__('lang.commons.data_saved'));

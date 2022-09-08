@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.create',$site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.create', $site_id) }}
 @endsection
 
 @section('page-title', 'Create Additional Cost')
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Additional Cost</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.additional-costs.create') }}
+                    {{ Breadcrumbs::render('sites.additional-costs.create', $site_id) }}
                 </div>
             </div>
         </div>

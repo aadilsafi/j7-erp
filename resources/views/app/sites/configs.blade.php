@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-1">
+                                    <div class="row mb-1 g-1">
 
                                         @forelse ($site->siteConfiguration->toArray() as $key => $value)
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'site')
@@ -117,12 +117,12 @@
                                                     <label class="form-label fs-5"
                                                         for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
-                                                        class="form-control form-control-lg @error($key) is-invalid @enderror"
+                                                        class="form-control form-control-lg @error('arr_site.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_site[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->title()->replace('_', ' ') }}" />
-                                                    @error($key)
-                                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                                    @error('arr_site.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             @endif
@@ -156,19 +156,19 @@
                             <input type="hidden" name="selected_tab" value="floor">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row mb-1">
+                                    <div class="row mb-1 g-1">
                                         @forelse ($site->siteConfiguration->toArray() as $key => $value)
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'floor')
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
                                                         for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
-                                                        class="form-control form-control-lg @error($key) is-invalid @enderror"
+                                                        class="form-control form-control-lg @error('arr_floor.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_floor[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->ucfirst()->replace('_', ' ') }}" />
-                                                    @error($key)
-                                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                                    @error('arr_floor.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             @endif
@@ -202,19 +202,20 @@
                             <input type="hidden" name="selected_tab" value="unit">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row mb-1">
+                                    <div class="row mb-1 g-1">
                                         @forelse ($site->siteConfiguration->toArray() as $key => $value)
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'unit')
+                                            {{-- {{ dd('arr_unit' . $key) }} --}}
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
                                                         for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
-                                                        class="form-control form-control-lg @error($key) is-invalid @enderror"
+                                                        class="form-control form-control-lg @error('arr_unit.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_unit[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->ucfirst()->replace('_', ' ') }}" />
-                                                    @error($key)
-                                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                                    @error('arr_unit.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             @endif

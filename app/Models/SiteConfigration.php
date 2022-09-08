@@ -41,6 +41,7 @@ class SiteConfigration extends Model
         'arr_site.site_down_payment_percentage.max' => 'The site down payment percentage may not be greater than 100.',
 
         'arr_floor.floor_prefix.string' => 'The floor prefix must be a string.',
+        'arr_floor.floor_prefix.alpha_num' => 'The floor prefix must only contain letters and numbers.',
         'arr_floor.floor_prefix.max' => 'The floor prefix may not be greater than 5 characters.',
 
         'arr_unit.unit_number_digits.numeric' => 'The unit number digits must be a number.',

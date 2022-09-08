@@ -278,6 +278,7 @@ Route::group([
 });
 
 Route::group(['prefix' => 'tests'], function () {
+    Route::get('test', [testController::class, 'test'])->name('test');
     Route::get('jobs', [testController::class, 'jobs'])->name('jobs');
     Route::get('/batch/{batchId}', [testController::class, 'getBatchByID'])->name('batch');
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');

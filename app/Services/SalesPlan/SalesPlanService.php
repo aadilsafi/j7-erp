@@ -185,7 +185,7 @@ class SalesPlanService implements SalesPlanInterface
 
                 $installmentRow = [
                     'key' => $key + 1,
-                    'date' => $date->format('d/m/Y'),
+                    'date' => $date,
                     'detail' => null,
                     'amount' => $amount,
                     'remarks' => null,

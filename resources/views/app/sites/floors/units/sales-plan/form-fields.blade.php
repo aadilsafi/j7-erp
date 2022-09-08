@@ -268,9 +268,7 @@
                                         <th scope="col">Installments</th>
                                         <th scope="col">Due Date</th>
                                         <th scope="col">Total Amount</th>
-                                        <th scope="col">Paid Amount</th>
-                                        <th scope="col">Remaining Amount</th>
-                                        <th scope="col">Status</th>
+                                        <th scope="col">Remarks</th>
                                     </tr>
                                 </thead>
 
@@ -300,7 +298,9 @@
                 <select class="form-select" id="stackholders">
                     <option value="0">Create new Stakeholder...</option>
                     @forelse ($stakeholders as $stakeholder)
-                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}</option>
+                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
+                            {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}
+                        </option>
                     @empty
                     @endforelse
                 </select>
@@ -369,8 +369,8 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_full_name">Sales Person</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_full_name"
-                name="sales_source[full_name]"
-                    placeholder="Sales Person" value="{{ $user->name }}" disabled />
+                    name="sales_source[full_name]" placeholder="Sales Person" value="{{ $user->name }}"
+                    disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -395,7 +395,7 @@
         </div>
 
         <div class="row mb-1">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="sales_source_lead_source">Lead Source</label>
                 <select class="form-select" id="sales_source_lead_source" name="sales_source[lead_source]">
                     <option value="0">Create new Lead Source</option>
@@ -404,6 +404,13 @@
                     @empty
                     @endforelse
                 </select>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 position-relative" style="display: none;">
+                <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
+                <input type="text" class="form-control form-control-lg" id="sales_source_new"
+                    name="sales_source[new]" placeholder="New Sale Source" value="{{ old('sales_source.new') }}"
+                    disabled />
             </div>
         </div>
 

@@ -217,47 +217,6 @@
                 containerCssClass: "select-lg",
             }).on("change", function(e) {
 
-                // showBlockUI('#stakeholders_card');
-
-                // let stakeholder_id = $(this).val();
-
-                // let stakeholderData = {
-                //     id: 0,
-                //     full_name: '',
-                //     father_name: '',
-                //     occupation: '',
-                //     designation: '',
-                //     cnic: '',
-                //     contact: '',
-                //     address: '',
-                // }
-
-                // $.ajax({
-                //     url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site->id), 'id' => ':id']) }}"
-                //         .replace(':id', stakeholder_id),
-                //     type: 'GET',
-                //     data: {},
-                //     success: function(response) {
-                //         if (response.status) {
-                //             if (response.data) {
-                //                 stakeholderData = response.data;
-                //             }
-                //             $('#stackholder_id').val(stakeholderData.id);
-                //             $('#stackholder_full_name').val(stakeholderData.full_name);
-                //             $('#stackholder_father_name').val(stakeholderData.father_name);
-                //             $('#stackholder_occupation').val(stakeholderData.occupation);
-                //             $('#stackholder_designation').val(stakeholderData.designation);
-                //             $('#stackholder_cnic').val(stakeholderData.cnic);
-                //             $('#stackholder_contact').val(stakeholderData.contact);
-                //             $('#stackholder_address').text(stakeholderData.address);
-                //         }
-                //         hideBlockUI('#stakeholders_card');
-                //     },
-                //     error: function(errors) {
-                //         console.error(errors);
-                //         hideBlockUI('#stakeholders_card');
-                //     }
-                // });
             });
 
 
@@ -478,109 +437,109 @@
             t = setTimeout(calculateInstallments, 1500, 1);
         }
 
-            // var validator = $("#create-sales-plan-form").validate({
-            //     debug: true,
-            //     rules: {
-            //         // 1. PRIMARY DATA
-            //         'unit[no]': {
-            //             required: true
-            //         },
-            //         'unit[floor_no]': {
-            //             required: true
-            //         },
-            //         'unit[type]': {
-            //             required: true
-            //         },
-            //         'unit[size]': {
-            //             required: true
-            //         },
-            //         'unit[price][unit]': {
-            //             required: true
-            //         },
-            //         'unit[price][total]': {
-            //             required: true
-            //         },
+        // var validator = $("#create-sales-plan-form").validate({
+        //     debug: true,
+        //     rules: {
+        //         // 1. PRIMARY DATA
+        //         'unit[no]': {
+        //             required: true
+        //         },
+        //         'unit[floor_no]': {
+        //             required: true
+        //         },
+        //         'unit[type]': {
+        //             required: true
+        //         },
+        //         'unit[size]': {
+        //             required: true
+        //         },
+        //         'unit[price][unit]': {
+        //             required: true
+        //         },
+        //         'unit[price][total]': {
+        //             required: true
+        //         },
 
-            //         //// Unit Discount
-            //         'unit[discount][percentage]': {
-            //             required: true
-            //         },
-            //         'unit[discount][total]': {
-            //             required: true
-            //         },
+        //         //// Unit Discount
+        //         'unit[discount][percentage]': {
+        //             required: true
+        //         },
+        //         'unit[discount][total]': {
+        //             required: true
+        //         },
 
-            //         //// Unit Grand Total
-            //         'unit[grand_total]': {
-            //             required: true
-            //         },
+        //         //// Unit Grand Total
+        //         'unit[grand_total]': {
+        //             required: true
+        //         },
 
-            //         //// Unit Down Payment
-            //         'unit[downpayment][percentage]': {
-            //             required: true
-            //         },
-            //         'unit[downpayment][total]': {
-            //             required: true
-            //         },
+        //         //// Unit Down Payment
+        //         'unit[downpayment][percentage]': {
+        //             required: true
+        //         },
+        //         'unit[downpayment][total]': {
+        //             required: true
+        //         },
 
-            //         // 2. INSTALLMENT DETAILS
-            //         'installments[types][type]': {
-            //             required: true
-            //         },
-            //         'installments[types][value]': {
-            //             required: true
-            //         },
-            //         'installments[start_date]': {
-            //             required: true
-            //         },
+        //         // 2. INSTALLMENT DETAILS
+        //         'installments[types][type]': {
+        //             required: true
+        //         },
+        //         'installments[types][value]': {
+        //             required: true
+        //         },
+        //         'installments[start_date]': {
+        //             required: true
+        //         },
 
-            //         // 3. STAKEHOLDER DATA (LEAD'S DATA)
-            //         'stackholder[stackholder_id]': {
-            //             required: true
-            //         },
-            //         'stackholder[full_name]': {
-            //             required: true
-            //         },
-            //         'stackholder[father_name]': {
-            //             required: true
-            //         },
-            //         'stackholder[occupation]': {
-            //             required: true
-            //         },
-            //         'stackholder[designation]': {
-            //             required: true
-            //         },
-            //         'stackholder[cnic]': {
-            //             required: true
-            //         },
-            //         'stackholder[contact]': {
-            //             required: true
-            //         },
-            //         'stackholder[address]': {
-            //             required: true
-            //         },
+        //         // 3. STAKEHOLDER DATA (LEAD'S DATA)
+        //         'stackholder[stackholder_id]': {
+        //             required: true
+        //         },
+        //         'stackholder[full_name]': {
+        //             required: true
+        //         },
+        //         'stackholder[father_name]': {
+        //             required: true
+        //         },
+        //         'stackholder[occupation]': {
+        //             required: true
+        //         },
+        //         'stackholder[designation]': {
+        //             required: true
+        //         },
+        //         'stackholder[cnic]': {
+        //             required: true
+        //         },
+        //         'stackholder[contact]': {
+        //             required: true
+        //         },
+        //         'stackholder[address]': {
+        //             required: true
+        //         },
 
-            //         // 4. SALES SOURCE
-            //         'sales_source[full_name]': {
-            //             required: true
-            //         },
-            //         'sales_source[status]': {
-            //             required: true
-            //         },
-            //         'sales_source[contact_no]': {
-            //             required: true
-            //         },
-            //         'sales_source[sales_type]': {
-            //             required: true
-            //         },
-            //         'sales_source[indirect_source]': {
-            //             required: true
-            //         },
-            //     },
-            //     submitHandler: function(form) {
-            //         // do other things for a valid form
-            //         console.log(form);
-            //     }
-            // });
+        //         // 4. SALES SOURCE
+        //         'sales_source[full_name]': {
+        //             required: true
+        //         },
+        //         'sales_source[status]': {
+        //             required: true
+        //         },
+        //         'sales_source[contact_no]': {
+        //             required: true
+        //         },
+        //         'sales_source[sales_type]': {
+        //             required: true
+        //         },
+        //         'sales_source[indirect_source]': {
+        //             required: true
+        //         },
+        //     },
+        //     submitHandler: function(form) {
+        //         // do other things for a valid form
+        //         console.log(form);
+        //     }
+        // });
 
         // validator.resetForm();
         // validator.showErrors({

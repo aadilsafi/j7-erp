@@ -265,10 +265,12 @@
                                 <thead style="position: sticky; top: 0; z-index: 10;">
                                     <tr class="text-center">
                                         <th scope="col">#</th>
+                                        <th scope="col">Installments</th>
                                         <th scope="col">Due Date</th>
-                                        <th scope="col">Details</th>
-                                        <th scope="col">Amount</th>
-                                        <th scope="col">Remarks</th>
+                                        <th scope="col">Total Amount</th>
+                                        <th scope="col">Paid Amount</th>
+                                        <th scope="col">Remaining Amount</th>
+                                        <th scope="col">Status</th>
                                     </tr>
                                 </thead>
 

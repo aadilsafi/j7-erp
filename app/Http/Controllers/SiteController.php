@@ -190,6 +190,7 @@ class SiteController extends Controller
     public function configStore(Request $request, $id)
     {
         $inputs = $request->validate((new SiteConfigration())->rules, (new SiteConfigration())->ruleMessages);
+        // dd($inputs);
         try {
             $this->SiteConfigurationInterface->update($inputs, $id);
             return redirect()->route('sites.configurations.configView', ['id' => encryptParams(decryptParams($id))])->withSuccess(__('lang.commons.data_saved'));

@@ -205,7 +205,6 @@
                                     <div class="row mb-1 g-1">
                                         @forelse ($site->siteConfiguration->toArray() as $key => $value)
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'unit')
-                                            {{-- {{ dd('arr_unit' . $key) }} --}}
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
                                                         for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>

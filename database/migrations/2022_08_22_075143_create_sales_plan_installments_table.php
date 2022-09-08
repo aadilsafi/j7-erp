@@ -16,9 +16,11 @@ return new class extends Migration
         Schema::create('sales_plan_installments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sales_plan_id')->constrained();
-            $table->string('date');
-            $table->double('amount')->default(0);
             $table->string('details')->nullable();
+            $table->string('date')->nullable();
+            $table->double('amount')->default(0);
+            $table->double('paid_amount')->default(0);
+            $table->double('remaining_amount')->default(0);
             $table->string('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

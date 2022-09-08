@@ -79,12 +79,12 @@ Breadcrumbs::for('sites.additional-costs.index', function (BreadcrumbTrail $trai
 });
 
 Breadcrumbs::for('sites.additional-costs.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.additional-costs.index', ['site_id' => $site_id]);
+    $trail->parent('sites.additional-costs.index', $site_id);
     $trail->push('Create Additional Cost');
 });
 
 Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.additional-costs.index', ['site_id' => $site_id]);
+    $trail->parent('sites.additional-costs.index', $site_id);
     $trail->push('Edit Additional Cost');
 });
 

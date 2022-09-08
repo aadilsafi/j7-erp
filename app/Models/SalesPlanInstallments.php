@@ -11,15 +11,21 @@ class SalesPlanInstallments extends Model
 
     protected $fillable = [
         'sales_plan_id',
+        'details',
         'date',
         'amount',
-        'details',
+        'paid_amount',
+        'remaining_amount',
         'remarks',
     ];
 
     protected $casts = [
-        'amount' => 'float',
+        'sales_plan_id' => 'integer',
         'details' => 'string',
+        'date' => 'string',
+        'amount' => 'double',
+        'paid_amount' => 'double',
+        'remaining_amount' => 'double',
         'remarks' => 'string',
     ];
 
@@ -27,5 +33,4 @@ class SalesPlanInstallments extends Model
     {
         return $this->belongsTo(SalesPlan::class);
     }
-
 }

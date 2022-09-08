@@ -35,16 +35,6 @@ class storeRequest extends FormRequest
      */
     public function withValidator($validator)
     {
-        if (!$validator->fails()) {
-            $validator->after(function ($validator) {
-                $typeId = $this->input('type');
-                if ($typeId != 0) {
-                    $type = (new Type)->where('id', $typeId)->first();
-                    if (!$type) {
-                        $validator->errors()->add('type', 'This type does not exists');
-                    }
-                }
-            });
-        }
+
     }
 }

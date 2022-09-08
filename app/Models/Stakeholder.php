@@ -23,6 +23,7 @@ class Stakeholder extends Model implements HasMedia
         'address',
         'parent_id',
         'relation',
+        'attachment',
     ];
 
     public $rules = [
@@ -34,9 +35,13 @@ class Stakeholder extends Model implements HasMedia
         'cnic' => 'required|string|min:1|max:15',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
-        'parent_id' => 'required|numeric',
-        // 'relation' => 'required_if:parent_id,0',
-        'attachment' => 'required',
+        'parent_id' => 'nullable|numeric',
+        'relation' => 'required_with:parent_id',
+        'attachment' => 'required|min:2',
+    ];
+
+    public $ruleMessages = [
+        'attachment' => 'Minimum Two Attachment Required.',
     ];
 
     protected $casts = [

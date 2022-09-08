@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->integer('parent_id')->default(0);
             $table->string('relation')->nullable();
+            $table->string('attachment')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

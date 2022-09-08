@@ -398,7 +398,7 @@ if (!function_exists('getStakeholderParentByParentId')) {
         if ($Stakeholder) {
             return $Stakeholder->full_name;
         }
-        return 'parent';
+        return 'Nill';
     }
 }
 

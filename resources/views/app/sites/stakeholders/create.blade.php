@@ -29,9 +29,9 @@
             background-color: #e3e0fd;
         }
 
-        .filepond--item {
+        /* .filepond--item {
                                 width: calc(20% - 0.5em);
-                            }
+                            } */
 
     </style>
 @endsection
@@ -50,21 +50,59 @@
 @endsection
 
 @section('content')
-    <div class="card">
+    {{-- <div class="card"> --}}
         <form class="form form-vertical" action="{{ route('sites.stakeholders.store', ['site_id' => encryptParams($site_id)]) }}"
             method="POST">
 
             <div class="card-header">
             </div>
 
-            <div class="card-body">
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-12 position-relative" >
+                    <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        @csrf
+                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                    <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
+                        style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
+                                <input id="attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror"
+                                    name="attachment[]"
+                                    multiple
+                                    accept="image/png, image/jpeg, image/gif"/>
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+                            <button type="submit" class="btn text-nowrap  w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                <i data-feather='save'></i>
+                                Save Stakeholder
+                            </button>
+                            <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="card-body">
 
                 @csrf
                 {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
 
-            </div>
+            </div> --}}
 
-            <div class="card-footer d-flex align-items-center justify-content-end">
+            {{-- <div class="card-footer d-flex align-items-center justify-content-end">
                 <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                     <i data-feather='save'></i>
                     Save Stakeholder
@@ -74,10 +112,10 @@
                     <i data-feather='x'></i>
                     {{ __('lang.commons.cancel') }}
                 </a>
-            </div>
+            </div> --}}
 
         </form>
-    </div>
+    {{-- </div> --}}
 @endsection
 
 @section('vendor-js')

@@ -178,4 +178,3 @@ Breadcrumbs::for('sites.lead-sources.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.lead-sources.index', $site_id);
     $trail->push('Edit Lead Source');
 });
-

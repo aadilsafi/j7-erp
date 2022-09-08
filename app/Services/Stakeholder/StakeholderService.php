@@ -33,7 +33,9 @@ class StakeholderService implements StakeholderInterface
     // Store
     public function store($site_id, $inputs)
     {
-        // dd($site_id,$inputs);
+        if($inputs['parent_id'] == null){
+            $inputs['parent_id'] = 0;
+        }
         $data = [
             'site_id' => decryptParams($site_id),
             'full_name' => $inputs['full_name'],
@@ -44,11 +46,12 @@ class StakeholderService implements StakeholderInterface
             'contact' => $inputs['contact'],
             'address' => $inputs['address'],
             'parent_id' => $inputs['parent_id'],
-            // 'relation' => '',
-            // 'attachment' => $inputs['full_name'],
+            'relation' => $inputs['relation'],
+            'attachment' => json_encode($inputs['attachment']),
         ];
 
         $stakeholder = $this->model()->create($data);
+
         return $stakeholder;
 
     }

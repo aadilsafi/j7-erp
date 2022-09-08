@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.edit') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.edit' ,$site_id) }}
 @endsection
 
 @section('page-title', 'Edit Additional Cost')

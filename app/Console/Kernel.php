@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('horizon')->everyMinute()->withoutOverlapping()->appendOutputTo(storage_path('logs') . '/commandOutput.txt');
-        $schedule->command('inspire')->everyMinute()->appendOutputTo(storage_path('logs') . '/commandOutput.txt');
+        $schedule->command('horizon:terminate')->daily()->appendOutputTo(storage_path('logs') . '/commandOutput.txt');
     }
 
     /**

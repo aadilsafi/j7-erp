@@ -26,7 +26,7 @@ class StakeholderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(StakeholderDataTable $dataTable,$site_id)
+    public function index(StakeholderDataTable $dataTable, $site_id)
     {
         //
         $data = [
@@ -34,7 +34,6 @@ class StakeholderController extends Controller
         ];
 
         return $dataTable->with($data)->render('app.sites.stakeholders.index', $data);
-
     }
 
     /**
@@ -64,7 +63,7 @@ class StakeholderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(stakeholderStoreRequest $request,$site_id)
+    public function store(stakeholderStoreRequest $request, $site_id)
     {
         //
         try {
@@ -103,7 +102,7 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $stakeholder = $this->stakeholderInterface->getById($site_id,$id);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $id);
 
             if ($stakeholder && !empty($stakeholder)) {
 
@@ -147,27 +146,6 @@ class StakeholderController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function ajaxGetById(Request $request, $site_id, $stakeholder_id)
-    {
-        if ($request->ajax()) {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id);
-            return apiSuccessResponse($stakeholder);
-        } else {
-            abort(403);
-        }
-    }
-
     public function destroySelected(Request $request, $site_id)
     {
         try {
@@ -188,6 +166,16 @@ class StakeholderController extends Controller
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function ajaxGetById(Request $request, $site_id, $stakeholder_id)
+    {
+        if ($request->ajax()) {
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id, ['stakeholder_types']);
+            return apiSuccessResponse($stakeholder);
+        } else {
+            abort(403);
         }
     }
 }

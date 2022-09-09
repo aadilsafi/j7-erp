@@ -22,15 +22,20 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->where('site_id', $site_id)->get();
     }
 
+    public function getByAllWith($site_id, array $relationships = [])
+    {
+        return $this->model()->with($relationships)->where('site_id', $site_id)->get();
+    }
+
     public function getAllWithTree()
     {
         $stakeholders = $this->model()->all();
         return getStakeholderTreeData(collect($stakeholders), $this->model());
     }
 
-    public function getById($site_id, $id)
+    public function getById($site_id, $id, array $relationships = [])
     {
-        return $this->model()->find($id);
+        return $this->model()->with($relationships)->find($id);
     }
 
     // Store

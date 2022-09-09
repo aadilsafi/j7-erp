@@ -222,7 +222,7 @@ class SalesPlanService implements SalesPlanInterface
                         'dateShow' => false,
                         'detail' => '',
                         'detailShow' => false,
-                        'amount' => $inputs['installment_amount'],
+                        'amount' => number_format($inputs['installment_amount']),
                         'amountName' => false,
                         'amountShow' => true,
                         'amountReadonly' => true,

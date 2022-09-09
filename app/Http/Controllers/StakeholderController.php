@@ -9,6 +9,7 @@ use App\Http\Requests\stakeholders\{
     storeRequest as stakeholderStoreRequest,
     updateRequest as stakeholderUpdateRequest,
 };
+use Exception;
 
 class StakeholderController extends Controller
 {

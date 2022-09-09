@@ -41,9 +41,9 @@ class StakeholderService implements StakeholderInterface
 
         $firstImageName = $firstImage->getClientOriginalName();
         $secondImageName = $secondImage->getClientOriginalName();
-        $attachment = $firstImageName.','.$secondImageName;
+        $attachment = $firstImageName . ',' . $secondImageName;
 
-        if($inputs['parent_id'] == null){
+        if ($inputs['parent_id'] == null) {
             $inputs['parent_id'] = 0;
         }
         $data = [
@@ -62,50 +62,49 @@ class StakeholderService implements StakeholderInterface
 
         $stakeholder = $this->model()->create($data);
 
-        $folder = 'app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/';
+        $folder = 'app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/';
 
-        if (!file_exists($folder.$firstImageName)) {
-            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/'), $firstImageName);
+        if (!file_exists($folder . $firstImageName)) {
+            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $firstImageName);
         }
-        if(!file_exists($folder.$secondImageName)) {
-            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/'), $secondImageName);
+        if (!file_exists($folder . $secondImageName)) {
+            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $secondImageName);
         }
 
         $stakeholderTypeData  = [
             [
                 'stakeholder_id' => $stakeholder->id,
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
-                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value.'-'.str_pad($stakeholder->id,4,"0",STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
                 'status' => 0,
             ],
             [
                 'stakeholder_id' => $stakeholder->id,
                 'type' => StakeholderTypeEnum::VENDOR->value,
-                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value.'-'.str_pad($stakeholder->id,4,"0",STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
                 'status' => 0,
             ],
             [
                 'stakeholder_id' => $stakeholder->id,
                 'type' => StakeholderTypeEnum::DEALER->value,
-                'stakeholder_code' => StakeholderTypeEnum::DEALER->value.'-'.str_pad($stakeholder->id,4,"0",STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
                 'status' => 0,
             ],
             [
                 'stakeholder_id' => $stakeholder->id,
                 'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value.'-'.str_pad($stakeholder->id,4,"0",STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
                 'status' => 0,
             ],
             [
                 'stakeholder_id' => $stakeholder->id,
                 'type' => StakeholderTypeEnum::LEAD->value,
-                'stakeholder_code' => StakeholderTypeEnum::LEAD->value.'-'.str_pad($stakeholder->id,4,"0",STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
                 'status' => 0,
             ],
         ];
         $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
         return $stakeholder;
-
     }
 
     public function update($site_id, $id, $inputs)
@@ -116,9 +115,9 @@ class StakeholderService implements StakeholderInterface
         $firstImageName = $firstImage->getClientOriginalName();
         $secondImageName = $secondImage->getClientOriginalName();
 
-        $attachment = $firstImageName.','.$secondImageName;
+        $attachment = $firstImageName . ',' . $secondImageName;
 
-        if($inputs['parent_id'] == null){
+        if ($inputs['parent_id'] == null) {
             $inputs['parent_id'] = 0;
         }
         $data = [
@@ -135,13 +134,13 @@ class StakeholderService implements StakeholderInterface
         ];
         $stakeholder_data = $this->model()->where('id', $id)->update($data);
 
-        $folder = 'app-assets/server-uploads/stakeholders/'.$id.'/';
+        $folder = 'app-assets/server-uploads/stakeholders/' . $id . '/';
 
-        if (!file_exists($folder.$firstImageName)) {
-            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/'.$id.'/'), $firstImageName);
+        if (!file_exists($folder . $firstImageName)) {
+            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $firstImageName);
         }
-        if(!file_exists($folder.$secondImageName)) {
-            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/'.$id.'/'), $secondImageName);
+        if (!file_exists($folder . $secondImageName)) {
+            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $secondImageName);
         }
 
         return $stakeholder_data;

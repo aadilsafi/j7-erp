@@ -62,7 +62,9 @@ class SalesPlanController extends Controller
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'unit' => (new Unit())->with('status', 'type')->find(decryptParams($unit_id)),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'stakeholders' => $this->stakeholderInterface->getByAll(decryptParams($site_id)),
+                'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
+                    'stakeholder_types',
+                ]),
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
@@ -80,11 +82,11 @@ class SalesPlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$site_id,$floor_id,$unit_id)
+    public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
         $data = $request->input();
         $record = $this->salesPlanInterface->store($site_id, $data);
-        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' =>$site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }
 
     /**
@@ -132,7 +134,7 @@ class SalesPlanController extends Controller
         //
     }
 
-    public function printPage($site_id,$floor_id,$unit_id,$sales_plan_id,$tempalte_id)
+    public function printPage($site_id, $floor_id, $unit_id, $sales_plan_id, $tempalte_id)
     {
         //
         $salesPlan = SalesPlan::find(decryptParams($sales_plan_id));
@@ -177,7 +179,7 @@ class SalesPlanController extends Controller
 
         $data['additional_costs'] = $salesPlan->additionalCosts;
 
-        return view('app.sites.floors.units.sales-plan.sales-plan-templates.'.$template->slug,compact('data'));
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }
 
     public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
@@ -186,7 +188,7 @@ class SalesPlanController extends Controller
 
         $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
-        if(is_a($installments, 'Exception')){
+        if (is_a($installments, 'Exception')) {
             return apiErrorResponse('invalid_amout');
         }
 

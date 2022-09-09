@@ -33,6 +33,7 @@
             </div>
         </div>
 
+        {{-- PRICING --}}
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
@@ -57,9 +58,9 @@
                                 <label class="form-label fs-5" for="total-price-unit">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" class="form-control form-control-lg" readonly
+                                    <input type="text" class="form-control form-control-lg" readonly
                                         id="total-price-unit" name="unit[price][total]" placeholder="Amount"
-                                        value="{{ $unit->total_price }}.00" />
+                                        value="{{ number_format($unit->total_price, 2) }}" />
 
                                 </div>
                             </div>
@@ -101,12 +102,12 @@
 
                                         <div class="input-group input-group-lg">
                                             <span class="input-group-text">Rs. </span>
-                                            <input type="number" min="0"
+                                            <input type="text"
                                                 class="form-control form-control-lg additional-cost-total-price"
-                                                readonly
                                                 id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
-                                                placeholder="Amount" value="{{ $additionalCostTotalAmount }}" />
+                                                readonly placeholder="Amount"
+                                                value="{{ number_format($additionalCostTotalAmount, 2) }}" />
                                         </div>
 
                                     </div>
@@ -134,7 +135,7 @@
                                 <label class="form-label fs-5" for="total-price-discount">Amount</label>
                                 <div class="input-group input-group-lg">
                                     <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" class="form-control form-control-lg"
+                                    <input type="text" min="0" class="form-control form-control-lg"
                                         readonly id="total-price-discount" name="unit[discount][total]"
                                         placeholder="Discount" value="0.00" />
                                 </div>
@@ -155,7 +156,7 @@
                                     <span class="input-group-text">Rs. </span>
                                     <input type="text" class="form-control form-control-lg" id="unit_rate_total"
                                         name="unit[grand_total]" placeholder="Total"
-                                        value="{{ $unit->total_price }}.00" readonly />
+                                        value="{{ number_format($unit->total_price, 2) }}" readonly />
                                 </div>
                             </div>
                         </div>
@@ -286,8 +287,10 @@
 
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
     id="stakeholders_card">
-    <div class="card-header">
+    <div class="card-header justify-content-between">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
+        <div style="display: none;" id="div_stakeholder_type">
+        </div>
     </div>
 
     <div class="card-body">

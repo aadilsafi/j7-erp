@@ -44,7 +44,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4 mt-2 position-relative">
         <label class="form-label fs-5" for="type_name">CNIC</label>
         <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
-            id="cnic" name="cnic" placeholder="CNIC"
+            id="cnic" name="cnic" placeholder="CNIC Without Dashes"
             value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" onkeyup="convertToSlug(this.value);" />
         @error('cnic')
             <div class="invalid-feedback">{{ $message }}</div>
@@ -56,7 +56,7 @@
     <div class="col-lg-4 col-md-4 col-sm-4 mt-2 position-relative">
         <label class="form-label fs-5" for="type_name">Contact</label>
         <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
-            id="contact" name="contact" placeholder=" @error('contact') {{ $message }} @enderror"
+            id="contact" name="contact" placeholder="Contact Number"
             value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" onkeyup="convertToSlug(this.value);" />
         @error('contact')
             <div class="invalid-feedback ">{{ $message }}</div>
@@ -67,11 +67,7 @@
 
     <div class="col-lg-12 col-md-12 col-sm-12 mt-2 position-relative">
         <label class="form-label fs-5" for="type_name">Stakeholder Address</label>
-        <textarea class="form-control @error('contact') is-invalid @enderror" name="address" id="address" rows="3" placeholder="Stakeholder Address">
-            @isset($stakeholder)
-                {{ $stakeholder->address }}
-            @endisset
-        </textarea>
+        <textarea class="form-control @error('contact') is-invalid @enderror" name="address" id="address" rows="3" placeholder="Stakeholder Address">@isset($stakeholder){{ $stakeholder->address }}@endisset</textarea>
         @error('address')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

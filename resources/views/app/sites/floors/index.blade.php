@@ -270,29 +270,28 @@
                     },
                     {
                         extend: 'collection',
-                        text: 'Export',
+                        text: '<i class="bi bi-upload"></i> Export',
                         className: 'btn btn-relief-outline-secondary dropdown-toggle',
                         buttons: [{
                                 extend: 'copy',
+                                text: '<i class="bi bi-clipboard"></i> Copy',
                                 className: 'dropdown-item',
                             },
                             {
                                 extend: 'csv',
-                                className: 'dropdown-item',
-                            },
-                            {
-                                extend: 'excel',
-                                title: '<i class="fa fa-file-excel-o"></i> Excel',
+                                text: '<i class="bi bi-file-earmark-spreadsheet"></i> CSV',
                                 className: 'dropdown-item',
                             },
                             {
                                 extend: 'pdf',
+                                text: '<i class="bi bi-filetype-pdf"></i> PDF',
                                 className: 'dropdown-item',
                             },
                             {
                                 extend: 'print',
+                                text: '<i class="bi bi-printer"></i> Print',
                                 className: 'dropdown-item',
-                            }
+                            },
                         ]
                     },
                     // {

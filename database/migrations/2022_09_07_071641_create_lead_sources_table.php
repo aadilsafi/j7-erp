@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('stakeholder_type', function (Blueprint $table) {
+        Schema::create('lead_sources', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stakeholder_id')->constrained();
-            $table->tinyInteger('type_id')->default(5);
-            $table->unique(['stakeholder_id', 'type_id']);
+            $table->foreignId('site_id')->constrained();
+            $table->string('name')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('lead_sources');
     }
 };

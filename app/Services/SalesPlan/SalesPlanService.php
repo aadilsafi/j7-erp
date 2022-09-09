@@ -36,26 +36,25 @@ class SalesPlanService implements SalesPlanInterface
     // }
 
     // // Store
-    public function store($inputs,$site_id)
+    public function store($site_id, $inputs)
     {
-        // dd($inputs['unit']);
+        $stakeholderData = [
+            'site_id' => decryptParams($site_id),
+            'full_name' => $inputs['stackholder']['full_name'],
+            'farther_name' => $inputs['stackholder']['father_name'],
+            'occupation' => $inputs['stackholder']['occupation'],
+            'designation' => $inputs['stackholder']['designation'],
+            'cnic' => $inputs['stackholder']['cnic'],
+            'contact' => $inputs['stackholder']['contact'],
+            'address' => $inputs['stackholder']['address'],
+        ];
 
-        if($inputs['stackholder']['stackholder_id'] == 0){
-            $stakeholder_data = new Stakeholder;
-        }
-        else{
-            $stakeholder_data = Stakeholder::find($inputs['stackholder']['stackholder_id']);
-        }
-
-        $stakeholder_data->site_id = decryptParams($site_id);
-        $stakeholder_data->full_name = $inputs['stackholder']['full_name'];
-        $stakeholder_data->father_name = $inputs['stackholder']['father_name'];
-        $stakeholder_data->occupation = $inputs['stackholder']['occupation'];
-        $stakeholder_data->designation = $inputs['stackholder']['designation'];
-        $stakeholder_data->cnic = $inputs['stackholder']['cnic'];
-        $stakeholder_data->contact = $inputs['stackholder']['contact'];
-        $stakeholder_data->address = $inputs['stackholder']['address'];
-        $stakeholder_data->save();
+        $stakeholder_data = Stakeholder::updateOrCreate(
+            [
+                'id' => $inputs['stackholder']['stackholder_id'],
+            ],
+            $stakeholderData
+        );
 
         $unit_id = Unit::where('floor_unit_number',$inputs['unit']['no'])->first()->id;
         $sales_plan_data = [
@@ -78,26 +77,34 @@ class SalesPlanService implements SalesPlanInterface
 
         foreach($inputs['unit']['additional_cost'] as $key => $value){
             $additonal_cost_id =  AdditionalCost::where('slug',$key)->first()->id;
-            $sales_plan_additonal_cost= new SalesPlanAdditionalCost;
-            $sales_plan_additonal_cost->sales_plan_id =  $sales_plan->id;
-            $sales_plan_additonal_cost->additional_cost_id  =  $additonal_cost_id;
-            $sales_plan_additonal_cost->percentage =  $value['percentage'];
-            $sales_plan_additonal_cost->amount =  $value['total'];
-            $sales_plan_additonal_cost->save();
+
+            $sales_plan_additonal_cost_data = [
+                'sales_plan_id' => $sales_plan->id,
+                'additional_cost_id' => $additonal_cost_id,
+                'percentage' => $value['percentage'],
+                'amount' => $value['total'],
+            ];
+
+            $sales_plan_additonal_cost = SalesPlanAdditionalCost::create($sales_plan_additonal_cost_data);
+
         }
 
         foreach($inputs['installments']['table'] as $key => $table_data){
-            $SalesPlanInstallments = new SalesPlanInstallments();
-            $SalesPlanInstallments->sales_plan_id =  $sales_plan->id;
-            $SalesPlanInstallments->date = Carbon::parse(str_replace('/', '-', $table_data['date']));
-            $SalesPlanInstallments->details = $table_data['details'];
-            $SalesPlanInstallments->amount = $table_data['amount'];
-            $SalesPlanInstallments->remarks = $table_data['remarks'];
-            $SalesPlanInstallments->save();
+
+            $instalmentData = [
+                'sales_plan_id' =>  $sales_plan->id,
+                'date' => Carbon::parse(str_replace('/', '-', $table_data['date'])),
+                'details' => $table_data['details'],
+                'amount' => $table_data['amount'],
+                'remarks' => $table_data['remarks'],
+            ];
+
+            $SalesPlanInstallments = SalesPlanInstallments::create($instalmentData);
 
         }
 
         return $sales_plan;
+
     }
 
     // public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
@@ -178,7 +185,7 @@ class SalesPlanService implements SalesPlanInterface
 
                 $installmentRow = [
                     'key' => $key + 1,
-                    'date' => $date->format('d/m/Y'),
+                    'date' => $date,
                     'detail' => null,
                     'amount' => $amount,
                     'remarks' => null,

@@ -5,6 +5,8 @@ use App\Models\{
     SiteConfigration,
     Type,
     UserBatch,
+    Stakeholder,
+    StakeholderType,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +35,40 @@ if (!function_exists('decode_html_entities')) {
     function decode_html_entities($field): string
     {
         return trim(html_entity_decode($field));
+    }
+}
+
+if (!function_exists('numberToWords')) {
+
+    function numberToWords($number): string
+    {
+        return (new NumberFormatter("en", NumberFormatter::SPELLOUT))->format($number);
+    }
+}
+
+if (!function_exists('englishCounting')) {
+
+    function englishCounting($number): string
+    {
+        $detail = '';
+        switch ($number) {
+            case 1:
+                $detail = '1st';
+                break;
+
+            case 2:
+                $detail = '2nd';
+                break;
+
+            case 3:
+                $detail = '3rd';
+                break;
+
+            default:
+                $detail = $number . 'th';
+                break;
+        }
+        return $detail;
     }
 }
 
@@ -127,6 +163,55 @@ if (!function_exists('getTreeData')) {
 
         return $typesTmp;
         // dd($typesTmp);
+    }
+}
+if (!function_exists('getStakeholderTreeData')) {
+    function getStakeholderTreeData(collection $collectionData, $model, $getFromDB = false): array
+    {
+        $stakeholderTmp = [];
+
+        $dbTypes = ($getFromDB ? $model::all() : $collectionData);
+
+        foreach ($collectionData as $key => $row) {
+            $stakeholder_type = StakeholderType::where('stakeholder_id',$row->id)->first();
+            if($stakeholder_type && $stakeholder_type->type == 'C' && $stakeholder_type->status == 1)
+            {
+                $stakeholderTmp[] = $row;
+                $stakeholderTmp[$key]["tree"] = ($getFromDB ? getStakholderParentTreeElequent($model, $row, $row->full_name, $collectionData, $dbTypes) : getStakeholderParentTreeCollection($row, $row->full_name, $collectionData));
+            }
+        }
+        return $stakeholderTmp;
+    }
+}
+
+if (!function_exists('getStakholderParentTreeElequent')) {
+    function getStakholderParentTreeElequent($model, $row, $name, collection $parent, $dbTypes)
+    {
+        if ($row->parent_id == 0) {
+            return $name;
+        }
+
+        $nextRow = $model::find($row->parent_id);
+        $name = $nextRow->full_name . ' > ' . $name;
+
+        return getStakholderParentTreeElequent($model, $nextRow, $name, $parent, $dbTypes);
+    }
+}
+
+if (!function_exists('getStakeholderParentTreeCollection')) {
+    function getStakeholderParentTreeCollection($row, $name, collection $parent): string
+    {
+        if ($row->parent_id == 0) {
+            return $name;
+        }
+
+        $nextRow = $parent->firstWhere('id', $row->parent_id);
+        $name = (is_null($nextRow) ?? empty($nextRow) ? '' : $nextRow->full_name) . ' > ' . $name;
+        if (is_null($nextRow) ?? empty($nextRow)) {
+            return $name;
+        }
+
+        return getStakeholderParentTreeCollection($nextRow, $name, $parent, $parent);
     }
 }
 
@@ -342,6 +427,17 @@ if (!function_exists('getRoleParentByParentId')) {
             return $role->name;
         }
         return 'parent';
+    }
+}
+
+if (!function_exists('getStakeholderParentByParentId')) {
+    function getStakeholderParentByParentId($parent_id)
+    {
+        $Stakeholder =  (new Stakeholder())->where('id', $parent_id)->first();
+        if ($Stakeholder) {
+            return $Stakeholder->full_name;
+        }
+        return 'Nill';
     }
 }
 

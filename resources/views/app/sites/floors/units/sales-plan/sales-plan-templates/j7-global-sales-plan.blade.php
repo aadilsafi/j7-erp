@@ -134,14 +134,14 @@
             <tr>
                 <th colspan="2" style="text-align: center; white-space: nowrap;">Down Payment %</th>
                 <td  colspan="2" style="text-align: center;border-bottom: 1px solid black;">
-                        0.0%
+                    {{ $data['down_payment_percentage'] }}%
                 </td>
                 <th colspan="2" style="text-align: center; white-space: nowrap;">Down Payment</th>
                 <td colspan="2" style="text-align: center;border-bottom: 1px solid black;">
-
+                    {{ $data['down_payment_total'] }}
                 </td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <th colspan="2" style="text-align: center; white-space: nowrap;">No. of Installlments</th>
                 <td  colspan="2" style="text-align: center;border-bottom: 1px solid black;">
                         0.0%
@@ -150,7 +150,7 @@
                 <td colspan="2" style="text-align: center;border-bottom: 1px solid black;">
                         10,000
                 </td>
-            </tr>
+            </tr> --}}
         </table>
 
         <h3 style="text-transform: uppercase; text-align:center;">Installment Detail</h3>
@@ -173,6 +173,9 @@
                     Remarks
                 </th>
             </tr>
+            @php
+                $totalInstallmentAmount = 0;
+            @endphp
             @foreach ($data['instalments'] as $key => $instalment )
                 <tr>
                     <th   style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
@@ -199,24 +202,27 @@
                         @endif
                     </td>
                 </tr>
+                @php
+                    $totalInstallmentAmount = $totalInstallmentAmount +  $instalment->amount;
+                @endphp
             @endforeach
                 <tr>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                     <th colspan="2" style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">Total</th>
-                    <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">{{ number_format($data['rate'] * $data['size']) }}</th>
+                    <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">{{ number_format($totalInstallmentAmount) }}</th>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                 </tr>
                 <tr>
-                    <th colspan="4" style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">Down PAyment 25%</th>
-                    <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"> 3,354,789</th>
+                    <th colspan="4" style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">Down PAyment {{ $data['down_payment_percentage'] }}%</th>
+                    <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"> {{ number_format($data['down_payment_total'])}}</th>
                 </tr>
-                <tr>
+                {{-- <tr>
                     <th colspan="4" style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">Own</th>
                     <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"> 800,000</th>
-                </tr>
+                </tr> --}}
                 <tr>
                     <th colspan="4" style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">Total Amount</th>
-                    <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"> 1,223,4567</th>
+                    <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">{{ number_format($data['rate'] * $data['size']) }}</th>
                 </tr>
                 <tr>
                     <th colspan="4" style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">Authorized Sign</th>

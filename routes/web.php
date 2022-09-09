@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     CountryController,
     FloorController,
     JobBatchController,
+    LeadSourceController,
     SalesPlanController,
     testController,
     UnitController,
@@ -233,10 +234,25 @@ Route::group([
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [StakeholderController::class, 'update'])->name('update');
+                        Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
                         Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
+                //LeadSources Routes
+                Route::group(['prefix' => 'lead-sources', 'as' => 'lead-sources.'], function () {
+                    Route::get('/', [LeadSourceController::class, 'index'])->name('index');
+
+                    Route::get('create', [LeadSourceController::class, 'create'])->name('create');
+                    Route::post('store', [LeadSourceController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [LeadSourceController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [LeadSourceController::class, 'edit'])->name('edit');
+                        Route::put('update', [LeadSourceController::class, 'update'])->name('update');
                     });
                 });
             });
@@ -262,6 +278,7 @@ Route::group([
 });
 
 Route::group(['prefix' => 'tests'], function () {
+    Route::get('test', [testController::class, 'test'])->name('test');
     Route::get('jobs', [testController::class, 'jobs'])->name('jobs');
     Route::get('/batch/{batchId}', [testController::class, 'getBatchByID'])->name('batch');
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');

@@ -1,17 +1,18 @@
 <tr id="row_{{ $keyShow ? $key : 'total' }}">
     <th scope="row">{!! $keyShow ? $key : '&nbsp;' !!}</th>
+
+    <td>
+        <div class="position-relative" {!! $detailShow ? null : "style='display: none;'" !!}>
+            <input type="text" class="form-control text-center form-control-lg" id="installment_detail_{{ $key }}"
+                {!! $detailShow ? "name='installments[table][" . $key . "][details]'" : null !!}
+                placeholder="Details" value="{{ englishCounting($key) }} Installment" disabled />
+        </div>
+    </td>
     <td>
         <div class="position-relative" {!! $dateShow ? null : "style='display: none;'" !!}>
             <input type="text" id="installment_date_{{ $key }}" {!! $dateShow ? "name='installments[table][" . $key . "][date]'" : null !!} readonly
                 class="form-control" value="{{ $date }}" placeholder="Installment Date"
                 onchange="storeUnchangedData('{{ $key }}', 'date');" />
-        </div>
-    </td>
-    <td>
-        <div class="position-relative" {!! $detailShow ? null : "style='display: none;'" !!}>
-            <input type="text" class="form-control form-control-lg" id="installment_detail_{{ $key }}"
-                {!! $detailShow ? "name='installments[table][" . $key . "][details]'" : null !!} placeholder="Details"{!! isset($filteredData['details']) ? "value='" . $filteredData['details'] . "'" : null !!}
-                onchange="storeUnchangedData({{ $key }}, 'details', this.value);" />
         </div>
     </td>
     <td style="width: 20%;">
@@ -21,8 +22,9 @@
             @endphp
             <input type="number" class="form-control form-control-lg text-end" min="0"
                 {{ $amountReadonly ? 'readonly' : null }} id="installment_amount_{{ $key }}"
-                value="{{ number_format((float)($installmentRate > 0 ? $installmentRate : '0'), 2, '.', ''); }}" {!! $amountName ? "name='installments[table][" . $key . "][amount]'" : null !!}
-                placeholder="Amount" onchange="storeUnchangedData({{ $key }}, 'amount', this.value);" />
+                value="{{ number_format((float) ($installmentRate > 0 ? $installmentRate : '0'), 2, '.', '') }}"
+                {!! $amountName ? "name='installments[table][" . $key . "][amount]'" : null !!} placeholder="Amount"
+                onchange="storeUnchangedData({{ $key }}, 'amount', this.value);" />
         </div>
     </td>
     <td>
@@ -33,3 +35,17 @@
         </div>
     </td>
 </tr>
+
+<script>
+    var e = $("#installment_date_{{ $key }}");
+    e.flatpickr({
+        defaultDate: '{{ $date }}',
+        minDate: '{{ $date }}',
+        altInput: !0,
+        altFormat: "F j, Y",
+        dateFormat: "Y-m-d",
+        onChange: function(selectedDates, dateStr, instance) {
+            updateTable();
+        },
+    });
+</script>

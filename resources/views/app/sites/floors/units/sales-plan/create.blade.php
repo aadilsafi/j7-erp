@@ -55,7 +55,7 @@
         method="POST">
 
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            <div class="col-lg-10 col-md-10 col-sm-12 position-relative">
 
                 @csrf
                 {{ view('app.sites.floors.units.sales-plan.form-fields', [
@@ -64,12 +64,13 @@
                     'unit' => $unit,
                     'additionalCosts' => $additionalCosts,
                     'stakeholders' => $stakeholders,
+                    'leadSources' => $leadSources,
                     'user' => $user,
                 ]) }}
 
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+            <div class="col-lg-2 col-md-2 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-header">
                         <h3 class="p-0">Additional Costs</h3>
@@ -205,6 +206,17 @@
                         hideBlockUI('#stakeholders_card');
                     }
                 });
+            });
+
+            var e = $("#sales_source_lead_source");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).on("change", function(e) {
+
             });
 
 
@@ -425,109 +437,109 @@
             t = setTimeout(calculateInstallments, 1500, 1);
         }
 
-        var validator = $("#create-sales-plan-form").validate({
-            debug: true,
-            rules: {
-                // 1. PRIMARY DATA
-                'unit[no]': {
-                    required: true
-                },
-                'unit[floor_no]': {
-                    required: true
-                },
-                'unit[type]': {
-                    required: true
-                },
-                'unit[size]': {
-                    required: true
-                },
-                'unit[price][unit]': {
-                    required: true
-                },
-                'unit[price][total]': {
-                    required: true
-                },
+        // var validator = $("#create-sales-plan-form").validate({
+        //     debug: true,
+        //     rules: {
+        //         // 1. PRIMARY DATA
+        //         'unit[no]': {
+        //             required: true
+        //         },
+        //         'unit[floor_no]': {
+        //             required: true
+        //         },
+        //         'unit[type]': {
+        //             required: true
+        //         },
+        //         'unit[size]': {
+        //             required: true
+        //         },
+        //         'unit[price][unit]': {
+        //             required: true
+        //         },
+        //         'unit[price][total]': {
+        //             required: true
+        //         },
 
-                //// Unit Discount
-                'unit[discount][percentage]': {
-                    required: true
-                },
-                'unit[discount][total]': {
-                    required: true
-                },
+        //         //// Unit Discount
+        //         'unit[discount][percentage]': {
+        //             required: true
+        //         },
+        //         'unit[discount][total]': {
+        //             required: true
+        //         },
 
-                //// Unit Grand Total
-                'unit[grand_total]': {
-                    required: true
-                },
+        //         //// Unit Grand Total
+        //         'unit[grand_total]': {
+        //             required: true
+        //         },
 
-                //// Unit Down Payment
-                'unit[downpayment][percentage]': {
-                    required: true
-                },
-                'unit[downpayment][total]': {
-                    required: true
-                },
+        //         //// Unit Down Payment
+        //         'unit[downpayment][percentage]': {
+        //             required: true
+        //         },
+        //         'unit[downpayment][total]': {
+        //             required: true
+        //         },
 
-                // 2. INSTALLMENT DETAILS
-                'installments[types][type]': {
-                    required: true
-                },
-                'installments[types][value]': {
-                    required: true
-                },
-                'installments[start_date]': {
-                    required: true
-                },
+        //         // 2. INSTALLMENT DETAILS
+        //         'installments[types][type]': {
+        //             required: true
+        //         },
+        //         'installments[types][value]': {
+        //             required: true
+        //         },
+        //         'installments[start_date]': {
+        //             required: true
+        //         },
 
-                // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                'stackholder[stackholder_id]': {
-                    required: true
-                },
-                'stackholder[full_name]': {
-                    required: true
-                },
-                'stackholder[father_name]': {
-                    required: true
-                },
-                'stackholder[occupation]': {
-                    required: true
-                },
-                'stackholder[designation]': {
-                    required: true
-                },
-                'stackholder[cnic]': {
-                    required: true
-                },
-                'stackholder[contact]': {
-                    required: true
-                },
-                'stackholder[address]': {
-                    required: true
-                },
+        //         // 3. STAKEHOLDER DATA (LEAD'S DATA)
+        //         'stackholder[stackholder_id]': {
+        //             required: true
+        //         },
+        //         'stackholder[full_name]': {
+        //             required: true
+        //         },
+        //         'stackholder[father_name]': {
+        //             required: true
+        //         },
+        //         'stackholder[occupation]': {
+        //             required: true
+        //         },
+        //         'stackholder[designation]': {
+        //             required: true
+        //         },
+        //         'stackholder[cnic]': {
+        //             required: true
+        //         },
+        //         'stackholder[contact]': {
+        //             required: true
+        //         },
+        //         'stackholder[address]': {
+        //             required: true
+        //         },
 
-                // 4. SALES SOURCE
-                'sales_source[full_name]': {
-                    required: true
-                },
-                'sales_source[status]': {
-                    required: true
-                },
-                'sales_source[contact_no]': {
-                    required: true
-                },
-                'sales_source[sales_type]': {
-                    required: true
-                },
-                'sales_source[indirect_source]': {
-                    required: true
-                },
-            },
-            submitHandler: function(form) {
-                // do other things for a valid form
-                console.log(form);
-            }
-        });
+        //         // 4. SALES SOURCE
+        //         'sales_source[full_name]': {
+        //             required: true
+        //         },
+        //         'sales_source[status]': {
+        //             required: true
+        //         },
+        //         'sales_source[contact_no]': {
+        //             required: true
+        //         },
+        //         'sales_source[sales_type]': {
+        //             required: true
+        //         },
+        //         'sales_source[indirect_source]': {
+        //             required: true
+        //         },
+        //     },
+        //     submitHandler: function(form) {
+        //         // do other things for a valid form
+        //         console.log(form);
+        //     }
+        // });
 
         // validator.resetForm();
         // validator.showErrors({

@@ -492,6 +492,101 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // Stakeholders
+            [
+                'name' => 'sites.stakeholders.index',
+                'show_name' => 'View Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.create',
+                'show_name' => 'Create Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.store',
+                'show_name' => 'Store Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.edit',
+                'show_name' => 'Edit Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.update',
+                'show_name' => 'Update Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.destroy',
+                'show_name' => 'Destroy Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Lead Sources Routes
+            [
+                'name' => 'sites.lead-sources.index',
+                'show_name' => 'View Lead Sources',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.lead-sources.create',
+                'show_name' => 'Create Lead Source',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.lead-sources.store',
+                'show_name' => 'Store Lead Source',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.lead-sources.edit',
+                'show_name' => 'Edit Lead Source',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.lead-sources.update',
+                'show_name' => 'Update Lead Source',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.lead-sources.destroy-selected',
+                'show_name' => 'Delete Selected Lead Sources',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

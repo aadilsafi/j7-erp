@@ -35,7 +35,7 @@
         <input type="text" class="form-control form-control-lg @error('site_name') is-invalid @enderror"
             id="site_name" name="site_name" placeholder="Site Name" readonly value="{{ $site->name }}" />
         @error('site_name')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -44,7 +44,7 @@
         <input type="text" class="form-control form-control-lg @error('floor_name') is-invalid @enderror"
             id="floor_name" name="floor_name" placeholder="Floor Name" value="{{ $floor->name }}" readonly />
         @error('floor_name')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 </div>
@@ -55,7 +55,7 @@
         <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
             name="name" placeholder="Name" value="{{ isset($unit) ? $unit->name : old('name') }}" />
         @error('name')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -68,7 +68,7 @@
             value="{{ isset($unit) ? $unit->unit_number : old('unit_number') ?? 1 }}"
             {{ isset($unit) ? 'disabled' : '' }} />
         @error('name')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 </div>
@@ -117,7 +117,7 @@
             name="width" placeholder="Width (sqft)" value="{{ isset($unit) ? $unit->width : old('width') ?? 0 }}"
              />
         @error('width')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -128,7 +128,7 @@
             value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}"
              />
         @error('length')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 </div>
@@ -141,7 +141,7 @@
             value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}"
              />
         @error('net_area')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -152,7 +152,7 @@
             value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}"
              />
         @error('gross_area')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -163,7 +163,7 @@
             value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}"
              />
         @error('price_sqft')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 
@@ -174,7 +174,7 @@
             value="{{ isset($unit) ? $unit->total_price : old('total_price') ?? '0.00' }}"
              />
         @error('total_price')
-            <div class="invalid-tooltip">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 

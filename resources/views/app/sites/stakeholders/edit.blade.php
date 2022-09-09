@@ -102,6 +102,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script>
         var editImage = "";
+        var id = <?php echo $stakeholder->id; ?>;
         let imageArray = [];
         editImage = <?php echo json_encode($stakeholder->attachment); ?>;
         if(editImage != null){
@@ -118,10 +119,10 @@
         FilePond.create(document.getElementById('attachment'), {
 
             files: [{
-                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[0],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[0],
                 },
                 {
-                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[1],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[1],
                 },
             ],
             styleButtonRemoveItemPosition: 'right',

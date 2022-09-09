@@ -35,7 +35,10 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->editColumn('parent_id', function ($stakeholder) {
-                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst();
+                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst(): '-' ;
+            })
+            ->editColumn('relation', function ($stakeholder) {
+                    return  $stakeholder->relation  ? $stakeholder->relation  : '-';
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);

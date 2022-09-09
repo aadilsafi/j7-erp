@@ -38,9 +38,9 @@
                                 <div class="card mb-1 queueProgressCard border-primary">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            {{-- <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}
-                                            </p> --}}
-                                            <div class="mb-1">
+                                            <p id="jobBatchId_{{ $key }}">{{ $batch->job_batch_id }}
+                                            </p>
+                                            {{-- <div class="mb-1">
                                                 <div class="spinner-grow text-primary spinner-grow-sm" role="status"
                                                     id="queueSpinner_{{ $key }}">
                                                     <span class="visually-hidden">Loading...</span>
@@ -50,7 +50,7 @@
                                                     <i data-feather='save'></i>
                                                     Preview
                                                 </button>
-                                            </div>
+                                            </div> --}}
                                             <p id="queueProgressBarProgress_{{ $key }}">Initializing...
                                             </p>
                                         </div>

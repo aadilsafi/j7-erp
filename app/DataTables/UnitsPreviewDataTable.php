@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UnitsPreviewDataTable extends DataTable
 {
@@ -150,5 +151,16 @@ class UnitsPreviewDataTable extends DataTable
     protected function filename(): string
     {
         return 'UnitsPreview_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

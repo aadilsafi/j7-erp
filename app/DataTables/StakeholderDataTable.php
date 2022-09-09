@@ -13,6 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StakeholderDataTable extends DataTable
 {
@@ -183,5 +184,16 @@ class StakeholderDataTable extends DataTable
     protected function filename(): string
     {
         return 'Stakeholders_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

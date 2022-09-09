@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+                                                    width: calc(20% - 0.5em);
+                                                } */
     </style>
 @endsection
 
@@ -77,7 +77,7 @@
                         </div>
                         <hr>
                         <a id="saveButton" href="#"
-                            class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                            class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
                             Update Stakeholder
                         </a>
@@ -100,13 +100,17 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+
+@endsection
+
+@section('page-js')
     <script>
         var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
         let imageArray = [];
         editImage = <?php echo json_encode($stakeholder->attachment); ?>;
-        if(editImage != null){
-         imageArray = editImage.split(',');
+        if (editImage != null) {
+            imageArray = editImage.split(',');
         }
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
@@ -119,10 +123,12 @@
         FilePond.create(document.getElementById('attachment'), {
 
             files: [{
-                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[0],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
+                        0],
                 },
                 {
-                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[1],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
+                        1],
                 },
             ],
             styleButtonRemoveItemPosition: 'right',
@@ -135,7 +141,7 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
-            minFiles:2,
+            minFiles: 2,
             required: true,
             checkValidity: true,
             credits: {
@@ -144,9 +150,7 @@
             }
         });
     </script>
-@endsection
 
-@section('page-js')
     <script type="text/javascript">
         $(document).ready(function() {
             $("#saveButton").click(function() {
@@ -180,20 +184,22 @@
                         '<span class="error allErrors text-danger">Designation is Required</span>');
                 }
 
-                 // if (!$.isNumeric(cnic)) {
+                // if (!$.isNumeric(cnic)) {
                 //     $('#cnic').after(
                 //     '<span class="error allErrors text-danger">Enter Numeric Value</span>');
                 // }
 
                 if (cnic.toString().length != 13) {
                     $('#cnic').after(
-                    '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>');
+                        '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>'
+                        );
                 }
                 if (!$.isNumeric(contact)) {
                     $('#contact').after(
                         '<span class="error allErrors text-danger">Enter Numeric Value</span>');
                 }
-                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' && father_name != '' &&
+                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' &&
+                    father_name != '' &&
                     occupation != '' && designation != '') {
                     $("#stakeholderForm").submit();
                 }

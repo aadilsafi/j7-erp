@@ -134,7 +134,7 @@ class RoleController extends Controller
             ]);
 
             if ($request->default) {
-                $record = $this->makeDefaultRole($record->id);
+                $record = $this->makeDefaultRole(decryptParams($id));
             }
 
             return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_saved'));

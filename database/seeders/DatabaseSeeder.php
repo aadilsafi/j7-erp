@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             SalesPlanInstallmentsSeeder::class,
             SalesPlanTemplatesSeeder::class,
             LeadSourceTableSeeder::class,
-            SatkeholderTypeSeeder::class,
+            StakeholderTypeSeeder::class,
         ]);
     }
 }

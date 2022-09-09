@@ -4,6 +4,7 @@ namespace App\Services\Stakeholder;
 
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
+use Illuminate\Support\Facades\Storage;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 
@@ -38,13 +39,17 @@ class StakeholderService implements StakeholderInterface
         $firstImage = $inputs['attachment'][0];
         $secondImage = $inputs['attachment'][1];
 
-        $firstImageName = time().'.'.$firstImage->extension();
-        $secondImageName = time().'.'.$secondImage->extension();
-        $folder = 'app-assets/stakeholder/cnic/attachments';
+        $firstImageName = $firstImage->getClientOriginalName();
+        $secondImageName = $secondImage->getClientOriginalName();
+        $folder = 'app-assets/stakeholder/cnic/attachments/';
 
-        $firstImage->move(public_path('app-assets/stakeholder/cnic/attachments'), $firstImageName);
+        if (!file_exists($folder.$firstImageName)) {
+            $firstImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $firstImageName);
+        }
+        if(!file_exists($folder.$secondImageName)) {
+            $secondImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $secondImageName);
+        }
 
-        $secondImage->move(public_path('app-assets/stakeholder/cnic/attachments'), $secondImageName);
 
         $attachment = $firstImageName.','.$secondImageName;
 
@@ -106,6 +111,25 @@ class StakeholderService implements StakeholderInterface
 
     public function update($site_id, $id, $inputs)
     {
+        $firstImage = $inputs['attachment'][0];
+        $secondImage = $inputs['attachment'][1];
+
+        $firstImageName = $firstImage->getClientOriginalName();
+        $secondImageName = $secondImage->getClientOriginalName();
+        $folder = 'app-assets/stakeholder/cnic/attachments/';
+
+        if (!file_exists($folder.$firstImageName)) {
+            $firstImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $firstImageName);
+        }
+        if(!file_exists($folder.$secondImageName)) {
+            $secondImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $secondImageName);
+        }
+
+        $attachment = $firstImageName.','.$secondImageName;
+
+        if($inputs['parent_id'] == null){
+            $inputs['parent_id'] = 0;
+        }
         $data = [
             'full_name' => $inputs['full_name'],
             'father_name' => $inputs['father_name'],
@@ -116,9 +140,9 @@ class StakeholderService implements StakeholderInterface
             'address' => $inputs['address'],
             'parent_id' => $inputs['parent_id'],
             'relation' => $inputs['relation'],
+            'attachment' => $attachment,
         ];
         $stakeholder_data = $this->model()->where('id', $id)->update($data);
-        // dd($stakeholder_data);
         return $stakeholder_data;
     }
 

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                    width: calc(20% - 0.5em);
-                                } */
+                                                width: calc(20% - 0.5em);
+                                            } */
     </style>
 @endsection
 
@@ -48,7 +48,6 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card"> --}}
     <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data"
         action="{{ route('sites.stakeholders.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($stakeholder->id)]) }}"
         method="POST">
@@ -66,8 +65,7 @@
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
@@ -78,8 +76,11 @@
                             @enderror
                         </div>
                         <hr>
-                        <input id="saveButton" type="" class="btn text-nowrap  w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1"
-                            value=" Save Stakeholder">
+                        <a id="saveButton" href="#"
+                            class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                            <i data-feather='save'></i>
+                            Update Stakeholder
+                        </a>
                         <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
@@ -89,28 +90,7 @@
                 </div>
             </div>
         </div>
-
-        {{-- <div class="card-body">
-
-                @csrf
-                {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
-
-            </div> --}}
-
-        {{-- <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                    <i data-feather='save'></i>
-                    Save Stakeholder
-                </button>
-                <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
-            </div> --}}
-
     </form>
-    {{-- </div> --}}
 @endsection
 
 @section('vendor-js')
@@ -121,6 +101,12 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script>
+        var editImage = "";
+        let imageArray = [];
+        editImage = <?php echo json_encode($stakeholder->attachment); ?>;
+        if(editImage != null){
+         imageArray = editImage.split(',');
+        }
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -130,20 +116,14 @@
         );
 
         FilePond.create(document.getElementById('attachment'), {
-            // files: [{
-            //     // the server file reference
-            //     source: 'app-assets/stakeholder/cnic/attachments/1662633952.png',
 
-            //     // set type to local to indicate an already uploaded file
-            //     options: {
-            //         type: 'local',
-
-            //         // file initial metadata
-            //         metadata: {
-            //             date: '2018-10-5T12:00',
-            //         },
-            //     },
-            // }, ],
+            files: [{
+                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[0],
+                },
+                {
+                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[1],
+                },
+            ],
             styleButtonRemoveItemPosition: 'right',
             imageValidateSizeMinWidth: 1000,
             imageValidateSizeMinHeight: 1000,
@@ -154,7 +134,7 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
-            // required:true,
+            required: true,
             checkValidity: true,
             credits: {
                 label: '',
@@ -165,47 +145,54 @@
 @endsection
 
 @section('page-js')
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#saveButton").click(function() {
-            var full_name = $("#full_name").val();
-            var father_name = $("#father_name").val();
-            var occupation = $("#occupation").val();
-            var designation = $("#designation").val();
-            var address = $("#address").val();
-            var cnic = $("#cnic").val();
-            var contact = $("#contact").val();
-            $('.allErrors').empty();
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#saveButton").click(function() {
+                var full_name = $("#full_name").val();
+                var father_name = $("#father_name").val();
+                var occupation = $("#occupation").val();
+                var designation = $("#designation").val();
+                var address = $("#address").val();
+                var cnic = $("#cnic").val();
+                var contact = $("#contact").val();
+                $('.allErrors').empty();
 
 
-            if (full_name == '') {
-                 $('#full_name').after('<span class="error allErrors text-danger">Full Name is Required</span>');
-            }
+                if (full_name == '') {
+                    $('#full_name').after(
+                        '<span class="error allErrors text-danger">Full Name is Required</span>');
+                }
 
-            if (father_name == '') {
-                 $('#father_name').after('<span class="error allErrors text-danger">Father Name is Required</span>');
-            }
+                if (father_name == '') {
+                    $('#father_name').after(
+                        '<span class="error allErrors text-danger">Father Name is Required</span>');
+                }
 
-            if (occupation == '') {
-                 $('#occupation').after('<span class="error allErrors text-danger">Occupation is Required</span>');
-            }
+                if (occupation == '') {
+                    $('#occupation').after(
+                        '<span class="error allErrors text-danger">Occupation is Required</span>');
+                }
 
-            if (designation == '') {
-                 $('#designation').after('<span class="error allErrors text-danger">Designation is Required</span>');
-            }
+                if (designation == '') {
+                    $('#designation').after(
+                        '<span class="error allErrors text-danger">Designation is Required</span>');
+                }
 
-            if (!$.isNumeric(cnic)) {
-                 $('#cnic').after('<span class="error allErrors text-danger">Enter Numeric Value</span>');
-            }
-            if (!$.isNumeric(contact)) {
-                 $('#contact').after('<span class="error allErrors text-danger">Enter Numeric Value</span>');
-            }
-            if($.isNumeric(cnic) && $.isNumeric(contact) && full_name != '' && father_name != '' && occupation != '' && designation != ''){
-                $("#stakeholderForm").submit();
-            }
+                if (!$.isNumeric(cnic)) {
+                    $('#cnic').after(
+                        '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                }
+                if (!$.isNumeric(contact)) {
+                    $('#contact').after(
+                        '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                }
+                if ($.isNumeric(cnic) && $.isNumeric(contact) && full_name != '' && father_name != '' &&
+                    occupation != '' && designation != '') {
+                    $("#stakeholderForm").submit();
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endsection
 
 @section('custom-js')

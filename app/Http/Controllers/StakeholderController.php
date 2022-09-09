@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\DataTables\StakeholderDataTable;
 use App\Http\Requests\stakeholders\{
     storeRequest as stakeholderStoreRequest,
+    updateRequest as stakeholderUpdateRequest,
 };
 
 class StakeholderController extends Controller
@@ -127,7 +128,7 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request  $request, $site_id, $id)
+    public function update(stakeholderUpdateRequest  $request, $site_id, $id)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);

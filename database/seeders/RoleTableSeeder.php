@@ -56,6 +56,38 @@ class RoleTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Recovery Department',
+                'guard_name' => 'web',
+                'default' => 0,
+                'parent_id'=> 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'File Management',
+                'guard_name' => 'web',
+                'default' => 0,
+                'parent_id'=> 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Receipts Management',
+                'guard_name' => 'web',
+                'default' => 0,
+                'parent_id'=> 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Expenses Management',
+                'guard_name' => 'web',
+                'default' => 0,
+                'parent_id'=> 5,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

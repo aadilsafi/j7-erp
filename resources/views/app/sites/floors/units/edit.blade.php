@@ -104,13 +104,15 @@
         //Calculate Unit Price and Total Price from Gross Area
         $('#gross_area, #price_sqft').on('keyup', function() {
                 var total_price = 0;
+                var gross_area = 0;
+                var price_sqft = 0;
                 if ($(this).val() > 0) {
-                    var gross_area = parseFloat($('#gross_area').val());
-                    var price_sqft = parseFloat($('#price_sqft').val());
+                    gross_area = parseFloat($('#gross_area').val());
+                    price_sqft = parseFloat($('#price_sqft').val());
                     total_price = gross_area * price_sqft;
                 } else {
                     total_price = 0;
-                    $(this).val('0');
+                    // $(this).val('0');
                 }
                 $('#total_price').val('' + parseFloat(total_price).toFixed(2));
 

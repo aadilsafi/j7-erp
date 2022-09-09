@@ -113,9 +113,9 @@ class Unit extends Model
         'length' => 'required|numeric',
         'unit_number' => 'nullable|integer',
         // 'floor_unit_number' => 'required|numeric',
-        'net_area' => 'required|numeric',
+        'net_area' => 'required|numeric|gt:0',
         'gross_area' => 'required|numeric|gte:net_area',
-        'price_sqft' => 'required|numeric',
+        'price_sqft' => 'required|numeric|gt:0',
         'is_corner' => 'required|boolean|in:0,1',
         'is_facing' => 'required|boolean|in:0,1',
         'facing_id' => 'required_if:is_facing,1|integer',
@@ -132,6 +132,7 @@ class Unit extends Model
         'facing_id.required_if' => 'The Facing charges field is required when :other is checked.',
         'slider_input_1.required_if' => 'The units is required when :other is checked.',
         'slider_input_2.required_if' => 'The units is required when :other is checked.',
+        'gross_area.gte' => 'The Gross Area must be greater than or equal to Net Area.',
     ];
 
     public function agent()

@@ -13,6 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 use App\Services\Interfaces\UnitTypeInterface;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TypesDataTable extends DataTable
 {
@@ -175,5 +176,16 @@ class TypesDataTable extends DataTable
     protected function filename(): string
     {
         return 'Types_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

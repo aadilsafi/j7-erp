@@ -48,7 +48,6 @@
 @endsection
 
 @section('content')
-    {{-- <div class="card"> --}}
     <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data"
         action="{{ route('sites.stakeholders.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
@@ -90,27 +89,7 @@
             </div>
         </div>
 
-        {{-- <div class="card-body">
-
-                @csrf
-                {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
-
-            </div> --}}
-
-        {{-- <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                    <i data-feather='save'></i>
-                    Save Stakeholder
-                </button>
-                <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
-            </div> --}}
-
     </form>
-    {{-- </div> --}}
 @endsection
 
 @section('vendor-js')
@@ -131,8 +110,8 @@
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
-            imageValidateSizeMinWidth: 1000,
-            imageValidateSizeMinHeight: 1000,
+            // imageValidateSizeMinWidth: 1000,
+            // imageValidateSizeMinHeight: 1000,
             imageCropAspectRatio: '1:1',
             acceptedFileTypes: ['image/png', 'image/jpeg'],
             maxFileSize: '1536KB',
@@ -157,6 +136,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#saveButton").click(function() {
+
                 var full_name = $("#full_name").val();
                 var father_name = $("#father_name").val();
                 var occupation = $("#occupation").val();
@@ -165,7 +145,6 @@
                 var cnic = $("#cnic").val();
                 var contact = $("#contact").val();
                 $('.allErrors').empty();
-
 
                 if (full_name == '') {
                     $('#full_name').after(
@@ -187,15 +166,21 @@
                         '<span class="error allErrors text-danger">Designation is Required</span>');
                 }
 
-                if (!$.isNumeric(cnic)) {
+                // if (!$.isNumeric(cnic)) {
+                //     $('#cnic').after(
+                //     '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                // }
+
+                if (cnic.toString().length != 13) {
                     $('#cnic').after(
-                    '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                    '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>');
                 }
+
                 if (!$.isNumeric(contact)) {
                     $('#contact').after(
                         '<span class="error allErrors text-danger">Enter Numeric Value</span>');
                 }
-                if ($.isNumeric(cnic) && $.isNumeric(contact) && full_name != '' && father_name != '' &&
+                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' && father_name != '' &&
                     occupation != '' && designation != '') {
                     $("#stakeholderForm").submit();
                 }

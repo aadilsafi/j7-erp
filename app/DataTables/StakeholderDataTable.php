@@ -13,6 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StakeholderDataTable extends DataTable
 {
@@ -35,7 +36,10 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->editColumn('parent_id', function ($stakeholder) {
-                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst();
+                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst(): '-' ;
+            })
+            ->editColumn('relation', function ($stakeholder) {
+                    return  $stakeholder->relation  ? $stakeholder->relation  : '-';
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
@@ -160,10 +164,10 @@ class StakeholderDataTable extends DataTable
             ),
 
             Column::make('full_name')->title('Name'),
-            Column::make('father_name')->title('Father Name'),
+            Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
             Column::make('contact')->title('Contact'),
-            Column::make('parent_id')->title('Next Of Kin'),
+            Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
             Column::make('relation')->title('Relation'),
             (
                 $editPermission ?
@@ -183,5 +187,16 @@ class StakeholderDataTable extends DataTable
     protected function filename(): string
     {
         return 'Stakeholders_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

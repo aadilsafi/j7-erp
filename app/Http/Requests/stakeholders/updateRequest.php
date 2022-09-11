@@ -24,7 +24,18 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Stakeholder())->rules;
+        return [
+            'full_name' => 'required|string|min:1|max:50',
+            'father_name' => 'required|string|min:1|max:50',
+            'occupation' => 'required|string|min:1|max:50',
+            'designation' => 'required|string|min:1|max:50',
+            'cnic' => 'required|string|min:1|max:15',
+            'contact' => 'required|string|min:1|max:20',
+            'address' => 'required|string',
+            'parent_id' => 'nullable|numeric',
+            'relation' => 'required_with:parent_id',
+            'attachment' => 'required|min:2',
+        ];
     }
 
     /**

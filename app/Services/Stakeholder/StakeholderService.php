@@ -41,16 +41,6 @@ class StakeholderService implements StakeholderInterface
 
         $firstImageName = $firstImage->getClientOriginalName();
         $secondImageName = $secondImage->getClientOriginalName();
-        $folder = 'app-assets/stakeholder/cnic/attachments/';
-
-        if (!file_exists($folder.$firstImageName)) {
-            $firstImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $firstImageName);
-        }
-        if(!file_exists($folder.$secondImageName)) {
-            $secondImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $secondImageName);
-        }
-
-
         $attachment = $firstImageName.','.$secondImageName;
 
         if($inputs['parent_id'] == null){
@@ -71,6 +61,15 @@ class StakeholderService implements StakeholderInterface
         ];
 
         $stakeholder = $this->model()->create($data);
+
+        $folder = 'app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/';
+
+        if (!file_exists($folder.$firstImageName)) {
+            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/'), $firstImageName);
+        }
+        if(!file_exists($folder.$secondImageName)) {
+            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/'.$stakeholder->id.'/'), $secondImageName);
+        }
 
         $stakeholderTypeData  = [
             [
@@ -116,14 +115,6 @@ class StakeholderService implements StakeholderInterface
 
         $firstImageName = $firstImage->getClientOriginalName();
         $secondImageName = $secondImage->getClientOriginalName();
-        $folder = 'app-assets/stakeholder/cnic/attachments/';
-
-        if (!file_exists($folder.$firstImageName)) {
-            $firstImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $firstImageName);
-        }
-        if(!file_exists($folder.$secondImageName)) {
-            $secondImage->move(public_path('app-assets/stakeholder/cnic/attachments/'), $secondImageName);
-        }
 
         $attachment = $firstImageName.','.$secondImageName;
 
@@ -143,6 +134,16 @@ class StakeholderService implements StakeholderInterface
             'attachment' => $attachment,
         ];
         $stakeholder_data = $this->model()->where('id', $id)->update($data);
+
+        $folder = 'app-assets/server-uploads/stakeholders/'.$id.'/';
+
+        if (!file_exists($folder.$firstImageName)) {
+            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/'.$id.'/'), $firstImageName);
+        }
+        if(!file_exists($folder.$secondImageName)) {
+            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/'.$id.'/'), $secondImageName);
+        }
+
         return $stakeholder_data;
     }
 

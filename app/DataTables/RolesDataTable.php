@@ -11,6 +11,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class RolesDataTable extends DataTable
 {
@@ -161,5 +162,16 @@ class RolesDataTable extends DataTable
     protected function filename(): string
     {
         return 'Roles_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

@@ -102,6 +102,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script>
         var editImage = "";
+        var id = <?php echo $stakeholder->id; ?>;
         let imageArray = [];
         editImage = <?php echo json_encode($stakeholder->attachment); ?>;
         if(editImage != null){
@@ -118,15 +119,15 @@
         FilePond.create(document.getElementById('attachment'), {
 
             files: [{
-                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[0],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[0],
                 },
                 {
-                    source: '{{ asset('app-assets') }}/stakeholder/cnic/attachments/' + imageArray[1],
+                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/'+id+'/' + imageArray[1],
                 },
             ],
             styleButtonRemoveItemPosition: 'right',
-            imageValidateSizeMinWidth: 1000,
-            imageValidateSizeMinHeight: 1000,
+            // imageValidateSizeMinWidth: 1000,
+            // imageValidateSizeMinHeight: 1000,
             imageCropAspectRatio: '1:1',
             acceptedFileTypes: ['image/png', 'image/jpeg'],
             maxFileSize: '1536KB',
@@ -134,6 +135,7 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
+            minFiles:2,
             required: true,
             checkValidity: true,
             credits: {
@@ -178,15 +180,20 @@
                         '<span class="error allErrors text-danger">Designation is Required</span>');
                 }
 
-                if (!$.isNumeric(cnic)) {
+                 // if (!$.isNumeric(cnic)) {
+                //     $('#cnic').after(
+                //     '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                // }
+
+                if (cnic.toString().length != 13) {
                     $('#cnic').after(
-                        '<span class="error allErrors text-danger">Enter Numeric Value</span>');
+                    '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>');
                 }
                 if (!$.isNumeric(contact)) {
                     $('#contact').after(
                         '<span class="error allErrors text-danger">Enter Numeric Value</span>');
                 }
-                if ($.isNumeric(cnic) && $.isNumeric(contact) && full_name != '' && father_name != '' &&
+                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' && father_name != '' &&
                     occupation != '' && designation != '') {
                     $("#stakeholderForm").submit();
                 }

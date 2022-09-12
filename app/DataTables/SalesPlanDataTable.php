@@ -33,6 +33,9 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('user_id', function ($salesPlan) {
                 return $salesPlan->user->name;
             })
+            ->editColumn('status', function ($salesPlan) {
+                return $salesPlan->status == 1 ? '<span class="badge badge-glow bg-success">Approved</span>' : '<span class="badge badge-glow bg-warning">Not Approved</span>';
+            })
             ->editColumn('stakeholder_id', function ($salesPlan) {
                 return $salesPlan->stakeholder->full_name;
             })
@@ -43,7 +46,7 @@ class SalesPlanDataTable extends DataTable
                 return editDateColumn($salesPlan->updated_at);
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['id' => $salesPlan->id]);
+                return view('app.sites.floors.units.sales-plan.actions', ['id' => $salesPlan->id, 'status' => $salesPlan->status]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -69,7 +72,7 @@ class SalesPlanDataTable extends DataTable
     {
         return $this->builder()
             ->addTableClass(['table-hover'])
-            ->setTableId('floors-units-table')
+            ->setTableId('sales-plan-table')
             ->columns($this->getColumns())
             ->deferRender()
             ->scrollX()
@@ -134,6 +137,7 @@ class SalesPlanDataTable extends DataTable
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('user_id')->title('Sales Person'),
             Column::make('stakeholder_id')->title('Stakeholder'),
+            Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];

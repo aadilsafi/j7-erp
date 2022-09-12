@@ -72,7 +72,7 @@
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="5">STATUSES</th>
                                         <th rowspan="2">CREATED AT</th>
-                                        <th rowspan="2">ACTIONS</th>
+                                        <th rowspan="2" id="action">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th>OPEN</th>
@@ -285,6 +285,11 @@
                             {
                                 extend: 'pdf',
                                 text: '<i class="bi bi-filetype-pdf"></i> PDF',
+                                className: 'dropdown-item',
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="bi bi-file-earmark-spreadsheet"></i>Excel',
                                 className: 'dropdown-item',
                             },
                             {

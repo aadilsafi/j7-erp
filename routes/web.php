@@ -17,6 +17,7 @@ use App\Http\Controllers\{
     UnitController,
     PrintSalesPlanController,
     StakeholderController,
+    NotificationController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -178,6 +179,7 @@ Route::group([
 
                                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
+                                    Route::post('/approve-sales-plan', [SalesPlanController::class, 'approveSalesPlan'])->name('approve-sales-plan');
 
                                     Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy-selected');
 
@@ -284,3 +286,6 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
 });
+
+Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
+Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);

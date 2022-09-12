@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
-use App\Models\{SalesPlan, Floor, Site, Unit};
+use App\Models\{SalesPlan, Floor, Site, Unit, User};
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
 use App\Services\Interfaces\AdditionalCostInterface;
@@ -11,8 +11,11 @@ use App\Services\{
     SalesPlan\Interface\SalesPlanInterface,
     Stakeholder\Interface\StakeholderInterface,
 };
+use Carbon\{Carbon, CarbonPeriod};
 use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
 
 class SalesPlanController extends Controller
 {
@@ -193,5 +196,28 @@ class SalesPlanController extends Controller
         }
 
         return apiSuccessResponse($installments);
+    }
+
+    public function approveSalesPlan(Request $request)
+    {
+        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $user = User::find($salesPlan->user_id);
+        $salesPlan->status = 1;
+        $salesPlan->save();
+
+        $currentURL = URL::current();
+        $notificaionData = [
+            'title' => 'Sales Plan Genration Notification',
+            'description' => Auth::User()->name.' approved generated sales plan.',
+            'message' => 'xyz message',
+            'url' => str_replace('/approve-sales-plan', '', $currentURL),
+        ];
+
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+
+        return response()->json([
+            'success' => true,
+            'message' => "Sales Plan Approved Sucessfully",
+        ], 200);
     }
 }

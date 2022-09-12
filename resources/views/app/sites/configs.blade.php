@@ -30,7 +30,7 @@
 
 @section('content')
     <section class="app-user-view-connections">
-        <div class="row">
+        <div class="row removeInvalidMessages">
             <div class="col-xl-12 col-lg-12">
                 <ul class="nav nav-pills mb-2">
                     <li class="nav-item">
@@ -139,7 +139,7 @@
                                         </button>
 
                                         <button type="reset"
-                                            class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
+                                            class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
                                             <i data-feather='x'></i>
                                             {{ __('lang.commons.cancel') }}
                                         </button>
@@ -185,7 +185,7 @@
                                         </button>
 
                                         <button type="reset"
-                                            class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
+                                            class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
                                             <i data-feather='x'></i>
                                             {{ __('lang.commons.cancel') }}
                                         </button>
@@ -231,7 +231,7 @@
                                         </button>
 
                                         <button type="reset"
-                                            class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
+                                            class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
                                             <i data-feather='x'></i>
                                             {{ __('lang.commons.cancel') }}
                                         </button>
@@ -253,7 +253,16 @@
 @endsection
 
 @section('page-js')
+
 @endsection
 
 @section('custom-js')
+<script>
+    $(".removeErrorMessage").on('click', function() {
+        $('.invalid-feedback').empty();
+        $('.invalid-tooltip').hide();
+        $('.alert-danger').empty();
+        $('.removeInvalidMessages').find('.is-invalid').removeClass("is-invalid");
+    });
+</script>
 @endsection

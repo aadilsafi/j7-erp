@@ -32,7 +32,7 @@ class Floor extends Model
         'name' => 'required|string|max:255',
         'floor_area' => 'required|numeric',
         'floor_order' => 'nullable|numeric',
-        'short_label' => 'required|string|max:5',
+        'short_label' => 'required|string|max:5|unique:floors,short_label',
     ];
 
     public function site()

@@ -178,3 +178,32 @@ Breadcrumbs::for('sites.lead-sources.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.lead-sources.index', $site_id);
     $trail->push('Edit Lead Source');
 });
+
+//receipts Breadcrumbs
+Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id , $sales_plan_id ) {
+    $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
+    $trail->push('Receipts');
+});
+
+// Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
+//     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
+//     $trail->push('Sales Plan', route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id]));
+// });
+
+// Breadcrumbs::for('sites.floors.units.sales-plans.receipts.create', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id  , $sales_plan_id) {
+//     $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
+//     $trail->push('Create Receipts');
+// });
+
+
+//receipts Breadcrumbs Main
+Breadcrumbs::for('sites.receipts.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Receipts', route('sites.receipts.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.receipts.index', $site_id);
+    $trail->push('Create Receipts');
+});
+

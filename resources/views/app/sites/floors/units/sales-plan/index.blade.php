@@ -178,5 +178,42 @@
             });
         }
 
+        function disapproveSalesPlan(id) {
+            var _token = '{{ csrf_token() }}';
+            let url = "{{ route('sites.floors.units.sales-plans.disapprove-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'salesPlanID': id,
+                    '_token': _token
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        toastr.success(response.message,
+                            "Success!", {
+                                showMethod: "slideDown",
+                                hideMethod: "slideUp",
+                                timeOut: 2e3,
+                                closeButton: !0,
+                                tapToDismiss: !1,
+                            });
+                            $('#sales-plan-table').DataTable().ajax.reload();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
     </script>
 @endsection

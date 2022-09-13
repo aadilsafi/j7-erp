@@ -47,14 +47,12 @@ class SalesPlanService implements SalesPlanInterface
         $authRoleId = Auth::user()->roles->pluck('id');
         $approveSalesPlanPermission = Role::find($authRoleId[0])->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
 
-        $permission = Permission::where('name','sites.floors.units.sales-plans.approve-sales-plan')->first();
+        $permission = Permission::where('name', 'sites.floors.units.sales-plans.approve-sales-plan')->first();
         $approveSalesPlanPermissionRole = $permission->roles;
 
-        if($approveSalesPlanPermission){
+        if ($approveSalesPlanPermission) {
             $status = true;
-        }
-        else
-        {
+        } else {
             $status = false;
         }
 
@@ -76,7 +74,7 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderData
         );
 
-        $unit_id = Unit::where('floor_unit_number',$inputs['unit']['no'])->first()->id;
+        $unit_id = Unit::where('floor_unit_number', $inputs['unit']['no'])->first()->id;
         $sales_plan_data = [
             'unit_id' => $unit_id,
             'stakeholder_id' => $stakeholder_data->id,
@@ -95,8 +93,8 @@ class SalesPlanService implements SalesPlanInterface
 
         $sales_plan = $this->model()->create($sales_plan_data);
 
-        foreach($inputs['unit']['additional_cost'] as $key => $value){
-            $additonal_cost_id =  AdditionalCost::where('slug',$key)->first()->id;
+        foreach ($inputs['unit']['additional_cost'] as $key => $value) {
+            $additonal_cost_id =  AdditionalCost::where('slug', $key)->first()->id;
 
             $sales_plan_additonal_cost_data = [
                 'sales_plan_id' => $sales_plan->id,
@@ -106,10 +104,9 @@ class SalesPlanService implements SalesPlanInterface
             ];
 
             $sales_plan_additonal_cost = SalesPlanAdditionalCost::create($sales_plan_additonal_cost_data);
-
         }
 
-        foreach($inputs['installments']['table'] as $key => $table_data){
+        foreach ($inputs['installments']['table'] as $key => $table_data) {
 
             $instalmentData = [
                 'sales_plan_id' =>  $sales_plan->id,
@@ -120,27 +117,24 @@ class SalesPlanService implements SalesPlanInterface
             ];
 
             $SalesPlanInstallments = SalesPlanInstallments::create($instalmentData);
-
         }
 
         $specificUsers = collect();
-        foreach($approveSalesPlanPermissionRole as $role){
-            $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id' , Auth::user()->id)->get());
-
+        foreach ($approveSalesPlanPermissionRole as $role) {
+            $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
         }
         $currentURL = URL::current();
 
         $notificaionData = [
             'title' => 'New Sales Plan Genration Notification',
-            'description' => Auth::User()->name.' generated new sales plan',
+            'description' => Auth::User()->name . ' generated new sales plan',
             'message' => 'xyz message',
             'url' => str_replace('/store', '', $currentURL),
         ];
 
-        GeneratedSalesPlanNotificationJob::dispatch($notificaionData,$specificUsers)->delay(Carbon::now()->addMinutes(1));
+        GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
 
         return $sales_plan;
-
     }
 
     // public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
@@ -185,100 +179,162 @@ class SalesPlanService implements SalesPlanInterface
 
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)
     {
-        try {
-            $start = microtime(true);
+        // try {
+        $start = microtime(true);
 
-            $installments = [
-                'site' => (new Site())->find(decryptParams($site_id)),
-                'floor' => (new Floor())->find(decryptParams($floor_id)),
-                'unit' => (new Unit())->find(decryptParams($unit_id)),
+        $installments = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'floor' => (new Floor())->find(decryptParams($floor_id)),
+            'unit' => (new Unit())->find(decryptParams($unit_id)),
+        ];
+
+        $unchangedData = isset($inputs['unchangedData']) ? $inputs['unchangedData'] : [];
+
+        $unchangedData = LazyCollection::make($unchangedData);
+
+        $unchangedAmont = $unchangedData->where('field', 'amount')->sum('value');
+        $unchangedAmontCount = $unchangedData->where('field', 'amount')->count();
+
+        $baseInstallmentTotal = ($inputs['installment_amount'] - $unchangedAmont);
+
+        if ($baseInstallmentTotal < 0) {
+            throw new Exception('invalid_amount');
+        }
+
+        $amount = $this->baseInstallment($baseInstallmentTotal, ($inputs['length'] - $unchangedAmontCount));
+
+        $unchangedDates = $unchangedData->whereIn('field', ['due_date'])->pluck('value')->all();
+
+        $installmentDates = $this->installmentDataCalculation($inputs['startDate'], 1, $inputs['length'], $inputs['rangeCount'], $unchangedDates);
+
+        $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use ($amount, $unchangedData, $baseInstallmentTotal) {
+
+            $filteredData = $unchangedData->where('key', $key + 1)->whereIn('field', ['amount', 'remarks'])->map(function ($item) {
+                return [$item['field'] => $item['value']];
+            })->values()->reduce(function ($carry, $item) {
+                return array_merge($carry, $item);
+            }, []);
+
+            $installmentRow = [
+                'key' => $key + 1,
+                'date' => $date,
+                'detail' => null,
+                'amount' => $amount,
+                'remarks' => null,
             ];
 
-            $unchangedData = isset($inputs['unchangedData']) ? $inputs['unchangedData'] : [];
+            $rowFields = [
+                'index' => [
+                    'value' => $installmentRow['key'],
+                    'placeholder' => 'Index',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => false,
+                    'readonly' => false,
+                ],
+                'installments' => [
+                    'value' => englishCounting($installmentRow['key']) . ' Installment',
+                    'placeholder' => 'Installments',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => true,
+                    'readonly' => false,
+                ],
+                'due_date' => [
+                    'value' => (new Carbon($installmentRow['date']))->format('Y-m-d'),
+                    'placeholder' => 'Due Date',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => false,
+                    'readonly' => true,
+                ],
+                'total_amount' => [
+                    'value' => isset($filteredData['amount']) ? $filteredData['amount'] : $installmentRow['amount'],
+                    'placeholder' => 'Total Amount',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => false,
+                    'readonly' => false,
+                ],
+                'remarks' => [
+                    'value' => isset($filteredData['remarks']) ? $filteredData['remarks'] : $installmentRow['remarks'],
+                    'placeholder' => 'Remarks',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => false,
+                    'readonly' => false,
+                ],
+                'others' => [
+                    'value' => '',
+                    'placeholder' => 'Others',
+                    'name' => true,
+                    'show' => true,
+                    'disabled' => false,
+                    'readonly' => false,
+                ],
+                'filteredData' => $filteredData,
+                'baseInstallmentTotal' => $baseInstallmentTotal,
+            ];
 
-            $installmentDates = $this->dateRanges($inputs['startDate'], $inputs['length'], $inputs['rangeCount'], $inputs['rangeBy']);
+            $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', $rowFields)->render();
 
-            $unchangedData = LazyCollection::make($unchangedData);
+            return $installmentRow;
+        })->toArray();
 
-            $unchangedAmont = $unchangedData->where('field', 'amount')->sum('value');
-            $unchangedAmontCount = $unchangedData->where('field', 'amount')->count();
+        // if ($inputs['length'] > 0) {
+        //     $installments['installments'][] = [
+        //         'row' => $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', [
+        //             'key' => 'total',
+        //             'keyShow' => false,
+        //             'date' => '',
+        //             'dateShow' => false,
+        //             'detail' => '',
+        //             'detailShow' => false,
+        //             'amount' => number_format($inputs['installment_amount']),
+        //             'amountName' => false,
+        //             'amountShow' => true,
+        //             'amountReadonly' => true,
+        //             'remarks' => '',
+        //             'remarksShow' => false,
+        //             'baseInstallmentTotal' => $baseInstallmentTotal,
+        //         ])->render(),
+        //     ];
+        // }
 
-            $baseInstallmentTotal = ($inputs['installment_amount'] - $unchangedAmont);
+        $installments['baseInstallmentTotal'] = $baseInstallmentTotal > 0 ? $baseInstallmentTotal : 0;
 
-            if ($baseInstallmentTotal < 0) {
-                throw new Exception('Invalid Amount!');
-            }
+        $time_elapsed_secs = microtime(true) - $start;
 
-            $amount = $this->baseInstallment($baseInstallmentTotal, ($inputs['length'] - $unchangedAmontCount));
+        dd($installments);
 
-            $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use ($amount, $unchangedData, $baseInstallmentTotal) {
-
-                $filteredData = $unchangedData->where('key', $key + 1)->whereIn('field', ['details', 'amount', 'remarks'])->map(function ($item) {
-                    return [$item['field'] => $item['value']];
-                })->values()->reduce(function ($carry, $item) {
-                    return array_merge($carry, $item);
-                }, []);
-
-                $installmentRow = [
-                    'key' => $key + 1,
-                    'date' => $date,
-                    'detail' => null,
-                    'amount' => $amount,
-                    'remarks' => null,
-                ];
-
-                $rowData = [
-                    'key' => $installmentRow['key'],
-                    'keyShow' => true,
-                    'date' => $installmentRow['date'],
-                    'dateShow' => true,
-                    'detail' => $installmentRow['detail'],
-                    'detailShow' => true,
-                    'amount' => $installmentRow['amount'],
-                    'amountName' => true,
-                    'amountShow' => true,
-                    'amountReadonly' => false,
-                    'remarks' => $installmentRow['remarks'],
-                    'remarksShow' => true,
-                    'filteredData' => $filteredData,
-                    'baseInstallmentTotal' => $baseInstallmentTotal,
-                ];
-
-                $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', $rowData)->render();
-
-                return $installmentRow;
-            })->toArray();
-
-            if ($inputs['length'] > 0) {
-                $installments['installments'][] = [
-                    'row' => $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', [
-                        'key' => 'total',
-                        'keyShow' => false,
-                        'date' => '',
-                        'dateShow' => false,
-                        'detail' => '',
-                        'detailShow' => false,
-                        'amount' => number_format($inputs['installment_amount']),
-                        'amountName' => false,
-                        'amountShow' => true,
-                        'amountReadonly' => true,
-                        'remarks' => '',
-                        'remarksShow' => false,
-                        'baseInstallmentTotal' => $baseInstallmentTotal,
-                    ])->render(),
-                ];
-            }
-
-            $installments['baseInstallmentTotal'] = $baseInstallmentTotal > 0 ? $baseInstallmentTotal : 0;
-
-            $time_elapsed_secs = microtime(true) - $start;
-
-            return $installments;
-        } catch (Exception $ex) {
-            return $ex;
-        }
+        return $installments;
+        // } catch (Exception $ex) {
+        //     return $ex;
+        // }
     }
 
+    private function installmentDataCalculation($date, $indexStart, $indexEnd, $numberOfDays, $datesList = [])
+    {
+        if ($indexEnd - $indexStart < 0) {
+            return [];
+        }
+
+        $date = isset($datesList[$indexStart - 1]) ? $datesList[$indexStart - 1] : $date;
+
+        $data = [
+            $date,
+        ];
+
+        if ($indexStart == $indexEnd) {
+            return $data;
+        }
+
+        $date = (new Carbon($date))->addDays($numberOfDays)->format('Y-m-d');
+        $indexStart++;
+
+        $data = array_merge($data, $this->installmentDataCalculation($date, $indexStart, $indexEnd, $numberOfDays, $datesList));
+        return $data;
+    }
 
     private function baseInstallment($total, $divide)
     {

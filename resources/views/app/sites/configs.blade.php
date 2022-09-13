@@ -51,6 +51,18 @@
                             <i class="bi bi-door-open font-medium-3 me-50"></i>
                             <span class="fw-bold">Unit</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="salesPlanTab" data-bs-toggle="tab" href="#salesPlanData"
+                            aria-controls="sales-plan" role="tab" aria-selected="false">
+                            <i class="bi bi-receipt font-medium-3 me-50"></i>
+                            <span class="fw-bold">Sales Plan</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="othersTab" data-bs-toggle="tab" href="#othersData"
+                            aria-controls="others" role="tab" aria-selected="false">
+                            <i class="bi bi-receipt font-medium-3 me-50"></i>
+                            <span class="fw-bold">Others</span></a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="siteCongifData" aria-labelledby="site-congif-tab" role="tabpanel">
@@ -115,12 +127,12 @@
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'site')
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
-                                                        for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('site_')->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_site.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_site[{{ $key }}]"
                                                         value="{{ $value }}"
-                                                        placeholder="{{ Str::of($key)->title()->replace('_', ' ') }}" />
+                                                        placeholder="{{ Str::of($key)->remove('site_')->title()->replace('_', ' ') }}" />
                                                     @error('arr_site.' . $key)
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -130,6 +142,7 @@
                                         @endforelse
                                     </div>
                                 </div>
+
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
                                         <button type="submit"
@@ -161,12 +174,12 @@
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'floor')
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
-                                                        for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('floor_')->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_floor.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_floor[{{ $key }}]"
                                                         value="{{ $value }}"
-                                                        placeholder="{{ Str::of($key)->ucfirst()->replace('_', ' ') }}" />
+                                                        placeholder="{{ Str::of($key)->remove('floor_')->title()->replace('_', ' ') }}" />
                                                     @error('arr_floor.' . $key)
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -207,13 +220,107 @@
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'unit')
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
-                                                        for="{{ $key }}">{{ Str::of($key)->title()->replace('_', ' ') }}</label>
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('unit_')->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_unit.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}" name="arr_unit[{{ $key }}]"
                                                         value="{{ $value }}"
-                                                        placeholder="{{ Str::of($key)->ucfirst()->replace('_', ' ') }}" />
+                                                        placeholder="{{ Str::of($key)->remove('unit_')->title()->replace('_', ' ') }}" />
                                                     @error('arr_unit.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                            <i data-feather='save'></i>
+                                            Update Configurations
+                                        </button>
+
+                                        <button type="reset"
+                                            class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
+                                            <i data-feather='x'></i>
+                                            {{ __('lang.commons.cancel') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane" id="salesPlanData" aria-labelledby="salesPlanTab" role="tabpanel">
+                        <form action="{{ route('sites.configurations.configStore', ['id' => encryptParams($site->id)]) }}"
+                            method="post">
+                            @csrf
+                            <input type="hidden" name="selected_tab" value="salesplan">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-1 g-1">
+                                        {{-- {{ dd($site->siteConfiguration->toArray()) }} --}}
+                                        @forelse ($site->siteConfiguration->toArray() as $key => $value)
+                                            @if ($key != 'site_id' && explode('_', $key)[0] == 'salesplan')
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                                    <label class="form-label fs-5"
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}</label>
+                                                    <input type="text"
+                                                        class="form-control form-control-lg @error('arr_salesplan.' . $key) is-invalid @enderror"
+                                                        id="{{ $key }}" name="arr_salesplan[{{ $key }}]"
+                                                        value="{{ $value }}"
+                                                        placeholder="{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}" />
+                                                    @error('arr_salesplan.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex align-items-center justify-content-end">
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                            <i data-feather='save'></i>
+                                            Update Configurations
+                                        </button>
+
+                                        <button type="reset"
+                                            class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
+                                            <i data-feather='x'></i>
+                                            {{ __('lang.commons.cancel') }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane" id="othersData" aria-labelledby="othersTab" role="tabpanel">
+                        <form action="{{ route('sites.configurations.configStore', ['id' => encryptParams($site->id)]) }}"
+                            method="post">
+                            @csrf
+                            <input type="hidden" name="selected_tab" value="others">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-1 g-1">
+                                        {{-- {{ dd($site->siteConfiguration->toArray()) }} --}}
+                                        @forelse ($site->siteConfiguration->toArray() as $key => $value)
+                                            @if ($key != 'site_id' && explode('_', $key)[0] == 'others')
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                                    <label class="form-label fs-5"
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('others_')->title()->replace('_', ' ') }}</label>
+                                                    <input type="text"
+                                                        class="form-control form-control-lg @error('arr_others.' . $key) is-invalid @enderror"
+                                                        id="{{ $key }}" name="arr_others[{{ $key }}]"
+                                                        value="{{ $value }}"
+                                                        placeholder="{{ Str::of($key)->remove('others_')->title()->replace('_', ' ') }}" />
+                                                    @error('arr_others.' . $key)
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>

@@ -191,6 +191,7 @@ class SalesPlanController extends Controller
 
         $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
+        // dd($installments);
         if (is_a($installments, 'Exception')) {
             return apiErrorResponse('invalid_amout');
         }

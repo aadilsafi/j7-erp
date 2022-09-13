@@ -55,7 +55,7 @@
         method="POST">
 
         <div class="row">
-            <div class="col-lg-10 col-md-10 col-sm-12 position-relative">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
                 {{ view('app.sites.floors.units.sales-plan.form-fields', [
@@ -70,7 +70,7 @@
 
             </div>
 
-            <div class="col-lg-2 col-md-2 col-sm-12 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-header">
                         <h3 class="p-0">Additional Costs</h3>
@@ -88,7 +88,7 @@
                                         for="checkbox-{{ $additionalCost->slug }}-{{ $key }}">
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder">{{ $key }}.
-                                                {{ $additionalCost->tree }}</span>
+                                                {{ $additionalCost->name }}</span>
                                         </span>
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder"></span>
@@ -179,7 +179,8 @@
                     contact: '',
                     address: '',
                 }
-
+                let div_stakeholder_type = $('#div_stakeholder_type');
+                div_stakeholder_type.hide();
                 $.ajax({
                     url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site->id), 'id' => ':id']) }}"
                         .replace(':id', stakeholder_id),
@@ -198,6 +199,22 @@
                             $('#stackholder_cnic').val(stakeholderData.cnic);
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
+
+                            let stakeholderType = '';
+                            (stakeholderData.stakeholder_types).forEach(types => {
+                                stakeholderType += '<span class="badge badge-light-primary fs-4"></span>';
+                                console.log(types.stakeholder_code);
+                            });
+
+
+                            // <span class="badge badge-light-primary fs-4"></span>
+
+
+
+
+
+
+                            div_stakeholder_type.show();
                         }
                         hideBlockUI('#stakeholders_card');
                     },
@@ -269,11 +286,11 @@
             });
 
             $('#unit_price').on('change', function() {
-                let unit_price = parseFloat($(this).val()).toFixed(2);
-                let unit_size = parseFloat($('#unit_size').val()).toFixed(2);
-                let totalPriceUnit = parseFloat(unit_price * unit_size).toFixed(2);
+                let unit_price = conventToFloatNumber($(this).val());
+                let unit_size = conventToFloatNumber($('#unit_size').val());
+                let totalPriceUnit = conventToFloatNumber(unit_price * unit_size);
 
-                $('#total-price-unit').val(totalPriceUnit).trigger('change');
+                $('#total-price-unit').val(numberFormat(totalPriceUnit)).trigger('change');
             });
 
             $('#total-price-unit').on('change', function() {
@@ -300,25 +317,25 @@
 
                 let elementId = $(this).attr('id');
                 elementId = elementId.slice(('percentage-').length);
+                let unitPriceTotal = conventToFloatNumber($('#total-price-unit').val()).toFixed(2);
 
-                let unitPriceTotal = parseFloat($('#total-price-unit').val()).toFixed(2);
+                let percentage = conventToFloatNumber($(`#percentage-${elementId}`).val()).toFixed(2);
 
-                let percentage = parseFloat($(`#percentage-${elementId}`).val()).toFixed(2);
+                let totalPrice = conventToFloatNumber((unitPriceTotal * percentage) / 100).toFixed(2);
 
-                let totalPrice = parseFloat((unitPriceTotal * percentage) / 100).toFixed(2);
-
-                $(`#total-price-${elementId}`).val(totalPrice);
+                $(`#total-price-${elementId}`).val(numberFormat(totalPrice));
                 calculateUnitGrandAmount();
             });
 
             $('#unit_downpayment_percentage').on('change', function() {
-                let unitPrice = parseFloat(($('#unit_rate_total').val()).replace(/,/g, '')).toFixed(2);
+                let unitPrice = conventToFloatNumber($('#unit_rate_total').val()).toFixed(2);
 
-                let percentage = parseFloat($(this).val());
+                let percentage = conventToFloatNumber($(this).val());
 
-                let totalDownPayment = parseFloat((unitPrice * percentage) / 100);
+                let totalDownPayment = conventToFloatNumber((unitPrice * percentage) / 100);
 
-                $('#unit_downpayment_total').val(parseFloat(totalDownPayment).toFixed(2));
+                $('#unit_downpayment_total').val(numberFormat(conventToFloatNumber(totalDownPayment)
+                    .toFixed(2)));
             });
 
             $('#unit_downpayment_percentage').trigger('change');
@@ -334,15 +351,14 @@
 
                 if ($(`#div-${elementId}`).is(':visible')) {
                     if ($(this).attr('id') == 'total-price-discount') {
-                        grandUnitAmount -= parseFloat($(this).val());
+                        grandUnitAmount -= conventToFloatNumber($(this).val());
                     } else {
-                        grandUnitAmount += parseFloat($(this).val());
+                        grandUnitAmount += conventToFloatNumber($(this).val());
                     }
                 }
             });
 
-            // $('#unit_rate_total').val(new Intl.NumberFormat().format(parseFloat(grandUnitAmount).toFixed(2)));
-            $('#unit_rate_total').val(parseFloat(grandUnitAmount).toFixed(2));
+            $('#unit_rate_total').val(numberFormat(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_downpayment_percentage').trigger('change');
         }
         var unchangedData = [];
@@ -351,10 +367,10 @@
 
             showBlockUI('#installments_acard');
 
-            let unitDownPayment = parseFloat($('#unit_downpayment_total').val()).toFixed(2);
-            let unit_rate_total = parseFloat($('#unit_rate_total').val()).toFixed(2);
+            let unitDownPayment = conventToFloatNumber($('#unit_downpayment_total').val()).toFixed(2);
+            let unit_rate_total = conventToFloatNumber($('#unit_rate_total').val()).toFixed(2);
 
-            let installment_amount = parseFloat(Math.abs(unit_rate_total - unitDownPayment));
+            let installment_amount = conventToFloatNumber(Math.abs(unit_rate_total - unitDownPayment));
 
             let installments_start_date = $('#installments_start_date').val();
             // startDate: '2021-12-15',
@@ -435,6 +451,18 @@
         function updateTable() {
             clearTimeout(t);
             t = setTimeout(calculateInstallments, 1500, 1);
+        }
+
+        function numberFormat(number) {
+            return new Intl.NumberFormat().format(number);
+        }
+
+        function conventToIntNumber(number) {
+            return parseInt(number.toString().replace(/,/g, ''));
+        }
+
+        function conventToFloatNumber(number) {
+            return parseFloat(number.toString().replace(/,/g, ''));
         }
 
         // var validator = $("#create-sales-plan-form").validate({

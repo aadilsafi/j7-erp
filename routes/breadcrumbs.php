@@ -63,12 +63,12 @@ Breadcrumbs::for('sites.types.index', function (BreadcrumbTrail $trail, $site_id
 });
 
 Breadcrumbs::for('sites.types.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.types.index', $site_id);
+    $trail->parent('sites.types.index', encryptParams($site_id));
     $trail->push('Create Type');
 });
 
 Breadcrumbs::for('sites.types.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.types.index', $site_id);
+    $trail->parent('sites.types.index', encryptParams($site_id));
     $trail->push('Edit Type');
 });
 

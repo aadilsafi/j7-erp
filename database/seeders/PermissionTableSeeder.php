@@ -482,6 +482,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.units.sales-plans.approve-sales-plan',
+                'show_name' => 'Approve Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
             //Sales Plan Print
             [

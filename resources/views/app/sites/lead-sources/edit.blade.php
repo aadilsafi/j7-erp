@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.lead-sources.edit', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.lead-sources.edit', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Edit Lead Source')
@@ -21,7 +21,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Edit Lead Source</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.lead-sources.edit', $site_id) }}
+                    {{ Breadcrumbs::render('sites.lead-sources.edit', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
-use App\Models\{SalesPlan, Floor, Site, Unit};
+use App\Models\{SalesPlan, Floor, Site, Unit, User};
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
 use App\Services\Interfaces\AdditionalCostInterface;
@@ -11,8 +11,11 @@ use App\Services\{
     SalesPlan\Interface\SalesPlanInterface,
     Stakeholder\Interface\StakeholderInterface,
 };
+use Carbon\{Carbon, CarbonPeriod};
 use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\URL;
+use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
 
 class SalesPlanController extends Controller
 {
@@ -62,7 +65,9 @@ class SalesPlanController extends Controller
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'unit' => (new Unit())->with('status', 'type')->find(decryptParams($unit_id)),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'stakeholders' => $this->stakeholderInterface->getByAll(decryptParams($site_id)),
+                'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
+                    'stakeholder_types',
+                ]),
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
@@ -80,11 +85,11 @@ class SalesPlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$site_id,$floor_id,$unit_id)
+    public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
         $data = $request->input();
         $record = $this->salesPlanInterface->store($site_id, $data);
-        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' =>$site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }
 
     /**
@@ -132,7 +137,7 @@ class SalesPlanController extends Controller
         //
     }
 
-    public function printPage($site_id,$floor_id,$unit_id,$sales_plan_id,$tempalte_id)
+    public function printPage($site_id, $floor_id, $unit_id, $sales_plan_id, $tempalte_id)
     {
         //
         $salesPlan = SalesPlan::find(decryptParams($sales_plan_id));
@@ -177,7 +182,7 @@ class SalesPlanController extends Controller
 
         $data['additional_costs'] = $salesPlan->additionalCosts;
 
-        return view('app.sites.floors.units.sales-plan.sales-plan-templates.'.$template->slug,compact('data'));
+        return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }
 
     public function ajaxGenerateInstallments(Request $request, $site_id, $floor_id, $unit_id)
@@ -186,10 +191,33 @@ class SalesPlanController extends Controller
 
         $installments = $this->salesPlanInterface->generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 
-        if(is_a($installments, 'Exception')){
+        if (is_a($installments, 'Exception')) {
             return apiErrorResponse('invalid_amout');
         }
 
         return apiSuccessResponse($installments);
+    }
+
+    public function approveSalesPlan(Request $request)
+    {
+        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $user = User::find($salesPlan->user_id);
+        $salesPlan->status = 1;
+        $salesPlan->save();
+
+        $currentURL = URL::current();
+        $notificaionData = [
+            'title' => 'Sales Plan Genration Notification',
+            'description' => Auth::User()->name.' approved generated sales plan.',
+            'message' => 'xyz message',
+            'url' => str_replace('/approve-sales-plan', '', $currentURL),
+        ];
+
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+
+        return response()->json([
+            'success' => true,
+            'message' => "Sales Plan Approved Sucessfully",
+        ], 200);
     }
 }

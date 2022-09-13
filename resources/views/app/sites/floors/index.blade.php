@@ -72,7 +72,7 @@
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="5">STATUSES</th>
                                         <th rowspan="2">CREATED AT</th>
-                                        <th rowspan="2">ACTIONS</th>
+                                        <th rowspan="2" id="action">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th>OPEN</th>
@@ -153,7 +153,6 @@
 
     <script>
         $(document).ready(function() {
-
             $(".dt-complex-header").DataTable({
                 processing: true,
                 serverSide: true,
@@ -230,7 +229,8 @@
                     },
 
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                     targets: 0,
                     className: 'text-center text-primary',
                     orderable: false,
@@ -246,7 +246,8 @@
                     checkboxes: {
                         'selectAllRender': '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     }
-                }],
+                }
+                ],
                 order: [
                     [11, 'desc']
                 ],
@@ -276,21 +277,41 @@
                                 extend: 'copy',
                                 text: '<i class="bi bi-clipboard"></i> Copy',
                                 className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11]
+                                }
                             },
                             {
                                 extend: 'csv',
                                 text: '<i class="bi bi-file-earmark-spreadsheet"></i> CSV',
                                 className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11]
+                                }
                             },
                             {
                                 extend: 'pdf',
                                 text: '<i class="bi bi-filetype-pdf"></i> PDF',
                                 className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11]
+                                }
+                            },
+                            {
+                                extend: 'excel',
+                                text: '<i class="bi bi-file-earmark-spreadsheet"></i>Excel',
+                                className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11]
+                                }
                             },
                             {
                                 extend: 'print',
                                 text: '<i class="bi bi-printer"></i> Print',
                                 className: 'dropdown-item',
+                                exportOptions: {
+                                    columns: [0,1,2,3,4,5,6,7,8,9,10,11]
+                                }
                             },
                         ]
                     },
@@ -333,11 +354,7 @@
                     showCancelButton: true,
                     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
                     confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
-                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
-                    },
+                    confirmButtonClass: 'btn-danger',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#floors-table-form').submit();

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                    width: calc(20% - 0.5em);
-                                } */
+                    width: calc(20% - 0.5em);
+                } */
     </style>
 @endsection
 
@@ -74,7 +74,7 @@
                         </div>
                         <hr>
                         <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
                             Save Stakeholder
                         </a>
@@ -99,6 +99,12 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+@endsection
+
+@section('page-js')
+@endsection
+
+@section('custom-js')
     <script>
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
@@ -110,8 +116,6 @@
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
-            // imageValidateSizeMinWidth: 1000,
-            // imageValidateSizeMinHeight: 1000,
             imageCropAspectRatio: '1:1',
             acceptedFileTypes: ['image/png', 'image/jpeg'],
             maxFileSize: '1536KB',
@@ -119,7 +123,7 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
-            // required:true,
+            required: true,
             checkValidity: true,
             credits: {
                 label: '',
@@ -127,12 +131,7 @@
             }
         });
     </script>
-@endsection
 
-@section('page-js')
-@endsection
-
-@section('custom-js')
     <script type="text/javascript">
         $(document).ready(function() {
             $("#saveButton").click(function() {
@@ -173,14 +172,16 @@
 
                 if (cnic.toString().length != 13) {
                     $('#cnic').after(
-                    '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>');
+                        '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>'
+                    );
                 }
 
                 if (!$.isNumeric(contact)) {
                     $('#contact').after(
                         '<span class="error allErrors text-danger">Enter Numeric Value</span>');
                 }
-                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' && father_name != '' &&
+                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' &&
+                    father_name != '' &&
                     occupation != '' && designation != '') {
                     $("#stakeholderForm").submit();
                 }

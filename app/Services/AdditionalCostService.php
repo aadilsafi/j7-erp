@@ -45,7 +45,7 @@ class AdditionalCostService implements AdditionalCostInterface
         $data = [
             'site_id' => decryptParams($site_id),
             'name' => filter_strip_tags($inputs['name']),
-            'slug' => Str::of(filter_strip_tags($inputs['slug']))->slug(),
+            'slug' => Str::of(filter_strip_tags($inputs['name']))->slug(),
             'parent_id' => filter_strip_tags($inputs['additionalCost']),
             'has_child' => filter_strip_tags($inputs['has_child']),
             'site_percentage' => filter_strip_tags($inputs['site_percentage']),
@@ -68,7 +68,7 @@ class AdditionalCostService implements AdditionalCostInterface
 
         $data = [
             'name' => filter_strip_tags($inputs['name']),
-            'slug' => Str::of(filter_strip_tags($inputs['slug']))->slug(),
+            'slug' => Str::of(filter_strip_tags($inputs['name']))->slug(),
             'parent_id' => filter_strip_tags($inputs['additionalCost']),
             'has_child' => filter_strip_tags($inputs['has_child']),
             'site_percentage' => filter_strip_tags($inputs['site_percentage']),

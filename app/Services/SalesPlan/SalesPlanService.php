@@ -2,11 +2,17 @@
 
 namespace App\Services\SalesPlan;
 
-use Carbon\{Carbon, CarbonPeriod};
-use Illuminate\Support\LazyCollection;
-use App\Models\{Stakeholder, AdditionalCost, SalesPlanAdditionalCost, Floor, SalesPlan, SalesPlanInstallments, Site, Unit};
-use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Exception;
+use App\Models\User;
+use Carbon\{Carbon, CarbonPeriod};
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\LazyCollection;
+use Spatie\Permission\Models\Permission;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
+use App\Jobs\SalesPlan\GeneratedSalesPlanNotificationJob;
+use App\Models\{Stakeholder, AdditionalCost, SalesPlanAdditionalCost, Floor, SalesPlan, SalesPlanInstallments, Site, Unit};
 
 class SalesPlanService implements SalesPlanInterface
 {
@@ -38,6 +44,20 @@ class SalesPlanService implements SalesPlanInterface
     // // Store
     public function store($site_id, $inputs)
     {
+        $authRoleId = Auth::user()->roles->pluck('id');
+        $approveSalesPlanPermission = Role::find($authRoleId[0])->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
+
+        $permission = Permission::where('name','sites.floors.units.sales-plans.approve-sales-plan')->first();
+        $approveSalesPlanPermissionRole = $permission->roles;
+
+        if($approveSalesPlanPermission){
+            $status = true;
+        }
+        else
+        {
+            $status = false;
+        }
+
         $stakeholderData = [
             'site_id' => decryptParams($site_id),
             'full_name' => $inputs['stackholder']['full_name'],
@@ -62,15 +82,15 @@ class SalesPlanService implements SalesPlanInterface
             'stakeholder_id' => $stakeholder_data->id,
             'user_id' => auth()->user()->id,
             'unit_price' => $inputs['unit']['price']['unit'],
-            'total_price' => $inputs['unit']['price']['total'],
+            'total_price' => str_replace(',', '', $inputs['unit']['price']['total']),
             'discount_percentage' => $inputs['unit']['discount']['percentage'],
-            'discount_total' => $inputs['unit']['discount']['total'],
+            'discount_total' => str_replace(',', '', $inputs['unit']['discount']['total']),
             'down_payment_percentage' => $inputs['unit']['downpayment']['percentage'],
-            'down_payment_total' => $inputs['unit']['downpayment']['total'],
-            'sales_type' => $inputs['sales_source']['sales_type'],
-            'indirect_source' => $inputs['sales_source']['indirect_source'],
+            'down_payment_total' => str_replace(',', '', $inputs['unit']['downpayment']['total']),
+            'sales_type' => $inputs['sales_source']['lead_source'],
+            // 'indirect_source' => $inputs['sales_source']['indirect_source'],
             'validity' => $inputs['sales_plan_validity'],
-            'status' => true,
+            'status' => $status,
         ];
 
         $sales_plan = $this->model()->create($sales_plan_data);
@@ -82,7 +102,7 @@ class SalesPlanService implements SalesPlanInterface
                 'sales_plan_id' => $sales_plan->id,
                 'additional_cost_id' => $additonal_cost_id,
                 'percentage' => $value['percentage'],
-                'amount' => $value['total'],
+                'amount' => str_replace(',', '', $value['total']),
             ];
 
             $sales_plan_additonal_cost = SalesPlanAdditionalCost::create($sales_plan_additonal_cost_data);
@@ -94,14 +114,30 @@ class SalesPlanService implements SalesPlanInterface
             $instalmentData = [
                 'sales_plan_id' =>  $sales_plan->id,
                 'date' => Carbon::parse(str_replace('/', '-', $table_data['date'])),
-                'details' => $table_data['details'],
-                'amount' => $table_data['amount'],
+                // 'details' => $table_data['details'],
+                'amount' => str_replace(',', '', $table_data['amount']),
                 'remarks' => $table_data['remarks'],
             ];
 
             $SalesPlanInstallments = SalesPlanInstallments::create($instalmentData);
 
         }
+
+        $specificUsers = collect();
+        foreach($approveSalesPlanPermissionRole as $role){
+            $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id' , Auth::user()->id)->get());
+
+        }
+        $currentURL = URL::current();
+
+        $notificaionData = [
+            'title' => 'New Sales Plan Genration Notification',
+            'description' => Auth::User()->name.' generated new sales plan',
+            'message' => 'xyz message',
+            'url' => str_replace('/store', '', $currentURL),
+        ];
+
+        GeneratedSalesPlanNotificationJob::dispatch($notificaionData,$specificUsers)->delay(Carbon::now()->addMinutes(1));
 
         return $sales_plan;
 
@@ -222,7 +258,7 @@ class SalesPlanService implements SalesPlanInterface
                         'dateShow' => false,
                         'detail' => '',
                         'detailShow' => false,
-                        'amount' => $inputs['installment_amount'],
+                        'amount' => number_format($inputs['installment_amount']),
                         'amountName' => false,
                         'amountShow' => true,
                         'amountReadonly' => true,

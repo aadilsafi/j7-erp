@@ -60,8 +60,8 @@
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
-        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
-        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <!-- END: Custom CSS-->
 
     <style>
@@ -176,6 +176,39 @@
     <!-- END: Page JS-->
 
     <script>
+        $("#unreadNotification").on('click', function() {
+            var id = $(this).attr('getNotificationID');
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: '{!! URL('/read-single-notification') !!}',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'notificationID': id,
+                    '_token': _token
+                },
+                success: function(data) {
+                    console.log(data);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        function readAllNotifications() {
+            $.ajax({
+                url: '{!! URL('/read-all-notifications') !!}',
+                type: 'get',
+                dataType: 'json',
+                success: function(data) {
+                    location.reload(true);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
         $(window).on('load', function() {
             if (feather) {
                 feather.replace({

@@ -207,7 +207,7 @@ class SalesPlanController extends Controller
 
         $currentURL = URL::current();
         $notificaionData = [
-            'title' => 'Sales Plan Genration Notification',
+            'title' => 'Sales Plan Approved Notification',
             'description' => Auth::User()->name.' approved generated sales plan.',
             'message' => 'xyz message',
             'url' => str_replace('/approve-sales-plan', '', $currentURL),
@@ -220,4 +220,28 @@ class SalesPlanController extends Controller
             'message' => "Sales Plan Approved Sucessfully",
         ], 200);
     }
+
+    public function disApproveSalesPlan(Request $request)
+    {
+        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $user = User::find($salesPlan->user_id);
+        $salesPlan->status = 0;
+        $salesPlan->save();
+
+        $currentURL = URL::current();
+        $notificaionData = [
+            'title' => 'Sales Plan Disapproved Notification',
+            'description' => Auth::User()->name.' disapproved generated sales plan.',
+            'message' => 'xyz message',
+            'url' => str_replace('/disapprove-sales-plan', '', $currentURL),
+        ];
+
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+
+        return response()->json([
+            'success' => true,
+            'message' => "Sales Plan disapproved Sucessfully",
+        ], 200);
+    }
+
 }

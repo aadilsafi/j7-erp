@@ -241,6 +241,20 @@
                 </li>
             @endcan
 
+            {{-- Receipts Menu --}}
+            @can('sites.receipts.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i class="bi bi-receipt-cutoff" style="
+                            margin-bottom: 10px;">
+                        </i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
+                    </a>
+                </li>
+            @endcan
+
         </ul>
     </div>
 </div>

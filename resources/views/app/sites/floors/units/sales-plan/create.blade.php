@@ -206,14 +206,6 @@
                                 console.log(types.stakeholder_code);
                             });
 
-
-                            // <span class="badge badge-light-primary fs-4"></span>
-
-
-
-
-
-
                             div_stakeholder_type.show();
                         }
                         hideBlockUI('#stakeholders_card');
@@ -235,7 +227,6 @@
             }).on("change", function(e) {
 
             });
-
 
             var installmentsRowAction = '';
 
@@ -274,8 +265,16 @@
                 }
             });
 
-            $(".flatpickr-basic").flatpickr({
-                defaultDate: "today",
+            $("#sales_plan_validity").flatpickr({
+                defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
+                minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
+            $("#installments_start_date").flatpickr({
+                defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
                 minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
@@ -421,6 +420,7 @@
         }
 
         function storeUnchangedData(key, field, value) {
+            // debugger;
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -436,6 +436,7 @@
                     value: value
                 });
             }
+            console.log(unchangedData);
             updateTable();
         }
 

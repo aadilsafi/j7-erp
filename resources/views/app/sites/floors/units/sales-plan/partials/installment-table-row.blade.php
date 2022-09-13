@@ -1,51 +1,54 @@
-<tr id="row_{{ $keyShow ? $key : 'total' }}">
-    <th scope="row">{!! $keyShow ? $key : '&nbsp;' !!}</th>
+<tr id="row_{{ $index['show'] ? $index['value'] : 'total' }}">
+    <th scope="row">{{ $index['show'] ? $index['value'] : '&nbsp;' }}</th>
 
     <td>
-        <div class="position-relative" {!! $detailShow ? null : "style='display: none;'" !!}>
-            <input type="text" class="form-control text-center form-control-lg" id="installment_detail_{{ $key }}"
-                {!! $detailShow ? "name='installments[table][" . $key . "][details]'" : null !!}
-                placeholder="Details" value="{{ englishCounting($key) }} Installment" disabled />
+        <div class="position-relative" {!! $installments['show'] ? null : "style='display: none;'" !!}>
+            <input type="text" class="form-control text-center form-control-lg"
+                id="installment_detail_{{ $index['value'] }}" {!! $installments['name'] ? "name='installments[table][" . $index['value'] . "][installment]'" : null !!}
+                placeholder="{{ $installments['placeholder'] }}" value="{{ $installments['value'] }}"
+                {{ $installments['disabled'] ? 'disabled' : null }}
+                {{ $installments['readonly'] ? 'readonly' : null }} />
         </div>
     </td>
+
     <td>
-        <div class="position-relative" {!! $dateShow ? null : "style='display: none;'" !!}>
-            <input type="text" id="installment_date_{{ $key }}" {!! $dateShow ? "name='installments[table][" . $key . "][date]'" : null !!} readonly
-                class="form-control" value="{{ $date }}" placeholder="Installment Date"
-                onchange="storeUnchangedData('{{ $key }}', 'date');" />
+        <div class="position-relative" {!! $due_date['show'] ? null : "style='display: none;'" !!}>
+            <input type="text" id="installment_date_{{ $index['value'] }}" {!! $due_date['show'] ? "name='installments[table][" . $index['value'] . "][due_date]'" : null !!}
+                class="form-control" value="{{ $due_date['value'] }}" placeholder="{{ $due_date['placeholder'] }}"
+                onchange="storeUnchangedData('{{ $index['value'] }}', 'due_date', this.value);"
+                {{ $due_date['disabled'] ? 'disabled' : null }} {{ $due_date['readonly'] ? 'readonly' : null }} />
         </div>
     </td>
-    <td style="width: 20%;">
-        <div class="position-relative text-end" {!! $amountShow ? null : "style='display: none;'" !!}>
-            @php
-                $installmentRate = isset($filteredData['amount']) ? $filteredData['amount'] : $amount;
-            @endphp
+
+    <td>
+        <div class="position-relative text-end" {!! $total_amount['show'] ? null : "style='display: none;'" !!}>
             <input type="number" class="form-control form-control-lg text-end" min="0"
-                {{ $amountReadonly ? 'readonly' : null }} id="installment_amount_{{ $key }}"
-                value="{{ number_format((float) ($installmentRate > 0 ? $installmentRate : '0'), 2, '.', '') }}"
-                {!! $amountName ? "name='installments[table][" . $key . "][amount]'" : null !!} placeholder="Amount"
-                onchange="storeUnchangedData({{ $key }}, 'amount', this.value);" />
+                id="installment_amount_{{ $index['value'] }}"
+                value="{{ number_format((float) ($total_amount['value'] > 0 ? $total_amount['value'] : '0'), 2, '.', '') }}"
+                {!! $total_amount['name'] ? "name='installments[table][" . $index['value'] . "][total_amount]'" : null !!} placeholder="{{ $total_amount['placeholder'] }}"
+                onchange="storeUnchangedData({{ $index['value'] }}, 'amount', this.value);"
+                {{ $total_amount['disabled'] ? 'disabled' : null }}
+                {{ $total_amount['readonly'] ? 'readonly' : null }} />
         </div>
     </td>
+
     <td>
-        <div class="position-relative" {!! $remarksShow ? null : "style='display: none;'" !!}>
-            <input type="text" class="form-control form-control-lg" id="installment_remark_{{ $key }}"
-                {!! $remarksShow ? "name='installments[table][" . $key . "][remarks]'" : null !!} placeholder="Remarks"
-                onchange="storeUnchangedData({{ $key }}, 'remarks', this.value);" {!! isset($filteredData['remarks']) ? "value='" . $filteredData['remarks'] . "'" : null !!} />
+        <div class="position-relative" {!! $remarks['show'] ? null : "style='display: none;'" !!}>
+            <input type="text" class="form-control form-control-lg" id="installment_remark_{{ $index['value'] }}"
+                {!! $remarks['show'] ? "name='installments[table][" . $index['value'] . "][remarks]'" : null !!} placeholder="{{ $remarks['placeholder'] }}"
+                onchange="storeUnchangedData({{ $index['value'] }}, 'remarks', this.value);"
+                value="{{ $remarks['value'] }}" {{ $remarks['disabled'] ? 'disabled' : null }}
+                {{ $remarks['readonly'] ? 'readonly' : null }} />
         </div>
     </td>
 </tr>
 
 <script>
-    var e = $("#installment_date_{{ $key }}");
-    e.flatpickr({
-        defaultDate: '{{ $date }}',
-        minDate: '{{ $date }}',
+    $("#installment_date_{{ $index['value'] }}").flatpickr({
+        defaultDate: '{{ $due_date['value'] }}',
+        minDate: 'today',
         altInput: !0,
         altFormat: "F j, Y",
         dateFormat: "Y-m-d",
-        onChange: function(selectedDates, dateStr, instance) {
-            updateTable();
-        },
     });
 </script>

@@ -188,11 +188,10 @@ class SalesPlanService implements SalesPlanInterface
             'unit' => (new Unit())->find(decryptParams($unit_id)),
         ];
 
-        $unchangedData = isset($inputs['unchangedData']) ? $inputs['unchangedData'] : [];
-
-        $unchangedData = LazyCollection::make($unchangedData);
+        $unchangedData = collect(isset($inputs['unchangedData']) ? $inputs['unchangedData'] : []);
 
         $unchangedAmont = $unchangedData->where('field', 'amount')->sum('value');
+
         $unchangedAmontCount = $unchangedData->where('field', 'amount')->count();
 
         $baseInstallmentTotal = ($inputs['installment_amount'] - $unchangedAmont);
@@ -203,11 +202,16 @@ class SalesPlanService implements SalesPlanInterface
 
         $amount = $this->baseInstallment($baseInstallmentTotal, ($inputs['length'] - $unchangedAmontCount));
 
-        $unchangedDates = $unchangedData->whereIn('field', ['due_date'])->pluck('value')->all();
+        $unchangedDates = $unchangedData->whereIn('field', ['due_date']);
 
-        $installmentDates = $this->installmentDataCalculation($inputs['startDate'], 1, $inputs['length'], $inputs['rangeCount'], $unchangedDates);
+        $unchangedDates = $unchangedDates->sortBy('key');
 
-        $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use ($amount, $unchangedData, $baseInstallmentTotal) {
+
+        $installmentDates = $this->installmentDataCalculation($inputs['startDate'], 1, intval($inputs['length']), $inputs['rangeCount'], $unchangedDates->pluck('value')->all());
+
+        $unchangedDates = $unchangedDates->all();
+
+        $installments['installments'] = collect($installmentDates)->map(function ($date, $key) use ($amount, $unchangedData, $baseInstallmentTotal, $unchangedDates) {
 
             $filteredData = $unchangedData->where('key', $key + 1)->whereIn('field', ['amount', 'remarks'])->map(function ($item) {
                 return [$item['field'] => $item['value']];
@@ -226,6 +230,7 @@ class SalesPlanService implements SalesPlanInterface
             $rowFields = [
                 'index' => [
                     'value' => $installmentRow['key'],
+                    'classes' => '',
                     'placeholder' => 'Index',
                     'name' => true,
                     'show' => true,
@@ -234,6 +239,7 @@ class SalesPlanService implements SalesPlanInterface
                 ],
                 'installments' => [
                     'value' => englishCounting($installmentRow['key']) . ' Installment',
+                    'classes' => '',
                     'placeholder' => 'Installments',
                     'name' => true,
                     'show' => true,
@@ -242,6 +248,7 @@ class SalesPlanService implements SalesPlanInterface
                 ],
                 'due_date' => [
                     'value' => (new Carbon($installmentRow['date']))->format('Y-m-d'),
+                    'classes' => '',
                     'placeholder' => 'Due Date',
                     'name' => true,
                     'show' => true,
@@ -250,6 +257,7 @@ class SalesPlanService implements SalesPlanInterface
                 ],
                 'total_amount' => [
                     'value' => isset($filteredData['amount']) ? $filteredData['amount'] : $installmentRow['amount'],
+                    'classes' => '',
                     'placeholder' => 'Total Amount',
                     'name' => true,
                     'show' => true,
@@ -258,6 +266,7 @@ class SalesPlanService implements SalesPlanInterface
                 ],
                 'remarks' => [
                     'value' => isset($filteredData['remarks']) ? $filteredData['remarks'] : $installmentRow['remarks'],
+                    'classes' => '',
                     'placeholder' => 'Remarks',
                     'name' => true,
                     'show' => true,
@@ -266,6 +275,7 @@ class SalesPlanService implements SalesPlanInterface
                 ],
                 'others' => [
                     'value' => '',
+                    'classes' => '',
                     'placeholder' => 'Others',
                     'name' => true,
                     'show' => true,
@@ -275,6 +285,22 @@ class SalesPlanService implements SalesPlanInterface
                 'filteredData' => $filteredData,
                 'baseInstallmentTotal' => $baseInstallmentTotal,
             ];
+
+            if (isset($unchangedDates[$key - 1])) {
+                $rowFields['due_date']['minDate'] = $unchangedDates[$key - 1]['value'];
+                $rowFields['due_date']['disabled'] = false;
+            }
+            if ($key == 0) {
+                $rowFields['due_date']['disabled'] = false;
+            }
+
+
+
+
+            // if (isset($unchangedDates[$key - 1])) {
+            // } else if (count((array)$unchangedDates) < 1 && $key == 0) {
+            //     $rowFields['due_date']['disabled'] = false;
+            // }
 
             $installmentRow['row'] = view('app.sites.floors.units.sales-plan.partials.installment-table-row', $rowFields)->render();
 
@@ -305,7 +331,7 @@ class SalesPlanService implements SalesPlanInterface
 
         $time_elapsed_secs = microtime(true) - $start;
 
-        dd($installments);
+        // dd($installments);
 
         return $installments;
         // } catch (Exception $ex) {

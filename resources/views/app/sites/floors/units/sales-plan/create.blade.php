@@ -202,7 +202,8 @@
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
-                                stakeholderType += '<span class="badge badge-light-primary fs-4"></span>';
+                                stakeholderType +=
+                                    '<span class="badge badge-light-primary fs-4"></span>';
                                 console.log(types.stakeholder_code);
                             });
 
@@ -420,7 +421,8 @@
         }
 
         function storeUnchangedData(key, field, value) {
-            // debugger;
+
+            key = parseInt(key);
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -436,8 +438,17 @@
                     value: value
                 });
             }
+            unchangedData.sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
+
+            unchangedData.forEach((element, i) => {
+                if (element.key > key && element.field === 'due_date') {
+                    unchangedData.splice(i, 1);
+                }
+            });
+
             console.log(unchangedData);
-            updateTable();
+
+            // updateTable();
         }
 
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',

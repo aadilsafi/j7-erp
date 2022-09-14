@@ -2,8 +2,8 @@
     <th scope="row">{{ $index['show'] ? $index['value'] : '&nbsp;' }}</th>
 
     <td>
-        <div class="position-relative" {!! $installments['show'] ? null : "style='display: none;'" !!}>
-            <input type="text" class="form-control text-center form-control-lg"
+        <div class="position-relative" style="{{ $installments['show'] ? null : 'display: none;' }}">
+            <input type="text" class="form-control text-center form-control-lg disbaled"
                 id="installment_detail_{{ $index['value'] }}" {!! $installments['name'] ? "name='installments[table][" . $index['value'] . "][installment]'" : null !!}
                 placeholder="{{ $installments['placeholder'] }}" value="{{ $installments['value'] }}"
                 {{ $installments['disabled'] ? 'disabled' : null }}
@@ -11,11 +11,11 @@
         </div>
     </td>
 
-    <td>
+    <td style="width: 28%">
         <div class="position-relative" {!! $due_date['show'] ? null : "style='display: none;'" !!}>
             <input type="text" id="installment_date_{{ $index['value'] }}" {!! $due_date['show'] ? "name='installments[table][" . $index['value'] . "][due_date]'" : null !!}
                 class="form-control" value="{{ $due_date['value'] }}" placeholder="{{ $due_date['placeholder'] }}"
-                onchange="storeUnchangedData('{{ $index['value'] }}', 'due_date', this.value);"
+                onchange="storeUnchangedData('{{ $index['value'] }}', 'due_date', this.value);" style="{{ $due_date['disabled'] ? 'background-color: #EFEFEF;' : null}}"
                 {{ $due_date['disabled'] ? 'disabled' : null }} {{ $due_date['readonly'] ? 'readonly' : null }} />
         </div>
     </td>
@@ -46,7 +46,7 @@
 <script>
     $("#installment_date_{{ $index['value'] }}").flatpickr({
         defaultDate: '{{ $due_date['value'] }}',
-        minDate: 'today',
+        minDate: '{{ isset($due_date['minDate']) ? $due_date['minDate'] : "today" }}',
         altInput: !0,
         altFormat: "F j, Y",
         dateFormat: "Y-m-d",

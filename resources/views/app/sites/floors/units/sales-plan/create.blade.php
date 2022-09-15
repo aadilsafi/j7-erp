@@ -136,10 +136,10 @@
                     </div>
 
                     <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
-                        <h4 class="alert-heading"><i data-feather='alert-triangle'
-                                class="me-50"></i>Warning!</h4>
+                        <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
                         <div class="alert-body">
-                            Any change in <strong>PRIMARY DATA</strong> and <strong>INSTALLMENT DETAILS</strong> will effect the installments table.
+                            Any change in <strong>PRIMARY DATA</strong> and <strong>INSTALLMENT DETAILS</strong> will effect
+                            the installments table.
                         </div>
                     </div>
                 </div>
@@ -211,13 +211,12 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
-                        console.log(response);
 
                         if (response.status) {
                             if (response.data) {
                                 stakeholderData = response.data;
                             }
-                            $('#stackholder_id').val(stakeholderData.id);
+                            // $('#stackholder_id').val(stakeholderData.id);
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
                             $('#stackholder_occupation').val(stakeholderData.occupation);
@@ -275,14 +274,14 @@
                 buttonup_class: "btn btn-primary",
                 buttondown_txt: feather.icons["chevron-down"].toSvg(),
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
-                min: 0,
+                min: 1,
                 max: 50,
             }).on("touchspin.on.stopspin", function() {
                 updateTable();
             }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
-                0 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
+                1 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
                     "disabled-max-min");
@@ -537,109 +536,110 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
-        // var validator = $("#create-sales-plan-form").validate({
-        //     debug: true,
-        //     rules: {
-        //         // 1. PRIMARY DATA
-        //         'unit[no]': {
-        //             required: true
-        //         },
-        //         'unit[floor_no]': {
-        //             required: true
-        //         },
-        //         'unit[type]': {
-        //             required: true
-        //         },
-        //         'unit[size]': {
-        //             required: true
-        //         },
-        //         'unit[price][unit]': {
-        //             required: true
-        //         },
-        //         'unit[price][total]': {
-        //             required: true
-        //         },
+        var validator = $("#create-sales-plan-form").validate({
+            // debug: true,
+            rules: {
+                // 1. PRIMARY DATA
+                'unit[no]': {
+                    required: true
+                },
+                'unit[floor_no]': {
+                    required: true
+                },
+                'unit[type]': {
+                    required: true
+                },
+                'unit[size]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[price][unit]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[price][total]': {
+                    required: true,
+                },
 
-        //         //// Unit Discount
-        //         'unit[discount][percentage]': {
-        //             required: true
-        //         },
-        //         'unit[discount][total]': {
-        //             required: true
-        //         },
+                //// Unit Discount
+                'unit[discount][percentage]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[discount][total]': {
+                    required: true
+                },
 
-        //         //// Unit Grand Total
-        //         'unit[grand_total]': {
-        //             required: true
-        //         },
+                //// Unit Grand Total
+                'unit[grand_total]': {
+                    required: true
+                },
 
-        //         //// Unit Down Payment
-        //         'unit[downpayment][percentage]': {
-        //             required: true
-        //         },
-        //         'unit[downpayment][total]': {
-        //             required: true
-        //         },
+                //// Unit Down Payment
+                'unit[downpayment][percentage]': {
+                    required: true
+                },
+                'unit[downpayment][total]': {
+                    required: true
+                },
 
-        //         // 2. INSTALLMENT DETAILS
-        //         'installments[types][type]': {
-        //             required: true
-        //         },
-        //         'installments[types][value]': {
-        //             required: true
-        //         },
-        //         'installments[start_date]': {
-        //             required: true
-        //         },
+                // 2. INSTALLMENT DETAILS
+                'installments[types][type]': {
+                    required: true
+                },
+                'installments[types][value]': {
+                    required: true,
+                    min: 1,
+                    digits: true
+                },
+                'installments[start_date]': {
+                    required: true
+                },
 
-        //         // 3. STAKEHOLDER DATA (LEAD'S DATA)
-        //         'stackholder[stackholder_id]': {
-        //             required: true
-        //         },
-        //         'stackholder[full_name]': {
-        //             required: true
-        //         },
-        //         'stackholder[father_name]': {
-        //             required: true
-        //         },
-        //         'stackholder[occupation]': {
-        //             required: true
-        //         },
-        //         'stackholder[designation]': {
-        //             required: true
-        //         },
-        //         'stackholder[cnic]': {
-        //             required: true
-        //         },
-        //         'stackholder[contact]': {
-        //             required: true
-        //         },
-        //         'stackholder[address]': {
-        //             required: true
-        //         },
+                // 3. STAKEHOLDER DATA (LEAD'S DATA)
+                'stackholder[stackholder_id]': {
+                    required: true
+                },
+                'stackholder[full_name]': {
+                    required: true
+                },
+                'stackholder[father_name]': {
+                    required: true
+                },
+                'stackholder[occupation]': {
+                    required: true
+                },
+                'stackholder[designation]': {
+                    required: true
+                },
+                'stackholder[cnic]': {
+                    required: true
+                },
+                'stackholder[contact]': {
+                    required: true
+                },
+                'stackholder[address]': {
+                    required: true
+                },
 
-        //         // 4. SALES SOURCE
-        //         'sales_source[full_name]': {
-        //             required: true
-        //         },
-        //         'sales_source[status]': {
-        //             required: true
-        //         },
-        //         'sales_source[contact_no]': {
-        //             required: true
-        //         },
-        //         'sales_source[sales_type]': {
-        //             required: true
-        //         },
-        //         'sales_source[indirect_source]': {
-        //             required: true
-        //         },
-        //     },
-        //     submitHandler: function(form) {
-        //         // do other things for a valid form
-        //         console.log(form);
-        //     }
-        // });
+                // 4. SALES SOURCE
+                'sales_source[sales_type]': {
+                    required: true
+                },
+                'sales_source[new]': {
+                    required: function(element) {
+                        return $("#sales_source_lead_source").val() == 0;
+                    }
+                },
+            },
+            // validClass: "is-valid",
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                console.log(form);
+            }
+        });
 
         // validator.resetForm();
         // validator.showErrors({

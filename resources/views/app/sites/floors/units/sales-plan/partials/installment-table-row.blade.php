@@ -43,15 +43,17 @@
     </td>
 </tr>
 
-<script>
-    $("#installment_date_{{ $index['value'] }}").flatpickr({
-        defaultDate: '{{ $due_date['value'] }}',
-        minDate: '{{ isset($due_date['minDate']) ? $due_date['minDate'] : 'today' }}',
-        altInput: !0,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-        onChange: function(selectedDates, dateStr, instance) {
-            storeUnchangedData({{ $index['value'] }}, 'due_date', dateStr, 'ArrDueDates');
-        }
-    });
-</script>
+@if ($index['show'])
+    <script>
+        $("#installment_date_{{ $index['value'] }}").flatpickr({
+            defaultDate: '{{ $due_date['value'] }}',
+            minDate: '{{ isset($due_date['minDate']) ? $due_date['minDate'] : 'today' }}',
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            onChange: function(selectedDates, dateStr, instance) {
+                storeUnchangedData({{ $index['value'] }}, 'due_date', dateStr, 'ArrDueDates');
+            }
+        });
+    </script>
+@endif

@@ -32,7 +32,7 @@
             display: none;
         }
 
-        #onlineValueDiv {
+        .onlineValueDiv {
             display: none;
         }
 
@@ -149,25 +149,21 @@
 
         $(document).ready(function() {
 
-            $("#saveButton").click(function() {
-                $("#receiptForm").submit();
-            });
-
             $(".other-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "block");
-                $('#onlineValueDiv').css("display", "none");
+                $('.onlineValueDiv').css("display", "none");
                 $('#chequeValueDiv').css("display", "none");
             });
 
             $(".cheque-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
-                $('#onlineValueDiv').css("display", "none");
+                $('.onlineValueDiv').css("display", "none");
                 $('#chequeValueDiv').css("display", "block");
             });
 
             $(".online-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
-                $('#onlineValueDiv').css("display", "block");
+                $('.onlineValueDiv').css("display", "block");
                 $('#chequeValueDiv').css("display", "none");
             });
 
@@ -253,17 +249,22 @@
                         $('#dynamic_total_installment_rows').empty();
                         $('#installments').empty();
                         var total_installments = 1;
+                        var order = null;
                         for (var i = 0; i <= response.total_calculated_installments.length; i++) {
                             // $('#installments').append('<input id="installments" hidden name="installments_id[]" value="'+response.total_calculated_installments[i]+'">');
                             // total_installments = total_installments + 1;
                             // var total_amount = total_amount + ( response.total_calculated_installments[i]['amount']) ;
                             // var total_remaining_amount = total_remaining_amount + response.total_calculated_installments[i]['remaining_amount'];
                             // var total_paid_amount = total_remaining_amount + response.total_calculated_installments[i]['paid_amount'];
-
+                            if( response.total_calculated_installments[i]['installment_order'] == 0 ){
+                                order = 'Down Payment';
+                            }
+                            else{
+                                order = response.total_calculated_installments[i]['installment_order'];
+                            }
                             $('#dynamic_total_installment_rows').append('<tr class="text-nowrap">',
                                 '<td class="text-nowrap text-center">'+(i+1)+'</td>',
-                                '<td class="text-nowrap text-center">' + response
-                                .total_calculated_installments[i]['id'] + '</td>',
+                                '<td class="text-nowrap text-center">' + order + '</td>',
                                 // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                 '<td class="text-nowrap text-center">' + response
                                 .total_calculated_installments[i]['amount'] + '</td>',
@@ -271,6 +272,8 @@
                                 .total_calculated_installments[i]['paid_amount'] + '</td>',
                                 '<td class="text-nowrap text-center">' + response
                                 .total_calculated_installments[i]['remaining_amount'] + '</td>',
+                                '</tr>',
+                                '<td class="text-nowrap text-center">' + response.total_calculated_installments[i]['partially_paid'] + '</td>',
                                 '</tr>', );
                         }
 
@@ -278,7 +281,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Something Went Wrong!!',
+                            text: response.message,
                         });
                     }
                 },
@@ -338,5 +341,33 @@
                 }
             });
         }
+
+
+        $("#saveButton").click(function() {
+            $("#receiptForm").submit();
+                // var unit_id = $(".unit_id").val();
+                // var amountToBePaid = $("#amountToBePaid").val();
+                // var mode_of_payment = $('.check_class').val();
+
+                // $('.allErrors').empty();
+
+                // if (unit_id == 0) {
+                //     $('.unit_id').after(
+                //     '<span class="error allErrors text-danger">Unit is Required</span>');
+                // }
+
+                // if (amountToBePaid == '') {
+                //     $('.amountToBePaid').after(
+                //     '<span class="error allErrors text-danger">Amount is Required</span>');
+                // }
+                // if (mode_of_payment == '') {
+                //     $('.mode_of_payment').after(
+                //     '<span class="error allErrors text-danger">Mode Of Payment is Required</span>');
+                // }
+
+                // if (unit_id != 0 && amountToBePaid != '' && mode_of_payment != '') {
+                //     $("#receiptForm").submit();
+                // }
+        });
     </script>
 @endsection

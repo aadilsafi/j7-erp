@@ -124,7 +124,7 @@ class ReceiptsDatatable extends DataTable
                         ])
                 ),
             )
-            // ->rowGroupDataSrc('parent_id')
+            ->rowGroupDataSrc('unit_id')
             ->columnDefs([
                 [
                     'targets' => 0,

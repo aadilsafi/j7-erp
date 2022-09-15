@@ -46,9 +46,10 @@ class StakeholderTypeSeeder extends Seeder
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::LEAD->value,
                 'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
+                'status' => 1,
             ],
 
+            // StakeHolder2
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
@@ -77,7 +78,7 @@ class StakeholderTypeSeeder extends Seeder
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::LEAD->value,
                 'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
+                'status' => 1,
             ],
         ];
         $stakeholder_type = StakeholderType::insert($stakeholderTypeData);

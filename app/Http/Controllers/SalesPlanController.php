@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
 use App\Utils\Enums\StakeholderTypeEnum;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class SalesPlanController extends Controller
 {
@@ -89,10 +91,15 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $inputs = $request->input();
+        try {
+            $inputs = $request->input();
 
-        $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
-        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
+            $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withSuccess('Sales Plan Saved!');
+        } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**

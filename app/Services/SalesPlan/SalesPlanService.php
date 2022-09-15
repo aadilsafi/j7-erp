@@ -12,10 +12,21 @@ use Illuminate\Support\LazyCollection;
 use Spatie\Permission\Models\Permission;
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use App\Jobs\SalesPlan\GeneratedSalesPlanNotificationJob;
-use App\Models\{Stakeholder, AdditionalCost, SalesPlanAdditionalCost, Floor, SalesPlan, SalesPlanInstallments, Site, Unit};
+use App\Models\{Stakeholder, AdditionalCost, SalesPlanAdditionalCost, Floor, SalesPlan, SalesPlanInstallments, Site, StakeholderType, Unit};
+use App\Services\Interfaces\UnitInterface;
+use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Utils\Enums\StakeholderTypeEnum;
+use Illuminate\Support\Str;
 
 class SalesPlanService implements SalesPlanInterface
 {
+
+    private $stakeholderInterface;
+
+    public function __construct(StakeholderInterface $stakeholderInterface)
+    {
+        $this->stakeholderInterface = $stakeholderInterface;
+    }
 
     public function model()
     {
@@ -56,47 +67,108 @@ class SalesPlanService implements SalesPlanInterface
 
         $approveSalesPlanPermissionRole = $permission->roles;
 
-        dd($authRoleId, $approveSalesPlanPermission, $permission, $approveSalesPlanPermissionRole);
-
-        if ($approveSalesPlanPermission) {
-            $status = true;
-        } else {
-            $status = false;
-        }
+        $stakeholderInput = $inputs['stackholder'];
 
         $stakeholderData = [
-            'site_id' => decryptParams($site_id),
-            'full_name' => $inputs['stackholder']['full_name'],
-            'farther_name' => $inputs['stackholder']['father_name'],
-            'occupation' => $inputs['stackholder']['occupation'],
-            'designation' => $inputs['stackholder']['designation'],
-            'cnic' => $inputs['stackholder']['cnic'],
-            'contact' => $inputs['stackholder']['contact'],
-            'address' => $inputs['stackholder']['address'],
+            'site_id' => $site->id,
+            'full_name' => $stakeholderInput['full_name'],
+            'farther_name' => $stakeholderInput['father_name'],
+            'occupation' => $stakeholderInput['occupation'],
+            'designation' => $stakeholderInput['designation'],
+            'cnic' => $stakeholderInput['cnic'],
+            'contact' => $stakeholderInput['contact'],
+            'address' => $stakeholderInput['address'],
         ];
 
-        $stakeholder_data = Stakeholder::updateOrCreate(
-            [
-                'id' => $inputs['stackholder']['stackholder_id'],
-            ],
-            $stakeholderData
-        );
+        $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
+            'id' => $stakeholderInput['stackholder_id'],
+        ], $stakeholderData);
 
-        $unit_id = Unit::where('floor_unit_number', $inputs['unit']['no'])->first()->id;
+        if ($stakeholderInput['stackholder_id'] == 0) {
+            $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
+            $stakeholderTypeData  = [
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => StakeholderTypeEnum::CUSTOMER->value,
+                    'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $stakeholderTypeCode,
+                    'status' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => StakeholderTypeEnum::VENDOR->value,
+                    'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $stakeholderTypeCode,
+                    'status' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => StakeholderTypeEnum::DEALER->value,
+                    'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $stakeholderTypeCode,
+                    'status' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
+                    'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $stakeholderTypeCode,
+                    'status' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => StakeholderTypeEnum::LEAD->value,
+                    'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ];
+            $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
+        }
+
+        dd($inputs, $authRoleId, $approveSalesPlanPermission, $permission, $approveSalesPlanPermissionRole, $stakeholder, $stakeholderType);
+
+        $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
+
+        // 'unit_id',
+        // 'user_id',
+        // 'stakeholder_id',
+        // 'unit_price',
+        // 'total_price',
+        // 'discount_percentage',
+        // 'discount_total',
+        // 'down_payment_percentage',
+        // 'down_payment_total',
+        // 'sales_type',
+        // 'indirect_source',
+        // 'validity',
+        // 'status',
+
+        $unitInput = $inputs['unit'];
+
+        $leadSource = $inputs['lead_source'];
+
+
+
         $sales_plan_data = [
-            'unit_id' => $unit_id,
-            'stakeholder_id' => $stakeholder_data->id,
+            'unit_id' => $unit->id,
             'user_id' => auth()->user()->id,
-            'unit_price' => $inputs['unit']['price']['unit'],
-            'total_price' => str_replace(',', '', $inputs['unit']['price']['total']),
-            'discount_percentage' => $inputs['unit']['discount']['percentage'],
-            'discount_total' => str_replace(',', '', $inputs['unit']['discount']['total']),
-            'down_payment_percentage' => $inputs['unit']['downpayment']['percentage'],
-            'down_payment_total' => str_replace(',', '', $inputs['unit']['downpayment']['total']),
+            'stakeholder_id' => $stakeholder->id,
+            'unit_price' => $unitInput['price']['unit'],
+            'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
+            'discount_percentage' => $unitInput['discount']['percentage'],
+            'discount_total' => intval(str_replace(',', '', $unitInput['discount']['total'])),
+            'down_payment_percentage' => $unitInput['downpayment']['percentage'],
+            'down_payment_total' => intval(str_replace(',', '', $unitInput['downpayment']['total'])),
             'sales_type' => $inputs['sales_source']['lead_source'],
             // 'indirect_source' => $inputs['sales_source']['indirect_source'],
             'validity' => $inputs['sales_plan_validity'],
-            'status' => $status,
+            'status' => $approveSalesPlanPermission ? true : false,
         ];
 
         $sales_plan = $this->model()->create($sales_plan_data);

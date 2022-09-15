@@ -249,7 +249,7 @@
                     <div class="col-md-12">
                         <label class="form-label fs-5" for="installments_start_date">Installments Start Date</label>
                         <input type="text" id="installments_start_date" name="installments[start_date]" readonly
-                            class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                            class="form-control" placeholder="YYYY-MM-DD" />
                     </div>
                 </div>
             </div>

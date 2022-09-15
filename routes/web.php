@@ -18,6 +18,7 @@ use App\Http\Controllers\{
     PrintSalesPlanController,
     StakeholderController,
     NotificationController,
+    ReceiptController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -181,6 +182,7 @@ Route::group([
                                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                                     Route::post('/approve-sales-plan', [SalesPlanController::class, 'approveSalesPlan'])->name('approve-sales-plan');
 
+                                    Route::post('/disapprove-sales-plan', [SalesPlanController::class, 'disApproveSalesPlan'])->name('disapprove-sales-plan');
                                     Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy-selected');
 
                                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
@@ -202,6 +204,27 @@ Route::group([
                                             });
 
                                         });
+
+                                        // Receipts Routes
+
+                                        Route::group(['prefix' => 'receipts', 'as' => 'receipts.'], function () {
+
+                                            Route::get('/', [ReceiptController::class, 'index'])->name('index');
+
+                                            Route::get('create', [ReceiptController::class, 'create'])->name('create');
+                                            Route::post('store', [ReceiptController::class, 'store'])->name('store');
+
+                                            Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+
+                                            Route::group(['prefix' => '/{id}'], function () {
+
+                                                Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
+                                                Route::put('update', [ReceiptController::class, 'update'])->name('update');
+                                            });
+
+                                        });
+
+
                                     });
                                 });
                             });
@@ -257,6 +280,22 @@ Route::group([
                         Route::put('update', [LeadSourceController::class, 'update'])->name('update');
                     });
                 });
+
+                // Receipts
+                Route::group(['prefix' => 'receipts', 'as' => 'receipts.'], function () {
+                    Route::get('/', [ReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [ReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [ReceiptController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
+                        Route::put('update', [ReceiptController::class, 'update'])->name('update');
+                        Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
             });
         });
 

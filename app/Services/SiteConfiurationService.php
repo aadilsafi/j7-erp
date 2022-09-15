@@ -71,6 +71,14 @@ class SiteConfiurationService implements SiteConfigurationInterface
                 $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_unit']);
                 break;
 
+            case 'salesplan':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_salesplan']);
+                break;
+
+            case 'others':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_others']);
+                break;
+
             default:
                 break;
         }

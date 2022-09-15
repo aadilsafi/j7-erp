@@ -53,12 +53,12 @@ class SiteController extends Controller
         try {
 
             (new Site())->create([
-                'name'          => $request->name,
-                'city_id'       => $request->city,
-                'address'       => $request->address,
-                'area_width'    => $request->area_width,
-                'area_length'   => $request->area_length,
-                'max_floors'    => $request->max_floors,
+                'name' => $request->name,
+                'city_id' => $request->city,
+                'address' => $request->address,
+                'area_width' => $request->area_width,
+                'area_length' => $request->area_length,
+                'max_floors' => $request->max_floors,
             ]);
 
             return redirect()->route('sites.index')->withSuccess(__('lang.commons.data_saved'));
@@ -110,12 +110,12 @@ class SiteController extends Controller
     {
         try {
             $record = (new Site())->where('id', decryptParams($id))->update([
-                'name'          => $request->name,
-                'city_id'       => $request->city,
-                'address'       => $request->address,
-                'area_width'    => $request->area_width,
-                'area_length'   => $request->area_length,
-                'max_floors'    => $request->max_floors,
+                'name' => $request->name,
+                'city_id' => $request->city,
+                'address' => $request->address,
+                'area_width' => $request->area_width,
+                'area_length' => $request->area_length,
+                'max_floors' => $request->max_floors,
             ]);
 
             return redirect()->route('sites.index')->withSuccess(__('lang.commons.data_saved'));
@@ -189,6 +189,7 @@ class SiteController extends Controller
 
     public function configStore(Request $request, $id)
     {
+        // dd($request->all());
         $inputs = $request->validate((new SiteConfigration())->rules, (new SiteConfigration())->ruleMessages);
         // dd($inputs);
         try {

@@ -87,7 +87,7 @@
             name="parent_id">
             <option value="" selected>Select Next Of Kin</option>
             @foreach ($stakeholders as $stakeholderRow)
-                @continue(isset($type) && $type->id == $stakeholderRow['id'])
+                @continue(isset($stakeholder) && $stakeholder->id == $stakeholderRow['id'])
                 <option value="{{ $stakeholderRow['id'] }}"
                     {{ (isset($stakeholder) ? $stakeholder->parent_id : old('type')) == $stakeholderRow['id'] ? 'selected' : '' }}>
                     {{ $loop->index + 1 }} - {{ $stakeholderRow['tree'] }}</option>

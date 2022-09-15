@@ -410,7 +410,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.units.edit',
-                'show_name' => 'Edit Site Flooe Units',
+                'show_name' => 'Edit Site Floor Units',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -485,6 +485,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.floors.units.sales-plans.approve-sales-plan',
                 'show_name' => 'Approve Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.sales-plans.disapprove-sales-plan',
+                'show_name' => 'Disapprove Sales Plan',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -593,6 +600,51 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // sales Plan Receipts
+            [
+                'name' => 'sites.receipts.index',
+                'show_name' => 'View Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.create',
+                'show_name' => 'Create Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.store',
+                'show_name' => 'Store Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.edit',
+                'show_name' => 'Edit Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.update',
+                'show_name' => 'Update Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.destroy-selected',
+                'show_name' => 'Destroy Selected Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
         ]);
 

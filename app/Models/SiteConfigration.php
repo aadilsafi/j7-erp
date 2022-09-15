@@ -11,12 +11,40 @@ class SiteConfigration extends Model
 
     protected $guarded = [];
 
+    public $datatypes = [
+        'arr_site' => [
+            'site_max_floors' => 'integer',
+            'site_token_percentage' => 'float',
+            'site_down_payment_percentage' => 'float',
+        ],
+
+        'arr_floor' => [
+            'floor_prefix' => 'string',
+        ],
+
+        'arr_unit' => [
+            'unit_number_digits' => 'integer',
+        ],
+
+        'arr_salesplan' => [
+            'validity_days' => 'integer',
+            'installment_days' => 'integer',
+        ],
+
+        'arr_others' => [
+            'bank_name' => 'string',
+            'bank_account_name' => 'string',
+            'bank_account_no' => 'string',
+        ],
+
+    ];
+
     public $rules = [
         'name' => 'sometimes|between:1,255',
         'address' => 'sometimes|between:1,255',
         'area_width' => 'sometimes|numeric|gt:0',
         'area_length' => 'sometimes|numeric|gt:0',
-        'selected_tab' => 'required|in:site,floor,unit',
+        'selected_tab' => 'required|in:site,floor,unit,salesplan,others',
         'arr_site' => 'sometimes|array',
         'arr_floor' => 'sometimes|array',
         'arr_unit' => 'sometimes|array',
@@ -28,6 +56,14 @@ class SiteConfigration extends Model
         'arr_floor.floor_prefix' => 'sometimes|string|alpha_num|max:5',
 
         'arr_unit.unit_number_digits' => 'sometimes|numeric|in:2,3',
+
+        'arr_salesplan.salesplan_validity_days' => 'sometimes|numeric|min:0|gt:0',
+        'arr_salesplan.salesplan_installment_days' => 'sometimes|numeric|min:0|gt:0',
+
+        'arr_others.others_bank_name' => 'sometimes|nullable|between:1,255',
+        'arr_others.others_bank_account_name' => 'sometimes|nullable|between:1,255',
+        'arr_others.others_bank_account_no' => 'sometimes|nullable|between:1,255',
+
     ];
 
     public $ruleMessages = [
@@ -46,7 +82,15 @@ class SiteConfigration extends Model
 
         'arr_unit.unit_number_digits.numeric' => 'The unit number digits must be a number.',
         'arr_unit.unit_number_digits.in' => 'The selected unit number digits is invalid.',
+
+        'arr_salesplan.salesplan_validity_days.numeric' => 'The validity days must be a number.',
+        'arr_salesplan.salesplan_installment_days.numeric' => 'The installment days must be a number.',
+
+        'arr_others.others_bank_name.between' => 'The bank name must be between 1 and 255 characters.',
+        'arr_others.others_bank_account_name.between' => 'The bank account name must be between 1 and 255 characters.',
+        'arr_others.others_bank_account_no.between' => 'The bank account no must be between 1 and 255 characters.',
     ];
+
     public function site()
     {
         return $this->belongsTo(Site::class);

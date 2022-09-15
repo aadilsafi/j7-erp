@@ -202,17 +202,10 @@
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
-                                stakeholderType += '<span class="badge badge-light-primary fs-4"></span>';
+                                stakeholderType +=
+                                    '<span class="badge badge-light-primary fs-4"></span>';
                                 console.log(types.stakeholder_code);
                             });
-
-
-                            // <span class="badge badge-light-primary fs-4"></span>
-
-
-
-
-
 
                             div_stakeholder_type.show();
                         }
@@ -235,7 +228,6 @@
             }).on("change", function(e) {
 
             });
-
 
             var installmentsRowAction = '';
 
@@ -274,8 +266,16 @@
                 }
             });
 
-            $(".flatpickr-basic").flatpickr({
-                defaultDate: "today",
+            $("#sales_plan_validity").flatpickr({
+                defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
+                minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
+            $("#installments_start_date").flatpickr({
+                defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
                 minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
@@ -421,6 +421,8 @@
         }
 
         function storeUnchangedData(key, field, value) {
+
+            key = parseInt(key);
             var index = unchangedData.findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
@@ -436,7 +438,17 @@
                     value: value
                 });
             }
-            updateTable();
+            unchangedData.sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
+
+            unchangedData.forEach((element, i) => {
+                if (element.key > key && element.field === 'due_date') {
+                    unchangedData.splice(i, 1);
+                }
+            });
+
+            console.log(unchangedData);
+
+            // updateTable();
         }
 
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',

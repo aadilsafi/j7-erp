@@ -637,7 +637,7 @@
             errorElement: "span",
             wrapper: "div",
             submitHandler: function(form) {
-                console.log(form);
+                form.submit();
             }
         });
 

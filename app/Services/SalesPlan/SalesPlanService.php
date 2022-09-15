@@ -256,7 +256,7 @@ class SalesPlanService implements SalesPlanInterface
                         'placeholder' => 'Due Date',
                         'name' => true,
                         'show' => true,
-                        'disabled' => true,
+                        'disabled' => false,
                         'readonly' => true,
                     ],
                     'total_amount' => [
@@ -292,10 +292,10 @@ class SalesPlanService implements SalesPlanInterface
 
                 if ($key > 0 && isset($unchangedDates[$key - 1])) {
                     $rowFields['due_date']['minDate'] = $unchangedDates[$key - 1]['value'];
-                    $rowFields['due_date']['disabled'] = false;
+                    $rowFields['due_date']['readonly'] = false;
                 }
                 if ($key == 0) {
-                    $rowFields['due_date']['disabled'] = false;
+                    $rowFields['due_date']['readonly'] = false;
                 }
 
 

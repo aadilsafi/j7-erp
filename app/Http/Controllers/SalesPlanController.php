@@ -90,6 +90,7 @@ class SalesPlanController extends Controller
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
         $data = $request->input();
+        dd($data);
         $record = $this->salesPlanInterface->store($site_id, $data);
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }

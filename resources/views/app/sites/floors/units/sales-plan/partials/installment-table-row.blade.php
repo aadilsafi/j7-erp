@@ -13,7 +13,7 @@
 
     <td style="width: 28%">
         <div class="position-relative" {!! $due_date['show'] ? null : "style='display: none;'" !!}>
-            <input type="text" id="installment_date_{{ $index['value'] }}" {!! $due_date['show'] ? "name='installments[table][" . $index['value'] . "][due_date]'" : null !!}
+            <input type="text" id="installment_date_{{ $index['value'] }}" {!! $due_date['name'] ? "name='installments[table][" . $index['value'] . "][due_date]'" : null !!}
                 class="form-control" value="{{ $due_date['value'] }}" placeholder="{{ $due_date['placeholder'] }}"
                 style="{{ $due_date['disabled'] ? 'background-color: #EFEFEF;' : null }}"
                 {{ $due_date['disabled'] ? 'disabled' : null }} {{ $due_date['readonly'] ? 'readonly' : null }} />

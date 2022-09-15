@@ -26,6 +26,7 @@ return new class extends Migration
             $table->double('down_payment_total')->default(0);
             $table->foreignId('lead_source_id')->constrained();
             $table->dateTime('validity')->nullable();
+            $table->text('comments')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamps();
             $table->softDeletes();

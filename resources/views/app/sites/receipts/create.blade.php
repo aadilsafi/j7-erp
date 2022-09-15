@@ -170,6 +170,8 @@
 
             $(".mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
+                $('.onlineValueDiv').css("display", "none");
+                $('#chequeValueDiv').css("display", "none");
             });
 
             $(".other-purpose").click(function() {
@@ -229,66 +231,88 @@
         $('.amountToBePaid').on('focusout', function() {
 
             var amount = $(this).val();
-            var _token = '{{ csrf_token() }}';
             var unit_id = $(this).attr('unit_id');
+            if(amount <= 0){
+                toastr.error('Invalid Amount.',
+                            "Error!", {
+                                showMethod: "slideDown",
+                                hideMethod: "slideUp",
+                                timeOut: 2e3,
+                                closeButton: !0,
+                                tapToDismiss: !1,
+                            });
+            }
+            if(unit_id == null || unit_id == 'undefined'){
+                toastr.error('Please Select Unit Number first.',
+                            "Error!", {
+                                showMethod: "slideDown",
+                                hideMethod: "slideUp",
+                                timeOut: 2e3,
+                                closeButton: !0,
+                                tapToDismiss: !1,
+                            });
+            }
+            var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.receipts.ajax-get-unpaid-installments', ['site_id' => encryptParams($site_id)]) }}";
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'unit_id': unit_id,
-                    'amount': amount,
-                    '_token': _token
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $('#instllmentTableDiv').css("display", "block");
-                        $('#modeOfPaymentDiv').css("display", "block");
-                        $('#dynamic_total_installment_rows').empty();
-                        $('#installments').empty();
-                        var total_installments = 1;
-                        var order = null;
-                        for (var i = 0; i <= response.total_calculated_installments.length; i++) {
-                            // $('#installments').append('<input id="installments" hidden name="installments_id[]" value="'+response.total_calculated_installments[i]+'">');
-                            // total_installments = total_installments + 1;
-                            // var total_amount = total_amount + ( response.total_calculated_installments[i]['amount']) ;
-                            // var total_remaining_amount = total_remaining_amount + response.total_calculated_installments[i]['remaining_amount'];
-                            // var total_paid_amount = total_remaining_amount + response.total_calculated_installments[i]['paid_amount'];
-                            if( response.total_calculated_installments[i]['installment_order'] == 0 ){
-                                order = 'Down Payment';
+            if(amount > 0 && unit_id > 0){
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'unit_id': unit_id,
+                        'amount': amount,
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#instllmentTableDiv').css("display", "block");
+                            $('#modeOfPaymentDiv').css("display", "block");
+                            $('#dynamic_total_installment_rows').empty();
+                            $('#installments').empty();
+                            var total_installments = 1;
+                            var order = null;
+                            for (var i = 0; i <= response.total_calculated_installments.length; i++) {
+                                // $('#installments').append('<input id="installments" hidden name="installments_id[]" value="'+response.total_calculated_installments[i]+'">');
+                                // total_installments = total_installments + 1;
+                                // var total_amount = total_amount + ( response.total_calculated_installments[i]['amount']) ;
+                                // var total_remaining_amount = total_remaining_amount + response.total_calculated_installments[i]['remaining_amount'];
+                                // var total_paid_amount = total_remaining_amount + response.total_calculated_installments[i]['paid_amount'];
+                                if( response.total_calculated_installments[i]['installment_order'] == 0 ){
+                                    order = 'Down Payment';
+                                }
+                                else{
+                                    order = response.total_calculated_installments[i]['installment_order'];
+                                }
+                                $('#dynamic_total_installment_rows').append('<tr class="text-nowrap">',
+                                    '<td class="text-nowrap text-center">'+(i+1)+'</td>',
+                                    '<td class="text-nowrap text-center">' + order + '</td>',
+                                    // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .total_calculated_installments[i]['amount'] + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .total_calculated_installments[i]['paid_amount'] + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .total_calculated_installments[i]['remaining_amount'] + '</td>',
+                                    '</tr>',
+                                    '<td class="text-nowrap text-center">' + response.total_calculated_installments[i]['partially_paid'] + '</td>',
+                                    '</tr>', );
                             }
-                            else{
-                                order = response.total_calculated_installments[i]['installment_order'];
-                            }
-                            $('#dynamic_total_installment_rows').append('<tr class="text-nowrap">',
-                                '<td class="text-nowrap text-center">'+(i+1)+'</td>',
-                                '<td class="text-nowrap text-center">' + order + '</td>',
-                                // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
-                                '<td class="text-nowrap text-center">' + response
-                                .total_calculated_installments[i]['amount'] + '</td>',
-                                '<td class="text-nowrap text-center">' + response
-                                .total_calculated_installments[i]['paid_amount'] + '</td>',
-                                '<td class="text-nowrap text-center">' + response
-                                .total_calculated_installments[i]['remaining_amount'] + '</td>',
-                                '</tr>',
-                                '<td class="text-nowrap text-center">' + response.total_calculated_installments[i]['partially_paid'] + '</td>',
-                                '</tr>', );
-                        }
 
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.message,
-                        });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
                     }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+                });
+            }
         });
 
         function getUnitTypeAndFloor(unit_id,id) {

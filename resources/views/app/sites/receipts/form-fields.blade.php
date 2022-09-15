@@ -34,7 +34,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 <h6 style="font-size: 15px"> Amount To be Paid</h6>
                             </label>
-                            <input onclick="setAmountIds(this)" id="amountToBePaid" type="number"
+                            <input min="0"  onclick="setAmountIds(this)" id="amountToBePaid" type="number"
                                 class="form-control amountToBePaid form-control-lg @error('amount_in_numbers') is-invalid @enderror"
                                 name="amount_in_numbers" placeholder="Amount To be Paid"
                                 value="{{ isset($receipt) ? $receipt->name : old('amount_in_numbers') }}" />

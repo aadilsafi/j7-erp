@@ -48,7 +48,7 @@
         $("#installment_date_{{ $index['value'] }}").flatpickr({
             defaultDate: '{{ $due_date['value'] }}',
             minDate: '{{ isset($due_date['minDate']) ? $due_date['minDate'] : 'today' }}',
-            altInput: !0,
+            // altInput: !0,
             dateFormat: "Y-m-d",
             onChange: function(selectedDates, dateStr, instance) {
                 storeUnchangedData({{ $index['value'] }}, 'due_date', dateStr, 'ArrDueDates');

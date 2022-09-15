@@ -348,10 +348,12 @@
                     $(`#div-${elementId}`).show('fast', 'linear', function() {
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
+                    $(`#status-${elementId}`).val(true);
                 } else {
                     $(`#div-${elementId}`).hide('fast', 'linear', function() {
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
+                    $(`#status-${elementId}`).val(true);
                 }
             });
 

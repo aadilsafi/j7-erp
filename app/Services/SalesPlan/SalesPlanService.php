@@ -42,13 +42,21 @@ class SalesPlanService implements SalesPlanInterface
     // }
 
     // // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $floor_id, $unit_id, $inputs)
     {
-        $authRoleId = Auth::user()->roles->pluck('id');
-        $approveSalesPlanPermission = Role::find($authRoleId[0])->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
 
-        $permission = Permission::where('name', 'sites.floors.units.sales-plans.approve-sales-plan')->first();
+        $site = (new Site())->find($site_id);
+        $floor = (new Floor())->find($floor_id);
+        $unit = (new Unit())->find($unit_id);
+
+        $authRoleId = auth()->user()->roles->pluck('id')->first();
+
+        $approveSalesPlanPermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
+        $permission = (new Permission())->where('name', 'sites.floors.units.sales-plans.approve-sales-plan')->first();
+
         $approveSalesPlanPermissionRole = $permission->roles;
+
+        dd($authRoleId, $approveSalesPlanPermission, $permission, $approveSalesPlanPermissionRole);
 
         if ($approveSalesPlanPermission) {
             $status = true;

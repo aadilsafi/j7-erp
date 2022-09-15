@@ -89,9 +89,9 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $data = $request->input();
-        dd($data);
-        $record = $this->salesPlanInterface->store($site_id, $data);
+        $inputs = $request->input();
+
+        $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
     }
 
@@ -212,12 +212,12 @@ class SalesPlanController extends Controller
         $currentURL = URL::current();
         $notificaionData = [
             'title' => 'Sales Plan Approved Notification',
-            'description' => Auth::User()->name.' approved generated sales plan.',
+            'description' => Auth::User()->name . ' approved generated sales plan.',
             'message' => 'xyz message',
             'url' => str_replace('/approve-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
 
         return response()->json([
             'success' => true,
@@ -235,17 +235,16 @@ class SalesPlanController extends Controller
         $currentURL = URL::current();
         $notificaionData = [
             'title' => 'Sales Plan Disapproved Notification',
-            'description' => Auth::User()->name.' disapproved generated sales plan.',
+            'description' => Auth::User()->name . ' disapproved generated sales plan.',
             'message' => 'xyz message',
             'url' => str_replace('/disapprove-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
 
         return response()->json([
             'success' => true,
             'message' => "Sales Plan disapproved Sucessfully",
         ], 200);
     }
-
 }

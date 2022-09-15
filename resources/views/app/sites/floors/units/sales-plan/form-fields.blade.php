@@ -71,6 +71,8 @@
                                 <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
                                     style="display: none;">
 
+                                    <input type="hidden" name="unit[additional_cost][{{ $additionalCost->slug }}][status]" id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
+
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
                                             for="price-{{ $additionalCost->slug }}-{{ $key }}">{{ $additionalCost->name }}

@@ -361,7 +361,11 @@
             $('#unit_rate_total').val(numberFormat(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_downpayment_percentage').trigger('change');
         }
-        var unchangedData = [];
+        var unchangedData = {
+            ArrAmounts: [],
+            ArrRemarks: [],
+            ArrDueDates: [],
+        };
 
         function calculateInstallments(action = '') {
 
@@ -420,35 +424,39 @@
             // console.log(action);
         }
 
-        function storeUnchangedData(key, field, value) {
-
-            key = parseInt(key);
-            var index = unchangedData.findIndex(function(element) {
+        function storeUnchangedData(key, field, value, Arr) {
+            console.log(key, field, value, Arr);
+            let index = unchangedData[Arr].findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
 
             if (index > -1) {
-                unchangedData.splice(index, 1);
-            }
-
-            if (value > 0 || value.length > 0) {
-                unchangedData.push({
+                const newData = {
                     key: key,
                     field: field,
-                    value: value
+                    value: value,
+                };
+                unchangedData[Arr].splice(index, 1, newData);
+            }
+
+            if (index < 0 && (value > 0 || value.length > 0)) {
+                unchangedData[Arr].push({
+                    key: key,
+                    field: field,
+                    value: value,
                 });
             }
-            unchangedData.sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
 
-            unchangedData.forEach((element, i) => {
-                if (element.key > key && element.field === 'due_date') {
-                    unchangedData.splice(i, 1);
-                }
-            });
+            unchangedData[Arr].sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
+
+            if (field === 'due_date') {
+                unchangedData[Arr] = unchangedData[Arr].filter(function(element) {
+                    return element.key <= key;
+                });
+            }
 
             console.log(unchangedData);
 
-            // updateTable();
         }
 
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',

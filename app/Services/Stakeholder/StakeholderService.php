@@ -35,6 +35,11 @@ class StakeholderService implements StakeholderInterface
 
     public function getById($site_id, $id, array $relationships = [])
     {
+
+        if ($id == 0) {
+            return $this->getEmptyInstance();
+        }
+
         return $this->model()->with($relationships)->find($id);
     }
 
@@ -162,5 +167,68 @@ class StakeholderService implements StakeholderInterface
         $this->model()->whereIn('id', $stakeholderIDs)->delete();
 
         return true;
+    }
+
+    public function getEmptyInstance()
+    {
+        $stakeholder = [
+            'id' => 0,
+            'full_name' => '',
+            'father_name' => '',
+            'occupation' => '',
+            'designation' => '',
+            'cnic' => '',
+            'contact' => '',
+            'address' => '',
+            'stakeholder_types' => [
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 1,
+                    'type' => 'C',
+                    'stakeholder_code' => 'C-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'V',
+                    'stakeholder_code' => 'V-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'D',
+                    'stakeholder_code' => 'D-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'K',
+                    'stakeholder_code' => 'K-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'L',
+                    'stakeholder_code' => 'L-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+            ]
+        ];
+
+        return $stakeholder;
     }
 }

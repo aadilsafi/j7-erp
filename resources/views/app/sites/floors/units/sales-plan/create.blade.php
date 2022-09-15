@@ -64,6 +64,7 @@
                     'unit' => $unit,
                     'additionalCosts' => $additionalCosts,
                     'stakeholders' => $stakeholders,
+                    'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
                 ]) }}
@@ -153,7 +154,15 @@
 @section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
-        var t = setTimeout(calculateInstallments, 1000);
+
+        var t = setTimeout(calculateInstallments, 1000),
+            dataArrays = {
+                ArrAmounts: [],
+                ArrRemarks: [],
+                ArrDueDates: [],
+            },
+            unchangedData = [];
+
         $(document).ready(function() {
 
             var e = $("#stackholders");
@@ -187,6 +196,8 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
+                        console.log(response);
+
                         if (response.status) {
                             if (response.data) {
                                 stakeholderData = response.data;
@@ -202,11 +213,18 @@
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
-                                stakeholderType +=
-                                    '<span class="badge badge-light-primary fs-4"></span>';
-                                console.log(types.stakeholder_code);
+                                if(types.status) {
+                                    stakeholderType +=
+                                        '<p class="badge badge-light-primary fs-5 ms-auto me-1">' +
+                                        types.stakeholder_code + '</p>';
+                                } else {
+                                    stakeholderType +=
+                                        '<p class="badge badge-light-danger fs-5 ms-auto me-1">' +
+                                        types.stakeholder_code + '</p>';
+                                }
                             });
 
+                            div_stakeholder_type.html(stakeholderType);
                             div_stakeholder_type.show();
                         }
                         hideBlockUI('#stakeholders_card');
@@ -361,11 +379,6 @@
             $('#unit_rate_total').val(numberFormat(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_downpayment_percentage').trigger('change');
         }
-        var unchangedData = {
-            ArrAmounts: [],
-            ArrRemarks: [],
-            ArrDueDates: [],
-        };
 
         function calculateInstallments(action = '') {
 
@@ -425,8 +438,7 @@
         }
 
         function storeUnchangedData(key, field, value, Arr) {
-            console.log(key, field, value, Arr);
-            let index = unchangedData[Arr].findIndex(function(element) {
+            let index = dataArrays[Arr].findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
 
@@ -436,27 +448,43 @@
                     field: field,
                     value: value,
                 };
-                unchangedData[Arr].splice(index, 1, newData);
+
+                if (value > 0 || value.length > 0) {
+                    dataArrays[Arr].splice(index, 1, newData);
+                } else {
+                    dataArrays[Arr].splice(index, 1);
+                }
             }
 
             if (index < 0 && (value > 0 || value.length > 0)) {
-                unchangedData[Arr].push({
+                dataArrays[Arr].push({
                     key: key,
                     field: field,
                     value: value,
                 });
             }
 
-            unchangedData[Arr].sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
+            dataArrays[Arr].sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
 
             if (field === 'due_date') {
-                unchangedData[Arr] = unchangedData[Arr].filter(function(element) {
+                dataArrays[Arr] = dataArrays[Arr].filter(function(element) {
                     return element.key <= key;
                 });
             }
 
-            console.log(unchangedData);
+            mergeArrays();
+        }
 
+        function mergeArrays() {
+            let ArrAmounts = dataArrays.ArrAmounts;
+            let ArrRemarks = dataArrays.ArrRemarks;
+            let ArrDueDates = dataArrays.ArrDueDates;
+
+            unchangedData = [...ArrAmounts, ...ArrRemarks, ...ArrDueDates];
+
+            console.log(dataArrays);
+
+            updateTable();
         }
 
         $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',

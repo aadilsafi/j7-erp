@@ -16,6 +16,7 @@ use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
+use App\Utils\Enums\StakeholderTypeEnum;
 
 class SalesPlanController extends Controller
 {
@@ -68,6 +69,7 @@ class SalesPlanController extends Controller
                 'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
                     'stakeholder_types',
                 ]),
+                'stakeholderTypes' => StakeholderTypeEnum::values(),
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];

@@ -1,5 +1,5 @@
 <tr id="row_{{ $index['show'] ? $index['value'] : 'total' }}">
-    <th scope="row">{{ $index['show'] ? $index['value'] : '&nbsp;' }}</th>
+    <th scope="row">{!! $index['show'] ? $index['value'] : '&nbsp;' !!}</th>
 
     <td>
         <div class="position-relative" style="{{ $installments['show'] ? null : 'display: none;' }}">

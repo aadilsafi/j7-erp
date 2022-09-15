@@ -289,7 +289,11 @@
     id="stakeholders_card">
     <div class="card-header justify-content-between">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
-        <div style="display: none;" id="div_stakeholder_type">
+        <div id="div_stakeholder_type">
+            @forelse ($stakeholderTypes as $stakeholderType)
+                <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
+            @empty
+            @endforelse
         </div>
     </div>
 

@@ -102,33 +102,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
 
-                        <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
-                            <input type="text" id="sales_plan_validity" name="sales_plan_validity"
-                                class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <div class="d-block mb-1">
+                                        <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
+                                        <input type="text" id="sales_plan_validity" name="sales_plan_validity"
+                                            class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                                    </div>
+                                    <hr>
+                                    <button type="submit" value="save"
+                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                        <i data-feather='save'></i>
+                                        <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                                    </button>
+                                    {{-- <button type="submit" value="save_print"
+                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                        <i data-feather='printer'></i>
+                                        <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
+                                    </button> --}}
+                                    <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
+                                        class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
-                        <hr>
-                        <button type="submit" value="save"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                            <i data-feather='save'></i>
-                            <span id="create_sales_plan_button_span">Save Sales Plan</span>
-                        </button>
-                        {{-- <button type="submit" value="save_print"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                            <i data-feather='printer'></i>
-                            <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
-                        </button> --}}
-                        <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
+                    </div>
+
+                    <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
+                        <h4 class="alert-heading"><i data-feather='alert-triangle'
+                                class="me-50"></i>Warning!</h4>
+                        <div class="alert-body">
+                            Any change in <strong>PRIMARY DATA</strong> and <strong>INSTALLMENT DETAILS</strong> will effect the installments table.
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 

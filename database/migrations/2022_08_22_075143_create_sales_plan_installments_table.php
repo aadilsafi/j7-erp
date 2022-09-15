@@ -22,7 +22,8 @@ return new class extends Migration
             $table->double('paid_amount')->default(0);
             $table->double('remaining_amount')->default(0);
             $table->string('remarks')->nullable();
-            $table->string('status')->default('Unpaid')->nullable();
+            $table->string('status')->nullable();
+            $table->tinyInteger('installment_order')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

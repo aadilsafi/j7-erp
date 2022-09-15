@@ -64,6 +64,7 @@
                     'unit' => $unit,
                     'additionalCosts' => $additionalCosts,
                     'stakeholders' => $stakeholders,
+                    'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
                 ]) }}
@@ -101,33 +102,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
 
-                        <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
-                            <input type="text" id="sales_plan_validity" name="sales_plan_validity"
-                                class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <div class="d-block mb-1">
+                                        <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
+                                        <input type="text" id="sales_plan_validity" name="sales_plan_validity"
+                                            class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
+                                    </div>
+                                    <hr>
+                                    <button type="submit" value="save"
+                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                        <i data-feather='save'></i>
+                                        <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                                    </button>
+                                    {{-- <button type="submit" value="save_print"
+                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                        <i data-feather='printer'></i>
+                                        <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
+                                    </button> --}}
+                                    <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
+                                        class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+
                         </div>
-                        <hr>
-                        <button type="submit" value="save"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                            <i data-feather='save'></i>
-                            <span id="create_sales_plan_button_span">Save Sales Plan</span>
-                        </button>
-                        {{-- <button type="submit" value="save_print"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                            <i data-feather='printer'></i>
-                            <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
-                        </button> --}}
-                        <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
+                    </div>
+
+                    <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
+                        <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
+                        <div class="alert-body">
+                            Any change in <strong>PRIMARY DATA</strong> and <strong>INSTALLMENT DETAILS</strong> will effect
+                            the installments table.
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -153,7 +169,15 @@
 @section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
-        var t = setTimeout(calculateInstallments, 1000);
+
+        var t = setTimeout(calculateInstallments, 1000),
+            dataArrays = {
+                ArrAmounts: [],
+                ArrRemarks: [],
+                ArrDueDates: [],
+            },
+            unchangedData = [];
+
         $(document).ready(function() {
 
             var e = $("#stackholders");
@@ -187,11 +211,12 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
+
                         if (response.status) {
                             if (response.data) {
                                 stakeholderData = response.data;
                             }
-                            $('#stackholder_id').val(stakeholderData.id);
+                            // $('#stackholder_id').val(stakeholderData.id);
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
                             $('#stackholder_occupation').val(stakeholderData.occupation);
@@ -202,10 +227,18 @@
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
-                                stakeholderType += '<span class="badge badge-light-primary fs-4"></span>';
-                                console.log(types.stakeholder_code);
+                                if (types.status) {
+                                    stakeholderType +=
+                                        '<p class="badge badge-light-primary fs-5 ms-auto me-1">' +
+                                        types.stakeholder_code + '</p>';
+                                } else {
+                                    stakeholderType +=
+                                        '<p class="badge badge-light-danger fs-5 ms-auto me-1">' +
+                                        types.stakeholder_code + '</p>';
+                                }
                             });
 
+                            div_stakeholder_type.html(stakeholderType);
                             div_stakeholder_type.show();
                         }
                         hideBlockUI('#stakeholders_card');
@@ -225,7 +258,13 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             }).on("change", function(e) {
+                let newLeadSource = $(this).val();
 
+                if (newLeadSource === "0") {
+                    $('#div_sales_source_lead_source').show();
+                } else {
+                    $('#div_sales_source_lead_source').hide();
+                }
             });
 
             var installmentsRowAction = '';
@@ -235,14 +274,14 @@
                 buttonup_class: "btn btn-primary",
                 buttondown_txt: feather.icons["chevron-down"].toSvg(),
                 buttonup_txt: feather.icons["chevron-up"].toSvg(),
-                min: 0,
+                min: 1,
                 max: 50,
             }).on("touchspin.on.stopspin", function() {
                 updateTable();
             }).on("change", function() {
                 var t = $(this);
                 $(".bootstrap-touchspin-up, .bootstrap-touchspin-down").removeClass("disabled-max-min");
-                0 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
+                1 == t.val() && $(this).siblings().find(".bootstrap-touchspin-down").addClass(
                     "disabled-max-min");
                 50 == t.val() && $(this).siblings().find(".bootstrap-touchspin-up").addClass(
                     "disabled-max-min");
@@ -263,6 +302,8 @@
                     default:
                         break;
                 }
+
+                updateTable();
             });
 
             $("#sales_plan_validity").flatpickr({
@@ -280,6 +321,8 @@
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
+                    dataArrays.ArrDueDates = [];
+                    mergeArrays();
                     updateTable();
                 },
             });
@@ -305,10 +348,12 @@
                     $(`#div-${elementId}`).show('fast', 'linear', function() {
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
+                    $(`#status-${elementId}`).val(true);
                 } else {
                     $(`#div-${elementId}`).hide('fast', 'linear', function() {
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
+                    $(`#status-${elementId}`).val(true);
                 }
             });
 
@@ -335,6 +380,8 @@
 
                 $('#unit_downpayment_total').val(numberFormat(conventToFloatNumber(totalDownPayment)
                     .toFixed(2)));
+
+                updateTable();
             });
 
             $('#unit_downpayment_percentage').trigger('change');
@@ -360,7 +407,6 @@
             $('#unit_rate_total').val(numberFormat(parseFloat(grandUnitAmount).toFixed(2)));
             $('#unit_downpayment_percentage').trigger('change');
         }
-        var unchangedData = [];
 
         function calculateInstallments(action = '') {
 
@@ -419,35 +465,61 @@
             // console.log(action);
         }
 
-        function storeUnchangedData(key, field, value) {
-            // debugger;
-            var index = unchangedData.findIndex(function(element) {
+        function storeUnchangedData(key, field, value, Arr) {
+            let index = dataArrays[Arr].findIndex(function(element) {
                 return element.key == key && element.field == field;
             });
 
             if (index > -1) {
-                unchangedData.splice(index, 1);
-            }
-
-            if (value > 0 || value.length > 0) {
-                unchangedData.push({
+                const newData = {
                     key: key,
                     field: field,
-                    value: value
+                    value: value,
+                };
+
+                if (value > 0 || value.length > 0) {
+                    dataArrays[Arr].splice(index, 1, newData);
+                } else {
+                    dataArrays[Arr].splice(index, 1);
+                }
+            }
+
+            if (index < 0 && (value > 0 || value.length > 0)) {
+                dataArrays[Arr].push({
+                    key: key,
+                    field: field,
+                    value: value,
                 });
             }
-            console.log(unchangedData);
+
+            dataArrays[Arr].sort((a, b) => conventToIntNumber(a.key) - conventToIntNumber(b.key));
+
+            if (field === 'due_date') {
+                dataArrays[Arr] = dataArrays[Arr].filter(function(element) {
+                    return element.key <= key;
+                });
+            }
+
+            mergeArrays();
+        }
+
+        function mergeArrays() {
+            let ArrAmounts = dataArrays.ArrAmounts;
+            let ArrRemarks = dataArrays.ArrRemarks;
+            let ArrDueDates = dataArrays.ArrDueDates;
+
+            unchangedData = [...ArrAmounts, ...ArrRemarks, ...ArrDueDates];
+
+            console.log(dataArrays);
+
             updateTable();
         }
 
-        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
+        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage').on('focusout',
             function() {
                 updateTable();
-            });
-
-        $('.installment_type_radio').on('change', function() {
-            updateTable();
-        });
+            }
+        );
 
         function updateTable() {
             clearTimeout(t);
@@ -466,109 +538,110 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
-        // var validator = $("#create-sales-plan-form").validate({
-        //     debug: true,
-        //     rules: {
-        //         // 1. PRIMARY DATA
-        //         'unit[no]': {
-        //             required: true
-        //         },
-        //         'unit[floor_no]': {
-        //             required: true
-        //         },
-        //         'unit[type]': {
-        //             required: true
-        //         },
-        //         'unit[size]': {
-        //             required: true
-        //         },
-        //         'unit[price][unit]': {
-        //             required: true
-        //         },
-        //         'unit[price][total]': {
-        //             required: true
-        //         },
+        var validator = $("#create-sales-plan-form").validate({
+            // debug: true,
+            rules: {
+                // 1. PRIMARY DATA
+                'unit[no]': {
+                    required: true
+                },
+                'unit[floor_no]': {
+                    required: true
+                },
+                'unit[type]': {
+                    required: true
+                },
+                'unit[size]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[price][unit]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[price][total]': {
+                    required: true,
+                },
 
-        //         //// Unit Discount
-        //         'unit[discount][percentage]': {
-        //             required: true
-        //         },
-        //         'unit[discount][total]': {
-        //             required: true
-        //         },
+                //// Unit Discount
+                'unit[discount][percentage]': {
+                    required: true,
+                    digits: true
+                },
+                'unit[discount][total]': {
+                    required: true
+                },
 
-        //         //// Unit Grand Total
-        //         'unit[grand_total]': {
-        //             required: true
-        //         },
+                //// Unit Grand Total
+                'unit[grand_total]': {
+                    required: true
+                },
 
-        //         //// Unit Down Payment
-        //         'unit[downpayment][percentage]': {
-        //             required: true
-        //         },
-        //         'unit[downpayment][total]': {
-        //             required: true
-        //         },
+                //// Unit Down Payment
+                'unit[downpayment][percentage]': {
+                    required: true
+                },
+                'unit[downpayment][total]': {
+                    required: true
+                },
 
-        //         // 2. INSTALLMENT DETAILS
-        //         'installments[types][type]': {
-        //             required: true
-        //         },
-        //         'installments[types][value]': {
-        //             required: true
-        //         },
-        //         'installments[start_date]': {
-        //             required: true
-        //         },
+                // 2. INSTALLMENT DETAILS
+                'installments[types][type]': {
+                    required: true
+                },
+                'installments[types][value]': {
+                    required: true,
+                    min: 1,
+                    digits: true
+                },
+                'installments[start_date]': {
+                    required: true
+                },
 
-        //         // 3. STAKEHOLDER DATA (LEAD'S DATA)
-        //         'stackholder[stackholder_id]': {
-        //             required: true
-        //         },
-        //         'stackholder[full_name]': {
-        //             required: true
-        //         },
-        //         'stackholder[father_name]': {
-        //             required: true
-        //         },
-        //         'stackholder[occupation]': {
-        //             required: true
-        //         },
-        //         'stackholder[designation]': {
-        //             required: true
-        //         },
-        //         'stackholder[cnic]': {
-        //             required: true
-        //         },
-        //         'stackholder[contact]': {
-        //             required: true
-        //         },
-        //         'stackholder[address]': {
-        //             required: true
-        //         },
+                // 3. STAKEHOLDER DATA (LEAD'S DATA)
+                'stackholder[stackholder_id]': {
+                    required: true
+                },
+                'stackholder[full_name]': {
+                    required: true
+                },
+                'stackholder[father_name]': {
+                    required: true
+                },
+                'stackholder[occupation]': {
+                    required: true
+                },
+                'stackholder[designation]': {
+                    required: true
+                },
+                'stackholder[cnic]': {
+                    required: true
+                },
+                'stackholder[contact]': {
+                    required: true
+                },
+                'stackholder[address]': {
+                    required: true
+                },
 
-        //         // 4. SALES SOURCE
-        //         'sales_source[full_name]': {
-        //             required: true
-        //         },
-        //         'sales_source[status]': {
-        //             required: true
-        //         },
-        //         'sales_source[contact_no]': {
-        //             required: true
-        //         },
-        //         'sales_source[sales_type]': {
-        //             required: true
-        //         },
-        //         'sales_source[indirect_source]': {
-        //             required: true
-        //         },
-        //     },
-        //     submitHandler: function(form) {
-        //         // do other things for a valid form
-        //         console.log(form);
-        //     }
-        // });
+                // 4. SALES SOURCE
+                'sales_source[sales_type]': {
+                    required: true
+                },
+                'sales_source[new]': {
+                    required: function(element) {
+                        return $("#sales_source_lead_source").val() == 0;
+                    }
+                },
+            },
+            // validClass: "is-valid",
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
 
         // validator.resetForm();
         // validator.showErrors({

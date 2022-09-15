@@ -25,7 +25,6 @@
         </div>
 
         <div class="row mb-2">
-
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
                 <input type="text" class="form-control form-control-lg" id="unit_size" name="unit[size]"
@@ -45,24 +44,17 @@
                         {{-- Unit Rate Row --}}
                         <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_price">Unit Price</label>
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="number" min="0" class="form-control form-control-lg"
-                                        id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
-                                        value="{{ $unit->price_sqft }}" />
-                                </div>
+                                <label class="form-label fs-5" for="unit_price">Unit Price (Rs)</label>
+                                <input type="number" min="0" class="form-control form-control-lg"
+                                    id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
+                                    value="{{ $unit->price_sqft }}" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-unit">Amount</label>
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="text" class="form-control form-control-lg" readonly
-                                        id="total-price-unit" name="unit[price][total]" placeholder="Amount"
-                                        value="{{ number_format($unit->total_price, 2) }}" />
-
-                                </div>
+                                <label class="form-label fs-5" for="total-price-unit">Amount (Rs)</label>
+                                <input type="text" class="form-control form-control-lg" readonly
+                                    id="total-price-unit" name="unit[price][total]" placeholder="Amount"
+                                    value="{{ number_format($unit->total_price, 2) }}" />
                             </div>
                         </div>
 
@@ -78,38 +70,35 @@
 
                                 <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
                                     style="display: none;">
+
+                                    <input type="hidden" name="unit[additional_cost][{{ $additionalCost->slug }}][status]" id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
+
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
-                                            for="price-{{ $additionalCost->slug }}-{{ $key }}">{{ $additionalCost->name }}</label>
+                                            for="price-{{ $additionalCost->slug }}-{{ $key }}">{{ $additionalCost->name }}
+                                            (%)
+                                        </label>
 
-                                        <div class="input-group input-group-lg">
-                                            <span class="input-group-text">
-                                                <i data-feather='percent'></i>
-                                            </span>
-                                            <input type="number" min="0" max="100" step="0.1"
-                                                class="form-control form-control-lg additional-cost-percentage"
-                                                id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
-                                                name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
-                                                placeholder="{{ $additionalCost->name }}"
-                                                value="{{ $additionalCost->site_percentage }}" />
-                                        </div>
+                                        <input type="number" min="0" max="100" step="0.1"
+                                            class="form-control form-control-lg additional-cost-percentage"
+                                            id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
+                                            name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
+                                            placeholder="{{ $additionalCost->name }}"
+                                            value="{{ $additionalCost->site_percentage }}" />
 
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
-                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount</label>
+                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount
+                                            (Rs)</label>
 
-                                        <div class="input-group input-group-lg">
-                                            <span class="input-group-text">Rs. </span>
-                                            <input type="text"
-                                                class="form-control form-control-lg additional-cost-total-price"
-                                                id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
-                                                name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
-                                                readonly placeholder="Amount"
-                                                value="{{ number_format($additionalCostTotalAmount, 2) }}" />
-                                        </div>
-
+                                        <input type="text"
+                                            class="form-control form-control-lg additional-cost-total-price"
+                                            id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
+                                            name="unit[additional_cost][{{ $additionalCost->slug }}][total]" readonly
+                                            placeholder="Amount"
+                                            value="{{ number_format($additionalCostTotalAmount, 2) }}" />
                                     </div>
                                 </div>
                             @endforeach
@@ -119,26 +108,17 @@
                         {{-- Discount Row --}}
                         <div class="row mb-1" id="div-discount">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="percentage-discount">Discount %</label>
-
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">
-                                        <i data-feather='percent'></i>
-                                    </span>
-                                    <input type="number" min="0" max="100" step="0.1"
-                                        class="form-control form-control-lg" id="percentage-discount"
-                                        name="unit[discount][percentage]" placeholder="Discount %" value="0.00" />
-                                </div>
+                                <label class="form-label fs-5" for="percentage-discount">Discount (%)</label>
+                                <input type="number" min="0" max="100" step="0.1"
+                                    class="form-control form-control-lg" id="percentage-discount"
+                                    name="unit[discount][percentage]" placeholder="Discount %" value="0" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="total-price-discount">Amount</label>
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="text" min="0" class="form-control form-control-lg"
-                                        readonly id="total-price-discount" name="unit[discount][total]"
-                                        placeholder="Discount" value="0.00" />
-                                </div>
+                                <label class="form-label fs-5" for="total-price-discount">Amount (Rs)</label>
+                                <input type="text" min="0" class="form-control form-control-lg" readonly
+                                    id="total-price-discount" name="unit[discount][total]" placeholder="Discount"
+                                    value="0.00" />
                             </div>
                         </div>
 
@@ -150,14 +130,10 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <hr>
-                                <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total</label>
-
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="text" class="form-control form-control-lg" id="unit_rate_total"
-                                        name="unit[grand_total]" placeholder="Total"
-                                        value="{{ number_format($unit->total_price, 2) }}" readonly />
-                                </div>
+                                <label class="form-label fw-bolder fs-5" for="unit_rate_total">Total (Rs)</label>
+                                <input type="text" class="form-control form-control-lg" id="unit_rate_total"
+                                    name="unit[grand_total]" placeholder="Total"
+                                    value="{{ number_format($unit->total_price, 2) }}" readonly />
                             </div>
                         </div>
 
@@ -165,26 +141,19 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_downpayment_percentage">Down Payment
-                                    %</label>
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text"><i data-feather='percent'></i></span>
-                                    <input type="number" class="form-control form-control-lg"
-                                        id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
-                                        placeholder="Down Payment %" min="0" max="100"
-                                        value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
-                                        step="0.1" />
-                                </div>
+                                    (%)</label>
+                                <input type="number" class="form-control form-control-lg"
+                                    id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
+                                    placeholder="Down Payment %" min="0" max="100"
+                                    value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
+                                    step="0.1" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_downpayment_total">Amount</label>
-
-                                <div class="input-group input-group-lg">
-                                    <span class="input-group-text">Rs. </span>
-                                    <input type="text" class="form-control form-control-lg" readonly
-                                        id="unit_downpayment_total" name="unit[downpayment][total]"
-                                        placeholder="Amount" />
-                                </div>
+                                <label class="form-label fs-5" for="unit_downpayment_total">Amount (Rs)</label>
+                                <input type="text" class="form-control form-control-lg" readonly
+                                    id="unit_downpayment_total" name="unit[downpayment][total]"
+                                    placeholder="Amount" />
                             </div>
                         </div>
                     </div>
@@ -235,7 +204,7 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="input-group input-group-lg ">
                                 <input type="number" min="0" class="touchspin-icon"
-                                    name="installments[types][value]" value="0" />
+                                    name="installments[types][value]" value="1" />
                             </div>
                         </div>
                     </div>
@@ -289,7 +258,11 @@
     id="stakeholders_card">
     <div class="card-header justify-content-between">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
-        <div style="display: none;" id="div_stakeholder_type">
+        <div id="div_stakeholder_type">
+            @forelse ($stakeholderTypes as $stakeholderType)
+                <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
+            @empty
+            @endforelse
         </div>
     </div>
 
@@ -298,7 +271,7 @@
         <div class="row mb-1">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                <select class="form-select" id="stackholders">
+                <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                     <option value="0">Create new Stakeholder...</option>
                     @forelse ($stakeholders as $stakeholder)
                         <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
@@ -311,7 +284,7 @@
         </div>
 
         <div class="row mb-1">
-            <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" />
+            {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
@@ -397,10 +370,11 @@
             </div>
         </div>
 
-        <div class="row mb-1">
-            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+        <div class="row mb-1 g-1">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="sales_source_lead_source">Lead Source</label>
-                <select class="form-select" id="sales_source_lead_source" name="sales_source[lead_source]">
+                <select class="form-select form-select-lg" id="sales_source_lead_source"
+                    name="sales_source[lead_source]">
                     <option value="0">Create new Lead Source</option>
                     @forelse ($leadSources as $leadSource)
                         <option value="{{ $leadSource->id }}">{{ $leadSource->name }}</option>
@@ -409,13 +383,37 @@
                 </select>
             </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 position-relative" style="display: none;">
-                <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
-                <input type="text" class="form-control form-control-lg" id="sales_source_new"
-                    name="sales_source[new]" placeholder="New Sale Source" value="{{ old('sales_source.new') }}"
-                    disabled />
+            <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
+                <div id="div_sales_source_lead_source">
+                    <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
+                    <input type="text" class="form-control form-control-lg" id="sales_source_new"
+                        name="sales_source[new]" placeholder="New Sale Source"
+                        value="{{ old('sales_source.new') }}" />
+                </div>
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>5. COMMENTS </h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-1 g-1">
+            {{-- <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="comments">Auto Generated Comments</label>
+                <textarea class="form-control form-control-lg" id="auto_generated_comments" name="comments[auto_generated]"
+                    placeholder="Auto Generated Comments" rows="5" readonly></textarea>
+            </div> --}}
+
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="comments">Comments</label>
+                <textarea class="form-control form-control-lg" id="custom_comments" name="comments[custom]" placeholder="Comments"
+                    rows="5"></textarea>
+            </div>
+        </div>
     </div>
 </div>

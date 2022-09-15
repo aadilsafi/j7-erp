@@ -17,6 +17,7 @@ class SalesPlanInstallments extends Model
         'paid_amount',
         'remaining_amount',
         'remarks',
+        'installment_order',
         'status',
     ];
 
@@ -28,6 +29,8 @@ class SalesPlanInstallments extends Model
         'paid_amount' => 'double',
         'remaining_amount' => 'double',
         'remarks' => 'string',
+        'installment_order' => 'integer',
+        'status' => 'string',
     ];
 
     public function salesPlan()

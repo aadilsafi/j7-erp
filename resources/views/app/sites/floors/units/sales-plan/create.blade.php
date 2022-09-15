@@ -288,6 +288,8 @@
                     default:
                         break;
                 }
+
+                updateTable();
             });
 
             $("#sales_plan_validity").flatpickr({
@@ -305,6 +307,8 @@
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
+                    dataArrays.ArrDueDates = [];
+                    mergeArrays();
                     updateTable();
                 },
             });
@@ -360,6 +364,8 @@
 
                 $('#unit_downpayment_total').val(numberFormat(conventToFloatNumber(totalDownPayment)
                     .toFixed(2)));
+
+                updateTable();
             });
 
             $('#unit_downpayment_percentage').trigger('change');
@@ -493,14 +499,11 @@
             updateTable();
         }
 
-        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage, .installment_type_radio').on('focusout',
+        $('#unit_price, input[id^="percentage-"], #unit_downpayment_percentage').on('focusout',
             function() {
                 updateTable();
-            });
-
-        $('.installment_type_radio').on('change', function() {
-            updateTable();
-        });
+            }
+        );
 
         function updateTable() {
             clearTimeout(t);

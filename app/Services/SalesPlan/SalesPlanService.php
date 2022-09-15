@@ -67,7 +67,7 @@ class SalesPlanService implements SalesPlanInterface
         $floor = (new Floor())->find($floor_id);
         $unit = (new Unit())->find($unit_id);
 
-        dd($inputs);
+        // dd($inputs);
 
         $authRoleId = auth()->user()->roles->pluck('id')->first();
 

@@ -201,10 +201,18 @@ class SalesPlanController extends Controller
 
     public function approveSalesPlan(Request $request)
     {
+
+        $salesPlan = (new SalesPlan())->where('id', '>', 0)->update([
+            'status' => 2,
+        ]);
+
+        $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
+            'status' => 1,
+        ]);
+
         $salesPlan = SalesPlan::find($request->salesPlanID);
+
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 1;
-        $salesPlan->save();
 
         $currentURL = URL::current();
         $notificaionData = [
@@ -226,7 +234,7 @@ class SalesPlanController extends Controller
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 0;
+        $salesPlan->status = 2;
         $salesPlan->save();
 
         $currentURL = URL::current();

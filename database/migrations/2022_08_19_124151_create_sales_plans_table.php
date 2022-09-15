@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('sales_type')->nullable();
             $table->string('indirect_source')->nullable();
             $table->dateTime('validity')->nullable();
-            $table->boolean('status')->default(false);
+            $table->double('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

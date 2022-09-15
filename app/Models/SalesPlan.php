@@ -49,4 +49,9 @@ class SalesPlan extends Model
     {
         return $this->hasMany(SalesPlanInstallments::class);
     }
+
+    public function unPaidInstallments()
+    {
+        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid');
+    }
 }

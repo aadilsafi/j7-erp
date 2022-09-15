@@ -20,11 +20,12 @@ use App\Services\{
     UnitService,
     UnitTypeService,
     UserBatchService,
-    RoleTypesService
+    RoleTypesService,
 };
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
+use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -47,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SalesPlanInterface::class, SalesPlanService::class);
         $this->app->bind(StakeholderInterface::class, StakeholderService::class);
         $this->app->bind(LeadSourceInterface::class, LeadSourceService::class);
+        $this->app->bind(ReceiptInterface::class, ReceiptService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

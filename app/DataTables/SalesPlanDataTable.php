@@ -34,7 +34,17 @@ class SalesPlanDataTable extends DataTable
                 return $salesPlan->user->name;
             })
             ->editColumn('status', function ($salesPlan) {
-                return $salesPlan->status == 1 ? '<span class="badge badge-glow bg-success">Approved</span>' : '<span class="badge badge-glow bg-warning">Not Approved</span>';
+                ($salesPlan->status == 0) ? '<span class="badge badge-glow bg-success">Pending</span>': "Dont Eat";
+                if($salesPlan->status == 0){
+                    return '<span class="badge badge-glow bg-warning">Pending</span>';
+                }
+                elseif($salesPlan->status == 1){
+                    return '<span class="badge badge-glow bg-success">Approved</span>';
+                }
+                else{
+                    return '<span class="badge badge-glow bg-danger">Disapproved</span>';
+                }
+                // return $salesPlan->status == 1 ? '<span class="badge badge-glow bg-success">Approved</span>' : '<span class="badge badge-glow bg-warning">Not Approved</span>';
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
                 return $salesPlan->stakeholder->full_name;

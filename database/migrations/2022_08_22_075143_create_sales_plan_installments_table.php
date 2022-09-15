@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('paid_amount')->default(0);
             $table->double('remaining_amount')->default(0);
             $table->string('remarks')->nullable();
+            $table->string('status')->default('Unpaid')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Receipt;
+use App\Models\SalesPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -169,6 +170,11 @@ class Unit extends Model
     public function receipts()
     {
         return $this->hasMany(Receipt::class);
+    }
+
+    public function salesPlan()
+    {
+        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder');
     }
 
 }

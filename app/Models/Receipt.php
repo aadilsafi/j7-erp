@@ -28,6 +28,12 @@ class Receipt extends Model
         'installment_number',
     ];
 
+    public $rules = [
+        'receipts.item_idunit_id' => 'required',
+        'receipts.mode_of_payment' => 'required',
+        'receipts.amount_in_numbers' => 'required',
+    ];
+
     public function site()
     {
         return $this->belongsTo(Site::class);

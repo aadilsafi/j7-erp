@@ -17,6 +17,7 @@ class SalesPlanInstallments extends Model
         'paid_amount',
         'remaining_amount',
         'remarks',
+        'status',
     ];
 
     protected $casts = [

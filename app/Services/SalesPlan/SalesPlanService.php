@@ -151,7 +151,9 @@ class SalesPlanService implements SalesPlanInterface
 
         $unitInput = $inputs['unit'];
 
-        $leadSource = $inputs['lead_source'];
+        $leadSource = $inputs['sales_source'];
+
+
 
 
 

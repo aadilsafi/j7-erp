@@ -24,8 +24,7 @@ return new class extends Migration
             $table->double('discount_total')->default(0);
             $table->double('down_payment_percentage')->default(0);
             $table->double('down_payment_total')->default(0);
-            $table->string('sales_type')->nullable();
-            $table->string('indirect_source')->nullable();
+            $table->foreignId('lead_source_id')->constrained();
             $table->dateTime('validity')->nullable();
             $table->boolean('status')->default(false);
             $table->timestamps();

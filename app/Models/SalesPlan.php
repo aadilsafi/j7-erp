@@ -19,8 +19,7 @@ class SalesPlan extends Model
         'discount_total',
         'down_payment_percentage',
         'down_payment_total',
-        'sales_type',
-        'indirect_source',
+        'lead_source',
         'validity',
         'status',
     ];

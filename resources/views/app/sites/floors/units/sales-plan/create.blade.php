@@ -213,7 +213,7 @@
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
-                                if(types.status) {
+                                if (types.status) {
                                     stakeholderType +=
                                         '<p class="badge badge-light-primary fs-5 ms-auto me-1">' +
                                         types.stakeholder_code + '</p>';
@@ -244,7 +244,13 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             }).on("change", function(e) {
+                let newLeadSource = $(this).val();
 
+                if (newLeadSource === "0") {
+                    $('#div_sales_source_lead_source').show();
+                } else {
+                    $('#div_sales_source_lead_source').hide();
+                }
             });
 
             var installmentsRowAction = '';

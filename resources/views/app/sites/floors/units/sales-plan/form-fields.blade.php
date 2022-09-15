@@ -401,10 +401,10 @@
             </div>
         </div>
 
-        <div class="row mb-1">
-            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+        <div class="row mb-1 g-1">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="sales_source_lead_source">Lead Source</label>
-                <select class="form-select" id="sales_source_lead_source" name="sales_source[lead_source]">
+                <select class="form-select form-select-lg" id="sales_source_lead_source" name="sales_source[lead_source]">
                     <option value="0">Create new Lead Source</option>
                     @forelse ($leadSources as $leadSource)
                         <option value="{{ $leadSource->id }}">{{ $leadSource->name }}</option>
@@ -413,13 +413,37 @@
                 </select>
             </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 position-relative" style="display: none;">
-                <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
-                <input type="text" class="form-control form-control-lg" id="sales_source_new"
-                    name="sales_source[new]" placeholder="New Sale Source" value="{{ old('sales_source.new') }}"
-                    disabled />
+            <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
+                <div id="div_sales_source_lead_source">
+                    <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
+                    <input type="text" class="form-control form-control-lg" id="sales_source_new"
+                        name="sales_source[new]" placeholder="New Sale Source"
+                        value="{{ old('sales_source.new') }}" />
+                </div>
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>5. COMMENTS </h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-1 g-1">
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="comments">Auto Generated Comments</label>
+                <textarea class="form-control form-control-lg" id="auto_generated_comments" name="comments[auto_generated]"
+                    placeholder="Auto Generated Comments" rows="5" readonly></textarea>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="comments">Comments</label>
+                <textarea class="form-control form-control-lg" id="custom_comments" name="comments[custom]" placeholder="Comments"
+                    rows="5"></textarea>
+            </div>
+        </div>
     </div>
 </div>

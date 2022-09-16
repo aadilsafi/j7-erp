@@ -24,18 +24,7 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'full_name' => 'required|string|min:1|max:50',
-            'father_name' => 'required|string|min:1|max:50',
-            'occupation' => 'required|string|min:1|max:50',
-            'designation' => 'required|string|min:1|max:50',
-            'cnic' => 'required|string|min:1|max:15',
-            'contact' => 'required|string|min:1|max:20',
-            'address' => 'required|string',
-            'parent_id' => 'nullable|numeric',
-            'relation' => 'required_with:parent_id',
-            'attachment' => 'required|min:2',
-        ];
+        return (new Stakeholder())->rules;
     }
 
     /**
@@ -46,6 +35,23 @@ class updateRequest extends FormRequest
      */
     public function withValidator($validator)
     {
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                $parent_id = $this->input('parent_id');
+                if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
+                    $validator->errors()->add('relation', 'Relation is required');
+                }
+            });
+        }
+    }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Stakeholder())->ruleMessages;
     }
 }

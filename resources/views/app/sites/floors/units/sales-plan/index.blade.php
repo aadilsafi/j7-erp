@@ -164,6 +164,7 @@
                                 tapToDismiss: !1,
                             });
                             $('#sales-plan-table').DataTable().ajax.reload();
+                            location.reload(true);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -201,6 +202,7 @@
                                 tapToDismiss: !1,
                             });
                             $('#sales-plan-table').DataTable().ajax.reload();
+                            location.reload(true);
                     } else {
                         Swal.fire({
                             icon: 'error',

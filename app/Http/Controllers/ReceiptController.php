@@ -8,6 +8,8 @@ use App\Models\SalesPlan;
 use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
+use App\Models\Receipt;
+use App\Models\ReceiptTemplate;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptController extends Controller
@@ -30,6 +32,7 @@ class ReceiptController extends Controller
         //
         $data = [
             'site_id' => $site_id,
+            'receipt_templates' => ReceiptTemplate::all(),
         ];
         return $dataTable->with($data)->render('app.sites.receipts.index', $data);
     }
@@ -249,6 +252,7 @@ class ReceiptController extends Controller
 
         $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount,$installmentPartialyPaidUnderAmount);
         $amount_entered = (float)$request->amount;
+
         if($amount_entered > $total_installment_required_amount){
             return response()->json([
                 'success' => false,
@@ -264,6 +268,41 @@ class ReceiptController extends Controller
             'total_installment_required_amount' => $total_installment_required_amount,
             'amount_to_be_paid' => $request->amount,
         ], 200);
+    }
+
+    public function printReceipt($site_id,$receipt_id,$template_id){
+
+        $receipt_data = Receipt::find($receipt_id);
+
+        $template =ReceiptTemplate::find(decryptParams($template_id));
+
+        $unit = Unit::find($receipt_data->unit_id);
+
+        // dd($receipt_data,$unit);
+
+        $preview_data = [
+            'unit_name' => $unit->name,
+            'unit_type' => $unit->type->name,
+            'unit_floor' => $unit->floor->name,
+            'name' => $receipt_data->name,
+            'cnic' => str_split( $receipt_data->cnic),
+            'mode_of_payment' => $receipt_data->mode_of_payment,
+
+            'other_value' => $receipt_data->other_value,
+            'pay_order' => $receipt_data->pay_order,
+            'cheque_no' => $receipt_data->cheque_no,
+            'online_instrument_no' => $receipt_data->online_instrument_no,
+            'drawn_on_bank' => $receipt_data->drawn_on_bank,
+            'transaction_date' => $receipt_data->transaction_date,
+            'amount_in_numbers' => $receipt_data->amount_in_numbers,
+            // 'amount_in_words' => $receipt_data->mode_of_paymet,
+            'purpose' => $receipt_data->purpose,
+            'other_purpose' => $receipt_data->other_purpose,
+            'installment_number' => $receipt_data->installment_number,
+            'online_instrument_no' => $receipt_data->online_instrument_no,
+        ];
+
+        return view('app.sites.receipts.templates.j7_template',compact('preview_data'));
     }
 
 }

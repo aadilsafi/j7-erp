@@ -169,7 +169,7 @@ class SalesPlanService implements SalesPlanInterface
             'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
             'validity' => $inputs['sales_plan_validity'],
             'comments' => $inputs['comments']['custom'],
-            'status' => $approveSalesPlanPermission ? true : false,
+            'status' => false,
         ];
 
         $salesPlan = $this->model()->create($sales_plan_data);
@@ -219,7 +219,7 @@ class SalesPlanService implements SalesPlanInterface
                 'paid_amount' => 0,
                 'remaining_amount' => floatval($installment['total_amount']),
                 'remarks' => $installment['remarks'],
-                'installment_order' => $key + 1,
+                'installment_order' => $key,
                 'status' => 'unpaid',
                 'created_at' => now(),
                 'updated_at' => now(),

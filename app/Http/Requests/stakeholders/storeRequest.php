@@ -35,6 +35,23 @@ class storeRequest extends FormRequest
      */
     public function withValidator($validator)
     {
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                $parent_id = $this->input('parent_id');
+                if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
+                    $validator->errors()->add('relation', 'Relation is required');
+                }
+            });
+        }
+    }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Stakeholder())->ruleMessages;
     }
 }

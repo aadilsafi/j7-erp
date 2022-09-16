@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                    width: calc(20% - 0.5em);
-                                                } */
+                                                                width: calc(20% - 0.5em);
+                                                            } */
     </style>
 @endsection
 
@@ -52,15 +52,18 @@
         action="{{ route('sites.stakeholders.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($stakeholder->id)]) }}"
         method="POST">
 
-        <div class="card-header">
-        </div>
-
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    @csrf
-                    @method('put')
-                    {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholder' => $stakeholder]) }}
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-body">
+                        @csrf
+                        @method('put')
+                        {{ view('app.sites.stakeholders.form-fields', [
+                            'stakeholders' => $stakeholders,
+                            'stakeholder' => $stakeholder,
+                            'stakeholderTypes' => $stakeholderTypes,
+                        ]) }}
+                    </div>
                 </div>
             </div>
 
@@ -192,7 +195,7 @@
                 if (cnic.toString().length != 13) {
                     $('#cnic').after(
                         '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>'
-                        );
+                    );
                 }
                 if (!$.isNumeric(contact)) {
                     $('#contact').after(

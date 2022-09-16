@@ -56,7 +56,7 @@
                 <div class="card">
                     <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         @csrf
-                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders]) }}
+                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholderTypes' => $stakeholderTypes]) }}
                     </div>
                 </div>
             </div>
@@ -72,12 +72,13 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                         <hr>
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+
+                        <button type="submit" class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='save'></i>
                             Save Stakeholder
-                        </a>
+                        </button>
 
                         <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -90,6 +91,7 @@
         </div>
 
     </form>
+
 @endsection
 
 @section('vendor-js')
@@ -123,7 +125,6 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
-            required: true,
             checkValidity: true,
             credits: {
                 label: '',
@@ -134,58 +135,26 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#saveButton").click(function() {
 
-                var full_name = $("#full_name").val();
-                var father_name = $("#father_name").val();
-                var occupation = $("#occupation").val();
-                var designation = $("#designation").val();
-                var address = $("#address").val();
-                var cnic = $("#cnic").val();
-                var contact = $("#contact").val();
-                $('.allErrors').empty();
-
-                if (full_name == '') {
-                    $('#full_name').after(
-                        '<span class="error allErrors text-danger">Full Name is Required</span>');
-                }
-
-                if (father_name == '') {
-                    $('#father_name').after(
-                        '<span class="error allErrors text-danger">Father Name is Required</span>');
-                }
-
-                if (occupation == '') {
-                    $('#occupation').after(
-                        '<span class="error allErrors text-danger">Occupation is Required</span>');
-                }
-
-                if (designation == '') {
-                    $('#designation').after(
-                        '<span class="error allErrors text-danger">Designation is Required</span>');
-                }
-
-                // if (!$.isNumeric(cnic)) {
-                //     $('#cnic').after(
-                //     '<span class="error allErrors text-danger">Enter Numeric Value</span>');
-                // }
-
-                if (cnic.toString().length != 13) {
-                    $('#cnic').after(
-                        '<span class="error allErrors text-danger">Enter 13 Digits Numeric Value</span>'
-                    );
-                }
-
-                if (!$.isNumeric(contact)) {
-                    $('#contact').after(
-                        '<span class="error allErrors text-danger">Enter Numeric Value</span>');
-                }
-                if (cnic.toString().length == 13 && $.isNumeric(contact) && full_name != '' &&
-                    father_name != '' &&
-                    occupation != '' && designation != '') {
-                    $("#stakeholderForm").submit();
-                }
+            var e = $("#parent_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
             });
+
+
+            var e = $("#stakeholder_type");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            });
+
         });
     </script>
 @endsection

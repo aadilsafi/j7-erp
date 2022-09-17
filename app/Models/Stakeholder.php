@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\StakeholderType;
+use App\Utils\Enums\StakeholderTypeEnum;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -24,7 +25,6 @@ class Stakeholder extends Model implements HasMedia
         'address',
         'parent_id',
         'relation',
-        'attachment',
     ];
 
     public $rules = [
@@ -37,12 +37,13 @@ class Stakeholder extends Model implements HasMedia
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'nullable|numeric',
-        'relation' => 'required_with:parent_id',
-        'attachment' => 'required|min:2',
+        'relation' => 'nullable|string|min:1|max:50',
+        'attachment' => 'sometimes|min:2',
+        'stakeholder_type' => 'required|in:C,V,D,L',
     ];
 
     public $ruleMessages = [
-        'attachment' => 'Minimum Two Attachment Required.',
+        'attachment.min' => 'Minimum 2 attachments are required.',
     ];
 
     protected $casts = [
@@ -56,7 +57,6 @@ class Stakeholder extends Model implements HasMedia
         'address' => 'string',
         'parent_id' => 'integer',
         'relation' => 'string',
-        'attachment' => 'string',
     ];
 
     public function site()
@@ -68,5 +68,4 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->hasMany(StakeholderType::class);
     }
-
 }

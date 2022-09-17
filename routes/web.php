@@ -288,6 +288,12 @@ Route::group([
                     Route::get('create', [ReceiptController::class, 'create'])->name('create');
                     Route::post('store', [ReceiptController::class, 'store'])->name('store');
 
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-unit-type-and-unit-floor', [ReceiptController::class, 'getUnitTypeAndFloorAjax'])->name('get-unit-type-and-unit-floor');
+                        Route::post('get-unpaid-installments', [ReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
+                    });
+
+
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');

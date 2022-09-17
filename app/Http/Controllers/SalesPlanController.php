@@ -16,6 +16,9 @@ use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
+use App\Utils\Enums\StakeholderTypeEnum;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class SalesPlanController extends Controller
 {
@@ -68,6 +71,7 @@ class SalesPlanController extends Controller
                 'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
                     'stakeholder_types',
                 ]),
+                'stakeholderTypes' => StakeholderTypeEnum::values(),
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
@@ -87,9 +91,15 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
-        $data = $request->input();
-        $record = $this->salesPlanInterface->store($site_id, $data);
-        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id])->withSuccess('Sales Plan Saved!');
+        try {
+            $inputs = $request->input();
+
+            $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withSuccess('Sales Plan Saved!');
+        } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**
@@ -201,20 +211,28 @@ class SalesPlanController extends Controller
 
     public function approveSalesPlan(Request $request)
     {
+
+        $salesPlan = (new SalesPlan())->where('id', '>', 0)->update([
+            'status' => 2,
+        ]);
+
+        $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
+            'status' => 1,
+        ]);
+
         $salesPlan = SalesPlan::find($request->salesPlanID);
+
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 1;
-        $salesPlan->save();
 
         $currentURL = URL::current();
         $notificaionData = [
             'title' => 'Sales Plan Approved Notification',
-            'description' => Auth::User()->name.' approved generated sales plan.',
+            'description' => Auth::User()->name . ' approved generated sales plan.',
             'message' => 'xyz message',
             'url' => str_replace('/approve-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
 
         return response()->json([
             'success' => true,
@@ -226,23 +244,22 @@ class SalesPlanController extends Controller
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 0;
+        $salesPlan->status = 2;
         $salesPlan->save();
 
         $currentURL = URL::current();
         $notificaionData = [
             'title' => 'Sales Plan Disapproved Notification',
-            'description' => Auth::User()->name.' disapproved generated sales plan.',
+            'description' => Auth::User()->name . ' disapproved generated sales plan.',
             'message' => 'xyz message',
             'url' => str_replace('/disapprove-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData,$user)->delay(Carbon::now()->addMinutes(1));
+        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
 
         return response()->json([
             'success' => true,
             'message' => "Sales Plan disapproved Sucessfully",
         ], 200);
     }
-
 }

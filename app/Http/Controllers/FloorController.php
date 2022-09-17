@@ -265,7 +265,7 @@ class FloorController extends Controller
 
     public function copyStore(copyFloorRequest $request, $site_id)
     {
-        dd($request->all());
+        // dd($request->all());
         // return $request->input();
         if (!request()->ajax()) {
 

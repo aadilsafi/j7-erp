@@ -31,11 +31,11 @@ class DatabaseSeeder extends Seeder
             FloorTableSeeder::class,
             UnitTableSeeder::class,
             StakeholdersSeeder::class,
+            LeadSourceTableSeeder::class,
             SalesPlanSeeder::class,
             SalesPlanAdditionalCostSeeder::class,
             SalesPlanInstallmentsSeeder::class,
             SalesPlanTemplatesSeeder::class,
-            LeadSourceTableSeeder::class,
             StakeholderTypeSeeder::class,
         ]);
     }

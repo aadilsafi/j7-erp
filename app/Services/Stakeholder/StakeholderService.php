@@ -7,6 +7,7 @@ use App\Models\StakeholderType;
 use Illuminate\Support\Facades\Storage;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use Illuminate\Support\Str;
 
 class StakeholderService implements StakeholderInterface
 {
@@ -29,28 +30,29 @@ class StakeholderService implements StakeholderInterface
 
     public function getAllWithTree()
     {
-        $stakeholders = $this->model()->all();
+        $stakeholders = $this->model()->with('stakeholder_types')->get();
         return getStakeholderTreeData(collect($stakeholders), $this->model());
     }
 
     public function getById($site_id, $id, array $relationships = [])
     {
+        if ($id == 0) {
+            return $this->getEmptyInstance();
+        }
+
         return $this->model()->with($relationships)->find($id);
     }
 
     // Store
     public function store($site_id, $inputs)
     {
-        $firstImage = $inputs['attachment'][0];
-        $secondImage = $inputs['attachment'][1];
+        // $firstImage = $inputs['attachment'][0];
+        // $secondImage = $inputs['attachment'][1];
 
-        $firstImageName = $firstImage->getClientOriginalName();
-        $secondImageName = $secondImage->getClientOriginalName();
-        $attachment = $firstImageName . ',' . $secondImageName;
+        // $firstImageName = $firstImage->getClientOriginalName();
+        // $secondImageName = $secondImage->getClientOriginalName();
+        // $attachment = $firstImageName . ',' . $secondImageName;
 
-        if ($inputs['parent_id'] == null) {
-            $inputs['parent_id'] = 0;
-        }
         $data = [
             'site_id' => decryptParams($site_id),
             'full_name' => $inputs['full_name'],
@@ -62,52 +64,40 @@ class StakeholderService implements StakeholderInterface
             'address' => $inputs['address'],
             'parent_id' => $inputs['parent_id'],
             'relation' => $inputs['relation'],
-            'attachment' => $attachment,
         ];
 
         $stakeholder = $this->model()->create($data);
 
-        $folder = 'app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/';
 
-        if (!file_exists($folder . $firstImageName)) {
-            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $firstImageName);
-        }
-        if (!file_exists($folder . $secondImageName)) {
-            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $secondImageName);
+        if (isset($inputs['attachment'])) {
+            $folder = 'app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/';
+            foreach ($inputs['attachment'] as $attachment) {
+                // $stakeholder->addMedia($attachment)->toMediaCollection('attachments');
+                if (!file_exists($folder . $attachment)) {
+                    $attachment->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $attachment);
+                }
+            }
         }
 
-        $stakeholderTypeData  = [
-            [
+        $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
+        $stakeholderTypeData = [];
+        foreach (StakeholderTypeEnum::array() as $key => $value) {
+            $stakeholderType = [
                 'stakeholder_id' => $stakeholder->id,
-                'type' => StakeholderTypeEnum::CUSTOMER->value,
-                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
-            ],
-            [
-                'stakeholder_id' => $stakeholder->id,
-                'type' => StakeholderTypeEnum::VENDOR->value,
-                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
-            ],
-            [
-                'stakeholder_id' => $stakeholder->id,
-                'type' => StakeholderTypeEnum::DEALER->value,
-                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
-            ],
-            [
-                'stakeholder_id' => $stakeholder->id,
-                'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
-            ],
-            [
-                'stakeholder_id' => $stakeholder->id,
-                'type' => StakeholderTypeEnum::LEAD->value,
-                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad($stakeholder->id, 3, "0", STR_PAD_LEFT),
-                'status' => 0,
-            ],
-        ];
+                'type' => $value,
+                'stakeholder_code' => $value . '-' . $stakeholderId,
+                'status' => $inputs['stakeholder_type'] == $value ? 1 : 0,
+            ];
+
+            if ($inputs['stakeholder_type'] == 'C' || $inputs['parent_id'] > 0) {
+                if (in_array($value, ['C', 'L', 'K'])) {
+                    $stakeholderType['status'] = 1;
+                }
+            }
+
+            $stakeholderTypeData[] = $stakeholderType;
+        }
+
         $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
         return $stakeholder;
     }
@@ -162,5 +152,68 @@ class StakeholderService implements StakeholderInterface
         $this->model()->whereIn('id', $stakeholderIDs)->delete();
 
         return true;
+    }
+
+    public function getEmptyInstance()
+    {
+        $stakeholder = [
+            'id' => 0,
+            'full_name' => '',
+            'father_name' => '',
+            'occupation' => '',
+            'designation' => '',
+            'cnic' => '',
+            'contact' => '',
+            'address' => '',
+            'stakeholder_types' => [
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 1,
+                    'type' => 'C',
+                    'stakeholder_code' => 'C-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'V',
+                    'stakeholder_code' => 'V-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'D',
+                    'stakeholder_code' => 'D-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'K',
+                    'stakeholder_code' => 'K-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+                [
+                    'stakeholder_id' => 0,
+                    'id' => 2,
+                    'type' => 'L',
+                    'stakeholder_code' => 'L-000',
+                    'status' => 0,
+                    'created_at' => null,
+                    'updated_at' => null,
+                ],
+            ]
+        ];
+
+        return $stakeholder;
     }
 }

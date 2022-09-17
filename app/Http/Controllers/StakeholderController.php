@@ -9,15 +9,15 @@ use App\Http\Requests\stakeholders\{
     storeRequest as stakeholderStoreRequest,
     updateRequest as stakeholderUpdateRequest,
 };
+use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
 
 class StakeholderController extends Controller
 {
     private $stakeholderInterface;
 
-    public function __construct(
-        StakeholderInterface $stakeholderInterface
-    ) {
+    public function __construct(StakeholderInterface $stakeholderInterface)
+    {
         $this->stakeholderInterface = $stakeholderInterface;
     }
 
@@ -43,14 +43,14 @@ class StakeholderController extends Controller
      */
     public function create(Request $request, $site_id)
     {
-        //
         if (!request()->ajax()) {
 
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                'stakeholderTypes' => StakeholderTypeEnum::array(),
             ];
-
+            // dd($data);
             return view('app.sites.stakeholders.create', $data);
         } else {
             abort(403);
@@ -65,10 +65,11 @@ class StakeholderController extends Controller
      */
     public function store(stakeholderStoreRequest $request, $site_id)
     {
-        //
+        // dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
+                // dd($inputs);
                 $record = $this->stakeholderInterface->store($site_id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -109,6 +110,7 @@ class StakeholderController extends Controller
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
+                    'stakeholderTypes' => StakeholderTypeEnum::array(),
                     'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                     'stakeholder' => $stakeholder,
                 ];

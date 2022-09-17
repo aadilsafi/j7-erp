@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('cnic');
             $table->string('phone_no');
             $table->string('mode_of_payment');
+            $table->string('other_value')->nullable();
             $table->string('pay_order')->nullable();
             $table->string('cheque_no')->nullable();
             $table->string('online_instrument_no')->nullable();
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('amount_in_words');
             $table->double('amount_in_numbers');
             $table->string('purpose');
+            $table->string('other_purpose')->nullable();
             $table->double('installment_number')->nullable();
             $table->timestamps();
         });

@@ -19,9 +19,9 @@ class SalesPlan extends Model
         'discount_total',
         'down_payment_percentage',
         'down_payment_total',
-        'sales_type',
-        'indirect_source',
+        'lead_source_id',
         'validity',
+        'comments',
         'status',
     ];
 
@@ -48,5 +48,10 @@ class SalesPlan extends Model
     public function installments()
     {
         return $this->hasMany(SalesPlanInstallments::class);
+    }
+
+    public function unPaidInstallments()
+    {
+        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid');
     }
 }

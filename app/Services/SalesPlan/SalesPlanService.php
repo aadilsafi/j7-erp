@@ -219,7 +219,7 @@ class SalesPlanService implements SalesPlanInterface
                 'paid_amount' => 0,
                 'remaining_amount' => floatval($installment['total_amount']),
                 'remarks' => $installment['remarks'],
-                'installment_order' => $key + 1,
+                'installment_order' => $key,
                 'status' => 'unpaid',
                 'created_at' => now(),
                 'updated_at' => now(),

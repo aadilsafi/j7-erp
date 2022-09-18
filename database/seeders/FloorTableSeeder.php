@@ -29,7 +29,7 @@ class FloorTableSeeder extends Seeder
             [
                 'name' => 'Floor 1',
                 'floor_area' => 1300,
-                'short_label' => 'F',
+                'short_label' => '1F',
                 'site_id' => 1,
                 'order' => 1,
                 'active' => true,
@@ -39,7 +39,7 @@ class FloorTableSeeder extends Seeder
             [
                 'name' => 'Floor 2',
                 'floor_area' => 1300,
-                'short_label' => 'F',
+                'short_label' => '2F',
                 'site_id' => 1,
                 'order' => 2,
                 'active' => true,
@@ -49,7 +49,7 @@ class FloorTableSeeder extends Seeder
             [
                 'name' => 'Floor 3',
                 'floor_area' => 1300,
-                'short_label' => 'F',
+                'short_label' => '3F',
                 'site_id' => 1,
                 'order' => 3,
                 'active' => true,

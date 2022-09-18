@@ -92,6 +92,11 @@
                     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
                     confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
                     confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#stakeholder-table-form').submit();

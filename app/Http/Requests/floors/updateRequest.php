@@ -25,6 +25,7 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules = (new Floor())->rules;
+        $rules['short_label'] = 'required|string|max:5|unique:floors,short_label,' . decryptParams($this->id);
         return $rules;
     }
 }

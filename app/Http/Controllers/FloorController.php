@@ -109,11 +109,14 @@ class FloorController extends Controller
                 ->editColumn('created_at', function ($floor) {
                     return editDateColumn($floor->created_at);
                 })
+                ->editColumn('updated_at', function ($floor) {
+                    return editDateColumn($floor->updated_at);
+                })
                 ->editColumn('actions', function ($floor) {
                     return view('app.sites.floors.actions', ['site_id' => $floor->site_id, 'id' => $floor->id]);
                 })
                 ->rawColumns([
-                    'created_at', 'units_dp_count', 'units_hold_count',
+                    'created_at', 'updated_at', 'units_dp_count', 'units_hold_count',
                     'units_token_count', 'units_sold_count', 'units_open_count',
                     'units_count', 'width', 'length', 'check', 'actions'
                 ])

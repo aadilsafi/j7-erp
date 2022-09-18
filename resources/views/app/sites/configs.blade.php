@@ -72,7 +72,7 @@
                             <input type="hidden" name="selected_tab" value="site">
                             <div class="card">
                                 <div class="card-body">
-                                    <div class="row mb-1">
+                                    <div class="row mb-1 g-1">
                                         {{-- {{ dd($site) }} --}}
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="name">Site Name</label>
@@ -95,9 +95,7 @@
                                                 <div class="invalid-tooltip">{{ $message }}</div>
                                             @enderror
                                         </div>
-                                    </div>
 
-                                    <div class="row mb-1">
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="name">Area Width</label>
                                             <input type="text"

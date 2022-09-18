@@ -302,7 +302,7 @@
                     },
                     {
                         name: 'reset',
-                        text: '<i class="fa fa-undo"></i> Reset',
+                        text: '<i class="bi bi-arrow-counterclockwise"></i> Reset',
                         className: 'btn btn-relief-outline-danger',
                         action: function(e, dt, button, config) {
                             dt.search('');
@@ -312,7 +312,7 @@
                     },
                     {
                         name: 'reload',
-                        text: '<i class="fa fa-refresh"></i> Reload',
+                        text: '<i class="bi bi-arrow-clockwise"></i> Reload',
                         className: 'btn btn-relief-outline-primary',
                         action: function(e, dt, button, config) {
                             dt.draw(false);

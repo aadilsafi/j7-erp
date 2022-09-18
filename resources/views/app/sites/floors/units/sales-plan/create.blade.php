@@ -566,10 +566,6 @@
                 //// Unit Discount
                 'unit[discount][percentage]': {
                     required: true,
-                    digits: true
-                },
-                'unit[discount][total]': {
-                    required: true
                 },
 
                 //// Unit Grand Total

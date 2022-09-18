@@ -219,7 +219,7 @@ class SalesPlanService implements SalesPlanInterface
                 'paid_amount' => 0,
                 'remaining_amount' => floatval($installment['total_amount']),
                 'remarks' => $installment['remarks'],
-                'installment_order' => $key + 1,
+                'installment_order' => $key,
                 'status' => 'unpaid',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -228,23 +228,21 @@ class SalesPlanService implements SalesPlanInterface
 
         $SalesPlanInstallments = (new SalesPlanInstallments())->insert($installmentsData);
 
+        //Notification of Sales Plan
+        $specificUsers = collect();
+        foreach ($approveSalesPlanPermissionRole as $role) {
+            $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
+        }
+        $currentURL = URL::current();
 
+        $notificaionData = [
+            'title' => 'New Sales Plan Genration Notification',
+            'description' => Auth::User()->name . ' generated new sales plan',
+            'message' => 'xyz message',
+            'url' => str_replace('/store', '', $currentURL),
+        ];
 
-
-        // $specificUsers = collect();
-        // foreach ($approveSalesPlanPermissionRole as $role) {
-        //     $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
-        // }
-        // $currentURL = URL::current();
-
-        // $notificaionData = [
-        //     'title' => 'New Sales Plan Genration Notification',
-        //     'description' => Auth::User()->name . ' generated new sales plan',
-        //     'message' => 'xyz message',
-        //     'url' => str_replace('/store', '', $currentURL),
-        // ];
-
-        // GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
+        GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
 
         return $salesPlan;
     }

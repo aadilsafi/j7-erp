@@ -65,6 +65,8 @@ class RolesDataTable extends DataTable
             ->setTableId('roles-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->select()
+            ->selectClassName('bg-primary')
             ->serverSide()
             ->processing()
             ->deferRender()

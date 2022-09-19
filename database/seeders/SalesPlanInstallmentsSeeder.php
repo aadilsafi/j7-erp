@@ -16,12 +16,6 @@ class SalesPlanInstallmentsSeeder extends Seeder
      */
     public function run()
     {
-        //
-        // $table->foreignId('sales_plan_id')->constrained();
-        //     $table->date('date');
-        //     $table->float('amount')->default(0);
-        //     $table->string('details')->nullable();
-        //     $table->string('remarks')->nullable();
         (new SalesPlanInstallments())->insert([
             [
                 'sales_plan_id' => 1,

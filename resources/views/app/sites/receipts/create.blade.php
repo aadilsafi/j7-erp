@@ -149,7 +149,17 @@
                 },
                 isFirstItemUndeletable: true
             })
+            var e = $("#unit_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            })
         });
+
+
 
         $(document).ready(function() {
 

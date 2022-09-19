@@ -69,11 +69,6 @@ class RoleController extends Controller
                 'parent_id' => $request->parent_id,
             ]);
 
-            if ($request->default) {
-                $record = $this->makeDefaultRole($record->id);
-                // dd($record);
-            }
-
             return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
             return redirect()->route('roles.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
@@ -133,10 +128,6 @@ class RoleController extends Controller
                 'parent_id' => $request->parent_id,
             ]);
 
-            if ($request->default) {
-                $record = $this->makeDefaultRole(decryptParams($id));
-            }
-
             return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
             return redirect()->route('roles.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
@@ -156,11 +147,6 @@ class RoleController extends Controller
 
             if ($record && !empty($record)) {
                 $record->delete();
-
-                if ($record->default) {
-                    $firstRecord = (new Role())->first();
-                    $record = $this->makeDefaultRole($firstRecord->id);
-                }
 
                 return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_deleted'));
             }
@@ -210,12 +196,6 @@ class RoleController extends Controller
             if ($request->has('chkRole')) {
 
                 (new Role())->whereIn('id', $request->chkRole)->delete();
-
-                $record = (new Role())->where('default', 1)->first();
-                if (is_null($record) || empty($record)) {
-                    $firstRecord = (new Role())->first();
-                    $record = $this->makeDefaultRole($firstRecord->id);
-                }
                 return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_deleted'));
             } else {
                 return redirect()->route('roles.index')->withWarning(__('lang.commons.please_select_at_least_one_item'));

@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     TypeController,
     SiteController,
     CountryController,
+    FileManagementController,
     FloorController,
     JobBatchController,
     LeadSourceController,
@@ -35,13 +36,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 */
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'auth.php';
-
-// Route::group(['domain' => '*.localhost:8000' ], function($subdomain) {
-//     Route::get('/', function () use ($subdomain) {
-//         return $subdomain;
-//     });
-
-// });
 
 Route::group([
     // 'prefix' => LaravelLocalization::setLocale(),
@@ -309,6 +303,18 @@ Route::group([
                         Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
                     });
                 });
+
+                // File Management
+                Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
+
+                    Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
+
+                    Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
+                        Route::get('/units', [FileManagementController::class, 'units'])->name('units');
+
+                    });
+                });
+
             });
         });
 

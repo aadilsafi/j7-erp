@@ -22,6 +22,7 @@ use App\Services\{
     UserBatchService,
     RoleTypesService,
 };
+use App\Services\FileManagements\{FileManagementInterface, FileManagementService};
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
@@ -49,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StakeholderInterface::class, StakeholderService::class);
         $this->app->bind(LeadSourceInterface::class, LeadSourceService::class);
         $this->app->bind(ReceiptInterface::class, ReceiptService::class);
+        $this->app->bind(FileManagementInterface::class, FileManagementService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

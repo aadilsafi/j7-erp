@@ -207,3 +207,9 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
     $trail->push('Create Receipts');
 });
 
+//File Management Breadcrumbs
+Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]));
+    $trail->push('Customer\'s List', route('sites.file-managements.customers', ['site_id' => $site_id]));
+});

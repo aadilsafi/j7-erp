@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('unit_owners', function (Blueprint $table) {
+        Schema::create('unit_stakeholders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('unit_id')->constrained();
-            $table->foreignId('owner_id')->constrained('users');
+            $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->timestamps();
             $table->softDeletes();
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('unit_owners');
+        Schema::dropIfExists('unit_stakeholders');
     }
 };

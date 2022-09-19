@@ -70,7 +70,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function query(SalesPlan $model): QueryBuilder
     {
-        return $model->newQuery()->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+        return $model->newQuery()->with('stakeholder')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
     }
 
     /**
@@ -146,7 +146,7 @@ class SalesPlanDataTable extends DataTable
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('user_id')->title('Sales Person'),
-            Column::make('stakeholder_id')->title('Stakeholder'),
+            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

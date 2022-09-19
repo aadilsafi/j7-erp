@@ -75,7 +75,7 @@ class TypeController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
         }
     }
 
@@ -111,13 +111,13 @@ class TypeController extends Controller
                     'types' => $this->unitTypeInterface->getAllWithTree(),
                     'type' => $type,
                 ];
-                // dd($data);
+
                 return view('app.sites.types.edit', $data);
             }
 
             return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
         }
     }
 

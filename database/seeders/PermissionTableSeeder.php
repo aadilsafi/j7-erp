@@ -644,8 +644,36 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.receipts.templates.print',
+                'show_name' => 'Destroy Selected Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
-
+            // Customer File Management Routes
+            [
+                'name' => 'sites.file-managements.customers',
+                'show_name' => 'File Management Customers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units',
+                'show_name' => 'File Management Customers Units',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'commands.command',
+                'show_name' => 'Commands Permissions',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

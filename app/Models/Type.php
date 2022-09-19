@@ -18,7 +18,7 @@ class Type extends Model
         'slug',
     ];
 
-    public $requestRules = [
+    public $rules = [
         'type' => 'required|numeric',
         'type_name' => 'required|string|min:1|max:255',
         // 'type_slug' => 'required|string|min:1|max:255|unique:types,slug',

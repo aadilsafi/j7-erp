@@ -140,8 +140,7 @@
 
                 },
                 scrollX: true,
-                columns: [
-                    {
+                columns: [{
                         data: 'check',
                         name: 'check',
                     },
@@ -236,24 +235,29 @@
                 ],
                 dom: 'BlfrtipC',
                 dom: '<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">',
-                buttons: [{
-                        name: 'add-new',
-                        text: '<i class="bi bi-plus"></i> Add New',
-                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-                        action: function(e, dt, node, config) {
-                            location.href =
-                                '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
-                        }
-                    },
-                    {
-                        name: 'copy-floor',
-                        text: '<i class="bi bi-clipboard-check"></i> Copy Floor',
-                        className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-                        action: function(e, dt, node, config) {
-                            location.href =
-                                '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
-                        }
-                    },
+                buttons: [
+                    @can('sites.floors.create')
+                        {
+                            name: 'add-new',
+                            text: '<i class="bi bi-plus"></i> Add New',
+                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
+                            action: function(e, dt, node, config) {
+                                location.href =
+                                    '{{ route('sites.floors.create', ['site_id' => $site_id]) }}';
+                            }
+                        },
+                    @endcan
+                    @can('sites.floors.copyView')
+                        {
+                            name: 'copy-floor',
+                            text: '<i class="bi bi-clipboard-check"></i> Copy Floor',
+                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
+                            action: function(e, dt, node, config) {
+                                location.href =
+                                    '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
+                            }
+                        },
+                    @endcan
                     {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',
@@ -318,14 +322,16 @@
                             dt.draw(false);
                         }
                     },
-                    {
-                        name: 'delete-selected',
-                        text: '<i class="bi bi-trash3-fill"></i> Delete Selected',
-                        className: 'btn btn-relief-outline-danger waves-effect waves-float waves-light',
-                        action: function(e, dt, node, config) {
-                            deleteSelected();
-                        }
-                    },
+                    @can('sites.floors.destroy-selected')
+                        {
+                            name: 'delete-selected',
+                            text: '<i class="bi bi-trash3-fill"></i> Delete Selected',
+                            className: 'btn btn-relief-outline-danger waves-effect waves-float waves-light',
+                            action: function(e, dt, node, config) {
+                                deleteSelected();
+                            }
+                        },
+                    @endcan
                 ],
                 displayLength: 20,
                 lengthMenu: [20, 25, 50, 75, 100],

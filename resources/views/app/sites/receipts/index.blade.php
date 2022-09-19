@@ -59,6 +59,12 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             <form action="{{ route('sites.receipts.destroy-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
+
+             {{-- Printing Modal --}}
+             @include('app.sites.receipts.partials.print', [
+                'receipt_templates' => $receipt_templates,
+            ])
+
         </div>
     </div>
 
@@ -117,6 +123,21 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
                 });
             }
+        }
+
+        function openTemplatesModal(receipt_id) {
+            $('#receipt_id').val(receipt_id);
+            $('#modal-receipt-template').modal('show');
+        }
+
+        function printReceiptTemplate(template_id) {
+            let receipt_id = $('#receipt_id').val();
+            let url =
+                "{{ route('sites.receipts.templates.print', ['site_id' => encryptParams($site_id), 'receipts_id' => ':receipts_id', 'id' => ':id']) }}"
+                .replace(':receipts_id', receipt_id)
+                .replace(':id', template_id);
+            window.open(url, '_blank').focus();
+
         }
 
         function addNew() {

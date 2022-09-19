@@ -5,8 +5,10 @@ namespace App\Services\Receipts;
 use App\Models\Unit;
 use App\Models\Receipt;
 use App\Models\SalesPlan;
-use App\Models\SalesPlanInstallments;
 use App\Models\Stakeholder;
+use App\Models\UnitStakeholder;
+use App\Models\SiteConfigration;
+use App\Models\SalesPlanInstallments;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptService implements ReceiptInterface
@@ -49,7 +51,7 @@ class ReceiptService implements ReceiptInterface
                 'installment_number' => '1',
             ];
 
-            $receipt = Receipt::insert($receiptData);
+            $receipt = Receipt::create($receiptData);
 
             $sales_plan = SalesPlan::where('unit_id', $data[$i]['unit_id'])->where('status', 1)->with('installments', 'unPaidInstallments')->first();
             $installmentFullyPaidUnderAmount = [];
@@ -129,7 +131,8 @@ class ReceiptService implements ReceiptInterface
                 }
             }
             $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
-            // dd($total_calculated_installments);
+            $instalment_numbers = [];
+            $total_paid_amount = 0.0;
             for ($i = 0; $i < count($total_calculated_installments); $i++) {
                 $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
                 $installment->paid_amount = $total_calculated_installments[$i]['paid_amount'];
@@ -139,8 +142,44 @@ class ReceiptService implements ReceiptInterface
                 } else {
                     $installment->status = 'partially_paid';
                 }
+                $instalment_numbers[] =  $installment->details;
+                $purpose = $installment->details;
+                $total_paid_amount =   $total_paid_amount + $total_calculated_installments[$i]['paid_amount'];
                 $installment->update();
             }
+            $update_installment_details = Receipt::find($receipt->id);
+            $update_installment_details->purpose =$purpose;
+            $update_installment_details->installment_number = $instalment_numbers;
+            $update_installment_details->update();
+
+            $totalAmountOfSalesPlan =  $sales_plan->total_price;
+            $down_payment_total = $sales_plan->down_payment_total;
+            $site_token_percentage = SiteConfigration::where('site_id',decryptParams($site_id))->first()->site_token_percentage;
+            $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
+
+            if($total_paid_amount >= $token_price){
+                $unit->status_id = 2;
+            }
+
+            if($total_paid_amount > $token_price &&  $total_paid_amount < $down_payment_total){
+                $unit->status_id = 3;
+            }
+
+            if($total_paid_amount >= $down_payment_total){
+
+                $unit->status_id = 5;
+
+                $unitStakeholderData = [
+                    'unit_id' => $unit->id,
+                    'stakeholder_id' =>$stakeholder->id,
+                ];
+
+                $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
+
+            }
+
+            $unit->update();
+
         }
     }
 

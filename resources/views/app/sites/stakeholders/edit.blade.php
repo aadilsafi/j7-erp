@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                width: calc(20% - 0.5em);
-                                                            } */
+                                                                    width: calc(20% - 0.5em);
+                                                                } */
     </style>
 @endsection
 
@@ -123,17 +123,24 @@
             FilePondPluginImageCrop,
         );
 
+        var files = [];
+        if (editImage != null) {
+            files.push({
+                source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
+                    0],
+            });
+
+            files.push({
+                source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
+                    1],
+            });
+        }
+
+
+
         FilePond.create(document.getElementById('attachment'), {
 
-            files: [{
-                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
-                        0],
-                },
-                {
-                    source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
-                        1],
-                },
-            ],
+            files: files,
             styleButtonRemoveItemPosition: 'right',
             // imageValidateSizeMinWidth: 1000,
             // imageValidateSizeMinHeight: 1000,

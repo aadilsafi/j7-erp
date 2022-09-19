@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<div class="row mb-1">
+{{-- <div class="row mb-1">
     <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="form-check form-check-inline">
             <input type="hidden" name="default" value="0" />
@@ -53,4 +53,4 @@
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror
     </div>
-</div>
+</div> --}}

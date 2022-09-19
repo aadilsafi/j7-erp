@@ -19,7 +19,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Director',
                 'guard_name' => 'web',
-                'default' => 1,
                 'parent_id' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -27,7 +26,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'GM Sales',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -35,7 +33,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Sales Managers',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -43,7 +40,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Sales Persons',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -51,7 +47,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Accounts',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id'=> 1,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -59,7 +54,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Recovery Department',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id'=> 5,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -67,7 +61,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'File Management',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id'=> 5,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -75,7 +68,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Receipts Management',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id'=> 5,
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -83,7 +75,6 @@ class RoleTableSeeder extends Seeder
             [
                 'name' => 'Expenses Management',
                 'guard_name' => 'web',
-                'default' => 0,
                 'parent_id'=> 5,
                 'created_at' => now(),
                 'updated_at' => now(),

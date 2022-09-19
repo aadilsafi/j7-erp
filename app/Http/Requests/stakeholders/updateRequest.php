@@ -24,7 +24,9 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Stakeholder())->rules;
+        $rules =  (new Stakeholder())->rules;
+        unset($rules['stakeholder_type']);
+        return $rules;
     }
 
     /**

@@ -37,7 +37,7 @@ class SalesPlanSeeder extends Seeder
             [
                 'unit_id' => 1,
                 'user_id' => 1,
-                'stakeholder_id' => 1,
+                'stakeholder_id' => 2,
                 'lead_source_id'=> 1,
                 'unit_price' => 26000,
                 'total_price' => 13598000,

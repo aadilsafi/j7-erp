@@ -21,6 +21,6 @@ class LeadSource extends Model
     ];
 
     public $rules = [
-        'lead_source_name' => 'required|string',
+        'lead_source_name' => 'required|string|unique:lead_sources,name',
     ];
 }

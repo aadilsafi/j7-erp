@@ -24,6 +24,8 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        return (new LeadSource())->rules;
+        $rules = (new LeadSource())->rules;
+        $rules['lead_source_name'] = 'required|string|unique:lead_sources,name,' . decryptParams($this->id);
+        return $rules;
     }
 }

@@ -24,7 +24,7 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Type())->requestRules;
+        return (new Type())->rules;
     }
 
     /**

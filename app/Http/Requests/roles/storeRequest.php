@@ -27,7 +27,6 @@ class storeRequest extends FormRequest
             'parent_id' => 'required|numeric',
             'role_name' => 'required|string|between:1,254',
             'guard_name' => 'required|string|between:1,254',
-            'default' => 'required|in:1,0',
         ];
     }
 }

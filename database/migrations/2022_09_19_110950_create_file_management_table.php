@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('file_management', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

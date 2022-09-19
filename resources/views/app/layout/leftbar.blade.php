@@ -255,6 +255,20 @@
                 </li>
             @endcan
 
+            {{-- File Management Menu --}}
+            @can('sites.file-managements.customers')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
+                        <i class="bi bi-folder2" style="
+                            margin-bottom: 10px;">
+                        </i>
+                        <span class="menu-title text-truncate" data-i18n="file-managements">File Management</span>
+                    </a>
+                </li>
+            @endcan
+
         </ul>
     </div>
 </div>

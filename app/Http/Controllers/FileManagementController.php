@@ -2,90 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\CustomersDataTable;
 use App\Services\FileManagements\FileManagementInterface;
+use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Utils\Enums\StakeholderTypeEnum;
 use Illuminate\Http\Request;
 
 class FileManagementController extends Controller
 {
     private $fileManagementInterface;
+    private $stakeholderInterface;
 
-    public function __construct(FileManagementInterface $fileManagementInterface) {
+    public function __construct(FileManagementInterface $fileManagementInterface, StakeholderInterface $stakeholderInterface) {
         $this->fileManagementInterface = $fileManagementInterface;
+        $this->stakeholderInterface = $stakeholderInterface;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function customers(CustomersDataTable $dataTable, Request $request, $site_id)
     {
-        //
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'stakeholder_type' => StakeholderTypeEnum::CUSTOMER->value,
+        ];
+
+        return $dataTable->with($data)->render('app.sites.file-managements.customers', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function units(CustomersDataTable $dataTable, Request $request, $site_id, $customer_id)
     {
-        //
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'customer_id' => decryptParams($customer_id),
+        ];
+
+        dd($data);
+
+        return $dataTable->with($data)->render('app.sites.file-managements.index', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

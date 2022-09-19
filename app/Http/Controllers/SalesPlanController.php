@@ -209,10 +209,11 @@ class SalesPlanController extends Controller
         return apiSuccessResponse($installments);
     }
 
-    public function approveSalesPlan($site_id, $floor_id, $unit_id, Request $request)
+    public function approveSalesPlan(Request $request,$site_id, $floor_id, $unit_id)
     {
 
-        $salesPlan = (new SalesPlan())->where('id', '>', 0)->where('unit_id',$unit_id)->update([
+
+        $salesPlan = (new SalesPlan())->where('id', '>', 0)->where('unit_id',decryptParams($unit_id))->update([
             'status' => 2,
         ]);
 

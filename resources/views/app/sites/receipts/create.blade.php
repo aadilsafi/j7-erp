@@ -80,7 +80,7 @@
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body g-1">
-                        <div class="d-block mb-1">
+                        {{-- <div class="d-block mb-1">
                             <button
                                 class="btn text-nowrap w-100 btn-relief-outline-primary waves-effect waves-float waves-light me-1 mb-1"
                                 type="button" data-repeater-create>
@@ -88,7 +88,7 @@
                                 <span class="text-nowrap">Receipt Form</span>
                             </button>
                         </div>
-                        <hr>
+                        <hr> --}}
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>

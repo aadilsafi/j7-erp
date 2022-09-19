@@ -2,6 +2,7 @@
 
 namespace App\Services\FileManagements;
 
+use App\Models\FileManagement;
 use App\Services\FileManagements\FileManagementInterface;
 
 class FileManagementService implements FileManagementInterface
@@ -9,7 +10,7 @@ class FileManagementService implements FileManagementInterface
 
     public function model()
     {
-        return new LeadSource();
+        return new FileManagement();
     }
 
     // Get

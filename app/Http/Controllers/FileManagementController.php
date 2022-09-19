@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FileManagements\FileManagementInterface;
 use Illuminate\Http\Request;
 
 class FileManagementController extends Controller
 {
+    private $fileManagementInterface;
+
+    public function __construct(FileManagementInterface $fileManagementInterface) {
+        $this->fileManagementInterface = $fileManagementInterface;
+    }
+
     /**
      * Display a listing of the resource.
      *

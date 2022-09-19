@@ -3,6 +3,7 @@
         <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
             <div>
                 <div class="row d-flex align-items-end">
+
                     <div class="col-md-6 col-12">
                         <div class="mb-1">
                             <label class="form-label" style="font-size: 15px" for="unit_id">
@@ -32,12 +33,12 @@
                     <div class="col-md-6 col-12">
                         <div class="mb-1">
                             <label class="form-label" style="font-size: 15px" for="floor">
-                                <h6 style="font-size: 15px"> Amount To be Paid</h6>
+                                <h6 style="font-size: 15px">Amount To be Paid</h6>
                             </label>
                             <input min="0"  onclick="setAmountIds(this)" id="amountToBePaid" type="number"
                                 class="form-control amountToBePaid form-control-lg @error('amount_in_numbers') is-invalid @enderror"
                                 name="amount_in_numbers" placeholder="Amount To be Paid"
-                                value="{{ isset($receipt) ? $receipt->name : old('amount_in_numbers') }}" />
+                                value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -71,12 +72,11 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 <h6 style="font-size: 15px">Floor</h6>
                             </label>
-                            <select disabled class="select2-size-lg form-select floor">
+                            <select name="floor" disabled class="select2-size-lg form-select floor">
                                 <option value="0" selected>Floor</option>
                             </select>
                         </div>
                     </div>
-
 
                     <div id="paidInstllmentTableDiv" class=" col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label" style="font-size: 15px" for="floor">
@@ -243,79 +243,6 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Pay Order</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('pay_order') is-invalid @enderror"
-                                id="pay_order" name="pay_order" placeholder="Pay Order"
-                                    value="{{ isset($receipt) ? $receipt->pay_order : old('pay_order') }}" />
-                                @error('pay_order')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Cheque No</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('cheque_no') is-invalid @enderror"
-                                id="cheque_no" name="cheque_no" placeholder="Cheque No"
-                                    value="{{ isset($receipt) ? $receipt->cheque_no : old('cheque_no') }}" />
-                                @error('cheque_no')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Drwan On Bank</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('drawn_on_bank') is-invalid @enderror"
-                                id="drawn_on_bank" name="drawn_on_bank" placeholder="Drawn On Bank"
-                                    value="{{ isset($receipt) ? $receipt->drawn_on_bank : old('drawn_on_bank') }}" />
-                                @error('drawn_on_bank')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Transaction Date</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('transaction_date') is-invalid @enderror"
-                                id="transaction_date" name="transaction_date" placeholder="Transaction Date"
-                                    value="{{ isset($receipt) ? $receipt->transaction_date : old('transaction_date') }}" />
-                                @error('transaction_date')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Transaction No</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('online_instrument_no') is-invalid @enderror"
-                                id="online_instrument_no" name="online_instrument_no" placeholder="Online Transaction"
-                                    value="{{ isset($receipt) ? $receipt->online_instrument_no : old('online_instrument_no') }}" />
-                                @error('online_instrument_no')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor"><h6 style="font-size: 15px">Paid Amount</h6></label>
-                            <input type="text" class="form-control form-control-lg @error('amount_in_numbers') is-invalid @enderror"
-                                id="amount_in_numbers" name="amount_in_numbers" placeholder="Amount in Numbers"
-                                    value="{{ isset($receipt) ? $receipt->online_instrument_no : old('amount_in_numbers') }}" />
-                                @error('amount_in_numbers')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                        </div>
-                    </div> --}}
-
-
                     <div class="col-md-12 col-12 mb-50 d-flex flex-row-reverse">
                         <div class="mb-1 mt-1">
                             <button class="btn btn-outline-danger text-nowrap px-1" data-repeater-delete
@@ -325,7 +252,6 @@
                             </button>
                         </div>
                     </div>
-
 
                 </div>
             </div>

@@ -49,7 +49,7 @@ class ReceiptService implements ReceiptInterface
                 'installment_number' => '1',
             ];
 
-            $receipt = Receipt::insert($receiptData);
+            $receipt = Receipt::create($receiptData);
 
             $sales_plan = SalesPlan::where('unit_id', $data[$i]['unit_id'])->where('status', 1)->with('installments', 'unPaidInstallments')->first();
             $installmentFullyPaidUnderAmount = [];
@@ -129,7 +129,7 @@ class ReceiptService implements ReceiptInterface
                 }
             }
             $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
-
+            $instalment_numbers = [];
             for ($i = 0; $i < count($total_calculated_installments); $i++) {
                 $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
                 $installment->paid_amount = $total_calculated_installments[$i]['paid_amount'];
@@ -139,8 +139,14 @@ class ReceiptService implements ReceiptInterface
                 } else {
                     $installment->status = 'partially_paid';
                 }
+                $instalment_numbers[] =  $installment->details;
+                $purpose = $installment->details;
                 $installment->update();
             }
+            $update_installment_details = Receipt::find($receipt->id);
+            $update_installment_details->purpose =$purpose;
+            $update_installment_details->installment_number = $instalment_numbers;
+            $update_installment_details->update();
         }
     }
 

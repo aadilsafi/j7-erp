@@ -69,7 +69,7 @@
         method="post" class=" repeater">
         @csrf
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-9 position-relative">
+            <div id="loader" class="col-lg-9 col-md-9 col-sm-9 position-relative">
                 {{ view('app.sites.receipts.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
@@ -196,37 +196,33 @@
         });
 
         function setIds(a) {
-            // console.log(a.name)
-            // $("#w3s").attr("href")
-            // $('.unit_id').removeAttr('id');
-            // $('.unit_name').removeAttr('id');
-            // $('.unit_type').removeAttr('id');
-            // $('.floor').removeAttr('id');
+            // $(':input[name="receipts[0][unit_name]"]').empty()
+            // $(':input[name="receipts[0][unit_name]"]').append('<option value="0" selected>asdsd</option>');
 
             var unit_id= a.name;
-            const unit_type= a.name.replace("unit_id", "unit_type");
-            const unit_name= a.name.replace("unit_id", "unit_name");
-            const floor= a.name.replace("unit_id", "floor");
+            // const unit_type= a.name.replace("unit_id", "unit_type");
+            // const unit_name= a.name.replace("unit_id", "unit_name");
+            // const floor= a.name.replace("unit_id", "floor");
 
-            const unit_name_attr = $('.unit_name').attr('id');
-            const unit_type_attr = $('.unit_type').attr('id');
-            const floor_attr = $('.floor').attr('id');
+            // const unit_name_attr = $('.unit_name').attr('id');
+            // const unit_type_attr = $('.unit_type').attr('id');
+            // const floor_attr = $('.floor').attr('id');
 
             // alert($('.unit_name').attr("id"))
 
             $('.unit_id').attr('id', unit_id);
 
-            if ( unit_name_attr !== 'undefined' && unit_name_attr !== false) {
-                $('.unit_name').attr('id', unit_name);
-            }
+            // if ( unit_name_attr !== 'undefined' && unit_name_attr !== false) {
+            //     $('.unit_name').attr('id', unit_name);
+            // }
 
-            if ( unit_type_attr !== 'undefined' && unit_type_attr !== false) {
-                $('.unit_type').attr('id', unit_type);
-            }
+            // if ( unit_type_attr !== 'undefined' && unit_type_attr !== false) {
+            //     $('.unit_type').attr('id', unit_type);
+            // }
 
-            if ( floor_attr !== 'undefined' && floor_attr !== false) {
-                $('.floor').attr('id', floor);
-            }
+            // if ( floor_attr !== 'undefined' && floor_attr !== false) {
+            //     $('.floor').attr('id', floor);
+            // }
 
         }
 
@@ -267,6 +263,7 @@
             let url =
                 "{{ route('sites.receipts.ajax-get-unpaid-installments', ['site_id' => encryptParams($site_id)]) }}";
             if(amount > 0 && unit_id > 0){
+                showBlockUI('#loader');
                 $.ajax({
                     url: url,
                     type: 'post',
@@ -329,8 +326,10 @@
                                     '<td class="text-nowrap text-center">' + response.total_calculated_installments[i]['partially_paid'] + '</td>',
                                     '</tr>', );
                             }}
+                            hideBlockUI('#loader');
 
                         } else {
+                            hideBlockUI('#loader');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -340,16 +339,18 @@
                     },
                     error: function(error) {
                         console.log(error);
+                        hideBlockUI('#loader');
                     }
                 });
             }
         });
 
         function getUnitTypeAndFloor(unit_id,id) {
-
             var unit_type= id.replace("unit_id", "unit_type");
             var unit_name=id.replace("unit_id", "unit_name");
             var floor= id.replace("unit_id", "floor");
+            // $(':input[name="receipts[1][floor]"]').empty();
+            // $( "input[name*='receipts[1][floor]']" ).empty()
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.receipts.ajax-get-unit-type-and-unit-floor', ['site_id' => encryptParams($site_id)]) }}";
@@ -363,17 +364,15 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        // console.log(  $('.unit_type'));
-                        // "'" + str + "'"
                         $('.amountToBePaid').attr('unit_id', response.unit_id);
-                        $(':input[id="'+unit_type+'"]').empty();
+                        $(':input[name="'+unit_type+'"]').empty();
                         $('.amountToBePaid').empty();
-                        $(':input[id="'+floor+'"]').empty()
-                        $(':input[id="'+unit_name+'"]').empty();
-                        $(':input[id="'+unit_type+'"]').append('<option value="0" selected>' + response.unit_type +
+                        $(':input[name="'+floor+'"]').empty()
+                        $(':input[name="'+unit_name+'"]').empty();
+                        $(':input[name="'+unit_type+'"]').append('<option value="0" selected>' + response.unit_type +
                         '</option>');
-                        $(':input[id="'+floor+'"]').append('<option value="0" selected>' + response.unit_floor + '</option>');
-                        $(':input[id="'+unit_name+'"]').append('<option value="0" selected>' + response.unit_name +
+                        $(':input[name="'+floor+'"]').append('<option value="0" selected>' + response.unit_floor + '</option>');
+                        $(':input[name="'+unit_name+'"]').append('<option value="0" selected>' + response.unit_name +
                         '</option>');
                     } else {
                         Swal.fire({
@@ -388,7 +387,6 @@
                 }
             });
         }
-
 
         $("#saveButton").click(function() {
             $("#receiptForm").submit();

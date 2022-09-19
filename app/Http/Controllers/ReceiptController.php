@@ -279,8 +279,6 @@ class ReceiptController extends Controller
 
         $unit = Unit::find($receipt_data->unit_id);
 
-        // dd($receipt_data,$unit);
-
         $preview_data = [
             'unit_name' => $unit->name,
             'unit_type' => $unit->type->name,
@@ -296,10 +294,10 @@ class ReceiptController extends Controller
             'drawn_on_bank' => $receipt_data->drawn_on_bank,
             'transaction_date' => $receipt_data->transaction_date,
             'amount_in_numbers' => $receipt_data->amount_in_numbers,
-            // 'amount_in_words' => $receipt_data->mode_of_paymet,
+            'amount_in_words' =>  numberToWords($receipt_data->amount_in_numbers),
             'purpose' => $receipt_data->purpose,
             'other_purpose' => $receipt_data->other_purpose,
-            'installment_number' => $receipt_data->installment_number,
+            'installment_number' =>str_replace(str_split('[]"'), '', $receipt_data->installment_number),
             'online_instrument_no' => $receipt_data->online_instrument_no,
         ];
 

@@ -293,7 +293,7 @@
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:3.5%;  ">Amount in words</th>
                 <td style="text-align: center; width:20%; border-bottom: 1px solid black; ">
-                    {{-- {{ $preview_data['drawn_on_bank'] }} --}}
+                    {{ $preview_data['amount_in_words'] }} Only.
                 </td>
             </tr>
 
@@ -302,10 +302,20 @@
         <br><br>
         <table id="firstTable" style="width:100%; text-transform: uppercase; ">
 
+            {{-- <tr style="border: 2px solid;">
+                <th style="text-align:start; width:10%;  ">Amount in figures</th>
+
+                <td style="text-align: center; width:50%;">
+                    <input style="width: 10%; height:20px; border:1px solid;" value="{{ $preview_data['amount_in_numbers'] }}" type="text">
+                </td>
+            </tr> --}}
+
             <tr style="border: 2px solid;">
-                <th style="text-align:start; width:4%;  ">Amount in figures</th>
-                <td style="text-align: center; width:20%; border-bottom: 1px solid black; ">
-                    {{ $preview_data['amount_in_numbers'] }}
+                <th style="text-align:start; width:4.5%;  ">
+                    Amount in figures
+                </th>
+                <td style="text-align: start; width:20%;  ">
+                    <input style="width: 20%; height:20px; border:1px solid; text-align:center;" value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
                 </td>
             </tr>
 
@@ -323,14 +333,14 @@
 
                     <input type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Installment</span>
-                    <span style="">________</span>
+                    <span style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
 
-                    <input type="checkbox" style="margin-left:15px;">
-                    <span class="checkmark" style="margin-left:15px;">Online</span>
+                    {{-- <input type="checkbox" style="margin-left:15px;">
+                    <span class="checkmark" style="margin-left:15px;">Online</span> --}}
 
                     <input type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Other</span>
-                    <span style="">_________</span>
+                    <span style="">____</span>
                 </td>
             </tr>
 

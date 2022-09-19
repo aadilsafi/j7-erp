@@ -42,6 +42,12 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('unit_id', function ($receipt) {
                     return  $receipt->unit->name;
             })
+            ->editColumn('installment_number', function ($receipt) {
+                return  str_replace(str_split('[]"'), '', $receipt->installment_number);
+            })
+            ->editColumn('amount_in_numbers', function ($receipt) {
+                return  number_format($receipt->amount_in_numbers);
+            })
             ->editColumn('created_at', function ($receipt) {
                 return editDateColumn($receipt->created_at);
             })
@@ -166,8 +172,9 @@ class ReceiptsDatatable extends DataTable
 
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
-            Column::make('unit_id')->title('Unit'),
-            Column::computed('floor_id')->title('Floor'),
+            Column::make('installment_number')->title('Installment Numbers'),
+            Column::make('amount_in_numbers')->title(' Paid Amount'),
+            // Column::computed('floor_id')->title('Floor'),
             Column::make('created_at')->title('Created_At'),
             (
                 $editPermission ?

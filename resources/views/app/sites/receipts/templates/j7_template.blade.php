@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Print Sales Plan</title>
+    <title>Sales Receipt</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {{-- <script src="{{ asset('app-assets') }}/js/scripts/pages/app-invoice-print.min.js"></script> --}}
     <script>
@@ -18,7 +18,6 @@
             $('.date').append(today);
             $('#btn').hide();
             window.print();
-
             $("#btn").click(function() {
                 $('#btn').hide();
                 window.print();

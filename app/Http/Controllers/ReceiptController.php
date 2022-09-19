@@ -286,7 +286,6 @@ class ReceiptController extends Controller
             'name' => $receipt_data->name,
             'cnic' => str_split( $receipt_data->cnic),
             'mode_of_payment' => $receipt_data->mode_of_payment,
-
             'other_value' => $receipt_data->other_value,
             'pay_order' => $receipt_data->pay_order,
             'cheque_no' => $receipt_data->cheque_no,

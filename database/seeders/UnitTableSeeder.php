@@ -30,7 +30,7 @@ class UnitTableSeeder extends Seeder
                 'corner_id' => null,
                 'is_facing' => false,
                 'type_id' => 5,
-                'status_id' => 1,
+                'status_id' => 5,
                 'active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),

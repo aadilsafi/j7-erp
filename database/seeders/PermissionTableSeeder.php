@@ -644,6 +644,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.receipts.templates.print',
+                'show_name' => 'Destroy Selected Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
 
         ]);

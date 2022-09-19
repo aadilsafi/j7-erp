@@ -164,10 +164,10 @@ class ReceiptsDatatable extends DataTable
                 Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
             ),
 
-            Column::make('unit_id')->title('Unit'),
-            Column::computed('floor_id')->title('Floor'),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
+            Column::make('unit_id')->title('Unit'),
+            Column::computed('floor_id')->title('Floor'),
             Column::make('created_at')->title('Created_At'),
             (
                 $editPermission ?

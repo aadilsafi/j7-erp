@@ -129,7 +129,7 @@ class ReceiptService implements ReceiptInterface
                 }
             }
             $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
-            // dd($total_calculated_installments);
+
             for ($i = 0; $i < count($total_calculated_installments); $i++) {
                 $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
                 $installment->paid_amount = $total_calculated_installments[$i]['paid_amount'];

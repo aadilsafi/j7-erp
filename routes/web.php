@@ -195,7 +195,6 @@ Route::group([
                                             Route::group(['prefix' => '/{id}'], function () {
                                                 Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
                                             });
-
                                         });
 
                                         // Receipts Routes
@@ -207,17 +206,16 @@ Route::group([
                                             Route::get('create', [ReceiptController::class, 'create'])->name('create');
                                             Route::post('store', [ReceiptController::class, 'store'])->name('store');
 
+
                                             Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+
 
                                             Route::group(['prefix' => '/{id}'], function () {
 
                                                 Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                                                 Route::put('update', [ReceiptController::class, 'update'])->name('update');
                                             });
-
                                         });
-
-
                                     });
                                 });
                             });
@@ -286,6 +284,16 @@ Route::group([
                         Route::post('get-unpaid-installments', [ReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
                     });
 
+                    Route::group(['prefix' => '/{receipts_id}'], function () {
+
+                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('/print', [ReceiptController::class, 'printReceipt'])->name('print');
+                            });
+                        });
+                    });
+
 
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
@@ -294,7 +302,6 @@ Route::group([
                         Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
                     });
                 });
-
             });
         });
 
@@ -327,3 +334,5 @@ Route::group(['prefix' => 'tests'], function () {
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
+
+Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);

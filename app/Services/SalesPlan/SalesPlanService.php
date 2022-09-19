@@ -169,7 +169,7 @@ class SalesPlanService implements SalesPlanInterface
             'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
             'validity' => $inputs['sales_plan_validity'],
             'comments' => $inputs['comments']['custom'],
-            'status' => $approveSalesPlanPermission ? true : false,
+            'status' => false,
         ];
 
         $salesPlan = $this->model()->create($sales_plan_data);

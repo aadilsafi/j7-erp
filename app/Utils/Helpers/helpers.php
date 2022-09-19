@@ -513,3 +513,33 @@ if (!function_exists('apiSuccessResponse')) {
         );
     }
 }
+
+
+if (!function_exists('sqlErrorMessagesByCode')) {
+    function sqlErrorMessagesByCode($errCode)
+    {
+        $messages = [
+            '1062' => 'Duplicate entry',
+            '1452' => 'Cannot add or update a child row',
+            '1451' => 'Cannot delete or update a parent row',
+            '1364' => 'Field does not have a default value',
+            '1048' => 'Column cannot be null',
+            '1054' => 'Unknown column',
+            '1052' => 'Column in where clause is ambiguous',
+            '1051' => 'Unknown table',
+            '1050' => 'Table already exists',
+            '1046' => 'No database selected',
+            '1045' => 'Access denied for user',
+            '1044' => 'Access denied for user',
+            '1042' => 'Can’t get hostname for your address',
+            '1040' => 'Too many connections',
+            '1038' => 'Out of sort memory, consider increasing server sort buffer size',
+            '1036' => 'Table is read only',
+            '1035' => 'CRASHED ON USAGE',
+            '1034' => 'CRASHED ON REPAIR',
+            '1033' => 'Out of memory; restart server and try again (needed 98304 bytes)',
+            '23505' => 'Data already exists',
+        ];
+        return $messages[$errCode] ?? 'Unknown error';
+    }
+}

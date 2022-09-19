@@ -302,6 +302,25 @@ Route::group([
                         Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
                     });
                 });
+
+                // File Management
+                Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
+                    Route::get('/', [ReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [ReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [ReceiptController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
+                        Route::put('update', [ReceiptController::class, 'update'])->name('update');
+                    });
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+
+                    });
+                });
+
             });
         });
 

@@ -36,13 +36,6 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 require __DIR__ . DIRECTORY_SEPARATOR . 'auth.php';
 
-// Route::group(['domain' => '*.localhost:8000' ], function($subdomain) {
-//     Route::get('/', function () use ($subdomain) {
-//         return $subdomain;
-//     });
-
-// });
-
 Route::group([
     // 'prefix' => LaravelLocalization::setLocale(),
     // 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']

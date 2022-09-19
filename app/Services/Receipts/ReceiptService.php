@@ -5,9 +5,10 @@ namespace App\Services\Receipts;
 use App\Models\Unit;
 use App\Models\Receipt;
 use App\Models\SalesPlan;
-use App\Models\SalesPlanInstallments;
-use App\Models\SiteConfigration;
 use App\Models\Stakeholder;
+use App\Models\UnitStakeholder;
+use App\Models\SiteConfigration;
+use App\Models\SalesPlanInstallments;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptService implements ReceiptInterface
@@ -165,8 +166,18 @@ class ReceiptService implements ReceiptInterface
             }
 
             if($total_paid_amount >= $down_payment_total){
+
                 $unit->status_id = 5;
+
+                $unitStakeholderData = [
+                    'unit_id' => $unit->id,
+                    'stakeholder_id' =>$stakeholder->id,
+                ];
+
+                $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
+
             }
+
             $unit->update();
 
         }

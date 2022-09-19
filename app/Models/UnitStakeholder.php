@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|UnitOwner whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class UnitOwner extends Model
+class UnitStakeholder extends Model
 {
     use HasFactory;
 }

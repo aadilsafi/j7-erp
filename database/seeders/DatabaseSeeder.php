@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             SalesPlanTemplatesSeeder::class,
             StakeholderTypeSeeder::class,
             ReceiptsTemplateSeeder::class,
+            FileManagementTableSeeder::class,
         ]);
     }
 }

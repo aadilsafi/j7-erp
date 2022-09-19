@@ -49,7 +49,7 @@
                             <label class="form-label" style="font-size: 15px" for="unit_name">
                                 <h6 style="font-size: 15px">Unit Name</h6>
                             </label>
-                            <select disabled class="select2-size-lg form-select unit_name">
+                            <select disabled name="unit_name" class="select2-size-lg form-select unit_name">
                                 <option selected>Unit Name</option>
                             </select>
                         </div>
@@ -78,7 +78,40 @@
                     </div>
 
 
-                    <div id="instllmentTableDiv" class=" col-lg-12 col-md-12 col-sm-12 position-relative">
+                    <div id="paidInstllmentTableDiv" class=" col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="floor">
+                            <h6 style="font-size: 15px"> Paid Installments</h6>
+                        </label>
+                        <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                            <div class="card-body">
+                                <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
+
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
+                                            <tr class="text-center text-nowrap">
+                                                <th scope="col">#</th>
+                                                <th scope="col">Installment No</th>
+                                                <th scope="col">Total Amount</th>
+                                                <th scope="col">Paid Amount</th>
+                                                <th scope="col">Remaining Amount</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="paid_dynamic_total_installment_rows">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="instllmentTableDiv" class=" col-lg-12 col-md-12 col-sm-12 mt-2 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="floor">
+                            <h6 style="font-size: 15px">Unpaid Installments</h6>
+                        </label>
                         <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
                                 <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">

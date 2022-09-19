@@ -164,7 +164,7 @@ class ReceiptController extends Controller
 
     public function getUnpaidInstallments(Request $request)
     {
-        $sales_plan = SalesPlan::where('unit_id',$request->unit_id)->where('status',1)->with('installments','unPaidInstallments')->first();
+        $sales_plan = SalesPlan::where('unit_id',$request->unit_id)->where('status',1)->with('PaidorPartiallyPaidInstallments','unPaidInstallments')->first();
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
         $calculate_amount = 0.0;
@@ -267,6 +267,7 @@ class ReceiptController extends Controller
             'total_calculated_installments' => $total_calculated_installments,
             'total_installment_required_amount' => $total_installment_required_amount,
             'amount_to_be_paid' => $request->amount,
+            'already_paid' =>$sales_plan->PaidorPartiallyPaidInstallments,
         ], 200);
     }
 

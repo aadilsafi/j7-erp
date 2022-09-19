@@ -32,6 +32,10 @@
             display: none;
         }
 
+        #paidInstllmentTableDiv {
+            display: none;
+        }
+
         .onlineValueDiv {
             display: none;
         }
@@ -192,20 +196,23 @@
         });
 
         function setIds(a) {
-
+            // console.log(a.name)
+            // $("#w3s").attr("href")
             // $('.unit_id').removeAttr('id');
             // $('.unit_name').removeAttr('id');
             // $('.unit_type').removeAttr('id');
             // $('.floor').removeAttr('id');
 
             var unit_id= a.name;
-            var unit_type= a.name.replace("unit_id", "unit_type");
-            var unit_name= a.name.replace("unit_id", "unit_name");
-            var floor= a.name.replace("unit_id", "floor");
+            const unit_type= a.name.replace("unit_id", "unit_type");
+            const unit_name= a.name.replace("unit_id", "unit_name");
+            const floor= a.name.replace("unit_id", "floor");
 
             const unit_name_attr = $('.unit_name').attr('id');
             const unit_type_attr = $('.unit_type').attr('id');
             const floor_attr = $('.floor').attr('id');
+
+            // alert($('.unit_name').attr("id"))
 
             $('.unit_id').attr('id', unit_id);
 
@@ -226,6 +233,10 @@
         function setAmountIds(a){
             let elements = document.getElementsByName(a.name);
         }
+
+        // $('*[name="receipts[0][amount_in_numbers]"]').on('focusout', function() {
+        //     alert('asd')
+        // });
 
 
         $('.amountToBePaid').on('focusout', function() {
@@ -267,18 +278,37 @@
                     },
                     success: function(response) {
                         if (response.success) {
+                            $('#paidInstllmentTableDiv').css("display", "block");
                             $('#instllmentTableDiv').css("display", "block");
                             $('#modeOfPaymentDiv').css("display", "block");
+                            $('#paid_dynamic_total_installment_rows').empty();
                             $('#dynamic_total_installment_rows').empty();
                             $('#installments').empty();
                             var total_installments = 1;
                             var order = null;
-                            for (var i = 0; i <= response.total_calculated_installments.length; i++) {
-                                // $('#installments').append('<input id="installments" hidden name="installments_id[]" value="'+response.total_calculated_installments[i]+'">');
-                                // total_installments = total_installments + 1;
-                                // var total_amount = total_amount + ( response.total_calculated_installments[i]['amount']) ;
-                                // var total_remaining_amount = total_remaining_amount + response.total_calculated_installments[i]['remaining_amount'];
-                                // var total_paid_amount = total_remaining_amount + response.total_calculated_installments[i]['paid_amount'];
+
+                            for(var i = 0; i <= response.already_paid.length; i++){
+                                if( response.already_paid[i] != null){
+                                    var d = response.already_paid[i]['details']
+
+                                $('#paid_dynamic_total_installment_rows').append('<tr class="text-nowrap">',
+                                    '<td class="text-nowrap text-center">'+(i+1)+'</td>',
+                                    '<td class="text-nowrap text-center">' + response.already_paid[i]['details'] + '</td>',
+                                    // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .already_paid[i]['amount'] + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .already_paid[i]['paid_amount'] + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .already_paid[i]['remaining_amount'] + '</td>',
+                                    '</tr>',
+                                    '<td class="text-nowrap text-center">' + response.already_paid[i]['status'] + '</td>',
+                                    '</tr>', );
+                                }
+                            }
+
+                            for (i = 0; i <= response.total_calculated_installments.length; i++) {
+                                if(response.total_calculated_installments[i] != null){
                                 if( response.total_calculated_installments[i]['installment_order'] == 0 ){
                                     order = 'Down Payment';
                                 }
@@ -298,7 +328,7 @@
                                     '</tr>',
                                     '<td class="text-nowrap text-center">' + response.total_calculated_installments[i]['partially_paid'] + '</td>',
                                     '</tr>', );
-                            }
+                            }}
 
                         } else {
                             Swal.fire({
@@ -317,16 +347,9 @@
 
         function getUnitTypeAndFloor(unit_id,id) {
 
-
             var unit_type= id.replace("unit_id", "unit_type");
             var unit_name=id.replace("unit_id", "unit_name");
             var floor= id.replace("unit_id", "floor");
-
-            var element  = document.getElementById('receipts[0][unit_type]')
-            element.append('<option>asdsad</option>');
-            // var dd = $('#receipts[0][unit_type]').val();
-
-
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.receipts.ajax-get-unit-type-and-unit-floor', ['site_id' => encryptParams($site_id)]) }}";
@@ -343,14 +366,14 @@
                         // console.log(  $('.unit_type'));
                         // "'" + str + "'"
                         $('.amountToBePaid').attr('unit_id', response.unit_id);
-                        $('.unit_type').empty();
+                        $(':input[id="'+unit_type+'"]').empty();
                         $('.amountToBePaid').empty();
-                        $('.floor').empty();
-                        $('.unit_name').empty();
-                        $('.unit_type').append('<option value="0" selected>' + response.unit_type +
+                        $(':input[id="'+floor+'"]').empty()
+                        $(':input[id="'+unit_name+'"]').empty();
+                        $(':input[id="'+unit_type+'"]').append('<option value="0" selected>' + response.unit_type +
                         '</option>');
-                        $('.floor').append('<option value="0" selected>' + response.unit_floor + '</option>');
-                        $('.unit_name').append('<option value="0" selected>' + response.unit_name +
+                        $(':input[id="'+floor+'"]').append('<option value="0" selected>' + response.unit_floor + '</option>');
+                        $(':input[id="'+unit_name+'"]').append('<option value="0" selected>' + response.unit_name +
                         '</option>');
                     } else {
                         Swal.fire({

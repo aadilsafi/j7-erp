@@ -116,7 +116,7 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="total-price-discount">Amount (Rs)</label>
-                                <input type="text" min="0" class="form-control form-control-lg" readonly
+                                <input type="text" class="form-control form-control-lg" readonly
                                     id="total-price-discount" name="unit[discount][total]" placeholder="Discount"
                                     value="0.00" />
                             </div>

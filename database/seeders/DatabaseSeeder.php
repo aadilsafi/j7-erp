@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             ReceiptsTemplateSeeder::class,
             FileManagementTableSeeder::class,
             ReceiptsTableSeeder::class,
+            UnitOwnersTableSeeder::class,
         ]);
     }
 }

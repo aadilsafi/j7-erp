@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
             StakeholderTypeSeeder::class,
             ReceiptsTemplateSeeder::class,
             FileManagementTableSeeder::class,
+            ReceiptsTableSeeder::class,
         ]);
     }
 }

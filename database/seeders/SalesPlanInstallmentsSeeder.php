@@ -117,7 +117,7 @@ class SalesPlanInstallmentsSeeder extends Seeder
                 'details' => '7th Instalment',
                 'remarks' => 'Unpaid',
                 'installment_order' => 7,
-                'status' => 'paid',
+                'status' => 'unpaid',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

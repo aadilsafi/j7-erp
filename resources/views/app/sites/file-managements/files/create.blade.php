@@ -13,10 +13,28 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-wizard.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
+    <style>
+        .filepond--drop-label {
+            color: #7367F0 !important;
+        }
+
+         .filepond--item-panel {
+            background-color: #7367F0;
+        }
+
+        .filepond--panel-root {
+            background-color: #e3e0fd;
+        }
+
+        /* .filepond--item {
+                    width: calc(20% - 0.5em);
+                } */
+    </style>
 @endsection
 
 @section('breadcrumbs')
@@ -46,37 +64,10 @@
                     'site' => $site,
                     'customer' => $customer,
                     'unit' => $unit,
+                    'nextOfKin' => $nextOfKin,
+                    'salesPlan' => $salesPlan,
                 ]) }}
             </div>
-
-            {{-- <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
-                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        <div class="card-body">
-                            <div class="row g-1">
-                                <div class="col-md-12">
-
-                                    <hr>
-
-                                    <button type="submit" value="save"
-                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                                        <i data-feather='save'></i>
-                                        <span id="create_sales_plan_button_span">Save Sales Plan</span>
-                                    </button>
-
-                                    <a href="{{ route('sites.file-managements.customers.units.files.create', ['site_id' => encryptParams($site->id), 'customer_id' => encryptParams($customer->id), 'unit_id' => encryptParams($unit->id)]) }}"
-                                        class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                                        <i data-feather='x'></i>
-                                        {{ __('lang.commons.cancel') }}
-                                    </a>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
     </form>
 @endsection
@@ -96,8 +87,29 @@
 @endsection
 
 @section('custom-js')
-
     <script type="text/javascript">
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
+
+        FilePond.create(document.getElementById('application_photo'), {
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            maxFiles: 1,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
         $(document).ready(function() {
             t = document.querySelector(".modern-wizard-example");
             if (void 0 !== typeof t && null !== t) {

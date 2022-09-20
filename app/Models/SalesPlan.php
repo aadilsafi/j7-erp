@@ -42,7 +42,8 @@ class SalesPlan extends Model
 
     public function additionalCosts()
     {
-        return $this->hasMany(SalesPlanAdditionalCost::class);
+        return $this->belongsToMany(AdditionalCost::class, 'sales_plan_additional_costs')
+            ->withPivot('amount', 'percentage');
     }
 
     public function installments()

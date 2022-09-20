@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Unit;
 use App\Models\SalesPlan;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -81,6 +82,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $unitStatus = Unit::find($this->unit->id)->status_id;
         $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.create');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         return $this->builder()
@@ -94,7 +96,7 @@ class SalesPlanDataTable extends DataTable
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
                 (
-                    $createPermission ?
+                    ($createPermission && $unitStatus == 1) ?
                         Button::raw('add-new')
                         ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                         ->text('<i class="bi bi-plus"></i> Add New')

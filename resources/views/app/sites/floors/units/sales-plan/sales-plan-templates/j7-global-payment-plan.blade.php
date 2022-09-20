@@ -21,8 +21,8 @@
                     <h1>PAYMENT PLAN</h1>
                 </td>
                 <td class="text-end">
-                    <p>Print Date:Fri 20-May-2022</p>
-                    <p>User: hasan</p>
+                    <p>Print Date:{{  date_format (new DateTime(), ' d-M-Y') }}</p>
+                    <p>User: {{ Auth::user()->name }}</p>
                 </td>
             </tr>
         </table>
@@ -30,24 +30,25 @@
         <table class="table">
             <tr>
                 <td style="border: 0px solid #eee!important;">
-                    <p class="m-0">Ali Abbas Brohi Flat No 328</p>
+                    <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
                     <p class="m-0">Customer ID : 00000084</p>
-                    <p class="m-0">Contact #:</p>
-                    <p class="m-0">Plan Effected From: Thu 26-Sep-2019</p>
+                    <p class="m-0">Contact #: {{  $data['contact'] }}</p>
+                    <p class="m-0">Plan Effected From:{{  date_format (new DateTime($data['validity']), 'D d-M-Y') }}
+                    </p>
                 </td>
                 <td style="border: 1px solid #eee!important;">
-                    <p class="m-0">Total Installments : 17</p>
-                    <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span> 10</p>
-                    <p class="m-0">Total Amount : 8,520,000/-</p>
-                    <p class="m-0">Total Paid Amount: 3,820,000/-</p>
-                    <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span> 1,728,500/-</p>
-                    <p class="m-0">Total Remaining Amount: 4,700,000/-</p>
+                    <p class="m-0">Total Installments : {{ count($data['instalments']) }}</p>
+                    <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span> {{ count($data['instalments']) }} </p>
+                    <p class="m-0">Total Amount : {{ number_format($data['amount']) }}</p>
+                    <p class="m-0">Total Paid Amount: - </p>
+                    <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span> {{ number_format($data['amount']) }}</p>
+                    <p class="m-0">Total Remaining Amount: {{ number_format($data['amount']) }}</p>
                 </td>
                 <td style="border: 1px solid #eee!important;">
-                    <p class="m-0">Invoice # : 000078</p>
-                    <p>Invoice Date : 26-Sep-2019</p>
-                    <p class="m-0">Account # : 0004-0007-0349</p>
-                    <p class="m-0">Sale Voucher # : 000286</p>
+                    <p class="m-0">Invoice # : -</p>
+                    <p>Invoice Date : {{  date_format (new DateTime(), ' d-M-Y') }}</p>
+                    <p class="m-0">Account # :-</p>
+                    <p class="m-0">Sale Voucher # :-</p>
                 </td>
             </tr>
         </table>
@@ -65,182 +66,20 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($data['instalments'] as $key=>$installment)
+
                 <tr>
-                    <td>1</td>
-                    <td class="text-start">1st Down Payment</td>
-                    <td>26-Sep-2019</td>
-                    <td>2,055,000</td>
-                    <td>2,055,000</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
+                    <td>{{ $key+1 }}</td>
+                    <td class="text-start">{{ $installment->details }}</td>
+                    <td> {{  date_format (new DateTime($installment->date), 'd/m/Y') }}</td>
+                    <td>{{ $installment->amount }}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="fw-bold text-success">UnPaid</span></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="text-start">1st Quaterly Installment</td>
-                    <td>26-Sep-2019</td>
-                    <td>349,350</td>
-                    <td>349,350</td>
-                    <td>0</td>
-                    <td><span class="fw-bold text-success">Fully Paid</span></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td colspan="2" class="text-start">On the Time of Transfer</td>
-                    <td>300,000</td>
-                    <td>0</td>
-                    <td>300,000</td>
-                    <td>Unpaid</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td colspan="2" class="text-start">On the Time of Possession</td>
-                    <td>300,000</td>
-                    <td>0</td>
-                    <td>300,000</td>
-                    <td>Unpaid</td>
-                </tr>
-                <tr class="fw-bold" style="border-top: 5px double;">
-                    <td colspan="3" class="text-end"><span class="fw-bold">Grand Total:</span></td>
-                    <td>8,520,000</td>
-                    <td>3,820,000</td>
-                    <td>4,700,000</td>
-                    <td></td>
-                </tr>
+
+                @endforeach
+
             </tbody>
         </table>
         <p class="fw-bold">I hereby acknowledge that I have read and understand the foregoing information and that my
@@ -251,8 +90,8 @@
                 <td class="text-center">
                     <hr width="50%">
 
-                    <p class="m-0">Ali Abbas Brohi Flat No 328</p>
-                    <p class="m-0">Print Date: Fri 20-May-2022</p>
+                    <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
+                    <p class="m-0">Print Date: {{  date_format (new DateTime(), 'D d-M-Y') }}</p>
                     <p class="m-0">Customer</p>
                 </td>
                 <td class="text-center">

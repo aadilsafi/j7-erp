@@ -192,6 +192,13 @@ class SalesPlanController extends Controller
 
         $data['additional_costs'] = $salesPlan->additionalCosts;
 
+        $data['validity'] = $salesPlan->validity;
+
+        $data['contact'] = $salesPlan->stakeholder->contact;
+
+        $data['amount'] = $salesPlan->total_price;
+
+        // dd(count($salesPlan->installments));
         return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }
 

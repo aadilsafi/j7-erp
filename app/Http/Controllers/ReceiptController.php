@@ -260,7 +260,6 @@ class ReceiptController extends Controller
             ], 200);
         }
 
-        dd($total_calculated_installments);
         return response()->json([
             'success' => true,
             'sales_plan' =>$sales_plan,

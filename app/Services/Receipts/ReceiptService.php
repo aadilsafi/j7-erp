@@ -170,6 +170,7 @@ class ReceiptService implements ReceiptInterface
                 $unit->status_id = 5;
 
                 $unitStakeholderData = [
+                    'site_id' => decryptParams($site_id),
                     'unit_id' => $unit->id,
                     'stakeholder_id' =>$stakeholder->id,
                 ];

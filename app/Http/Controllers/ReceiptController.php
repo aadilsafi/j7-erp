@@ -259,6 +259,8 @@ class ReceiptController extends Controller
                 'message' => 'Entered Amount is greater than Required Amount. Required Amount is '.$total_installment_required_amount,
             ], 200);
         }
+
+        dd($total_calculated_installments);
         return response()->json([
             'success' => true,
             'sales_plan' =>$sales_plan,

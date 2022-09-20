@@ -324,7 +324,8 @@
                                 }
                                 $('#dynamic_total_installment_rows').append('<tr class="text-nowrap">',
                                     '<td class="text-nowrap text-center">'+(i+1)+'</td>',
-                                    '<td class="text-nowrap text-center">' + order + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .total_calculated_installments[i]['detail'] + '</td>',
                                     // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                     '<td class="text-nowrap text-center">' + response
                                     .total_calculated_installments[i]['amount'] + '</td>',
@@ -359,8 +360,6 @@
             var unit_type= id.replace("unit_id", "unit_type");
             var unit_name=id.replace("unit_id", "unit_name");
             var floor= id.replace("unit_id", "floor");
-            // $(':input[name="receipts[1][floor]"]').empty();
-            // $( "input[name*='receipts[1][floor]']" ).empty()
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.receipts.ajax-get-unit-type-and-unit-floor', ['site_id' => encryptParams($site_id)]) }}";

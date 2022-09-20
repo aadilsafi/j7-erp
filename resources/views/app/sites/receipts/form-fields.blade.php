@@ -152,7 +152,7 @@
                                         <label class="custom-option-item text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon1">
                                             {{-- <i data-feather='dollar-sign'></i> --}}
-                                            <i class="bi bi-cash-coin" style="font-size: 30px"></i>
+                                            <i class="bi bi-cash-coin" style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Cash</span>
                                         </label>
                                     </div>
@@ -163,7 +163,7 @@
                                             id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
                                         <label class="custom-option-item text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon2">
-                                            <i class="bi bi-bank"  style="font-size: 30px"></i>
+                                            <i class="bi bi-bank"  style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Cheque</span>
                                         </label>
                                     </div>
@@ -174,7 +174,7 @@
                                             id="customOptionsCheckableRadiosWithIcon3" value="Online">
                                         <label class="custom-option-item text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon3">
-                                            <i class="bi bi-app-indicator"  style="font-size: 30px"></i>
+                                            <i class="bi bi-app-indicator"  style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Online</span>
                                         </label>
                                     </div>
@@ -185,7 +185,7 @@
                                             value="Other">
                                         <label class="custom-option-item text-center text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon4">
-                                            <i class="bi bi-wallet" style="font-size: 30px"></i>
+                                            <i class="bi bi-wallet" style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Other</span>
                                         </label>
                                     </div>

@@ -312,9 +312,25 @@ Route::group([
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
                         Route::get('/units', [FileManagementController::class, 'units'])->name('units');
 
+                        Route::group(['prefix' => 'units/{unit_id}', 'as' => 'units.'], function () {
+
+                            //Files Routes
+                            Route::group(['prefix' => 'files', 'as' => 'files.'], function () {
+                                Route::get('/', [FileManagementController::class, 'index'])->name('index');
+
+                                Route::get('create', [FileManagementController::class, 'create'])->name('create');
+                                Route::post('store', [FileManagementController::class, 'store'])->name('store');
+
+                                Route::get('delete-selected', [FileManagementController::class, 'destroySelected'])->name('destroy-selected');
+
+                                Route::group(['prefix' => '/{id}'], function () {
+                                    Route::get('edit', [FileManagementController::class, 'edit'])->name('edit');
+                                    Route::put('update', [FileManagementController::class, 'update'])->name('update');
+                                });
+                            });
+                        });
                     });
                 });
-
             });
         });
 

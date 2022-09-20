@@ -668,6 +668,50 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.file-managements.customers.units.files.index',
+                'show_name' => 'Create Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.create',
+                'show_name' => 'Create Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.store',
+                'show_name' => 'Store Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.edit',
+                'show_name' => 'Edit Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.update',
+                'show_name' => 'Update Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.destroy-selected',
+                'show_name' => 'Delete Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //Commands Route
+            [
                 'name' => 'commands.command',
                 'show_name' => 'Commands Permissions',
                 'guard_name' => 'web',

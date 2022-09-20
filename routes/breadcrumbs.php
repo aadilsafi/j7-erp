@@ -210,6 +210,21 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
 //File Management Breadcrumbs
 Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]));
+    $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => $site_id]));
     $trail->push('Customer\'s List', route('sites.file-managements.customers', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units', function (BreadcrumbTrail $trail, $site_id, $customer_id) {
+    $trail->parent('sites.file-managements.customers', $site_id);
+    $trail->push('Units List', route('sites.file-managements.customers.units', ['site_id' => $site_id, 'customer_id' => $customer_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.index', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers.units', $site_id, $customer_id, $unit_id);
+    $trail->push('Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.create', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers.units.files.index', $site_id, $customer_id, $unit_id);
+    $trail->push('Create Files', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });

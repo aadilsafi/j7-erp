@@ -531,7 +531,7 @@ if (!function_exists('sqlErrorMessagesByCode')) {
             '1046' => 'No database selected',
             '1045' => 'Access denied for user',
             '1044' => 'Access denied for user',
-            '1042' => 'Can’t get hostname for your address',
+            '1042' => 'Can\'t get hostname for your address',
             '1040' => 'Too many connections',
             '1038' => 'Out of sort memory, consider increasing server sort buffer size',
             '1036' => 'Table is read only',

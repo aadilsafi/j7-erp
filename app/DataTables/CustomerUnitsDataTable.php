@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Stakeholder;
+use App\Models\Unit;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -11,7 +12,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class CustomersDataTable extends DataTable
+class CustomerUnitsDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,26 +20,26 @@ class CustomersDataTable extends DataTable
      * @param QueryBuilder $query Results from query() method.
      * @return \Yajra\DataTables\EloquentDataTable
      */
-    public function dataTable(QueryBuilder $query): EloquentDataTable
+
+    public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-
-            ->editColumn('cnic', function ($fileManagement) {
-                return strlen($fileManagement->cnic) > 0 ? $fileManagement->cnic : '-';
+            ->editColumn('status_id', function ($unit) {
+                return editBadgeColumn($unit->status->name);
             })
-            ->editColumn('contact', function ($fileManagement) {
-                return strlen($fileManagement->contact) > 0 ? $fileManagement->contact : '-';
+            ->editColumn('type_id', function ($unit) {
+                return $unit->type->name;
             })
-            ->editColumn('created_at', function ($fileManagement) {
-                return editDateColumn($fileManagement->created_at);
+            ->editColumn('created_at', function ($unit) {
+                return editDateColumn($unit->created_at);
             })
-            ->editColumn('updated_at', function ($fileManagement) {
-                return editDateColumn($fileManagement->updated_at);
+            ->editColumn('updated_at', function ($unit) {
+                return editDateColumn($unit->updated_at);
             })
-            ->editColumn('actions', function ($fileManagement) {
-                return view('app.sites.file-managements.customers.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->id]);
+            ->editColumn('actions', function ($unit) {
+                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $this->customer_id, 'unit_id' => $unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -47,29 +48,14 @@ class CustomersDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Stakeholder $model
+     * @param \App\Models\Unit $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Stakeholder $model): QueryBuilder
+    public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->with('stakeholder_types')->whereHas(
-            'stakeholder_types',
-            function ($query) {
-                $query->where([
-                    'type' => $this->stakeholder_type,
-                    'status' => true,
-                ]);
-            }
-        )->where([
-            'site_id' => $this->site_id
-        ]);
+        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereIn('id', $this->unit_ids);
     }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
     public function html(): HtmlBuilder
     {
         $buttons = [
@@ -85,9 +71,8 @@ class CustomersDataTable extends DataTable
         ];
 
         return $this->builder()
-            ->addIndex()
-            ->addTableClass(['table-hover', 'table-striped'])
-            ->setTableId('file-management-table')
+            ->addTableClass(['table-striped', 'table-hover'])
+            ->setTableId('floors-units-table')
             ->columns($this->getColumns())
             ->deferRender()
             ->scrollX()
@@ -95,9 +80,11 @@ class CustomersDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
+            ->rowGroupDataSrc('type_id')
             ->orders([
-                [3, 'desc'],
+                [5, 'desc'],
             ]);
+
     }
 
     /**
@@ -109,13 +96,13 @@ class CustomersDataTable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('full_name'),
-            Column::make('father_name'),
-            Column::make('cnic'),
-            Column::make('contact'),
-            Column::make('created_at')->title('Created At'),
-            Column::make('updated_at')->title('Updated At'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            Column::make('floor_unit_number')->title('Unit Number'),
+            Column::make('name')->title('Units'),
+            Column::make('type_id')->name('type.name')->title('Type'),
+            Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
+            Column::make('created_at'),
+            Column::make('updated_at'),
+            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center')->width(60),
         ];
     }
 
@@ -126,7 +113,7 @@ class CustomersDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Stakeholders_' . date('YmdHis');
+        return 'Units_' . date('YmdHis');
     }
 
     /**

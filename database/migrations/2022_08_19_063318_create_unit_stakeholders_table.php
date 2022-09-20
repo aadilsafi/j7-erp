@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('unit_stakeholders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')->constrained();
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->timestamps();

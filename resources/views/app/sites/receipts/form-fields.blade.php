@@ -35,7 +35,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 <h6 style="font-size: 15px">Amount To be Paid</h6>
                             </label>
-                            <input min="0"  onclick="setAmountIds(this)" id="amountToBePaid" type="number"
+                            <input min="0" onclick="setAmountIds(this)" id="amountToBePaid" type="number"
                                 class="form-control amountToBePaid form-control-lg @error('amount_in_numbers') is-invalid @enderror"
                                 name="amount_in_numbers" placeholder="Amount To be Paid"
                                 value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
@@ -142,103 +142,111 @@
                     <div id="modeOfPaymentDiv" class="col-12 mt-1">
                         <div class="mb-1">
                             <h6 style="font-size: 15px">Mode Of Payment</h6>
-                            <div class="row custom-options-checkable g-1">
-                                <div class="col-md-3">
-                                    <input class="custom-option-item-check checkClass mode-of-payment" type="radio"
-                                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1"
-                                        value="Cash">
-                                    <label class="custom-option-item text-center p-1"
-                                        for="customOptionsCheckableRadiosWithIcon1">
-                                        <span class="custom-option-item-title h4 d-block">Cash</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <input class="custom-option-item-check checkClass cheque-mode-of-payment"
-                                        type="radio" name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2"
-                                        value="Cheque">
-                                    <label class="custom-option-item text-center p-1"
-                                        for="customOptionsCheckableRadiosWithIcon2">
-                                        <span class="custom-option-item-title h4 d-block">Cheque</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <input class="custom-option-item-check checkClass online-mode-of-payment"
-                                        type="radio" name="mode_of_payment"
-                                        id="customOptionsCheckableRadiosWithIcon3" value="Online">
-                                    <label class="custom-option-item text-center p-1"
-                                        for="customOptionsCheckableRadiosWithIcon3">
-                                        <span class="custom-option-item-title h4 d-block">Online</span>
-                                    </label>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <input class="custom-option-item-check other-mode-of-payment" type="radio"
-                                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon4"
-                                        value="Other">
-                                    <label class="custom-option-item text-center text-center p-1"
-                                        for="customOptionsCheckableRadiosWithIcon4">
-                                        <span class="custom-option-item-title h4 d-block">Other</span>
-                                    </label>
-                                </div>
-
-                                <div id="otherValueDiv" class="col-md-12 ">
-                                    <label class="form-label" style="font-size: 15px" for="floor">
-                                        <h6 style="font-size: 15px">Other Payment Mode</h6>
-                                    </label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
-                                        id="other_value" name="other_value" placeholder="Other Payment Mode"
-                                        value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
-                                    @error('other_value')
-                                        <div class="invalid-tooltip">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div id="onlineValueDiv" class="col-md-6 col-12 onlineValueDiv">
-                                    <label class="form-label" style="font-size: 15px" for="floor">
-                                        <h6 style="font-size: 15px">Transaction No</h6>
-                                    </label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('online_instrument_no') is-invalid @enderror"
-                                        id="online_instrument_no" name="online_instrument_no"
-                                        placeholder="Online Transaction"
-                                        value="{{ isset($receipt) ? $receipt->online_instrument_no : old('online_instrument_no') }}" />
-                                    @error('online_instrument_no')
-                                        <div class="invalid-tooltip">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div id="onlineValueDiv" class="col-md-6 col-12 onlineValueDiv">
-                                    <div class="mb-1">
-                                        <label class="form-label" style="font-size: 15px" for="floor">
-                                            <h6 style="font-size: 15px">Transaction Date</h6>
+                            <div class="card m-0"
+                                style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                                <div class="row custom-options-checkable g-1 m-1  mb-2">
+                                    <div class="col-md-3">
+                                        <input class="custom-option-item-check checkClass mode-of-payment"
+                                            type="radio" name="mode_of_payment"
+                                            id="customOptionsCheckableRadiosWithIcon1" value="Cash">
+                                        <label class="custom-option-item text-center p-1"
+                                            for="customOptionsCheckableRadiosWithIcon1">
+                                            {{-- <i data-feather='dollar-sign'></i> --}}
+                                            <i class="bi bi-cash-coin" style="font-size: 30px"></i>
+                                            <span class="custom-option-item-title h4 d-block">Cash</span>
                                         </label>
-                                        <input type="date"
-                                            class="form-control form-control-lg @error('transaction_date') is-invalid @enderror"
-                                            id="transaction_date" name="transaction_date"
-                                            placeholder="Transaction Date"
-                                            value="{{ isset($receipt) ? $receipt->transaction_date : old('transaction_date') }}" />
-                                        @error('transaction_date')
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <input class="custom-option-item-check checkClass cheque-mode-of-payment"
+                                            type="radio" name="mode_of_payment"
+                                            id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
+                                        <label class="custom-option-item text-center p-1"
+                                            for="customOptionsCheckableRadiosWithIcon2">
+                                            <i class="bi bi-bank"  style="font-size: 30px"></i>
+                                            <span class="custom-option-item-title h4 d-block">Cheque</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <input class="custom-option-item-check checkClass online-mode-of-payment"
+                                            type="radio" name="mode_of_payment"
+                                            id="customOptionsCheckableRadiosWithIcon3" value="Online">
+                                        <label class="custom-option-item text-center p-1"
+                                            for="customOptionsCheckableRadiosWithIcon3">
+                                            <i class="bi bi-app-indicator"  style="font-size: 30px"></i>
+                                            <span class="custom-option-item-title h4 d-block">Online</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <input class="custom-option-item-check other-mode-of-payment" type="radio"
+                                            name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon4"
+                                            value="Other">
+                                        <label class="custom-option-item text-center text-center p-1"
+                                            for="customOptionsCheckableRadiosWithIcon4">
+                                            <i class="bi bi-wallet" style="font-size: 30px"></i>
+                                            <span class="custom-option-item-title h4 d-block">Other</span>
+                                        </label>
+                                    </div>
+
+                                    <div id="otherValueDiv" class="col-md-12 ">
+                                        <label class="form-label" style="font-size: 15px" for="floor">
+                                            <h6 style="font-size: 15px">Other Payment Mode</h6>
+                                        </label>
+                                        <input type="text"
+                                            class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                            id="other_value" name="other_value" placeholder="Other Payment Mode"
+                                            value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
+                                        @error('other_value')
                                             <div class="invalid-tooltip">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
 
-                                <div id="chequeValueDiv" class="col-md-12 ">
-                                    <label class="form-label" style="font-size: 15px" for="floor">
-                                        <h6 style="font-size: 15px">Cheque No</h6>
-                                    </label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('cheque_no') is-invalid @enderror"
-                                        id="cheque_no" name="cheque_no" placeholder="Cheque No"
-                                        value="{{ isset($receipt) ? $receipt->cheque_no : old('cheque_no') }}" />
-                                    @error('cheque_no')
-                                        <div class="invalid-tooltip">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                    <div id="onlineValueDiv" class="col-md-6 col-12 onlineValueDiv">
+                                        <label class="form-label" style="font-size: 15px" for="floor">
+                                            <h6 style="font-size: 15px">Transaction No</h6>
+                                        </label>
+                                        <input type="text"
+                                            class="form-control form-control-lg @error('online_instrument_no') is-invalid @enderror"
+                                            id="online_instrument_no" name="online_instrument_no"
+                                            placeholder="Online Transaction"
+                                            value="{{ isset($receipt) ? $receipt->online_instrument_no : old('online_instrument_no') }}" />
+                                        @error('online_instrument_no')
+                                            <div class="invalid-tooltip">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
+                                    <div id="onlineValueDiv" class="col-md-6 col-12 onlineValueDiv">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="floor">
+                                                <h6 style="font-size: 15px">Transaction Date</h6>
+                                            </label>
+                                            <input type="date"
+                                                class="form-control form-control-lg @error('transaction_date') is-invalid @enderror"
+                                                id="transaction_date" name="transaction_date"
+                                                placeholder="Transaction Date"
+                                                value="{{ isset($receipt) ? $receipt->transaction_date : old('transaction_date') }}" />
+                                            @error('transaction_date')
+                                                <div class="invalid-tooltip">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div id="chequeValueDiv" class="col-md-12 ">
+                                        <label class="form-label" style="font-size: 15px" for="floor">
+                                            <h6 style="font-size: 15px">Cheque No</h6>
+                                        </label>
+                                        <input type="text"
+                                            class="form-control form-control-lg @error('cheque_no') is-invalid @enderror"
+                                            id="cheque_no" name="cheque_no" placeholder="Cheque No"
+                                            value="{{ isset($receipt) ? $receipt->cheque_no : old('cheque_no') }}" />
+                                        @error('cheque_no')
+                                            <div class="invalid-tooltip">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>

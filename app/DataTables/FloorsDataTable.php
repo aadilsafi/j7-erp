@@ -3,14 +3,15 @@
 namespace App\DataTables;
 
 use App\Models\Floor;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class FloorsDataTable extends DataTable
 {

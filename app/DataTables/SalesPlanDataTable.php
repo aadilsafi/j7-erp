@@ -4,15 +4,16 @@ namespace App\DataTables;
 
 use App\Models\SalesPlan;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\SalesPlanTemplate;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class SalesPlanDataTable extends DataTable
@@ -80,6 +81,8 @@ class SalesPlanDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         return $this->builder()
             ->addTableClass(['table-hover'])
             ->setTableId('sales-plan-table')
@@ -90,12 +93,22 @@ class SalesPlanDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ]),
+                (
+                    $createPermission ?
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                    :
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                ),
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
@@ -105,12 +118,22 @@ class SalesPlanDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
+                (
+                    $selectedDeletePermission ?
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                    :
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                ),
 
             )
             // ->rowGroupDataSrc('type_id')
@@ -143,13 +166,27 @@ class SalesPlanDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $destroyPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
+        $printPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.templates.print');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            (
+                ($destroyPermission) ?
+                Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
+
             Column::make('user_id')->title('Sales Person'),
             Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            (
+                ($printPermission) ?
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+                :
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
+
         ];
     }
 

@@ -104,13 +104,16 @@ class StakeholderService implements StakeholderInterface
 
     public function update($site_id, $id, $inputs)
     {
-        $firstImage = $inputs['attachment'][0];
-        $secondImage = $inputs['attachment'][1];
-
-        $firstImageName = $firstImage->getClientOriginalName();
-        $secondImageName = $secondImage->getClientOriginalName();
-
-        $attachment = $firstImageName . ',' . $secondImageName;
+        if (isset($inputs['attachment'])) {
+            $firstImage = $inputs['attachment'][0];
+            $secondImage = $inputs['attachment'][1];
+            $firstImageName = $firstImage->getClientOriginalName();
+            $secondImageName = $secondImage->getClientOriginalName();
+            $attachment = $firstImageName . ',' . $secondImageName;
+        }
+        else{
+            $attachment = null;
+        }
 
         if ($inputs['parent_id'] == null) {
             $inputs['parent_id'] = 0;
@@ -125,19 +128,18 @@ class StakeholderService implements StakeholderInterface
             'address' => $inputs['address'],
             'parent_id' => $inputs['parent_id'],
             'relation' => $inputs['relation'],
-            'attachment' => $attachment,
         ];
         $stakeholder_data = $this->model()->where('id', $id)->update($data);
 
         $folder = 'app-assets/server-uploads/stakeholders/' . $id . '/';
-
-        if (!file_exists($folder . $firstImageName)) {
-            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $firstImageName);
+        if (isset($inputs['attachment'])) {
+            if (!file_exists($folder . $firstImageName)) {
+                $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $firstImageName);
+            }
+            if (!file_exists($folder . $secondImageName)) {
+                $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $secondImageName);
+            }
         }
-        if (!file_exists($folder . $secondImageName)) {
-            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $secondImageName);
-        }
-
         return $stakeholder_data;
     }
 

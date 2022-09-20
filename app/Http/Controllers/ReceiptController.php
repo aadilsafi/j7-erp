@@ -198,6 +198,7 @@ class ReceiptController extends Controller
                     'remaining_amount' => 0.0,
                     'installment_order' => $installment->installment_order,
                     'partially_paid' => $partially_paid,
+                    'detail' => $installment->details,
                 ];
             }
             else{
@@ -234,6 +235,7 @@ class ReceiptController extends Controller
                         'remaining_amount' => $remaining_amount,
                         'installment_order' => $installment->installment_order,
                         'partially_paid' => $installment->paid_amount,
+                        'detail' => $installment->details,
                     ];
                 }
 
@@ -301,7 +303,7 @@ class ReceiptController extends Controller
             'online_instrument_no' => $receipt_data->online_instrument_no,
         ];
 
-        return view('app.sites.receipts.templates.j7_template',compact('preview_data'));
+        return view('app.sites.receipts.templates.'.$template->slug ,compact('preview_data'));
     }
 
 }

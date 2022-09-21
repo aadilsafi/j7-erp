@@ -60,4 +60,9 @@ class SalesPlan extends Model
     {
         return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
     }
+
+    public function leadSource()
+    {
+        return $this->belongsTo(LeadSource::class);
+    }
 }

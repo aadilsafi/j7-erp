@@ -76,14 +76,14 @@
             <button type="button" class="step-trigger">
                 <span class="bs-stepper-box waves-effect waves-float waves-light" class="font-medium-3">6</span>
                 <span class="bs-stepper-label">
-                    <span class="bs-stepper-title">Booking Form</span>
-                    <span class="bs-stepper-subtitle">Validate Booking Form</span>
+                    <span class="bs-stepper-title">Rebate Form</span>
+                    <span class="bs-stepper-subtitle">Validate Rebate Form</span>
                 </span>
             </button>
         </div>
     </div>
 
-    <div class="bs-stepper-content p-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="bs-stepper-content p-0">
 
         <div class="card content shadow-none m-0" id="applicaiton-form" role="tabpanel"
             aria-labelledby="applicaiton-form-trigger">
@@ -108,7 +108,7 @@
                         <div class="row mb-1">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                 <div class="card m-0"
-                                    style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                                     <div class="card-header">
                                         <h3>Units</h3>
                                     </div>
@@ -161,7 +161,8 @@
                 {{-- Stakeholder Data --}}
                 <div class="row mb-1">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                        <div class="card m-0"
+                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-header">
                                 <h3>Customer</h3>
                             </div>
@@ -220,7 +221,8 @@
                 {{-- Next Of KIN Data --}}
                 <div class="row mb-1">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                        <div class="card m-0"
+                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-header">
                                 <h3>Next Of KIN</h3>
                             </div>
@@ -399,7 +401,6 @@
                                         </div>
 
                                         <div id="div_additional_cost">
-                                            {{-- Additional Cost Rows --}}
 
                                             @php
                                                 $total_additional_cost = 0;
@@ -505,17 +506,18 @@
 
                                     <tbody>
                                         @forelse ($salesPlan->installments as $installment)
-                                        {{-- {{ dd($installment) }} --}}
-
-                                        <tr class="text-center">
-                                            <td>{{ $installment->installment_order }}</td>
-                                            <td>{{ $installment->details }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}</td>
-                                            <td>{{ number_format($installment->amount, 2) }}</td>
-                                            <td>{{ $installment->remarks }}</td>
-                                        </tr>
+                                            <tr class="text-center">
+                                                <td>{{ $installment->installment_order }}</td>
+                                                <td>{{ $installment->details }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
+                                                </td>
+                                                <td>{{ number_format($installment->amount, 2) }}</td>
+                                                <td>{{ $installment->remarks }}</td>
+                                            </tr>
                                         @empty
-
+                                            <tr class="text-center">
+                                                <td colspan="5">No data found</td>
+                                            </tr>
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -541,116 +543,230 @@
             </div>
         </div>
 
+        <div class="card content shadow-none m-0" id="receipts" role="tabpanel" aria-labelledby="receipts-trigger">
 
-        <div id="receipts" class="content" role="tabpanel" aria-labelledby="receipts-trigger">
-            <div class="content-header">
-                <h5 class="mb-0">Social Links</h5>
-                <small>Enter Your Social Links.</small>
+            <div class="card-body">
+
             </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-twitter">Twitter</label>
-                    <input type="text" id="modern-twitter" class="form-control"
-                        placeholder="https://twitter.com/abc" />
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
+                        type="button">
+                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
+                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    </button>
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
+                        type="button">
+                        <span class="align-middle d-sm-inline-block d-none">Next</span>
+                        <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
+                    </button>
                 </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-facebook">Facebook</label>
-                    <input type="text" id="modern-facebook" class="form-control"
-                        placeholder="https://facebook.com/abc" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-google">Google+</label>
-                    <input type="text" id="modern-google" class="form-control"
-                        placeholder="https://plus.google.com/abc" />
-                </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-linkedin">Linkedin</label>
-                    <input type="text" id="modern-linkedin" class="form-control"
-                        placeholder="https://linkedin.com/abc" />
-                </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-primary btn-prev">
-                    <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                </button>
-                <button class="btn btn-success btn-submit">Submit</button>
             </div>
         </div>
-        <div id="booking-form" class="content" role="tabpanel" aria-labelledby="receipts-trigger">
-            <div class="content-header">
-                <h5 class="mb-0">Social Links</h5>
-                <small>Enter Your Social Links.</small>
+
+        <div class="card content shadow-none m-0" id="booking-form" role="tabpanel"
+            aria-labelledby="booking-form-trigger">
+
+            <div class="card-body">
+
+                <div class="row mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card m-0"
+                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card-header">
+                                <h3>Sales Person</h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row mb-1">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                        <label class="form-label fs-5" for="sales_source_full_name">Sales
+                                            Person</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="sales_source_full_name" name="sales_source[full_name]"
+                                            placeholder="Sales Person" value="{{ $user->name }}" disabled />
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+
+                                        @php
+                                            $roles = $user->roles->pluck('name')->toArray();
+                                            $roles = implode(', ', $roles);
+                                        @endphp
+
+                                        <label class="form-label fs-5" for="sales_source_status">Status</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="sales_source_status" name="sales_source[status]" placeholder="Status"
+                                            value="{{ $roles }}" disabled />
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                        <label class="form-label fs-5" for="sales_source_contact_no">Contact
+                                            No</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="sales_source_contact_no" name="sales_source[contact_no]"
+                                            placeholder="Contact No" value="{{ $user->phone_no }}" disabled />
+                                        {{-- invalid-tooltip">{{ $message }}</div> --}}
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                        <label class="form-label fs-5" for="sales_source_lead_source">Lead
+                                            Source</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="sales_source_lead_source" placeholder="Lead Source"
+                                            value="{{ $salesPlan->leadSource->name }}" disabled />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Stakeholder Data --}}
+                <div class="row mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card m-0"
+                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card-header">
+                                <h3>Customer</h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row g-1 mb-1">
+                                    <input type="hidden" name="application_form[stakeholder_id]"
+                                        value="{{ $customer->id }}">
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_name">Name</label>
+                                        <input type="text" class="form-control form-control-lg" id="customer_name"
+                                            placeholder="Name" value="{{ $customer->full_name }}" disabled />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_father_name">Father/Husband
+                                            Name</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_father_name" value="{{ $customer->father_name }}"
+                                            placeholder="Father/Husband Name" disabled />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
+                                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
+                                            placeholder="CNIC/Passport" value="{{ $customer->cnic ?? '-' }}"
+                                            disabled />
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_address" placeholder="Mail Address"
+                                            value="{{ $customer->address ?? '-' }}" disabled />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_phone">Cell</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_phone" placeholder="Cell"
+                                            value="{{ $customer->contact ?? '-' }}" disabled />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="customer_occupation">Occupation</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_occupation" placeholder="Occupation"
+                                            value="{{ $customer->occupation ?? '-' }}" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- PAYMENT PLAN --}}
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                    id="installments_acard">
+                    <div class="card-header">
+                        <h3>2. INSTALLMENT DETAILS</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                <table class="table table-hover table-striped table-borderless"
+                                    id="installments_table" style="position: relative;">
+                                    <thead style="position: sticky; top: 0; z-index: 10;">
+                                        <tr class="text-center">
+                                            <th scope="col">#</th>
+                                            <th scope="col">Installments</th>
+                                            <th scope="col">Due Date</th>
+                                            <th scope="col">Total Amount</th>
+                                            <th scope="col">Remarks</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @forelse ($salesPlan->installments as $installment)
+                                            <tr class="text-center">
+                                                <td>{{ $installment->installment_order }}</td>
+                                                <td>{{ $installment->details }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
+                                                </td>
+                                                <td>{{ number_format($installment->amount, 2) }}</td>
+                                                <td>{{ $installment->remarks }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr class="text-center">
+                                                <td colspan="5">No data found</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-twitter">Twitter</label>
-                    <input type="text" id="modern-twitter" class="form-control"
-                        placeholder="https://twitter.com/abc" />
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
+                        type="button">
+                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
+                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    </button>
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
+                        type="button">
+                        <span class="align-middle d-sm-inline-block d-none">Next</span>
+                        <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
+                    </button>
                 </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-facebook">Facebook</label>
-                    <input type="text" id="modern-facebook" class="form-control"
-                        placeholder="https://facebook.com/abc" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-google">Google+</label>
-                    <input type="text" id="modern-google" class="form-control"
-                        placeholder="https://plus.google.com/abc" />
-                </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-linkedin">Linkedin</label>
-                    <input type="text" id="modern-linkedin" class="form-control"
-                        placeholder="https://linkedin.com/abc" />
-                </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-primary btn-prev">
-                    <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                </button>
-                <button class="btn btn-success btn-submit">Submit</button>
             </div>
         </div>
-        <div id="rebate-form" class="content" role="tabpanel" aria-labelledby="receipts-trigger">
-            <div class="content-header">
-                <h5 class="mb-0">Social Links</h5>
-                <small>Enter Your Social Links.</small>
+
+        <div class="card content shadow-none m-0" id="rebate-form" role="tabpanel"
+            aria-labelledby="rebate-form-trigger">
+
+            <div class="card-body">
+
             </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-twitter">Twitter</label>
-                    <input type="text" id="modern-twitter" class="form-control"
-                        placeholder="https://twitter.com/abc" />
+
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
+                        type="button">
+                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
+                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    </button>
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
+                        type="button">
+                        <span class="align-middle d-sm-inline-block d-none">Next</span>
+                        <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
+                    </button>
                 </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-facebook">Facebook</label>
-                    <input type="text" id="modern-facebook" class="form-control"
-                        placeholder="https://facebook.com/abc" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-google">Google+</label>
-                    <input type="text" id="modern-google" class="form-control"
-                        placeholder="https://plus.google.com/abc" />
-                </div>
-                <div class="mb-1 col-md-6">
-                    <label class="form-label" for="modern-linkedin">Linkedin</label>
-                    <input type="text" id="modern-linkedin" class="form-control"
-                        placeholder="https://linkedin.com/abc" />
-                </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-primary btn-prev">
-                    <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                </button>
-                <button class="btn btn-success btn-submit">Submit</button>
             </div>
         </div>
     </div>

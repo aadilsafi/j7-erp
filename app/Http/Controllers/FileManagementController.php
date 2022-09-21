@@ -71,14 +71,16 @@ class FileManagementController extends Controller
             'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
+            'user' => auth()->user(),
         ];
 
         $data['salesPlan'] = (new SalesPlan())->with([
-            'additionalCosts', 'installments'
+            'additionalCosts', 'installments', 'leadSource'
         ])->where([
             'status' => 1,
             'unit_id' => $data['unit']->id,
         ])->first();
+        $data['salesPlan']->installments = $data['salesPlan']->installments->sortBy('installment_order');
 
         if ($data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);

@@ -66,6 +66,7 @@
                     'unit' => $unit,
                     'nextOfKin' => $nextOfKin,
                     'salesPlan' => $salesPlan,
+                    'user' => $user,
                 ]) }}
             </div>
         </div>

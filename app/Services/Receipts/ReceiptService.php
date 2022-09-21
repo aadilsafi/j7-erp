@@ -45,7 +45,7 @@ class ReceiptService implements ReceiptInterface
                 'online_instrument_no' => $data[$i]['online_instrument_no'],
                 // 'drawn_on_bank' => $data[$i]['drawn_on_bank'],
                 'transaction_date' => $data[$i]['transaction_date'],
-                'amount_in_words' => '',
+                'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
                 'amount_in_numbers' => $data[$i]['amount_in_numbers'],
                 'purpose' => 'installments',
                 'installment_number' => '1',

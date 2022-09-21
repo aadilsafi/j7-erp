@@ -9,7 +9,7 @@
                             <label class="form-label" style="font-size: 15px" for="unit_id">
                                 <h6 style="font-size: 15px">Unit No.</h6>
                             </label>
-                            <select class="form-select form-select-lg unit_id @error('unit_id') is-invalid @enderror"
+                            <select class="select2 form-select  unit_id @error('unit_id') is-invalid @enderror"
                                 name="unit_id" onclick="setIds(this)"
                                 onchange="getUnitTypeAndFloor(this.options[this.selectedIndex].value,this.id)">
                                 <option selected>Select Unit No</option>
@@ -25,7 +25,6 @@
                             </select>
                             @error('unit_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
-                                {{-- <span class="text-danger">{{ $message }}</span> --}}
                             @enderror
                         </div>
                     </div>
@@ -36,7 +35,7 @@
                                 <h6 style="font-size: 15px">Amount To be Paid</h6>
                             </label>
                             <input min="0" onclick="setAmountIds(this)" id="amountToBePaid" type="number"
-                                class="form-control amountToBePaid form-control-lg @error('amount_in_numbers') is-invalid @enderror"
+                                class="form-control amountToBePaid  @error('amount_in_numbers') is-invalid @enderror"
                                 name="amount_in_numbers" placeholder="Amount To be Paid"
                                 value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
                             @error('amount_in_numbers')

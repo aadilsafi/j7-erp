@@ -365,14 +365,14 @@
                 success: function(response) {
                     if (response.success) {
                         $('.amountToBePaid').attr('unit_id', response.unit_id);
-                        $(':input[name="'+unit_type+'"]').empty();
+                        $('#unit_type').empty();
                         $('.amountToBePaid').empty();
-                        $(':input[name="'+floor+'"]').empty()
-                        $(':input[name="'+unit_name+'"]').empty();
-                        $(':input[name="'+unit_type+'"]').append('<option value="0" selected>' + response.unit_type +
+                        $('.floor').empty()
+                        $('.unit_name').empty();
+                        $('.unit_type').append('<option value="0" selected>' + response.unit_type +
                         '</option>');
-                        $(':input[name="'+floor+'"]').append('<option value="0" selected>' + response.unit_floor + '</option>');
-                        $(':input[name="'+unit_name+'"]').append('<option value="0" selected>' + response.unit_name +
+                        $('.floor').append('<option value="0" selected>' + response.unit_floor + '</option>');
+                        $('.unit_name').append('<option value="0" selected>' + response.unit_name +
                         '</option>');
                     } else {
                         Swal.fire({

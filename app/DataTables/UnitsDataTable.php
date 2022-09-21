@@ -2,15 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\Floor;
 use App\Models\Unit;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
+use App\Models\Floor;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class UnitsDataTable extends DataTable
 {
@@ -56,11 +57,13 @@ class UnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereFloorId($this->floor->id)->whereActive(true);
+        return $model->newQuery()->select('units.*')->with(['type', 'status'])->whereFloorId($this->floor->id)->whereActive(true);
     }
 
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return $this->builder()
             ->addTableClass(['table-striped', 'table-hover'])
             ->setTableId('floors-units-table')
@@ -71,12 +74,21 @@ class UnitsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('add-new')
+                ($createPermission ?
+                    Button::raw('add-new')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-plus"></i> Add New')
                     ->attr([
                         'onclick' => 'addNew()',
-                    ]),
+                    ])
+                    :
+                    Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')
+                    ->attr([
+                        'onclick' => 'addNew()',
+                    ])
+                ),
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
@@ -86,12 +98,21 @@ class UnitsDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
+                ($selectedDeletePermission ?
+                    Button::raw('delete-selected')
                     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
                     ->attr([
                         'onclick' => 'deleteSelected()',
-                    ]),
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                    ->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
+                ),
 
             )
             ->rowGroupDataSrc('type_id')
@@ -115,7 +136,6 @@ class UnitsDataTable extends DataTable
             ->orders([
                 [5, 'desc'],
             ]);
-
     }
 
     /**
@@ -125,8 +145,14 @@ class UnitsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $destroyPermission = Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            (
+                ($destroyPermission) ?
+                Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
             Column::make('floor_unit_number')->title('Unit Number'),
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type'),

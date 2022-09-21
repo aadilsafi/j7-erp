@@ -64,7 +64,7 @@
 
 @section('content')
     <form id="receiptForm" action="{{ route('sites.receipts.store', ['site_id' => encryptParams($site_id)]) }}"
-        method="post" class=" repeater">
+        method="post" class="repeater">
         @csrf
         <div class="row">
             <div id="loader" class="col-lg-9 col-md-9 col-sm-9 position-relative">
@@ -106,6 +106,7 @@
 @endsection
 
 @section('vendor-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
 @endsection
 
@@ -117,27 +118,26 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('.repeater').repeater({
-
                 show: function () {
                     $(this).slideDown();
                 },
 
-                hide: function(deleteElement) {
+                // hide: function(deleteElement) {
 
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Warning',
-                        text: 'Are you sure you want to delete this receipt form!!!',
-                        showCancelButton: true,
-                        cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                        confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                        confirmButtonClass: 'btn-danger',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $(this).slideUp(deleteElement);
-                        }
-                    });
-                },
+                //     Swal.fire({
+                //         icon: 'warning',
+                //         title: 'Warning',
+                //         text: 'Are you sure you want to delete this receipt form!!!',
+                //         showCancelButton: true,
+                //         cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                //         confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+                //         confirmButtonClass: 'btn-danger',
+                //     }).then((result) => {
+                //         if (result.isConfirmed) {
+                //             $(this).slideUp(deleteElement);
+                //         }
+                //     });
+                // },
                 isFirstItemUndeletable: true
             })
             var e = $("#unit_id");

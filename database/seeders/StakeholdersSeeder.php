@@ -36,7 +36,7 @@ class StakeholdersSeeder extends Seeder
                 'father_name' => 'Raza',
                 'occupation' => 'Web Developer',
                 'designation' => 'Laravel Developer',
-                'cnic' => '1234567890123',
+                'cnic' => '1234567890124',
                 'address' => 'Sarai Kharbooza, Opposite E16 GT Road, Islamabad, Pakistan',
                 'contact' => '0512226044',
                 'parent_id' => 0,

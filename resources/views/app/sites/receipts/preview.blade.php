@@ -1,0 +1,306 @@
+@extends('app.layout.layout')
+
+@section('seo-breadcrumb')
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.edit', encryptParams($site_id)) }}
+@endsection
+
+@section('page-title', 'Receipt Details')
+
+@section('page-vendor')
+@endsection
+
+@section('page-css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+@endsection
+
+@section('custom-css')
+@endsection
+
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Receipt Details</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::render('sites.receipts.edit', encryptParams($site_id)) }}
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('content')
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="stakeholders_card">
+                <div class="card-header justify-content-between">
+                    <h3>1. CUSTOMER DATA </h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row mb-1">
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->full_name }}"
+                                class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
+                                class="form-control form-control-lg" id="stackholder_father_name"
+                                placeholder="Father Name" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->occupation }}"
+                                class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->designation }}"
+                                class="form-control form-control-lg" id="stackholder_designation"
+                                placeholder="Designation" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->cnic }}"
+                                class="form-control form-control-lg" id="stackholder_cnic" placeholder="CNIC" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->contact }}"
+                                class="form-control form-control-lg" id="stackholder_contact" placeholder="Contact" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="stackholder_address">Address</label>
+                            <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
+                                placeholder="Address" rows="5">{{ $stakeholder_data->address }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                <div class="card-header">
+                    <h3>2. UNIT DATA</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-1">
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="unit_no">Unit Name</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
+                                placeholder="Unit No" value="{{ $unit_data->name }}" readonly />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="floor_no">Floor No</label>
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}" readonly />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="unit_type">Unit Type</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
+                                placeholder="Unit Type" value="{{ $unit_data->type->name }}" readonly />
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="unit_no">AREA(sq.ft)</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
+                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="floor_no">UNIT SIZE(sq.ft)</label>
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ number_format($unit_data->price_sqft)  }}" readonly />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="unit_type">TOTAL PRICE</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
+                                placeholder="Unit Type" value="{{ number_format($unit_data->total_price)  }}" readonly />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                <div class="card-header">
+                    <h3>3. RECEIPT DATA</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-1">
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 mb-2 position-relative">
+                            <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
+                                placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 mb-2 position-relative">
+                            <label class="form-label fs-5" for="unit_type">CREATED AT</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
+                                placeholder="Unit Type"
+                                value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}" readonly />
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
+                            <input type="text" class="form-control form-control-lg" id="floor_no"
+                                name="unit[floor_no]" placeholder="Floor No" value="{{ $receipt->amount_in_words }}"
+                                readonly />
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="installments_acard">
+                <div class="card-header">
+                    <h3>4. PAID OR PARTIALLY PAID INSTALLMENT DETAILS</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                                <div class="card-body">
+                                    <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
+
+                                        <table class="table table-hover table-striped table-borderless"
+                                            id="installments_table" style="position: relative;">
+                                            <thead style="position: sticky; top: 0; z-index: 10;">
+                                                <tr class="text-center text-nowrap">
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Installments</th>
+                                                    <th scope="col">Due Date</th>
+                                                    <th scope="col">Total Amount</th>
+                                                    <th scope="col">Paid Amount</th>
+                                                    <th scope="col">Remaining Amount</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            @php
+                                                $i = 0;
+                                            @endphp
+                                            <tbody id="dynamic_installment_rows">
+                                                @foreach ($paid_installments as $paidIntsallment)
+                                                    @php
+                                                        $i = $i + 1;
+                                                    @endphp
+                                                    <tr class="text-center text-nowrap">
+                                                        <td>{{ $i }}</td>
+                                                        <td>{{ $paidIntsallment->details }}</td>
+                                                        <td>{{ $paidIntsallment->date }}</td>
+                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
+                                                        <td>{{ $paidIntsallment->status }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="installments_acard">
+                <div class="card-header">
+                    <h3>5. UNPAID INSTALLMENT DETAILS</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                                <div class="card-body">
+                                    <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
+
+                                        <table class="table table-hover table-striped table-borderless"
+                                            id="installments_table" style="position: relative;">
+                                            <thead style="position: sticky; top: 0; z-index: 10;">
+                                                <tr class="text-center text-nowrap">
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Installments</th>
+                                                    <th scope="col">Due Date</th>
+                                                    <th scope="col">Total Amount</th>
+                                                    <th scope="col">Paid Amount</th>
+                                                    <th scope="col">Remaining Amount</th>
+                                                    <th scope="col">Status</th>
+                                                </tr>
+                                            </thead>
+                                            @php
+                                                $z = 0;
+                                            @endphp
+                                            <tbody id="dynamic_installment_rows">
+                                                @foreach ($unpadid_installments as $unPaidIntsallment)
+                                                    @php
+                                                        $z = $z + 1;
+                                                    @endphp
+                                                    <tr class="text-center text-nowrap">
+                                                        <td>{{ $z }}</td>
+                                                        <td>{{ $unPaidIntsallment->details }}</td>
+                                                        <td>{{ $unPaidIntsallment->date }}</td>
+                                                        <td>{{ number_format($unPaidIntsallment->amount) }}</td>
+                                                        <td>-</td>
+                                                        <td>-</td>
+                                                        <td>UnPaid</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+@endsection
+
+@section('vendor-js')
+@endsection
+
+@section('page-js')
+@endsection
+
+@section('custom-js')
+@endsection

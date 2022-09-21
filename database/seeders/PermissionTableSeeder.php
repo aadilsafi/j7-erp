@@ -625,7 +625,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.receipts.edit',
-                'show_name' => 'Edit Receipts',
+                'show_name' => 'View Receipt Details',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

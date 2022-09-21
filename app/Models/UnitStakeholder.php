@@ -11,14 +11,21 @@ class UnitStakeholder extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'site_id',
         'unit_id',
         'stakeholder_id',
     ];
 
     protected $casts = [
+        'site_id' => 'integer',
         'unit_id' => 'integer',
         'stakeholder_id' => 'integer',
     ];
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 
     public function unit()
     {

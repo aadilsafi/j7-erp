@@ -1,15 +1,14 @@
 @extends('app.layout.layout')
-
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', $site_id) }}
+{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Customer\'s List')
 
 @section('page-vendor')
-    <link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
+        <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
@@ -18,10 +17,10 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
-@endsection
+        @endsection
 
-@section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
+        @section('page-css')
+        <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
 @endsection
 
 @section('custom-css')
@@ -31,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">File Managements(Customers List)</h2>
+                <h2 class="content-header-title float-start mb-0">File Management (Customers List)</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.customers', $site_id) }}
+                    {{ Breadcrumbs::render('sites.file-managements.customers', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -42,7 +41,6 @@
 
 @section('content')
     <p class="mb-2">
-
     </p>
 
     <div class="card">

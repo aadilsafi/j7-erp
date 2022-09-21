@@ -139,7 +139,7 @@ class UnitsPreviewDataTable extends DataTable
             Column::make('price_sqft'),
             Column::make('is_corner'),
             Column::make('is_facing'),
-            Column::make('created_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
         ];
     }
 

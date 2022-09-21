@@ -176,7 +176,7 @@ class AdditionalCostsDataTable extends DataTable
                 :
                     Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
             ),
-            Column::make('name')->title('Additional Cost'),
+            Column::make('name')->title('Additional Cost')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
             Column::make('has_child'),
             Column::make('applicable_on_site')->addClass('text-center'),
@@ -185,7 +185,7 @@ class AdditionalCostsDataTable extends DataTable
             Column::make('floor_percentage')->title('Floor (%)')->addClass('text-center'),
             Column::make('applicable_on_unit')->addClass('text-center'),
             Column::make('unit_percentage')->title('Unit (%)')->addClass('text-center'),
-            Column::make('created_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(100)->addClass('text-center'),
         ];
     }

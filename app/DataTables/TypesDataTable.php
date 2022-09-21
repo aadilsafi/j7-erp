@@ -157,8 +157,8 @@ class TypesDataTable extends DataTable
 
             Column::make('name')->title('Type Name'),
             Column::make('parent_id')->title('Parent'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('updated_at')->addClass('text-nowrap'),
             ($editPermission ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
                 :

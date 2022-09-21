@@ -181,7 +181,7 @@ class SalesPlanDataTable extends DataTable
             Column::make('user_id')->title('Sales Person'),
             Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::make('status')->title('Status')->addClass('text-center'),
-            Column::make('created_at')->title('Created At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             (
                 ($printPermission) ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')

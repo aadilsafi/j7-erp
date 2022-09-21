@@ -144,7 +144,7 @@ class RolesDataTable extends DataTable
             Column::make('guard_name')->title('Guard Name'),
             // Column::make('default')->title('Default')->addClass('text-center'),
             Column::make('parent_id')->title('Parent'),
-            Column::make('created_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
             // Column::make('updated_at'),
             (
                 ($editPermission || $defaultPermission ||  $destroyPermission) ?

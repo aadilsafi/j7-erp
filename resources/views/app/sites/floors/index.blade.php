@@ -203,10 +203,12 @@
                     {
                         data: 'created_at',
                         name: 'created_at',
+                        className: 'text-nowrap',
                     },
                     {
                         data: 'updated_at',
                         name: 'updated_at',
+                        className: 'text-nowrap',
                     },
                     {
                         data: 'actions',

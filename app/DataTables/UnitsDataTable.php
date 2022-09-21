@@ -157,8 +157,8 @@ class UnitsDataTable extends DataTable
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type'),
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center'),
         ];
     }

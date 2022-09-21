@@ -109,12 +109,12 @@ class CustomersDataTable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('full_name'),
-            Column::make('father_name'),
+            Column::make('full_name')->addClass('text-nowrap'),
+            Column::make('father_name')->addClass('text-nowrap'),
             Column::make('cnic'),
             Column::make('contact'),
-            Column::make('created_at')->title('Created At'),
-            Column::make('updated_at')->title('Updated At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

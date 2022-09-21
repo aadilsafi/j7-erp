@@ -173,9 +173,9 @@ class ReceiptsDatatable extends DataTable
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
             // Column::make('installment_number')->title('Installment Numbers'),
-            Column::make('amount_in_numbers')->title(' Paid Amount'),
+            Column::make('amount_in_numbers')->title('Paid Amount'),
             // Column::computed('floor_id')->title('Floor'),
-            Column::make('created_at')->title('Created_At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             (
                 $editPermission ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')

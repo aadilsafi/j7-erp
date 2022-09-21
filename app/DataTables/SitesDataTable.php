@@ -114,7 +114,7 @@ class SitesDataTable extends DataTable
             Column::make('address')->title('Address'),
             Column::make('area_width')->title('Area Width'),
             Column::make('area_length')->title('Area Length'),
-            Column::make('created_at')->title('Created At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

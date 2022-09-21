@@ -1,4 +1,4 @@
-<?php
+->addClass('text-nowrap')<?php
 
 namespace App\DataTables;
 
@@ -132,8 +132,8 @@ class LeadSourceDataTable extends DataTable
         return [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Lead Source'),
-            Column::make('created_at')->title('Created At'),
-            Column::make('updated_at')->title('Updated At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

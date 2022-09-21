@@ -1,7 +1,5 @@
-->addClass('text-nowrap')<?php
-
+<?php
 namespace App\DataTables;
-
 use App\Models\LeadSource;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;

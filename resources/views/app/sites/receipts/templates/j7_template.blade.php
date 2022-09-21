@@ -228,7 +228,12 @@
                         <input disabled type="checkbox" style="margin-left:15px;">
                     @endif
                     <span disabled class="checkmark" style="margin-left:15px;">Other</span>
-                    <span style="">________________________</span>
+                    @if ($preview_data['other_value'])
+                        <span style=" border-bottom: 1px solid black; ">&nbsp;&nbsp;&nbsp; {{ $preview_data['other_value'] }}&nbsp;&nbsp;&nbsp;</span>
+                    @else
+                        <span style="">________________________</span>
+                    @endif
+
                 </td>
             </tr>
 
@@ -240,7 +245,8 @@
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:8%;  ">DD / Pay Order / Cheque No.</th>
                 <td style="text-align: start; width:20%;  ">
-                    <input disabled style="width: 97%; height:20px; border:1px solid;" value="{{ $preview_data['cheque_no'] }}" type="text">
+                    <input disabled style="width: 97%; height:20px; border:1px solid;"
+                        value="{{ $preview_data['cheque_no'] }}" type="text">
                 </td>
             </tr>
 
@@ -255,7 +261,8 @@
 
                 </th>
                 <td style="text-align: start; width:20%;  ">
-                    <input disabled style="width: 97%; height:20px; border:1px solid;" value="{{ $preview_data['online_instrument_no'] }}" type="text">
+                    <input disabled style="width: 97%; height:20px; border:1px solid;"
+                        value="{{ $preview_data['online_instrument_no'] }}" type="text">
                 </td>
             </tr>
 
@@ -306,7 +313,8 @@
                     Amount in figures
                 </th>
                 <td style="text-align: start; width:20%;  ">
-                    <input disabled style="width: 20%; height:20px; border:1px solid; text-align:center;" value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
+                    <input disabled style="width: 20%; height:20px; border:1px solid; text-align:center;"
+                        value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
                 </td>
             </tr>
 
@@ -320,17 +328,18 @@
                 <td style="text-align: start; width:10%; ">
 
                     <input disabled type="checkbox" checked="checked">
-                    <span class="checkmark"  style="margin-left:15px;">Downpayment</span>
+                    <span class="checkmark" style="margin-left:15px;">Downpayment</span>
 
                     <input disabled type="checkbox" style="margin-left:15px;">
-                    <span class="checkmark"  style="margin-left:15px;">Installment</span>
-                    <span style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
+                    <span class="checkmark" style="margin-left:15px;">Installment</span>
+                    <span
+                        style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
 
                     {{-- <input type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Online</span> --}}
 
                     <input disabled type="checkbox" style="margin-left:15px;">
-                    <span class="checkmark"  style="margin-left:15px;">Other</span>
+                    <span class="checkmark" style="margin-left:15px;">Other</span>
                     <span style="">____</span>
                 </td>
             </tr>

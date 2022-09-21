@@ -47,4 +47,8 @@ class Receipt extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function salesPlan()
+    {
+        return $this->belongsTo(SalesPlan::class);
+    }
 }

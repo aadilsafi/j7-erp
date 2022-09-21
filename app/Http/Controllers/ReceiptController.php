@@ -10,6 +10,8 @@ use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Models\Receipt;
 use App\Models\ReceiptTemplate;
+use App\Models\SalesPlanInstallments;
+use App\Models\Stakeholder;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptController extends Controller
@@ -97,9 +99,21 @@ class ReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($site_id, $id)
     {
         //
+        $site_id = decryptParams($site_id);
+        $receipt = Receipt::find(decryptParams($id));
+        $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
+        $installmentNumbersArray = explode(",",$receipt_installment_numbers);
+        $last_index = array_key_last ( $installmentNumbersArray );
+        $first_letter = str_split( $installmentNumbersArray[$last_index]);
+        $unit_data =  $receipt->unit;
+        $last_paid_installment_id = SalesPlanInstallments::where('details','LIKE', '%'.$first_letter[0].'%')->where('sales_plan_id',$receipt->sales_plan_id)->first()->id;
+        $unpadid_installments = SalesPlanInstallments::where('id','>',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $paid_installments = SalesPlanInstallments::where('id','<=',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $stakeholder_data = Stakeholder::where('cnic',$receipt->cnic)->first();
+        return view('app.sites.receipts.preview',compact('site_id','unit_data','stakeholder_data','paid_installments','unpadid_installments','receipt'));
     }
 
     /**

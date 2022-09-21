@@ -155,13 +155,20 @@
                 <div class="card-body">
                     <div class="row mb-1">
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 mb-2 position-relative">
+                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
                             <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
                                 placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
                         </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-6 mb-2 position-relative">
+                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
+                            <label class="form-label fs-5" for="unit_type">MODE OF PAYMENT</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
+                                placeholder="Unit Type"
+                                value="{{$receipt->mode_of_payment}}" readonly />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
                             <label class="form-label fs-5" for="unit_type">CREATED AT</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
                                 placeholder="Unit Type"
@@ -171,7 +178,7 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="Floor No" value="{{ $receipt->amount_in_words }}"
+                                name="unit[floor_no]" placeholder="" value="{{ numberToWords($receipt->amount_in_numbers)}} only."
                                 readonly />
                         </div>
 
@@ -218,7 +225,7 @@
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $i }}</td>
                                                         <td>{{ $paidIntsallment->details }}</td>
-                                                        <td>{{ $paidIntsallment->date }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}</td>
                                                         <td>{{ number_format($paidIntsallment->amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
@@ -273,7 +280,7 @@
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $z }}</td>
                                                         <td>{{ $unPaidIntsallment->details }}</td>
-                                                        <td>{{ $unPaidIntsallment->date }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}</td>
                                                         <td>{{ number_format($unPaidIntsallment->amount) }}</td>
                                                         <td>-</td>
                                                         <td>-</td>

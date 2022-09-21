@@ -294,12 +294,8 @@
 
             </div>
             <div class="card-footer">
-                <div class="d-flex justify-content-between">
-                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
-                        type="button">
-                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                    </button>
+                <div class="d-flex justify-content-end">
+
                     <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
                         type="button">
                         <span class="align-middle d-sm-inline-block d-none">Next</span>

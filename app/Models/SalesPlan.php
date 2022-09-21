@@ -65,4 +65,9 @@ class SalesPlan extends Model
     {
         return $this->belongsTo(LeadSource::class);
     }
+
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class);
+    }
 }

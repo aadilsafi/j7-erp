@@ -72,10 +72,11 @@ class FileManagementController extends Controller
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
+
         ];
 
         $data['salesPlan'] = (new SalesPlan())->with([
-            'additionalCosts', 'installments', 'leadSource'
+            'additionalCosts', 'installments', 'leadSource', 'receipts'
         ])->where([
             'status' => 1,
             'unit_id' => $data['unit']->id,

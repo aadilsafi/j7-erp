@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\Site;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Receipt extends Model
+class Receipt extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     protected $fillable = [
         'site_id',

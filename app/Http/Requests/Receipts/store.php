@@ -72,7 +72,7 @@ class store extends FormRequest
                 if ($modeOfPayment[0] != 'Cash' && $attachment == null) {
                     $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online or Other.');
                 }
-                if($amount_in_numbers >  $amount_received){
+                if($amount_in_numbers[0] >  $amount_received){
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
                 }
             });

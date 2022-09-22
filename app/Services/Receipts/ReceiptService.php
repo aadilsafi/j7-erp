@@ -41,10 +41,8 @@ class ReceiptService implements ReceiptInterface
                 'phone_no' => $phone_no,
                 'mode_of_payment' => $data[$i]['mode_of_payment'],
                 'other_value' => $data[$i]['other_value'],
-                // 'pay_order' => $data[$i]['pay_order'],
                 'cheque_no' => $data[$i]['cheque_no'],
                 'online_instrument_no' => $data[$i]['online_instrument_no'],
-                // 'drawn_on_bank' => $data[$i]['drawn_on_bank'],
                 'transaction_date' => $data[$i]['transaction_date'],
                 'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
                 'amount_in_numbers' => $data[$i]['amount_in_numbers'],
@@ -54,6 +52,10 @@ class ReceiptService implements ReceiptInterface
             ];
 
             $receipt = Receipt::create($receiptData);
+
+            if (isset($requested_data['attachment'])) {
+                $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+            }
 
             $sales_plan = SalesPlan::where('unit_id', $data[$i]['unit_id'])->where('status', 1)->with('installments', 'unPaidInstallments')->first();
             $installmentFullyPaidUnderAmount = [];

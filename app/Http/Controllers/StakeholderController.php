@@ -88,7 +88,7 @@ class StakeholderController extends Controller
      */
     public function show($id)
     {
-        //
+        abort(403);
     }
 
     /**
@@ -106,6 +106,7 @@ class StakeholderController extends Controller
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id);
 
             if ($stakeholder && !empty($stakeholder)) {
+                $images = $stakeholder->getMedia('stakeholder_cnic');
 
                 $data = [
                     'site_id' => $site_id,
@@ -113,6 +114,7 @@ class StakeholderController extends Controller
                     'stakeholderTypes' => StakeholderTypeEnum::array(),
                     'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                     'stakeholder' => $stakeholder,
+                    'images' => $stakeholder->getMedia('stakeholder_cnic'),
                 ];
                 return view('app.sites.stakeholders.edit', $data);
             }

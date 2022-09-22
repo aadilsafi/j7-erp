@@ -30,6 +30,6 @@ class testJob implements ShouldQueue
      */
     public function handle()
     {
-        sleep(1);
+        // sleep(1);
     }
 }

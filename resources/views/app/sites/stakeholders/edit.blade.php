@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+                                width: calc(20% - 0.5em);
+                            } */
     </style>
 @endsection
 
@@ -122,9 +122,9 @@
         var files = [];
 
         @forelse($images as $image)
-        files.push({
-            source: '{{ $image->getUrl() }}',
-        });
+            files.push({
+                source: '{{ $image->getUrl() }}',
+            });
         @empty
         @endforelse
 

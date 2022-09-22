@@ -70,7 +70,7 @@ class ReceiptController extends Controller
         //
         try {
             if (!request()->ajax()) {
-                $data = $request->receipts;
+                $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);;
                 return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {

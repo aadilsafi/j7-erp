@@ -155,20 +155,26 @@
                 <div class="card-body">
                     <div class="row mb-1">
 
-                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                            <label class="form-label fs-5" for="unit_no">TOTAL AMOUNT RECEIVED</label>
+                            <input type="text" class="form-control form-control-lg" id="unit_no"
+                                placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                             <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
                                 placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
                         </div>
 
-                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                             <label class="form-label fs-5" for="unit_type">MODE OF PAYMENT</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
                                 placeholder="Unit Type"
                                 value="{{$receipt->mode_of_payment}}" readonly />
                         </div>
 
-                        <div class="col-lg-4 col-md-4 col-sm-4 mb-2 position-relative">
+                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                             <label class="form-label fs-5" for="unit_type">CREATED AT</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
                                 placeholder="Unit Type"

@@ -20,8 +20,9 @@ class ReceiptService implements ReceiptInterface
     }
 
     // Store
-    public function store($site_id, $data)
+    public function store($site_id, $requested_data)
     {
+        $data = $requested_data['receipts'];
         for ($i = 0; $i < count($data); $i++) {
             $unit = Unit::find($data[$i]['unit_id']);
             $sales_plan = $unit->salesPlan->toArray();
@@ -49,6 +50,7 @@ class ReceiptService implements ReceiptInterface
                 'amount_in_numbers' => $data[$i]['amount_in_numbers'],
                 'purpose' => 'installments',
                 'installment_number' => '1',
+                'amount_received' => $requested_data['amount_received'],
             ];
 
             $receipt = Receipt::create($receiptData);

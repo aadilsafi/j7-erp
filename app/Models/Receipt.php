@@ -29,6 +29,8 @@ class Receipt extends Model
         'phone_no',
         'other_value',
         'pay_order',
+        'amount_received',
+        'attachment',
     ];
 
     public $rules = [

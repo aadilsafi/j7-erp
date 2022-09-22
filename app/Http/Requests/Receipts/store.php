@@ -29,11 +29,12 @@ class store extends FormRequest
             'receipts.*.unit_id' => 'required|numeric',
             'receipts.*.mode_of_payment' => 'required',
             'receipts.*.amount_in_numbers' => 'required',
+            'amount_received' => 'required',
             'receipts.*.other_value' => ' required_if:receipts.*.mode_of_payment,==,Other',
             'receipts.*.cheque_no' => ' required_if:receipts.*.mode_of_payment,==,Cheque',
             'receipts.*.transaction_date' => ' required_if:receipts.*.mode_of_payment,==,Online',
             'receipts.*.online_instrument_no' => ' required_if:receipts.*.mode_of_payment,==,Online',
-
+            'attachment' => 'sometimes',
         ];
     }
 
@@ -44,10 +45,12 @@ class store extends FormRequest
             "receipts.*.unit_id.numeric" => "Unit id is required.",
             "receipts.*.mode_of_payment.required" => "Mode of Payment is Required.",
             "receipts.*.amount_in_numbers.required" => "Amount is Required.",
+            "amount_received.required" => "Total Amount Received is Required.",
             'receipts.*.other_value' => "Other value is required when Other mode of payment is selected.",
             'receipts.*.cheque_no' => "Cheque number is required when Cheque mode of payment is selected.",
             'receipts.*.transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
             'receipts.*.online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
+            "attachment" => "Attachment is Required if mode of payment is Cheque or Online or Other.",
         ];
     }
 
@@ -57,8 +60,22 @@ class store extends FormRequest
      * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
+
     public function withValidator($validator)
     {
-
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                $modeOfPayment = $this->input('receipts.*.mode_of_payment');
+                $attachment = $this->attachment;
+                $amount_received = $this->input('amount_received');
+                $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
+                if ($modeOfPayment[0] != 'Cash' && $attachment == null) {
+                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online or Other.');
+                }
+                if($amount_in_numbers >  $amount_received){
+                    $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
+                }
+            });
+        }
     }
 }

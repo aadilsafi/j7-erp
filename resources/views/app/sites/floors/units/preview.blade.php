@@ -137,7 +137,7 @@
         });
 
         function updateUnitField(id, value, field, element = null) {
-            var url = "{{ route('unit.name.update') }}";
+            var url = "{{ route('ajax-unit.name.update') }}";
             toastr.options = {
                 "closeButton": true,
                 "newestOnTop": true,
@@ -162,7 +162,7 @@
                         toastr.success(response['message']);
                         if (response['data']['facing'] == 'yes' || response['data']['facing'] == 'no') {
                             $.ajax({
-                                url: "{{ route('facing.field.draw') }}",
+                                url: "{{ route('ajax-facing.field.draw') }}",
                                 type: 'GET',
                                 data: {
                                     id: id,
@@ -205,7 +205,7 @@
                 inputtype = $(this).data('inputtype');
                 el = $(this);
 
-                var url = "{{ route('unit.get.input') }}";
+                var url = "{{ route('ajax-unit.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',

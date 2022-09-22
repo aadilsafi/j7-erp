@@ -334,9 +334,9 @@ Route::group([
             });
         });
 
-        Route::get('get-unit-input', [UnitController::class, 'getUnitInput'])->name('unit.get.input');
-        Route::get('draw-facing-field', [UnitController::class, 'drawFacingField'])->name('facing.field.draw');
-        Route::get('update-unit-name', [UnitController::class, 'updateUnitName'])->name('unit.name.update');
+        Route::get('ajax-get-unit-input', [UnitController::class, 'getUnitInput'])->name('unit.get.input');
+        Route::get('ajax-draw-facing-field', [UnitController::class, 'drawFacingField'])->name('facing.field.draw');
+        Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('unit.name.update');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

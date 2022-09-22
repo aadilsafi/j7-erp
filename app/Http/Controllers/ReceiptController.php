@@ -91,6 +91,7 @@ class ReceiptController extends Controller
     public function show($id)
     {
         //
+        abort(403);
     }
 
     /**
@@ -104,6 +105,8 @@ class ReceiptController extends Controller
         //
         $site_id = decryptParams($site_id);
         $receipt = Receipt::find(decryptParams($id));
+        $image = $receipt->getFirstMediaUrl('receipt_attachments');
+        // dd();
         $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
         $installmentNumbersArray = explode(",",$receipt_installment_numbers);
         $last_index = array_key_last ( $installmentNumbersArray );
@@ -113,7 +116,7 @@ class ReceiptController extends Controller
         $unpadid_installments = SalesPlanInstallments::where('id','>',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id','<=',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $stakeholder_data = Stakeholder::where('cnic',$receipt->cnic)->first();
-        return view('app.sites.receipts.preview',compact('site_id','unit_data','stakeholder_data','paid_installments','unpadid_installments','receipt'));
+        return view('app.sites.receipts.preview',compact('site_id','unit_data','stakeholder_data','paid_installments','unpadid_installments','receipt','image'));
     }
 
     /**
@@ -126,6 +129,7 @@ class ReceiptController extends Controller
     public function update(Request $request, $id)
     {
         //
+        abort(403);
     }
 
     /**
@@ -137,6 +141,7 @@ class ReceiptController extends Controller
     public function destroy($id)
     {
         //
+        abort(403);
     }
 
     public function destroySelected(Request $request, $site_id)

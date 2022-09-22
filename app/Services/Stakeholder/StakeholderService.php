@@ -43,16 +43,8 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->with($relationships)->find($id);
     }
 
-    // Store
     public function store($site_id, $inputs)
     {
-        // $firstImage = $inputs['attachment'][0];
-        // $secondImage = $inputs['attachment'][1];
-
-        // $firstImageName = $firstImage->getClientOriginalName();
-        // $secondImageName = $secondImage->getClientOriginalName();
-        // $attachment = $firstImageName . ',' . $secondImageName;
-
         $data = [
             'site_id' => decryptParams($site_id),
             'full_name' => $inputs['full_name'],
@@ -70,12 +62,8 @@ class StakeholderService implements StakeholderInterface
 
 
         if (isset($inputs['attachment'])) {
-            $folder = 'app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/';
             foreach ($inputs['attachment'] as $attachment) {
-                // $stakeholder->addMedia($attachment)->toMediaCollection('attachments');
-                if (!file_exists($folder . $attachment)) {
-                    $attachment->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $attachment);
-                }
+                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
             }
         }
 

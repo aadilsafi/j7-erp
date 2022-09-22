@@ -92,20 +92,6 @@ class StakeholderService implements StakeholderInterface
 
     public function update($site_id, $id, $inputs)
     {
-        if (isset($inputs['attachment'])) {
-            $firstImage = $inputs['attachment'][0];
-            $secondImage = $inputs['attachment'][1];
-            $firstImageName = $firstImage->getClientOriginalName();
-            $secondImageName = $secondImage->getClientOriginalName();
-            $attachment = $firstImageName . ',' . $secondImageName;
-        }
-        else{
-            $attachment = null;
-        }
-
-        if ($inputs['parent_id'] == null) {
-            $inputs['parent_id'] = 0;
-        }
         $data = [
             'full_name' => $inputs['full_name'],
             'father_name' => $inputs['father_name'],
@@ -117,18 +103,17 @@ class StakeholderService implements StakeholderInterface
             'parent_id' => $inputs['parent_id'],
             'relation' => $inputs['relation'],
         ];
-        $stakeholder_data = $this->model()->where('id', $id)->update($data);
 
-        $folder = 'app-assets/server-uploads/stakeholders/' . $id . '/';
+        $stakeholder = $this->model()->where('id', $id)->update($data);
+        $stakeholder = $this->model()->find($id);
+        $stakeholder->clearMediaCollection('stakeholder_cnic');
+
         if (isset($inputs['attachment'])) {
-            if (!file_exists($folder . $firstImageName)) {
-                $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $firstImageName);
-            }
-            if (!file_exists($folder . $secondImageName)) {
-                $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $secondImageName);
+            foreach ($inputs['attachment'] as $attachment) {
+                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
             }
         }
-        return $stakeholder_data;
+        return $stakeholder;
     }
 
     public function destroy($site_id, $id)

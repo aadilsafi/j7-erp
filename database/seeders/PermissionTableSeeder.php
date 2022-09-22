@@ -625,7 +625,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.receipts.edit',
-                'show_name' => 'Edit Receipts',
+                'show_name' => 'View Receipt Details',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -646,7 +646,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.receipts.templates.print',
-                'show_name' => 'Destroy Selected Receipts',
+                'show_name' => 'Print Selected Receipts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -667,6 +667,50 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.index',
+                'show_name' => 'Create Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.create',
+                'show_name' => 'Create Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.store',
+                'show_name' => 'Store Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.edit',
+                'show_name' => 'Edit Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.update',
+                'show_name' => 'Update Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.destroy-selected',
+                'show_name' => 'Delete Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //Commands Route
             [
                 'name' => 'commands.command',
                 'show_name' => 'Commands Permissions',

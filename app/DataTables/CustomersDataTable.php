@@ -23,9 +23,8 @@ class CustomersDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('check', function ($fileManagement) {
-                return $fileManagement;
-            })
+            ->addIndexColumn()
+
             ->editColumn('cnic', function ($fileManagement) {
                 return strlen($fileManagement->cnic) > 0 ? $fileManagement->cnic : '-';
             })
@@ -39,7 +38,7 @@ class CustomersDataTable extends DataTable
                 return editDateColumn($fileManagement->updated_at);
             })
             ->editColumn('actions', function ($fileManagement) {
-                return view('app.sites.file-managements.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->id]);
+                return view('app.sites.file-managements.customers.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -73,8 +72,21 @@ class CustomersDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $buttons = [
+            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('print')->addClass('dropdown-item'),
+                Button::make('copy')->addClass('dropdown-item'),
+                Button::make('csv')->addClass('dropdown-item'),
+                Button::make('excel')->addClass('dropdown-item'),
+                Button::make('pdf')->addClass('dropdown-item'),
+            ]),
+            Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+        ];
+
         return $this->builder()
-            ->addTableClass(['table-hover'])
+            ->addIndex()
+            ->addTableClass(['table-hover', 'table-striped'])
             ->setTableId('file-management-table')
             ->columns($this->getColumns())
             ->deferRender()
@@ -82,48 +94,7 @@ class CustomersDataTable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons(
-                Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ]),
-                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
-                    Button::make('print')->addClass('dropdown-item'),
-                    Button::make('copy')->addClass('dropdown-item'),
-                    Button::make('csv')->addClass('dropdown-item'),
-                    Button::make('excel')->addClass('dropdown-item'),
-                    Button::make('pdf')->addClass('dropdown-item'),
-                ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
-
-            )
-            // ->rowGroupDataSrc('type_id')
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 0,
-                    'render' => "function (data, type, full, setting) {
-                         tableRow = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
+            ->buttons($buttons)
             ->orders([
                 [3, 'desc'],
             ]);
@@ -137,13 +108,13 @@ class CustomersDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('full_name'),
-            Column::make('father_name'),
+            Column::computed('DT_RowIndex')->title('#'),
+            Column::make('full_name')->addClass('text-nowrap'),
+            Column::make('father_name')->addClass('text-nowrap'),
             Column::make('cnic'),
             Column::make('contact'),
-            Column::make('created_at')->title('Created At'),
-            Column::make('updated_at')->title('Updated At'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
@@ -155,7 +126,7 @@ class CustomersDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Stakeholders_' . date('YmdHis');
+        return 'Customers_' . date('YmdHis');
     }
 
     /**

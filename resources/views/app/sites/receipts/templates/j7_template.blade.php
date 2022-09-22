@@ -200,35 +200,40 @@
                 <td style="text-align: start; width:10%; ">
 
                     @if ($preview_data['mode_of_payment'] == 'Cash')
-                        <input type="checkbox" checked="checked">
+                        <input disabled type="checkbox" checked="checked">
                     @else
-                        <input type="checkbox">
+                        <input disabled type="checkbox">
                     @endif
 
                     <span class="checkmark" style="margin-left:15px;">Cash</span>
 
                     @if ($preview_data['mode_of_payment'] == 'Cheque')
-                        <input type="checkbox" style="margin-left:15px;" checked="checked">
+                        <input disabled type="checkbox" style="margin-left:15px;" checked="checked">
                     @else
-                        <input type="checkbox" style="margin-left:15px;">
+                        <input disabled type="checkbox" style="margin-left:15px;">
                     @endif
                     <span class="checkmark" style="margin-left:15px;">Cheque</span>
 
                     @if ($preview_data['mode_of_payment'] == 'Online')
-                        <input type="checkbox" style="margin-left:15px;" checked="checked">
+                        <input disabled type="checkbox" style="margin-left:15px;" checked="checked">
                     @else
-                        <input type="checkbox" style="margin-left:15px;">
+                        <input disabled type="checkbox" style="margin-left:15px;">
                     @endif
 
-                    <span class="checkmark" style="margin-left:15px;">Online</span>
+                    <span disabled class="checkmark" style="margin-left:15px;">Online</span>
 
                     @if ($preview_data['mode_of_payment'] == 'Other')
-                        <input type="checkbox" style="margin-left:15px;" checked="checked">
+                        <input disabled type="checkbox" style="margin-left:15px;" checked="checked">
                     @else
-                        <input type="checkbox" style="margin-left:15px;">
+                        <input disabled type="checkbox" style="margin-left:15px;">
                     @endif
-                    <span class="checkmark" style="margin-left:15px;">Other</span>
-                    <span style="">________________________</span>
+                    <span disabled class="checkmark" style="margin-left:15px;">Other</span>
+                    @if ($preview_data['other_value'])
+                        <span style=" border-bottom: 1px solid black; ">&nbsp;&nbsp;&nbsp; {{ $preview_data['other_value'] }}&nbsp;&nbsp;&nbsp;</span>
+                    @else
+                        <span style="">________________________</span>
+                    @endif
+
                 </td>
             </tr>
 
@@ -240,7 +245,8 @@
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:8%;  ">DD / Pay Order / Cheque No.</th>
                 <td style="text-align: start; width:20%;  ">
-                    <input style="width: 97%; height:20px; border:1px solid;" value="{{ $preview_data['cheque_no'] }}" type="text">
+                    <input disabled style="width: 97%; height:20px; border:1px solid;"
+                        value="{{ $preview_data['cheque_no'] }}" type="text">
                 </td>
             </tr>
 
@@ -255,7 +261,8 @@
 
                 </th>
                 <td style="text-align: start; width:20%;  ">
-                    <input style="width: 97%; height:20px; border:1px solid;" value="{{ $preview_data['online_instrument_no'] }}" type="text">
+                    <input disabled style="width: 97%; height:20px; border:1px solid;"
+                        value="{{ $preview_data['online_instrument_no'] }}" type="text">
                 </td>
             </tr>
 
@@ -301,20 +308,13 @@
         <br><br>
         <table id="firstTable" style="width:100%; text-transform: uppercase; ">
 
-            {{-- <tr style="border: 2px solid;">
-                <th style="text-align:start; width:10%;  ">Amount in figures</th>
-
-                <td style="text-align: center; width:50%;">
-                    <input style="width: 10%; height:20px; border:1px solid;" value="{{ $preview_data['amount_in_numbers'] }}" type="text">
-                </td>
-            </tr> --}}
-
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:4.5%;  ">
                     Amount in figures
                 </th>
                 <td style="text-align: start; width:20%;  ">
-                    <input style="width: 20%; height:20px; border:1px solid; text-align:center;" value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
+                    <input disabled style="width: 20%; height:20px; border:1px solid; text-align:center;"
+                        value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
                 </td>
             </tr>
 
@@ -327,17 +327,18 @@
                 <th style="text-align:start; width:0.5%; ">Purpose</th>
                 <td style="text-align: start; width:10%; ">
 
-                    <input type="checkbox" checked="checked">
+                    <input disabled type="checkbox" checked="checked">
                     <span class="checkmark" style="margin-left:15px;">Downpayment</span>
 
-                    <input type="checkbox" style="margin-left:15px;">
+                    <input disabled type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Installment</span>
-                    <span style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
+                    <span
+                        style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
 
                     {{-- <input type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Online</span> --}}
 
-                    <input type="checkbox" style="margin-left:15px;">
+                    <input disabled type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Other</span>
                     <span style="">____</span>
                 </td>
@@ -345,7 +346,7 @@
 
         </table>
 
-        <br><br><br><br><br><br><br>
+        <br><br><br><br><br>
 
         <table style="width:100%;text-transform: uppercase;">
             <tr>

@@ -3,14 +3,15 @@
 namespace App\DataTables;
 
 use App\Models\Floor;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class FloorsDataTable extends DataTable
 {
@@ -214,7 +215,7 @@ class FloorsDataTable extends DataTable
             Column::computed('units_token_count')->title('Token'),
             Column::computed('units_hold_count')->title('Hold'),
             Column::computed('units_dp_count')->title('Partial DP'),
-            Column::make('created_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1'),
         ];
     }

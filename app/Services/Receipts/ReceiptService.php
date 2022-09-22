@@ -20,8 +20,9 @@ class ReceiptService implements ReceiptInterface
     }
 
     // Store
-    public function store($site_id, $data)
+    public function store($site_id, $requested_data)
     {
+        $data = $requested_data['receipts'];
         for ($i = 0; $i < count($data); $i++) {
             $unit = Unit::find($data[$i]['unit_id']);
             $sales_plan = $unit->salesPlan->toArray();
@@ -40,18 +41,21 @@ class ReceiptService implements ReceiptInterface
                 'phone_no' => $phone_no,
                 'mode_of_payment' => $data[$i]['mode_of_payment'],
                 'other_value' => $data[$i]['other_value'],
-                // 'pay_order' => $data[$i]['pay_order'],
                 'cheque_no' => $data[$i]['cheque_no'],
                 'online_instrument_no' => $data[$i]['online_instrument_no'],
-                // 'drawn_on_bank' => $data[$i]['drawn_on_bank'],
                 'transaction_date' => $data[$i]['transaction_date'],
-                'amount_in_words' => '',
+                'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
                 'amount_in_numbers' => $data[$i]['amount_in_numbers'],
                 'purpose' => 'installments',
                 'installment_number' => '1',
+                'amount_received' => $requested_data['amount_received'],
             ];
 
             $receipt = Receipt::create($receiptData);
+
+            if (isset($requested_data['attachment'])) {
+                $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+            }
 
             $sales_plan = SalesPlan::where('unit_id', $data[$i]['unit_id'])->where('status', 1)->with('installments', 'unPaidInstallments')->first();
             $installmentFullyPaidUnderAmount = [];
@@ -170,6 +174,7 @@ class ReceiptService implements ReceiptInterface
                 $unit->status_id = 5;
 
                 $unitStakeholderData = [
+                    'site_id' => decryptParams($site_id),
                     'unit_id' => $unit->id,
                     'stakeholder_id' =>$stakeholder->id,
                 ];

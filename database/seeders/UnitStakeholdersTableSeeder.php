@@ -6,7 +6,7 @@ use App\Models\UnitStakeholder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UnitOwnersTableSeeder extends Seeder
+class UnitStakeholdersTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,6 +17,7 @@ class UnitOwnersTableSeeder extends Seeder
     {
         (new UnitStakeholder())->insert([
             [
+                'site_id' => 1,
                 'unit_id' => 1,
                 'stakeholder_id' => 1,
                 'created_at' => now(),

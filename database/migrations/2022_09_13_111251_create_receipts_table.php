@@ -33,6 +33,8 @@ return new class extends Migration
             $table->string('purpose');
             $table->string('other_purpose')->nullable();
             $table->string('installment_number')->nullable();
+            $table->string('attachment')->nullable();
+            $table->string('amount_received')->nullable();
             $table->timestamps();
         });
     }

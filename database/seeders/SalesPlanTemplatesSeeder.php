@@ -24,13 +24,13 @@ class SalesPlanTemplatesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'J7-Global Sales Plan',
-                'slug' => 'j7-global-sales-plan',
-                'image' => '/images/SalesTemplate/j7global.png',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'J7-Global Sales Plan',
+            //     'slug' => 'j7-global-sales-plan',
+            //     'image' => '/images/SalesTemplate/j7global.png',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'J7-Global Payment Plan',
                 'slug' => 'j7-global-payment-plan',

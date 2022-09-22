@@ -42,7 +42,8 @@ class SalesPlan extends Model
 
     public function additionalCosts()
     {
-        return $this->hasMany(SalesPlanAdditionalCost::class);
+        return $this->belongsToMany(AdditionalCost::class, 'sales_plan_additional_costs')
+            ->withPivot('amount', 'percentage');
     }
 
     public function installments()
@@ -52,11 +53,21 @@ class SalesPlan extends Model
 
     public function PaidorPartiallyPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','paid')->orWhere('status','partially_paid');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status','paid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
     }
 
     public function unPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
+    }
+
+    public function leadSource()
+    {
+        return $this->belongsTo(LeadSource::class);
+    }
+
+    public function receipts()
+    {
+        return $this->hasMany(Receipt::class);
     }
 }

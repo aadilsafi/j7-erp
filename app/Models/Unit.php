@@ -8,65 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-/**
- * App\Models\Unit
- *
- * @property int $id
- * @property int $floor_id
- * @property string|null $name
- * @property float $width
- * @property float $length
- * @property int $unit_number
- * @property string|null $floor_unit_number
- * @property float $net_area
- * @property float $gross_area
- * @property float $price_sqft
- * @property float $total_price
- * @property int $type_id
- * @property int $status_id
- * @property bool $active
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property bool $is_corner
- * @property int|null $corner_id
- * @property bool $is_facing
- * @property int|null $facing_id
- * @property-read \App\Models\User|null $agent
- * @property-read \App\Models\AdditionalCost|null $corner
- * @property-read \App\Models\AdditionalCost|null $facing
- * @property-read \App\Models\Floor $floor
- * @property-read \App\Models\Status $status
- * @property-read \App\Models\Type $type
- * @method static \Illuminate\Database\Eloquent\Builder|Unit newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit newQuery()
- * @method static \Illuminate\Database\Query\Builder|Unit onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit query()
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCornerId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFacingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFloorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereFloorUnitNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereGrossArea($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsCorner($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereIsFacing($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereLength($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereNetArea($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePriceSqft($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereTotalPrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Unit whereWidth($value)
- * @method static \Illuminate\Database\Query\Builder|Unit withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Unit withoutTrashed()
- * @mixin \Eloquent
- */
 class Unit extends Model
 {
     use HasFactory, SoftDeletes;

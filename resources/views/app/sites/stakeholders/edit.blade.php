@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                    width: calc(20% - 0.5em);
-                                                                } */
+                                width: calc(20% - 0.5em);
+                            } */
     </style>
 @endsection
 
@@ -110,11 +110,7 @@
     <script>
         var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
-        let imageArray = [];
-        editImage = <?php echo json_encode($stakeholder->attachment); ?>;
-        if (editImage != null) {
-            imageArray = editImage.split(',');
-        }
+
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -124,19 +120,13 @@
         );
 
         var files = [];
-        if (editImage != null) {
+
+        @forelse($images as $image)
             files.push({
-                source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
-                    0],
+                source: '{{ $image->getUrl() }}',
             });
-
-            files.push({
-                source: '{{ asset('app-assets') }}/server-uploads/stakeholders/' + id + '/' + imageArray[
-                    1],
-            });
-        }
-
-
+        @empty
+        @endforelse
 
         FilePond.create(document.getElementById('attachment'), {
 

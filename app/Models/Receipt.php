@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\Site;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Receipt extends Model
+class Receipt extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     protected $fillable = [
         'site_id',
@@ -29,6 +31,8 @@ class Receipt extends Model
         'phone_no',
         'other_value',
         'pay_order',
+        'amount_received',
+        'attachment',
     ];
 
     public $rules = [
@@ -47,4 +51,8 @@ class Receipt extends Model
         return $this->belongsTo(Unit::class);
     }
 
+    public function salesPlan()
+    {
+        return $this->belongsTo(SalesPlan::class);
+    }
 }

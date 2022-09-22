@@ -185,16 +185,6 @@ Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (Brea
     $trail->push('Receipts');
 });
 
-// Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
-//     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
-//     $trail->push('Sales Plan', route('sites.floors.units.sales-plans.index', ['site_id' => $site_id, 'floor_id' => $floor_id, 'unit_id' => $unit_id]));
-// });
-
-// Breadcrumbs::for('sites.floors.units.sales-plans.receipts.create', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id  , $sales_plan_id) {
-//     $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
-//     $trail->push('Create Receipts');
-// });
-
 
 //receipts Breadcrumbs Main
 Breadcrumbs::for('sites.receipts.index', function (BreadcrumbTrail $trail, $site_id) {
@@ -207,9 +197,29 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
     $trail->push('Create Receipts');
 });
 
+Breadcrumbs::for('sites.receipts.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.receipts.index', $site_id);
+    $trail->push(' Receipt Details');
+});
+
 //File Management Breadcrumbs
 Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]));
+    $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => $site_id]));
     $trail->push('Customer\'s List', route('sites.file-managements.customers', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units', function (BreadcrumbTrail $trail, $site_id, $customer_id) {
+    $trail->parent('sites.file-managements.customers', $site_id);
+    $trail->push('Units List', route('sites.file-managements.customers.units', ['site_id' => $site_id, 'customer_id' => $customer_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.index', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers.units', $site_id, $customer_id, $unit_id);
+    $trail->push('Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.create', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers.units.files.index', $site_id, $customer_id, $unit_id);
+    $trail->push('Create Files', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });

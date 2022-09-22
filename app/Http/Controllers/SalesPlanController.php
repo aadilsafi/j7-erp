@@ -154,43 +154,31 @@ class SalesPlanController extends Controller
 
         $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 
-        $data['unit_no'] = $salesPlan->unit->floor_unit_number;
-
-        $data['floor_short_label'] = $salesPlan->unit->floor->short_label;
-
-        $data['category'] = $salesPlan->unit->type->name;
-
-        $data['size'] = $salesPlan->unit->gross_area;
-
-        $data['client_name'] = $salesPlan->stakeholder->full_name;
-
-        $data['rate'] = $salesPlan->unit->price_sqft;
-
-        $data['down_payment_percentage'] = $salesPlan->down_payment_percentage;
-
-        $data['down_payment_total'] = $salesPlan->down_payment_total;
-
-        $data['discount_percentage'] = $salesPlan->discount_percentage;
-
-        $data['discount_total'] = $salesPlan->discount_total;
-
-        $data['sales_person_name'] = Auth::user()->name;
-
         $role = Auth::user()->roles->pluck('name');
 
-        $data['sales_person_contact'] = $salesPlan->stakeholder->contact;
-
-        $data['sales_person_status'] = $role[0];
-
-        $data['sales_person_phone_no'] = Auth::user()->phone_no;
-
-        $data['sales_person_sales_type'] = $salesPlan->sales_type;
-
-        $data['indirect_source'] = $salesPlan->indirect_source;
-
-        $data['instalments'] = $salesPlan->installments;
-
-        $data['additional_costs'] = $salesPlan->additionalCosts;
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'rate' => $salesPlan->unit->price_sqft,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'sales_person_name' => Auth::user()->name,
+            'sales_person_contact' => $salesPlan->stakeholder->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => Auth::user()->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => $salesPlan->installments,
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->contact,
+            'amount' => $salesPlan->total_price,
+        ];
 
         return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }

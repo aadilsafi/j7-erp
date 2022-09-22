@@ -43,16 +43,8 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->with($relationships)->find($id);
     }
 
-    // Store
     public function store($site_id, $inputs)
     {
-        // $firstImage = $inputs['attachment'][0];
-        // $secondImage = $inputs['attachment'][1];
-
-        // $firstImageName = $firstImage->getClientOriginalName();
-        // $secondImageName = $secondImage->getClientOriginalName();
-        // $attachment = $firstImageName . ',' . $secondImageName;
-
         $data = [
             'site_id' => decryptParams($site_id),
             'full_name' => $inputs['full_name'],
@@ -70,12 +62,8 @@ class StakeholderService implements StakeholderInterface
 
 
         if (isset($inputs['attachment'])) {
-            $folder = 'app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/';
             foreach ($inputs['attachment'] as $attachment) {
-                // $stakeholder->addMedia($attachment)->toMediaCollection('attachments');
-                if (!file_exists($folder . $attachment)) {
-                    $attachment->move(public_path('app-assets/server-uploads/stakeholders/' . $stakeholder->id . '/'), $attachment);
-                }
+                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
             }
         }
 
@@ -104,17 +92,6 @@ class StakeholderService implements StakeholderInterface
 
     public function update($site_id, $id, $inputs)
     {
-        $firstImage = $inputs['attachment'][0];
-        $secondImage = $inputs['attachment'][1];
-
-        $firstImageName = $firstImage->getClientOriginalName();
-        $secondImageName = $secondImage->getClientOriginalName();
-
-        $attachment = $firstImageName . ',' . $secondImageName;
-
-        if ($inputs['parent_id'] == null) {
-            $inputs['parent_id'] = 0;
-        }
         $data = [
             'full_name' => $inputs['full_name'],
             'father_name' => $inputs['father_name'],
@@ -125,20 +102,18 @@ class StakeholderService implements StakeholderInterface
             'address' => $inputs['address'],
             'parent_id' => $inputs['parent_id'],
             'relation' => $inputs['relation'],
-            'attachment' => $attachment,
         ];
-        $stakeholder_data = $this->model()->where('id', $id)->update($data);
 
-        $folder = 'app-assets/server-uploads/stakeholders/' . $id . '/';
+        $stakeholder = $this->model()->where('id', $id)->update($data);
+        $stakeholder = $this->model()->find($id);
+        $stakeholder->clearMediaCollection('stakeholder_cnic');
 
-        if (!file_exists($folder . $firstImageName)) {
-            $firstImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $firstImageName);
+        if (isset($inputs['attachment'])) {
+            foreach ($inputs['attachment'] as $attachment) {
+                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
+            }
         }
-        if (!file_exists($folder . $secondImageName)) {
-            $secondImage->move(public_path('app-assets/server-uploads/stakeholders/' . $id . '/'), $secondImageName);
-        }
-
-        return $stakeholder_data;
+        return $stakeholder;
     }
 
     public function destroy($site_id, $id)

@@ -10,6 +10,8 @@ use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Models\Receipt;
 use App\Models\ReceiptTemplate;
+use App\Models\SalesPlanInstallments;
+use App\Models\Stakeholder;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptController extends Controller
@@ -68,7 +70,7 @@ class ReceiptController extends Controller
         //
         try {
             if (!request()->ajax()) {
-                $data = $request->receipts;
+                $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);;
                 return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -97,9 +99,21 @@ class ReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($site_id, $id)
     {
         //
+        $site_id = decryptParams($site_id);
+        $receipt = Receipt::find(decryptParams($id));
+        $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
+        $installmentNumbersArray = explode(",",$receipt_installment_numbers);
+        $last_index = array_key_last ( $installmentNumbersArray );
+        $first_letter = str_split( $installmentNumbersArray[$last_index]);
+        $unit_data =  $receipt->unit;
+        $last_paid_installment_id = SalesPlanInstallments::where('details','LIKE', '%'.$first_letter[0].'%')->where('sales_plan_id',$receipt->sales_plan_id)->first()->id;
+        $unpadid_installments = SalesPlanInstallments::where('id','>',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $paid_installments = SalesPlanInstallments::where('id','<=',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $stakeholder_data = Stakeholder::where('cnic',$receipt->cnic)->first();
+        return view('app.sites.receipts.preview',compact('site_id','unit_data','stakeholder_data','paid_installments','unpadid_installments','receipt'));
     }
 
     /**
@@ -198,6 +212,7 @@ class ReceiptController extends Controller
                     'remaining_amount' => 0.0,
                     'installment_order' => $installment->installment_order,
                     'partially_paid' => $partially_paid,
+                    'detail' => $installment->details,
                 ];
             }
             else{
@@ -234,6 +249,7 @@ class ReceiptController extends Controller
                         'remaining_amount' => $remaining_amount,
                         'installment_order' => $installment->installment_order,
                         'partially_paid' => $installment->paid_amount,
+                        'detail' => $installment->details,
                     ];
                 }
 
@@ -259,6 +275,7 @@ class ReceiptController extends Controller
                 'message' => 'Entered Amount is greater than Required Amount. Required Amount is '.$total_installment_required_amount,
             ], 200);
         }
+
         return response()->json([
             'success' => true,
             'sales_plan' =>$sales_plan,
@@ -300,7 +317,7 @@ class ReceiptController extends Controller
             'online_instrument_no' => $receipt_data->online_instrument_no,
         ];
 
-        return view('app.sites.receipts.templates.j7_template',compact('preview_data'));
+        return view('app.sites.receipts.templates.'.$template->slug ,compact('preview_data'));
     }
 
 }

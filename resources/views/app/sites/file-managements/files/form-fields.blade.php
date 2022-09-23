@@ -488,35 +488,37 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <table class="table table-hover table-striped table-borderless"
-                                    id="installments_table" style="position: relative;">
-                                    <thead style="position: sticky; top: 0; z-index: 10;">
-                                        <tr class="text-center">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Installments</th>
-                                            <th scope="col">Due Date</th>
-                                            <th scope="col">Total Amount</th>
-                                            <th scope="col">Remarks</th>
-                                        </tr>
-                                    </thead>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
+                                            <tr class="text-center">
+                                                <th scope="col">#</th>
+                                                <th scope="col">Installments</th>
+                                                <th scope="col">Due Date</th>
+                                                <th scope="col">Total Amount</th>
+                                                <th scope="col">Remarks</th>
+                                            </tr>
+                                        </thead>
 
-                                    <tbody>
-                                        @forelse ($salesPlan->installments as $installment)
-                                            <tr class="text-center">
-                                                <td>{{ $installment->installment_order }}</td>
-                                                <td>{{ $installment->details }}</td>
-                                                <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
-                                                </td>
-                                                <td>{{ number_format($installment->amount, 2) }}</td>
-                                                <td>{{ $installment->remarks }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr class="text-center">
-                                                <td colspan="5">No data found</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        <tbody>
+                                            @forelse ($salesPlan->installments as $installment)
+                                                <tr class="text-center">
+                                                    <td>{{ $installment->installment_order }}</td>
+                                                    <td>{{ $installment->details }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
+                                                    </td>
+                                                    <td>{{ number_format($installment->amount, 2) }}</td>
+                                                    <td>{{ $installment->remarks }}</td>
+                                                </tr>
+                                            @empty
+                                                <tr class="text-center">
+                                                    <td colspan="5">No data found</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -552,39 +554,41 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <table class="table table-hover table-striped table-borderless"
-                                    id="installments_table" style="position: relative;">
-                                    <thead style="position: sticky; top: 0; z-index: 10;">
-                                        <tr class="text-center">
-                                            <th scope="col">#</th>
-                                            <th scope="col">Installments</th>
-                                            <th scope="col">Transaction Date</th>
-                                            <th scope="col">Total Amount</th>
-                                            <th scope="col">Mode of Payment</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        @forelse ($salesPlan->receipts as $receipt)
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
                                             <tr class="text-center">
-                                                <td>{{ $loop->index + 1 }}</td>
-
-                                                @php
-                                                    $installmentsInfo = implode(', ', json_decode($receipt->installment_number));
-                                                @endphp
-                                                <td>{{ $installmentsInfo }}</td>
-
-                                                <td>{{ $receipt->created_at }}</td>
-                                                <td>{{ number_format($receipt->amount_in_numbers, 2) }}</td>
-                                                <td>{{ $receipt->mode_of_payment }}</td>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Installments</th>
+                                                <th scope="col">Transaction Date</th>
+                                                <th scope="col">Total Amount</th>
+                                                <th scope="col">Mode of Payment</th>
                                             </tr>
-                                        @empty
-                                            <tr class="text-center">
-                                                <td colspan="5">No data found</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+                                        </thead>
+
+                                        <tbody>
+                                            @forelse ($salesPlan->receipts as $receipt)
+                                                <tr class="text-center">
+                                                    <td>{{ $loop->index + 1 }}</td>
+
+                                                    @php
+                                                        $installmentsInfo = implode(', ', json_decode($receipt->installment_number));
+                                                    @endphp
+                                                    <td>{{ $installmentsInfo }}</td>
+
+                                                    <td>{{ $receipt->created_at }}</td>
+                                                    <td>{{ number_format($receipt->amount_in_numbers, 2) }}</td>
+                                                    <td>{{ $receipt->mode_of_payment }}</td>
+                                                </tr>
+                                            @empty
+                                                <tr class="text-center">
+                                                    <td colspan="5">No data found</td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -737,55 +741,61 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <table class="table table-hover table-striped table-borderless"
-                                    id="installments_table" style="position: relative;">
-                                    <thead style="position: sticky; top: 0; z-index: 10;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
 
-                                        <tr class="text-center">
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Sr</th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Unit #
-                                            </th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Area
-                                            </th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Rate
-                                            </th>
-                                            <th style="vertical-align: middle;" scope="col">Face Charges</th>
-                                            <th style="vertical-align: middle;" scope="col">Discount</th>
-                                            <th style="vertical-align: middle;" scope="col">Total</th>
-                                            <th style="vertical-align: middle;" scope="col">Downpayment</th>
-                                        </tr>
+                                            <tr class="text-center">
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">Sr
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Unit #
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Area
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Rate
+                                                </th>
+                                                <th style="vertical-align: middle;" scope="col">Face Charges</th>
+                                                <th style="vertical-align: middle;" scope="col">Discount</th>
+                                                <th style="vertical-align: middle;" scope="col">Total</th>
+                                                <th style="vertical-align: middle;" scope="col">Downpayment</th>
+                                            </tr>
 
-                                        <tr class="text-center">
-                                            <th style="vertical-align: middle;" scope="col">%</th>
-                                            <th style="vertical-align: middle;" scope="col">
-                                                {{ $salesPlan->discount_percentage }} %</th>
-                                            <th style="vertical-align: middle;" scope="col">Value</th>
-                                            <th style="vertical-align: middle;" scope="col">
-                                                {{ $salesPlan->down_payment_percentage }} %</th>
-                                        </tr>
+                                            <tr class="text-center">
+                                                <th style="vertical-align: middle;" scope="col">%</th>
+                                                <th style="vertical-align: middle;" scope="col">
+                                                    {{ $salesPlan->discount_percentage }} %</th>
+                                                <th style="vertical-align: middle;" scope="col">Value</th>
+                                                <th style="vertical-align: middle;" scope="col">
+                                                    {{ $salesPlan->down_payment_percentage }} %</th>
+                                            </tr>
 
-                                    </thead>
+                                        </thead>
 
-                                    <tbody>
-                                        <tr class="text-center">
-                                            <td>1</td>
-                                            <td>{{ $unit->unit_number }}</td>
-                                            <td>{{ $unit->gross_area }}</td>
-                                            <td>{{ number_format($unit->price_sqft, 2) }}</td>
-                                            <td></td>
-                                            <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->total_price, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <td colspan="4"></td>
-                                            <td>-</td>
-                                            <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->total_price, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td>1</td>
+                                                <td>{{ $unit->unit_number }}</td>
+                                                <td>{{ $unit->gross_area }}</td>
+                                                <td>{{ number_format($unit->price_sqft, 2) }}</td>
+                                                <td></td>
+                                                <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->total_price, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="4"></td>
+                                                <td>-</td>
+                                                <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->total_price, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -798,26 +808,35 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="ideal-deal-check"
-                                    name="deal_type" value="ideal-deal" checked>
-                                <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
+
+                        <div class="row g-1">
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="ideal-deal-check"
+                                        name="deal_type" value="ideal-deal" checked>
+                                    <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="mark-down-check" name="deal_type"
-                                    value="mark_down">
-                                <label class="form-check-label" for="mark-down-check">Mark Down</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="mark-down-check"
+                                        name="deal_type" value="mark_down">
+                                    <label class="form-check-label" for="mark-down-check">Mark Down</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="special-case-check"
-                                    name="deal_type" value="special_case">
-                                <label class="form-check-label" for="special-case-check">Special Case</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="special-case-check"
+                                        name="deal_type" value="special_case">
+                                    <label class="form-check-label" for="special-case-check">Special Case</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="special-case-check"
-                                    name="deal_type" value="adjustment">
-                                <label class="form-check-label" for="special-case-check">Adjustment</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="adjustment-check"
+                                        name="deal_type" value="adjustment">
+                                    <label class="form-check-label" for="adjustment-check">Adjustment</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -971,59 +990,65 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <table class="table table-hover table-striped table-borderless"
-                                    id="installments_table" style="position: relative;">
-                                    <thead style="position: sticky; top: 0; z-index: 10;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
 
-                                        <tr class="text-center">
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Sr</th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Unit #
-                                            </th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Area
-                                            </th>
-                                            <th style="vertical-align: middle;" rowspan="2" scope="col">Rate
-                                            </th>
-                                            <th style="vertical-align: middle;" scope="col">Face Charges</th>
-                                            <th style="vertical-align: middle;" scope="col">Discount</th>
-                                            <th style="vertical-align: middle;" scope="col">Total</th>
-                                            <th style="vertical-align: middle;" scope="col">Downpayment</th>
-                                            <th style="vertical-align: middle;" scope="col">Rebate</th>
-                                        </tr>
+                                            <tr class="text-center">
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">Sr
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Unit #
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Area
+                                                </th>
+                                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                                    Rate
+                                                </th>
+                                                <th style="vertical-align: middle;" scope="col">Face Charges</th>
+                                                <th style="vertical-align: middle;" scope="col">Discount</th>
+                                                <th style="vertical-align: middle;" scope="col">Total</th>
+                                                <th style="vertical-align: middle;" scope="col">Downpayment</th>
+                                                <th style="vertical-align: middle;" scope="col">Rebate</th>
+                                            </tr>
 
-                                        <tr class="text-center">
-                                            <th style="vertical-align: middle;" scope="col">%</th>
-                                            <th style="vertical-align: middle;" scope="col">
-                                                {{ $salesPlan->discount_percentage }} %</th>
-                                            <th style="vertical-align: middle;" scope="col">Value</th>
-                                            <th style="vertical-align: middle;" scope="col">
-                                                {{ $salesPlan->down_payment_percentage }} %</th>
+                                            <tr class="text-center">
+                                                <th style="vertical-align: middle;" scope="col">%</th>
+                                                <th style="vertical-align: middle;" scope="col">
+                                                    {{ $salesPlan->discount_percentage }} %</th>
+                                                <th style="vertical-align: middle;" scope="col">Value</th>
+                                                <th style="vertical-align: middle;" scope="col">
+                                                    {{ $salesPlan->down_payment_percentage }} %</th>
                                                 <th style="vertical-align: middle;" scope="col">5%</th>
-                                        </tr>
+                                            </tr>
 
-                                    </thead>
+                                        </thead>
 
-                                    <tbody>
-                                        <tr class="text-center">
-                                            <td>1</td>
-                                            <td>{{ $unit->unit_number }}</td>
-                                            <td>{{ $unit->gross_area }}</td>
-                                            <td>{{ number_format($unit->price_sqft, 2) }}</td>
-                                            <td></td>
-                                            <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->total_price, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
-                                            <td>{{ number_format(469668, 2) }}</td>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <td colspan="4"></td>
-                                            <td>-</td>
-                                            <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->total_price, 2) }}</td>
-                                            <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
-                                            <td>{{ number_format(469668, 2) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                        <tbody>
+                                            <tr class="text-center">
+                                                <td>1</td>
+                                                <td>{{ $unit->unit_number }}</td>
+                                                <td>{{ $unit->gross_area }}</td>
+                                                <td>{{ number_format($unit->price_sqft, 2) }}</td>
+                                                <td></td>
+                                                <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->total_price, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
+                                                <td>{{ number_format(469668, 2) }}</td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="4"></td>
+                                                <td>-</td>
+                                                <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->total_price, 2) }}</td>
+                                                <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
+                                                <td>{{ number_format(469668, 2) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1036,26 +1061,34 @@
                     </div>
 
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="ideal-deal-check"
-                                    name="deal_type" value="ideal-deal" checked>
-                                <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
+                        <div class="row g-1">
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="ideal-deal-check"
+                                        name="deal_type" value="ideal-deal" checked disabled>
+                                    <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="mark-down-check" name="deal_type"
-                                    value="mark_down">
-                                <label class="form-check-label" for="mark-down-check">Mark Down</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="mark-down-check"
+                                        name="deal_type" value="mark_down" disabled>
+                                    <label class="form-check-label" for="mark-down-check">Mark Down</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="special-case-check"
-                                    name="deal_type" value="special_case">
-                                <label class="form-check-label" for="special-case-check">Special Case</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="special-case-check"
+                                        name="deal_type" value="special_case" disabled>
+                                    <label class="form-check-label" for="special-case-check">Special Case</label>
+                                </div>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" id="special-case-check"
-                                    name="deal_type" value="adjustment">
-                                <label class="form-check-label" for="special-case-check">Adjustment</label>
+                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="adjustment-check"
+                                        name="deal_type" value="adjustment" disabled>
+                                    <label class="form-check-label" for="adjustment-check">Adjustment</label>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,9 @@ class StakeholderDataTable extends DataTable
             ->editColumn('parent_id', function ($stakeholder) {
                 return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst(): '-' ;
             })
+            ->editColumn('cnic', function ($stakeholder) {
+                return cnicFormat($stakeholder->cnic);
+            })
             ->editColumn('relation', function ($stakeholder) {
                     return  $stakeholder->relation  ? $stakeholder->relation  : '-';
             })

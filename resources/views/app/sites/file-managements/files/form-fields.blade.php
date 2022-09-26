@@ -188,7 +188,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport" value="{{ $customer->cnic ?? '-' }}"
+                                            placeholder="CNIC/Passport" value="{{ cnicFormat($customer->cnic) ?? '-' }}"
                                             disabled />
                                     </div>
                                 </div>
@@ -262,7 +262,7 @@
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
                                             placeholder="CNIC/Passport"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->cnic : '-' }}" disabled />
+                                            value="{{ !is_null($nextOfKin) ? cnicFormat($nextOfKin->cnic) : '-' }}" disabled />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_phone">Cell</label>

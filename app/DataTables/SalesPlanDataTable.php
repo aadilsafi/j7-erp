@@ -36,14 +36,12 @@ class SalesPlanDataTable extends DataTable
                 return $salesPlan->user->name;
             })
             ->editColumn('status', function ($salesPlan) {
-                ($salesPlan->status == 0) ? '<span class="badge badge-glow bg-success">Pending</span>': "Dont Eat";
-                if($salesPlan->status == 0){
+                ($salesPlan->status == 0) ? '<span class="badge badge-glow bg-success">Pending</span>' : "Dont Eat";
+                if ($salesPlan->status == 0) {
                     return '<span class="badge badge-glow bg-warning">Pending</span>';
-                }
-                elseif($salesPlan->status == 1){
+                } elseif ($salesPlan->status == 1) {
                     return '<span class="badge badge-glow bg-success">Approved</span>';
-                }
-                else{
+                } else {
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
                 // return $salesPlan->status == 1 ? '<span class="badge badge-glow bg-success">Approved</span>' : '<span class="badge badge-glow bg-warning">Not Approved</span>';
@@ -57,8 +55,28 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);
             })
+            ->editColumn('salesplanstatus', function ($salesPlan) {
+
+                switch ($salesPlan->status) {
+                    case 0:
+                        return 'Pending';
+                        break;
+
+                    case 1:
+                        return 'Approved';
+                        break;
+
+                    case 2:
+                        return 'Disapproved';
+                        break;
+
+                    default:
+                        # code...
+                        break;
+                }
+            })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id , 'id' => $salesPlan->id, 'status' => $salesPlan->status]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -97,19 +115,19 @@ class SalesPlanDataTable extends DataTable
             ->buttons(
                 (
                     ($createPermission && $unitStatus == 1) ?
-                        Button::raw('add-new')
-                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-plus"></i> Add New')
-                        ->attr([
-                            'onclick' => 'addNew()',
-                        ])
+                    Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')
+                    ->attr([
+                        'onclick' => 'addNew()',
+                    ])
                     :
-                        Button::raw('add-new')
-                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-plus"></i> Add New')
-                        ->attr([
-                            'onclick' => 'addNew()',
-                        ])
+                    Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')
+                    ->attr([
+                        'onclick' => 'addNew()',
+                    ])
                 ),
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -120,25 +138,24 @@ class SalesPlanDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                (
-                    $selectedDeletePermission ?
-                        Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                        ->attr([
-                            'onclick' => 'deleteSelected()',
-                        ])
+                ($selectedDeletePermission ?
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                    ->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
                     :
-                        Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                        ->attr([
-                            'onclick' => 'deleteSelected()',
-                        ])
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                    ->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
                 ),
 
             )
-            // ->rowGroupDataSrc('type_id')
+            ->rowGroupDataSrc('salesplanstatus')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -180,6 +197,7 @@ class SalesPlanDataTable extends DataTable
 
             Column::make('user_id')->title('Sales Person'),
             Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             (

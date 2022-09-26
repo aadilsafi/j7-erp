@@ -42,6 +42,9 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('unit_id', function ($receipt) {
                     return  $receipt->unit->name;
             })
+            ->editColumn('cnic', function ($receipt) {
+                return  cnicFormat($receipt->cnic);
+        })
             ->editColumn('installment_number', function ($receipt) {
                 return  str_replace(str_split('[]"'), '', $receipt->installment_number);
             })

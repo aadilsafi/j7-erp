@@ -29,7 +29,7 @@ class StatusTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Partial DP',
+                'name' => 'Partial Paid',
                 'default' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),

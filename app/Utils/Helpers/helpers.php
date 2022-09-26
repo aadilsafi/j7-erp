@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\{Crypt, File};
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 if (!function_exists('filter_strip_tags')) {
 
@@ -541,5 +542,13 @@ if (!function_exists('sqlErrorMessagesByCode')) {
             '23505' => 'Data already exists',
         ];
         return $messages[$errCode] ?? 'Unknown error';
+    }
+}
+
+if (!function_exists('cnicFormat')) {
+    function cnicFormat($cnic)
+    {
+        $data = Str::of($cnic)->substrReplace('-', 5, 0)->substrReplace('-', 13, 0);
+        return $data;
     }
 }

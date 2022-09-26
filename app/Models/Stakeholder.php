@@ -68,4 +68,8 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->hasMany(StakeholderType::class);
     }
+
+    public function multiValues() {
+        return $this->morphMany(MultiValue::class, 'multivalueable');
+    }
 }

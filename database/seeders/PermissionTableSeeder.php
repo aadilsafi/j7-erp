@@ -385,6 +385,36 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.units.preview',
+                'show_name' => 'Preview Unit ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.changes.save',
+                'show_name' => ' Save Preview Unit ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'name' => 'sites.floors.preview',
+                'show_name' => ' Preview floors ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => ' sites.floors.changes.save',
+                'show_name' => ' Save Preview floors ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
             // Unit Routes
             [

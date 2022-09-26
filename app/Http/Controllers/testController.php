@@ -15,7 +15,7 @@ class testController extends Controller
     {
 
         // return (new Floor())->with(['site', 'site.siteConfiguration'])->find(1)->site->siteConfiguration;
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 2000; $i++) {
             JobsTestJob::dispatch();
         }
         // $batch = Bus::batch([

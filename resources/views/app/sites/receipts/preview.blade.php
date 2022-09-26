@@ -14,7 +14,25 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
+
 @section('custom-css')
+    <style>
+        .filepond--drop-label {
+            color: #7367F0 !important;
+        }
+
+        / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+            background-color: #7367F0;
+        }
+
+        .filepond--panel-root {
+            background-color: #e3e0fd;
+        }
+
+        /* .filepond--item {
+                                width: calc(20% - 0.5em);
+                            } */
+    </style>
 @endsection
 
 @section('breadcrumbs')
@@ -132,14 +150,15 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">UNIT SIZE(sq.ft)</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
-                                placeholder="Floor No" value="{{ number_format($unit_data->price_sqft)  }}" readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no"
+                                name="unit[floor_no]" placeholder="Floor No"
+                                value="{{ number_format($unit_data->price_sqft) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">TOTAL PRICE</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($unit_data->total_price)  }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($unit_data->total_price) }}" readonly />
                         </div>
 
                     </div>
@@ -155,40 +174,54 @@
                 <div class="card-body">
                     <div class="row mb-1">
 
-                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                            <label class="form-label fs-5" for="unit_no">TOTAL AMOUNT RECEIVED</label>
-                            <input type="text" class="form-control form-control-lg" id="unit_no"
-                                placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
+                        <div class="col-lg-9 col-md-9 col-sm-12">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="unit_no">TOTAL AMOUNT RECEIVED</label>
+                                    <input type="text" class="form-control form-control-lg" id="unit_no"
+                                        placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
+                                    <input type="text" class="form-control form-control-lg" id="unit_no"
+                                        name="unit[no]" placeholder=""
+                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="unit_type">MODE OF PAYMENT</label>
+                                    <input type="text" class="form-control form-control-lg" id="unit_type"
+                                        name="unit[type]" placeholder="Unit Type"
+                                        value="{{ $receipt->mode_of_payment }}" readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="unit_type">CREATED AT</label>
+                                    <input type="text" class="form-control form-control-lg" id="unit_type"
+                                        name="unit[type]" placeholder="Unit Type"
+                                        value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}"
+                                        readonly />
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
+                                    <input type="text" class="form-control form-control-lg" id="floor_no"
+                                        name="unit[floor_no]" placeholder=""
+                                        value="{{ numberToWords($receipt->amount_in_numbers) }} only." readonly />
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                            <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
-                            <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
-                                placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                        <div class="col-lg-3 col-md-3 col-ms-12">
+                            <label class="form-label fs-5" for="type_name">Attachment</label>
+                            <input disabled id="attachment" type="file"
+                                class="filepond @error('attachment') is-invalid @enderror" name="attachment"
+                                accept="image/png, image/jpeg, image/gif" />
+                            @error('attachment')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                            <label class="form-label fs-5" for="unit_type">MODE OF PAYMENT</label>
-                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type"
-                                value="{{$receipt->mode_of_payment}}" readonly />
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                            <label class="form-label fs-5" for="unit_type">CREATED AT</label>
-                            <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type"
-                                value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}" readonly />
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="" value="{{ numberToWords($receipt->amount_in_numbers)}} only."
-                                readonly />
-                        </div>
-
-
                     </div>
 
                 </div>
@@ -231,7 +264,8 @@
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $i }}</td>
                                                         <td>{{ $paidIntsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
+                                                        </td>
                                                         <td>{{ number_format($paidIntsallment->amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
@@ -286,7 +320,8 @@
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $z }}</td>
                                                         <td>{{ $unPaidIntsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
+                                                        </td>
                                                         <td>{{ number_format($unPaidIntsallment->amount) }}</td>
                                                         <td>-</td>
                                                         <td>-</td>
@@ -310,10 +345,52 @@
 @endsection
 
 @section('vendor-js')
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
 @endsection
 
 @section('page-js')
 @endsection
 
 @section('custom-js')
+    <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
+
+        var files = [];
+        @if ($image != '')
+            files.push({
+                source: '{{ $image }}',
+            });
+        @endif
+
+        FilePond.create(document.getElementById('attachment'), {
+            files: files,
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
+            maxFiles: 2,
+            minFiles: 2,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+    </script>
 @endsection

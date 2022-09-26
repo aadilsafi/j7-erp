@@ -340,11 +340,11 @@
                                         .already_paid[i]['details'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['amount'] + '</td>',
+                                        .already_paid[i]['amount'].toLocaleString('en') + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['paid_amount'] + '</td>',
+                                        .already_paid[i]['paid_amount'].toLocaleString('en') + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['remaining_amount'] + '</td>',
+                                        .already_paid[i]['remaining_amount'].toLocaleString('en') + '</td>',
                                         '</tr>',
                                         '<td class="text-nowrap text-center">' + response
                                         .already_paid[i]['status'] + '</td>',

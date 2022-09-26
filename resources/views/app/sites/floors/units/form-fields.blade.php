@@ -171,7 +171,7 @@
         <label class="form-label fs-5" for="total_price">Total Price</label>
         <input type="text" class="form-control form-control-lg @error('total_price') is-invalid @enderror"
             id="total_price" name="total_price" placeholder="Total Price (sqft)" readonly
-            value="{{ isset($unit) ? $unit->total_price : old('total_price') ?? '0.00' }}"
+            value="{{ isset($unit) ? number_format($unit->total_price) : number_format(old('total_price')) ?? '0.00' }}"
              />
         @error('total_price')
             <div class="invalid-feedback">{{ $message }}</div>

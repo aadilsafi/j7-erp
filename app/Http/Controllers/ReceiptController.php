@@ -212,11 +212,11 @@ class ReceiptController extends Controller
                 $installmentFullyPaidUnderAmount[] = [
                     'id' => $installment->id,
                     'date' => $installment->date,
-                    'amount' => $installment->amount,
-                    'paid_amount' => $paid_amount,
+                    'amount' => number_format($installment->amount),
+                    'paid_amount' => number_format($paid_amount),
                     'remaining_amount' => 0.0,
                     'installment_order' => $installment->installment_order,
-                    'partially_paid' => $partially_paid,
+                    'partially_paid' => number_format($partially_paid),
                     'detail' => $installment->details,
                 ];
             }
@@ -249,11 +249,11 @@ class ReceiptController extends Controller
                     $installmentPartialyPaidUnderAmount[] = [
                         'id' => $installment->id,
                         'date' => $installment->date,
-                        'amount' => $installment->amount,
-                        'paid_amount' => $paid_amount,
-                        'remaining_amount' => $remaining_amount,
+                        'amount' => number_format($installment->amount),
+                        'paid_amount' => number_format($paid_amount),
+                        'remaining_amount' => number_format($remaining_amount),
                         'installment_order' => $installment->installment_order,
-                        'partially_paid' => $installment->paid_amount,
+                        'partially_paid' => number_format($installment->paid_amount),
                         'detail' => $installment->details,
                     ];
                 }
@@ -288,7 +288,7 @@ class ReceiptController extends Controller
             'unpaid_installments_to_be_partialy_paid' => $installmentPartialyPaidUnderAmount,
             'total_calculated_installments' => $total_calculated_installments,
             'total_installment_required_amount' => $total_installment_required_amount,
-            'amount_to_be_paid' => $request->amount,
+            'amount_to_be_paid' => number_format($request->amount),
             'already_paid' =>$sales_plan->PaidorPartiallyPaidInstallments,
         ], 200);
     }

@@ -48,6 +48,10 @@
             display: none;
         }
 
+        #customerData {
+            display: none;
+        }
+
         .filepond--drop-label {
             color: #7367F0 !important;
         }
@@ -61,8 +65,8 @@
         }
 
         /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+                                                width: calc(20% - 0.5em);
+                                            } */
     </style>
 @endsection
 
@@ -116,20 +120,23 @@
                             </label>
                             <input min="0" type="number"
                                 class="form-control  @error('amount_in_numbers') is-invalid @enderror"
-                                @if($amount_received == 0) name="amount_received" @endif  placeholder="Amount Received" @if($amount_received > 0) readonly @endif  value="{{ isset($amount_received) ? $amount_received : null }}"/>
+                                @if ($amount_received == 0) name="amount_received" @endif
+                                placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
+                                value="{{ isset($amount_received) ? $amount_received : null }}" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
-                        @if($amount_received > 0)
+                        @if ($amount_received > 0)
                             <div class="d-block mb-1">
                                 <label class="form-label" style="font-size: 15px" for="floor">
                                     <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
                                 <input min="0" type="number"
                                     class="form-control  @error('amount_in_numbers') is-invalid @enderror"
-                                    @if($amount_received > 0) name="amount_received" @endif   placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}"/>
+                                    @if ($amount_received > 0) name="amount_received" @endif
+                                    placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}" />
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -146,14 +153,15 @@
                         </div>
 
                         <hr>
-
-                        <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
-                            <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
-                            <div class="alert-body">
-                                <strong>On Cancel Receipts created against Amount Received will be Effected.
+                        @if ($amount_received > 0)
+                            <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
+                                <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
+                                <div class="alert-body">
+                                    <strong>On Cancel Receipts created against Amount Received will be Effected.
+                                </div>
                             </div>
-                        </div>
-                        <hr>
+                            <hr>
+                        @endif
 
                         {{-- <div class="d-block mb-1">
                             <button
@@ -170,11 +178,19 @@
                             Save Receipts
                         </a>
 
-                        <a href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
+                        @if ($amount_received > 0)
+                            <a onclick="destroyDraft()"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        @else
+                            <a href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        @endif
 
                     </div>
                 </div>
@@ -355,12 +371,24 @@
                     },
                     success: function(response) {
                         if (response.success) {
+
                             $('#paidInstllmentTableDiv').css("display", "block");
                             $('#instllmentTableDiv').css("display", "block");
                             $('#modeOfPaymentDiv').css("display", "block");
+                            $('#customerData').css("display", "block");
                             $('#paid_dynamic_total_installment_rows').empty();
                             $('#dynamic_total_installment_rows').empty();
                             $('#installments').empty();
+
+                            $('#stackholder_full_name').val(response.stakeholders['full_name']);
+                            $('#stackholder_father_name').val(response.stakeholders['father_name']);
+                            $('#stackholder_occupation').val(response.stakeholders['occupation']);
+                            $('#stackholder_designation').val(response.stakeholders['designation']);
+                            $('#stackholder_cnic').val(response.stakeholders['cnic']);
+                            $('#stackholder_contact').val(response.stakeholders['contact']);
+                            $('#stackholder_address').val(response.stakeholders['address']);
+
+
                             var total_installments = 1;
                             var order = null;
 
@@ -377,9 +405,11 @@
                                         '<td class="text-nowrap text-center">' + response
                                         .already_paid[i]['amount'].toLocaleString('en') + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['paid_amount'].toLocaleString('en') + '</td>',
+                                        .already_paid[i]['paid_amount'].toLocaleString('en') +
+                                        '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['remaining_amount'].toLocaleString('en') + '</td>',
+                                        .already_paid[i]['remaining_amount'].toLocaleString('en') +
+                                        '</td>',
                                         '</tr>',
                                         '<td class="text-nowrap text-center">' + response
                                         .already_paid[i]['status'] + '</td>',
@@ -405,15 +435,19 @@
                                         .total_calculated_installments[i]['detail'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['amount'] + '</td>',
+                                        .total_calculated_installments[i]['amount']
+                                        .toLocaleString() + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['paid_amount'] + '</td>',
+                                        .total_calculated_installments[i]['paid_amount']
+                                        .toLocaleString() + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['remaining_amount'] +
+                                        .total_calculated_installments[i]['remaining_amount']
+                                        .toLocaleString() +
                                         '</td>',
                                         '</tr>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['partially_paid'] +
+                                        .total_calculated_installments[i]['partially_paid']
+                                        .toLocaleString() +
                                         '</td>',
                                         '</tr>', );
                                 }
@@ -481,5 +515,30 @@
         $("#saveButton").click(function() {
             $("#receiptForm").submit();
         });
+
+        function destroyDraft() {
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are you sure you want to destroy the draft receipts ?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Change it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                    "{{ route('sites.receipts.destroy-draft', ['site_id' => encryptParams($site_id)]) }}";
+                    location.href = url;
+                }
+            });
+
+        }
     </script>
 @endsection

@@ -4,11 +4,6 @@
             <div>
                 <div class="row d-flex align-items-end">
 
-
-                    {{-- <label class="form-label" style="font-size: 15px" for="floor">
-                        <h6 style="font-size: 15px">Unit Data</h6>
-                    </label> --}}
-
                     <div class="mb-1 col-lg-12 col-md-12 col-sm-12 position-relative">
                         <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
@@ -96,9 +91,77 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row d-flex align-items-end">
+
+                    <div id="customerData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;"
+                            id="stakeholders_card">
+                            <div class="card-header justify-content-between">
+                                <h3> Customer Data </h3>
+                            </div>
+
+                            <div class="card-body">
+
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_full_name"
+                                            placeholder="Full Name" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_father_name"
+                                            placeholder="Father Name" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_occupation"
+                                            placeholder="Occupation" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_designation"
+                                            placeholder="Designation" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_cnic"
+                                            placeholder="CNIC" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_contact"
+                                            placeholder="Contact" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_address">Address</label>
+                                        <textarea class="form-control  form-control-lg" readonly id="stackholder_address"
+                                            placeholder="Address" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div id="paidInstllmentTableDiv" class=" col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label" style="font-size: 15px" for="floor">
@@ -270,12 +333,12 @@
 
                                     <div id="chequeValueDiv" class="col-md-6 chequeValueDiv">
                                         <label class="form-label" style="font-size: 15px" for="floor">
-                                            <h6 style="font-size: 15px">Bank Detail</h6>
+                                            <h6 style="font-size: 15px">Bank Name</h6>
                                         </label>
                                         <input type="text"
-                                            class="form-control form-control-lg @error('bank_detail') is-invalid @enderror"
-                                            id="bank_detail" name="bank_detail" placeholder="Bank Detail" />
-                                        @error('bank_detail')
+                                            class="form-control form-control-lg @error('bank_details') is-invalid @enderror"
+                                            id="bank_details" name="bank_details" placeholder="Bank Name" />
+                                        @error('bank_details')
                                             <div class="invalid-tooltip">{{ $message }}</div>
                                         @enderror
                                     </div>

@@ -33,6 +33,9 @@ class Receipt extends Model implements HasMedia
         'pay_order',
         'amount_received',
         'attachment',
+        'comments',
+        'status',
+        'bank_details',
     ];
 
     public $rules = [

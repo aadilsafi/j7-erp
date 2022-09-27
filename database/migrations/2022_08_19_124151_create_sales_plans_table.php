@@ -28,6 +28,7 @@ return new class extends Migration
             $table->dateTime('validity')->nullable();
             $table->double('status')->default(0);
             $table->text('comments')->nullable();
+            $table->dateTime('approved_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

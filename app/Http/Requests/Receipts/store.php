@@ -35,6 +35,7 @@ class store extends FormRequest
             'receipts.*.transaction_date' => ' required_if:receipts.*.mode_of_payment,==,Online',
             'receipts.*.online_instrument_no' => ' required_if:receipts.*.mode_of_payment,==,Online',
             'attachment' => 'sometimes',
+            'comments' => 'sometimes',
         ];
     }
 

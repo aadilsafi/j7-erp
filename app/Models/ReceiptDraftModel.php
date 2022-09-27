@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\HasMedia;
 
-class ReceiptDraftModel extends Model
+class ReceiptDraftModel extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory , InteractsWithMedia;
 
     protected $fillable = [
         'site_id',
@@ -29,6 +31,9 @@ class ReceiptDraftModel extends Model
         'pay_order',
         'amount_received',
         'attachment',
+        'comments',
+        'status',
+        'bank_details',
     ];
 
 }

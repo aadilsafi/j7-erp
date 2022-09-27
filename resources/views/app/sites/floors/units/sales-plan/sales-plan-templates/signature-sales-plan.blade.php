@@ -75,8 +75,8 @@
             <th style="width:33%; ">
                 <h1>Sales Plan</h1>
             </th>
-            <th id="date" style="width:33%; text-align:end;">
-                Date : ____________
+            <th  style="width:33%; text-align:end;">
+                Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
             </th>
         </tr>
     </table>

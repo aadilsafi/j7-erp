@@ -21,7 +21,7 @@
                     <h1>PAYMENT PLAN</h1>
                 </td>
                 <td class="text-end">
-                    <p>Print Date:{{  date_format (new DateTime(), ' d-M-Y') }}</p>
+                    <p>Print Date:{{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}</p>
                     <p>User: {{ Auth::user()->name }}</p>
                 </td>
             </tr>
@@ -46,7 +46,7 @@
                 </td>
                 <td style="border: 1px solid #eee!important;">
                     <p class="m-0">Invoice # : -</p>
-                    <p>Invoice Date : {{  date_format (new DateTime(), ' d-M-Y') }}</p>
+                    <p>Invoice Date : {{  date_format (new DateTime($data['validity']), 'D d-M-Y') }}</p>
                     <p class="m-0">Account # :-</p>
                     <p class="m-0">Sale Voucher # :-</p>
                 </td>
@@ -91,7 +91,7 @@
                     <hr width="50%">
 
                     <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
-                    <p class="m-0">Print Date: {{  date_format (new DateTime(), 'D d-M-Y') }}</p>
+                    <p class="m-0">Print Date: {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}</p>
                     <p class="m-0">Customer</p>
                 </td>
                 <td class="text-center">

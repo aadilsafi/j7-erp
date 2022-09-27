@@ -56,7 +56,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.receipts.destroy-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
+            <form action="{{ route('sites.receipts.make-active-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
 
@@ -105,6 +105,37 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     showCancelButton: true,
                     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
                     confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+                    confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#stakeholder-table-form').submit();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
+                });
+            }
+        }
+
+        function changeStatusSelected() {
+            var selectedCheckboxes = $('.dt-checkboxes:checked').length;
+            if (selectedCheckboxes > 0) {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Are you sure you want to change the staus of selected items ?',
+                    showCancelButton: true,
+                    cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                    confirmButtonText: 'Yes, Change it!',
                     confirmButtonClass: 'btn-danger',
                     buttonsStyling: false,
                     customClass: {

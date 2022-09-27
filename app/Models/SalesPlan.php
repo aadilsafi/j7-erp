@@ -23,6 +23,7 @@ class SalesPlan extends Model
         'validity',
         'comments',
         'status',
+        'approved_date',
     ];
 
     public function unit()

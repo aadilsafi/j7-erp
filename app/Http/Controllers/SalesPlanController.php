@@ -203,10 +203,12 @@ class SalesPlanController extends Controller
 
         $salesPlan = (new SalesPlan())->where('id', '>', 0)->where('unit_id',decryptParams($unit_id))->update([
             'status' => 2,
+            'approved_date' => now(),
         ]);
 
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
+            'approved_date' => now(),
         ]);
 
         $salesPlan = SalesPlan::find($request->salesPlanID);

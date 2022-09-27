@@ -26,6 +26,7 @@ class UserTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
+            'site_id' => 1,
         ]);
         $user->assignRole([1]);
 
@@ -38,6 +39,7 @@ class UserTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
+            'site_id' => 1,
         ]);
         $user->assignRole([1]);
 
@@ -50,6 +52,7 @@ class UserTableSeeder extends Seeder
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
+            'site_id' => 1,
         ]);
 
         $user->assignRole([2]);

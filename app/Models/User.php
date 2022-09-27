@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * App\Models\User
@@ -50,9 +52,9 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +65,22 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone_no',
+        'site_id'
+    ];
+
+
+    public $rules = [
+        'name' => 'required|string|min:1|max:50',
+        'email' => 'required|email|unique:users',
+        'phone_no' => 'required|string|min:11|max:11',
+        'password' => 'required | confirmed',
+        'attachment' => 'sometimes|min:2',
+        'role_id' => 'required'
+    ];
+
+    public $ruleMessages = [
+        'attachment.min' => 'Minimum 2 attachments are required.',
     ];
 
     /**

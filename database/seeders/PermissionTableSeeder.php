@@ -748,8 +748,60 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+             // Users
+             [
+                'name' => 'sites.users.index',
+                'show_name' => 'View Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.create',
+                'show_name' => 'Create Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.store',
+                'show_name' => 'Store Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.edit',
+                'show_name' => 'Edit Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.update',
+                'show_name' => 'Update Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.destroy',
+                'show_name' => 'Destroy Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
+        
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));
     }
 }

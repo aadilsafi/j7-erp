@@ -20,6 +20,7 @@ use App\Http\Controllers\{
     StakeholderController,
     NotificationController,
     ReceiptController,
+    UserController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -256,6 +257,25 @@ Route::group([
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
                         Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
+                 //Users Routes
+                 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+                    Route::get('/', [UserController::class, 'index'])->name('index');
+
+                    Route::get('create', [UserController::class, 'create'])->name('create');
+                    Route::post('store', [UserController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [UserController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [UserController::class, 'edit'])->name('edit');
+                        Route::put('update', [UserController::class, 'update'])->name('update');
+                        Route::get('delete', [UserController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [UserController::class, 'ajaxGetById'])->name('get-by-id');
                     });
                 });
 

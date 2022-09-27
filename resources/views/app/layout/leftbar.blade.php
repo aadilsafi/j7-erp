@@ -81,27 +81,29 @@
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='shield'></i>
-                    <span class="menu-title text-truncate"
-                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
+                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{
+                        __('lang.leftbar.roles_and_permissions') }}</span>
                 </a>
                 <ul class="menu-content">
                     <li class="">
                         <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
                             <i data-feather='shield'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.leftbar.roles') }}">{{ __('lang.leftbar.roles') }}</span>
+                            <span class="menu-item text-truncate" data-i18n="{{ __('lang.leftbar.roles') }}">{{
+                                __('lang.leftbar.roles') }}</span>
                         </a>
                         <ul class="menu-content">
                             <li class="{{ request()->routeIs('roles.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
                                     <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
+                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all')
+                                        }}</span>
                                 </a>
                             </li>
                             <li class="{{ request()->routeIs('roles.create') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('roles.create') }}">
                                     <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
+                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new')
+                                        }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -109,20 +111,22 @@
                     <li class="">
                         <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
                             <i data-feather='shield'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.leftbar.permissions') }}">{{ __('lang.leftbar.permissions') }}</span>
+                            <span class="menu-item text-truncate" data-i18n="{{ __('lang.leftbar.permissions') }}">{{
+                                __('lang.leftbar.permissions') }}</span>
                         </a>
                         <ul class="menu-content">
                             <li class="{{ request()->routeIs('permissions.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
                                     <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
+                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all')
+                                        }}</span>
                                 </a>
                             </li>
                             <li class="{{ request()->routeIs('permissions.create') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('permissions.create') }}">
                                     <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
+                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new')
+                                        }}</span>
                                 </a>
                             </li>
                         </ul>
@@ -184,15 +188,37 @@
                 </li>
             @endcanany
 
-            @can('sites.stakeholders.index')
-                <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
-                    <a class="d-flex align-items-center"
-                        href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
-                        <i data-feather='users'></i>
-                        <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
-                    </a>
-                </li>
-            @endcan
+            @if (Auth::user()->can('sites.stakeholders.index') || Auth::user()->can('sites.users.index'))
+            <li class="nav-item ">
+                <a class="d-flex align-items-center" href="javascript:void(0)">
+                    <i data-feather='users'></i>
+                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                       Users</span>
+                </a>
+                <ul class="menu-content">
+                    @can('sites.stakeholders.index')
+                    <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='users'></i>
+                            <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
+                        </a>
+                    </li>
+                    @endcan
+
+                    @can('sites.users.index')
+                    <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='users'></i>
+                            <span class="menu-title text-truncate" data-i18n="Email">Internal Users</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
+            @endif
+
 
             @can('sites.types.index')
                 <li class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">

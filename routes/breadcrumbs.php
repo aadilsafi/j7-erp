@@ -162,6 +162,22 @@ Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $s
     $trail->push('Edit Stakeholder');
 });
 
+//Users Breadcrumbs
+Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Users', route('sites.users.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.users.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->push('Create Users');
+});
+
+Breadcrumbs::for('sites.users.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->push('Edit Users');
+});
+
 
 //Leads Source Breadcrumbs
 Breadcrumbs::for('sites.lead-sources.index', function (BreadcrumbTrail $trail, $site_id) {

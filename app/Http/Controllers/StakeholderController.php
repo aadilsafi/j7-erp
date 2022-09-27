@@ -64,8 +64,9 @@ class StakeholderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(stakeholderStoreRequest $request, $site_id)
+    // public function store(Request $request, $site_id)
     {
-        // dd($request->all());
+        dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();

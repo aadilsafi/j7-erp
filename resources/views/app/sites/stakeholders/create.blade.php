@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+                            width: calc(20% - 0.5em);
+                        } */
     </style>
 @endsection
 
@@ -53,12 +53,9 @@
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                <div class="card">
-                    <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        @csrf
-                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholderTypes' => $stakeholderTypes]) }}
-                    </div>
-                </div>
+                @csrf
+                {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholderTypes' => $stakeholderTypes]) }}
+
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
@@ -75,7 +72,8 @@
 
                         <hr>
 
-                        <button type="submit" class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                        <button type="submit"
+                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                             <i data-feather='save'></i>
                             Save Stakeholder
                         </button>
@@ -101,6 +99,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -154,6 +153,37 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             });
+
+            $(".contact-persons-list").repeater({
+                initEmpty: true,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Warning',
+                        text: 'Are you sure you want to delete this element?',
+                        showCancelButton: true,
+                        cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                        confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+                        confirmButtonClass: 'btn-danger',
+                        buttonsStyling: false,
+                        customClass: {
+                            confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                            cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                        },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $(this).slideUp(e)
+                        }
+                    });
+                }
+            })
 
         });
     </script>

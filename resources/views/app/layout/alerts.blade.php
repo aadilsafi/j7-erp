@@ -1,4 +1,4 @@
-@if ($errors->any())
+{{-- @if ($errors->any()) --}}
 <div class="section mt-30">
     <div class="container-fluid g-0">
         <div class="row">
@@ -60,4 +60,4 @@
         </div>
     </div>
 </div>
-@endif
+{{-- @endif --}}

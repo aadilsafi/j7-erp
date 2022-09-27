@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Models\Receipt;
+use App\Models\ReceiptDraftModel;
 use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Stakeholder;
@@ -52,6 +53,7 @@ class ReceiptController extends Controller
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => (new Unit())->with('salesPlan','salesPlan.installments')->get(),
+                'draft_receipts' => ReceiptDraftModel::all(),
             ];
             return view('app.sites.receipts.create',$data);
         } else {
@@ -71,8 +73,14 @@ class ReceiptController extends Controller
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
-                $record = $this->receiptInterface->store($site_id, $data);;
-                return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                $record = $this->receiptInterface->store($site_id, $data);
+                if(isset($record['remaining_amount'])){
+                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst '.$record['unit_name'] .' saved. Remaining amount is '.$record['remaining_amount'] ))->with(  'remaining_amount' , $record['remaining_amount'] );
+                }
+                else{
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                }
+
             } else {
                 abort(403);
             }
@@ -106,7 +114,6 @@ class ReceiptController extends Controller
         $site_id = decryptParams($site_id);
         $receipt = Receipt::find(decryptParams($id));
         $image = $receipt->getFirstMediaUrl('receipt_attachments');
-        // dd();
         $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
         $installmentNumbersArray = explode(",",$receipt_installment_numbers);
         $last_index = array_key_last ( $installmentNumbersArray );

@@ -515,7 +515,6 @@ if (!function_exists('apiSuccessResponse')) {
     }
 }
 
-
 if (!function_exists('sqlErrorMessagesByCode')) {
     function sqlErrorMessagesByCode($errCode)
     {
@@ -550,5 +549,17 @@ if (!function_exists('cnicFormat')) {
     {
         $data = Str::of($cnic)->substrReplace('-', 5, 0)->substrReplace('-', 13, 0);
         return $data;
+    }
+}
+
+if (!function_exists('storeMultiValue')) {
+    function storeMultiValue($model, $data)
+    {
+        foreach ($data as $key => $value) {
+            $model->multiValues()->create([
+                'type' => $key,
+                'value' => $value,
+            ]);
+        }
     }
 }

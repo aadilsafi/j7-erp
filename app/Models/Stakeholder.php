@@ -21,6 +21,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation',
         'designation',
         'cnic',
+        'ntn',
         'contact',
         'address',
         'parent_id',
@@ -34,6 +35,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
         'cnic' => 'required|string|min:1|max:15',
+        'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'nullable|numeric',
@@ -53,6 +55,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation' => 'string',
         'designation' => 'string',
         'cnic' => 'string',
+        'ntn' => 'string',
         'contact' => 'string',
         'address' => 'string',
         'parent_id' => 'integer',
@@ -67,5 +70,9 @@ class Stakeholder extends Model implements HasMedia
     public function stakeholder_types()
     {
         return $this->hasMany(StakeholderType::class);
+    }
+
+    public function multiValues() {
+        return $this->morphMany(MultiValue::class, 'multivalueable');
     }
 }

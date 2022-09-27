@@ -514,7 +514,6 @@ if (!function_exists('apiSuccessResponse')) {
     }
 }
 
-
 if (!function_exists('sqlErrorMessagesByCode')) {
     function sqlErrorMessagesByCode($errCode)
     {
@@ -541,5 +540,17 @@ if (!function_exists('sqlErrorMessagesByCode')) {
             '23505' => 'Data already exists',
         ];
         return $messages[$errCode] ?? 'Unknown error';
+    }
+}
+
+if (!function_exists('storeMultiValue')) {
+    function storeMultiValue($model, $data)
+    {
+        foreach ($data as $key => $value) {
+            $model->multiValues()->create([
+                'type' => $key,
+                'value' => $value,
+            ]);
+        }
     }
 }

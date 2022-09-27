@@ -134,6 +134,14 @@ class StakeholderService implements StakeholderInterface
                 }
             }
 
+            if (isset($inputs['stakeholder_type'])) {
+                foreach ($inputs['stakeholder_type'] as $key => $value) {
+                    (new StakeholderType())->find($key)->update([
+                        'status' => true,
+                    ]);
+                }
+            }
+            // dd($inputs);
             $stakeholder->contacts()->delete();
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
                 $contacts = [];

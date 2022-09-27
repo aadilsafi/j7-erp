@@ -20,8 +20,32 @@
                     @enderror
                 </div>
             </div>
+        @else
+            <div class="row mb-1">
+                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                    <div class="d-flex justify-content-between">
+                        @forelse ($stakeholder->stakeholder_types as $type)
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <span
+                                    class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
+                                <div
+                                    class="form-check form-switch form-check-success">
+                                    <input type="checkbox" class="form-check-input"
+                                        id="stakeholder_type_{{ $type->id }}" name="stakeholder_type[{{ $type->id }}]" value="1"
+                                        {{ $type->status ? 'checked disabled' : null }} />
+                                    <label class="form-check-label" for="stakeholder_type_{{ $type->id }}">
+                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                    </label>
+                                </div>
+                            </div>
+                        @empty
+                        @endforelse
+                    </div>
+                </div>
+            </div>
         @endif
-
+        <hr>
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -122,7 +146,6 @@
         </div>
 
         <div class="row mb-1">
-
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
@@ -149,6 +172,8 @@
                 @enderror
             </div>
         </div>
+
+
     </div>
 </div>
 

@@ -25,6 +25,8 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules =  (new Stakeholder())->rules;
+        $rules['cnic'] .= ',' . decryptParams($this->id);
+        $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
         return $rules;
     }

@@ -10,7 +10,7 @@
 @endsection
 
 @section('page-css')
-<link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
@@ -40,7 +40,7 @@
             display: none;
         }
 
-        #chequeValueDiv {
+        .chequeValueDiv {
             display: none;
         }
 
@@ -61,8 +61,8 @@
         }
 
         /* .filepond--item {
-                        width: calc(20% - 0.5em);
-                    } */
+                            width: calc(20% - 0.5em);
+                        } */
     </style>
 @endsection
 
@@ -80,7 +80,8 @@
 @endsection
 
 @section('content')
-    <form id="receiptForm" enctype="multipart/form-data" action="{{ route('sites.receipts.store', ['site_id' => encryptParams($site_id)]) }}" method="post"
+    <form id="receiptForm" enctype="multipart/form-data"
+        action="{{ route('sites.receipts.store', ['site_id' => encryptParams($site_id)]) }}" method="post"
         class="repeater">
         @csrf
         <div class="row">
@@ -90,25 +91,50 @@
                     'units' => $units,
                 ]) }}
             </div>
+            @isset($draft_receipts)
+                @php
+                    $amount_received = 0;
+                    $amount_paid = 0;
+                @endphp
 
+                @foreach ($draft_receipts as $draft_receipt)
+                    @php
+                        $amount_received = $draft_receipt->amount_received;
+                        $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
+                    @endphp
+                @endforeach
+
+            @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
 
                         <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                <h6 style="font-size: 15px"> Amount Received</h6>
+                            </label>
+                            <input min="0" type="number"
+                                class="form-control  @error('amount_in_numbers') is-invalid @enderror"
+                                @if($amount_received == 0) name="amount_received" @endif  placeholder="Amount Received" @if($amount_received > 0) readonly @endif  value="{{ isset($amount_received) ? $amount_received : null }}"/>
+                            @error('amount_in_numbers')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        @if($amount_received > 0)
+                            <div class="d-block mb-1">
                                 <label class="form-label" style="font-size: 15px" for="floor">
-                                    <h6 style="font-size: 15px"> Amount Received</h6>
+                                    <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
-                                <input min="0"  type="number"
+                                <input min="0" type="number"
                                     class="form-control  @error('amount_in_numbers') is-invalid @enderror"
-                                    name="amount_received" placeholder="Amount Received"
-                                    />
+                                    @if($amount_received > 0) name="amount_received" @endif   placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}"/>
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                        </div>
-
+                            </div>
+                        @endif
 
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
@@ -120,6 +146,15 @@
                         </div>
 
                         <hr>
+
+                        <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
+                            <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
+                            <div class="alert-body">
+                                <strong>On Cancel Receipts created against Amount Received will be Effected.
+                            </div>
+                        </div>
+                        <hr>
+
                         {{-- <div class="d-block mb-1">
                             <button
                                 class="btn text-nowrap w-100 btn-relief-outline-primary waves-effect waves-float waves-light me-1 mb-1"
@@ -140,6 +175,7 @@
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
                         </a>
+
                     </div>
                 </div>
             </div>
@@ -164,7 +200,6 @@
 @section('custom-js')
 
     <script>
-
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -232,26 +267,26 @@
             $(".other-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "block");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
             $(".cheque-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "block");
+                $('.chequeValueDiv').css("display", "block");
             });
 
             $(".online-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "block");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
 
             $(".mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
             $(".other-purpose").click(function() {
@@ -355,7 +390,8 @@
                             for (i = 0; i <= response.total_calculated_installments.length; i++) {
                                 if (response.total_calculated_installments[i] != null) {
                                     if (response.total_calculated_installments[i][
-                                        'installment_order'] == 0) {
+                                            'installment_order'
+                                        ] == 0) {
                                         order = 'Down Payment';
                                     } else {
                                         order = response.total_calculated_installments[i][
@@ -445,6 +481,5 @@
         $("#saveButton").click(function() {
             $("#receiptForm").submit();
         });
-
     </script>
 @endsection

@@ -2,8 +2,11 @@
 
 namespace App\Services\Stakeholder;
 
-use App\Models\Stakeholder;
-use App\Models\StakeholderType;
+use App\Models\{
+    Stakeholder,
+    StakeholderContact,
+    StakeholderType,
+};
 use Illuminate\Support\Facades\Storage;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
@@ -55,19 +58,29 @@ class StakeholderService implements StakeholderInterface
                 'occupation' => $inputs['occupation'],
                 'designation' => $inputs['designation'],
                 'cnic' => $inputs['cnic'],
+                'ntn' => $inputs['ntn'],
                 'contact' => $inputs['contact'],
                 'address' => $inputs['address'],
                 'parent_id' => $inputs['parent_id'],
+                'comments' => $inputs['comments'],
                 'relation' => $inputs['relation'],
             ];
+            // dd($inputs);
 
             $stakeholder = $this->model()->create($data);
-
 
             if (isset($inputs['attachment'])) {
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+            }
+
+            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
+                $contacts = [];
+                foreach ($inputs['contact-persons'] as $contact) {
+                    $contacts[] = new StakeholderContact($contact);
+                }
+                $stakeholder->contacts()->saveMany($contacts);
             }
 
             $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
@@ -104,9 +117,11 @@ class StakeholderService implements StakeholderInterface
                 'occupation' => $inputs['occupation'],
                 'designation' => $inputs['designation'],
                 'cnic' => $inputs['cnic'],
+                'ntn' => $inputs['ntn'],
                 'contact' => $inputs['contact'],
                 'address' => $inputs['address'],
                 'parent_id' => $inputs['parent_id'],
+                'comments' => $inputs['comments'],
                 'relation' => $inputs['relation'],
             ];
             $stakeholder->update($data);
@@ -117,6 +132,15 @@ class StakeholderService implements StakeholderInterface
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+            }
+
+            $stakeholder->contacts()->delete();
+            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
+                $contacts = [];
+                foreach ($inputs['contact-persons'] as $contact) {
+                    $contacts[] = new StakeholderContact($contact);
+                }
+                $stakeholder->contacts()->saveMany($contacts);
             }
             return $stakeholder;
         });
@@ -142,8 +166,10 @@ class StakeholderService implements StakeholderInterface
             'occupation' => '',
             'designation' => '',
             'cnic' => '',
+            'ntn' => '',
             'contact' => '',
             'address' => '',
+            'comments' => '',
             'stakeholder_types' => [
                 [
                     'stakeholder_id' => 0,

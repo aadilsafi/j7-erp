@@ -26,7 +26,7 @@ class CustomersDataTable extends DataTable
             ->addIndexColumn()
 
             ->editColumn('cnic', function ($fileManagement) {
-                return strlen($fileManagement->cnic) > 0 ? $fileManagement->cnic : '-';
+                return strlen($fileManagement->cnic) > 0 ? cnicFormat($fileManagement->cnic) : '-';
             })
             ->editColumn('contact', function ($fileManagement) {
                 return strlen($fileManagement->contact) > 0 ? $fileManagement->contact : '-';

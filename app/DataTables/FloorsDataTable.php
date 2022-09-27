@@ -214,7 +214,7 @@ class FloorsDataTable extends DataTable
             Column::computed('units_sold_count')->title('Sold'),
             Column::computed('units_token_count')->title('Token'),
             Column::computed('units_hold_count')->title('Hold'),
-            Column::computed('units_dp_count')->title('Partial DP'),
+            Column::computed('units_dp_count')->title('Partial Paid'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1'),
         ];

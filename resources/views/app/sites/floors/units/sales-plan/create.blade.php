@@ -229,7 +229,7 @@
                             (stakeholderData.stakeholder_types).forEach(types => {
                                 if (types.status) {
                                     stakeholderType +=
-                                        '<p class="badge badge-light-primary fs-5 ms-auto me-1">' +
+                                        '<p class="badge badge-light-success fs-5 ms-auto me-1">' +
                                         types.stakeholder_code + '</p>';
                                 } else {
                                     stakeholderType +=

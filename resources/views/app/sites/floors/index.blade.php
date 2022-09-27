@@ -73,7 +73,7 @@
                                         <th>SOLD</th>
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
-                                        <th>Partial DP</th>
+                                        <th>Partial Paid</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -90,7 +90,7 @@
                                         <th>SOLD</th>
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
-                                        <th>Partial DP</th>
+                                        <th>Partial Paid</th>
                                         <th rowspan="2">CREATED AT</th>
                                         <th rowspan="2">UPDATED AT</th>
                                         <th rowspan="2">ACTIONS</th>

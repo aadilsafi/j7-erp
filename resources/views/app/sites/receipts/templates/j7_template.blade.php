@@ -314,7 +314,7 @@
                 </th>
                 <td style="text-align: start; width:20%;  ">
                     <input disabled style="width: 20%; height:20px; border:1px solid; text-align:center;"
-                        value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
+                        value="RS {{ number_format($preview_data['amount_in_numbers']) }}" type="text">
                 </td>
             </tr>
 

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('receipts', function (Blueprint $table) {
+        Schema::create('receipt_draft_models', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->foreignId('unit_id')->constrained();
@@ -49,6 +49,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('receipts');
+        Schema::dropIfExists('receipt_draft_models');
     }
 };

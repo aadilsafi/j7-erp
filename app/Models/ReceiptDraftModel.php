@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Site;
-use App\Models\Unit;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Receipt extends Model implements HasMedia
+class ReceiptDraftModel extends Model implements HasMedia
 {
     use HasFactory , InteractsWithMedia;
 
@@ -38,24 +36,4 @@ class Receipt extends Model implements HasMedia
         'bank_details',
     ];
 
-    public $rules = [
-        'receipts.item_idunit_id' => 'required',
-        'receipts.mode_of_payment' => 'required',
-        'receipts.amount_in_numbers' => 'required',
-    ];
-
-    public function site()
-    {
-        return $this->belongsTo(Site::class);
-    }
-
-    public function unit()
-    {
-        return $this->belongsTo(Unit::class);
-    }
-
-    public function salesPlan()
-    {
-        return $this->belongsTo(SalesPlan::class);
-    }
 }

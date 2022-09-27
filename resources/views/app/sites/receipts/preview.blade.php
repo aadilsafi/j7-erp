@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                width: calc(20% - 0.5em);
-                            } */
+                                        width: calc(20% - 0.5em);
+                                    } */
     </style>
 @endsection
 
@@ -210,6 +210,13 @@
                                         name="unit[floor_no]" placeholder=""
                                         value="{{ numberToWords($receipt->amount_in_numbers) }} only." readonly />
                                 </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                    <label class="form-label fs-5" for="stackholder_address">Comments</label>
+                                    <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
+                                        rows="5">{{ $receipt->comments }}</textarea>
+                                </div>
+
                             </div>
                         </div>
 
@@ -222,6 +229,7 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
                     </div>
 
                 </div>

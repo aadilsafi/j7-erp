@@ -211,7 +211,6 @@ Route::group([
 
                                             Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
 
-
                                             Route::group(['prefix' => '/{id}'], function () {
 
                                                 Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
@@ -315,8 +314,9 @@ Route::group([
                         });
                     });
 
-
+                    Route::get('destroy-draft', [ReceiptController::class, 'destroyDraft'])->name('destroy-draft');
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [ReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         Route::put('update', [ReceiptController::class, 'update'])->name('update');

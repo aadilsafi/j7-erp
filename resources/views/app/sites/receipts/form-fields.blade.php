@@ -4,78 +4,162 @@
             <div>
                 <div class="row d-flex align-items-end">
 
-                    <div class="col-md-6 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="unit_id">
-                                <h6 style="font-size: 15px">Unit No.</h6>
-                            </label>
-                            <select class="select2 form-select  unit_id @error('unit_id') is-invalid @enderror"
-                                name="unit_id" onclick="setIds(this)"
-                                onchange="getUnitTypeAndFloor(this.options[this.selectedIndex].value,this.id)">
-                                <option selected>Select Unit No</option>
-                                @foreach ($units as $row)
-                                    @if (!$row->salesPlan->isEmpty())
-                                        @continue(isset($unit) && $unit->id == $row['id'])
-                                        <option value="{{ $row->id }}"
-                                            {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
-                                            {{ $row->name }} ( {{ $row->floor_unit_number }} )
-                                        </option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @error('unit_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                    <div class="mb-1 col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-md-6 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="unit_id">
+                                                <h6 style="font-size: 15px">Unit No.</h6>
+                                            </label>
+                                            <select
+                                                class="select2 form-select  unit_id @error('unit_id') is-invalid @enderror"
+                                                name="unit_id" onclick="setIds(this)"
+                                                onchange="getUnitTypeAndFloor(this.options[this.selectedIndex].value,this.id)">
+                                                <option selected>Select Unit No</option>
+                                                @foreach ($units as $row)
+                                                    @if (!$row->salesPlan->isEmpty())
+                                                        @continue(isset($unit) && $unit->id == $row['id'])
+                                                        <option value="{{ $row->id }}"
+                                                            {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
+                                                            {{ $row->name }} ( {{ $row->floor_unit_number }} )
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @error('unit_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="floor">
+                                                <h6 style="font-size: 15px">Amount To be Paid</h6>
+                                            </label>
+                                            <input min="0" onclick="setAmountIds(this)" id="amountToBePaid"
+                                                type="number"
+                                                class="form-control amountToBePaid  @error('amount_in_numbers') is-invalid @enderror"
+                                                name="amount_in_numbers" placeholder="Amount To be Paid"
+                                                value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
+                                            @error('amount_in_numbers')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="unit_name">
+                                                <h6 style="font-size: 15px">Unit Name</h6>
+                                            </label>
+                                            <select disabled name="unit_name"
+                                                class="select2-size-lg form-select unit_name">
+                                                <option selected>Unit Name</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="unit_type">
+                                                <h6 style="font-size: 15px">Unit Type</h6>
+                                            </label>
+                                            <select disabled class="select2-size-lg form-select unit_type"
+                                                name="unit_type">
+                                                <option value="0" selected>Unit Type</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 col-12">
+                                        <div class="mb-1">
+                                            <label class="form-label" style="font-size: 15px" for="floor">
+                                                <h6 style="font-size: 15px">Floor</h6>
+                                            </label>
+                                            <select name="floor" disabled class="select2-size-lg form-select floor">
+                                                <option value="0" selected>Floor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 
+                </div>
 
+                <div class="row d-flex align-items-end">
 
-                    <div class="col-md-6 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor">
-                                <h6 style="font-size: 15px">Amount To be Paid</h6>
-                            </label>
-                            <input min="0" onclick="setAmountIds(this)" id="amountToBePaid" type="number"
-                                class="form-control amountToBePaid  @error('amount_in_numbers') is-invalid @enderror"
-                                name="amount_in_numbers" placeholder="Amount To be Paid"
-                                value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
-                            @error('amount_in_numbers')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                    <div id="customerData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;"
+                            id="stakeholders_card">
+                            <div class="card-header justify-content-between">
+                                <h3> Customer Data </h3>
+                            </div>
 
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="unit_name">
-                                <h6 style="font-size: 15px">Unit Name</h6>
-                            </label>
-                            <select disabled name="unit_name" class="select2-size-lg form-select unit_name">
-                                <option selected>Unit Name</option>
-                            </select>
-                        </div>
-                    </div>
+                            <div class="card-body">
 
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="unit_type">
-                                <h6 style="font-size: 15px">Unit Type</h6>
-                            </label>
-                            <select disabled class="select2-size-lg form-select unit_type" name="unit_type">
-                                <option value="0" selected>Unit Type</option>
-                            </select>
-                        </div>
-                    </div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_full_name"
+                                            placeholder="Full Name" />
+                                    </div>
 
-                    <div class="col-md-4 col-12">
-                        <div class="mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor">
-                                <h6 style="font-size: 15px">Floor</h6>
-                            </label>
-                            <select name="floor" disabled class="select2-size-lg form-select floor">
-                                <option value="0" selected>Floor</option>
-                            </select>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_father_name"
+                                            placeholder="Father Name" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_occupation"
+                                            placeholder="Occupation" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_designation"
+                                            placeholder="Designation" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_cnic"
+                                            placeholder="CNIC" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                                        <input type="text" readonly value=""
+                                            class="form-control form-control-lg" id="stackholder_contact"
+                                            placeholder="Contact" />
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_address">Address</label>
+                                        <textarea class="form-control  form-control-lg" readonly id="stackholder_address"
+                                            placeholder="Address" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -164,7 +248,7 @@
                                             id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
                                         <label class="custom-option-item text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon2">
-                                            <i class="bi bi-bank"  style="font-size: 20px"></i>
+                                            <i class="bi bi-bank" style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Cheque</span>
                                         </label>
                                     </div>
@@ -175,7 +259,7 @@
                                             id="customOptionsCheckableRadiosWithIcon3" value="Online">
                                         <label class="custom-option-item text-center p-1"
                                             for="customOptionsCheckableRadiosWithIcon3">
-                                            <i class="bi bi-app-indicator"  style="font-size: 20px"></i>
+                                            <i class="bi bi-app-indicator" style="font-size: 20px"></i>
                                             <span class="custom-option-item-title h4 d-block">Online</span>
                                         </label>
                                     </div>
@@ -234,7 +318,7 @@
                                         </div>
                                     </div>
 
-                                    <div id="chequeValueDiv" class="col-md-12 ">
+                                    <div id="chequeValueDiv" class="col-md-6 chequeValueDiv">
                                         <label class="form-label" style="font-size: 15px" for="floor">
                                             <h6 style="font-size: 15px">Cheque No</h6>
                                         </label>
@@ -247,8 +331,30 @@
                                         @enderror
                                     </div>
 
+                                    <div id="chequeValueDiv" class="col-md-6 chequeValueDiv">
+                                        <label class="form-label" style="font-size: 15px" for="floor">
+                                            <h6 style="font-size: 15px">Bank Name</h6>
+                                        </label>
+                                        <input type="text"
+                                            class="form-control form-control-lg @error('bank_details') is-invalid @enderror"
+                                            id="bank_details" name="bank_details" placeholder="Bank Name" />
+                                        @error('bank_details')
+                                            <div class="invalid-tooltip">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="floor">
+                            <h6 style="font-size: 15px">Comments </h6>
+                        </label>
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <textarea style="border: 2px solid #eee; border-style: dashed; border-radius: 0;" class="form-control form-control-lg"
+                                id="custom_comments" name="comments" placeholder="Comments" rows="5"></textarea>
                         </div>
                     </div>
 

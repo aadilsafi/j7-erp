@@ -675,6 +675,20 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.receipts.make-active-selected',
+                'show_name' => 'Make Active Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.destroy-draft',
+                'show_name' => 'Destroy Draft Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.receipts.templates.print',
                 'show_name' => 'Print Selected Receipts',
                 'guard_name' => 'web',

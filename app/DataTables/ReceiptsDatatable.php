@@ -51,6 +51,9 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('amount_in_numbers', function ($receipt) {
                 return  number_format($receipt->amount_in_numbers);
             })
+            ->editColumn('status', function ($receipt) {
+                return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+            })
             ->editColumn('created_at', function ($receipt) {
                 return editDateColumn($receipt->created_at);
             })
@@ -81,6 +84,7 @@ class ReceiptsDatatable extends DataTable
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
+        $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         return $this->builder()
             ->setTableId('stakeholder-table')
@@ -118,18 +122,23 @@ class ReceiptsDatatable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+                // Button::raw('export')
+                // ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
+                // ->text('<i class="bi bi-pencil"></i> Receipt Status')->attr([
+                //     'onclick' => 'changeStatusSelected()',
+                // ]),
 
-                ($selectedDeletePermission ?
+                ($selectedActivePermission ?
                     Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                            'onclick' => 'deleteSelected()',
+                        ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
+                            'onclick' => 'changeStatusSelected()',
                         ])
                         :
                         Button::raw('delete-selected')
                         ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                            'onclick' => 'deleteSelected()',
+                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
+                            'onclick' => 'changeStatusSelected()',
                         ])
                 ),
             )
@@ -175,9 +184,8 @@ class ReceiptsDatatable extends DataTable
 
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
-            // Column::make('installment_number')->title('Installment Numbers'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
-            // Column::computed('floor_id')->title('Floor'),
+            Column::computed('status')->title('Status'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             (
                 $editPermission ?

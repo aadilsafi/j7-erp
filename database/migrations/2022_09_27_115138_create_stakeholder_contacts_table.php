@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stakeholders', function (Blueprint $table) {
+        Schema::create('stakeholder_contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();
             $table->string('occupation', 50)->nullable();
@@ -24,9 +24,6 @@ return new class extends Migration
             $table->string('ntn')->nullable();
             $table->string('contact', 20)->nullable();
             $table->string('address')->nullable();
-            $table->string('comments')->nullable();
-            $table->integer('parent_id')->default(0);
-            $table->string('relation')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -39,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stakeholders');
+        Schema::dropIfExists('stakeholder_contacts');
     }
 };

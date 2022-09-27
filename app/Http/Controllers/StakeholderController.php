@@ -49,7 +49,9 @@ class StakeholderController extends Controller
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
+                'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]
             ];
+            unset($data['emptyRecord'][0]['stakeholder_types']);
             // dd($data);
             return view('app.sites.stakeholders.create', $data);
         } else {
@@ -64,6 +66,7 @@ class StakeholderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(stakeholderStoreRequest $request, $site_id)
+    // public function store(Request $request, $site_id)
     {
         // dd($request->all());
         try {
@@ -103,7 +106,7 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $id);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types']);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
@@ -115,7 +118,10 @@ class StakeholderController extends Controller
                     'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
+                    'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]
                 ];
+                unset($data['emptyRecord'][0]['stakeholder_types']);
+                // dd($data);
                 return view('app.sites.stakeholders.edit', $data);
             }
 
@@ -140,6 +146,7 @@ class StakeholderController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
+
                 $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {

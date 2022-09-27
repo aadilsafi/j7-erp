@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+                                            width: calc(20% - 0.5em);
+                                        } */
     </style>
 @endsection
 
@@ -53,38 +53,39 @@
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                <div class="card">
-                    <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        @csrf
-                        {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholderTypes' => $stakeholderTypes]) }}
-                    </div>
-                </div>
+                @csrf
+                {{ view('app.sites.stakeholders.form-fields', ['stakeholders' => $stakeholders, 'stakeholderTypes' => $stakeholderTypes, 'emptyRecord' => $emptyRecord]) }}
+
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
-                        <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
-                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
-                            @error('attachment')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
+                                <input id="attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="attachment[]" multiple
+                                    accept="image/png, image/jpeg, image/gif" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <hr>
+
+                            <button type="submit"
+                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                <i data-feather='save'></i>
+                                Save Stakeholder
+                            </button>
+
+                            <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
                         </div>
-
-                        <hr>
-
-                        <button type="submit" class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
-                            <i data-feather='save'></i>
-                            Save Stakeholder
-                        </button>
-
-                        <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
                     </div>
                 </div>
             </div>
@@ -101,6 +102,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -154,6 +156,23 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             });
+
+            $(".contact-persons-list").repeater({
+                // initEmpty: true,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            })
+
+            @if (empty(old()))
+                $('#delete-contact-person').trigger('click');
+            @endif
 
         });
     </script>

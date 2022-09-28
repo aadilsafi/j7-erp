@@ -41,6 +41,8 @@ class DatabaseSeeder extends Seeder
             FileManagementTableSeeder::class,
             ReceiptsTableSeeder::class,
             UnitStakeholdersTableSeeder::class,
+            TeamSeeder::class,
+            TeamUserSeeder::class,
         ]);
     }
 }

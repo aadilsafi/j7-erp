@@ -21,6 +21,7 @@ use App\Http\Controllers\{
     NotificationController,
     ReceiptController,
     UserController,
+    TeamController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -275,6 +276,25 @@ Route::group([
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
                         Route::get('/', [UserController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
+                //Teams Routes
+                Route::group(['prefix' => 'teams', 'as' => 'teams.'], function () {
+                    Route::get('/', [TeamController::class, 'index'])->name('index');
+
+                    Route::get('create', [TeamController::class, 'create'])->name('create');
+                    Route::post('store', [TeamController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [TeamController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [TeamController::class, 'edit'])->name('edit');
+                        Route::put('update', [TeamController::class, 'update'])->name('update');
+                        Route::get('delete', [TeamController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [TeamController::class, 'ajaxGetById'])->name('get-by-id');
                     });
                 });
 

@@ -21,6 +21,8 @@ use App\Http\Controllers\{
     NotificationController,
     ReceiptController,
     UserController,
+    RebateIncentiveController,
+    DealerIncentiveController
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -259,8 +261,8 @@ Route::group([
                     });
                 });
 
-                 //Users Routes
-                 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+                //Users Routes
+                Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
                     Route::get('/', [UserController::class, 'index'])->name('index');
 
                     Route::get('create', [UserController::class, 'create'])->name('create');
@@ -328,6 +330,24 @@ Route::group([
                 Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
 
                     Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
+
+                    // rebate incentive form
+                    Route::group(['prefix' => 'rebate-incentive', 'as' => 'rebate-incentive.'], function () {
+
+                        Route::get('/', [RebateIncentiveController::class, 'index'])->name('index');
+
+                        Route::get('create', [RebateIncentiveController::class, 'create'])->name('create');
+                        Route::post('store', [RebateIncentiveController::class, 'store'])->name('store');
+                    });
+
+                    // dealer incentive form
+                    Route::group(['prefix' => 'dealer-incentive', 'as' => 'dealer-incentive.'], function () {
+
+                        Route::get('/', [DealerIncentiveController::class, 'index'])->name('index');
+
+                        Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
+                        Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+                    });
 
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
                         Route::get('/units', [FileManagementController::class, 'units'])->name('units');

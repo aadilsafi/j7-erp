@@ -2,8 +2,8 @@
 
 namespace App\DataTables;
 
-use App\Models\Receipt;
-use App\Models\Stakeholder;
+use App\Models\RebateIncentiveModel;
+use App\Services\RebateIncentive\RebateIncentiveInterface;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -13,17 +13,17 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Services\Stakeholder\Interface\rebateIncentive;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class ReceiptsDatatable extends DataTable
+class RebateIncentiveDataTable extends DataTable
 {
 
-    private $stakeholderInterface;
+    private $rebateIncentive;
 
-    public function __construct( StakeholderInterface $stakeholderInterface)
+    public function __construct(RebateIncentiveInterface $rebateIncentive)
     {
-        $this->stakeholderInterface = $stakeholderInterface;
+        $this->rebateIncentive = $rebateIncentive;
     }
 
     /**
@@ -36,35 +36,38 @@ class ReceiptsDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('floor_id', function ($receipt) {
-                return  $receipt->unit->floor->name;
+            ->editColumn('unit_id', function ($rebateIncentive) {
+                return $rebateIncentive->unit->floor_unit_number;
             })
-            ->editColumn('unit_id', function ($receipt) {
-                    return  $receipt->unit->name;
+            ->editColumn('unit_name', function ($rebateIncentive) {
+                return $rebateIncentive->unit->name;
             })
-            ->editColumn('cnic', function ($receipt) {
-                return  cnicFormat($receipt->cnic);
-        })
-            ->editColumn('installment_number', function ($receipt) {
-                return  str_replace(str_split('[]"'), '', $receipt->installment_number);
+            ->editColumn('stakeholder_id', function ($rebateIncentive) {
+                return $rebateIncentive->stakeholder->full_name;
             })
-            ->editColumn('amount_in_numbers', function ($receipt) {
-                return  number_format($receipt->amount_in_numbers);
+            ->editColumn('stakeholder_cnic', function ($rebateIncentive) {
+                return $rebateIncentive->stakeholder->cnic;
             })
-            ->editColumn('status', function ($receipt) {
-                return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+            ->editColumn('stakeholder_contact', function ($rebateIncentive) {
+                return $rebateIncentive->stakeholder->contact;
             })
-            ->editColumn('created_at', function ($receipt) {
-                return editDateColumn($receipt->created_at);
+            ->editColumn('commision_percentage', function ($rebateIncentive) {
+                return $rebateIncentive->commision_percentage .'%';
             })
-            ->editColumn('updated_at', function ($receipt) {
-                return editDateColumn($receipt->updated_at);
+            ->editColumn('created_at', function ($rebateIncentive) {
+                return editDateColumn($rebateIncentive->created_at);
             })
-            ->editColumn('actions', function ($receipt) {
-                return view('app.sites.receipts.actions', ['site_id' => decryptParams($this->site_id), 'id' => $receipt->id]);
+            ->editColumn('updated_at', function ($rebateIncentive) {
+                return editDateColumn($rebateIncentive->updated_at);
             })
-            ->editColumn('check', function ($receipt) {
-                return $receipt;
+            ->editColumn('status', function ($rebateIncentive) {
+                return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+            })
+            // ->editColumn('actions', function ($rebateIncentive) {
+            //     return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $rebateIncentive->id]);
+            // })
+            ->editColumn('check', function ($rebateIncentive) {
+                return $rebateIncentive;
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -75,16 +78,16 @@ class ReceiptsDatatable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Receipt $model): QueryBuilder
+    public function query(RebateIncentiveModel $model): QueryBuilder
     {
-        return $model->newQuery()->where('site_id', decryptParams($this->site_id));
+        return $model->newQuery()->where('site_id', $this->site_id);
     }
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
-        $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
+        $createPermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.create');
+        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
+        // $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         return $this->builder()
             ->setTableId('stakeholder-table')
@@ -105,14 +108,14 @@ class ReceiptsDatatable extends DataTable
                     ->text('<i class="bi bi-plus"></i> Add New')->attr([
                         'onclick' => 'addNew()',
                     ])
-                :
-                Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                    'onclick' => 'addNew()',
-                ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
 
-            ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -123,27 +126,14 @@ class ReceiptsDatatable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                // Button::raw('export')
-                // ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-                // ->text('<i class="bi bi-pencil"></i> Receipt Status')->attr([
-                //     'onclick' => 'changeStatusSelected()',
-                // ]),
 
-                ($selectedActivePermission ?
-                    Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-                            'onclick' => 'changeStatusSelected()',
-                        ])
-                        :
-                        Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-                            'onclick' => 'changeStatusSelected()',
-                        ])
-                ),
+                Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
             )
-            ->rowGroupDataSrc('unit_id')
+            ->rowGroupDataSrc('stakeholder_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -174,26 +164,27 @@ class ReceiptsDatatable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
+        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
+        // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
         return [
-            ( $selectedActivePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
 
-            Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC'),
-            Column::make('amount_in_numbers')->title('Paid Amount'),
-            Column::computed('status')->title('Status'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            (
-                $editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
+            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::computed('unit_id')->title('Unit Number')->addClass('text-nowrap text-center'),
+            Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
+            // Column::computed('unit_type')->title('Unit Type')->addClass('text-nowrap text-center'),
+
+            Column::computed('stakeholder_id')->title('Full Name')->addClass('text-nowrap text-center'),
+            Column::computed('stakeholder_cnic')->title('Cnic')->addClass('text-nowrap '),
+            Column::computed('stakeholder_contact')->title('Contact')->addClass('text-nowrap text-center'),
+
+            Column::make('deal_type')->title('Deal Type')->addClass('text-nowrap text-center'),
+            Column::computed('commision_percentage')->title('Commision Percentage')->addClass('text-nowrap text-center'),
+            Column::computed('commision_total')->title('Commision Total')->addClass('text-nowrap text-center'),
+            Column::computed('status')->title('Status')->addClass('text-nowrap text-center'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap text-center'),
+
+            // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+
 
         ];
     }
@@ -205,7 +196,7 @@ class ReceiptsDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Receipts' . date('YmdHis');
+        return 'Rebate_Incentive' . date('YmdHis');
     }
 
     /**

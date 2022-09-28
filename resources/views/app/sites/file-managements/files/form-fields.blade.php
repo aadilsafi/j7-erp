@@ -72,7 +72,7 @@
             {{-- <i data-feather="chevron-right" class="font-medium-2"></i> --}}
         </div>
 
-        <div class="step" data-target="#rebate-form" role="tab" id="rebate-form-trigger">
+        {{-- <div class="step" data-target="#rebate-form" role="tab" id="rebate-form-trigger">
             <button type="button" class="step-trigger">
                 <span class="bs-stepper-box waves-effect waves-float waves-light" class="font-medium-3">6</span>
                 <span class="bs-stepper-label">
@@ -80,7 +80,7 @@
                     <span class="bs-stepper-subtitle">Validate Rebate Form</span>
                 </span>
             </button>
-        </div>
+        </div> --}}
     </div>
 
     <div class="bs-stepper-content p-0">
@@ -851,11 +851,11 @@
                         <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
                         <span class="align-middle d-sm-inline-block d-none">Previous</span>
                     </button>
-                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
+                    {{-- <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
                         type="button">
                         <span class="align-middle d-sm-inline-block d-none">Next</span>
                         <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
-                    </button>
+                    </button> --}}
                 </div>
             </div>
         </div>

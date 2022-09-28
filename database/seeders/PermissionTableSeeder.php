@@ -753,7 +753,50 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            // file management rebate incentive
+            [
+                'name' => 'sites.file-managements.rebate-incentive.index',
+                'show_name' => 'View Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.create',
+                'show_name' => 'Create Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.store',
+                'show_name' => 'Store Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // file management dealer incentive
+            [
+                'name' => 'sites.file-managements.dealer-incentive.index',
+                'show_name' => 'View Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.dealer-incentive.create',
+                'show_name' => 'Create Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.dealer-incentive.store',
+                'show_name' => 'Store Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //Commands Route
             [
                 'name' => 'commands.command',
@@ -822,7 +865,7 @@ class PermissionTableSeeder extends Seeder
             ],
         ]);
 
-        
+
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));
     }
 }

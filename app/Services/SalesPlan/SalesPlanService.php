@@ -226,6 +226,29 @@ class SalesPlanService implements SalesPlanInterface
             ];
         }
 
+        if (isset($inputs['expenses'])) {
+            $expenses = $inputs['expenses'];
+            $count = count($installmentsData);
+            foreach ($expenses as $key => $expense) {
+                $installmentsData[] = [
+                    'sales_plan_id' => $salesPlan->id,
+                    'date' => Carbon::parse($expense['due_date']),
+                    'details' => $expense['expense_label'],
+                    'amount' => floatval($expense['amount']),
+                    'paid_amount' => 0,
+                    'remaining_amount' => floatval($expense['expense_label']),
+                    'remarks' => $expense['remarks'],
+                    'installment_order' => $count,
+                    'status' => 'unpaid',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+
+                $count++;
+            }
+        }
+        // dd($installmentsData);
+
         $SalesPlanInstallments = (new SalesPlanInstallments())->insert($installmentsData);
 
         //Notification of Sales Plan

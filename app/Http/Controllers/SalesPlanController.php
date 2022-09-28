@@ -75,7 +75,6 @@ class SalesPlanController extends Controller
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
-            // dd($data);
 
             return view('app.sites.floors.units.sales-plan.create', $data);
         } else {
@@ -91,6 +90,7 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
+        // dd($request->all());
         try {
             $inputs = $request->input();
 

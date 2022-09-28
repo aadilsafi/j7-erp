@@ -163,7 +163,7 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
-    {{-- <script src="{{ asset('app-assets') }}/pages/create-sales-plan.min.js"></script> --}}
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -176,7 +176,8 @@
                 ArrRemarks: [],
                 ArrDueDates: [],
             },
-            unchangedData = [];
+            unchangedData = [],
+            lastInstallemtDate = 'today';
 
         $(document).ready(function() {
 
@@ -385,6 +386,40 @@
             });
 
             $('#unit_downpayment_percentage').trigger('change');
+
+            $(".expenses-list").repeater({
+                initEmpty: true,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            });
+
+            $('#add-new-expense').on('click', function() {
+                $(".expense_due_date").flatpickr({
+                    defaultDate: lastInstallemtDate,
+                    minDate: lastInstallemtDate,
+                    // altInput: !0,
+                    dateFormat: "Y-m-d",
+                    onChange: function(selectedDates, dateStr, instance) {
+                        if (dateStr.length < 1) {
+                            $('#add-new-expense').trigger('click');
+                        }
+                    }
+                });
+
+                $('input[name^="expenses"]').map(function() {
+                    $(this).rules('add', {
+                        required: true,
+                    });
+                });
+            });
+
         });
 
         function calculateUnitGrandAmount() {
@@ -446,6 +481,17 @@
 
                         $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
                         InstallmentRows = '';
+
+                        showBlockUI('#additional_expense_card');
+                        lastInstallemtDate = response.data.installments[response.data.installments.length - 2]
+                            .date;
+
+                        flatpickr($(".expense_due_date"), {
+                            defaultDate: lastInstallemtDate,
+                            minDate: lastInstallemtDate,
+                        });
+                        hideBlockUI('#additional_expense_card');
+
                         $('#base-installment').val(response.data.baseInstallmentTotal);
                     } else {
                         if (response.message.error == 'invalid_amout') {

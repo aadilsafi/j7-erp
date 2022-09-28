@@ -179,7 +179,7 @@
                 hide: function(e) {
                     $(this).slideUp(e)
                 }
-            })
+            });
 
             @php
                 $data = old();

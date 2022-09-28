@@ -193,7 +193,7 @@
                 <a class="d-flex align-items-center" href="javascript:void(0)">
                     <i data-feather='users'></i>
                     <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                       Users</span>
+                       Statkeholders</span>
                 </a>
                 <ul class="menu-content">
                     @can('sites.stakeholders.index')
@@ -201,7 +201,7 @@
                         <a class="d-flex align-items-center"
                             href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
                             <i data-feather='users'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
+                            <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
                         </a>
                     </li>
                     @endcan
@@ -211,7 +211,7 @@
                         <a class="d-flex align-items-center"
                             href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
                             <i data-feather='users'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">Internal Users</span>
+                            <span class="menu-title text-truncate" data-i18n="Email">Internal Stakeholders</span>
                         </a>
                     </li>
                     @endcan

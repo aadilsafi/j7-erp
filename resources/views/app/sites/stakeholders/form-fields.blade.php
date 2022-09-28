@@ -143,7 +143,7 @@
             </div>
         </div>
 
-        <div class="row mb-1" id="div-next-of-kin" style="{{ $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
+        <div class="row mb-1" id="div-next-of-kin" style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">

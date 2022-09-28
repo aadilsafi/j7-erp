@@ -399,29 +399,6 @@
 
                     </ul>
                 </li>
-            @can('sites.receipts.index')
-            <li
-                class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i class="bi bi-receipt-cutoff" style="
-                            margin-bottom: 10px;">
-                    </i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
-                </a>
-            </li>
-            @endcan
-
-            {{-- File Management Menu --}}
-            @can('sites.file-managements.customers')
-            <li
-                class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
-                    <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                    <span class="menu-title text-truncate" data-i18n="file-managements">File Management</span>
-                </a>
-            </li>
             @endcan
 
 

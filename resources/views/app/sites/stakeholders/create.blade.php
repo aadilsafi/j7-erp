@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                            width: calc(20% - 0.5em);
-                                        } */
+                        width: calc(20% - 0.5em);
+                    } */
     </style>
 @endsection
 
@@ -74,7 +74,7 @@
 
                             <hr>
 
-                            <button type="submit"
+                            <button type="submit" value="save"
                                 class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                                 <i data-feather='save'></i>
                                 Save Stakeholder
@@ -106,6 +106,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -155,6 +157,15 @@
                 dropdownParent: e.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
+            }).on('select2:select', function(e) {
+                var data = e.params.data;
+                console.log(data.id);
+
+                if (data.id == 'K') {
+                    $('#div-next-of-kin').show();
+                } else {
+                    $('#div-next-of-kin').hide();
+                }
             });
 
             $(".contact-persons-list").repeater({
@@ -170,10 +181,12 @@
                 }
             })
 
-            @if (empty(old()))
+            @php
+                $data = old();
+            @endphp
+            @if (!isset($data['contact-persons']))
                 $('#delete-contact-person').trigger('click');
             @endif
-
         });
     </script>
 @endsection

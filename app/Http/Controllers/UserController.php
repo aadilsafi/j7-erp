@@ -47,7 +47,7 @@ class UserController extends Controller
         if (!request()->ajax()) {
 
             $role = Role::get();
-            
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'role' => $role,
@@ -68,10 +68,10 @@ class UserController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                DB::transaction(function () use ($request, $site_id) {
-                    $inputs = $request->validated();
-                    $record = $this->userInterface->store($site_id, $inputs);
-                });
+
+                $inputs = $request->validated();
+                $record = $this->userInterface->store($site_id, $inputs);
+
                 return redirect()->route('sites.users.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
@@ -100,11 +100,13 @@ class UserController extends Controller
      */
     public function edit(Request $request, $site_id, $id)
     {
+
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
+            $roles = Role::get();
             $user = $this->userInterface->getById($site_id, $id);
-            $role = $user->roles;
+            $Selectedroles = $user->roles->pluck('name')->toArray();
             if ($user && !empty($user)) {
                 $images = $user->getMedia('user_cnic');
 
@@ -113,8 +115,10 @@ class UserController extends Controller
                     'id' => $id,
                     'user' => $user,
                     'images' => $images,
-                    'roles' => $role
+                    'Selectedroles' => $Selectedroles,
+                    'roles' => $roles
                 ];
+
                 return view('app.sites.users.edit', $data);
             }
 
@@ -139,13 +143,13 @@ class UserController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-                $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+                $record = $this->userInterface->update($site_id, $id, $inputs);
+                return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -158,5 +162,23 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function destroySelected(Request $request,$site_id)
+    {
+        try {
+            $site_id = decryptParams($site_id);
+            if ($request->has('chkUsers')) {
+                $ids = $request->get('chkUsers');
+                
+                $this->userInterface->destroySelected($ids);
+
+                return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_deleted'));
+            } else {
+                return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.please_select_at_least_one_item'));
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 }

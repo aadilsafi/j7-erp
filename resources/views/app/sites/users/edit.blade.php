@@ -59,7 +59,7 @@
                 <div class="card-body">
                     @csrf
                     @method('put')
-                    {{ view('app.sites.users.form-fields', ['user' => $user, 'roles' => $roles]) }}
+                    {{ view('app.sites.users.form-fields', ['user' => $user, 'roles' => $roles,'Selectedroles' => $Selectedroles]) }}
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                 <div class="card-body">
-                    <div class="d-block mb-1">
+                    {{-- <div class="d-block mb-1">
                         <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
                         <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
                             name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
@@ -75,7 +75,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <hr>
+                    <hr> --}}
                     <a id="saveButton" href="#"
                         class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                         <i data-feather='save'></i>
@@ -150,6 +150,16 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+            
+            var e = $("#role_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            });
+
             $("#saveButton").click(function() {
                 var name = $("#name").val();
                 var email = $("#email").val();
@@ -177,9 +187,8 @@
                         '<span class="error allErrors text-danger">Enter 11 Digits Phone Number</span>');
                 }
               
-                if (phone_no.toString().length != 11 && name != '' &&
+                if (phone_no.toString().length = 11 && name != '' &&
                     email != '' ) {
-                        console.log('#userForm"')
                     $("#userForm").submit();
                 }
             });

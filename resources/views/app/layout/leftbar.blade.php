@@ -189,35 +189,34 @@
             @endcanany
 
             @if (Auth::user()->can('sites.stakeholders.index') || Auth::user()->can('sites.users.index'))
-                <li class="nav-item ">
-                    <a class="d-flex align-items-center" href="javascript:void(0)">
-                        <i data-feather='users'></i>
-                        <span class="menu-title text-truncate"
-                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                            Users</span>
-                    </a>
-                    <ul class="menu-content">
-                        @can('sites.stakeholders.index')
-                            <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
-                                <a class="d-flex align-items-center"
-                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
-                                    <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
-                                </a>
-                            </li>
-                        @endcan
+            <li class="nav-item ">
+                <a class="d-flex align-items-center" href="javascript:void(0)">
+                    <i data-feather='users'></i>
+                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                       Statkeholders</span>
+                </a>
+                <ul class="menu-content">
+                    @can('sites.stakeholders.index')
+                    <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='users'></i>
+                            <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
+                        </a>
+                    </li>
+                    @endcan
 
-                        @can('sites.users.index')
-                            <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
-                                <a class="d-flex align-items-center"
-                                    href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
-                                    <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Internal Users</span>
-                                </a>
-                            </li>
-                        @endcan
-                    </ul>
-                </li>
+                    @can('sites.users.index')
+                    <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                        <a class="d-flex align-items-center"
+                            href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                            <i data-feather='users'></i>
+                            <span class="menu-title text-truncate" data-i18n="Email">Internal Stakeholders</span>
+                        </a>
+                    </li>
+                    @endcan
+                </ul>
+            </li>
             @endif
 
 

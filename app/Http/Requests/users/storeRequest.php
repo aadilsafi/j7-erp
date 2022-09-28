@@ -32,8 +32,8 @@ class storeRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
-    {
-        return (new User())->ruleMessages;
-    }
+    // public function messages()
+    // {
+    //     return (new User())->ruleMessages;
+    // }
 }

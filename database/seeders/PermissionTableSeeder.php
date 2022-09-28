@@ -856,6 +856,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.users.edit.password',
+                'show_name' => 'Edit Sites Users Password',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
 

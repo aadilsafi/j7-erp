@@ -8,8 +8,6 @@
                         {{ isset($stakeholder) ? 'disabled' : null }}>
                         <option value="0" selected>Select Stakeholder Type</option>
                         @foreach ($stakeholderTypes as $key => $value)
-                            @continue($value == 'K')
-                            {{-- @continue(isset($stakeholder) && $stakeholder->id == $stakeholderRow['id']) --}}
                             <option value="{{ $value }}">
                                 {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
                             </option>
@@ -28,12 +26,12 @@
                             <div class="d-flex flex-column justify-content-center align-items-center">
                                 <span
                                     class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
-                                <div
-                                    class="form-check form-switch form-check-success">
+                                <div class="form-check form-switch form-check-success">
                                     <input type="checkbox" class="form-check-input"
-                                        id="stakeholder_type_{{ $type->id }}" name="stakeholder_type[{{ $type->id }}]" value="1"
+                                        id="stakeholder_type_{{ $type->type }}" onchange="performAction('{{ $type->type }}')"
+                                        name="stakeholder_type[{{ $type->type }}]" value="1"
                                         {{ $type->status ? 'checked disabled' : null }} />
-                                    <label class="form-check-label" for="stakeholder_type_{{ $type->id }}">
+                                    <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                         <span class="switch-icon-left"><i data-feather="check"></i></span>
                                         <span class="switch-icon-right"><i data-feather="x"></i></span>
                                     </label>
@@ -44,8 +42,8 @@
                     </div>
                 </div>
             </div>
+            <hr>
         @endif
-        <hr>
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -145,7 +143,7 @@
             </div>
         </div>
 
-        <div class="row mb-1">
+        <div class="row mb-1" id="div-next-of-kin" style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
@@ -189,7 +187,7 @@
                     @forelse ((isset($stakeholder) && count($stakeholder->contacts) > 0 ? $stakeholder->contacts : old('contact-persons')) ?? $emptyRecord as $key => $oldContactPersons)
                         <div class="card m-0">
                             <div class="card-header pt-0">
-                                <h3>Conact Person</h3>
+                                <h3>Contact Person</h3>
 
                                 <button
                                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"

@@ -4,6 +4,7 @@ namespace App\Http\Requests\users;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class updateRequest extends FormRequest
 {
@@ -24,9 +25,13 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules =  (new User())->rules;
-        unset($rules['email']);
         
+        $rules =  (new User())->rules;
+        $rules['email'] = ['required', 'email', Rule::unique('users')->ignore($this->input('Userid'))];
+        if (!$this->input('password')) {
+            unset($rules['password']);
+        }
+
         return $rules;
     }
 
@@ -35,8 +40,8 @@ class updateRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
-    {
-        return (new User())->ruleMessages;
-    }
+    // public function messages()
+    // {
+    //     return (new User())->ruleMessages;
+    // }
 }

@@ -75,13 +75,13 @@ class User extends Authenticatable implements HasMedia
         'email' => 'required|email|unique:users',
         'phone_no' => 'required|string|min:11|max:11',
         'password' => 'required | confirmed',
-        'attachment' => 'sometimes|min:2',
+        // 'attachment' => 'sometimes|min:2',
         'role_id' => 'required'
     ];
 
-    public $ruleMessages = [
-        'attachment.min' => 'Minimum 2 attachments are required.',
-    ];
+    // public $ruleMessages = [
+    //     'attachment.min' => 'Minimum 2 attachments are required.',
+    // ];
 
     /**
      * The attributes that should be hidden for serialization.

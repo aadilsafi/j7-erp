@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Services\User\Interface\UserInterface;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserService implements UserInterface
 {
@@ -23,25 +24,28 @@ class UserService implements UserInterface
 
     public function store($site_id, $inputs)
     {
-        $data = [
-            'site_id' => decryptParams($site_id),
-            'name' => $inputs['name'],
-            'email' => $inputs['email'],
-            'phone_no' => $inputs['phone_no'],
-            'password' =>  Hash::make($inputs['password']),
-        ];
+        DB::transaction(function () use ($site_id, $inputs) {
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'name' => $inputs['name'],
+                'email' => $inputs['email'],
+                'phone_no' => $inputs['phone_no'],
+                'password' =>  Hash::make($inputs['password']),
+            ];
 
-        $user = $this->model()->create($data);
+            $user = $this->model()->create($data);
 
-        $user->assignRole([$inputs['role_id']]);
 
-        if (isset($inputs['attachment'])) {
-            foreach ($inputs['attachment'] as $attachment) {
-                $user->addMedia($attachment)->toMediaCollection('user_cnic');
+            $user->assignRole([$inputs['role_id']]);
+
+            if (isset($inputs['attachment'])) {
+                foreach ($inputs['attachment'] as $attachment) {
+                    $user->addMedia($attachment)->toMediaCollection('user_cnic');
+                }
             }
-        }
 
-        return $user;
+            return $user;
+        });
     }
 
     public function getById($site_id, $id)
@@ -55,24 +59,48 @@ class UserService implements UserInterface
 
     public function update($site_id, $id, $inputs)
     {
-        $data = [
-            'name' => $inputs['name'],
-            'email' => $inputs['email'],
-            'phone_no' => $inputs['phone_no'],
-            'password' =>  Hash::make($inputs['password']),
-        ];
-
-        $user = $this->model()->where('id', $id)->update($data);
-        $user = $this->model()->find($id);
-        $user->clearMediaCollection('user_cnic');
-
-        if (isset($inputs['attachment'])) {
-            foreach ($inputs['attachment'] as $attachment) {
-                $user->addMedia($attachment)->toMediaCollection('user_cnic');
+        DB::transaction(function () use ($site_id, $id, $inputs) {
+            $data = [
+                'name' => $inputs['name'],
+                'email' => $inputs['email'],
+                'phone_no' => $inputs['phone_no'],
+            ];
+            if (isset($inputs['password'])) {
+                $data['password'] =  Hash::make($inputs['password']);
             }
-        }
-        return $user;
+
+            $user = $this->model()->where('id', $id)->update($data);
+            $user = $this->model()->find($id);
+            $user->clearMediaCollection('user_cnic');
+
+            if (isset($inputs['attachment'])) {
+                foreach ($inputs['attachment'] as $attachment) {
+                    $user->addMedia($attachment)->toMediaCollection('user_cnic');
+                }
+            }
+            $user->syncRoles([$inputs['role_id']]);
+
+            return $user;
+        });
     }
+
+    public function destroySelected($id)
+    {
+        DB::transaction(function () use ($id) {
+            if (!empty($id)) {
+                foreach($id as $data){
+                    $user = $this->model()->find($data);
+                    $user->roles()->detach();
+                    $user->delete();
+                }
+                // $this->model()->whereIn('id', $id)->delete();
+                return true;
+            }
+            return false;
+        });
+    }
+
+
     public function getEmptyInstance()
     {
         $user = [

@@ -65,7 +65,7 @@
         <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                 <div class="card-body">
-                    <div class="d-block mb-1">
+                    {{-- <div class="d-block mb-1">
                         <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
                         <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
                             name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
@@ -74,7 +74,7 @@
                         @enderror
                     </div>
 
-                    <hr>
+                    <hr> --}}
 
                     <button type="submit"
                         class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
@@ -137,7 +137,14 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
+        var e = $("#role_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            });
 
         });
 </script>

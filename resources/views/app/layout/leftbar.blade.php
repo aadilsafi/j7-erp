@@ -189,34 +189,35 @@
             @endcanany
 
             @if (Auth::user()->can('sites.stakeholders.index') || Auth::user()->can('sites.users.index'))
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='users'></i>
-                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                       Users</span>
-                </a>
-                <ul class="menu-content">
-                    @can('sites.stakeholders.index')
-                    <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='users'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
-                        </a>
-                    </li>
-                    @endcan
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='users'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                            Users</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('sites.stakeholders.index')
+                            <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Stakeholders</span>
+                                </a>
+                            </li>
+                        @endcan
 
-                    @can('sites.users.index')
-                    <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='users'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">Internal Users</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+                        @can('sites.users.index')
+                            <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Internal Users</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endif
 
 
@@ -268,7 +269,7 @@
             @endcan
 
             {{-- Receipts Menu --}}
-            @can('sites.receipts.index')
+            {{-- @can('sites.receipts.index')
                 <li
                     class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
@@ -279,19 +280,105 @@
                         <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
 
             {{-- File Management Menu --}}
             @can('sites.file-managements.customers')
-                <li
-                    class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                    <a class="d-flex align-items-center"
-                        href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="#">
                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
                         <span class="menu-title text-truncate" data-i18n="file-managements">File Management</span>
                     </a>
+                    <ul>
+                        @can('sites.receipts.index')
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
+                                </a>
+                                <ul>
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-receipt-cutoff"
+                                                style="
+                                    margin-bottom: 10px;">
+                                            </i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        @endcan
+                        <li>
+                            <a class="d-flex align-items-center" href="#">
+                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 2</span>
+                            </a>
+                            <ul>
+                                @can('sites.file-managements.customers')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="file-managements">File Creation
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Rebate Incentive Form
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Dealer Incentive Form
+                                        </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="d-flex align-items-center" href="#">
+                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 3</span>
+                            </a>
+                            <ul>
+                                {{-- @can('sites.receipts.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-receipt-cutoff"
+                                                style="
+                                    margin-bottom: 10px;">
+                                            </i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
+                                        </a>
+                                    </li>
+                                @endcan --}}
+                            </ul>
+                        </li>
+
+                    </ul>
                 </li>
             @endcan
+
+
 
         </ul>
     </div>

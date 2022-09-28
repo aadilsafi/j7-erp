@@ -10,7 +10,7 @@ use App\Services\Interfaces\{
     UnitInterface,
     UnitTypeInterface,
     UserBatchInterface,
-    RoleTypesInterface
+    RoleTypesInterface,
 };
 use App\Services\{
     AdditionalCostService,
@@ -28,6 +28,8 @@ use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface
 use App\Services\User\{UserService, Interface\UserInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
 use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
+use App\Services\RebateIncentive\RebateIncentiveInterface;
+use App\Services\RebateIncentive\RebateIncentiveService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(LeadSourceInterface::class, LeadSourceService::class);
         $this->app->bind(ReceiptInterface::class, ReceiptService::class);
         $this->app->bind(FileManagementInterface::class, FileManagementService::class);
+        $this->app->bind(RebateIncentiveInterface::class, RebateIncentiveService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

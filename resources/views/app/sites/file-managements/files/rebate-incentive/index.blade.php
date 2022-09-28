@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.rebate-incentive.index', $site_id) }}
 @endsection
 
-@section('page-title', 'File Management Customer\'s List')
+@section('page-title', __('Rebate Incentive'))
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -15,7 +15,8 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -30,9 +31,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">File Management (Customers List)</h2>
+                <h2 class="content-header-title float-start mb-0">Rebate Incentive</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.customers', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.rebate-incentive.index', $site_id) }}
                 </div>
             </div>
         </div>
@@ -46,9 +47,9 @@
 
     <div class="card">
         <div class="card-body">
-            {{-- <form action="{{ route('sites.file-managements.destroy-selected', ['site_id' => $site_id]) }}" id="file-managements-table-form" method="get"> --}}
-            {{ $dataTable->table() }}
-            {{-- </form> --}}
+            <form action="{{ route('sites.receipts.destroy-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
+                {{ $dataTable->table() }}
+            </form>
         </div>
     </div>
 
@@ -108,5 +109,25 @@
                 });
             }
         }
+
+        function openTemplatesModal(receipt_id) {
+            $('#receipt_id').val(receipt_id);
+            $('#modal-receipt-template').modal('show');
+        }
+
+        function printReceiptTemplate(template_id) {
+            let receipt_id = $('#receipt_id').val();
+            let url =
+                "{{ route('sites.receipts.templates.print', ['site_id' => encryptParams($site_id), 'receipts_id' => ':receipts_id', 'id' => ':id']) }}"
+                .replace(':receipts_id', receipt_id)
+                .replace(':id', template_id);
+            window.open(url, '_blank').focus();
+
+        }
+
+        function addNew() {
+            location.href = '{{ route('sites.file-managements.rebate-incentive.create', ['site_id' => encryptParams($site_id)]) }}';
+        }
+
     </script>
 @endsection

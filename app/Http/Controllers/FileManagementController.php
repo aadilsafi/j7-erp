@@ -25,14 +25,17 @@ class FileManagementController extends Controller
         $this->stakeholderInterface = $stakeholderInterface;
     }
 
-    public function customers(CustomersDataTable $dataTable, Request $request, $site_id)
+    public function customers(CustomerUnitsDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
             'stakeholder_type' => StakeholderTypeEnum::CUSTOMER->value,
         ];
 
-        return $dataTable->with($data)->render('app.sites.file-managements.customers.customers', $data);
+        $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
+        // return $dataTable->with($data)->render('app.sites.file-managements.customers.customers', $data);
+
+        return $dataTable->with($data)->render('app.sites.file-managements.customers.units.units', $data);
     }
 
     public function units(CustomerUnitsDataTable $dataTable, Request $request, $site_id, $customer_id)
@@ -66,6 +69,7 @@ class FileManagementController extends Controller
 
     public function create(Request $request, $site_id, $customer_id, $unit_id)
     {
+
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
@@ -83,11 +87,10 @@ class FileManagementController extends Controller
         ])->first();
         $data['salesPlan']->installments = $data['salesPlan']->installments->sortBy('installment_order');
 
-        if ($data['customer']->parent_id > 0) {
+        if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
         }
 
-        // dd($data);
 
         return view('app.sites.file-managements.files.create', $data);
     }

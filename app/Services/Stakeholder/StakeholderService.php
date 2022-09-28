@@ -136,7 +136,10 @@ class StakeholderService implements StakeholderInterface
 
             if (isset($inputs['stakeholder_type'])) {
                 foreach ($inputs['stakeholder_type'] as $key => $value) {
-                    (new StakeholderType())->find($key)->update([
+                    (new StakeholderType())->where([
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => $key,
+                    ])->update([
                         'status' => true,
                     ]);
                 }

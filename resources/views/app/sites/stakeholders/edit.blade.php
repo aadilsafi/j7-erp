@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                        width: calc(20% - 0.5em);
-                                    } */
+                                                width: calc(20% - 0.5em);
+                                            } */
     </style>
 @endsection
 
@@ -48,7 +48,7 @@
 @endsection
 
 @section('content')
-{{-- @dd($stakeholder) --}}
+    {{-- @dd($stakeholder) --}}
     <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data"
         action="{{ route('sites.stakeholders.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($stakeholder->id)]) }}"
         method="POST">
@@ -61,7 +61,7 @@
                     'stakeholders' => $stakeholders,
                     'stakeholder' => $stakeholder,
                     'stakeholderTypes' => $stakeholderTypes,
-                    'emptyRecord' => $emptyRecord
+                    'emptyRecord' => $emptyRecord,
                 ]) }}
             </div>
 
@@ -177,6 +177,12 @@
                 $('#delete-contact-person').trigger('click');
             @endif
         });
+
+        function performAction(action) {
+            if (action == 'K') {
+                $('#div-next-of-kin').toggle('fast', 'linear');
+            }
+        }
     </script>
 @endsection
 

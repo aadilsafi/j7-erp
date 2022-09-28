@@ -43,7 +43,7 @@ class Stakeholder extends Model implements HasMedia
         'comments' => 'nullable|string',
         'relation' => 'nullable|string|min:1|max:50',
         'attachment' => 'sometimes|min:2',
-        'stakeholder_type' => 'required|in:C,V,D,L',
+        'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
         'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];

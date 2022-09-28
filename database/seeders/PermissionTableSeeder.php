@@ -863,6 +863,58 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+
+            // Users Teams
+            [
+                'name' => 'sites.teams.index',
+                'show_name' => 'View Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.create',
+                'show_name' => 'Create Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.store',
+                'show_name' => 'Store Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.edit',
+                'show_name' => 'Edit Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.update',
+                'show_name' => 'Update Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.destroy',
+                'show_name' => 'Destroy Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
 

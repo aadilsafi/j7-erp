@@ -7,6 +7,7 @@ use App\Models\{
     UserBatch,
     Stakeholder,
     StakeholderType,
+    Team,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -561,5 +562,17 @@ if (!function_exists('storeMultiValue')) {
                 'value' => $value,
             ]);
         }
+    }
+}
+
+
+if (!function_exists('getTeamParentByParentId')) {
+    function getTeamParentByParentId($parent_id)
+    {
+        $team = (new Team())->where('id', $parent_id)->first();
+        if ($team) {
+            return $team->name;
+        }
+        return 'parent';
     }
 }

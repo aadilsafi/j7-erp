@@ -178,6 +178,21 @@ Breadcrumbs::for('sites.users.edit', function (BreadcrumbTrail $trail, $site_id)
     $trail->push('Edit Users');
 });
 
+//Teams Breadcrumbs
+Breadcrumbs::for('sites.teams.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Teams', route('sites.teams.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.teams.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.teams.index', encryptParams($site_id));
+    $trail->push('Create Team');
+});
+
+Breadcrumbs::for('sites.teams.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.teams.index', encryptParams($site_id));
+    $trail->push('Edit Team');
+});
 
 //Leads Source Breadcrumbs
 Breadcrumbs::for('sites.lead-sources.index', function (BreadcrumbTrail $trail, $site_id) {

@@ -23,7 +23,7 @@
             color: #7367F0 !important;
         }
 
-         .filepond--item-panel {
+        .filepond--item-panel {
             background-color: #7367F0;
         }
 
@@ -32,8 +32,8 @@
         }
 
         /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+                        width: calc(20% - 0.5em);
+                    } */
     </style>
 @endsection
 
@@ -50,28 +50,38 @@
     </div>
 @endsection
 
-{{-- @section('content')
-    <form id="customer-files-create-form"
-        action="{{ route('sites.file-managements.customers.units.files.store', ['site_id' => encryptParams($site->id), 'customer_id' => encryptParams($customer->id), 'unit_id' => encryptParams($unit->id)]) }}"
-        method="post" class=" repeater">
+@section('content')
+    <form id="rebateForm"
+        action="{{ route('sites.file-managements.rebate-incentive.store', ['site_id' => encryptParams($site_id)]) }}"
+        method="post" class=" ">
         @csrf
 
         <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                @csrf
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                {{ view('app.sites.file-managements.files.rebate-incentive.form-fields', []) }}
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
+                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
+                    <div class="card-body g-1">
 
-                {{ view('app.sites.file-managements.files.form-fields', [
-                    'site' => $site,
-                    'customer' => $customer,
-                    'unit' => $unit,
-                    'nextOfKin' => $nextOfKin,
-                    'salesPlan' => $salesPlan,
-                    'user' => $user,
-                ]) }}
+                        <a id="saveButton" href="#"
+                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                            <i data-feather='save'></i>
+                            Save Rebate Incentive
+                        </a>
+                        <a href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}"
+                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                            <i data-feather='x'></i>
+                            {{ __('lang.commons.cancel') }}
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
     </form>
-@endsection --}}
+@endsection
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/wizard/bs-stepper.min.js"></script>
@@ -125,6 +135,10 @@
                     alert("Submitted..!!")
                 }))
             }
+        });
+
+        $("#saveButton").click(function() {
+            $("#rebateForm").submit();
         });
     </script>
 @endsection

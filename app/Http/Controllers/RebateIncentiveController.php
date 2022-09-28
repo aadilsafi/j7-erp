@@ -59,6 +59,7 @@ class RebateIncentiveController extends Controller
     public function store(Request $request)
     {
         //
+        abort(403);
     }
 
     /**

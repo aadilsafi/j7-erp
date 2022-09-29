@@ -419,6 +419,7 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/batch/{batchId}', [testController::class, 'getBatchByID'])->name('batch');
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
+    Route::get('activitylogs', [testController::class, 'activityLog']);
 });
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);

@@ -81,8 +81,11 @@ class testController extends Controller
         print "</pre>";
     }
 
-    function activityLog()
+    function activityLog(Request $request)
     {
+        return $_SERVER;
+        return getUserPcInfo($request);
+return php_uname();
         return activity()
             ->causedBy(auth()->user())
             ->inLog('asdad')

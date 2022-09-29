@@ -35,9 +35,12 @@ class TeamsDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-        ->editColumn('parent_id', function ($team) {
-            return Str::of(getTeamParentByParentId($team->parent_id))->ucfirst();
-        })
+            ->editColumn('parent_id', function ($team) {
+                return Str::of(getTeamParentByParentId($team->parent_id))->ucfirst();
+            })
+            ->editColumn('has_team', function ($additionalCost) {
+                return editBooleanColumn($additionalCost->has_team);
+            })
             ->editColumn('created_at', function ($team) {
                 return editDateColumn($team->created_at);
             })
@@ -159,6 +162,7 @@ class TeamsDataTable extends DataTable
 
             Column::make('name')->title('Name'),
             Column::make('parent_id')->title('Email')->addClass('text-nowrap'),
+            Column::make('has_team'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             ($editPermission ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')

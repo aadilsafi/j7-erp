@@ -35,14 +35,14 @@ class TeamService implements TeamInterface
                 'site_id' => decryptParams($site_id),
                 'name' => $inputs['team_name'],
                 'parent_id' => $inputs['team'],
+                'has_team' => $inputs['has_team'],
             ];
 
             $team = $this->model()->create($data);
 
-            $team->users()->syncWithPivotValues(
-                [$inputs['user_id']],
-                ['site_id' => decryptParams($site_id)]
-            );
+            if(!$inputs['has_team']){
+                $team->users()->attach($inputs['user_id'], ['site_id' => decryptParams($site_id)]);
+            }
 
             return $team;
         });
@@ -60,27 +60,26 @@ class TeamService implements TeamInterface
     public function update($site_id, $id, $inputs)
     {
         DB::transaction(function () use ($site_id, $id, $inputs) {
+         
             $data = [
-                'name' => $inputs['name'],
-                'email' => $inputs['email'],
-                'phone_no' => $inputs['phone_no'],
+                'site_id' => $site_id,
+                'name' => $inputs['team_name'],
+                'parent_id' => $inputs['team'],
+                'has_team' => $inputs['has_team'],
             ];
-            if (isset($inputs['password'])) {
-                $data['password'] =  Hash::make($inputs['password']);
+
+            $team = $this->model()->where('id', $id)->update($data);
+
+            $team = $this->model()->find($id);
+            if($inputs['has_team']){
+                $team = $this->model()->find($id);
+              $team->users()->detach();
             }
-
-            $user = $this->model()->where('id', $id)->update($data);
-            $user = $this->model()->find($id);
-            $user->clearMediaCollection('user_cnic');
-
-            if (isset($inputs['attachment'])) {
-                foreach ($inputs['attachment'] as $attachment) {
-                    $user->addMedia($attachment)->toMediaCollection('user_cnic');
-                }
+            else{
+                $team->users()->syncWithPivotValues($inputs['user_id'], ['site_id' => $site_id]);
             }
-            $user->syncRoles([$inputs['role_id']]);
-
-            return $user;
+           
+            return $team;
         });
     }
 
@@ -89,9 +88,9 @@ class TeamService implements TeamInterface
         DB::transaction(function () use ($id) {
             if (!empty($id)) {
                 foreach ($id as $data) {
-                    $user = $this->model()->find($data);
-                    $user->roles()->detach();
-                    $user->delete();
+                    $team = $this->model()->find($data);
+                    $team->users()->detach();
+                    $team->delete();
                 }
                 // $this->model()->whereIn('id', $id)->delete();
                 return true;

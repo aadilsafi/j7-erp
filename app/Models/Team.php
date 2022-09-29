@@ -13,14 +13,14 @@ class Team extends Model
         'site_id',
         'name',
         'parent_id',
-        'has_child'
+        'has_team'
     ];
 
     public $rules = [
         'team' => 'required|numeric',
         'team_name' => 'required|string|min:1|max:255',
-        'has_child' => 'boolean|in:0,1',
-        'user_id' => 'required_if:has_child,0',
+        'has_team' => 'boolean|in:0,1',
+        'user_id' => 'required_if:has_team,0',
     ];
 
 

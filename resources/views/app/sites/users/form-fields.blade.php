@@ -50,7 +50,7 @@
         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
             <label for="password-confirm" class="form-label fs-5">Confirm Password</label>
             <input id="password-confirm" class="form-control form-control-lg" type="password" class="form-control"
-                name="password_confirmation">
+            placeholder="Confirm Password"  name="password_confirmation">
         </div>
     @endcan
 

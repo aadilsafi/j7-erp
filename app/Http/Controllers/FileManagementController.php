@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\CustomersDataTable;
-use App\DataTables\CustomerUnitsDataTable;
-use App\Models\SalesPlan;
+use Exception;
 use App\Models\Site;
-use App\Models\Stakeholder;
 use App\Models\Unit;
+use App\Models\SalesPlan;
+use App\Models\Stakeholder;
+use Illuminate\Http\Request;
 use App\Models\UnitStakeholder;
+use App\DataTables\CustomersDataTable;
+use App\Utils\Enums\StakeholderTypeEnum;
+use App\DataTables\CustomerUnitsDataTable;
+use App\DataTables\ViewFilesDatatable;
 use App\Services\FileManagements\FileManagementInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
-use App\Utils\Enums\StakeholderTypeEnum;
-use Illuminate\Http\Request;
+use App\Http\Requests\File\store;
 
 class FileManagementController extends Controller
 {
@@ -95,17 +98,26 @@ class FileManagementController extends Controller
         return view('app.sites.file-managements.files.create', $data);
     }
 
-    public function store(Request $request, $site_id, $customer_id, $unit_id)
+    public function store(store $request, $site_id, $customer_id, $unit_id)
     {
-        dd($request->input());
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->fileManagementInterface->store($site_id, $data);
+                return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function viewFiles(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    {
         $data = [
-            'site' => (new Site())->find(decryptParams($site_id)),
-            'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
-            'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
+            'site_id' => decryptParams($site_id),
         ];
-
-        // dd($data);
-
-        return view('app.sites.file-managements.files.create', $data);
+        return $dataTable->with($data)->render('app.sites.file-managements.files.view', $data);
     }
 }

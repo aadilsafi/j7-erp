@@ -106,6 +106,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
     <script>
         var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
@@ -187,4 +189,40 @@
 @endsection
 
 @section('custom-js')
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+            $.validator.addMethod("unique", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var cnicRepeated = 0;
+                if (value != '') {
+                    $(parentForm.find('.cp_cnic')).each(function () {
+                        if ($(this).val() === value) {
+                        cnicRepeated++;
+                        }
+                    });
+                }
+                return cnicRepeated === 1 || cnicRepeated === 0;
+                
+            }, "Contact Person CNIC can't be duplicated");
+
+            var validator = $("#stakeholderForm").validate({
+             
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
+
+            @php
+                $data = old();
+            @endphp
+            @if (!isset($data['contact-persons']))
+                $('#delete-contact-person').trigger('click');
+            @endif
+        });
+</script>
 @endsection

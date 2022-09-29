@@ -234,6 +234,12 @@ Breadcrumbs::for('sites.receipts.edit', function (BreadcrumbTrail $trail, $site_
 });
 
 //File Management Breadcrumbs
+
+Breadcrumbs::for('sites.file-managements.view-files', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('View Customer Files', route('sites.file-managements.view-files', ['site_id' => $site_id]));
+});
+
 Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => $site_id]));
@@ -264,4 +270,11 @@ Breadcrumbs::for('sites.file-managements.rebate-incentive.index', function (Brea
 Breadcrumbs::for('sites.file-managements.rebate-incentive.create', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.file-managements.rebate-incentive.index', $site_id);
     $trail->push('Create Rebate Incentive', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+
+//File Refund  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-refund.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Refund', route('sites.file-managements.file-refund.index', ['site_id' => $site_id]));
 });

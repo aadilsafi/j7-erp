@@ -775,6 +775,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.view-files',
+                'show_name' => 'View Customer Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // file management dealer incentive
             [
                 'name' => 'sites.file-managements.dealer-incentive.index',
@@ -797,6 +804,62 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // File Refund
+            [
+                'name' => 'sites.file-managements.file-refund.index',
+                'show_name' => 'View File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File Buy Back
+            [
+                'name' => 'sites.file-managements.file-buy-back.index',
+                'show_name' => 'View File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File Cancellation
+            [
+                'name' => 'sites.file-managements.file-cancellation.index',
+                'show_name' => 'View File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File resale
+            [
+                'name' => 'sites.file-managements.file-resale.index',
+                'show_name' => 'View File Re-sale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File title transfer
+            [
+                'name' => 'sites.file-managements.file-title-transfer.index',
+                'show_name' => 'View File Title-Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File title adjustment
+            [
+                'name' => 'sites.file-managements.file-adjustment.index',
+                'show_name' => 'View File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File unit shifting
+            [
+                'name' => 'sites.file-managements.unit-shifting.index',
+                'show_name' => 'View File Unit Shifting',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //Commands Route
             [
                 'name' => 'commands.command',
@@ -806,8 +869,8 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-             // Users
-             [
+            // Users
+            [
                 'name' => 'sites.users.index',
                 'show_name' => 'View Sites Users',
                 'guard_name' => 'web',

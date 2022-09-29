@@ -317,6 +317,17 @@
                         <span class="menu-title text-truncate" data-i18n="file-managements">File Management</span>
                     </a>
                     <ul>
+                        @can('sites.file-managements.view-files')
+                        <li
+                            class="nav-item {{ request()->routeIs('sites.file-managements.view-files', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                            <a class="d-flex align-items-center"
+                                href="{{ route('sites.file-managements.view-files', ['site_id' => encryptParams($site_id)]) }}">
+                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">View Customer Files
+                                </span>
+                            </a>
+                        </li>
+                        @endcan
                         @can('sites.receipts.index')
                             <li>
                                 <a class="d-flex align-items-center" href="#">
@@ -386,64 +397,52 @@
                                 <span class="menu-title text-truncate" data-i18n="file-managements">Step 3</span>
                             </a>
                             <ul>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">File Refund</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">File Buy Back</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">File Cancellation</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">File Release</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
-                                        <span class="menu-title text-truncate" data-i18n="Email">File Title Transfer Request</span>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Title Transfer
+                                            Request</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
-                                        <span class="menu-title text-truncate" data-i18n="Email">File Adjustment Request</span>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Adjustment
+                                            Request</span>
                                     </a>
                                 </li>
-                                <li
-                                    class="nav-item ">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                <li class="nav-item {{ request()->routeIs('sites.file-managements.unit-shifting.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.unit-shifting.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder-symlink-fill">
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">Unit Shifting</span>

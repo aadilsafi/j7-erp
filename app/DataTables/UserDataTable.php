@@ -59,7 +59,6 @@ class UserDataTable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        // dd($this->userInterface->getByAll());
         return $this->userInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
     }
 

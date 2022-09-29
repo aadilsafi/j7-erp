@@ -12,6 +12,7 @@
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-wizard.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
@@ -23,7 +24,7 @@
             color: #7367F0 !important;
         }
 
-         .filepond--item-panel {
+        .filepond--item-panel {
             background-color: #7367F0;
         }
 
@@ -32,8 +33,8 @@
         }
 
         /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+                        width: calc(20% - 0.5em);
+                    } */
     </style>
 @endsection
 
@@ -75,6 +76,8 @@
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/wizard/bs-stepper.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
@@ -118,7 +121,26 @@
                     linear: !1
                 });
                 $(t).find(".btn-next").on("click", (function() {
-                    a.next()
+                    let registration_no = $('#registration_no').val();
+                    let application_no = $('#application_no').val();
+                    $('.RemoveError').empty();
+
+                    if (registration_no.length === 0) {
+                        window.scrollTo(0, 0);
+                        $('#registration_no').after(
+                            '<span class="text-danger RemoveError">Registration Number Required!!!</span>'
+                            )
+                    }
+                    if (application_no.length === 0) {
+                        window.scrollTo(0, 0);
+                        $('#application_no').after(
+                            '<span class="text-danger RemoveError">Application Number Required!!!</span>'
+                            )
+                    }
+
+                    if (registration_no.length > 0 && application_no.length > 0) {
+                        a.next()
+                    }
                 })), $(t).find(".btn-prev").on("click", (function() {
                     a.previous()
                 })), $(t).find(".btn-submit").on("click", (function() {

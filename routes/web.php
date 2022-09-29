@@ -24,6 +24,13 @@ use App\Http\Controllers\{
     RebateIncentiveController,
     DealerIncentiveController,
     TeamController,
+    FileRefundController,
+    UnitShiftingController,
+    FileAdjustmentController,
+    FileTitleTransferController,
+    FileReleaseController,
+    FileCancellationController,
+    FileBuyBackController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -350,7 +357,7 @@ Route::group([
                 Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
 
                     Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
-
+                    Route::get('/view-files', [FileManagementController::class, 'viewFiles'])->name('view-files');
                     // rebate incentive form
                     Route::group(['prefix' => 'rebate-incentive', 'as' => 'rebate-incentive.'], function () {
 
@@ -372,6 +379,76 @@ Route::group([
 
                         Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+                    });
+
+                    // file refund
+                    Route::group(['prefix' => 'file-refund', 'as' => 'file-refund.'], function () {
+
+                        Route::get('/', [FileRefundController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileRefundController::class, 'create'])->name('create');
+                        Route::post('store', [FileRefundController::class, 'store'])->name('store');
+
+                    });
+
+                    // file buy back
+                    Route::group(['prefix' => 'file-buy-back', 'as' => 'file-buy-back.'], function () {
+
+                        Route::get('/', [FileBuyBackController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileBuyBackController::class, 'create'])->name('create');
+                        Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
+
+                    });
+
+                    // file Cancellation
+                    Route::group(['prefix' => 'file-cancellation', 'as' => 'file-cancellation.'], function () {
+
+                        Route::get('/', [FileCancellationController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileCancellationController::class, 'create'])->name('create');
+                        Route::post('store', [FileCancellationController::class, 'store'])->name('store');
+
+                    });
+
+                    // file release
+                    Route::group(['prefix' => 'file-resale', 'as' => 'file-resale.'], function () {
+
+                        Route::get('/', [FileReleaseController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileReleaseController::class, 'create'])->name('create');
+                        Route::post('store', [FileReleaseController::class, 'store'])->name('store');
+
+                    });
+
+                    // file title transfer
+                    Route::group(['prefix' => 'file-title-transfer', 'as' => 'file-title-transfer.'], function () {
+
+                        Route::get('/', [FileTitleTransferController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileTitleTransferController::class, 'create'])->name('create');
+                        Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
+
+                    });
+
+                    // file adjustment
+                    Route::group(['prefix' => 'file-adjustment', 'as' => 'file-adjustment.'], function () {
+
+                        Route::get('/', [FileAdjustmentController::class, 'index'])->name('index');
+
+                        Route::get('create', [FileAdjustmentController::class, 'create'])->name('create');
+                        Route::post('store', [FileAdjustmentController::class, 'store'])->name('store');
+
+                    });
+
+                    // Unit Shifting
+                    Route::group(['prefix' => 'unit-shifting', 'as' => 'unit-shifting.'], function () {
+
+                        Route::get('/', [UnitShiftingController::class, 'index'])->name('index');
+
+                        Route::get('create', [UnitShiftingController::class, 'create'])->name('create');
+                        Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
+
                     });
 
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {

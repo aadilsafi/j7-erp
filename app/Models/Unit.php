@@ -7,10 +7,12 @@ use App\Models\SalesPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Unit extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'floor_id',
@@ -77,6 +79,11 @@ class Unit extends Model
         'slider_input_2.required_if' => 'The units is required when :other is checked.',
         'gross_area.gte' => 'The Gross Area must be greater than or equal to Net Area.',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function agent()
     {

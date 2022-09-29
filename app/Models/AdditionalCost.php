@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\AdditionalCost
@@ -53,7 +55,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class AdditionalCost extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -93,6 +95,11 @@ class AdditionalCost extends Model
         'applicable_on_unit' => 'required|boolean|in:0,1',
         'unit_percentage' => 'required_if:applicable_on_unit,1|numeric',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function site()
     {

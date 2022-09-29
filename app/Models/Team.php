@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Team extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -23,6 +26,10 @@ class Team extends Model
         'user_id' => 'required_if:has_team,0',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function users()
     {

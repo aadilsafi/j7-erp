@@ -95,7 +95,10 @@ class AdditionalCostService implements AdditionalCostInterface
 
         $additionalCostsIDs = array_merge($id, array_column($additionalCosts, 'id'));
         // dd($additionalCostsIDs);
-        $this->model()->whereIn('id', $additionalCostsIDs)->delete();
+
+        $this->model()->whereIn('id', $additionalCostsIDs)->get()->each(function ($row) {
+            $row->delete();
+        });
 
         return true;
     }

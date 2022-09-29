@@ -60,7 +60,7 @@ class TeamService implements TeamInterface
     public function update($site_id, $id, $inputs)
     {
         DB::transaction(function () use ($site_id, $id, $inputs) {
-         
+
             $data = [
                 'site_id' => $site_id,
                 'name' => $inputs['team_name'],
@@ -78,7 +78,7 @@ class TeamService implements TeamInterface
             else{
                 $team->users()->syncWithPivotValues($inputs['user_id'], ['site_id' => $site_id]);
             }
-           
+
             return $team;
         });
     }

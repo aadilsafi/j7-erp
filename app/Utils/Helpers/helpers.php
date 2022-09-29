@@ -585,3 +585,16 @@ if (!function_exists('getUserBrowserInfo')) {
         return $userPcInfo;
     }
 }
+
+if (!function_exists('actionLog')) {
+    function actionLog($logName, $causedByModel, $performedOnModel, $log, $properties = [], $event = '')
+    {
+        return activity()
+        ->causedBy($causedByModel)
+        ->performedOn($performedOnModel)
+        ->inLog($logName)
+        ->event($event)
+        ->withProperties($properties)
+        ->log($log);
+    }
+}

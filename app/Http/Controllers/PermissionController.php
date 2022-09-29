@@ -12,6 +12,7 @@ use App\Http\Requests\permissions\{
 use App\Models\Permission;
 use App\Models\Role;
 use App\Services\Permissions\PermissionInterface;
+use Attribute;
 
 class PermissionController extends Controller
 {
@@ -161,6 +162,11 @@ class PermissionController extends Controller
             $role = (new Role())->find($request->role_id);
             $role->givePermissionTo($request->permission_id);
 
+            $permission = (new Permission())->find($request->permission_id);
+            actionLog(get_class($permission), auth()->user(), $role, 'assign permission to role', [
+                'attributes' => $permission->toArray()
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => "Permission Assigned Sucessfully",
@@ -175,6 +181,11 @@ class PermissionController extends Controller
         try {
             $role = (new Role())->find($request->role_id);
             $role->revokePermissionTo($request->permission_id);
+
+            $permission = (new Permission())->find($request->permission_id);
+            actionLog(get_class($permission), auth()->user(), $role, 'revoke permission from role', [
+                'attributes' => $permission->toArray()
+            ]);
 
             return response()->json([
                 'success' => true,

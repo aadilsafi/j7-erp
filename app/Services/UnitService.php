@@ -124,7 +124,9 @@ class UnitService implements UnitInterface
         $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
-        $this->model()->where('floor_id', $floor_id)->whereIn('id', $id)->delete();
+        $this->model()->whereIn('id', $id)->get()->each(function ($row) {
+            $row->delete();
+        });
 
         return true;
     }

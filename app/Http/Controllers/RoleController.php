@@ -45,11 +45,10 @@ class RoleController extends Controller
             $data = [
                 'roles' => $this->RoleTypesInterface->getAllWithTree(),
             ];
-            return view('app.roles.create',$data);
+            return view('app.roles.create', $data);
         } else {
             abort(403);
         }
-
     }
 
     /**
@@ -138,7 +137,7 @@ class RoleController extends Controller
         try {
             if ($request->has('chkRole')) {
 
-                (new Role())->whereIn('id', $request->chkRole)->get()->each(function($row){
+                (new Role())->whereIn('id', $request->chkRole)->get()->each(function ($row) {
                     $row->delete();
                 });
                 return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_deleted'));

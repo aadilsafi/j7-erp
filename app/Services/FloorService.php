@@ -83,10 +83,13 @@ class FloorService implements FloorInterface
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 
-        $this->model()->where([
+
+        $floor = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,
-        ])->delete();
+        ])->first();
+
+        $floor->delete();
 
         return true;
     }

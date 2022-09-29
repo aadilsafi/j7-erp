@@ -163,7 +163,11 @@ class StakeholderService implements StakeholderInterface
             $id = decryptParams($id);
             $stakeholder = getLinkedTreeData($this->model(), $id);
             $stakeholderIDs = array_merge($id, array_column($stakeholder, 'id'));
-            $this->model()->whereIn('id', $stakeholderIDs)->delete();
+
+            $this->model()->whereIn('id', $stakeholderIDs)->get()->each(function ($row) {
+                $row->delete();
+            });
+
             return true;
         });
     }

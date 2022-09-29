@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\DataTables\RebateIncentiveDataTable;
-use App\Services\RebateIncentive\RebateIncentiveInterface;
+
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use App\DataTables\RebateIncentiveDataTable;
+use App\Models\SalesPlanInstallments;
+use App\Services\RebateIncentive\RebateIncentiveInterface;
 
 class RebateIncentiveController extends Controller
 {
@@ -21,7 +24,7 @@ class RebateIncentiveController extends Controller
         $this->rebateIncentive = $rebateIncentive;
     }
 
-    public function index(RebateIncentiveDataTable $dataTable,Request $request, $site_id)
+    public function index(RebateIncentiveDataTable $dataTable, Request $request, $site_id)
     {
         //
         $data = [
@@ -42,6 +45,7 @@ class RebateIncentiveController extends Controller
         if (!request()->ajax()) {
             $data = [
                 'site_id' => decryptParams($site_id),
+                'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);
@@ -105,5 +109,22 @@ class RebateIncentiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getData(Request $request)
+    {
+        $unit = Unit::find($request->unit_id);
+        $stakeholder = $unit->salesPlan[0]['stakeholder'];
+        $leadSource = $unit->salesPlan[0]['leadSource'];
+        $salesPlan = $unit->salesPlan[0];
+
+        return response()->json([
+            'success' => true,
+            'unit' => $unit,
+            'stakeholder' => $stakeholder,
+            'leadSource' => $leadSource,
+            'cnic' => cnicFormat($stakeholder->cnic),
+            'salesPlan' => $salesPlan,
+        ], 200);
     }
 }

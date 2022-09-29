@@ -105,19 +105,16 @@ class TeamController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $roles = Role::get();
-            $user = $this->teamInterface->getById($site_id, $id);
-            $Selectedroles = $user->roles->pluck('name')->toArray();
-            if ($user && !empty($user)) {
-                $images = $user->getMedia('user_cnic');
+            $team = $this->teamInterface->getById($site_id, $id);
+            if ($team && !empty($team)) {
 
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
-                    'user' => $user,
-                    'images' => $images,
-                    'Selectedroles' => $Selectedroles,
-                    'roles' => $roles
+                    'team' => $team,
+                    'teams' => $this->teamInterface->getAllWithTree(),
+                    'team_users' => $team->users->pluck('name')->toArray(),
+                    'users' => User::all()
                 ];
 
                 return view('app.sites.teams.edit', $data);
@@ -136,7 +133,7 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(userUpdateRequest  $request, $site_id, $id)
+    public function update(teamUpdateRequest  $request, $site_id, $id)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
@@ -144,6 +141,7 @@ class TeamController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
+                
                 $record = $this->teamInterface->update($site_id, $id, $inputs);
                 return redirect()->route('sites.teams.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
@@ -165,13 +163,15 @@ class TeamController extends Controller
         //
     }
 
-    public function destroySelected(Request $request,$site_id)
+    public function destroySelected(Request $request, $site_id)
     {
+        abort(403);
+
         try {
             $site_id = decryptParams($site_id);
             if ($request->has('chkteams')) {
                 $ids = $request->get('chkteams');
-                
+
                 $this->teamInterface->destroySelected($ids);
 
                 return redirect()->route('sites.teams.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_deleted'));

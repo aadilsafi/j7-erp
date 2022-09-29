@@ -195,10 +195,10 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <label class="form-label fs-5" for="customer_ntn">NTN Number</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Mail Address"
-                                            value="{{ $customer->address ?? '-' }}" disabled />
+                                            id="customer_ntn" placeholder="NTN Number"
+                                            value="{{ $customer->ntn ?? '-' }}" disabled />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_phone">Cell</label>
@@ -211,6 +211,15 @@
                                         <input type="text" class="form-control form-control-lg"
                                             id="customer_occupation" placeholder="Occupation"
                                             value="{{ $customer->occupation ?? '-' }}" disabled />
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                          <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_address" placeholder="Mail Address"
+                                            value="{{ $customer->address ?? '-' }}" disabled />
                                     </div>
                                 </div>
                             </div>

@@ -565,7 +565,6 @@ if (!function_exists('storeMultiValue')) {
     }
 }
 
-
 if (!function_exists('getTeamParentByParentId')) {
     function getTeamParentByParentId($parent_id)
     {
@@ -574,5 +573,16 @@ if (!function_exists('getTeamParentByParentId')) {
             return $team->name;
         }
         return 'parent';
+    }
+}
+
+if (!function_exists('getUserPcInfo')) {
+    function getUserPcInfo($request)
+    {
+        $userPcInfo = new stdClass();
+        $userPcInfo->ip = $request->ip();
+        $userPcInfo->username = gethostname();
+
+        return $userPcInfo;
     }
 }

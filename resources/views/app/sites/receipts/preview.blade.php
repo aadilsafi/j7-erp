@@ -93,7 +93,7 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->cnic }}"
+                            <input type="text" readonly value="{{ cnicFormat($stakeholder_data->cnic) }}"
                                 class="form-control form-control-lg" id="stackholder_cnic" placeholder="CNIC" />
                         </div>
 

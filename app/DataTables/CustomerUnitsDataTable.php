@@ -36,7 +36,7 @@ class CustomerUnitsDataTable extends DataTable
                 return $unit->salesPlan[0]['stakeholder']['father_name'];
             })
             ->editColumn('cnic', function ($unit) {
-                return $unit->salesPlan[0]['stakeholder']['cnic'];
+                return cnicFormat($unit->salesPlan[0]['stakeholder']['cnic']);
             })
             ->editColumn('contact', function ($unit) {
                 return $unit->salesPlan[0]['stakeholder']['contact'];
@@ -114,7 +114,7 @@ class CustomerUnitsDataTable extends DataTable
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
             Column::computed('full_name')->name('salesPlan.stakeholder.full_name')->title('Full Name')->addClass('text-center text-nowrap'),
             Column::computed('father_name')->name('salesPlan.stakeholder.father_name')->title('FATHER NAME')->addClass('text-center text-nowrap'),
-            Column::computed('cnic')->name('salesPlan.stakeholder.cnic')->title('CNIC')->addClass('text-center'),
+            Column::computed('cnic')->name('salesPlan.stakeholder.cnic')->title('CNIC')->addClass('text-center text-nowrap'),
             Column::computed('contact')->name('salesPlan.stakeholder.contact')->title('CONTACT')->addClass('text-center text-nowrap'),
             // Column::make('created_at')->addClass('text-nowrap'),
             // Column::make('updated_at'),

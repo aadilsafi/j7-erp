@@ -105,7 +105,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg @error('cnic') is-invalid @enderror"
+                <input type="text" class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
                     id="cnic" name="cnic" placeholder="CNIC Without Dashes"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
                 @error('cnic')
@@ -260,7 +260,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="cnic">CNIC</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('cnic') is-invalid @enderror"
+                                                class="unique cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
                                                 id="cnic_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][cnic]"
                                                 placeholder="CNIC Without Dashes"

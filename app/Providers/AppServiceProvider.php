@@ -5,22 +5,18 @@ namespace App\Providers;
 use App\Services\Interfaces\{
     AdditionalCostInterface,
     FloorInterface,
-    PermissionInterface,
     SiteConfigurationInterface,
     UnitInterface,
     UnitTypeInterface,
     UserBatchInterface,
-    RoleTypesInterface,
 };
 use App\Services\{
     AdditionalCostService,
     FloorService,
-    PermissionService,
     SiteConfiurationService,
     UnitService,
     UnitTypeService,
     UserBatchService,
-    RoleTypesService,
 };
 use App\Services\FileManagements\{FileManagementInterface, FileManagementService};
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
@@ -28,9 +24,10 @@ use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface
 use App\Services\User\{UserService, Interface\UserInterface};
 use App\Services\Team\{TeamService, Interface\TeamInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
+use App\Services\Permissions\{PermissionInterface, PermissionService};
 use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
-use App\Services\RebateIncentive\RebateIncentiveInterface;
-use App\Services\RebateIncentive\RebateIncentiveService;
+use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
+use App\Services\Roles\{RoleInterface, RoleService};
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -49,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UnitInterface::class, UnitService::class);
         $this->app->bind(SiteConfigurationInterface::class, SiteConfiurationService::class);
         $this->app->bind(UserBatchInterface::class, UserBatchService::class);
-        $this->app->bind(RoleTypesInterface::class, RoleTypesService::class);
+        $this->app->bind(RoleInterface::class, RoleService::class);
         $this->app->bind(SalesPlanInterface::class, SalesPlanService::class);
         $this->app->bind(StakeholderInterface::class, StakeholderService::class);
         $this->app->bind(UserInterface::class, UserService::class);

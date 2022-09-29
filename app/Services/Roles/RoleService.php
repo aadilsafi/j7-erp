@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Roles;
 
-use App\Services\Interfaces\RoleTypesInterface;
+use App\Models\Role;
+use App\Services\Roles\RoleInterface;
 use Exception;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
-class RoleTypesService implements RoleTypesInterface
+class RoleService implements RoleInterface
 {
 
     public function model()
@@ -20,6 +20,4 @@ class RoleTypesService implements RoleTypesInterface
         $roles = $this->model()->all();
         return getTreeData(collect($roles), $this->model());
     }
-
-
 }

@@ -64,13 +64,10 @@ Route::group([
             Route::get('create', [RoleController::class, 'create'])->name('create');
             Route::post('store', [RoleController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy-selected');
+            Route::get('delete-selected', [RoleController::class, 'destroy'])->name('destroy-selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [RoleController::class, 'edit'])->name('edit');
                 Route::put('update', [RoleController::class, 'update'])->name('update');
-
-                Route::get('delete', [RoleController::class, 'destroy'])->name('destroy');
-                Route::get('make-default', [RoleController::class, 'makeDefault'])->name('make-default');
             });
         });
 

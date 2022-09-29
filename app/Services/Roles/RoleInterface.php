@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Interfaces;
+namespace App\Services\Roles;
 
-interface RoleTypesInterface
+interface RoleInterface
 {
     public function model();
     public function getAllWithTree();

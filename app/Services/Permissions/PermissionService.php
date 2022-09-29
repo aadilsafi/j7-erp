@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Permissions;
 
-use App\Services\Interfaces\PermissionInterface;
+use App\Models\Permission;
+use App\Services\Permissions\PermissionInterface;
+use Exception;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Artisan;
-
 
 class PermissionService implements PermissionInterface
 {

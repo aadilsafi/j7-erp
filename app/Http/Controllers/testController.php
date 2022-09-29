@@ -83,28 +83,17 @@ class testController extends Controller
 
     function activityLog(Request $request)
     {
-        return $_SERVER;
-        return getUserPcInfo($request);
-return php_uname();
+        return $lastLoggedActivity = Activity::all()->last();
+        return $lastLoggedActivity->changes();
+        $UserBrowserInfo = getUserBrowserInfo($request);
+
         return activity()
             ->causedBy(auth()->user())
             ->inLog('asdad')
-            ->withProperties([
-                'customProperty1' => 'customValue1',
-                'customProperty2' => 'customValue2',
-                'customProperty3' => 'customValue3',
-                'customProperty4' => 'customValue4',
-                'customProperty5' => 'customValue5',
-                'customProperty6' => 'customValue6',
-                'customProperty7' => 'customValue7',
-                'customProperty8' => 'customValue8',
-                'customProperty9' => 'customValue9',
-            ])
+            ->withProperties(json_encode($UserBrowserInfo))
             ->event('verified')
             ->log('edited');
 
-        $lastLoggedActivity = Activity::all()->first();
-        return $lastLoggedActivity->changes();
 
         $lastLoggedActivity->subject; //returns an instance of an eloquent model
         $lastLoggedActivity->causer; //returns an instance of your user model

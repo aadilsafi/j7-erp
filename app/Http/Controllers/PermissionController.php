@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\PermissionsDataTable;
-use App\Services\Interfaces\PermissionInterface;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\permissions\{
     storeRequest as permissionStoreRequest,
     updateRequest as permissionUpdateRequest
 };
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use App\Models\Permission;
+use App\Models\Role;
+use App\Services\Permissions\PermissionInterface;
 
 class PermissionController extends Controller
 {

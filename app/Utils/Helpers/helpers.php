@@ -576,13 +576,12 @@ if (!function_exists('getTeamParentByParentId')) {
     }
 }
 
-if (!function_exists('getUserPcInfo')) {
-    function getUserPcInfo($request)
+if (!function_exists('getUserBrowserInfo')) {
+    function getUserBrowserInfo($request)
     {
         $userPcInfo = new stdClass();
         $userPcInfo->ip = $request->ip();
-        $userPcInfo->username = gethostname();
-
+        $userPcInfo->os = $request->header('User-Agent');
         return $userPcInfo;
     }
 }

@@ -23,7 +23,7 @@ class RebateIncentiveSeeder extends Seeder
                 'stakeholder_id' => 1,
                 'stakeholder_data' => 'Stakeholder Data',
                 'unit_data' => 'Unit Data',
-                'deal_type' => 'Ideal Deal',
+                'deal_type' => 'ideal-deal',
                 'commision_percentage' => 5,
                 'commision_total' => 10000,
                 'status' => 1,

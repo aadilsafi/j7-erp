@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\teams;
 
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -25,14 +26,7 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        
-        $rules =  (new User())->rules;
-        $rules['email'] = ['required', 'email', Rule::unique('users')->ignore($this->input('Userid'))];
-        if (!$this->input('password')) {
-            unset($rules['password']);
-        }
-
-        return $rules;
+        return (new Team())->rules;
     }
 
     /**
@@ -40,8 +34,18 @@ class updateRequest extends FormRequest
      *
      * @return array
      */
-    // public function messages()
-    // {
-    //     return (new User())->ruleMessages;
-    // }
+    public function withValidator($validator)
+    {
+        if (!$validator->fails()) {
+            $validator->after(function ($validator) {
+                $teamId = $this->input('team');
+                if ($teamId != 0) {
+                    $team = (new Team)->where('id', $teamId)->first();
+                    if (!$team) {
+                        $validator->errors()->add('team', 'This team does not exists');
+                    }
+                }
+            });
+        }
+    }
 }

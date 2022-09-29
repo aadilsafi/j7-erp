@@ -358,6 +358,11 @@ Route::group([
 
                         Route::get('create', [RebateIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [RebateIncentiveController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
+                        });
+
                     });
 
                     // dealer incentive form

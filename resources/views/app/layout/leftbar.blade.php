@@ -68,12 +68,13 @@
             </li>
 
             @if (Auth::user()->can('permissions.index') ||
-            Auth::user()->can('roles.index') ||
-            Auth::user()->can('sites.configurations.configView'))
-            <li class="navigation-header">
-                <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
+                Auth::user()->can('roles.index') ||
+                Auth::user()->can('sites.configurations.configView'))
+                <li class="navigation-header">
+                    <span
+                        data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
             @endif
 
             {{-- Roles & Permission Menu --}}
@@ -134,34 +135,34 @@
             </li> --}}
 
             @if (Auth::user()->can('permissions.index') || Auth::user()->can('roles.index'))
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='shield'></i>
-                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{
-                        __('lang.leftbar.roles_and_permissions') }}</span>
-                </a>
-                <ul class="menu-content">
-                    @can('roles.index')
-                    <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">{{ __('lang.leftbar.roles')
-                                }}</span>
-                        </a>
-                    </li>
-                    @endcan
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='shield'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('roles.index')
+                            <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.roles') }}</span>
+                                </a>
+                            </li>
+                        @endcan
 
-                    @can('permissions.index')
-                    <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">{{ __('lang.leftbar.permissions')
-                                }}</span>
-                        </a>
-                    </li>
-                    @endcan
-                </ul>
-            </li>
+                        @can('permissions.index')
+                            <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.permissions') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
             @endif
 
             {{-- <li class="navigation-header">
@@ -170,125 +171,128 @@
             </li> --}}
 
             @can('sites.configurations.configView')
-            <li
-                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
-                    <i data-feather='settings'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
-                </a>
-            </li>
+                <li
+                    class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
+                        <i data-feather='settings'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
+                    </a>
+                </li>
             @endcan
 
             @canany(['sites.types.index', 'sites.additional-costs.index', 'sites.floors.index'])
-            <li class="navigation-header">
-                <span data-i18n="Others">Others</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
+                <li class="navigation-header">
+                    <span data-i18n="Others">Others</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
             @endcanany
 
             @if (Auth::user()->can('sites.stakeholders.index') || Auth::user()->can('sites.users.index'))
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='users'></i>
-                    <span class="menu-title text-truncate" data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                        Stakeholders</span>
-                </a>
-                <ul class="menu-content">
-                    @can('sites.stakeholders.index')
-                    <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='users'></i>
-                            <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
-                        </a>
-                    </li>
-                    @endcan
-
-                    @if (Auth::user()->can('sites.teams.index') || Auth::user()->can('sites.users.index'))
-                    <li class="nav-item ">
-                        <a class="d-flex align-items-center" href="javascript:void(0)">
-                            <i data-feather='users'></i>
-                            <span class="menu-title text-truncate"
-                                data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                                Internal Stakeholders</span>
-                        </a>
-                        <ul class="menu-content">
-
-                            @can('sites.users.index')
-                            <li class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='users'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                            Stakeholders</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('sites.stakeholders.index')
+                            <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
-                                    href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
                                     <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Users</span>
+                                    <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
                                 </a>
                             </li>
-                            @endcan
+                        @endcan
 
-                            @can('sites.teams.index')
-                            <li class="nav-item {{ request()->routeIs('sites.teams.index') ? 'active' : null }}">
-                                <a class="d-flex align-items-center"
-                                    href="{{ route('sites.teams.index', ['site_id' => encryptParams(1)]) }}">
+                        @if (Auth::user()->can('sites.teams.index') || Auth::user()->can('sites.users.index'))
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
                                     <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Teams</span>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                                        Internal Stakeholders</span>
                                 </a>
+                                <ul class="menu-content">
+
+                                    @can('sites.users.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Users</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('sites.teams.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.teams.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.teams.index', ['site_id' => encryptParams(1)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Teams</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
                             </li>
-                            @endcan
-                        </ul>
-                    </li>
-                    @endif
+                        @endif
 
 
-                </ul>
-            </li>
+                    </ul>
+                </li>
             @endif
 
 
             @can('sites.types.index')
-            <li class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='menu'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Types</span>
-                </a>
-            </li>
+                <li class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='menu'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Types</span>
+                    </a>
+                </li>
             @endcan
 
             {{-- Additional Costs Menu --}}
             @can('sites.additional-costs.index')
-            <li
-                class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='dollar-sign'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
-                </a>
-            </li>
+                <li
+                    class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='dollar-sign'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
+                    </a>
+                </li>
             @endcan
 
 
             {{-- Floors Menu --}}
             @can('sites.floors.index')
-            <li
-                class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='layers'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
-                </a>
-            </li>
+                <li
+                    class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='layers'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
+                    </a>
+                </li>
             @endcan
 
             {{-- Lead Sources Menu --}}
             @can('sites.lead-sources.index')
-            <li
-                class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
-                    <i data-feather='trello'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
-                </a>
-            </li>
+                <li
+                    class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='trello'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
+                    </a>
+                </li>
             @endcan
 
             {{-- Receipts Menu --}}
@@ -358,17 +362,18 @@
                                     <a class="d-flex align-items-center"
                                         href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                        <span class="menu-title text-truncate" data-i18n="file-managements">Rebate Incentive Form
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Rebate
+                                            Incentive Form
                                         </span>
                                     </a>
                                 </li>
 
                                 <li
                                     class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                    <a class="d-flex align-items-center"
-                                        href="#">
+                                    <a class="d-flex align-items-center" href="#">
                                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                        <span class="menu-title text-truncate" data-i18n="file-managements">Dealer Incentive Form
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
+                                            Incentive Form
                                         </span>
                                     </a>
                                 </li>
@@ -381,19 +386,69 @@
                                 <span class="menu-title text-truncate" data-i18n="file-managements">Step 3</span>
                             </a>
                             <ul>
-                                {{-- @can('sites.receipts.index')
-                                    <li
-                                        class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                        <a class="d-flex align-items-center"
-                                            href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-receipt-cutoff"
-                                                style="
-                                    margin-bottom: 10px;">
-                                            </i>
-                                            <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
-                                        </a>
-                                    </li>
-                                @endcan --}}
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Refund</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Buy Back</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Cancellation</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Release</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Title Transfer Request</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Adjustment Request</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item ">
+                                    <a class="d-flex align-items-center"
+                                        href="#">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">Unit Shifting</span>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
 

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+                                                    width: calc(20% - 0.5em);
+                                                } */
     </style>
 @endsection
 
@@ -66,27 +66,30 @@
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
-                        <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
-                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
-                            @error('attachment')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
+                                <input id="attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="attachment[]" multiple
+                                    accept="image/png, image/jpeg, image/gif" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
+                            <button id="saveButton" type="submit"
+                                class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Update Stakeholder
+                            </button>
+                            <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
                         </div>
-                        <hr>
-                        <button id="saveButton" type="submit"
-                            class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Update Stakeholder
-                        </button>
-                        <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
                     </div>
                 </div>
             </div>
@@ -190,32 +193,32 @@
 
 @section('custom-js')
 
-<script type="text/javascript">
-    $(document).ready(function() {
+    <script type="text/javascript">
+        $(document).ready(function() {
 
             $.validator.addMethod("unique", function(value, element) {
                 var parentForm = $(element).closest('form');
                 var cnicRepeated = 0;
                 if (value != '') {
-                    $(parentForm.find('.cp_cnic')).each(function () {
+                    $(parentForm.find('.cp_cnic')).each(function() {
                         if ($(this).val() === value) {
-                        cnicRepeated++;
+                            cnicRepeated++;
                         }
                     });
                 }
                 return cnicRepeated === 1 || cnicRepeated === 0;
-                
+
             }, "Contact Person CNIC can't be duplicated");
 
             var validator = $("#stakeholderForm").validate({
-             
-            errorClass: 'is-invalid text-danger',
-            errorElement: "span",
-            wrapper: "div",
-            submitHandler: function(form) {
-                form.submit();
-            }
-        });
+
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
 
             @php
                 $data = old();
@@ -224,5 +227,5 @@
                 $('#delete-contact-person').trigger('click');
             @endif
         });
-</script>
+    </script>
 @endsection

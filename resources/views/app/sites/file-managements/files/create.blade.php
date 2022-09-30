@@ -114,6 +114,7 @@
                 url: ''
             }
         });
+
         $(document).ready(function() {
             t = document.querySelector(".modern-wizard-example");
             if (void 0 !== typeof t && null !== t) {

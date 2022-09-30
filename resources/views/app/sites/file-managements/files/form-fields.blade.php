@@ -156,7 +156,7 @@
 
                     <div class="col-lg-2 col-md-2 col-sm-12">
                         <label class="form-label fs-5" for="application_photo">Photo</label>
-                        <input id="application_photo" type="file" class="filepond" name="application_form[photo]"
+                        <input @if(isset($customer_file)) disabled  @endif id="application_photo" type="file" class="filepond" name="application_form[photo]"
                             accept="image/png, image/jpeg" />
                     </div>
                 </div>

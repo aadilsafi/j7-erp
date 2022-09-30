@@ -100,8 +100,15 @@
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
         );
+        var files = [];
+        @if (isset($image))
+            files.push({
+                source: '{{ $image}}',
+            });
+        @endif
 
         FilePond.create(document.getElementById('application_photo'), {
+            files: files,
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
             acceptedFileTypes: ['image/png', 'image/jpeg'],

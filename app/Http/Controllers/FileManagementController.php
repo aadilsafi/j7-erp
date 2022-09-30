@@ -37,7 +37,6 @@ class FileManagementController extends Controller
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
-        // return $dataTable->with($data)->render('app.sites.file-managements.customers.customers', $data);
 
         return $dataTable->with($data)->render('app.sites.file-managements.customers.units.units', $data);
     }
@@ -82,7 +81,7 @@ class FileManagementController extends Controller
             'user' => auth()->user(),
             'customer_file' => FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first(),
         ];
-
+        $customer_file = FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first();
         $data['salesPlan'] = (new SalesPlan())->with([
             'additionalCosts', 'installments', 'leadSource', 'receipts'
         ])->where([
@@ -90,6 +89,9 @@ class FileManagementController extends Controller
             'unit_id' => $data['unit']->id,
         ])->first();
         $data['salesPlan']->installments = $data['salesPlan']->installments->sortBy('installment_order');
+        if(isset($customer_file)){
+            $data['image'] =$customer_file->getFirstMediaUrl('application_form_photo');
+        }
 
         if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);

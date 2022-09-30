@@ -26,14 +26,16 @@ class store extends FormRequest
         return [
             'application_form.registration_no' => 'required',
             'application_form.application_no' => 'required',
+            'application_form.photo' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            "application_form.registration_no.required" => "Registration Number is required.",
-            "application_form.application_no" => "Application Number is required.",
+            "application_form.registration_no.required" => "Registration Number Required.",
+            "application_form.application_no" => "Application Number Required.",
+            'application_form.photo' => 'Applicant Picture  Required',
         ];
     }
 }

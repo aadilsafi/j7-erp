@@ -125,4 +125,9 @@ class Unit extends Model
         return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource');
     }
 
+    public function file()
+    {
+        return $this->hasOne(FileManagement::class);
+    }
+
 }

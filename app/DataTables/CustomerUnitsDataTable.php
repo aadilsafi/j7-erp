@@ -51,7 +51,7 @@ class CustomerUnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'unit_id' => $unit->id]);
+                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'unit_id' => $unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -65,7 +65,7 @@ class CustomerUnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status' ,'salesPlan'])->whereIn('id', $this->unit_ids);
+        return $model->newQuery()->select('units.*')->with(['type', 'status' ,'salesPlan','file'])->whereIn('id', $this->unit_ids);
     }
 
     public function html(): HtmlBuilder

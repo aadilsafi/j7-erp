@@ -88,16 +88,21 @@
         <div class="card content shadow-none m-0" id="applicaiton-form" role="tabpanel"
             aria-labelledby="applicaiton-form-trigger">
             <div class="card-body">
-
                 <div class="row g-1 mb-2">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="registration_no">Registration No</label>
                         <input type="text" class="form-control form-control-lg" id="registration_no"
+                            @isset($customer_file)
+                             value="{{ $customer_file->registration_no }}" readonly
+                            @endisset
                             name="application_form[registration_no]" placeholder="Registration No" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="application_no">Application No</label>
                         <input type="text" class="form-control form-control-lg" id="application_no"
+                            @isset($customer_file)
+                             value="{{ $customer_file->application_no }}" readonly
+                            @endisset
                             name="application_form[application_no]" placeholder="Application No" />
                     </div>
                 </div>
@@ -860,11 +865,12 @@
                         <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
                         <span class="align-middle d-sm-inline-block d-none">Previous</span>
                     </button>
-                    <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
-                        type="submit">
-                        <span class="align-middle d-sm-inline-block d-none">Save</span>
-                        {{-- <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i> --}}
-                    </button>
+                    @if (!isset($customer_file))
+                        <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
+                            type="submit">
+                            <span class="align-middle d-sm-inline-block d-none">Save</span>
+                        </button>
+                    @endif
                 </div>
             </div>
         </div>

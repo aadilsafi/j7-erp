@@ -261,6 +261,10 @@ Breadcrumbs::for('sites.file-managements.customers.units.files.create', function
     $trail->push('Create Files', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });
 
+Breadcrumbs::for('sites.file-managements.customers.units.files.viewFile', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers', $site_id);
+    $trail->push('View File', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
 //Rebate Incentive Breadcrumbs Main
 Breadcrumbs::for('sites.file-managements.rebate-incentive.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

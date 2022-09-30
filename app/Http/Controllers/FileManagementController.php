@@ -16,6 +16,7 @@ use App\DataTables\ViewFilesDatatable;
 use App\Services\FileManagements\FileManagementInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Http\Requests\File\store;
+use App\Models\FileManagement;
 
 class FileManagementController extends Controller
 {
@@ -79,7 +80,7 @@ class FileManagementController extends Controller
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
-
+            'customer_file' => FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first(),
         ];
 
         $data['salesPlan'] = (new SalesPlan())->with([
@@ -93,8 +94,9 @@ class FileManagementController extends Controller
         if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
         }
-
-
+        if(isset($data['customer_file'])){
+            return view('app.sites.file-managements.files.viewFile', $data);
+        }
         return view('app.sites.file-managements.files.create', $data);
     }
 

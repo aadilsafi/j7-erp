@@ -44,7 +44,7 @@ class FileManagement extends Model implements HasMedia
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class)->with('type','status');
     }
 
     public function stakeholder()

@@ -88,16 +88,21 @@
         <div class="card content shadow-none m-0" id="applicaiton-form" role="tabpanel"
             aria-labelledby="applicaiton-form-trigger">
             <div class="card-body">
-
                 <div class="row g-1 mb-2">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="registration_no">Registration No</label>
                         <input type="text" class="form-control form-control-lg" id="registration_no"
+                            @isset($customer_file)
+                             value="{{ $customer_file->registration_no }}" readonly
+                            @endisset
                             name="application_form[registration_no]" placeholder="Registration No" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="application_no">Application No</label>
                         <input type="text" class="form-control form-control-lg" id="application_no"
+                            @isset($customer_file)
+                             value="{{ $customer_file->application_no }}" readonly
+                            @endisset
                             name="application_form[application_no]" placeholder="Application No" />
                     </div>
                 </div>
@@ -688,59 +693,19 @@
                 </div>
             </div>
 
-            {{-- Stakeholder Data --}}
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                    <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        <div class="card-header">
-                            <h3>Customer</h3>
-                        </div>
-
-                        <div class="card-body">
-
-                            <div class="row g-1 mb-1">
-                                <input type="hidden" name="application_form[stakeholder_id]"
-                                    value="{{ $customer->id }}">
-
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_name">Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_name"
-                                        placeholder="Name" value="{{ $customer->full_name }}" disabled />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_father_name">Father/Husband
-                                        Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_father_name"
-                                        value="{{ $customer->father_name }}" placeholder="Father/Husband Name"
-                                        disabled />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                        placeholder="CNIC/Passport" value="{{ cnicFormat($customer->cnic) ?? '-' }}"
-                                        disabled />
-                                </div>
-                            </div>
-
-                            <div class="row g-1 mb-1">
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_address">Mail Address</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_address"
-                                        placeholder="Mail Address" value="{{ $customer->address ?? '-' }}" disabled />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_phone">Cell</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_phone"
-                                        placeholder="Cell" value="{{ $customer->contact ?? '-' }}" disabled />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="customer_occupation">Occupation</label>
-                                    <input type="text" class="form-control form-control-lg" id="customer_occupation"
-                                        placeholder="Occupation" value="{{ $customer->occupation ?? '-' }}" disabled />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
+                        type="button">
+                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
+                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    </button>
+                    @if (!isset($customer_file))
+                        <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
+                            type="submit">
+                            <span class="align-middle d-sm-inline-block d-none">Save</span>
+                        </button>
+                    @endif
                 </div>
             </div>
 
@@ -857,21 +822,21 @@
 
         </div>
 
-        <div class="card-footer">
-            <div class="d-flex justify-content-between">
-                <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
-                    type="button">
-                    <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
-                    <span class="align-middle d-sm-inline-block d-none">Previous</span>
-                </button>
-                {{-- <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
-                    type="button">
-                    <span class="align-middle d-sm-inline-block d-none">Next</span>
-                    <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
-                </button> --}}
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-prev"
+                        type="button">
+                        <i data-feather="arrow-left" class="align-middle me-sm-25 me-0"></i>
+                        <span class="align-middle d-sm-inline-block d-none">Previous</span>
+                    </button>
+                    {{-- <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light btn-next"
+                        type="button">
+                        <span class="align-middle d-sm-inline-block d-none">Next</span>
+                        <i data-feather="arrow-right" class="align-middle ms-sm-25 ms-0"></i>
+                    </button> --}}
+                </div>
             </div>
         </div>
-    </div>
 
     <div class="card content shadow-none m-0" id="rebate-form" role="tabpanel" aria-labelledby="rebate-form-trigger">
 

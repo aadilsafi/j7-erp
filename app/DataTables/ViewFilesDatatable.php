@@ -25,23 +25,34 @@ class ViewFilesDatatable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('father_name', function ($fileManagement) {
-                return strlen($fileManagement->stakeholder->father_name) > 0 ? $fileManagement->stakeholder->father_name : '-';
-            })
-            ->editColumn('full_name', function ($fileManagement) {
-                return strlen($fileManagement->stakeholder->full_name) > 0 ? $fileManagement->stakeholder->full_name : '-';
-            })
-            ->editColumn('unit_no', function ($fileManagement) {
+            // ->editColumn('father_name', function ($fileManagement) {
+            //     return strlen($fileManagement->stakeholder->father_name) > 0 ? $fileManagement->stakeholder->father_name : '-';
+            // })
+            // ->editColumn('full_name', function ($fileManagement) {
+            //     return strlen($fileManagement->stakeholder->full_name) > 0 ? $fileManagement->stakeholder->full_name : '-';
+            // })
+            ->editColumn('floor_unit_number', function ($fileManagement) {
                 return strlen($fileManagement->unit->floor_unit_number) > 0 ? $fileManagement->unit->floor_unit_number : '-';
             })
             ->editColumn('unit_name', function ($fileManagement) {
                 return strlen($fileManagement->unit->name) > 0 ? $fileManagement->unit->name : '-';
             })
-
-            ->editColumn('cnic', function ($fileManagement) {
+            ->editColumn('unit_type', function ($fileManagement) {
+                return strlen($fileManagement->unit->type->name) > 0 ? $fileManagement->unit->type->name : '-';
+            })
+            ->editColumn('unit_status', function ($fileManagement) {
+                return editBadgeColumn($fileManagement->unit->status->name);
+            })
+            ->editColumn('stakeholder_full_name', function ($fileManagement) {
+                return strlen($fileManagement->stakeholder->full_name) > 0 ?$fileManagement->stakeholder->full_name : '-';
+            })
+            ->editColumn('stakeholder_father_name', function ($fileManagement) {
+                return strlen($fileManagement->stakeholder->father_name) > 0 ?$fileManagement->stakeholder->father_name : '-';
+            })
+            ->editColumn('stakeholder_cnic', function ($fileManagement) {
                 return strlen($fileManagement->stakeholder->cnic) > 0 ? cnicFormat($fileManagement->stakeholder->cnic) : '-';
             })
-            ->editColumn('contact', function ($fileManagement) {
+            ->editColumn('stakeholder_contact', function ($fileManagement) {
                 return strlen($fileManagement->stakeholder->contact) > 0 ? $fileManagement->stakeholder->contact : '-';
             })
             ->editColumn('created_at', function ($fileManagement) {
@@ -50,9 +61,9 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('updated_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->updated_at);
             })
-            // ->editColumn('actions', function ($fileManagement) {
-            //     return view('app.sites.file-managements.customers.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->id]);
-            // })
+            ->editColumn('actions', function ($fileManagement) {
+                return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
+            })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
@@ -65,7 +76,7 @@ class ViewFilesDatatable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        return $model->newQuery()->where('site_id', $this->site_id);
+        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status')->where('site_id', $this->site_id);
     }
 
     /**
@@ -97,10 +108,10 @@ class ViewFilesDatatable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons($buttons)
-            ->orders([
-                [3, 'desc'],
-            ]);
+            ->buttons($buttons);
+        // ->orders([
+        //     [3, 'desc'],
+        // ]);
     }
 
     /**
@@ -112,15 +123,17 @@ class ViewFilesDatatable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::computed('unit_no')->name('unit.floor_unit_number')->addClass('text-nowrap'),
-            Column::computed('unit_name')->name('unit.name')->addClass('text-nowrap'),
-            Column::computed('full_name')->name('stakeholder.full_name')->addClass('text-nowrap'),
-            Column::computed('father_name')->name('stakeholder.father_name')->addClass('text-nowrap'),
-            Column::computed('cnic')->name('stakeholder.cnic'),
-            Column::computed('contact')->name('stakeholder.contact'),
+            Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
+            Column::make('unit_name')->name('unit.name')->title('Unit Name')->addClass('text-nowrap'),
+            Column::make('unit_type')->name('unit.type.name')->title('Unit Type')->addClass('text-nowrap'),
+            Column::make('unit_status')->name('unit.status.name')->title('Unit Status')->addClass('text-nowrap text-center'),
+            Column::make('stakeholder_full_name')->name('stakeholder.full_name')->title('Customer Name')->addClass('text-nowrap'),
+            Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Son of')->addClass('text-nowrap'),
+            Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
             Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
-            // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
 

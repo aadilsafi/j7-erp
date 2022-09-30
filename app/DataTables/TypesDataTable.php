@@ -72,16 +72,7 @@ class TypesDataTable extends DataTable
 
         $buttons = [];
 
-        if ($createPermission) {
-            $buttons[] = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')
-                ->attr([
-                    'onclick' => 'addNew()',
-                ]);
-        }
-
-        $buttons = array_merge($buttons, [
+        $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
                 Button::make('copy')->addClass('dropdown-item'),
@@ -91,7 +82,17 @@ class TypesDataTable extends DataTable
             ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-        ]);
+        ];
+
+        if ($createPermission) {
+            $newButton = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+            array_unshift($buttons, $newButton);
+        }
 
         if ($selectedDeletePermission) {
 
@@ -148,24 +149,22 @@ class TypesDataTable extends DataTable
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
-        return [
-            ($selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
 
+
+        $columns = [
             Column::make('name')->title('Type Name'),
             Column::make('parent_id')->title('Parent'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
-            ($editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
-
+            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
+
+        if($selectedDeletePermission){
+            $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
+            array_unshift($columns, $newColumn);
+        }
+
+        return $columns;
     }
 
     /**

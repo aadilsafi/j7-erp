@@ -107,6 +107,11 @@
                     icon: 'warning',
                     title: 'Warning',
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
                 });
             }
         }

@@ -15,6 +15,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Collection;
+use PHPUnit\Framework\Constraint\Count;
 
 class TeamsDataTable extends DataTable
 {
@@ -38,14 +39,17 @@ class TeamsDataTable extends DataTable
             ->editColumn('parent_id', function ($team) {
                 return Str::of(getTeamParentByParentId($team->parent_id))->ucfirst();
             })
-            ->editColumn('has_team', function ($additionalCost) {
-                return editBooleanColumn($additionalCost->has_team);
+            ->editColumn('has_team', function ($team) {
+                return editBooleanColumn($team->has_team);
             })
             ->editColumn('created_at', function ($team) {
                 return editDateColumn($team->created_at);
             })
             ->editColumn('actions', function ($team) {
                 return view('app.sites.teams.actions', ['site_id' => decryptParams($this->site_id), 'id' => $team->id]);
+            })
+            ->editColumn('total_users', function ($team) {
+                return $team->has_team ? '-' : Count($team->users);
             })
             ->editColumn('check', function ($team) {
                 return $team;
@@ -161,8 +165,9 @@ class TeamsDataTable extends DataTable
             ),
 
             Column::make('name')->title('Name'),
-            Column::make('parent_id')->title('Email')->addClass('text-nowrap'),
+            Column::make('parent_id')->title('Parent')->addClass('text-nowrap'),
             Column::make('has_team'),
+            Column::computed('total_users')->title('Total Users')->addClass('text-nowrap'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
             ($editPermission ?
                 Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')

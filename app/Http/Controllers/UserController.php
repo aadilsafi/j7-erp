@@ -164,15 +164,13 @@ class UserController extends Controller
         //
     }
 
-    public function destroySelected(Request $request,$site_id)
+    public function destroySelected(Request $request, $site_id)
     {
-        abort(403);
-
         try {
             $site_id = decryptParams($site_id);
             if ($request->has('chkUsers')) {
                 $ids = $request->get('chkUsers');
-                
+
                 $this->userInterface->destroySelected($ids);
 
                 return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_deleted'));

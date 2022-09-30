@@ -165,8 +165,6 @@ class TeamController extends Controller
 
     public function destroySelected(Request $request, $site_id)
     {
-        abort(403);
-
         try {
             $site_id = decryptParams($site_id);
             if ($request->has('chkteams')) {

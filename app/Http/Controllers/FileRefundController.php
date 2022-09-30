@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\Models\UnitStakeholder;
+use App\Models\ReceiptDraftModel;
 use App\DataTables\ViewFilesDatatable;
+use App\Models\Stakeholder;
 
 class FileRefundController extends Controller
 {
@@ -29,9 +32,20 @@ class FileRefundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id,$unit_id, $customer_id)
     {
         //
+        if (!request()->ajax()) {
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'unit' => Unit::find(decryptParams($unit_id)),
+                'customer' => Stakeholder::find(decryptParams($customer_id)),
+            ];
+            return view('app.sites.file-managements.files.files-actions.file-refund.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -43,6 +57,8 @@ class FileRefundController extends Controller
     public function store(Request $request)
     {
         //
+        abort(403);
+        dd($request->all());
     }
 
     /**

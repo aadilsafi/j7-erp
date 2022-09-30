@@ -28,11 +28,13 @@ class FileManagement extends Model implements HasMedia
     public $rules = [
         'application_form.*.registration_no' => 'required',
         'application_form.*.application_no' => 'required',
+        'application_form.*.photo' => 'sometimes|max:1',
     ];
 
     public $ruleMessages = [
         "application_form.*.registration_no.required" => "Registration No. is required.",
         "application_form.*.application_no" => "Application No. is required.",
+        "application_form.*.photo" => "Maximum 1 attachments are required.",
     ];
 
     public function site()

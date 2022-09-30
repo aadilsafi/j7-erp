@@ -4,7 +4,7 @@
         <select class="select2-size-lg form-select" id="teamsTree" name="team">
             <option value="0" selected>Parent Team</option>
             @foreach ($teams as $typeRow)
-            @continue(isset($team) && $team->id == $typeRow['id'])
+            @continue($typeRow['has_team'] == 0 || isset($team) && $team->id == $typeRow['id'] )
             <option value="{{ $typeRow['id'] }}" {{ (isset($team) ? $team->parent_id : old('team')) == $typeRow['id'] ?
                 'selected' : '' }}>
                 {{ $loop->index + 1 }} - {{ $typeRow['tree'] }}</option>

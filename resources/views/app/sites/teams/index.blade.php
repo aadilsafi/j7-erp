@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.users.index', $site_id) }}
 @endsection
 
 @section('page-title', __('Teams'))
@@ -99,7 +99,7 @@
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#user-table-form').submit();
+                        $('#teams-table-form').submit();
                     }
                 });
             } else {

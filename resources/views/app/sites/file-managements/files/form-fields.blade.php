@@ -193,16 +193,17 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ cnicFormat($customer->cnic) ?? '-' }}" disabled />
+                                            placeholder="CNIC/Passport" value="{{ cnicFormat($customer->cnic) ?? '-' }}"
+                                            disabled />
                                     </div>
                                 </div>
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_ntn">NTN Number</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
-                                            placeholder="NTN Number" value="{{ $customer->ntn ?? '-' }}" disabled />
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_ntn" placeholder="NTN Number"
+                                            value="{{ $customer->ntn ?? '-' }}" disabled />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_phone">Cell</label>
@@ -220,7 +221,7 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                          <label class="form-label fs-5" for="customer_address">Mail Address</label>
                                         <input type="text" class="form-control form-control-lg"
                                             id="customer_address" placeholder="Mail Address"
                                             value="{{ $customer->address ?? '-' }}" disabled />
@@ -275,8 +276,7 @@
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
                                             placeholder="CNIC/Passport"
-                                            value="{{ !is_null($nextOfKin) ? cnicFormat($nextOfKin->cnic) : '-' }}"
-                                            disabled />
+                                            value="{{ !is_null($nextOfKin) ? cnicFormat($nextOfKin->cnic) : '-' }}" disabled />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_phone">Cell</label>
@@ -323,7 +323,20 @@
             aria-labelledby="sales-agreement-trigger">
 
             <div class="card-body">
-
+                <div>
+                    <div class="row">
+                        <div class="col-9 p-2">
+                            <h1 class="text-bold text-underline text-center"><u><strong>Agreement</strong></u></h1>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 col-sm-9">
+                            <p class="text-bold text-underline text-center"><strong>THIS AGREEMENT TO SELL ("Agreement")</strong>, executed at Islamabad on the
+                            <span class="px-3"><u><strong>22-Aug-2022</strong></u></span></p>
+                            <p>by and between:</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer">
@@ -715,8 +728,8 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ cnicFormat($customer->cnic) ?? '-' }}" disabled />
+                                            placeholder="CNIC/Passport" value="{{ cnicFormat($customer->cnic) ?? '-' }}"
+                                            disabled />
                                     </div>
                                 </div>
 
@@ -827,28 +840,28 @@
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="ideal-deal-check"
-                                        name="application_form[deal_type]" value="ideal-deal" checked>
+                                        name="deal_type" value="ideal-deal" checked>
                                     <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="mark-down-check"
-                                        name="application_form[deal_type]" value="mark_down">
+                                        name="deal_type" value="mark_down">
                                     <label class="form-check-label" for="mark-down-check">Mark Down</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="special-case-check"
-                                        name="application_form[deal_type]" value="special_case">
+                                        name="deal_type" value="special_case">
                                     <label class="form-check-label" for="special-case-check">Special Case</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="adjustment-check"
-                                        name="application_form[deal_type]" value="adjustment">
+                                        name="deal_type" value="adjustment">
                                     <label class="form-check-label" for="adjustment-check">Adjustment</label>
                                 </div>
                             </div>
@@ -965,8 +978,8 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                         <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ cnicFormat($customer->cnic) ?? '-' }}" disabled />
+                                            placeholder="CNIC/Passport" value="{{  cnicFormat($customer->cnic) ?? '-' }}"
+                                            disabled />
                                     </div>
                                 </div>
 

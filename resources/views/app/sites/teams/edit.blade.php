@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.types.edit', $site_id) }}
+{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.teams.edit', $site_id) }}
 @endsection
 
 @section('page-title', 'Edit Team')
@@ -59,7 +59,7 @@
         <div class="card-footer d-flex align-items-center justify-content-end">
             <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
                 <i data-feather='save'></i>
-                Update Type
+                Update Team
             </button>
             <a href="{{ route('sites.teams.index', ['site_id' => encryptParams($site_id)]) }}"
                 class="btn btn-relief-outline-danger waves-effect waves-float waves-light">

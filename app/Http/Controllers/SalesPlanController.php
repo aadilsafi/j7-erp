@@ -180,6 +180,10 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
         ];
 
+        actionLog(get_class($salesPlan), auth()->user(), $role, 'print', [
+            'attributes' => $salesPlan->toArray()
+        ]);
+
         return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }
 

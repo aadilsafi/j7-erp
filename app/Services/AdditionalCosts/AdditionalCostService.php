@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\AdditionalCosts;
 
 use App\Models\AdditionalCost;
-use App\Services\Interfaces\AdditionalCostInterface;
+use App\Services\AdditionalCosts\AdditionalCostInterface;
 use Exception;
 use Illuminate\Support\Str;
 
@@ -94,7 +94,6 @@ class AdditionalCostService implements AdditionalCostInterface
         $additionalCosts = getLinkedTreeData($this->model(), $id);
 
         $additionalCostsIDs = array_merge($id, array_column($additionalCosts, 'id'));
-        // dd($additionalCostsIDs);
 
         $this->model()->whereIn('id', $additionalCostsIDs)->get()->each(function ($row) {
             $row->delete();

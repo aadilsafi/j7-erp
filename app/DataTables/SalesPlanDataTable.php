@@ -27,6 +27,11 @@ class SalesPlanDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        $data  = [
+            0 => 'Pending',
+            1 => 'Approved',
+            2 => 'Disapproved',
+        ];
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->editColumn('check', function ($salesPlan) {
@@ -36,7 +41,6 @@ class SalesPlanDataTable extends DataTable
                 return $salesPlan->user->name;
             })
             ->editColumn('status', function ($salesPlan) {
-                ($salesPlan->status == 0) ? '<span class="badge badge-glow bg-success">Pending</span>' : "Dont Eat";
                 if ($salesPlan->status == 0) {
                     return '<span class="badge badge-glow bg-warning">Pending</span>';
                 } elseif ($salesPlan->status == 1) {
@@ -44,7 +48,6 @@ class SalesPlanDataTable extends DataTable
                 } else {
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
-                // return $salesPlan->status == 1 ? '<span class="badge badge-glow bg-success">Approved</span>' : '<span class="badge badge-glow bg-warning">Not Approved</span>';
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
                 return $salesPlan->stakeholder->full_name;
@@ -55,25 +58,8 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);
             })
-            ->editColumn('salesplanstatus', function ($salesPlan) {
-
-                switch ($salesPlan->status) {
-                    case 0:
-                        return 'Pending';
-                        break;
-
-                    case 1:
-                        return 'Approved';
-                        break;
-
-                    case 2:
-                        return 'Disapproved';
-                        break;
-
-                    default:
-                        # code...
-                        break;
-                }
+            ->editColumn('salesplanstatus', function ($salesPlan) use ($data) {
+                return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
                 return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status]);
@@ -167,7 +153,7 @@ class SalesPlanDataTable extends DataTable
                     'render' => "function (data, type, full, setting) {
                     var tableRow = JSON.parse(data);
                     return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                }",
+                    }",
                     'checkboxes' => [
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]

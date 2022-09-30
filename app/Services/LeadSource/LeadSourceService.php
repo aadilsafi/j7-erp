@@ -55,7 +55,9 @@ class LeadSourceService implements LeadSourceInterface
 
     public function destroy($site_id, $inputs)
     {
-        $this->model()->whereIn('id', $inputs)->delete();
+        $this->model()->whereIn('id', $inputs)->get()->each(function ($row) {
+            $row->delete();
+        });
 
         return true;
     }

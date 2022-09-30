@@ -52,7 +52,7 @@
 @endsection
 
 @section('content')
-    <form id="customer-files-create-form"
+    <form enctype="multipart/form-data" id="customer-files-create-form"
         action="{{ route('sites.file-managements.customers.units.files.store', ['site_id' => encryptParams($site->id), 'customer_id' => encryptParams($customer->id), 'unit_id' => encryptParams($unit->id)]) }}"
         method="post" class=" repeater">
         @csrf

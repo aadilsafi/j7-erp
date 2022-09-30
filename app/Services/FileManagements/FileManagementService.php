@@ -46,9 +46,7 @@ class FileManagementService implements FileManagementInterface
         $file = $this->model()->create($data);
 
         if (isset($inputs['application_form']['photo'])) {
-            foreach ($inputs['application_form']['photo'] as $attachment) {
-                $file->addMedia($attachment)->toMediaCollection('application_form_photo');
-            }
+            $file->addMedia($inputs['application_form']['photo'])->toMediaCollection('application_form_photo');
         }
 
         return $file;

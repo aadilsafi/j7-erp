@@ -115,7 +115,7 @@
 
             <div class="card-footer d-flex align-items-center justify-content-end">
                 <button id="copy_floor_button" type="submit"
-                    class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                    class="btn btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1">
                     <i data-feather='copy'></i>
                     <span id="copy_floor_button_span">Copy Floor </span>
                 </button>

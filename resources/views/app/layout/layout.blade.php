@@ -283,6 +283,10 @@
             $('.dt-checkboxes').trigger('change');
         }
         // hideBlockUI();
+
+        $('.buttonToBlockUI').on('click', function() {
+            showBlockUI();
+        });
     </script>
 
     @yield('custom-js')

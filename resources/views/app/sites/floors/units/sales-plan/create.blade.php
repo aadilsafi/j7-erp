@@ -115,7 +115,7 @@
                                     </div>
                                     <hr>
                                     <button type="submit" value="save"
-                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                                         <i data-feather='save'></i>
                                         <span id="create_sales_plan_button_span">Save Sales Plan</span>
                                     </button>

@@ -21,7 +21,7 @@
         color: #7367F0 !important;
     }
 
-    / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+    .filepond--item-panel {
         background-color: #7367F0;
     }
 
@@ -77,7 +77,7 @@
                     <hr> --}}
 
                     <button type="submit"
-                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                         <i data-feather='save'></i>
                         Save User
                     </button>

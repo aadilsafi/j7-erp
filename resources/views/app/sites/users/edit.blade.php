@@ -21,7 +21,7 @@
         color: #7367F0 !important;
     }
 
-    / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+    .filepond--item-panel {
         background-color: #7367F0;
     }
 
@@ -77,7 +77,7 @@
                     </div>
                     <hr> --}}
                     <a id="saveButton" href="#"
-                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1 mb-1">
                         <i data-feather='save'></i>
                         Update User
                     </a>
@@ -150,7 +150,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-            
+
             var e = $("#role_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -186,7 +186,7 @@
                     $('#phone_no').after(
                         '<span class="error allErrors text-danger">Enter 11 Digits Phone Number</span>');
                 }
-              
+
                 if (phone_no.toString().length = 11 && name != '' &&
                     email != '' ) {
                     $("#userForm").submit();

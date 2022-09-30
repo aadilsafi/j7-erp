@@ -80,7 +80,7 @@
                             </div>
                             <hr>
                             <button id="saveButton" type="submit"
-                                class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                class="btn   w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
                                 <i data-feather='save'></i>
                                 Update Stakeholder
                             </button>

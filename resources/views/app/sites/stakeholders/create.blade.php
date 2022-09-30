@@ -77,7 +77,7 @@
                         <hr>
 
                         <button type="submit" value="save"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
+                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
                             Save Stakeholder
                         </button>
@@ -194,11 +194,11 @@
                     });
                 }
                 return cnicRepeated === 1 || cnicRepeated === 0;
-                
+
             }, "Contact Person CNIC can't be duplicated");
 
             var validator = $("#stakeholderForm").validate({
-             
+
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
             wrapper: "div",

@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string('occupation', 50)->nullable();
             $table->string('designation', 50)->nullable();
             $table->string('cnic', 15)->nullable();
+            $table->string('ntn')->nullable();
             $table->string('contact', 20)->nullable();
             $table->string('address')->nullable();
+            $table->string('comments')->nullable();
             $table->integer('parent_id')->default(0);
             $table->string('relation')->nullable();
             $table->timestamps();

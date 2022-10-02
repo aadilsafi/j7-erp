@@ -30,34 +30,43 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <form class="form form-vertical"
-            action="{{ route('sites.additional-costs.store', ['site_id' => $site_id]) }}" method="POST">
+    <form class="form form-vertical" action="{{ route('sites.additional-costs.store', ['site_id' => $site_id]) }}"
+        method="POST">
 
-            <div class="card-header">
-            </div>
-
-            <div class="card-body">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
                 {{ view('app.additional-costs.form-fields', ['additionalCosts' => $additionalCosts]) }}
 
             </div>
 
-            <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                    <i data-feather='save'></i>
-                    Save Additional Cost
-                </button>
-                <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                        <i data-feather='save'></i>
+                                        Save Additional Cost
+                                    </button>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"
+                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        </form>
-    </div>
+        </div>
+    </form>
 @endsection
 
 @section('vendor-js')
@@ -71,7 +80,7 @@
         $(document).ready(function() {
             $('#has_child').trigger('change');
         });
-
+        let allCheckboxes = $('#applicable_on_site, #applicable_on_floor, #applicable_on_unit');
 
         function convertToSlug(text) {
             let slug = $('#slug');
@@ -80,9 +89,10 @@
 
         $('#has_child').on('change', function() {
             if ($(this).is(':checked')) {
-                $('#hasChildCard').hide();
+                $('#hasSubAdditionalCost').collapse('hide');
+                allCheckboxes.attr('checked', false).trigger('change');
             } else {
-                $('#hasChildCard').show();
+                $('#hasSubAdditionalCost').collapse('show');
             }
         });
 

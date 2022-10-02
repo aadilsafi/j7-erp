@@ -7,12 +7,14 @@ use App\Models\{
     UserBatch,
     Stakeholder,
     StakeholderType,
+    Team,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
 use Illuminate\Support\Facades\{Crypt, File};
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 if (!function_exists('filter_strip_tags')) {
 
@@ -514,7 +516,6 @@ if (!function_exists('apiSuccessResponse')) {
     }
 }
 
-
 if (!function_exists('sqlErrorMessagesByCode')) {
     function sqlErrorMessagesByCode($errCode)
     {
@@ -541,5 +542,59 @@ if (!function_exists('sqlErrorMessagesByCode')) {
             '23505' => 'Data already exists',
         ];
         return $messages[$errCode] ?? 'Unknown error';
+    }
+}
+
+if (!function_exists('cnicFormat')) {
+    function cnicFormat($cnic)
+    {
+        $data = Str::of($cnic)->substrReplace('-', 5, 0)->substrReplace('-', 13, 0);
+        return $data;
+    }
+}
+
+if (!function_exists('storeMultiValue')) {
+    function storeMultiValue($model, $data)
+    {
+        foreach ($data as $key => $value) {
+            $model->multiValues()->create([
+                'type' => $key,
+                'value' => $value,
+            ]);
+        }
+    }
+}
+
+if (!function_exists('getTeamParentByParentId')) {
+    function getTeamParentByParentId($parent_id)
+    {
+        $team = (new Team())->where('id', $parent_id)->first();
+        if ($team) {
+            return $team->name;
+        }
+        return 'parent';
+    }
+}
+
+if (!function_exists('getUserBrowserInfo')) {
+    function getUserBrowserInfo($request)
+    {
+        $userPcInfo = new stdClass();
+        $userPcInfo->ip = $request->ip();
+        $userPcInfo->os = $request->header('User-Agent');
+        return $userPcInfo;
+    }
+}
+
+if (!function_exists('actionLog')) {
+    function actionLog($logName, $causedByModel, $performedOnModel, $log, $properties = [], $event = '')
+    {
+        return activity()
+        ->causedBy($causedByModel)
+        ->performedOn($performedOnModel)
+        ->inLog($logName)
+        ->event($event)
+        ->withProperties($properties)
+        ->log($log);
     }
 }

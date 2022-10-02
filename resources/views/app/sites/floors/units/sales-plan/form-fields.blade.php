@@ -71,7 +71,9 @@
                                 <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
                                     style="display: none;">
 
-                                    <input type="hidden" name="unit[additional_cost][{{ $additionalCost->slug }}][status]" id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
+                                    <input type="hidden"
+                                        name="unit[additional_cost][{{ $additionalCost->slug }}][status]"
+                                        id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
 
                                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                         <label class="form-label fs-5"
@@ -248,6 +250,84 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="card" id="additional_expense_card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Additional Expenses</h3>
+    </div>
+    <div class="card-body">
+        <div class="expenses-list">
+            <div data-repeater-list="expenses">
+                <div data-repeater-item>
+                    <div class="card m-0">
+                        <div class="card-body">
+                            <div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                        <label class="form-label fs-5"
+                                            for="expense_label_{{ $key }}">Expense label</label>
+                                        <input type="text"
+                                            class="form-control form-control-lg @error('expense_label') is-invalid @enderror"
+                                            id="expense_label_{{ $key }}"
+                                            name="expenses[{{ $key }}][expense_label]"
+                                            placeholder="Expense Label" />
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="expense_due_date">Expense Due Date</label>
+                                        <input type="text" id="expense_due_date"
+                                            name="expenses[{{ $key }}][due_date]" readonly
+                                            class="form-control form-control-lg expense_due_date"
+                                            placeholder="YYYY-MM-DD" />
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="expense_amount">Amount</label>
+                                        <input type="number" min="0" class="form-control form-control-lg"
+                                            id="expense_amount" name="expenses[{{ $key }}][amount]"
+                                            placeholder="Amount">
+                                    </div>
+
+                                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="expense_remarks">Remarks</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="expense_remarks" name="expenses[{{ $key }}][remarks]"
+                                            placeholder="Remarks">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <div class="d-flex h-100 justify-content-end align-items-end">
+                                            <div>
+                                                <button
+                                                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light"
+                                                    data-repeater-delete id="delete-contact-person" type="button">
+                                                    <i data-feather="x" class="me-25"></i>
+                                                    <span>Delete</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="add-new-expense" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
                 </div>
             </div>
         </div>

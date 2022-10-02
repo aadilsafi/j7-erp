@@ -10,7 +10,7 @@
 @endsection
 
 @section('page-css')
-<link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
@@ -40,11 +40,15 @@
             display: none;
         }
 
-        #chequeValueDiv {
+        .chequeValueDiv {
             display: none;
         }
 
         #modeOfPaymentDiv {
+            display: none;
+        }
+
+        #customerData {
             display: none;
         }
 
@@ -61,8 +65,8 @@
         }
 
         /* .filepond--item {
-                        width: calc(20% - 0.5em);
-                    } */
+                                                width: calc(20% - 0.5em);
+                                            } */
     </style>
 @endsection
 
@@ -80,7 +84,8 @@
 @endsection
 
 @section('content')
-    <form id="receiptForm" enctype="multipart/form-data" action="{{ route('sites.receipts.store', ['site_id' => encryptParams($site_id)]) }}" method="post"
+    <form id="receiptForm" enctype="multipart/form-data"
+        action="{{ route('sites.receipts.store', ['site_id' => encryptParams($site_id)]) }}" method="post"
         class="repeater">
         @csrf
         <div class="row">
@@ -90,25 +95,53 @@
                     'units' => $units,
                 ]) }}
             </div>
+            @isset($draft_receipts)
+                @php
+                    $amount_received = 0;
+                    $amount_paid = 0;
+                @endphp
 
+                @foreach ($draft_receipts as $draft_receipt)
+                    @php
+                        $amount_received = $draft_receipt->amount_received;
+                        $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
+                    @endphp
+                @endforeach
+
+            @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
-                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
 
                         <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                <h6 style="font-size: 15px"> Amount Received</h6>
+                            </label>
+                            <input min="0" type="number"
+                                class="form-control  @error('amount_in_numbers') is-invalid @enderror"
+                                @if ($amount_received == 0) name="amount_received" @endif
+                                placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
+                                value="{{ isset($amount_received) ? $amount_received : null }}" />
+                            @error('amount_in_numbers')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        @if ($amount_received > 0)
+                            <div class="d-block mb-1">
                                 <label class="form-label" style="font-size: 15px" for="floor">
-                                    <h6 style="font-size: 15px"> Amount Received</h6>
+                                    <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
-                                <input min="0"  type="number"
+                                <input min="0" type="number"
                                     class="form-control  @error('amount_in_numbers') is-invalid @enderror"
-                                    name="amount_received" placeholder="Amount Received"
-                                    />
+                                    @if ($amount_received > 0) name="amount_received" @endif
+                                    placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}" />
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                        </div>
-
+                            </div>
+                        @endif
 
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
@@ -120,6 +153,16 @@
                         </div>
 
                         <hr>
+                        @if ($amount_received > 0)
+                            <div class="alert alert-warning alert-dismissible m-0 fade show" role="alert">
+                                <h4 class="alert-heading"><i data-feather='alert-triangle' class="me-50"></i>Warning!</h4>
+                                <div class="alert-body">
+                                    <strong>On Cancel Receipts created against Amount Received will be Effected.
+                                </div>
+                            </div>
+                            <hr>
+                        @endif
+
                         {{-- <div class="d-block mb-1">
                             <button
                                 class="btn text-nowrap w-100 btn-relief-outline-primary waves-effect waves-float waves-light me-1 mb-1"
@@ -130,16 +173,25 @@
                         </div>
                         <hr> --}}
                         <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
                             Save Receipts
                         </a>
 
-                        <a href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}"
-                            class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
+                        @if ($amount_received > 0)
+                            <a onclick="destroyDraft()"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        @else
+                            <a href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -164,7 +216,6 @@
 @section('custom-js')
 
     <script>
-
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -232,26 +283,26 @@
             $(".other-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "block");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
             $(".cheque-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "block");
+                $('.chequeValueDiv').css("display", "block");
             });
 
             $(".online-mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "block");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
 
             $(".mode-of-payment").click(function() {
                 $('#otherValueDiv').css("display", "none");
                 $('.onlineValueDiv').css("display", "none");
-                $('#chequeValueDiv').css("display", "none");
+                $('.chequeValueDiv').css("display", "none");
             });
 
             $(".other-purpose").click(function() {
@@ -320,12 +371,24 @@
                     },
                     success: function(response) {
                         if (response.success) {
+
                             $('#paidInstllmentTableDiv').css("display", "block");
                             $('#instllmentTableDiv').css("display", "block");
                             $('#modeOfPaymentDiv').css("display", "block");
+                            $('#customerData').css("display", "block");
                             $('#paid_dynamic_total_installment_rows').empty();
                             $('#dynamic_total_installment_rows').empty();
                             $('#installments').empty();
+
+                            $('#stackholder_full_name').val(response.stakeholders['full_name']);
+                            $('#stackholder_father_name').val(response.stakeholders['father_name']);
+                            $('#stackholder_occupation').val(response.stakeholders['occupation']);
+                            $('#stackholder_designation').val(response.stakeholders['designation']);
+                            $('#stackholder_cnic').val(response.stakeholders['cnic']);
+                            $('#stackholder_contact').val(response.stakeholders['contact']);
+                            $('#stackholder_address').val(response.stakeholders['address']);
+
+
                             var total_installments = 1;
                             var order = null;
 
@@ -340,11 +403,13 @@
                                         .already_paid[i]['details'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['amount'] + '</td>',
+                                        .already_paid[i]['amount'].toLocaleString('en') + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['paid_amount'] + '</td>',
+                                        .already_paid[i]['paid_amount'].toLocaleString('en') +
+                                        '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['remaining_amount'] + '</td>',
+                                        .already_paid[i]['remaining_amount'].toLocaleString('en') +
+                                        '</td>',
                                         '</tr>',
                                         '<td class="text-nowrap text-center">' + response
                                         .already_paid[i]['status'] + '</td>',
@@ -355,7 +420,8 @@
                             for (i = 0; i <= response.total_calculated_installments.length; i++) {
                                 if (response.total_calculated_installments[i] != null) {
                                     if (response.total_calculated_installments[i][
-                                        'installment_order'] == 0) {
+                                            'installment_order'
+                                        ] == 0) {
                                         order = 'Down Payment';
                                     } else {
                                         order = response.total_calculated_installments[i][
@@ -369,15 +435,19 @@
                                         .total_calculated_installments[i]['detail'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['amount'] + '</td>',
+                                        .total_calculated_installments[i]['amount']
+                                        .toLocaleString() + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['paid_amount'] + '</td>',
+                                        .total_calculated_installments[i]['paid_amount']
+                                        .toLocaleString() + '</td>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['remaining_amount'] +
+                                        .total_calculated_installments[i]['remaining_amount']
+                                        .toLocaleString() +
                                         '</td>',
                                         '</tr>',
                                         '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['partially_paid'] +
+                                        .total_calculated_installments[i]['partially_paid']
+                                        .toLocaleString() +
                                         '</td>',
                                         '</tr>', );
                                 }
@@ -446,5 +516,29 @@
             $("#receiptForm").submit();
         });
 
+        function destroyDraft() {
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are you sure you want to destroy the draft receipts ?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Change it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                    "{{ route('sites.receipts.destroy-draft', ['site_id' => encryptParams($site_id)]) }}";
+                    location.href = url;
+                }
+            });
+
+        }
     </script>
 @endsection

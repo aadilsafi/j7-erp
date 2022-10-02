@@ -29,6 +29,18 @@ class CustomerUnitsDataTable extends DataTable
             ->editColumn('status_id', function ($unit) {
                 return editBadgeColumn($unit->status->name);
             })
+            ->editColumn('full_name', function ($unit) {
+                return $unit->salesPlan[0]['stakeholder']['full_name'];
+            })
+            ->editColumn('father_name', function ($unit) {
+                return $unit->salesPlan[0]['stakeholder']['father_name'];
+            })
+            ->editColumn('cnic', function ($unit) {
+                return cnicFormat($unit->salesPlan[0]['stakeholder']['cnic']);
+            })
+            ->editColumn('contact', function ($unit) {
+                return $unit->salesPlan[0]['stakeholder']['contact'];
+            })
             ->editColumn('type_id', function ($unit) {
                 return $unit->type->name;
             })
@@ -39,7 +51,7 @@ class CustomerUnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $this->customer_id, 'unit_id' => $unit->id]);
+                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'unit_id' => $unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -53,7 +65,7 @@ class CustomerUnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status' ])->whereIn('id', $this->unit_ids);
+        return $model->newQuery()->select('units.*')->with(['type', 'status' ,'salesPlan','file'])->whereIn('id', $this->unit_ids);
     }
 
     public function html(): HtmlBuilder
@@ -96,13 +108,17 @@ class CustomerUnitsDataTable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('floor_unit_number')->title('Unit Number'),
+            Column::make('floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type'),
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center')->width(60),
+            Column::computed('full_name')->name('salesPlan.stakeholder.full_name')->title('Full Name')->addClass('text-center text-nowrap'),
+            Column::computed('father_name')->name('salesPlan.stakeholder.father_name')->title('FATHER NAME')->addClass('text-center text-nowrap'),
+            Column::computed('cnic')->name('salesPlan.stakeholder.cnic')->title('CNIC')->addClass('text-center text-nowrap'),
+            Column::computed('contact')->name('salesPlan.stakeholder.contact')->title('CONTACT')->addClass('text-center text-nowrap'),
+            // Column::make('created_at')->addClass('text-nowrap'),
+            // Column::make('updated_at'),
+            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center text-nowrap')->width(60),
         ];
     }
 
@@ -113,7 +129,7 @@ class CustomerUnitsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Units_' . date('YmdHis');
+        return 'Customers_' . date('YmdHis');
     }
 
     /**

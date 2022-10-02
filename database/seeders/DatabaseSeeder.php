@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Database\Seeders\SatkeholderTypeSeeder;
-use Database\Seeders\SalesPlanTemplatesSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
@@ -19,13 +17,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleTableSeeder::class,
             PermissionTableSeeder::class,
-            UserTableSeeder::class,
             CountryTableSeeder::class,
             StatusTableSeeder::class,
             StatesTableSeeder::class,
             CityTableSeeder::class,
             SiteTableSeeder::class,
             TypeSeeder::class,
+            UserTableSeeder::class,
             AdditionalCostsTableSeeder::class,
             SiteStatusPivotTableSeeder::class,
             FloorTableSeeder::class,
@@ -41,6 +39,9 @@ class DatabaseSeeder extends Seeder
             FileManagementTableSeeder::class,
             ReceiptsTableSeeder::class,
             UnitStakeholdersTableSeeder::class,
+            RebateIncentiveSeeder::class,
+            TeamSeeder::class,
+            TeamUserSeeder::class,
         ]);
     }
 }

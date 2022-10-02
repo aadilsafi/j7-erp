@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Stakeholder extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, SoftDeletes, InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -21,9 +23,11 @@ class Stakeholder extends Model implements HasMedia
         'occupation',
         'designation',
         'cnic',
+        'ntn',
         'contact',
         'address',
         'parent_id',
+        'comments',
         'relation',
     ];
 
@@ -33,17 +37,24 @@ class Stakeholder extends Model implements HasMedia
         'father_name' => 'required|string|min:1|max:50',
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
-        'cnic' => 'required|string|min:1|max:15',
+        'cnic' => 'required|numeric|digits_between:1,15|unique:stakeholders,cnic',
+        'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'nullable|numeric',
+        'comments' => 'nullable|string',
         'relation' => 'nullable|string|min:1|max:50',
         'attachment' => 'sometimes|min:2',
-        'stakeholder_type' => 'required|in:C,V,D,L',
+        'stakeholder_type' => 'required|in:C,V,D,L,K',
+        'contact-persons' => 'nullable|array',
+        'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
     public $ruleMessages = [
         'attachment.min' => 'Minimum 2 attachments are required.',
+        'contact-persons.*.cnic.numeric' => 'CNIC must be numeric.',
+        'contact-persons.*.cnic.min' => 'CNIC must be at least 1 digit.',
+        'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
     ];
 
     protected $casts = [
@@ -53,11 +64,17 @@ class Stakeholder extends Model implements HasMedia
         'occupation' => 'string',
         'designation' => 'string',
         'cnic' => 'string',
+        'ntn' => 'string',
         'contact' => 'string',
         'address' => 'string',
         'parent_id' => 'integer',
         'relation' => 'string',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function site()
     {
@@ -67,5 +84,14 @@ class Stakeholder extends Model implements HasMedia
     public function stakeholder_types()
     {
         return $this->hasMany(StakeholderType::class);
+    }
+
+    public function multiValues() {
+        return $this->morphMany(MultiValue::class, 'multivalueable');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(StakeholderContact::class);
     }
 }

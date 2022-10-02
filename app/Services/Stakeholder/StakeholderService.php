@@ -2,11 +2,15 @@
 
 namespace App\Services\Stakeholder;
 
-use App\Models\Stakeholder;
-use App\Models\StakeholderType;
+use App\Models\{
+    Stakeholder,
+    StakeholderContact,
+    StakeholderType,
+};
 use Illuminate\Support\Facades\Storage;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class StakeholderService implements StakeholderInterface
@@ -45,88 +49,127 @@ class StakeholderService implements StakeholderInterface
 
     public function store($site_id, $inputs)
     {
-        $data = [
-            'site_id' => decryptParams($site_id),
-            'full_name' => $inputs['full_name'],
-            'father_name' => $inputs['father_name'],
-            'occupation' => $inputs['occupation'],
-            'designation' => $inputs['designation'],
-            'cnic' => $inputs['cnic'],
-            'contact' => $inputs['contact'],
-            'address' => $inputs['address'],
-            'parent_id' => $inputs['parent_id'],
-            'relation' => $inputs['relation'],
-        ];
+        DB::transaction(function () use ($site_id, $inputs) {
 
-        $stakeholder = $this->model()->create($data);
-
-
-        if (isset($inputs['attachment'])) {
-            foreach ($inputs['attachment'] as $attachment) {
-                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
-            }
-        }
-
-        $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
-        $stakeholderTypeData = [];
-        foreach (StakeholderTypeEnum::array() as $key => $value) {
-            $stakeholderType = [
-                'stakeholder_id' => $stakeholder->id,
-                'type' => $value,
-                'stakeholder_code' => $value . '-' . $stakeholderId,
-                'status' => $inputs['stakeholder_type'] == $value ? 1 : 0,
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'full_name' => $inputs['full_name'],
+                'father_name' => $inputs['father_name'],
+                'occupation' => $inputs['occupation'],
+                'designation' => $inputs['designation'],
+                'cnic' => $inputs['cnic'],
+                'ntn' => $inputs['ntn'],
+                'contact' => $inputs['contact'],
+                'address' => $inputs['address'],
+                'parent_id' => $inputs['parent_id'],
+                'comments' => $inputs['comments'],
+                'relation' => $inputs['relation'],
             ];
+            // dd($inputs);
 
-            if ($inputs['stakeholder_type'] == 'C' || $inputs['parent_id'] > 0) {
-                if (in_array($value, ['C', 'L', 'K'])) {
-                    $stakeholderType['status'] = 1;
+            $stakeholder = $this->model()->create($data);
+
+            if (isset($inputs['attachment'])) {
+                foreach ($inputs['attachment'] as $attachment) {
+                    $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
             }
 
-            $stakeholderTypeData[] = $stakeholderType;
-        }
+            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
+                $contacts = [];
+                foreach ($inputs['contact-persons'] as $contact) {
+                    $contacts[] = new StakeholderContact($contact);
+                }
+                $stakeholder->contacts()->saveMany($contacts);
+            }
 
-        $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
-        return $stakeholder;
+            $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
+            $stakeholderTypeData = [];
+            foreach (StakeholderTypeEnum::array() as $key => $value) {
+                $stakeholderType = [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => $value,
+                    'stakeholder_code' => $value . '-' . $stakeholderId,
+                    'status' => $inputs['stakeholder_type'] == $value ? 1 : 0,
+                ];
+
+                if ($inputs['stakeholder_type'] == 'C' || $inputs['parent_id'] > 0) {
+                    if (in_array($value, ['C', 'L', 'K'])) {
+                        $stakeholderType['status'] = 1;
+                    }
+                }
+
+                $stakeholderTypeData[] = $stakeholderType;
+            }
+
+            $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
+            return $stakeholder;
+        });
     }
 
     public function update($site_id, $id, $inputs)
     {
-        $data = [
-            'full_name' => $inputs['full_name'],
-            'father_name' => $inputs['father_name'],
-            'occupation' => $inputs['occupation'],
-            'designation' => $inputs['designation'],
-            'cnic' => $inputs['cnic'],
-            'contact' => $inputs['contact'],
-            'address' => $inputs['address'],
-            'parent_id' => $inputs['parent_id'],
-            'relation' => $inputs['relation'],
-        ];
+        DB::transaction(function () use ($site_id, $id, $inputs) {
+            $stakeholder = $this->model()->find($id);
+            $data = [
+                'full_name' => $inputs['full_name'],
+                'father_name' => $inputs['father_name'],
+                'occupation' => $inputs['occupation'],
+                'designation' => $inputs['designation'],
+                'cnic' => $inputs['cnic'],
+                'ntn' => $inputs['ntn'],
+                'contact' => $inputs['contact'],
+                'address' => $inputs['address'],
+                'parent_id' => $inputs['parent_id'],
+                'comments' => $inputs['comments'],
+                'relation' => $inputs['relation'],
+            ];
+            $stakeholder->update($data);
 
-        $stakeholder = $this->model()->where('id', $id)->update($data);
-        $stakeholder = $this->model()->find($id);
-        $stakeholder->clearMediaCollection('stakeholder_cnic');
+            $stakeholder->clearMediaCollection('stakeholder_cnic');
 
-        if (isset($inputs['attachment'])) {
-            foreach ($inputs['attachment'] as $attachment) {
-                $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
+            if (isset($inputs['attachment'])) {
+                foreach ($inputs['attachment'] as $attachment) {
+                    $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
+                }
             }
-        }
-        return $stakeholder;
+
+            if (isset($inputs['stakeholder_type'])) {
+                foreach ($inputs['stakeholder_type'] as $key => $value) {
+                    (new StakeholderType())->where([
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => $key,
+                    ])->update([
+                        'status' => true,
+                    ]);
+                }
+            }
+            // dd($inputs);
+            $stakeholder->contacts()->delete();
+            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
+                $contacts = [];
+                foreach ($inputs['contact-persons'] as $contact) {
+                    $contacts[] = new StakeholderContact($contact);
+                }
+                $stakeholder->contacts()->saveMany($contacts);
+            }
+            return $stakeholder;
+        });
     }
 
     public function destroy($site_id, $id)
     {
-        $id = decryptParams($id);
+        DB::transaction(function () use ($site_id, $id) {
+            $id = decryptParams($id);
+            $stakeholder = getLinkedTreeData($this->model(), $id);
+            $stakeholderIDs = array_merge($id, array_column($stakeholder, 'id'));
 
-        $stakeholder = getLinkedTreeData($this->model(), $id);
+            $this->model()->whereIn('id', $stakeholderIDs)->get()->each(function ($row) {
+                $row->delete();
+            });
 
-        $stakeholderIDs = array_merge($id, array_column($stakeholder, 'id'));
-
-        $this->model()->whereIn('id', $stakeholderIDs)->delete();
-
-        return true;
+            return true;
+        });
     }
 
     public function getEmptyInstance()
@@ -138,8 +181,10 @@ class StakeholderService implements StakeholderInterface
             'occupation' => '',
             'designation' => '',
             'cnic' => '',
+            'ntn' => '',
             'contact' => '',
             'address' => '',
+            'comments' => '',
             'stakeholder_types' => [
                 [
                     'stakeholder_id' => 0,

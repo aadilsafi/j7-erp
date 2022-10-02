@@ -3,6 +3,8 @@
 namespace App\Services\FileManagements;
 
 use App\Models\FileManagement;
+use App\Models\Stakeholder;
+use App\Models\Unit;
 use App\Services\FileManagements\FileManagementInterface;
 
 class FileManagementService implements FileManagementInterface
@@ -31,12 +33,23 @@ class FileManagementService implements FileManagementInterface
     public function store($site_id, $inputs)
     {
         $data = [
-            'site_id' => $site_id,
-            'name' => filter_strip_tags($inputs['lead_source_name']),
+            'site_id' => decryptParams($site_id),
+            'unit_id' => $inputs['application_form']['unit_id'],
+            'stakeholder_id' => $inputs['application_form']['stakeholder_id'],
+            'unit_data' => json_encode(Unit::find($inputs['application_form']['unit_id'])),
+            'stakeholder_data' => json_encode(Stakeholder::find($inputs['application_form']['stakeholder_id'])),
+            'registration_no' => $inputs['application_form']['registration_no'],
+            'application_no' => $inputs['application_form']['application_no'],
+            'deal_type'=> $inputs['application_form']['deal_type'],
+            'status' => 1,
         ];
+        $file = $this->model()->create($data);
 
-        $leadSource = $this->model()->create($data);
-        return $leadSource;
+        if (isset($inputs['application_form']['photo'])) {
+            $file->addMedia($inputs['application_form']['photo'])->toMediaCollection('application_form_photo');
+        }
+
+        return $file;
     }
 
     public function update($site_id, $id, $inputs)

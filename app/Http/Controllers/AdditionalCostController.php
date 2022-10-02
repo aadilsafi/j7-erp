@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AdditionalCostsDataTable;
-use App\Services\Interfaces\AdditionalCostInterface;
 use Illuminate\Http\Request;
 use App\Http\Requests\additionalCosts\{
     storeRequest as additionalCostStoreRequest,
     updateRequest as additionalCostUpdateRequest
 };
+use App\Services\AdditionalCosts\AdditionalCostInterface;
 use Exception;
 
 class AdditionalCostController extends Controller

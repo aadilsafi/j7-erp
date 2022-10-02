@@ -20,6 +20,17 @@ use App\Http\Controllers\{
     StakeholderController,
     NotificationController,
     ReceiptController,
+    UserController,
+    RebateIncentiveController,
+    DealerIncentiveController,
+    TeamController,
+    FileRefundController,
+    UnitShiftingController,
+    FileAdjustmentController,
+    FileTitleTransferController,
+    FileReleaseController,
+    FileCancellationController,
+    FileBuyBackController,
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -60,13 +71,10 @@ Route::group([
             Route::get('create', [RoleController::class, 'create'])->name('create');
             Route::post('store', [RoleController::class, 'store'])->name('store');
 
-            Route::get('delete-selected', [RoleController::class, 'destroySelected'])->name('destroy-selected');
+            Route::get('delete-selected', [RoleController::class, 'destroy'])->name('destroy-selected');
             Route::group(['prefix' => '/{id}'], function () {
                 Route::get('edit', [RoleController::class, 'edit'])->name('edit');
                 Route::put('update', [RoleController::class, 'update'])->name('update');
-
-                Route::get('delete', [RoleController::class, 'destroy'])->name('destroy');
-                Route::get('make-default', [RoleController::class, 'makeDefault'])->name('make-default');
             });
         });
 
@@ -210,7 +218,6 @@ Route::group([
 
                                             Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
 
-
                                             Route::group(['prefix' => '/{id}'], function () {
 
                                                 Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
@@ -259,6 +266,44 @@ Route::group([
                     });
                 });
 
+                //Users Routes
+                Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+                    Route::get('/', [UserController::class, 'index'])->name('index');
+
+                    Route::get('create', [UserController::class, 'create'])->name('create');
+                    Route::post('store', [UserController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [UserController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [UserController::class, 'edit'])->name('edit');
+                        Route::put('update', [UserController::class, 'update'])->name('update');
+                        Route::get('delete', [UserController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [UserController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
+                //Teams Routes
+                Route::group(['prefix' => 'teams', 'as' => 'teams.'], function () {
+                    Route::get('/', [TeamController::class, 'index'])->name('index');
+
+                    Route::get('create', [TeamController::class, 'create'])->name('create');
+                    Route::post('store', [TeamController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [TeamController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [TeamController::class, 'edit'])->name('edit');
+                        Route::put('update', [TeamController::class, 'update'])->name('update');
+                        Route::get('delete', [TeamController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [TeamController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
                 //LeadSources Routes
                 Route::group(['prefix' => 'lead-sources', 'as' => 'lead-sources.'], function () {
                     Route::get('/', [LeadSourceController::class, 'index'])->name('index');
@@ -295,8 +340,9 @@ Route::group([
                         });
                     });
 
-
+                    Route::get('destroy-draft', [ReceiptController::class, 'destroyDraft'])->name('destroy-draft');
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [ReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         Route::put('update', [ReceiptController::class, 'update'])->name('update');
@@ -308,6 +354,99 @@ Route::group([
                 Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
 
                     Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
+                    Route::get('/view-files', [FileManagementController::class, 'viewFiles'])->name('view-files');
+                    // rebate incentive form
+                    Route::group(['prefix' => 'rebate-incentive', 'as' => 'rebate-incentive.'], function () {
+
+                        Route::get('/', [RebateIncentiveController::class, 'index'])->name('index');
+
+                        Route::get('create', [RebateIncentiveController::class, 'create'])->name('create');
+                        Route::post('store', [RebateIncentiveController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
+                        });
+
+                    });
+
+                    // dealer incentive form
+                    Route::group(['prefix' => 'dealer-incentive', 'as' => 'dealer-incentive.'], function () {
+
+                        Route::get('/', [DealerIncentiveController::class, 'index'])->name('index');
+
+                        Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
+                        Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+                    });
+
+                    // file refund
+                    Route::group(['prefix' => 'file-refund', 'as' => 'file-refund.'], function () {
+
+                        Route::get('/', [FileRefundController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
+                        Route::post('store', [FileRefundController::class, 'store'])->name('store');
+
+                    });
+
+                    // file buy back
+                    Route::group(['prefix' => 'file-buy-back', 'as' => 'file-buy-back.'], function () {
+
+                        Route::get('/', [FileBuyBackController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
+                        Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
+
+                    });
+
+                    // file Cancellation
+                    Route::group(['prefix' => 'file-cancellation', 'as' => 'file-cancellation.'], function () {
+
+                        Route::get('/', [FileCancellationController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
+                        Route::post('store', [FileCancellationController::class, 'store'])->name('store');
+
+                    });
+
+                    // file release
+                    Route::group(['prefix' => 'file-resale', 'as' => 'file-resale.'], function () {
+
+                        Route::get('/', [FileReleaseController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
+                        Route::post('store', [FileReleaseController::class, 'store'])->name('store');
+
+                    });
+
+                    // file title transfer
+                    Route::group(['prefix' => 'file-title-transfer', 'as' => 'file-title-transfer.'], function () {
+
+                        Route::get('/', [FileTitleTransferController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
+                        Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
+
+                    });
+
+                    // file adjustment
+                    Route::group(['prefix' => 'file-adjustment', 'as' => 'file-adjustment.'], function () {
+
+                        Route::get('/', [FileAdjustmentController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [FileAdjustmentController::class, 'create'])->name('create');
+                        Route::post('store', [FileAdjustmentController::class, 'store'])->name('store');
+
+                    });
+
+                    // Unit Shifting
+                    Route::group(['prefix' => 'unit-shifting', 'as' => 'unit-shifting.'], function () {
+
+                        Route::get('/', [UnitShiftingController::class, 'index'])->name('index');
+
+                        Route::get('create/{unit_id}/{customer_id}', [UnitShiftingController::class, 'create'])->name('create');
+                        Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
+
+                    });
 
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
                         Route::get('/units', [FileManagementController::class, 'units'])->name('units');
@@ -359,6 +498,7 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/batch/{batchId}', [testController::class, 'getBatchByID'])->name('batch');
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
+    Route::get('activitylogs', [testController::class, 'activityLog']);
 });
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);

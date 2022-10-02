@@ -35,6 +35,9 @@ return new class extends Migration
             $table->string('installment_number')->nullable();
             $table->string('attachment')->nullable();
             $table->string('amount_received')->nullable();
+            $table->string('comments')->nullable();
+            $table->boolean('status')->default(0);
+            $table->string('bank_details')->nullable();
             $table->timestamps();
         });
     }

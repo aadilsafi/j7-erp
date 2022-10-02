@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\CustomersDataTable;
-use App\DataTables\CustomerUnitsDataTable;
-use App\Models\SalesPlan;
+use Exception;
 use App\Models\Site;
-use App\Models\Stakeholder;
 use App\Models\Unit;
+use App\Models\SalesPlan;
+use App\Models\Stakeholder;
+use Illuminate\Http\Request;
 use App\Models\UnitStakeholder;
+use App\DataTables\CustomersDataTable;
+use App\Utils\Enums\StakeholderTypeEnum;
+use App\DataTables\CustomerUnitsDataTable;
+use App\DataTables\ViewFilesDatatable;
 use App\Services\FileManagements\FileManagementInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
-use App\Utils\Enums\StakeholderTypeEnum;
-use Illuminate\Http\Request;
+use App\Http\Requests\File\store;
+use App\Models\FileManagement;
 
 class FileManagementController extends Controller
 {
@@ -25,14 +29,16 @@ class FileManagementController extends Controller
         $this->stakeholderInterface = $stakeholderInterface;
     }
 
-    public function customers(CustomersDataTable $dataTable, Request $request, $site_id)
+    public function customers(CustomerUnitsDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
             'stakeholder_type' => StakeholderTypeEnum::CUSTOMER->value,
         ];
 
-        return $dataTable->with($data)->render('app.sites.file-managements.customers.customers', $data);
+        $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
+
+        return $dataTable->with($data)->render('app.sites.file-managements.customers.units.units', $data);
     }
 
     public function units(CustomerUnitsDataTable $dataTable, Request $request, $site_id, $customer_id)
@@ -66,15 +72,16 @@ class FileManagementController extends Controller
 
     public function create(Request $request, $site_id, $customer_id, $unit_id)
     {
+
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
-
+            'customer_file' => FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first(),
         ];
-
+        $customer_file = FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first();
         $data['salesPlan'] = (new SalesPlan())->with([
             'additionalCosts', 'installments', 'leadSource', 'receipts'
         ])->where([
@@ -82,27 +89,39 @@ class FileManagementController extends Controller
             'unit_id' => $data['unit']->id,
         ])->first();
         $data['salesPlan']->installments = $data['salesPlan']->installments->sortBy('installment_order');
-
-        if ($data['customer']->parent_id > 0) {
-            $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
+        if(isset($customer_file)){
+            $data['image'] =$customer_file->getFirstMediaUrl('application_form_photo');
         }
 
-        // dd($data);
-
+        if (isset($data['customer']) && $data['customer']->parent_id > 0) {
+            $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
+        }
+        if(isset($data['customer_file'])){
+            return view('app.sites.file-managements.files.viewFile', $data);
+        }
         return view('app.sites.file-managements.files.create', $data);
     }
 
-    public function store(Request $request, $site_id, $customer_id, $unit_id)
+    public function store(store $request, $site_id, $customer_id, $unit_id)
     {
-        dd($request->input());
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->fileManagementInterface->store($site_id, $data);
+                return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function viewFiles(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    {
         $data = [
-            'site' => (new Site())->find(decryptParams($site_id)),
-            'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
-            'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
+            'site_id' => decryptParams($site_id),
         ];
-
-        // dd($data);
-
-        return view('app.sites.file-managements.files.create', $data);
+        return $dataTable->with($data)->render('app.sites.file-managements.files.view', $data);
     }
 }

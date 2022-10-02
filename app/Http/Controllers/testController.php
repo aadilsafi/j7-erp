@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use NumberFormatter;
+use Spatie\Activitylog\Models\Activity;
 
 class testController extends Controller
 {
@@ -78,5 +79,25 @@ class testController extends Controller
         echo (new NumberFormatter("en", NumberFormatter::MAX_INTEGER_DIGITS))->format(190);
         echo (new NumberFormatter("en", NumberFormatter::MIN_INTEGER_DIGITS))->format(190);
         print "</pre>";
+    }
+
+    function activityLog(Request $request)
+    {
+        return $lastLoggedActivity = Activity::all()->last();
+        return $lastLoggedActivity->changes();
+        $UserBrowserInfo = getUserBrowserInfo($request);
+
+        return activity()
+            ->causedBy(auth()->user())
+            ->inLog('asdad')
+            ->withProperties(json_encode($UserBrowserInfo))
+            ->event('verified')
+            ->log('edited');
+
+
+        $lastLoggedActivity->subject; //returns an instance of an eloquent model
+        $lastLoggedActivity->causer; //returns an instance of your user model
+        $lastLoggedActivity->getExtraProperty('customProperty'); //returns 'customValue'
+        return $lastLoggedActivity->description; //returns 'Look, I logged something'
     }
 }

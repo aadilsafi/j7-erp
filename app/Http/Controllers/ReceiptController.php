@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Models\Receipt;
+use App\Models\ReceiptDraftModel;
 use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Stakeholder;
@@ -51,9 +52,10 @@ class ReceiptController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => (new Unit())->with('salesPlan','salesPlan.installments')->get(),
+                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
+                'draft_receipts' => ReceiptDraftModel::all(),
             ];
-            return view('app.sites.receipts.create',$data);
+            return view('app.sites.receipts.create', $data);
         } else {
             abort(403);
         }
@@ -65,21 +67,24 @@ class ReceiptController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(store $request,$site_id)
+    public function store(store $request, $site_id)
     {
         //
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
-                $record = $this->receiptInterface->store($site_id, $data);;
-                return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                $record = $this->receiptInterface->store($site_id, $data);
+                if (isset($record['remaining_amount'])) {
+                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst ' . $record['unit_name'] . ' saved. Remaining amount is ' . $record['remaining_amount']))->with('remaining_amount', $record['remaining_amount']);
+                } else {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                }
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
-
     }
 
     /**
@@ -106,17 +111,16 @@ class ReceiptController extends Controller
         $site_id = decryptParams($site_id);
         $receipt = Receipt::find(decryptParams($id));
         $image = $receipt->getFirstMediaUrl('receipt_attachments');
-        // dd();
         $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
-        $installmentNumbersArray = explode(",",$receipt_installment_numbers);
-        $last_index = array_key_last ( $installmentNumbersArray );
-        $first_letter = str_split( $installmentNumbersArray[$last_index]);
+        $installmentNumbersArray = explode(",", $receipt_installment_numbers);
+        $last_index = array_key_last($installmentNumbersArray);
+        $first_letter = str_split($installmentNumbersArray[$last_index]);
         $unit_data =  $receipt->unit;
-        $last_paid_installment_id = SalesPlanInstallments::where('details','LIKE', '%'.$first_letter[0].'%')->where('sales_plan_id',$receipt->sales_plan_id)->first()->id;
-        $unpadid_installments = SalesPlanInstallments::where('id','>',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $paid_installments = SalesPlanInstallments::where('id','<=',$last_paid_installment_id)->where('sales_plan_id',$receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $stakeholder_data = Stakeholder::where('cnic',$receipt->cnic)->first();
-        return view('app.sites.receipts.preview',compact('site_id','unit_data','stakeholder_data','paid_installments','unpadid_installments','receipt','image'));
+        $last_paid_installment_id = SalesPlanInstallments::where('details', 'LIKE', '%' . $first_letter[0] . '%')->where('sales_plan_id', $receipt->sales_plan_id)->first()->id;
+        $unpadid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
+        return view('app.sites.receipts.preview', compact('site_id', 'unit_data', 'stakeholder_data', 'paid_installments', 'unpadid_installments', 'receipt', 'image'));
     }
 
     /**
@@ -167,7 +171,39 @@ class ReceiptController extends Controller
         }
     }
 
-    public function getUnitTypeAndFloorAjax(Request $request){
+    public function destroyDraft(Request $request, $site_id)
+    {
+        ReceiptDraftModel::truncate();
+
+        return redirect()->route('sites.receipts.index', ['site_id' => $site_id])->withSuccess(__('Draft Cleared'));
+    }
+
+    public function makeActiveSelected(Request $request, $site_id)
+    {
+        try {
+            $site_id = decryptParams($site_id);
+            if (!request()->ajax()) {
+                if ($request->has('chkRole')) {
+
+                    $record = $this->receiptInterface->makeActive($site_id, $request->chkRole);
+
+                    if ($record) {
+                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('Status Changed'));
+                    } else {
+                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                    }
+                }
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+
+    public function getUnitTypeAndFloorAjax(Request $request)
+    {
 
         $unit = Unit::find($request->unit_id);
 
@@ -178,32 +214,31 @@ class ReceiptController extends Controller
             'unit_floor' => $unit->floor->name,
             'unit_name' => $unit->name,
         ], 200);
-
     }
 
     public function getUnpaidInstallments(Request $request)
     {
-        $sales_plan = SalesPlan::where('unit_id',$request->unit_id)->where('status',1)->with('PaidorPartiallyPaidInstallments','unPaidInstallments')->first();
+        $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('PaidorPartiallyPaidInstallments', 'unPaidInstallments', 'stakeholder')->first();
+        $stakeholders = $sales_plan->stakeholder;
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
-        $calculate_amount = 0.0;
-        $to_be_paid_calculate_amount = 0.0;
+        $calculate_amount = 0;
+        $to_be_paid_calculate_amount = 0;
         $total_calculated_installments = [];
         $amount_to_be_paid = $request->amount;
-        $total_installment_required_amount = 0.0;
-        foreach($sales_plan->unPaidInstallments as $installment){
-            if($installment->remaining_amount == 0){
+        $total_installment_required_amount = 0;
+        foreach ($sales_plan->unPaidInstallments as $installment) {
+            if ($installment->remaining_amount == 0) {
                 $paid_amount = $installment->amount;
                 $total_amount = $installment->amount;
-            }
-            else{
+            } else {
                 $paid_amount = $installment->remaining_amount;
                 $total_amount = $installment->amount - $paid_amount;
             }
             $calculate_amount = $calculate_amount + $paid_amount;
-            if($amount_to_be_paid >= $calculate_amount){
-                $partially_paid = 0.0;
-                if($installment->status == 'partially_paid'){
+            if ($amount_to_be_paid >= $calculate_amount) {
+                $partially_paid = 0;
+                if ($installment->status == 'partially_paid') {
                     $partially_paid = $installment->paid_amount;
                     $paid_amount = $paid_amount + $installment->paid_amount;
                     $remaining_amount = $installment->amount - $paid_amount;
@@ -214,33 +249,30 @@ class ReceiptController extends Controller
                     'date' => $installment->date,
                     'amount' => $installment->amount,
                     'paid_amount' => $paid_amount,
-                    'remaining_amount' => 0.0,
+                    'remaining_amount' => 0,
                     'installment_order' => $installment->installment_order,
                     'partially_paid' => $partially_paid,
                     'detail' => $installment->details,
                 ];
-            }
-            else{
-                foreach($installmentFullyPaidUnderAmount as $to_be_paid_installments){
-                    if($to_be_paid_installments['partially_paid'] !== 0.0){
+            } else {
+                foreach ($installmentFullyPaidUnderAmount as $to_be_paid_installments) {
+                    if ($to_be_paid_installments['partially_paid'] !== 0) {
                         $to_be_paid_calculate_amount = $to_be_paid_installments['paid_amount'] - $to_be_paid_installments['partially_paid'];
-                    }
-                    else{
+                    } else {
                         $to_be_paid_calculate_amount = $to_be_paid_calculate_amount + $to_be_paid_installments['paid_amount'];
                     }
                 }
-                if($to_be_paid_calculate_amount < $amount_to_be_paid){
+                if ($to_be_paid_calculate_amount < $amount_to_be_paid) {
 
-                    if($to_be_paid_calculate_amount == 0){
+                    if ($to_be_paid_calculate_amount == 0) {
                         $amount_to_be_paid = $installment->amount - $amount_to_be_paid;
-                        $paid_amount =$installment->amount - $amount_to_be_paid;
+                        $paid_amount = $installment->amount - $amount_to_be_paid;
                         $remaining_amount = $installment->amount - $paid_amount;
-                    }
-                    else{
+                    } else {
                         $paid_amount = $amount_to_be_paid - $to_be_paid_calculate_amount;
                         $remaining_amount = $installment->amount - $paid_amount;
                     }
-                    if($installment->status == 'partially_paid'){
+                    if ($installment->status == 'partially_paid') {
                         $partially_paid = $paid_amount;
                         $paid_amount = $paid_amount + $installment->paid_amount;
                         $remaining_amount = $installment->amount - $paid_amount;
@@ -259,45 +291,46 @@ class ReceiptController extends Controller
                 }
 
                 break;
-
             }
         }
-        foreach($sales_plan->unPaidInstallments as $installment){
-            if($installment->status == 'partially_paid'){
+        foreach ($sales_plan->unPaidInstallments as $installment) {
+            if ($installment->status == 'partially_paid') {
                 $total_installment_required_amount = $total_installment_required_amount +  $installment->remaining_amount;
-            }
-            else{
+            } else {
                 $total_installment_required_amount = $total_installment_required_amount +  $installment->amount;
             }
         }
 
-        $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount,$installmentPartialyPaidUnderAmount);
+        $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
         $amount_entered = (float)$request->amount;
 
-        if($amount_entered > $total_installment_required_amount){
+        if ($amount_entered > $total_installment_required_amount) {
             return response()->json([
                 'success' => false,
-                'message' => 'Entered Amount is greater than Required Amount. Required Amount is '.$total_installment_required_amount,
+                'message' => 'Entered Amount is greater than Required Amount. Required Amount is ' . $total_installment_required_amount,
             ], 200);
         }
 
         return response()->json([
             'success' => true,
-            'sales_plan' =>$sales_plan,
+            'sales_plan' => $sales_plan,
             'unpaid_installments_to_be_paid' => $installmentFullyPaidUnderAmount,
             'unpaid_installments_to_be_partialy_paid' => $installmentPartialyPaidUnderAmount,
             'total_calculated_installments' => $total_calculated_installments,
             'total_installment_required_amount' => $total_installment_required_amount,
             'amount_to_be_paid' => $request->amount,
-            'already_paid' =>$sales_plan->PaidorPartiallyPaidInstallments,
+            'already_paid' => $sales_plan->PaidorPartiallyPaidInstallments,
+            'stakeholders' => $stakeholders,
         ], 200);
     }
 
-    public function printReceipt($site_id,$receipt_id,$template_id){
+
+    public function printReceipt($site_id, $receipt_id, $template_id)
+    {
 
         $receipt_data = Receipt::find($receipt_id);
 
-        $template =ReceiptTemplate::find(decryptParams($template_id));
+        $template = ReceiptTemplate::find(decryptParams($template_id));
 
         $unit = Unit::find($receipt_data->unit_id);
 
@@ -306,7 +339,7 @@ class ReceiptController extends Controller
             'unit_type' => $unit->type->name,
             'unit_floor' => $unit->floor->name,
             'name' => $receipt_data->name,
-            'cnic' => str_split( $receipt_data->cnic),
+            'cnic' => str_split($receipt_data->cnic),
             'mode_of_payment' => $receipt_data->mode_of_payment,
             'other_value' => $receipt_data->other_value,
             'pay_order' => $receipt_data->pay_order,
@@ -318,11 +351,9 @@ class ReceiptController extends Controller
             'amount_in_words' =>  numberToWords($receipt_data->amount_in_numbers),
             'purpose' => $receipt_data->purpose,
             'other_purpose' => $receipt_data->other_purpose,
-            'installment_number' =>str_replace(str_split('[]"'), '', $receipt_data->installment_number),
+            'installment_number' => str_replace(str_split('[]"'), '', $receipt_data->installment_number),
             'online_instrument_no' => $receipt_data->online_instrument_no,
         ];
-
-        return view('app.sites.receipts.templates.'.$template->slug ,compact('preview_data'));
+        return view('app.sites.receipts.templates.' . $template->slug, compact('preview_data'));
     }
-
 }

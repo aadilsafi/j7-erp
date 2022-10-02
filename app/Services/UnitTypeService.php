@@ -66,7 +66,9 @@ class UnitTypeService implements UnitTypeInterface
 
         $typesIDs = array_merge($id, array_column($types, 'id'));
 
-        $this->model()->whereIn('id', $typesIDs)->delete();
+        $this->model()->whereIn('id', $typesIDs)->get()->each(function ($row) {
+            $row->delete();
+        });
 
         return true;
     }

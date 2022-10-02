@@ -123,7 +123,8 @@
 
                 </td>
                 <th style="text-align: center; width:8%;">Date</th>
-                <td class="date" style="text-align: center;  width:20%; border-bottom: 1px solid black; ">
+                <td  style="text-align: center;  width:20%; border-bottom: 1px solid black; ">
+                    {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
                 </td>
             </tr>
 
@@ -229,7 +230,8 @@
                     @endif
                     <span disabled class="checkmark" style="margin-left:15px;">Other</span>
                     @if ($preview_data['other_value'])
-                        <span style=" border-bottom: 1px solid black; ">&nbsp;&nbsp;&nbsp; {{ $preview_data['other_value'] }}&nbsp;&nbsp;&nbsp;</span>
+                        <span style=" border-bottom: 1px solid black; ">&nbsp;&nbsp;&nbsp;
+                            {{ $preview_data['other_value'] }}&nbsp;&nbsp;&nbsp;</span>
                     @else
                         <span style="">________________________</span>
                     @endif
@@ -314,7 +316,7 @@
                 </th>
                 <td style="text-align: start; width:20%;  ">
                     <input disabled style="width: 20%; height:20px; border:1px solid; text-align:center;"
-                        value="RS {{ $preview_data['amount_in_numbers'] }}" type="text">
+                        value="RS {{ number_format($preview_data['amount_in_numbers']) }}" type="text">
                 </td>
             </tr>
 
@@ -326,17 +328,22 @@
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:0.5%; ">Purpose</th>
                 <td style="text-align: start; width:10%; ">
+                    @if ($preview_data['purpose'][0] == 'D')
+                        <input disabled type="checkbox" checked="checked">
+                    @else
+                        <input disabled type="checkbox">
+                    @endif
 
-                    <input disabled type="checkbox" checked="checked">
                     <span class="checkmark" style="margin-left:15px;">Downpayment</span>
 
-                    <input disabled type="checkbox" style="margin-left:15px;">
-                    <span class="checkmark" style="margin-left:15px;">Installment</span>
-                    <span
-                        style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
+                    @if ($preview_data['purpose'][0] != 'D')
+                        <input disabled type="checkbox"  style="margin-left:15px;" checked="checked">
+                    @else
+                        <input disabled type="checkbox"  style="margin-left:15px;">
+                    @endif
 
-                    {{-- <input type="checkbox" style="margin-left:15px;">
-                    <span class="checkmark" style="margin-left:15px;">Online</span> --}}
+                    <span class="checkmark" style="margin-left:15px;">Installment</span>
+                    <span style="border-bottom: 1px solid black; margin-left:15px;">{{ $preview_data['installment_number'] }}</span>
 
                     <input disabled type="checkbox" style="margin-left:15px;">
                     <span class="checkmark" style="margin-left:15px;">Other</span>

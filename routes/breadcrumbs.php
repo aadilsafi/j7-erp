@@ -162,6 +162,37 @@ Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $s
     $trail->push('Edit Stakeholder');
 });
 
+//Users Breadcrumbs
+Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Users', route('sites.users.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.users.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->push('Create Users');
+});
+
+Breadcrumbs::for('sites.users.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->push('Edit Users');
+});
+
+//Teams Breadcrumbs
+Breadcrumbs::for('sites.teams.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Teams', route('sites.teams.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.teams.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.teams.index', encryptParams($site_id));
+    $trail->push('Create Team');
+});
+
+Breadcrumbs::for('sites.teams.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.teams.index', encryptParams($site_id));
+    $trail->push('Edit Team');
+});
 
 //Leads Source Breadcrumbs
 Breadcrumbs::for('sites.lead-sources.index', function (BreadcrumbTrail $trail, $site_id) {
@@ -203,6 +234,12 @@ Breadcrumbs::for('sites.receipts.edit', function (BreadcrumbTrail $trail, $site_
 });
 
 //File Management Breadcrumbs
+
+Breadcrumbs::for('sites.file-managements.view-files', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('View Customer Files', route('sites.file-managements.view-files', ['site_id' => $site_id]));
+});
+
 Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('File Management', route('sites.file-managements.customers', ['site_id' => $site_id]));
@@ -220,6 +257,34 @@ Breadcrumbs::for('sites.file-managements.customers.units.files.index', function 
 });
 
 Breadcrumbs::for('sites.file-managements.customers.units.files.create', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
-    $trail->parent('sites.file-managements.customers.units.files.index', $site_id, $customer_id, $unit_id);
+    $trail->parent('sites.file-managements.customers', $site_id);
     $trail->push('Create Files', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.viewFile', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.customers', $site_id);
+    $trail->push('View File', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+//Rebate Incentive Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.rebate-incentive.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Rebate Incentive Details', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.rebate-incentive.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.rebate-incentive.index', $site_id);
+    $trail->push('Create Rebate Incentive', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+
+//File Refund  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-refund.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Refund', route('sites.file-managements.file-refund.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-refund.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-refund.index', $site_id);
+    $trail->push('Create File Refund', route('sites.file-managements.rebate-incentive.create', ['site_id' => $site_id]));
+
 });

@@ -7,10 +7,12 @@ use App\Models\SalesPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Unit extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'floor_id',
@@ -78,6 +80,11 @@ class Unit extends Model
         'gross_area.gte' => 'The Gross Area must be greater than or equal to Net Area.',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+
     public function agent()
     {
         return $this->belongsTo(User::class);
@@ -115,7 +122,12 @@ class Unit extends Model
 
     public function salesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder');
+        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource');
+    }
+
+    public function file()
+    {
+        return $this->hasOne(FileManagement::class);
     }
 
 }

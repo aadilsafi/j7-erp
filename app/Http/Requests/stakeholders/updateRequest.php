@@ -25,6 +25,8 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules =  (new Stakeholder())->rules;
+        $rules['cnic'] .= ',' . decryptParams($this->id);
+        $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
         return $rules;
     }
@@ -37,14 +39,20 @@ class updateRequest extends FormRequest
      */
     public function withValidator($validator)
     {
-        if (!$validator->fails()) {
+        // if (!$validator->fails()) {
             $validator->after(function ($validator) {
-                $parent_id = $this->input('parent_id');
-                if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
-                    $validator->errors()->add('relation', 'Relation is required');
+                if (isset($this->stakeholder_type['K'])) {
+                    $parent_id = $this->parent_id;
+                    if ($parent_id < 1) {
+                        $validator->errors()->add('parent_id', 'Please select a next of kin');
+                    }
+
+                    if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
+                        $validator->errors()->add('relation', 'Relation is required');
+                    }
                 }
             });
-        }
+        // }
     }
 
     /**

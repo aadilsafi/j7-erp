@@ -675,6 +675,20 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.receipts.make-active-selected',
+                'show_name' => 'Make Active Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.destroy-draft',
+                'show_name' => 'Destroy Draft Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.receipts.templates.print',
                 'show_name' => 'Print Selected Receipts',
                 'guard_name' => 'web',
@@ -739,7 +753,211 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            // file management rebate incentive
+            [
+                'name' => 'sites.file-managements.rebate-incentive.index',
+                'show_name' => 'View Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.create',
+                'show_name' => 'Create Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.store',
+                'show_name' => 'Store Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.view-files',
+                'show_name' => 'View Customer Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // file management dealer incentive
+            [
+                'name' => 'sites.file-managements.dealer-incentive.index',
+                'show_name' => 'View Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.dealer-incentive.create',
+                'show_name' => 'Create Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.dealer-incentive.store',
+                'show_name' => 'Store Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File Refund
+            [
+                'name' => 'sites.file-managements.file-refund.index',
+                'show_name' => 'View File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-refund.create',
+                'show_name' => 'View File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-refund.store',
+                'show_name' => 'View File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File Buy Back
+            [
+                'name' => 'sites.file-managements.file-buy-back.index',
+                'show_name' => 'View File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-buy-back.create',
+                'show_name' => 'View File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-buy-back.store',
+                'show_name' => 'View File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File Cancellation
+            [
+                'name' => 'sites.file-managements.file-cancellation.index',
+                'show_name' => 'View File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-cancellation.create',
+                'show_name' => 'View File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-cancellation.store',
+                'show_name' => 'View File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File resale
+            [
+                'name' => 'sites.file-managements.file-resale.index',
+                'show_name' => 'View File Re-sale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-resale.create',
+                'show_name' => 'View File Re-sale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-resale.store',
+                'show_name' => 'View File Re-sale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File title transfer
+            [
+                'name' => 'sites.file-managements.file-title-transfer.index',
+                'show_name' => 'View File Title-Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-title-transfer.create',
+                'show_name' => 'View File Title-Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-title-transfer.store',
+                'show_name' => 'View File Title-Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File title adjustment
+            [
+                'name' => 'sites.file-managements.file-adjustment.index',
+                'show_name' => 'View File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-adjustment.create',
+                'show_name' => 'View File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-adjustment.store',
+                'show_name' => 'View File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // File unit shifting
+            [
+                'name' => 'sites.file-managements.unit-shifting.index',
+                'show_name' => 'View File Unit Shifting',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.unit-shifting.create',
+                'show_name' => 'View File Unit Shifting',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.unit-shifting.store',
+                'show_name' => 'View File Unit Shifting',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //Commands Route
             [
                 'name' => 'commands.command',
@@ -748,7 +966,118 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // Users
+            [
+                'name' => 'sites.users.index',
+                'show_name' => 'View Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.create',
+                'show_name' => 'Create Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.store',
+                'show_name' => 'Store Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.edit',
+                'show_name' => 'Edit Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.update',
+                'show_name' => 'Update Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.destroy',
+                'show_name' => 'Destroy Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Users',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.users.edit.password',
+                'show_name' => 'Edit Sites Users Password',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
+            // Users Teams
+            [
+                'name' => 'sites.teams.index',
+                'show_name' => 'View Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.create',
+                'show_name' => 'Create Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.store',
+                'show_name' => 'Store Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.edit',
+                'show_name' => 'Edit Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.update',
+                'show_name' => 'Update Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.destroy',
+                'show_name' => 'Destroy Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.teams.destroy-selected',
+                'show_name' => 'Destroy Selected Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
+
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));
     }

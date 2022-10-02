@@ -6,7 +6,6 @@ use App\DataTables\SalesPlanDataTable;
 use App\Models\{SalesPlan, Floor, Site, Unit, User};
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
-use App\Services\Interfaces\AdditionalCostInterface;
 use App\Services\{
     SalesPlan\Interface\SalesPlanInterface,
     Stakeholder\Interface\StakeholderInterface,
@@ -16,6 +15,7 @@ use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
+use App\Services\AdditionalCosts\AdditionalCostInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -75,7 +75,6 @@ class SalesPlanController extends Controller
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
             ];
-            // dd($data);
 
             return view('app.sites.floors.units.sales-plan.create', $data);
         } else {
@@ -91,6 +90,7 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id, $unit_id)
     {
+        // dd($request->all());
         try {
             $inputs = $request->input();
 
@@ -180,6 +180,10 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
         ];
 
+        actionLog(get_class($salesPlan), auth()->user(), $role, 'print', [
+            'attributes' => $salesPlan->toArray()
+        ]);
+
         return view('app.sites.floors.units.sales-plan.sales-plan-templates.' . $template->slug, compact('data'));
     }
 
@@ -203,10 +207,12 @@ class SalesPlanController extends Controller
 
         $salesPlan = (new SalesPlan())->where('id', '>', 0)->where('unit_id',decryptParams($unit_id))->update([
             'status' => 2,
+            'approved_date' => now(),
         ]);
 
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
+            'approved_date' => now(),
         ]);
 
         $salesPlan = SalesPlan::find($request->salesPlanID);

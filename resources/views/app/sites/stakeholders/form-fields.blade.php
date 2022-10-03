@@ -8,6 +8,7 @@
                         {{ isset($stakeholder) ? 'disabled' : null }}>
                         <option value="0" selected>Select Stakeholder Type</option>
                         @foreach ($stakeholderTypes as $key => $value)
+                        @continue($value == 'K')
                             <option value="{{ $value }}">
                                 {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
                             </option>
@@ -30,7 +31,7 @@
                                     <input type="checkbox" class="form-check-input"
                                         id="stakeholder_type_{{ $type->type }}" onchange="performAction('{{ $type->type }}')"
                                         name="stakeholder_type[{{ $type->type }}]" value="1"
-                                        {{ $type->status ? 'checked disabled' : null }} />
+                                        {{ $type->status ? 'checked' : null }} {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
                                     <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                         <span class="switch-icon-left"><i data-feather="check"></i></span>
                                         <span class="switch-icon-right"><i data-feather="x"></i></span>

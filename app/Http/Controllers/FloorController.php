@@ -45,7 +45,6 @@ class FloorController extends Controller
      */
     public function index(FloorsDataTable $dataTable, $site_id, Request $request)
     {
-
         $nonActiveFloors = (new Floor())->where('active', false)->where('site_id', decryptParams($site_id))->get();
         if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
             return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
@@ -191,12 +190,12 @@ class FloorController extends Controller
      */
     public function edit(Request $request, $site_id, $id)
     {
-        $site = Site::where('id', decryptParams($site_id))->with('siteConfiguration')->first();
+        $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
         try {
             $floor = $this->floorInterface->getById($site_id, $id);
             if ($floor && !empty($floor)) {
                 $data = [
-                    'site_id' => $site_id,
+                    'site_id' => $site->id,
                     'floor' => $floor,
                     'floorShortLable' => $site->siteConfiguration->floor_prefix,
                 ];

@@ -75,7 +75,7 @@ class ReceiptController extends Controller
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
                 if (isset($record['remaining_amount'])) {
-                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst ' . $record['unit_name'] . ' saved. Remaining amount is ' . $record['remaining_amount']))->with('remaining_amount', $record['remaining_amount']);
+                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst ' . $record['unit_name'] . ' saved as draft. Remaining amount is ' . $record['remaining_amount']))->with('remaining_amount', $record['remaining_amount']);
                 } else {
                     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
                 }
@@ -116,10 +116,15 @@ class ReceiptController extends Controller
         $last_index = array_key_last($installmentNumbersArray);
         $first_letter = str_split($installmentNumbersArray[$last_index]);
         $unit_data =  $receipt->unit;
+        $lastIntsalmentStatus = SalesPlanInstallments::orderBy('id', 'desc')->first()->status;
         $last_paid_installment_id = SalesPlanInstallments::where('details', 'LIKE', '%' . $first_letter[0] . '%')->where('sales_plan_id', $receipt->sales_plan_id)->first()->id;
         $unpadid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
+        // if($lastIntsalmentStatus == 'paid'){
+        //     $paid_installments = SalesPlanInstallments::all();
+        //     $unpadid_installments = null;
+        // }
         return view('app.sites.receipts.preview', compact('site_id', 'unit_data', 'stakeholder_data', 'paid_installments', 'unpadid_installments', 'receipt', 'image'));
     }
 

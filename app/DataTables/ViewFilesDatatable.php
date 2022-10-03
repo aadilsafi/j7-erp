@@ -2,15 +2,16 @@
 
 namespace App\DataTables;
 
-use App\Models\FileManagement;
 use App\Models\Stakeholder;
+use App\Models\FileManagement;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Route;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ViewFilesDatatable extends DataTable
 {
@@ -63,6 +64,9 @@ class ViewFilesDatatable extends DataTable
             })
             ->editColumn('actions', function ($fileManagement) {
                 return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
+            })
+            ->editColumn('refund_actions', function ($fileManagement) {
+                return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -121,6 +125,10 @@ class ViewFilesDatatable extends DataTable
      */
     protected function getColumns(): array
     {
+        $refundRoute = false;
+        if (Route::current()->getName() == "sites.file-managements.file-refund.index"){
+                $refundRoute = true;
+        }
         return [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
@@ -131,10 +139,17 @@ class ViewFilesDatatable extends DataTable
             Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Son of')->addClass('text-nowrap'),
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
-            Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
-            Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
+            // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            (
+                $refundRoute ?
+                Column::computed('refund_actions')->title('Refund Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('refund_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
+
     }
 
     /**

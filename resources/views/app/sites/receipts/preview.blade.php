@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                        width: calc(20% - 0.5em);
-                                    } */
+                                            width: calc(20% - 0.5em);
+                                        } */
     </style>
 @endsection
 
@@ -204,53 +204,52 @@
                                         readonly />
                                 </div>
                                 @if ($receipt->mode_of_payment == 'Cheque')
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">Check Number</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_type"
-                                        name="unit[type]" placeholder="Check Number"
-                                        value="{{ $receipt->cheque_no }}" readonly />
-                                </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                        <label class="form-label fs-5" for="unit_type">Check Number</label>
+                                        <input type="text" class="form-control form-control-lg" id="unit_type"
+                                            name="unit[type]" placeholder="Check Number"
+                                            value="{{ $receipt->cheque_no }}" readonly />
+                                    </div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">Bank Name</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_type"
-                                        name="unit[type]" placeholder="Bank Name"
-                                        value="{{ $receipt->bank_details }}"
-                                        readonly />
-                                </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                        <label class="form-label fs-5" for="unit_type">Bank Name</label>
+                                        <input type="text" class="form-control form-control-lg" id="unit_type"
+                                            name="unit[type]" placeholder="Bank Name"
+                                            value="{{ $receipt->bank_details }}" readonly />
+                                    </div>
                                 @endif
-                              
-                                @if ($receipt->mode_of_payment == 'Online')
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">Transaction No</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_type"
-                                        name="unit[type]" placeholder="Transaction No"
-                                        value="{{ $receipt->online_instrument_no }}" readonly />
-                                </div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">Transaction Date</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_type"
-                                        name="unit[type]" placeholder="Transaction Date"
-                                        value="{{ $receipt->transaction_date }}"
-                                        readonly />
-                                </div>
+                                @if ($receipt->mode_of_payment == 'Online')
+                                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                        <label class="form-label fs-5" for="unit_type">Transaction No</label>
+                                        <input type="text" class="form-control form-control-lg" id="unit_type"
+                                            name="unit[type]" placeholder="Transaction No"
+                                            value="{{ $receipt->online_instrument_no }}" readonly />
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                        <label class="form-label fs-5" for="unit_type">Transaction Date</label>
+                                        <input type="text" class="form-control form-control-lg" id="unit_type"
+                                            name="unit[type]" placeholder="Transaction Date"
+                                            value="{{ $receipt->transaction_date }}" readonly />
+                                    </div>
                                 @endif
 
                                 @if ($receipt->mode_of_payment == 'Other')
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">Other Payment Mode</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_type"
-                                        name="unit[type]" placeholder="Other Payment Mode"
-                                        value="{{ $receipt->other_value }}" readonly />
-                                </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                        <label class="form-label fs-5" for="unit_type">Other Payment Mode</label>
+                                        <input type="text" class="form-control form-control-lg" id="unit_type"
+                                            name="unit[type]" placeholder="Other Payment Mode"
+                                            value="{{ $receipt->other_value }}" readonly />
+                                    </div>
                                 @endif
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                     <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} only." readonly />
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} only."
+                                        readonly />
                                 </div>
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
@@ -363,21 +362,23 @@
                                                 $z = 0;
                                             @endphp
                                             <tbody id="dynamic_installment_rows">
-                                                @foreach ($unpadid_installments as $unPaidIntsallment)
-                                                    @php
-                                                        $z = $z + 1;
-                                                    @endphp
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $z }}</td>
-                                                        <td>{{ $unPaidIntsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($unPaidIntsallment->amount) }}</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>UnPaid</td>
-                                                    </tr>
-                                                @endforeach
+                                                @isset($unpadid_installments)
+                                                    @foreach ($unpadid_installments as $unPaidIntsallment)
+                                                        @php
+                                                            $z = $z + 1;
+                                                        @endphp
+                                                        <tr class="text-center text-nowrap">
+                                                            <td>{{ $z }}</td>
+                                                            <td>{{ $unPaidIntsallment->details }}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
+                                                            </td>
+                                                            <td>{{ number_format($unPaidIntsallment->amount) }}</td>
+                                                            <td>-</td>
+                                                            <td>-</td>
+                                                            <td>UnPaid</td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endisset
                                             </tbody>
                                         </table>
                                     </div>

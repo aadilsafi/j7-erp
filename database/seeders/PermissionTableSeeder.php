@@ -840,6 +840,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-refund.approve',
+                'show_name' => 'Approve File Refund Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File Buy Back
             [
                 'name' => 'sites.file-managements.file-buy-back.index',
@@ -858,6 +865,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-buy-back.store',
                 'show_name' => 'View File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-buy-back.approve',
+                'show_name' => 'Approve File Buy Back Request',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -884,6 +898,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-cancellation.approve',
+                'show_name' => 'Approve File Cancallation Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File resale
             [
                 'name' => 'sites.file-managements.file-resale.index',
@@ -902,6 +923,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-resale.store',
                 'show_name' => 'View File Re-sale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-resale.approve',
+                'show_name' => 'Approve File Resale Request',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -928,6 +956,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-title-transfer.approve',
+                'show_name' => 'Approve File Title Transfer Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File title adjustment
             [
                 'name' => 'sites.file-managements.file-adjustment.index',
@@ -946,6 +981,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-adjustment.store',
                 'show_name' => 'View File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-adjustment.approve',
+                'show_name' => 'Approve File Title Adjustment Request',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

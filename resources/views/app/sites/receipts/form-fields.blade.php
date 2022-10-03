@@ -24,7 +24,7 @@
                                                         @continue(isset($unit) && $unit->id == $row['id'])
                                                         <option value="{{ $row->id }}"
                                                             {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
-                                                            {{ $row->name }} ( {{ $row->floor_unit_number }} )
+                                                            {{ $row->name }} ( {{ $row->floor_unit_number }}) ( {{ $row->salesPlan[0]['stakeholder']['full_name'] }} , {{ $row->salesPlan[0]['stakeholder']['cnic']  }})
                                                         </option>
                                                     @endif
                                                 @endforeach

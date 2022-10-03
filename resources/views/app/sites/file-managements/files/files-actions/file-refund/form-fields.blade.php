@@ -13,19 +13,19 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
-                        <input type="text" name="amount_to_be_refunded" class="form-control form-control-lg"
-                            id="amount_to_be_refunded" placeholder="amount to be refunded" />
+                        <input type="text" required name="amount_to_be_refunded" class="form-control form-control-lg"
+                            id="amount_to_be_refunded" placeholder="Amount to be refunded" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
-                        <input type="text" name="payment_due_date" class="form-control form-control-lg"
+                        <input type="date" required name="payment_due_date" class="form-control form-control-lg"
                             id="payment_due_date" placeholder="Payment Due Date" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
-                        <input type="text" class="form-control form-control-lg" id="remarks"
+                        <input type="text" name="amount_remarks" required class="form-control form-control-lg" id="remarks"
                             placeholder="Amount Remarks" />
                     </div>
 
@@ -106,12 +106,10 @@
         </div>
     </div>
 
-
-
-
     <div id="customerData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">
+            <input type="hidden" value="{{ $customer->id }}" name="customer_id">
             <div class="card-header justify-content-between">
                 <h3> Customer Data </h3>
             </div>
@@ -176,6 +174,7 @@
     <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">
+            <input type="hidden" value="{{ $unit->id }}" name="unit_id">
             <div class="card-header justify-content-between">
                 <h3> Unit Data </h3>
             </div>

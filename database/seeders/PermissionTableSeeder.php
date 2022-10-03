@@ -776,6 +776,20 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.file-managements.rebate-incentive.edit',
+                'show_name' => 'Edit Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.update',
+                'show_name' => 'Update Rebate Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.file-managements.view-files',
                 'show_name' => 'View Customer Files',
                 'guard_name' => 'web',

@@ -20,6 +20,7 @@ class RebateIncentiveModel extends Model
         'commision_total',
         'status',
         'comments',
+        'dealer_id',
     ];
 
     public function site()

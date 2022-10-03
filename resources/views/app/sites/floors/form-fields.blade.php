@@ -11,7 +11,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="floor_order">Floor Order</label>
         <input type="text" class="form-control form-control-lg @error('floor_order') is-invalid @enderror" id="floor_order"
-            name="floor_order" placeholder="Floor Order" value="{{ isset($floor) ? $floor->order : (old('order') ?? 0) }}" readonly />
+            name="floor_order" placeholder="Floor Order" value="{{ isset($floor) ? $floor->order : (old('order') ?? $floorOrder) }}" readonly />
         @error('name')
             <div class="invalid-tooltip">{{ $message }}</div>
         @enderror

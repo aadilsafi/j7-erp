@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.create', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.create', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Create Floor')
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Floor</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.create', $site_id) }}
+                    {{ Breadcrumbs::render('sites.floors.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
 
 @section('content')
     <div class="card">
-        <form class="form form-vertical" action="{{ route('sites.floors.store', ['site_id' => $site_id]) }}" method="POST">
+        <form class="form form-vertical" action="{{ route('sites.floors.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
             <div class="card-header">
             </div>
@@ -39,7 +39,7 @@
             <div class="card-body">
 
                 @csrf
-                {{ view('app.sites.floors.form-fields', ['floorShortLable' => $floorShortLable]) }}
+                {{ view('app.sites.floors.form-fields', ['floorShortLable' => $floorShortLable, 'floorOrder' => $floorOrder]) }}
 
             </div>
 
@@ -48,7 +48,7 @@
                     <i data-feather='save'></i>
                     Save Floor
                 </button>
-                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]) }}"
+                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>
                     {{ __('lang.commons.cancel') }}

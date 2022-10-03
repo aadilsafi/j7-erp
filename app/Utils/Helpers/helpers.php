@@ -2,6 +2,7 @@
 
 use App\Models\{
     AdditionalCost,
+    Floor,
     SiteConfigration,
     Type,
     UserBatch,
@@ -596,5 +597,12 @@ if (!function_exists('actionLog')) {
         ->event($event)
         ->withProperties($properties)
         ->log($log);
+    }
+}
+
+if (!function_exists('getMaxFloorOrder')) {
+    function getMaxFloorOrder($site_id)
+    {
+        return (new Floor())->where('site_id', $site_id)->max('order');
     }
 }

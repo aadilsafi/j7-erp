@@ -5,27 +5,34 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class RebateIncentiveModel extends Model
+class FileRefund extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'site_id',
+        'file_id',
         'unit_id',
         'stakeholder_id',
+        'dealer_id',
         'stakeholder_data',
         'unit_data',
-        'deal_type',
-        'commision_percentage',
-        'commision_total',
+        'dealer_data',
+        'amount_to_be_refunded',
+        'payment_due_date',
         'status',
         'comments',
-        'dealer_id',
     ];
 
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(FileManagement::class);
     }
 
     public function unit()
@@ -36,6 +43,11 @@ class RebateIncentiveModel extends Model
     public function stakeholder()
     {
         return $this->belongsTo(Stakeholder::class);
+    }
+
+    public function fileRefundAttachments()
+    {
+        return $this->hasMany(FileRefundAttachment::class);
     }
 
 }

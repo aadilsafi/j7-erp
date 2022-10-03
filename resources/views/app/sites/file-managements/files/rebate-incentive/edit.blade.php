@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.rebate-incentive.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create Rebate Incentive')
+@section('page-title', 'Edit Rebate Incentive')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/forms/wizard/bs-stepper.min.css">
@@ -20,7 +20,7 @@
 @section('custom-css')
     <style>
         .hideDiv {
-                display: none;
+               
             }
     </style>
 @endsection
@@ -29,7 +29,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Rebate Incentive</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Rebate Incentive</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.file-managements.rebate-incentive.create', encryptParams($site_id)) }}
                 </div>
@@ -48,9 +48,9 @@
             <div  class="col-lg-9 col-md-9 col-sm-12 position-relative">
                 {{ view('app.sites.file-managements.files.rebate-incentive.form-fields', [
                     'site_id' => $site_id,
-                    'units' => $units,
+                    'edit_unit' => $edit_unit,
                     'dealer_data' =>$dealer_data,
-                    'rebate_files' => $rebate_files
+                    'rebate_data' => $rebate_data
                 ]) }}
             </div>
             <div  class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -94,7 +94,12 @@
 
 @section('custom-js')
     <script type="text/javascript">
+    let x = '{{$edit_unit->unit_id}}';
+    alert(x);
+    // getData({{$edit_unit->unit_id}});
+
         function getData(unit_id) {
+            alert(unit_id);
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.file-managements.rebate-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";

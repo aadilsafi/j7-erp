@@ -94,4 +94,9 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->hasMany(StakeholderContact::class);
     }
+
+    public function dealer_stakeholder()
+    {
+        return $this->hasMany(StakeholderType::class)->where('type','D')->where('status',1);
+    }
 }

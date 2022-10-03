@@ -362,7 +362,10 @@ Route::group([
 
                         Route::get('create', [RebateIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [RebateIncentiveController::class, 'store'])->name('store');
-
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [RebateIncentiveController::class, 'edit'])->name('edit');
+                            Route::put('update', [RebateIncentiveController::class, 'update'])->name('update');
+                    });
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
                         });

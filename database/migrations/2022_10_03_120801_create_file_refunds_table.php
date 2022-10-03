@@ -13,19 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rebate_incentive_models', function (Blueprint $table) {
+        Schema::create('file_refunds', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
+            $table->foreignId('file_id')->constrained('file_management');
             $table->foreignId('unit_id')->constrained('units');
+            $table->foreignId('dealer_id')->nullable();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->longText('stakeholder_data')->nullable();
             $table->longText('unit_data')->nullable();
-            $table->string('deal_type')->nullable();
-            $table->string('commision_percentage')->nullable();
-            $table->string('commision_total')->nullable();
+            $table->longText('dealer_data')->nullable();
+            $table->string('amount_to_be_refunded')->nullable();
+            $table->string('payment_due_date')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
-            $table->foreignId('dealer_id')->constrained('stakeholders');
             $table->timestamps();
         });
     }
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rebate_incentive_models');
+        Schema::dropIfExists('file_refunds');
     }
 };

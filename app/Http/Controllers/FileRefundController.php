@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Unit;
+use App\Models\Stakeholder;
 use Illuminate\Http\Request;
+use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\Models\ReceiptDraftModel;
 use App\DataTables\ViewFilesDatatable;
-use App\Models\Stakeholder;
+use App\Http\Requests\FileRefund\store;
+use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 
 class FileRefundController extends Controller
 {
@@ -15,7 +19,17 @@ class FileRefundController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
      */
+
+    private $refundInterface;
+
+    public function __construct(
+        RefundInterface $refundInterface
+    ) {
+        $this->refundInterface = $refundInterface;
+    }
+
     public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
     {
         $data = [
@@ -41,6 +55,7 @@ class FileRefundController extends Controller
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
+                'file' => FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first(),
             ];
             return view('app.sites.file-managements.files.files-actions.file-refund.create', $data);
         } else {
@@ -54,11 +69,19 @@ class FileRefundController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(store $request ,$site_id)
     {
-        //
-        abort(403);
-        dd($request->all());
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->refundInterface->store($site_id, $data);
+                return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                        width: calc(20% - 0.5em);
-                                                                    } */
+                                                                            width: calc(20% - 0.5em);
+                                                                        } */
     </style>
 @endsection
 
@@ -58,6 +58,7 @@
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
+                    'file' =>$file,
                 ]) }}
             </div>
 
@@ -65,15 +66,15 @@
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
-
-                        {{-- <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="type_name">Attachment</label>
-                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment" accept="image/png, image/jpeg, image/gif" />
-                            @error('attachment')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> --}}
+                        <input type="hidden" name="file_id" value="{{ $file->id }}">
+                        <div class="d-block mb-1">
+                            <div class="form-check form-check-primary">
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" >
+                                <label class="form-check-label" for="colorCheck3">
+                                        Attachement Attached
+                                </label>
+                            </div>
+                        </div>
 
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
@@ -159,30 +160,31 @@
                 $(this).slideUp(e)
             }
         });
+        // const input = $('.attachment');
         $('#add-new-attachment').on('click', function() {
             FilePond.registerPlugin(
-            FilePondPluginImagePreview,
-            FilePondPluginFileValidateType,
-            FilePondPluginFileValidateSize,
-            FilePondPluginImageValidateSize,
-            FilePondPluginImageCrop,
-        );
+                FilePondPluginImagePreview,
+                FilePondPluginFileValidateType,
+                FilePondPluginFileValidateSize,
+                FilePondPluginImageValidateSize,
+                FilePondPluginImageCrop,
+            );
 
-        FilePond.create(document.getElementById('attachment'), {
-            styleButtonRemoveItemPosition: 'right',
-            imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
-            maxFileSize: '1536KB',
-            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-            storeAsFile: true,
-            allowMultiple: true,
-            maxFiles: 1,
-            checkValidity: true,
-            credits: {
-                label: '',
-                url: ''
-            }
-        });
+            FilePond.create(document.getElementById('attachment'), {
+                styleButtonRemoveItemPosition: 'right',
+                imageCropAspectRatio: '1:1',
+                acceptedFileTypes: ['image/png', 'image/jpeg'],
+                maxFileSize: '1536KB',
+                ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+                storeAsFile: true,
+                allowMultiple: true,
+                maxFiles: 1,
+                checkValidity: true,
+                credits: {
+                    label: '',
+                    url: ''
+                }
+            });
         });
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();

@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             FileManagementTableSeeder::class,
             ReceiptsTableSeeder::class,
             UnitStakeholdersTableSeeder::class,
-            RebateIncentiveSeeder::class,
+            // RebateIncentiveSeeder::class,
             TeamSeeder::class,
             TeamUserSeeder::class,
         ]);

@@ -64,7 +64,7 @@ class RebateIncentiveDataTable extends DataTable
                 return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
             // ->editColumn('actions', function ($rebateIncentive) {
-            //     return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $rebateIncentive->id]);
+            //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $rebateIncentive->id]);
             // })
             ->editColumn('check', function ($rebateIncentive) {
                 return $rebateIncentive;
@@ -182,7 +182,6 @@ class RebateIncentiveDataTable extends DataTable
             Column::computed('commision_total')->title('Commision Total')->addClass('text-nowrap text-center'),
             Column::computed('status')->title('Status')->addClass('text-nowrap text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap text-center'),
-
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
 
 

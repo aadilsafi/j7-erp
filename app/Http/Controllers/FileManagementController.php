@@ -106,7 +106,8 @@ class FileManagementController extends Controller
         if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
         }
-        if (isset($data['customer_file'])) {
+        // && $data['customer_file']['file_action_id'] == 1
+        if (isset($data['customer_file']) ) {
             return view('app.sites.file-managements.files.viewFile', $data);
         }
         return view('app.sites.file-managements.files.create', $data);

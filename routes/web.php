@@ -371,6 +371,7 @@ Route::group([
                         Route::get('approve/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'ApproveFileRefund'])->name('approve');
                         Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
                         Route::post('store', [FileRefundController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'show'])->name('preview');
                     });
 
                     // file buy back

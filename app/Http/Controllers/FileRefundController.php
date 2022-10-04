@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Unit;
+use App\Models\Receipt;
+use App\Models\SalesPlan;
+use App\Models\FileRefund;
 use App\Models\Stakeholder;
 use Illuminate\Http\Request;
 use App\Models\FileManagement;
+use Psy\Readline\Hoa\FileRead;
 use App\Models\UnitStakeholder;
 use App\Models\ReceiptDraftModel;
+use App\Models\FileRefundAttachment;
 use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileRefund\store;
-use App\Models\FileRefund;
-use App\Models\SalesPlan;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
-use Psy\Readline\Hoa\FileRead;
 
 class FileRefundController extends Controller
 {
@@ -93,9 +95,28 @@ class FileRefundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $unit_id, $customer_id, $id)
     {
-        //
+        $files_labels = FileRefundAttachment::where('file_refund_id', decryptParams($id))->get();
+        $images = [];
+
+        foreach ($files_labels as $key=>$file) {
+            $image = $file->getFirstMedia('file_refund_attachments');
+            $images[$key] = $image->getUrl();
+        }
+
+        // dd($images);
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'unit' => Unit::find(decryptParams($unit_id)),
+            'customer' => Stakeholder::find(decryptParams($customer_id)),
+            'refund_file' => (new FileRefund())->find(decryptParams($id)),
+            'images' => $images,
+            'labels' => $files_labels,
+        ];
+
+        return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);
     }
 
     /**
@@ -143,15 +164,22 @@ class FileRefundController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first();
+        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
         $file->file_action_id = 2;
         $file->update();
 
-        $salesPlan = SalesPlan::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->where('status',1)->get();
-        foreach($salesPlan as $salesPlan){
+        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+        foreach ($salesPlan as $salesPlan) {
             $SalesPlan = SalesPlan::find($salesPlan->id);
             $SalesPlan->status = 3;
             $SalesPlan->update();
+        }
+
+        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+        foreach ($receipt as $receipt) {
+            $Receipt = Receipt::find($receipt->id);
+            $Receipt->status = 2;
+            $Receipt->update();
         }
 
         return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');

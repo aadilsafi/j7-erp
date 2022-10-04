@@ -896,6 +896,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-buy-back.preview',
+                'show_name' => 'Preview File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File Cancellation
             [
                 'name' => 'sites.file-managements.file-cancellation.index',

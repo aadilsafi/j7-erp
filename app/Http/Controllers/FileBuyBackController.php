@@ -98,7 +98,7 @@ class FileBuyBackController extends Controller
         $images = [];
 
         foreach ($files_labels as $key=>$file) {
-            $image = $file->getFirstMedia('file_refund_attachments');
+            $image = $file->getFirstMedia('file_buy_back_attachments');
             $images[$key] = $image->getUrl();
         }
 
@@ -111,7 +111,7 @@ class FileBuyBackController extends Controller
             'labels' => $files_labels,
         ];
 
-        return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);
+        return view('app.sites.file-managements.files.files-actions.file-buy-back.preview', $data);
     }
 
     /**

@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-refund.create', encryptParams($site_id)) }}
+{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-buy-back.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Preview File Refund ')
+@section('page-title', 'Preview File Buy Back ')
 
 @section('page-vendor')
 @endsection
@@ -20,8 +20,7 @@
     .filepond--drop-label {
         color: #7367F0 !important;
     }
-
-    / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+    .filepond--item-panel {
         background-color: #7367F0;
     }
 
@@ -39,9 +38,9 @@
 <div class="content-header-left col-md-9 col-12 mb-2">
     <div class="row breadcrumbs-top">
         <div class="col-12">
-            <h2 class="content-header-title float-start mb-0">Preview File Refund</h2>
+            <h2 class="content-header-title float-start mb-0">Preview File Buy Back</h2>
             <div class="breadcrumb-wrapper">
-                {{ Breadcrumbs::render('sites.file-managements.file-refund.create', encryptParams($site_id)) }}
+                {{ Breadcrumbs::render('sites.file-managements.file-buy-back.create', encryptParams($site_id)) }}
             </div>
         </div>
     </div>

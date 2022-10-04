@@ -128,6 +128,21 @@ class ViewFilesDatatable extends DataTable
         if (Route::current()->getName() == 'sites.file-managements.file-buy-back.index') {
             return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 3);
         }
+        if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 4);
+        }
+        if (Route::current()->getName() == 'sites.file-managements.file-resale.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 5);
+        }
+        if (Route::current()->getName() == 'sites.file-managements.file-title-transfer.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 6);
+        }
+        if (Route::current()->getName() == 'sites.file-managements.file-adjustment.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 7);
+        }
+        if (Route::current()->getName() == 'sites.file-managements.unit-shifting.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 8);
+        }
     }
 
     /**

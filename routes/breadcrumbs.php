@@ -289,14 +289,26 @@ Breadcrumbs::for('sites.file-managements.file-refund.create', function (Breadcru
 
 });
 
+Breadcrumbs::for('sites.file-managements.file-refund.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-refund.index', $site_id);
+    $trail->push('Preview File Refund', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
 //File buy back  Breadcrumbs Main
 Breadcrumbs::for('sites.file-managements.file-buy-back.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('File Buy Back', route('sites.file-managements.file-refund.index', ['site_id' => $site_id]));
+    $trail->push('File Buy Back', route('sites.file-managements.file-buy-back.index', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.file-managements.file-buy-back.create', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.file-managements.file-buy-back.index', $site_id);
     $trail->push('Create File Buy Back', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-buy-back.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-buy-back.index', $site_id);
+    $trail->push('Preview File Buy Back', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 
 });

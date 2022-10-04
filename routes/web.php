@@ -327,9 +327,9 @@ Route::group([
 
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('show', [ReceiptController::class, 'show'])->name('show');
-                        Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
-                        Route::put('update', [ReceiptController::class, 'update'])->name('update');
-                        Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                        // Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
+                        // Route::put('update', [ReceiptController::class, 'update'])->name('update');
+                        // Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
                     });
                 });
 

@@ -32,7 +32,7 @@ return new class extends Migration
             $table->double('amount_in_numbers');
             $table->string('purpose');
             $table->string('other_purpose')->nullable();
-            $table->string('installment_number')->nullable();
+            $table->text('installment_number')->nullable();
             $table->string('attachment')->nullable();
             $table->string('amount_received')->nullable();
             $table->string('comments')->nullable();

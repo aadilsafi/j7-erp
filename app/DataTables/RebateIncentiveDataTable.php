@@ -46,7 +46,7 @@ class RebateIncentiveDataTable extends DataTable
                 return $rebateIncentive->stakeholder->full_name;
             })
             ->editColumn('stakeholder_cnic', function ($rebateIncentive) {
-                return $rebateIncentive->stakeholder->cnic;
+                return cnicFormat($rebateIncentive->stakeholder->cnic);
             })
             ->editColumn('stakeholder_contact', function ($rebateIncentive) {
                 return $rebateIncentive->stakeholder->contact;

@@ -46,7 +46,7 @@ class RebateIncentiveDataTable extends DataTable
                 return $rebateIncentive->stakeholder->full_name;
             })
             ->editColumn('stakeholder_cnic', function ($rebateIncentive) {
-                return $rebateIncentive->stakeholder->cnic;
+                return cnicFormat($rebateIncentive->stakeholder->cnic);
             })
             ->editColumn('stakeholder_contact', function ($rebateIncentive) {
                 return $rebateIncentive->stakeholder->contact;
@@ -165,7 +165,7 @@ class RebateIncentiveDataTable extends DataTable
     protected function getColumns(): array
     {
         // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
-        // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
+        // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.show');
         return [
 
             Column::computed('check')->exportable(false)->printable(false)->width(60),

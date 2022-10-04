@@ -39,7 +39,7 @@
                                 <label class="form-label" style="font-size: 15px" for="floor">
                                     <h6 class="mb-1">Rebate %</h6>
                                 </label>
-                                <input min="0" id="rebate_percentage" onchange="rebateValue()" type="number" value = "{{isset($edit_unit) ? $edit_unit->commision_percentage : ''}}"
+                                <input min="0" id="rebate_percentage" onchange="rebateValue()" type="number" value = "{{isset($rebate_data) ? $rebate_data->commision_percentage : ''}}"
                                     class="form-control rebate_percentage  @error('rebate_percentage') is-invalid @enderror"
                                     name="rebate_percentage" placeholder="Rebate Percentage">
                                 @error('rebate_percentage')
@@ -125,7 +125,7 @@
                             <select class="form-select form-select-lg" id="dealer" name="dealer_id">
                                 <option value="0">Create new Dealer</option>
                                 @forelse ($dealer_data as $dealer)
-                                <option value="{{ $dealer->stakeholder->id }}">{{ $dealer->stakeholder->full_name }}
+                                <option value="{{ $dealer->stakeholder->id }}" {{isset($rebate_data) && $rebate_data->dealer_id == $dealer->stakeholder->id ? 'selected' : ''}}>{{ $dealer->stakeholder->full_name }}
                                 </option>
                                 @empty
                                 @endforelse
@@ -390,27 +390,27 @@
                     <div class="form-check form-check-inline">
                         <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
                         <input class="form-check-input" type="radio" id="ideal-deal-check" name="deal_type"
-                            value="ideal-deal">
+                            value="ideal-deal" {{isset($rebate_data) && $rebate_data->deal_type == 'ideal-deal' ? 'checked' : ''}}>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="mark-down-check" name="deal_type"
-                            value="mark_down">
+                            value="mark_down" {{isset($rebate_data) && $rebate_data->deal_type == 'mark_down' ? 'checked' : ''}}>
                         <label class="form-check-label" for="mark-down-check">Mark Down</label>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="special-case-check" name="deal_type"
-                            value="special_case">
+                            value="special_case" {{isset($rebate_data) && $rebate_data->deal_type == 'special_case' ? 'checked' : ''}}>
                         <label class="form-check-label" for="special-case-check">Special Case</label>
                     </div>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" id="adjustment-check" name="deal_type"
-                            value="adjustment">
+                            value="adjustment" {{isset($rebate_data) && $rebate_data->deal_type == 'adjustment' ? 'checked' : ''}}>
                         <label class="form-check-label" for="adjustment-check">Adjustment</label>
                     </div>
                 </div>
@@ -430,7 +430,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
-                                placeholder="Comments" rows="5"></textarea>
+                                placeholder="Comments" rows="5" >{{isset($rebate_data) ? $rebate_data->comments :  old('comments')}}</textarea>
                         </div>
                     </div>
                 </div>

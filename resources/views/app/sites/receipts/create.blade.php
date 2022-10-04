@@ -56,7 +56,7 @@
             color: #7367F0 !important;
         }
 
-        / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+        .filepond--item-panel {
             background-color: #7367F0;
         }
 
@@ -384,6 +384,7 @@
                             $('#stackholder_father_name').val(response.stakeholders['father_name']);
                             $('#stackholder_occupation').val(response.stakeholders['occupation']);
                             $('#stackholder_designation').val(response.stakeholders['designation']);
+                            $('#stackholder_ntn').val(response.stakeholders['ntn']);
                             $('#stackholder_cnic').val(response.stakeholders['cnic']);
                             $('#stackholder_contact').val(response.stakeholders['contact']);
                             $('#stackholder_address').val(response.stakeholders['address']);

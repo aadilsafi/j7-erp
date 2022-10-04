@@ -218,7 +218,7 @@ class ReceiptService implements ReceiptInterface
         }
         $update_installment_details = Receipt::find($receipt->id);
         $update_installment_details->purpose = $purpose;
-        $update_installment_details->installment_number = $instalment_numbers;
+        $update_installment_details->installment_number = json_encode($instalment_numbers);
         $update_installment_details->update();
 
         $totalAmountOfSalesPlan =  $sales_plan->total_price;

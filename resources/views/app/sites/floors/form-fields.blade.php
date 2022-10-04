@@ -57,7 +57,7 @@
                 <label class="form-label fs-5" for="short_label">Short label</label>
                 <input type="text" class="form-control form-control-lg @error('short_label') is-invalid @enderror"
                     id="short_label" name="short_label" placeholder="Short label"
-                    value="{{ isset($floor) ? $floor->short_label : old('short_label') ?? $floorShortLable }}" />
+                    value="{{ isset($floor) ? $floor->short_label : old('short_label') ?? $floorOrder . $floorShortLable }}" />
                 @error('short_label')
                     <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror

@@ -51,4 +51,9 @@ class FileManagement extends Model implements HasMedia
     {
         return $this->belongsTo(Stakeholder::class);
     }
+
+    public function fileRefund()
+    {
+        return $this->hasMany(FileRefund::class,'file_id');
+    }
 }

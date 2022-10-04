@@ -111,6 +111,7 @@ class ReceiptController extends Controller
         $site_id = decryptParams($site_id);
         $receipt = Receipt::find(decryptParams($id));
         $image = $receipt->getFirstMediaUrl('receipt_attachments');
+
         $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
         $installmentNumbersArray = explode(",", $receipt_installment_numbers);
         $last_index = array_key_last($installmentNumbersArray);

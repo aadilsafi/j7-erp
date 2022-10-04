@@ -44,7 +44,7 @@ class ReceiptsDatatable extends DataTable
             })
             ->editColumn('cnic', function ($receipt) {
                 return  cnicFormat($receipt->cnic);
-        })
+            })
             ->editColumn('installment_number', function ($receipt) {
                 return  str_replace(str_split('[]"'), '', $receipt->installment_number);
             })
@@ -175,7 +175,7 @@ class ReceiptsDatatable extends DataTable
     protected function getColumns(): array
     {
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
+        $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.show');
         return [
             ( $selectedActivePermission ?
                 Column::computed('check')->exportable(false)->printable(false)->width(60)

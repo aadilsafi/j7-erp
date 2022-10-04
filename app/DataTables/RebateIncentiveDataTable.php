@@ -165,7 +165,7 @@ class RebateIncentiveDataTable extends DataTable
     protected function getColumns(): array
     {
         // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
-        // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
+        // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.show');
         return [
 
             Column::computed('check')->exportable(false)->printable(false)->width(60),

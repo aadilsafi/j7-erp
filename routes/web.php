@@ -205,25 +205,6 @@ Route::group([
                                                 Route::get('/print', [SalesPlanController::class, 'printPage'])->name('print');
                                             });
                                         });
-
-                                        // Receipts Routes
-
-                                        Route::group(['prefix' => 'receipts', 'as' => 'receipts.'], function () {
-
-                                            Route::get('/', [ReceiptController::class, 'index'])->name('index');
-
-                                            Route::get('create', [ReceiptController::class, 'create'])->name('create');
-                                            Route::post('store', [ReceiptController::class, 'store'])->name('store');
-
-
-                                            Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
-
-                                            Route::group(['prefix' => '/{id}'], function () {
-
-                                                Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
-                                                Route::put('update', [ReceiptController::class, 'update'])->name('update');
-                                            });
-                                        });
                                     });
                                 });
                             });
@@ -343,7 +324,9 @@ Route::group([
                     Route::get('destroy-draft', [ReceiptController::class, 'destroyDraft'])->name('destroy-draft');
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
                     Route::get('make-active-selected', [ReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+
                     Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [ReceiptController::class, 'show'])->name('show');
                         Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         Route::put('update', [ReceiptController::class, 'update'])->name('update');
                         Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
@@ -365,11 +348,10 @@ Route::group([
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [RebateIncentiveController::class, 'edit'])->name('edit');
                             Route::put('update', [RebateIncentiveController::class, 'update'])->name('update');
-                    });
+                        });
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
                         });
-
                     });
 
                     // dealer incentive form
@@ -388,7 +370,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
                         Route::post('store', [FileRefundController::class, 'store'])->name('store');
-
                     });
 
                     // file buy back
@@ -398,7 +379,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
-
                     });
 
                     // file Cancellation
@@ -408,7 +388,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
-
                     });
 
                     // file release
@@ -418,7 +397,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
-
                     });
 
                     // file title transfer
@@ -428,7 +406,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
-
                     });
 
                     // file adjustment
@@ -438,7 +415,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileAdjustmentController::class, 'create'])->name('create');
                         Route::post('store', [FileAdjustmentController::class, 'store'])->name('store');
-
                     });
 
                     // Unit Shifting
@@ -448,7 +424,6 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [UnitShiftingController::class, 'create'])->name('create');
                         Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
-
                     });
 
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {

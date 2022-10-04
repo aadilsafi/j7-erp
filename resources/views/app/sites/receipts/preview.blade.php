@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.edit', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.show', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Receipt Details')
@@ -41,7 +41,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Receipt Details</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.receipts.edit', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.receipts.show', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

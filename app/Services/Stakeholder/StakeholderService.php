@@ -78,7 +78,20 @@ class StakeholderService implements StakeholderInterface
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
                 $contacts = [];
                 foreach ($inputs['contact-persons'] as $contact) {
-                    $contacts[] = new StakeholderContact($contact);
+
+                    $data = [
+                        'stakeholder_id' => $stakeholder->id,
+                        'full_name' => $contact['full_name'],
+                        'father_name' => $contact['father_name'],
+                        'occupation' => $contact['occupation'],
+                        'designation' => $contact['designation'],
+                        'cnic' => $contact['cnic'],
+                        'ntn' => $contact['ntn'],
+                        'contact' => $contact['contact'],
+                        'address' => $contact['address'],
+                    ];
+
+                    $contacts[] = new StakeholderContact($data);
                 }
                 $stakeholder->contacts()->saveMany($contacts);
             }

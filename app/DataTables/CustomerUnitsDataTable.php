@@ -59,8 +59,12 @@ class CustomerUnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
+                $file_Action_id = 0;
+                if(isset($unit->file->file_action_id)){
+                    $file_Action_id = $unit->file->file_action_id;
+                }
                 if (isset($unit->salesPlan[0])) {
-                    return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'unit_id' => $unit->id]);
+                    return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'file_Action_id' =>$file_Action_id, 'unit_id' => $unit->id]);
                 }
             })
             ->setRowId('id')

@@ -77,7 +77,7 @@ class ReceiptsDatatable extends DataTable
      */
     public function query(Receipt $model): QueryBuilder
     {
-        return $model->newQuery()->where('site_id', decryptParams($this->site_id));
+        return $model->newQuery()->where('site_id', decryptParams($this->site_id))->where('status','!=', 2);
     }
 
     public function html(): HtmlBuilder

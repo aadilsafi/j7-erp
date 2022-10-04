@@ -42,7 +42,7 @@ class UnitService implements UnitInterface
     public function store($site_id, $floor_id, $inputs, $isUnitActive = true)
     {
         $site_id = decryptParams($site_id);
-        $floor_id = decryptParams($floor_id);
+        $floor = (new Floor())->find(decryptParams($floor_id));
 
         $totalPrice = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
 
@@ -54,7 +54,7 @@ class UnitService implements UnitInterface
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'unit_number' => filter_strip_tags($inputs['unit_number']),
-            'floor_unit_number' => $floor_id . Str::padLeft($inputs['unit_number'], $unitNumberDigits, '0'),
+            'floor_unit_number' => $floor_id . Str::padLeft($floor->short_label, $unitNumberDigits, '0'),
             'net_area' => filter_strip_tags($inputs['net_area']),
             'gross_area' => filter_strip_tags($inputs['gross_area']),
             'price_sqft' => filter_strip_tags($inputs['price_sqft']),

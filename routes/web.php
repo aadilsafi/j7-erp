@@ -378,9 +378,11 @@ Route::group([
                     Route::group(['prefix' => 'file-buy-back', 'as' => 'file-buy-back.'], function () {
 
                         Route::get('/', [FileBuyBackController::class, 'index'])->name('index');
-                        Route::get('approve/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'approve'])->name('approve');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'ApproveFileBuyBack'])->name('approve');
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
+
                     });
 
                     // file Cancellation

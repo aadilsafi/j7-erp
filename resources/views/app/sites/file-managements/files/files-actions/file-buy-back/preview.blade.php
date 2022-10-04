@@ -53,11 +53,11 @@
     @csrf
     <div class="row">
         <div id="loader" class="col-lg-12 col-md-12 col-sm-12 position-relative">
-            {{ view('app.sites.file-managements.files.files-actions.file-refund.form-fields', [
+            {{ view('app.sites.file-managements.files.files-actions.file-buy-back.form-fields', [
             'site_id' => $site_id,
             'unit' => $unit,
             'customer' => $customer,
-            'refund_file' => $refund_file,
+            'buy_back_file' => $buy_back_file,
             'labels' => $labels
             ]) }}
         </div>
@@ -104,7 +104,7 @@
                 $(this).slideUp(e)
             }
         });
-       
+
             FilePond.registerPlugin(
                 FilePondPluginImagePreview,
                 FilePondPluginFileValidateType,
@@ -114,15 +114,15 @@
             );
 
             var files = [];
-            
+
             @if (isset($images))
-        
+
                 @foreach ($images as $image)
                 files.push({
                     source: '{{ $image}}',
                 });
                 @endforeach
-                
+
             @endif
 
             FilePond.create(document.getElementById('attachment'), {
@@ -141,7 +141,7 @@
                     url: ''
                 }
             });
-    
+
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });

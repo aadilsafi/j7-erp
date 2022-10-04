@@ -12,8 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/nouislider.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
 @endsection
 

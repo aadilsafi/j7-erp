@@ -54,7 +54,7 @@ class UnitService implements UnitInterface
             'width' => filter_strip_tags($inputs['width']),
             'length' => filter_strip_tags($inputs['length']),
             'unit_number' => filter_strip_tags($inputs['unit_number']),
-            'floor_unit_number' => $floor_id . Str::padLeft($floor->short_label, $unitNumberDigits, '0'),
+            'floor_unit_number' => $floor->short_label . '-' . Str::padLeft($inputs['unit_number'], $unitNumberDigits, '0'),
             'net_area' => filter_strip_tags($inputs['net_area']),
             'gross_area' => filter_strip_tags($inputs['gross_area']),
             'price_sqft' => filter_strip_tags($inputs['price_sqft']),

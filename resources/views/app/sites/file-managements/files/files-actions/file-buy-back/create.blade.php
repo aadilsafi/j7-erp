@@ -54,7 +54,7 @@
         @csrf
         <div class="row">
             <div id="loader" class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                {{ view('app.sites.file-managements.files.files-actions.file-refund.form-fields', [
+                {{ view('app.sites.file-managements.files.files-actions.file-buy-back.form-fields', [
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
@@ -79,10 +79,10 @@
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
-                            Save File Refund
+                            Save File Buy Back
                         </a>
 
-                        <a href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}

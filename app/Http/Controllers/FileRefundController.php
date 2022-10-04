@@ -106,8 +106,6 @@ class FileRefundController extends Controller
             $images[$key] = $image->getUrl();
         }
 
-        // dd($images);
-
         $data = [
             'site_id' => decryptParams($site_id),
             'unit' => Unit::find(decryptParams($unit_id)),

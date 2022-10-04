@@ -102,7 +102,7 @@ class ViewFilesDatatable extends DataTable
 
             ->editColumn('buy_back_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileBuyBack[0])) {
-                    return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileBuyBack[0]['id'], 'file_refund_status' => $fileManagement->fileBuyBack[0]['status'],]);
+                    return view('app.sites.file-managements.files.files-actions.file-buy-back.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileBuyBack[0]['id'], 'file_refund_status' => $fileManagement->fileBuyBack[0]['status'],]);
                 } else {
                     return "-";
                 }

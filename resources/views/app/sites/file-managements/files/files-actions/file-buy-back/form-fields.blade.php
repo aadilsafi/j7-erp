@@ -11,27 +11,35 @@
 
                 <div class="row mb-1">
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
                         <input type="text" required name="amount_to_be_refunded" class="form-control form-control-lg"
-                            {{isset($refund_file) ? 'disabled' : '' }} id="amount_to_be_refunded"
+                            {{isset($buy_back_file) ? 'disabled' : '' }} id="amount_to_be_refunded"
                             placeholder="Amount to be refunded"
-                            value="{{isset($refund_file) ? $refund_file->amount_to_be_refunded : ''}}" />
+                            value="{{isset($buy_back_file) ? $buy_back_file->amount_to_be_refunded : ''}}" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Profit Amount</label>
+                        <input type="text" required name="amount_profit" class="form-control form-control-lg"
+                            {{isset($buy_back_file) ? 'disabled' : '' }} id="amount_profit"
+                            placeholder=" Profit Amount"
+                            value="{{isset($buy_back_file) ? $buy_back_file->amount_profit : ''}}" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
-                            {{isset($refund_file) ? 'disabled' : '' }} id="payment_due_date"
+                            {{isset($buy_back_file) ? 'disabled' : '' }} id="payment_due_date"
                             placeholder="Payment Due Date"
-                            value="{{isset($refund_file) ? $refund_file->payment_due_date : ''}}" />
+                            value="{{isset($buy_back_file) ? $buy_back_file->payment_due_date : ''}}" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
                         <input type="text" name="amount_remarks" required class="form-control form-control-lg"
-                            id="remarks" {{isset($refund_file) ? 'disabled' : '' }} placeholder="Amount Remarks" 
-                            value="{{isset($refund_file) ? $refund_file->amount_remarks : ''}}"/>
+                            id="remarks" {{isset($buy_back_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
+                            value="{{isset($buy_back_file) ? $buy_back_file->amount_remarks : ''}}"/>
                     </div>
 
                 </div>
@@ -49,7 +57,7 @@
                 <h3>Attachments</h3>
             </div>
             <div class="card-body">
-                @if (isset($refund_file))
+                @if (isset($buy_back_file))
                 @foreach ($labels as $key => $label)
                 <div class="card m-0">
                     <div class="card-body">
@@ -152,33 +160,39 @@
             <div class="card-body">
 
                 <div class="row mb-1">
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                         <input type="text" readonly value="{{ $customer->full_name }}"
                             class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
                         <input type="text" readonly value="{{ $customer->father_name }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Father Name" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                         <input type="text" readonly value="{{ $customer->occupation }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                        <input type="text" readonly value="{{ $customer->designation }}"
+                            class="form-control form-control-lg" id="stackholder_designation"
+                            placeholder="Designation" />
                     </div>
                 </div>
 
                 <div class="row mb-1">
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" readonly value="{{ $customer->designation }}"
-                            class="form-control form-control-lg" id="stackholder_designation"
-                            placeholder="Designation" />
+                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
+                        <input type="text" readonly value="{{ $customer->ntn }}"
+                            class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -195,10 +209,16 @@
                 </div>
 
                 <div class="row mb-1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="stackholder_address"
+                        <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
                             placeholder="Address" rows="5">{{ $customer->address }}</textarea>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
+                        <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
+                            placeholder="Address" rows="5">{{ $customer->comments }}</textarea>
                     </div>
                 </div>
             </div>
@@ -236,28 +256,6 @@
                     </div>
 
                 </div>
-
-                {{-- <div class="row mb-1">
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Floor Name</label>
-                        <input type="text" readonly value="{{$unit->floor->name }}" class="form-control form-control-lg"
-                            id="stackholder_occupation" placeholder="Unit No" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_full_name">Short Label</label>
-                        <input type="text" readonly value="{{ $unit->floor->short_label }}" class="form-control form-control-lg"
-                            id="stackholder_full_name" placeholder="Unit Name" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Unit Status</label>
-                        <input type="text" readonly value="{{ $unit->status->name }}" class="form-control form-control-lg"
-                            id="stackholder_father_name" placeholder="Unit Type" />
-                    </div>
-
-                </div> --}}
 
                 <div class="row mb-1">
 
@@ -300,8 +298,8 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
-                            {{isset($refund_file) ? 'disabled' : '' }}
-                                placeholder="Comments" rows="5">{{isset($refund_file) ? $refund_file->comments : '' }}</textarea>
+                            {{isset($buy_back_file) ? 'disabled' : '' }}
+                                placeholder="Comments" rows="5">{{isset($buy_back_file) ? $buy_back_file->comments : '' }}</textarea>
                         </div>
                     </div>
                 </div>

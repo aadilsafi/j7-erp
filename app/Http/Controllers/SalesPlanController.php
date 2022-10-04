@@ -180,7 +180,7 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
         ];
 
-        actionLog(get_class($salesPlan), auth()->user(), $role, 'print', [
+        actionLog(get_class($salesPlan), auth()->user(), $template, 'print', [
             'attributes' => $salesPlan->toArray()
         ]);
 

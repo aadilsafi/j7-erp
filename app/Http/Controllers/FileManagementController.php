@@ -79,24 +79,34 @@ class FileManagementController extends Controller
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
-            'customer_file' => FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first(),
+            'customer_file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
         ];
-        $customer_file = FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first();
+
+        $customer_file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+
+
         $data['salesPlan'] = (new SalesPlan())->with([
             'additionalCosts', 'installments', 'leadSource', 'receipts'
         ])->where([
             'status' => 1,
             'unit_id' => $data['unit']->id,
+        ])->orWhere([
+            'status' => 3,
+            'unit_id' => $data['unit']->id,
         ])->first();
+
+
         $data['salesPlan']->installments = $data['salesPlan']->installments->sortBy('installment_order');
-        if(isset($customer_file)){
-            $data['image'] =$customer_file->getFirstMediaUrl('application_form_photo');
+
+
+        if (isset($customer_file)) {
+            $data['image'] = $customer_file->getFirstMediaUrl('application_form_photo');
         }
 
         if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
         }
-        if(isset($data['customer_file'])){
+        if (isset($data['customer_file'])) {
             return view('app.sites.file-managements.files.viewFile', $data);
         }
         return view('app.sites.file-managements.files.create', $data);
@@ -124,5 +134,4 @@ class FileManagementController extends Controller
         ];
         return $dataTable->with($data)->render('app.sites.file-managements.files.view', $data);
     }
-
 }

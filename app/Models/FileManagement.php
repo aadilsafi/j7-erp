@@ -22,7 +22,8 @@ class FileManagement extends Model implements HasMedia
         'application_no',
         'status',
         'deal_type',
-        'comments'
+        'comments',
+        'file_action_id',
     ];
 
     public $rules = [
@@ -55,5 +56,10 @@ class FileManagement extends Model implements HasMedia
     public function fileRefund()
     {
         return $this->hasMany(FileRefund::class,'file_id');
+    }
+
+    public function fileAction()
+    {
+        return $this->belongsTo(FileAction::class,'file_action_id');
     }
 }

@@ -30,16 +30,24 @@ class CustomerUnitsDataTable extends DataTable
                 return editBadgeColumn($unit->status->name);
             })
             ->editColumn('full_name', function ($unit) {
-                return $unit->salesPlan[0]['stakeholder']['full_name'];
+                if (isset($unit->salesPlan[0])) {
+                    return $unit->salesPlan[0]['stakeholder']['full_name'];
+                }
             })
             ->editColumn('father_name', function ($unit) {
-                return $unit->salesPlan[0]['stakeholder']['father_name'];
+                if (isset($unit->salesPlan[0])) {
+                    return $unit->salesPlan[0]['stakeholder']['father_name'];
+                }
             })
             ->editColumn('cnic', function ($unit) {
-                return cnicFormat($unit->salesPlan[0]['stakeholder']['cnic']);
+                if (isset($unit->salesPlan[0])) {
+                    return cnicFormat($unit->salesPlan[0]['stakeholder']['cnic']);
+                }
             })
             ->editColumn('contact', function ($unit) {
-                return $unit->salesPlan[0]['stakeholder']['contact'];
+                if (isset($unit->salesPlan[0])) {
+                    return $unit->salesPlan[0]['stakeholder']['contact'];
+                }
             })
             ->editColumn('type_id', function ($unit) {
                 return $unit->type->name;
@@ -51,7 +59,9 @@ class CustomerUnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'unit_id' => $unit->id]);
+                if (isset($unit->salesPlan[0])) {
+                    return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'unit_id' => $unit->id]);
+                }
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -65,7 +75,7 @@ class CustomerUnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status' ,'salesPlan','file'])->whereIn('id', $this->unit_ids);
+        return $model->newQuery()->select('units.*')->with(['type', 'status', 'salesPlan', 'file'])->whereIn('id', $this->unit_ids)->where('status_id',5);
     }
 
     public function html(): HtmlBuilder
@@ -92,11 +102,10 @@ class CustomerUnitsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('type_id')
+            ->rowGroupDataSrc('floor_unit_number')
             ->orders([
                 [5, 'desc'],
             ]);
-
     }
 
     /**

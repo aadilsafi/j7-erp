@@ -20,7 +20,7 @@
             color: #7367F0 !important;
         }
 
-        / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+        .filepond--item-panel {
             background-color: #7367F0;
         }
 
@@ -111,8 +111,12 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
-    <script>
-        var editImage = "";
+@endsection
+
+@section('custom-js')
+
+    <script type="text/javascript">
+    var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
 
         FilePond.registerPlugin(
@@ -153,9 +157,7 @@
                 url: ''
             }
         });
-    </script>
 
-    <script type="text/javascript">
         $(document).ready(function() {
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
@@ -178,23 +180,6 @@
                     $(this).slideUp(e)
                 }
             })
-            @if (isset($stakeholder) && count($stakeholder->contacts) == 0)
-                $('#delete-contact-person').trigger('click');
-            @endif
-        });
-
-        function performAction(action) {
-            if (action == 'C') {
-                $('#div-next-of-kin').toggle('fast', 'linear');
-            }
-        }
-    </script>
-@endsection
-
-@section('custom-js')
-
-    <script type="text/javascript">
-        $(document).ready(function() {
 
             $.validator.addMethod("unique", function(value, element) {
                 var parentForm = $(element).closest('form');
@@ -220,12 +205,13 @@
                 }
             });
 
-            @php
-                $data = old();
-            @endphp
-            @if (!isset($data['contact-persons']))
-                $('#delete-contact-person').trigger('click');
-            @endif
+
         });
+
+        function performAction(action) {
+            if (action == 'C') {
+                $('#div-next-of-kin').toggle('fast', 'linear');
+            }
+        }
     </script>
 @endsection

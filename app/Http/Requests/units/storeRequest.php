@@ -27,7 +27,7 @@ class storeRequest extends FormRequest
     {
         $rules = (new Unit())->rules;
         $rules['unit_number'] = [
-            'required', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
+            'nullable', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
         ];
 
         return $rules;

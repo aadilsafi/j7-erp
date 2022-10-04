@@ -67,7 +67,7 @@ class SalesPlanService implements SalesPlanInterface
         $floor = (new Floor())->find($floor_id);
         $unit = (new Unit())->find($unit_id);
 
-        dd($inputs);
+        // dd($inputs);
 
         $authRoleId = auth()->user()->roles->pluck('id')->first();
 
@@ -177,18 +177,21 @@ class SalesPlanService implements SalesPlanInterface
         $additionalCosts = $inputs['unit']['additional_cost'];
         $additionalCostData = [];
         foreach ($additionalCosts as $key => $value) {
-            $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
+            if ($value['status'] == 'true') {
+                $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
 
-            $additionalCostData[] = [
-                'sales_plan_id' => $salesPlan->id,
-                'additional_cost_id' => $additonalCost->id,
-                'percentage' => $value['percentage'],
-                'amount' => str_replace(',', '', $value['total']),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+                $additionalCostData[] = [
+                    'sales_plan_id' => $salesPlan->id,
+                    'additional_cost_id' => $additonalCost->id,
+                    'percentage' => $value['percentage'],
+                    'amount' => str_replace(',', '', $value['total']),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
         }
 
+        // dd($additionalCostData);
         $salesPlanAdditionalCosts = (new SalesPlanAdditionalCost())->insert($additionalCostData);
 
         $downpaymentTotal = $inputs['unit']['downpayment']['total'];

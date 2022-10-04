@@ -12,6 +12,7 @@ use App\Models\ReceiptDraftModel;
 use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileRefund\store;
 use App\Models\FileRefund;
+use App\Models\FileRefundAttachment;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 use Psy\Readline\Hoa\FileRead;
 
@@ -92,9 +93,28 @@ class FileRefundController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $unit_id, $customer_id, $id)
     {
-        //
+        $files_labels = FileRefundAttachment::where('file_refund_id', decryptParams($id))->get();
+        $images = [];
+
+        foreach ($files_labels as $key=>$file) {
+            $image = $file->getFirstMedia('file_refund_attachments');
+            $images[$key] = $image->getUrl();
+        }
+
+        // dd($images);
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'unit' => Unit::find(decryptParams($unit_id)),
+            'customer' => Stakeholder::find(decryptParams($customer_id)),
+            'refund_file' => (new FileRefund())->find(decryptParams($id)),
+            'images' => $images,
+            'labels' => $files_labels,
+        ];
+
+        return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);
     }
 
     /**

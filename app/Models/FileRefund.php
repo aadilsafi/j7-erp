@@ -21,6 +21,7 @@ class FileRefund extends Model
         'dealer_data',
         'amount_to_be_refunded',
         'payment_due_date',
+        'amount_remarks',
         'status',
         'comments',
     ];

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('file_refund_id')->constrained();
             $table->string('label');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

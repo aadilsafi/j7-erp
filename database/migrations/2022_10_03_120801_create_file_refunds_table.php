@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('dealer_data')->nullable();
             $table->string('amount_to_be_refunded')->nullable();
             $table->string('payment_due_date')->nullable();
+            $table->string('amount_remarks')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->timestamps();

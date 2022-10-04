@@ -124,4 +124,5 @@ class FileManagementController extends Controller
         ];
         return $dataTable->with($data)->render('app.sites.file-managements.files.view', $data);
     }
+
 }

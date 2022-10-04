@@ -62,11 +62,31 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('updated_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->updated_at);
             })
+            ->editColumn('refund_status', function ($fileManagement) {
+                if(isset($fileManagement->fileRefund[0])){
+                    if( $fileManagement->fileRefund[0]['status'] == 1){
+                        return editBadgeColumn('Active');
+                    }
+                    else{
+                        return editBadgeColumn('Pending');
+                    }
+                }
+                else
+                {
+                    return editBadgeColumn(' File Refund Request Not Found');
+                }
+
+            })
             ->editColumn('actions', function ($fileManagement) {
                 return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
             })
             ->editColumn('refund_actions', function ($fileManagement) {
-                return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
+                if(isset($fileManagement->fileRefund[0])){
+                    return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id , 'file_refund_id' => $fileManagement->fileRefund[0]['id'] , 'file_refund_status' => $fileManagement->fileRefund[0]['status'],]);
+                }
+                else{
+                    return "-" ;
+                }
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -80,7 +100,7 @@ class ViewFilesDatatable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status')->where('site_id', $this->site_id);
+        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status','fileRefund')->where('site_id', $this->site_id);
     }
 
     /**
@@ -141,6 +161,12 @@ class ViewFilesDatatable extends DataTable
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
             // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            (
+                $refundRoute ?
+                Column::computed('refund_status')->title('Refund File Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('refund_status')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
             (
                 $refundRoute ?
                 Column::computed('refund_actions')->title('Refund Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')

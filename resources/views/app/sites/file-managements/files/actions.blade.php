@@ -8,10 +8,9 @@
             </a>
         @else
         @endif
-        {{-- @if (Route::current()->getName() == 'sites.file-managements.customers.units.files.create')
-            <span class="badge badge-glow bg-success">File Already Exist</span>
-        @endif --}}
     @endcan
+
+    {{-- Refund Actions --}}
     @if (Route::current()->getName() == 'sites.file-managements.file-refund.index')
         @php
             $checkFileRefund = DB::table('file_refunds')
@@ -34,5 +33,7 @@
         @endif
 
     @endif
+
+
 
 </div>

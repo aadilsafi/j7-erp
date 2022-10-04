@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
+use App\Models\Stakeholder;
 use Illuminate\Http\Request;
+use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\DataTables\ViewFilesDatatable;
 
@@ -29,9 +32,22 @@ class FileBuyBackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($site_id, $unit_id, $customer_id)
     {
+        // dd(decryptParams($site_id),decryptParams($unit_id),decryptParams($customer_id));
         //
+        if (!request()->ajax()) {
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'unit' => Unit::find(decryptParams($unit_id)),
+                'customer' => Stakeholder::find(decryptParams($customer_id)),
+                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+            ];
+            return view('app.sites.file-managements.files.files-actions.file-buy-back.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**

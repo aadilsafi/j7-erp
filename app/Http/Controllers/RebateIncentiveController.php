@@ -44,7 +44,7 @@ class RebateIncentiveController extends Controller
      */
     public function create(Request $request, $site_id)
     {
-      
+
         if (!request()->ajax()) {
             $data = [
                 'site_id' => decryptParams($site_id),
@@ -99,7 +99,7 @@ class RebateIncentiveController extends Controller
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
-        
+
         try {
             $rebate_data = $this->rebateIncentive->getById($site_id, $id);
             if ($rebate_data && !empty($rebate_data)) {
@@ -136,7 +136,7 @@ class RebateIncentiveController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-                
+
                 $record = $this->rebateIncentive->update($site_id, $id, $inputs);
                 return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
@@ -160,6 +160,7 @@ class RebateIncentiveController extends Controller
 
     public function getData(Request $request)
     {
+        // dd($request->all());
         $unit = Unit::find($request->unit_id);
         $stakeholder = $unit->salesPlan[0]['stakeholder'];
         $leadSource = $unit->salesPlan[0]['leadSource'];

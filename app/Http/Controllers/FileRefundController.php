@@ -162,6 +162,17 @@ class FileRefundController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
+        $file = FileManagement::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->first();
+        $file->file_action_id = 2;
+        $file->update();
+
+        $salesPlan = SalesPlan::where('unit_id',decryptParams($unit_id))->where('stakeholder_id',decryptParams($customer_id))->where('status',1)->get();
+        foreach($salesPlan as $salesPlan){
+            $SalesPlan = SalesPlan::find($salesPlan->id);
+            $SalesPlan->status = 3;
+            $SalesPlan->update();
+        }
+
         return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 }

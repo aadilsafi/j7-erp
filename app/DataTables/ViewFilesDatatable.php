@@ -62,10 +62,13 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('updated_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->updated_at);
             })
+            ->editColumn('file_status', function ($fileManagement) {
+                return editBadgeColumn($fileManagement->fileAction->name);
+            })
             ->editColumn('refund_status', function ($fileManagement) {
                 if(isset($fileManagement->fileRefund[0])){
                     if( $fileManagement->fileRefund[0]['status'] == 1){
-                        return editBadgeColumn('Active');
+                        return editBadgeColumn('File Request Approved');
                     }
                     else{
                         return editBadgeColumn('Pending');
@@ -100,7 +103,7 @@ class ViewFilesDatatable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status','fileRefund')->where('site_id', $this->site_id);
+        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status','fileRefund','fileAction')->where('site_id', $this->site_id);
     }
 
     /**
@@ -132,7 +135,8 @@ class ViewFilesDatatable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons($buttons);
+            ->buttons($buttons)
+            ->rowGroupDataSrc('file_status');
         // ->orders([
         //     [3, 'desc'],
         // ]);
@@ -159,6 +163,7 @@ class ViewFilesDatatable extends DataTable
             Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Son of')->addClass('text-nowrap'),
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
+            Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center'),
             // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
             (

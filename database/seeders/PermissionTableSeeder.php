@@ -660,26 +660,33 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.receipts.edit',
-                'show_name' => 'View Receipt Details',
+                'name' => 'sites.receipts.show',
+                'show_name' => 'View Receipts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'sites.receipts.update',
-                'show_name' => 'Update Receipts',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.receipts.destroy-selected',
-                'show_name' => 'Destroy Selected Receipts',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.receipts.edit',
+            //     'show_name' => 'View Receipt Details',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.receipts.update',
+            //     'show_name' => 'Update Receipts',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.receipts.destroy-selected',
+            //     'show_name' => 'Destroy Selected Receipts',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'sites.receipts.make-active-selected',
                 'show_name' => 'Make Active Receipts',
@@ -1146,7 +1153,6 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
         ]);
-
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));
     }

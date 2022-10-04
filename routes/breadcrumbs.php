@@ -228,7 +228,7 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
     $trail->push('Create Receipts');
 });
 
-Breadcrumbs::for('sites.receipts.edit', function (BreadcrumbTrail $trail, $site_id) {
+Breadcrumbs::for('sites.receipts.show', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.receipts.index', $site_id);
     $trail->push(' Receipt Details');
 });

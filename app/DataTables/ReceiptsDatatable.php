@@ -21,7 +21,7 @@ class ReceiptsDatatable extends DataTable
 
     private $stakeholderInterface;
 
-    public function __construct( StakeholderInterface $stakeholderInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
     }
@@ -40,11 +40,11 @@ class ReceiptsDatatable extends DataTable
                 return  $receipt->unit->floor->name;
             })
             ->editColumn('unit_id', function ($receipt) {
-                    return  $receipt->unit->name;
+                return  $receipt->unit->name;
             })
             ->editColumn('cnic', function ($receipt) {
                 return  cnicFormat($receipt->cnic);
-        })
+            })
             ->editColumn('installment_number', function ($receipt) {
                 return  str_replace(str_split('[]"'), '', $receipt->installment_number);
             })
@@ -83,8 +83,38 @@ class ReceiptsDatatable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
+
+
+        $buttons = [
+            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('print')->addClass('dropdown-item'),
+                Button::make('copy')->addClass('dropdown-item'),
+                Button::make('csv')->addClass('dropdown-item'),
+                Button::make('excel')->addClass('dropdown-item'),
+                Button::make('pdf')->addClass('dropdown-item'),
+            ]),
+            Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+        ];
+
+        if ($createPermission) {
+            $addButton = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                    'onclick' => 'addNew()',
+                ]);
+
+            array_unshift($buttons, $addButton);
+        }
+
+        if ($selectedActivePermission) {
+            $buttons[] = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
+                    'onclick' => 'changeStatusSelected()',
+                ]);
+        }
 
         return $this->builder()
             ->setTableId('stakeholder-table')
@@ -98,51 +128,7 @@ class ReceiptsDatatable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons(
-                ($createPermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ])
-                :
-                Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                    'onclick' => 'addNew()',
-                ])
-
-            ),
-
-                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
-                    Button::make('print')->addClass('dropdown-item'),
-                    Button::make('copy')->addClass('dropdown-item'),
-                    Button::make('csv')->addClass('dropdown-item'),
-                    Button::make('excel')->addClass('dropdown-item'),
-                    Button::make('pdf')->addClass('dropdown-item'),
-                ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                // Button::raw('export')
-                // ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-                // ->text('<i class="bi bi-pencil"></i> Receipt Status')->attr([
-                //     'onclick' => 'changeStatusSelected()',
-                // ]),
-
-                ($selectedActivePermission ?
-                    Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-                            'onclick' => 'changeStatusSelected()',
-                        ])
-                        :
-                        Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-                            'onclick' => 'changeStatusSelected()',
-                        ])
-                ),
-            )
+            ->buttons($buttons)
             ->rowGroupDataSrc('unit_id')
             ->columnDefs([
                 [
@@ -175,27 +161,23 @@ class ReceiptsDatatable extends DataTable
     protected function getColumns(): array
     {
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.edit');
-        return [
-            ( $selectedActivePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
 
+        $columns = [
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
             Column::computed('status')->title('Status'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            (
-                $editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
-
+            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('updated_at')->addClass('text-nowrap'),
+            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
         ];
+
+        if ($selectedActivePermission) {
+            $activeColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
+            array_unshift($columns, $activeColumn);
+        }
+
+        return $columns;
     }
 
     /**

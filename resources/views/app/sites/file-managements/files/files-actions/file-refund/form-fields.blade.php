@@ -41,7 +41,7 @@
         <div class="card" id="additional_expense_card"
             style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
             <div class="card-header">
-                <h3>Attachements</h3>
+                <h3>Attachments</h3>
             </div>
             <div class="card-body">
                 <div class="expenses-list">

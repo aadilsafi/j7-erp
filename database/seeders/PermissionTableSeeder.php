@@ -386,20 +386,12 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.units.preview',
-                'show_name' => 'Preview Unit ',
+                'name' => ' sites.floors.pending.get',
+                'show_name' => ' Save Preview floors ',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'sites.floors.units.changes.save',
-                'show_name' => ' Save Preview Unit ',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
             [
                 'name' => 'sites.floors.preview',
                 'show_name' => ' Preview floors ',
@@ -455,6 +447,20 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.floors.units.destroy-selected',
                 'show_name' => 'Destroy Sites Floors Units',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.preview',
+                'show_name' => 'Preview Unit ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.changes.save',
+                'show_name' => ' Save Preview Unit ',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

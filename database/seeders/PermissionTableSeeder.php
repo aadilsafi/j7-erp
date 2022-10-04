@@ -386,8 +386,8 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => ' sites.floors.pending.get',
-                'show_name' => ' Save Preview floors ',
+                'name' => 'sites.floors.pending.get',
+                'show_name' => 'Get Pending floors ',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -400,8 +400,8 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => ' sites.floors.changes.save',
-                'show_name' => ' Save Preview floors ',
+                'name' => 'sites.floors.changes.save',
+                'show_name' => 'Save Preview floors ',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -839,28 +839,36 @@
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="ideal-deal-check"
-                                        name="application_form[deal_type]" value="ideal-deal" checked>
+                                        name="application_form[deal_type]" value="ideal-deal"
+                                        @if (isset($customer_file)) disabled @else checked @endif
+                                        @if (isset($customer_file) && $customer_file->deal_type == 'ideal-deal') checked @endif>
                                     <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="mark-down-check"
-                                        name="application_form[deal_type]" value="mark_down">
+                                        name="application_form[deal_type]" value="mark_down"
+                                        @if (isset($customer_file)) disabled @endif
+                                        @if (isset($customer_file) && $customer_file->deal_type == 'mark_down') checked @endif>
                                     <label class="form-check-label" for="mark-down-check">Mark Down</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="special-case-check"
-                                        name="application_form[deal_type]" value="special_case">
+                                        name="application_form[deal_type]" value="special_case"
+                                        @if (isset($customer_file)) disabled @endif
+                                        @if (isset($customer_file) && $customer_file->deal_type == 'special_case') checked @endif>
                                     <label class="form-check-label" for="special-case-check">Special Case</label>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="adjustment-check"
-                                        name="application_form[deal_type]" value="adjustment">
+                                        name="application_form[deal_type]" value="adjustment"
+                                        @if (isset($customer_file)) disabled @endif
+                                        @if (isset($customer_file) && $customer_file->deal_type == 'adjustment') checked @endif>
                                     <label class="form-check-label" for="adjustment-check">Adjustment</label>
                                 </div>
                             </div>
@@ -877,10 +885,10 @@
                         <span class="align-middle d-sm-inline-block d-none">Previous</span>
                     </button>
                     @if (!isset($customer_file))
-                    <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
-                        type="submit">
-                        <span class="align-middle d-sm-inline-block d-none">Save</span>
-                    </button>
+                        <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
+                            type="submit">
+                            <span class="align-middle d-sm-inline-block d-none">Save</span>
+                        </button>
                     @endif
                 </div>
             </div>

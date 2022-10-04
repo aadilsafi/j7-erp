@@ -128,9 +128,23 @@ class RebateIncentiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $site_id, $id)
     {
-        //
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+
+                $record = $this->rebateIncentive->update($site_id, $id, $inputs);
+                return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

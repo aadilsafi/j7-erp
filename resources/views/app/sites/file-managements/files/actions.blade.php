@@ -17,7 +17,7 @@
             <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
                 data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
                 href="#">
-                <i class="bi bi-file-person-fill" style="font-size: 1.1rem" class="m-10"></i>
+                <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
             </a>
         @else
             <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"

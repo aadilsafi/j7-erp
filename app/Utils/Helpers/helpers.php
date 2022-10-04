@@ -9,6 +9,7 @@ use App\Models\{
     Stakeholder,
     StakeholderType,
     Team,
+    Unit,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -604,5 +605,12 @@ if (!function_exists('getMaxFloorOrder')) {
     function getMaxFloorOrder($site_id)
     {
         return (new Floor())->where('site_id', $site_id)->max('order');
+    }
+}
+
+if (!function_exists('getMaxUnitNumber')) {
+    function getMaxUnitNumber($floor_id)
+    {
+        return (new Unit())->where('floor_id', $floor_id)->max('unit_number');
     }
 }

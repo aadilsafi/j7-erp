@@ -572,10 +572,6 @@
             t = setTimeout(calculateInstallments, 1500, 1);
         }
 
-        function numberFormat(number) {
-            return new Intl.NumberFormat().format(number);
-        }
-
         function conventToIntNumber(number) {
             return parseInt(number.toString().replace(/,/g, ''));
         }

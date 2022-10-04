@@ -4,6 +4,7 @@ namespace App\Http\Requests\units;
 
 use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class storeRequest extends FormRequest
 {
@@ -24,7 +25,12 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Unit())->rules;
+        $rules = (new Unit())->rules;
+        $rules['unit_number'] = [
+            'required', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
+        ];
+
+        return $rules;
     }
 
     /**

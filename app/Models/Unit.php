@@ -56,7 +56,6 @@ class Unit extends Model
         'name' => 'nullable|string|max:255',
         'width' => 'required|numeric',
         'length' => 'required|numeric',
-        'unit_number' => 'nullable|integer',
         // 'floor_unit_number' => 'required|numeric',
         'net_area' => 'required|numeric|gt:0',
         'gross_area' => 'required|numeric|gte:net_area',

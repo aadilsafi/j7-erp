@@ -860,6 +860,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-refund.preview',
+                'show_name' => 'Preview File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File Buy Back
             [
                 'name' => 'sites.file-managements.file-buy-back.index',

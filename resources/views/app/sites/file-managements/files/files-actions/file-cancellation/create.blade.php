@@ -197,8 +197,8 @@
             let cancellationCharges = $('#cancellation_charges').val();
             if(cancellationCharges < parseFloat(paid_amount)){
                 amount_refunded = parseFloat(paid_amount) - cancellationCharges;
-                $('#cancellation_charges').val();
                 $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
+                // $('#amount_to_be_refunded').attr('value',amount_refunded);
             }
             else{
                 toastr.error('Invalid Amount. Cancellation Charges should be less than Paid Amount',

@@ -47,7 +47,7 @@ class BuyBackService implements BuyBackInterface
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
-                'amount_to_be_refunded' => $inputs['amount_to_be_refunded'],
+                'amount_to_be_refunded' => str_replace( ',', '', $inputs['amount_to_be_refunded']) ,
                 'payment_due_date' => $inputs['payment_due_date'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,

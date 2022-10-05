@@ -71,7 +71,7 @@ class RebateIncentiveController extends Controller
             $inputs = $request->input();
 
             $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
-            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Sales Plan Saved!');
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong'));

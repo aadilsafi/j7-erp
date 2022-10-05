@@ -51,12 +51,15 @@ class FileBuyBackController extends Controller
     public function create($site_id, $unit_id, $customer_id)
     {
         if (!request()->ajax()) {
-
+            $unit = Unit::find(decryptParams($unit_id));
+            $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
+            $total_paid_amount = $receipts->sum('amount_in_numbers');
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'total_paid_amount' => $total_paid_amount,
             ];
             return view('app.sites.file-managements.files.files-actions.file-buy-back.create', $data);
         } else {

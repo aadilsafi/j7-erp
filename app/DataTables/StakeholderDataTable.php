@@ -72,8 +72,39 @@ class StakeholderDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.stakeholders.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $createPermission = Auth::user()->hasPermissionTo('sites.stakeholders.create');
+        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $selectedDeletePermission = 0;
+
+        $buttons = [
+            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('print')->addClass('dropdown-item'),
+                Button::make('copy')->addClass('dropdown-item'),
+                Button::make('csv')->addClass('dropdown-item'),
+                Button::make('excel')->addClass('dropdown-item'),
+                Button::make('pdf')->addClass('dropdown-item'),
+            ]),
+            Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+        ];
+
+        if ($createPermission) {
+            $addbutton = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                    'onclick' => 'addNew()',
+                ]);
+
+            array_unshift($buttons, $addbutton);
+        }
+
+        if ($selectedDeletePermission) {
+            $buttons[] = Button::raw('delete-selected')
+            ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+            ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                'onclick' => 'deleteSelected()',
+            ]);
+        }
 
         return $this->builder()
             ->setTableId('stakeholder-table')
@@ -86,64 +117,25 @@ class StakeholderDataTable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons(
-                ($createPermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ])
-
-                ),
-
-                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
-                    Button::make('print')->addClass('dropdown-item'),
-                    Button::make('copy')->addClass('dropdown-item'),
-                    Button::make('csv')->addClass('dropdown-item'),
-                    Button::make('excel')->addClass('dropdown-item'),
-                    Button::make('pdf')->addClass('dropdown-item'),
-                ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-
-                ($selectedDeletePermission ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                ),
-            )
+            ->buttons($buttons)
             // ->rowGroupDataSrc('parent_id')
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
+            // ->columnDefs([
+            //     [
+            //         'targets' => 0,
+            //         'className' => 'text-center text-primary',
+            //         'width' => '10%',
+            //         'orderable' => false,
+            //         'searchable' => false,
+            //         'responsivePriority' => 3,
+            //         'render' => "function (data, type, full, setting) {
+            //             var role = JSON.parse(data);
+            //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+            //         }",
+            //         'checkboxes' => [
+            //             'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+            //         ]
+            //     ],
+            // ])
             ->orders([
                 [2, 'asc'],
                 [4, 'desc'],
@@ -157,8 +149,9 @@ class StakeholderDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.stakeholders.edit');
+        $editPermission = Auth::user()->hasPermissionTo('sites.stakeholders.edit');
+        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $selectedDeletePermission = 0;
 
         $columns = [
             Column::make('full_name')->title('Name'),

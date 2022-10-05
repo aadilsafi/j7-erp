@@ -26,12 +26,6 @@ class ViewFilesDatatable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            // ->editColumn('father_name', function ($fileManagement) {
-            //     return strlen($fileManagement->stakeholder->father_name) > 0 ? $fileManagement->stakeholder->father_name : '-';
-            // })
-            // ->editColumn('full_name', function ($fileManagement) {
-            //     return strlen($fileManagement->stakeholder->full_name) > 0 ? $fileManagement->stakeholder->full_name : '-';
-            // })
             ->editColumn('floor_unit_number', function ($fileManagement) {
                 return strlen($fileManagement->unit->floor_unit_number) > 0 ? $fileManagement->unit->floor_unit_number : '-';
             })
@@ -56,15 +50,15 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('stakeholder_contact', function ($fileManagement) {
                 return strlen($fileManagement->stakeholder->contact) > 0 ? $fileManagement->stakeholder->contact : '-';
             })
-            ->editColumn('created_at', function ($fileManagement) {
-                return editDateColumn($fileManagement->created_at);
-            })
-            ->editColumn('updated_at', function ($fileManagement) {
-                return editDateColumn($fileManagement->updated_at);
-            })
+            // ->editColumn('created_at', function ($fileManagement) {
+            //     return editDateColumn($fileManagement->created_at);
+            // })
+            // ->editColumn('updated_at', function ($fileManagement) {
+            //     return editDateColumn($fileManagement->updated_at);
+            // })
             ->editColumn('file_status', function ($fileManagement) {
                 return editBadgeColumn($fileManagement->fileAction->name);
-            })
+                })
             // refund status
             ->editColumn('refund_status', function ($fileManagement) {
                 if (isset($fileManagement->fileRefund[0])) {
@@ -80,6 +74,7 @@ class ViewFilesDatatable extends DataTable
             // buy back status
             ->editColumn('buy_back_status', function ($fileManagement) {
                 if (isset($fileManagement->fileBuyBack[0])) {
+                    // dd($fileManagement->fileBuyBack[0]['status']);
                     if ($fileManagement->fileBuyBack[0]['status'] == 1) {
                         return editBadgeColumn('File Buy Back Request Approved');
                     } else {
@@ -91,7 +86,7 @@ class ViewFilesDatatable extends DataTable
             })
             // cancellation status
             ->editColumn('cancellation_status', function ($fileManagement) {
-                if (isset($fileManagement->fileBuyBack[0])) {
+                if (isset($fileManagement->fileCancellation[0])) {
                     if ($fileManagement->fileCancellation[0]['status'] == 1) {
                         return editBadgeColumn('File Cancellation Request Approved');
                     } else {
@@ -124,7 +119,7 @@ class ViewFilesDatatable extends DataTable
             // Cancellation Actions
             ->editColumn('cancellation_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileCancellation[0])) {
-                    return view('app.sites.file-managements.files.files-actions.file-cancellation.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileBuyBack[0]['id'], 'file_refund_status' => $fileManagement->fileBuyBack[0]['status'],]);
+                    return view('app.sites.file-managements.files.files-actions.file-cancellation.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileCancellation[0]['id'], 'file_refund_status' => $fileManagement->fileCancellation[0]['status'],]);
                 } else {
                     return "-";
                 }
@@ -233,8 +228,8 @@ class ViewFilesDatatable extends DataTable
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center'),
-            // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
-            // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            // // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
+            // // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
             // Refund Actions
             ($refundRoute ?
                 Column::computed('refund_status')->title('Refund File Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
@@ -247,7 +242,7 @@ class ViewFilesDatatable extends DataTable
                 Column::computed('refund_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
             ),
 
-            // Buy Back Actions
+            // // Buy Back Actions
             ($buyBackroute ?
                 Column::computed('buy_back_status')->title('Buy Back File Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
                 :

@@ -97,9 +97,9 @@
                                                 <label class="form-label fs-5" for="type_name">Attachment</label>
                                                 <input id="attachment" type="file"
                                                     class="filepond attachment @error('image') is-invalid @enderror"
-                                                    name="attachment[image]"
+                                                    name="attachments[image]"
                                                     accept="image/png, image/jpeg, image/gif" />
-                                                @error('image')
+                                                @error('attachments.image')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
                                             </div>

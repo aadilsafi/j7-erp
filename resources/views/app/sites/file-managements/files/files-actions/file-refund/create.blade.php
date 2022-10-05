@@ -69,7 +69,7 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" >
+                                <input type="checkbox" name="checkAttachment" class="form-check-input" value="1" id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
                                         Attachement Attached
                                 </label>
@@ -186,7 +186,33 @@
                 }
             });
         });
+
+        $('#colorCheck3').change(function(){
+            var check = $('#colorCheck3').is(':checked')
+            if(check){
+                var validator = $("#fileRefundForm").validate({
+                rules: {
+                'attachments[0][attachment_label]': {
+                    required: true
+                },
+                'attachment[0][image]': {
+                    required: true
+                },
+            },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+        });
+            }
+        })
+     
+       
+
         $("#saveButton").click(function() {
+            $("#fileRefundForm").removeClass('is-invalid text-danger')  
             $("#fileRefundForm").submit();
         });
     </script>

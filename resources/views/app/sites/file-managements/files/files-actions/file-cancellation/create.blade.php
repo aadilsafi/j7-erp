@@ -187,6 +187,30 @@
                 }
             });
         });
+
+        var validator = $("#fileRefundForm").validate({
+                rules: {
+                'cancellation_charges': {
+                    required: true
+                },
+                'payment_due_date': {
+                    required: true
+                },
+                'amount_remarks': {
+                    required: true
+                },
+                'amount_to_be_refunded': {
+                    required: true
+                },
+            },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });

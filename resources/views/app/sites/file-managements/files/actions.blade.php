@@ -6,6 +6,8 @@
             <i class="bi bi-file-person-fill" style="font-size: 1.1rem" class="m-10"></i>
         </a>
     @endcan
+
+    {{-- File Refund Actions --}}
     @if (Route::current()->getName() == 'sites.file-managements.file-refund.index')
         @php
             $checkFileRefund = DB::table('file_refunds')
@@ -29,7 +31,7 @@
 
     @endif
 
-
+    {{-- File Buy Back  --}}
     @if (Route::current()->getName() == 'sites.file-managements.file-buy-back.index')
         @php
             $checkFileBuyBack = DB::table('file_buy_backs')
@@ -52,5 +54,29 @@
         @endif
 
     @endif
+
+     {{-- File Cancellation  --}}
+     @if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index')
+     @php
+         $checkFileCancellation = DB::table('file_canecllations')
+             ->where('unit_id', $unit_id)
+             ->where('stakeholder_id', $customer_id)
+             ->first();
+     @endphp
+     @if (isset($checkFileCancellation))
+         <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+             data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
+             href="{{ route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_buy_back_id' => encryptParams($checkFileCancellation->id)]) }}">
+             <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
+         </a>
+     @else
+         <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+             data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Cancellation"
+             href="{{ route('sites.file-managements.file-cancellation.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
+             <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
+         </a>
+     @endif
+
+ @endif
 
 </div>

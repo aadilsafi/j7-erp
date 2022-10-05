@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
+use App\Models\Stakeholder;
 use Illuminate\Http\Request;
+use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\DataTables\ViewFilesDatatable;
+use App\Models\Receipt;
 
 class FileCancellationController extends Controller
 {
@@ -29,9 +33,23 @@ class FileCancellationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($site_id, $unit_id, $customer_id)
     {
-        //
+        if (!request()->ajax()) {
+            $unit = Unit::find(decryptParams($unit_id));
+            $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
+            $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'unit' => $unit,
+                'customer' => Stakeholder::find(decryptParams($customer_id)),
+                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'total_paid_amount' =>$total_paid_amount,
+            ];
+            return view('app.sites.file-managements.files.files-actions.file-cancellation.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**

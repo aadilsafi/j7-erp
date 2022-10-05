@@ -392,6 +392,7 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileCancellationController::class, 'show'])->name('preview');
                     });
 
                     // file release

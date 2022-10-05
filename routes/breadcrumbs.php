@@ -312,3 +312,20 @@ Breadcrumbs::for('sites.file-managements.file-buy-back.preview', function (Bread
     $trail->push('Preview File Buy Back', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 
 });
+
+//File Cancellation  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-cancellation.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Cancellation', route('sites.file-managements.file-cancellation.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-cancellation.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-cancellation.index', $site_id);
+    $trail->push('Create Cancellation', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-cancellation.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-cancellation.index', $site_id);
+    $trail->push('Preview Cancellation', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});

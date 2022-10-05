@@ -12,40 +12,52 @@
                 <div class="row mb-1">
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
-                        <input type="text" required name="amount_to_be_refunded" class="form-control form-control-lg"
-                            {{isset($buy_back_file) ? 'disabled' : '' }} id="amount_to_be_refunded"
-                            placeholder="Amount to be refunded"
-                            value="{{isset($buy_back_file) ? $buy_back_file->amount_to_be_refunded : ''}}" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="amount_to_be_refunded">Profit Amount</label>
-                        <input type="text" required name="amount_profit" class="form-control form-control-lg"
-                            {{isset($buy_back_file) ? 'disabled' : '' }} id="amount_profit"
-                            placeholder=" Profit Amount"
-                            value="{{isset($buy_back_file) ? $buy_back_file->amount_profit : ''}}" />
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges</label>
+                        <input type="number" onchange="calculateRefundedAmount()" required name="cancellation_charges" class="form-control form-control-lg"
+                            {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
+                            placeholder=" Cancellation Charges"
+                            value="{{ isset($cancellation_file) ? $cancellation_file->cancellation_charges : '' }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
-                            {{isset($buy_back_file) ? 'disabled' : '' }} id="payment_due_date"
+                            {{ isset($cancellation_file) ? 'disabled' : '' }} id="payment_due_date"
                             placeholder="Payment Due Date"
-                            value="{{isset($buy_back_file) ? $buy_back_file->payment_due_date : ''}}" />
+                            value="{{ isset($cancellation_file) ? $cancellation_file->payment_due_date : '' }}" />
                     </div>
 
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
+                        <input type="text" name="amount_remarks" required class="form-control form-control-lg"
+                            id="remarks" {{ isset($cancellation_file) ? 'disabled' : '' }}
+                            placeholder="Amount Remarks"
+                            value="{{ isset($cancellation_file) ? $cancellation_file->amount_remarks : '' }}" />
+                    </div>
 
 
                 </div>
 
                 <div class="row mb-1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
-                        <input type="text" name="amount_remarks" required class="form-control form-control-lg"
-                            id="remarks" {{isset($buy_back_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
-                            value="{{isset($buy_back_file) ? $buy_back_file->amount_remarks : ''}}"/>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
+                        <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
+                            id="paid_amount" placeholder=" Paid Amount"
+                            value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
                     </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
+                        <input type="text" disabled required name="amount_to_be_refunded"
+                            class="form-control form-control-lg" {{ isset($cancellation_file) ? 'disabled' : '' }}
+                            id="amount_to_be_refunded" placeholder="Amount to be refunded"
+                            value="{{ isset($cancellation_file) ? $cancellation_file->amount_to_be_refunded : '' }}" />
+                    </div>
+
+
+
                 </div>
 
             </div>
@@ -61,73 +73,73 @@
                 <h3>Attachments</h3>
             </div>
             <div class="card-body">
-                @if (isset($buy_back_file))
-                @foreach ($labels as $key => $label)
-                <div class="card m-0">
-                    <div class="card-body">
-                        <div>
-                            <div class="row mb-1">
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="expense_label">Attachement
-                                        label</label>
-                                    <input type="text" class="form-control form-control-lg" id="expense_label"
-                                        name="attachments[attachment_label]" value="{{$label->label}}" disabled
-                                        placeholder="Attachment Label" />
-                                </div>
-
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
-                                    <label class="form-label fs-5" for="type_name">Attachment</label>
-                                    <input id="attachment" type="file" class="filepond attachment" disabled
-                                        name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                @endforeach
-                @else
-                <div class="expenses-list">
-
-                    <div data-repeater-list="attachments">
-                        <div data-repeater-item>
-                            <div class="card m-0">
-                                <div class="card-body">
-                                    <div>
-                                        <div class="row mb-1">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                                <label class="form-label fs-5" for="expense_label">Attachement
-                                                    label</label>
-                                                <input type="text"
-                                                    class="form-control form-control-lg @error('attachments') is-invalid @enderror"
-                                                    id="expense_label" name="attachments[attachment_label]"
-                                                    placeholder="Attachment Label" />
-                                            </div>
-
-                                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
-                                                <label class="form-label fs-5" for="type_name">Attachment</label>
-                                                <input id="attachment" type="file"
-                                                    class="filepond attachment @error('image') is-invalid @enderror"
-                                                    name="attachment[image]"
-                                                    accept="image/png, image/jpeg, image/gif" />
-                                                @error('image')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-                                            </div>
+                @if (isset($cancellation_file))
+                    @foreach ($labels as $key => $label)
+                        <div class="card m-0">
+                            <div class="card-body">
+                                <div>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                            <label class="form-label fs-5" for="expense_label">Attachement
+                                                label</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="expense_label" name="attachments[attachment_label]"
+                                                value="{{ $label->label }}" disabled placeholder="Attachment Label" />
                                         </div>
 
-                                        <div class="row mb-1">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                                <div class="d-flex h-100 justify-content-end align-items-end">
-                                                    <div>
-                                                        <button
-                                                            class="btn btn-relief-outline-danger waves-effect waves-float waves-light"
-                                                            data-repeater-delete id="delete-contact-person"
-                                                            type="button">
-                                                            <i data-feather="x" class="me-25"></i>
-                                                            <span>Delete</span>
-                                                        </button>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                            <label class="form-label fs-5" for="type_name">Attachment</label>
+                                            <input id="attachment" type="file" class="filepond attachment" disabled
+                                                name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                @else
+                    <div class="expenses-list">
+
+                        <div data-repeater-list="attachments">
+                            <div data-repeater-item>
+                                <div class="card m-0">
+                                    <div class="card-body">
+                                        <div>
+                                            <div class="row mb-1">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                    <label class="form-label fs-5" for="expense_label">Attachement
+                                                        label</label>
+                                                    <input type="text"
+                                                        class="form-control form-control-lg @error('attachments') is-invalid @enderror"
+                                                        id="expense_label" name="attachments[attachment_label]"
+                                                        placeholder="Attachment Label" />
+                                                </div>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                                    <label class="form-label fs-5" for="type_name">Attachment</label>
+                                                    <input id="attachment" type="file"
+                                                        class="filepond attachment @error('image') is-invalid @enderror"
+                                                        name="attachment[image]"
+                                                        accept="image/png, image/jpeg, image/gif" />
+                                                    @error('image')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                    <div class="d-flex h-100 justify-content-end align-items-end">
+                                                        <div>
+                                                            <button
+                                                                class="btn btn-relief-outline-danger waves-effect waves-float waves-light"
+                                                                data-repeater-delete id="delete-contact-person"
+                                                                type="button">
+                                                                <i data-feather="x" class="me-25"></i>
+                                                                <span>Delete</span>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -136,17 +148,16 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
-                                id="add-new-attachment" type="button" data-repeater-create>
-                                <i data-feather="plus" class="me-25"></i>
-                                <span>Add New</span>
-                            </button>
+                        <div class="row">
+                            <div class="col-12">
+                                <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                                    id="add-new-attachment" type="button" data-repeater-create>
+                                    <i data-feather="plus" class="me-25"></i>
+                                    <span>Add New</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endif
 
             </div>
@@ -167,7 +178,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                         <input type="text" readonly value="{{ $customer->full_name }}"
-                            class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
+                            class="form-control form-control-lg" id="stackholder_full_name"
+                            placeholder="Full Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -180,7 +192,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                         <input type="text" readonly value="{{ $customer->occupation }}"
-                            class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
+                            class="form-control form-control-lg" id="stackholder_occupation"
+                            placeholder="Occupation" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -249,14 +262,16 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Unit Name</label>
-                        <input type="text" readonly value="{{ $unit->name }}" class="form-control form-control-lg"
-                            id="stackholder_full_name" placeholder="Unit Name" />
+                        <input type="text" readonly value="{{ $unit->name }}"
+                            class="form-control form-control-lg" id="stackholder_full_name"
+                            placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Unit Type</label>
-                        <input type="text" readonly value="{{ $unit->type->name }}" class="form-control form-control-lg"
-                            id="stackholder_father_name" placeholder="Unit Type" />
+                        <input type="text" readonly value="{{ $unit->type->name }}"
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
                     </div>
 
                 </div>
@@ -302,8 +317,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
-                            {{isset($buy_back_file) ? 'disabled' : '' }}
-                                placeholder="Comments" rows="5">{{isset($buy_back_file) ? $buy_back_file->comments : '' }}</textarea>
+                                {{ isset($cancellation_file) ? 'disabled' : '' }} placeholder="Comments" rows="5">{{ isset($cancellation_file) ? $cancellation_file->comments : '' }}</textarea>
                         </div>
                     </div>
                 </div>

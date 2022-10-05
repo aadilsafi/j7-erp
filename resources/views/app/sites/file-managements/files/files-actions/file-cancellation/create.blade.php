@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-refund.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-cancellation.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create File Refund ')
+@section('page-title', 'Create File Cancellation ')
 
 @section('page-vendor')
 @endsection
@@ -38,9 +38,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create File Refund</h2>
+                <h2 class="content-header-title float-start mb-0">Create File Cancellation</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.file-managements.file-refund.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.file-managements.file-cancellation.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -49,16 +49,17 @@
 
 @section('content')
     <form id="fileRefundForm" enctype="multipart/form-data"
-        action="{{ route('sites.file-managements.file-refund.store', ['site_id' => encryptParams($site_id)]) }}"
+        action="{{ route('sites.file-managements.file-cancellation.store', ['site_id' => encryptParams($site_id)]) }}"
         method="post" class="">
         @csrf
         <div class="row">
             <div id="loader" class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                {{ view('app.sites.file-managements.files.files-actions.file-refund.form-fields', [
+                {{ view('app.sites.file-managements.files.files-actions.file-cancellation.form-fields', [
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
                     'file' =>$file,
+                    'total_paid_amount' => $total_paid_amount,
                 ]) }}
             </div>
 
@@ -79,10 +80,10 @@
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
-                            Save File Refund
+                            Save File Cancellation
                         </a>
 
-                        <a href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -189,5 +190,26 @@
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });
+
+        function calculateRefundedAmount(){
+            let paid_amount = '{{ $total_paid_amount }}';
+            let amount_refunded = 0.0;
+            let cancellationCharges = $('#cancellation_charges').val();
+            if(cancellationCharges < parseFloat(paid_amount)){
+                amount_refunded = parseFloat(paid_amount) - cancellationCharges;
+                $('#cancellation_charges').val();
+                $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
+            }
+            else{
+                toastr.error('Invalid Amount. Cancellation Charges should be less than Paid Amount',
+                    "Error!", {
+                        showMethod: "slideDown",
+                        hideMethod: "slideUp",
+                        timeOut: 2e3,
+                        closeButton: !0,
+                        tapToDismiss: !1,
+                    });
+            }
+        }
     </script>
 @endsection

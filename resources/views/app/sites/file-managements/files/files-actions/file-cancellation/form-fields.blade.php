@@ -16,7 +16,7 @@
                         <input type="number" min="1" onchange="calculateRefundedAmount()" required name="cancellation_charges" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
                             placeholder=" Cancellation Charges"
-                            value="{{ isset($cancellation_file) ? $cancellation_file->cancellation_charges : '' }}" />
+                            value="{{ isset($cancellation_file) ? number_format($cancellation_file->cancellation_charges) : '' }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -53,7 +53,7 @@
                         <input type="text" readonly required name="amount_to_be_refunded"
                             class="form-control form-control-lg" {{ isset($cancellation_file) ? 'disabled' : '' }}
                             id="amount_to_be_refunded" placeholder="Amount to be refunded"
-                            value="{{ isset($cancellation_file) ? $cancellation_file->amount_to_be_refunded : '' }}" />
+                            value="{{ isset($cancellation_file) ? number_format($cancellation_file->amount_to_be_refunded) : '' }}" />
                     </div>
 
 

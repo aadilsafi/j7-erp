@@ -98,7 +98,7 @@ class UnitController extends Controller
                     // dd('true');
                     return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {
-                    $record = $this->unitInterface->store($site_id, $floor_id, $inputs);
+                    $record = $this->unitInterface->store($site_id, decryptParams($floor_id), $inputs);
                 }
 
                 return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));

@@ -125,7 +125,8 @@
                             <select class="form-select form-select-lg" id="dealer" name="dealer_id">
                                 <option value="0">Create new Dealer</option>
                                 @forelse ($dealer_data as $dealer)
-                                <option value="{{ $dealer->stakeholder->id }}" {{isset($rebate_data) && $rebate_data->dealer_id == $dealer->stakeholder->id ? 'selected' : ''}}>{{ $dealer->stakeholder->full_name }}
+                                <option value="{{ $dealer->stakeholder->id }}" {{isset($rebate_data) && $rebate_data->dealer_id == $dealer->stakeholder->id ? 'selected' : ''}}>
+                                    {{ $dealer->stakeholder->full_name }} ( {{$dealer->stakeholder->cnic}} ) - {{$dealer->stakeholder->designation}}
                                 </option>
                                 @empty
                                 @endforelse
@@ -330,6 +331,9 @@
                                     <th style="vertical-align: middle;" rowspan="2" scope="col">
                                         Rate
                                     </th>
+                                    <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                        Floor
+                                    </th>
                                     <th style="vertical-align: middle;" scope="col">Face Charges</th>
                                     <th style="vertical-align: middle;" scope="col">Discount</th>
                                     <th style="vertical-align: middle;" scope="col">Total</th>
@@ -354,6 +358,7 @@
                                     <td id="td_unit_id">-</td>
                                     <td id="td_unit_area">-</td>
                                     <td id="td_unit_rate">-</td>
+                                    <td id="td_unit_floor">-</td>
                                     <td id="td_unit_facing_charges">-</td>
                                     <td id="td_unit_discount">-</td>
                                     <td id="td_unit_total">-</td>

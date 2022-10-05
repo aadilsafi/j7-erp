@@ -72,7 +72,7 @@
                     <td>{{ $key+1 }}</td>
                     <td class="text-start">{{ $installment->details }}</td>
                     <td> {{  date_format (new DateTime($installment->date), 'd/m/Y') }}</td>
-                    <td>{{ $installment->amount }}</td>
+                    <td>{{ number_format($installment->amount) }}</td>
                     <td>-</td>
                     <td>-</td>
                     <td><span class="fw-bold text-success">UnPaid</span></td>

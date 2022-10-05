@@ -120,6 +120,7 @@
                         $('#td_unit_id').html(response.unit.unit_number);
                         $('#td_unit_area').html(response.unit.gross_area);
                         $('#td_unit_rate').html(response.unit.price_sqft.toLocaleString());
+                        $('#td_unit_floor').html(response.floor);
 
                         if (response.unit.facing != null) {
                             $('#td_unit_facing_charges').html(response.unit.facing.unit_percentage + '%');

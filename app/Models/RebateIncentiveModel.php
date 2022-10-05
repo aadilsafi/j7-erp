@@ -37,5 +37,8 @@ class RebateIncentiveModel extends Model
     {
         return $this->belongsTo(Stakeholder::class);
     }
-
+    public function dealer()
+    {
+        return $this->belongsTo(Stakeholder::class,'dealer_id','id');
+    }
 }

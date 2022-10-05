@@ -165,6 +165,7 @@ class RebateIncentiveController extends Controller
         $stakeholder = $unit->salesPlan[0]['stakeholder'];
         $leadSource = $unit->salesPlan[0]['leadSource'];
         $salesPlan = $unit->salesPlan[0];
+        $floor = $unit->floor->short_label;
 
         return response()->json([
             'success' => true,
@@ -173,6 +174,7 @@ class RebateIncentiveController extends Controller
             'leadSource' => $leadSource,
             'cnic' => cnicFormat($stakeholder->cnic),
             'salesPlan' => $salesPlan,
+            'floor' => $floor
         ], 200);
     }
 }

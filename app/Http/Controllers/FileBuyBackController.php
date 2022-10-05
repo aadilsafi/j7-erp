@@ -100,6 +100,10 @@ class FileBuyBackController extends Controller
         $files_labels = FileBuyBackLabelsAttachment::where('file_buy_back_id', decryptParams($id))->get();
         $images = [];
 
+        $unit = Unit::find(decryptParams($unit_id));
+        $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+
         foreach ($files_labels as $key=>$file) {
             $image = $file->getFirstMedia('file_buy_back_attachments');
             $images[$key] = $image->getUrl();
@@ -112,6 +116,7 @@ class FileBuyBackController extends Controller
             'buy_back_file' => (new FileBuyBack())->find(decryptParams($id)),
             'images' => $images,
             'labels' => $files_labels,
+            'total_paid_amount' => $total_paid_amount,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-buy-back.preview', $data);

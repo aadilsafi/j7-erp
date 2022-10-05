@@ -15,7 +15,7 @@
                             name="amount_profit" class="form-control form-control-lg"
                             {{ isset($buy_back_file) ? 'disabled' : '' }} id="profit_charges"
                             placeholder=" Profit Charges"
-                            value="{{ isset($buy_back_file) ? $buy_back_file->amount_profit : '' }}" />
+                            value="{{ isset($buy_back_file) ? number_format($buy_back_file->amount_profit) : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
@@ -45,7 +45,7 @@
                         <input type="text" readonly required name="amount_to_be_refunded"
                             class="form-control form-control-lg" {{ isset($buy_back_file) ? 'disabled' : '' }}
                             id="amount_to_be_refunded" placeholder="Amount to be refunded"
-                            value="{{ isset($buy_back_file) ? $buy_back_file->amount_to_be_refunded : '' }}" />
+                            value="{{ isset($buy_back_file) ? number_format($buy_back_file->amount_to_be_refunded ): '' }}" />
                     </div>
                 </div>
 

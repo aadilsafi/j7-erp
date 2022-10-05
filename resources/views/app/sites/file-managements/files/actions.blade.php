@@ -66,7 +66,7 @@
      @if (isset($checkFileCancellation))
          <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
              data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
-             href="{{ route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_buy_back_id' => encryptParams($checkFileCancellation->id)]) }}">
+             href="{{ route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_cancellation_id' => encryptParams($checkFileCancellation->id)]) }}">
              <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
          </a>
      @else

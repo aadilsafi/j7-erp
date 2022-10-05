@@ -20,7 +20,6 @@ class FileCanecllation extends Model
         'dealer_data',
         'amount_to_be_refunded',
         'cancellation_charges',
-        // 'total_amount_refunded',
         'payment_due_date',
         'amount_remarks',
         'status',

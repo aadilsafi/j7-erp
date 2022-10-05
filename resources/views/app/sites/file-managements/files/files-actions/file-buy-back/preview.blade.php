@@ -57,7 +57,8 @@
             'unit' => $unit,
             'customer' => $customer,
             'buy_back_file' => $buy_back_file,
-            'labels' => $labels
+            'labels' => $labels,
+            'total_paid_amount' => $total_paid_amount,
             ]) }}
         </div>
 

@@ -13,7 +13,7 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges</label>
-                        <input type="number" onchange="calculateRefundedAmount()" required name="cancellation_charges" class="form-control form-control-lg"
+                        <input type="number" onchange="calculateRefundedAmount()" name="cancellation_charges" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
                             placeholder=" Cancellation Charges"
                             value="{{ isset($cancellation_file) ? $cancellation_file->cancellation_charges : '' }}" />
@@ -21,7 +21,7 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
-                        <input type="date" required name="payment_due_date" class="form-control form-control-lg"
+                        <input type="date" name="payment_due_date" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="payment_due_date"
                             placeholder="Payment Due Date"
                             value="{{ isset($cancellation_file) ? $cancellation_file->payment_due_date : '' }}" />
@@ -30,7 +30,7 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
-                        <input type="text" name="amount_remarks" required class="form-control form-control-lg"
+                        <input type="text" name="amount_remarks" class="form-control form-control-lg"
                             id="remarks" {{ isset($cancellation_file) ? 'disabled' : '' }}
                             placeholder="Amount Remarks"
                             value="{{ isset($cancellation_file) ? $cancellation_file->amount_remarks : '' }}" />
@@ -50,7 +50,7 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
-                        <input type="text" disabled required name="amount_to_be_refunded"
+                        <input type="text" disabled name="amount_to_be_refunded"
                             class="form-control form-control-lg" {{ isset($cancellation_file) ? 'disabled' : '' }}
                             id="amount_to_be_refunded" placeholder="Amount to be refunded"
                             value="{{ isset($cancellation_file) ? $cancellation_file->amount_to_be_refunded : '' }}" />

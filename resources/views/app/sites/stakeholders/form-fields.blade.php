@@ -149,9 +149,9 @@
         <div class="row mb-1" id="div-next-of-kin"
             style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
+                <label class="form-label" style="font-size: 15px" for="parent_id">Customers</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
-                    <option value="0" selected>Select Next Of Kin</option>
+                    <option value="0" selected>Select Customer</option>
                     @foreach ($stakeholders as $stakeholderRow)
                         @continue(!$stakeholderRow->stakeholder_types->where('type', 'C')->first()->status)
                         <option value="{{ $stakeholderRow['id'] }}"
@@ -165,9 +165,9 @@
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="relation">Next Of Kin Relation</label>
+                <label class="form-label fs-5" for="relation">Relation</label>
                 <input type="text" class="form-control form-control-lg @error('relation') is-invalid @enderror"
-                    id="stakeholder_name" name="relation" placeholder="Next Of Kin Relation"
+                    id="stakeholder_name" name="relation" placeholder="Relation"
                     value="{{ isset($stakeholder) ? $stakeholder->relation : old('stakeholder_name') }}" />
                 @error('relation')
                     <div class="invalid-feedback">{{ $message }}</div>

@@ -39,9 +39,9 @@ class storeRequest extends FormRequest
             $validator->after(function ($validator) {
                 if ($this->stakeholder_type == 'C') {
                     $parent_id = $this->parent_id;
-                    if ($parent_id < 1) {
-                        $validator->errors()->add('parent_id', 'Please select a next of kin');
-                    }
+                    // if ($parent_id < 1) {
+                    //     $validator->errors()->add('parent_id', 'Please select a next of kin');
+                    // }
 
                     if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
                         $validator->errors()->add('relation', 'Relation is required');

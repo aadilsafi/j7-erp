@@ -54,6 +54,12 @@ class RebateIncentiveDataTable extends DataTable
             ->editColumn('commision_percentage', function ($rebateIncentive) {
                 return $rebateIncentive->commision_percentage .'%';
             })
+            ->editColumn('dealer_id', function ($rebateIncentive) {
+                return $rebateIncentive->dealer->full_name ;
+            })
+            ->editColumn('commision_total', function ($rebateIncentive) {
+                return number_format($rebateIncentive->commision_total) ;
+            })
             ->editColumn('created_at', function ($rebateIncentive) {
                 return editDateColumn($rebateIncentive->created_at);
             })
@@ -176,7 +182,7 @@ class RebateIncentiveDataTable extends DataTable
             Column::computed('stakeholder_id')->title('Full Name')->addClass('text-nowrap text-center'),
             Column::computed('stakeholder_cnic')->title('Cnic')->addClass('text-nowrap '),
             Column::computed('stakeholder_contact')->title('Contact')->addClass('text-nowrap text-center'),
-
+            Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
             Column::make('deal_type')->title('Deal Type')->addClass('text-nowrap text-center'),
             Column::computed('commision_percentage')->title('Commision Percentage')->addClass('text-nowrap text-center'),
             Column::computed('commision_total')->title('Commision Total')->addClass('text-nowrap text-center'),

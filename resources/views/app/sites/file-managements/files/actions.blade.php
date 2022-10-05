@@ -6,12 +6,51 @@
             <i class="bi bi-file-person-fill" style="font-size: 1.1rem" class="m-10"></i>
         </a>
     @endcan
-    @if (Route::current()->getName() == "sites.file-managements.file-refund.index")
-        <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
-            data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Refund"
-            href="{{ route('sites.file-managements.file-refund.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
-            <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
-        </a>
+    @if (Route::current()->getName() == 'sites.file-managements.file-refund.index')
+        @php
+            $checkFileRefund = DB::table('file_refunds')
+                ->where('unit_id', $unit_id)
+                ->where('stakeholder_id', $customer_id)
+                ->first();
+        @endphp
+        @if (isset($checkFileRefund))
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
+                href="{{ route('sites.file-managements.file-refund.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_refund_id' => encryptParams($checkFileRefund->id)]) }}">
+                <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @else
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Refund"
+                href="{{ route('sites.file-managements.file-refund.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
+                <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @endif
+
+    @endif
+
+
+    @if (Route::current()->getName() == 'sites.file-managements.file-buy-back.index')
+        @php
+            $checkFileBuyBack = DB::table('file_buy_backs')
+                ->where('unit_id', $unit_id)
+                ->where('stakeholder_id', $customer_id)
+                ->first();
+        @endphp
+        @if (isset($checkFileBuyBack))
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
+                href="{{ route('sites.file-managements.file-buy-back.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_buy_back_id' => encryptParams($checkFileBuyBack->id)]) }}">
+                <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @else
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Buy Back"
+                href="{{ route('sites.file-managements.file-buy-back.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
+                <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @endif
+
     @endif
 
 </div>

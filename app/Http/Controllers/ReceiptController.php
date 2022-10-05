@@ -12,6 +12,7 @@ use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
 use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
+use App\Models\Site;
 use App\Models\Stakeholder;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
@@ -75,7 +76,7 @@ class ReceiptController extends Controller
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
                 if (isset($record['remaining_amount'])) {
-                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst ' . $record['unit_name'] . ' saved. Remaining amount is ' . $record['remaining_amount']))->with('remaining_amount', $record['remaining_amount']);
+                    return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('Data Agianst ' . $record['unit_name'] . ' saved as draft. Remaining amount is ' . $record['remaining_amount']))->with('remaining_amount', $record['remaining_amount']);
                 } else {
                     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
                 }
@@ -93,10 +94,39 @@ class ReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $id)
     {
-        //
-        abort(403);
+        $site = (new Site())->find(decryptParams($site_id));
+        $receipt = (new Receipt())->find(decryptParams($id));
+        $image = $receipt->getFirstMediaUrl('receipt_attachments');
+
+        $installmentNumbersArray = json_decode($receipt->installment_number);
+
+        $lastInstallment = array_pop($installmentNumbersArray);
+        $unit_data =  $receipt->unit;
+
+        $last_paid_installment_id = SalesPlanInstallments::where([
+            'sales_plan_id' => $receipt->sales_plan_id,
+            'details' => $lastInstallment
+        ])->first()->id;
+
+        $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
+        $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
+        // if($lastIntsalmentStatus == 'paid'){
+        //     $paid_installments = SalesPlanInstallments::all();
+        //     $unpadid_installments = null;
+        // }
+
+        return view('app.sites.receipts.preview', [
+            'site' => $site,
+            'receipt' => $receipt,
+            'image' => $image,
+            'unit_data' => $unit_data,
+            'paid_installments' => $paid_installments,
+            'unpaid_installments' => $unpaid_installments,
+            'stakeholder_data' => $stakeholder_data
+        ]);
     }
 
     /**
@@ -107,20 +137,7 @@ class ReceiptController extends Controller
      */
     public function edit($site_id, $id)
     {
-        //
-        $site_id = decryptParams($site_id);
-        $receipt = Receipt::find(decryptParams($id));
-        $image = $receipt->getFirstMediaUrl('receipt_attachments');
-        $receipt_installment_numbers = str_replace(str_split('[]"'), '', $receipt->installment_number);
-        $installmentNumbersArray = explode(",", $receipt_installment_numbers);
-        $last_index = array_key_last($installmentNumbersArray);
-        $first_letter = str_split($installmentNumbersArray[$last_index]);
-        $unit_data =  $receipt->unit;
-        $last_paid_installment_id = SalesPlanInstallments::where('details', 'LIKE', '%' . $first_letter[0] . '%')->where('sales_plan_id', $receipt->sales_plan_id)->first()->id;
-        $unpadid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
-        return view('app.sites.receipts.preview', compact('site_id', 'unit_data', 'stakeholder_data', 'paid_installments', 'unpadid_installments', 'receipt', 'image'));
+        abort(403);
     }
 
     /**
@@ -220,6 +237,7 @@ class ReceiptController extends Controller
     {
         $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('PaidorPartiallyPaidInstallments', 'unPaidInstallments', 'stakeholder')->first();
         $stakeholders = $sales_plan->stakeholder;
+        $stakeholders->cnic = cnicFormat($stakeholders->cnic);
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
         $calculate_amount = 0;

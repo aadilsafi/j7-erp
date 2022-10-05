@@ -32,11 +32,11 @@ return new class extends Migration
             $table->double('amount_in_numbers');
             $table->string('purpose');
             $table->string('other_purpose')->nullable();
-            $table->string('installment_number')->nullable();
+            $table->text('installment_number')->nullable();
             $table->string('attachment')->nullable();
             $table->string('amount_received')->nullable();
             $table->string('comments')->nullable();
-            $table->boolean('status')->default(0);
+            $table->double('status')->default(0);
             $table->string('bank_details')->nullable();
             $table->timestamps();
         });

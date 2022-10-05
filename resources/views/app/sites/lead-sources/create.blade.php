@@ -21,7 +21,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Lead Sources</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.lead-sources.create',  encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.lead-sources.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -29,35 +29,44 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <form class="form form-vertical" action="{{ route('sites.lead-sources.store', ['site_id' => encryptParams($site_id)]) }}"
-            method="POST">
+    <form class="form form-vertical" action="{{ route('sites.lead-sources.store', ['site_id' => encryptParams($site_id)]) }}"
+        method="POST">
 
-            <div class="card-header">
-            </div>
-
-            <div class="card-body">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-
                 {{ view('app.sites.lead-sources.form-fields') }}
 
             </div>
 
-            <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1">
-                    <i data-feather='save'></i>
-                    Save Lead Sources
-                </button>
-                <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                        <i data-feather='save'></i>
+                                        Save Lead Source
+                                    </button>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"
+                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        </form>
-    </div>
+    </form>
 @endsection
 
 @section('vendor-js')

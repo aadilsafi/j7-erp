@@ -8,6 +8,7 @@
                         {{ isset($stakeholder) ? 'disabled' : null }}>
                         <option value="0" selected>Select Stakeholder Type</option>
                         @foreach ($stakeholderTypes as $key => $value)
+                            @continue($value == 'K')
                             <option value="{{ $value }}">
                                 {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
                             </option>
@@ -28,9 +29,11 @@
                                     class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
                                 <div class="form-check form-switch form-check-success">
                                     <input type="checkbox" class="form-check-input"
-                                        id="stakeholder_type_{{ $type->type }}" onchange="performAction('{{ $type->type }}')"
+                                        id="stakeholder_type_{{ $type->type }}"
+                                        onchange="performAction('{{ $type->type }}')"
                                         name="stakeholder_type[{{ $type->type }}]" value="1"
-                                        {{ $type->status ? 'checked disabled' : null }} />
+                                        {{ $type->status ? 'checked' : null }}
+                                        {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
                                     <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                         <span class="switch-icon-left"><i data-feather="check"></i></span>
                                         <span class="switch-icon-right"><i data-feather="x"></i></span>
@@ -92,7 +95,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="contact">Contact</label>
-                <input type="text" class="form-control form-control-lg @error('contact') is-invalid @enderror"
+                <input type="number" class="form-control form-control-lg @error('contact') is-invalid @enderror"
                     id="contact" name="contact" placeholder="Contact Number"
                     value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" />
                 @error('contact')
@@ -105,8 +108,8 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC</label>
-                <input type="text" class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC Without Dashes"
+                <input type="number" class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
+                    id="cnic" name="cnic" placeholder="CNIC Without Dashes" min="13"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
                 @error('cnic')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -115,7 +118,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="ntn">NTN</label>
-                <input type="text" class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                <input type="number" class="form-control form-control-lg @error('ntn') is-invalid @enderror"
                     id="ntn" name="ntn" placeholder="NTN Number"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
                 @error('ntn')
@@ -143,7 +146,8 @@
             </div>
         </div>
 
-        <div class="row mb-1" id="div-next-of-kin" style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
+        <div class="row mb-1" id="div-next-of-kin"
+            style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
@@ -183,8 +187,8 @@
     <div class="card-body">
         <div class="contact-persons-list">
             <div data-repeater-list="contact-persons">
-                <div data-repeater-item>
-                    @forelse ((isset($stakeholder) && count($stakeholder->contacts) > 0 ? $stakeholder->contacts : old('contact-persons')) ?? $emptyRecord as $key => $oldContactPersons)
+                @forelse ((isset($stakeholder) && count($stakeholder->contacts) > 0 ? $stakeholder->contacts : old('contact-persons')) ?? $emptyRecord as $key => $oldContactPersons)
+                    <div data-repeater-item>
                         <div class="card m-0">
                             <div class="card-header pt-0">
                                 <h3>Contact Person</h3>
@@ -246,7 +250,7 @@
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="contact">Contact</label>
-                                            <input type="text"
+                                            <input type="number"
                                                 class="form-control form-control-lg @error('contact') is-invalid @enderror"
                                                 id="contact_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][contact]"
@@ -259,7 +263,7 @@
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="cnic">CNIC</label>
-                                            <input type="text"
+                                            <input type="number"
                                                 class="unique cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
                                                 id="cnic_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][cnic]"
@@ -272,7 +276,7 @@
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="ntn">NTN</label>
-                                            <input type="text"
+                                            <input type="number"
                                                 class="form-control form-control-lg @error('ntn') is-invalid @enderror"
                                                 id="ntn_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][ntn]"
@@ -291,9 +295,9 @@
                                 </div>
                             </div>
                         </div>
-                    @empty
-                    @endforelse
-                </div>
+                    </div>
+                @empty
+                @endforelse
             </div>
             <div class="row">
                 <div class="col-12">

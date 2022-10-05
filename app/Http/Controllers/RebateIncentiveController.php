@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use App\DataTables\RebateIncentiveDataTable;
-use App\Models\SalesPlanInstallments;
+use App\Models\RebateIncentiveModel;
+use App\Models\StakeholderType;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RebateIncentiveController extends Controller
 {
@@ -41,11 +44,13 @@ class RebateIncentiveController extends Controller
      */
     public function create(Request $request, $site_id)
     {
-        //
+
         if (!request()->ajax()) {
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
+                'rebate_files' => RebateIncentiveModel::pluck('id')->toArray(),
+                'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);
@@ -60,10 +65,17 @@ class RebateIncentiveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $site_id)
     {
-        //
-        abort(403);
+        try {
+            $inputs = $request->input();
+
+            $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Sales Plan Saved!');
+        } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**
@@ -83,9 +95,30 @@ class RebateIncentiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($site_id, $id)
     {
-        //
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+
+        try {
+            $rebate_data = $this->rebateIncentive->getById($site_id, $id);
+            if ($rebate_data && !empty($rebate_data)) {
+
+                $data = [
+                    'site_id' => $site_id,
+                    'id' => $id,
+                    'rebate_data' => $rebate_data,
+                    'edit_unit' => Unit::find($rebate_data->unit_id),
+                    'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                ];
+
+                return view('app.sites.file-managements.files.rebate-incentive.edit', $data);
+            }
+
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -95,9 +128,23 @@ class RebateIncentiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $site_id, $id)
     {
-        //
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
+
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+
+                $record = $this->rebateIncentive->update($site_id, $id, $inputs);
+                return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -113,6 +160,7 @@ class RebateIncentiveController extends Controller
 
     public function getData(Request $request)
     {
+        // dd($request->all());
         $unit = Unit::find($request->unit_id);
         $stakeholder = $unit->salesPlan[0]['stakeholder'];
         $leadSource = $unit->salesPlan[0]['leadSource'];

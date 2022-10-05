@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('commision_total')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->foreignId('dealer_id')->constrained('stakeholders');
             $table->timestamps();
         });
     }

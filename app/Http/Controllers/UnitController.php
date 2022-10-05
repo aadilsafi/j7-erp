@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\UnitsDataTable;
-use App\DataTables\UnitsPreviewDataTable;
-use App\Models\{Facing, Floor, Site, Status, Unit};
+use App\DataTables\{UnitsDataTable, UnitsPreviewDataTable};
+use App\Models\{Floor, Site, Status, Unit};
 use App\Services\Interfaces\{UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
@@ -12,8 +11,7 @@ use App\Http\Requests\units\{
     updateRequest as unitUpdateRequest
 };
 use App\Services\AdditionalCosts\AdditionalCostInterface;
-use App\Utils\Enums\UserBatchActionsEnum;
-use App\Utils\Enums\UserBatchStatusEnum;
+use App\Utils\Enums\{UserBatchActionsEnum, UserBatchStatusEnum};
 use Exception;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,8 +41,7 @@ class UnitController extends Controller
      */
     public function index(UnitsDataTable $dataTable, $site_id, $floor_id)
     {
-
-        $nonActiveUnits = (new Unit())->where('active', false)->where('floor_id',decryptParams($floor_id))->get();
+        $nonActiveUnits = (new Unit())->where('active', false)->where('floor_id', decryptParams($floor_id))->get();
 
         if (!empty($nonActiveUnits) && count($nonActiveUnits) > 0) {
             return redirect()->route('sites.floors.units.preview', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id))]);
@@ -73,6 +70,7 @@ class UnitController extends Controller
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
+                'max_unit_number' => getMaxUnitNumber(decryptParams($floor_id)) + 1,
             ];
 
             return view('app.sites.floors.units.create', $data);
@@ -215,13 +213,14 @@ class UnitController extends Controller
         return $dataTable->with($data)->render('app.sites.floors.units.preview', $data);
     }
 
-    public function saveChanges(Request $request,$site_id, $floor_id){
+    public function saveChanges(Request $request, $site_id, $floor_id)
+    {
 
         try {
             (new Unit())->where('floor_id', decryptParams($floor_id))->update([
                 'active' => true
             ]);
-            return redirect()->route('sites.floors.units.index',['site_id'=>encryptParams(decryptParams($site_id)), 'floor_id'=>encryptParams(decryptParams($floor_id))]);
+            return redirect()->route('sites.floors.units.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id))]);
         } catch (Exception $th) {
             return redirect()->back();
         }
@@ -230,7 +229,7 @@ class UnitController extends Controller
     public function updateUnitName(Request $request)
     {
         try {
-            $unit = Unit::find((int)$request->get('id'));
+            $unit = (new Unit())->find((int)$request->get('id'));
             $value = $request->get('value');
             $field = $request->get('field');
 
@@ -240,7 +239,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'name'      => 'required|string|max:255',
+                            'name' => 'required|string|max:255',
                         ]
                     );
                     break;
@@ -249,7 +248,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'width'      => 'required|numeric',
+                            'width' => 'required|numeric',
                         ]
                     );
                     break;
@@ -258,7 +257,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'length'      => 'required|numeric',
+                            'length' => 'required|numeric',
                         ]
                     );
                     break;
@@ -267,7 +266,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'net_area'      => 'required|numeric',
+                            'net_area' => 'required|numeric',
                         ]
                     );
                     break;
@@ -276,7 +275,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'gross_area'      => 'required|numeric|gte:' . $unit->net_area,
+                            'gross_area' => 'required|numeric|gte:' . $unit->net_area,
                         ]
                     );
                     break;
@@ -285,7 +284,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'price_sqft'      => 'required|numeric',
+                            'price_sqft' => 'required|numeric',
                         ]
                     );
                     break;
@@ -294,7 +293,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'is_corner'      => 'required|boolean|in:0,1',
+                            'is_corner' => 'required|boolean|in:0,1',
                         ]
                     );
                     break;
@@ -303,7 +302,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'is_facing'      => 'required|boolean|in:0,1',
+                            'is_facing' => 'required|boolean|in:0,1',
                         ]
                     );
                     break;
@@ -312,7 +311,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'facing_id'      => 'required_if:' . $unit->is_facing . ',1|integer',
+                            'facing_id' => 'required_if:' . $unit->is_facing . ',1|integer',
                         ]
                     );
                     break;
@@ -321,7 +320,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'type_id'      => 'required|integer',
+                            'type_id' => 'required|integer',
                         ]
                     );
                     break;
@@ -330,7 +329,7 @@ class UnitController extends Controller
                     $validateRequest = Validator::make(
                         $request->get('fieldsData'),
                         [
-                            'status_id'      => 'required|integer',
+                            'status_id' => 'required|integer',
                         ]
                     );
                     break;

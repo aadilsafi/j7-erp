@@ -284,9 +284,25 @@
         }
         // hideBlockUI();
 
-        $('.buttonToBlockUI').on('click', function() {
+        // $('.buttonToBlockUI').on('click', function() {
+        //     showBlockUI();
+
+        //     setTimeout(function() {
+        //         hideBlockUI();
+        //     }, 2000);
+        // });
+
+        $('form').on('submit', function() {
             showBlockUI();
+
+            setTimeout(function() {
+                hideBlockUI();
+            }, 3000);
         });
+
+        function numberFormat(number) {
+            return new Intl.NumberFormat().format(number);
+        }
     </script>
 
     @yield('custom-js')

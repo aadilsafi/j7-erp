@@ -180,7 +180,7 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
         ];
 
-        actionLog(get_class($salesPlan), auth()->user(), $role, 'print', [
+        actionLog(get_class($salesPlan), auth()->user(), $template, 'print', [
             'attributes' => $salesPlan->toArray()
         ]);
 
@@ -204,8 +204,7 @@ class SalesPlanController extends Controller
     public function approveSalesPlan(Request $request,$site_id, $floor_id, $unit_id)
     {
 
-
-        $salesPlan = (new SalesPlan())->where('id', '>', 0)->where('unit_id',decryptParams($unit_id))->update([
+        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id',decryptParams($unit_id))->update([
             'status' => 2,
             'approved_date' => now(),
         ]);

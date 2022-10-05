@@ -49,6 +49,8 @@
                 {{ view('app.sites.file-managements.files.rebate-incentive.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
+                    'dealer_data' =>$dealer_data,
+                    'rebate_files' => $rebate_files
                 ]) }}
             </div>
             <div  class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -86,6 +88,8 @@
 @endsection
 
 @section('page-js')
+<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -105,6 +109,7 @@
                 success: function(response) {
                     if (response.success) {
                         $('#sales_source_lead_source').val(response.leadSource.name);
+                        $('#stakeholder_id').val(response.stakeholder.id);
                         $('#customer_name').val(response.stakeholder.full_name);
                         $('#customer_father_name').val(response.stakeholder.father_name);
                         $('#customer_cnic').val(response.cnic);
@@ -164,9 +169,68 @@
             let rebate_value = unit_total * percentage;
             $('#td_rebate').html(rebate_percentage + '%');
             $('#td_rebate_value').html(rebate_value.toLocaleString());
+            $('#rebate_total').val(rebate_value);
             $('.hideDiv').css("display", "block");
             hideBlockUI('#rebate-form');
         }
+
+        var e = $("#dealer");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).on("change", function(e) {
+                let dealer = $(this).val();
+
+                if (dealer === "0") {
+                    $('#div_new_dealer').show();
+                } else {
+                    $('#div_new_dealer').hide();
+                }
+            });
+
+            var validator = $("#rebateForm").validate({
+                rules: {
+                'dealer[full_name]': {
+                    required: true
+                },
+                'dealer[father_name]': {
+                    required: true
+                },
+                'dealer[occupation]': {
+                    required: true
+                },
+                'dealer[designation]': {
+                    required: true
+                },
+                'dealer[contact]': {
+                    required: true,
+                    digits: true,
+                },
+                'dealer[cnic]': {
+                    required: true,
+                    digits: true
+                },
+                'dealer[ntn]': {
+                    required: true,
+                },
+                'dealer[address]': {
+                    required: true,
+                },
+                'deal_type': {
+                    required: true,
+                },
+                
+            },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+                });
 
         $("#saveButton").click(function() {
             $("#rebateForm").submit();

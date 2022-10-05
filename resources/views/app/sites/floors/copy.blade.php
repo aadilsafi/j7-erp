@@ -12,8 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/nouislider.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
 @endsection
 
@@ -45,52 +44,53 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <form class="form form-vertical" action="{{ route('sites.floors.copyStore', ['site_id' => $site_id]) }}"
-            method="POST">
+    <form class="form form-vertical" action="{{ route('sites.floors.copyStore', ['site_id' => $site_id]) }}" method="POST">
 
-            <div class="card-header">
-            </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-body">
+                        @csrf
+                        <div class="row mb-2">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                <label class="form-label" style="font-size: 15px" for="floor">Select Floor to Copy
+                                    *</label>
+                                <select class="select2-size-lg form-select" id="floor" name="floor"
+                                    onchange="floorValue(this.value)">
+                                    <option value="" selected>Select Floor to Copy</option>
+                                    @foreach ($floors as $floor)
+                                        <option value="{{ $floor->id }}" {{ $floor->units_count == 0 ? 'disabled' : '' }}
+                                            {{ old('additionalCost') == $floor->id ? 'selected' : '' }}>
+                                            {{ $loop->index + 1 }} - {{ $floor->name }} ({{ $floor->units_count }}
+                                            Units)
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('floor')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
 
-            <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 
-                @csrf
-                <div class="row mb-2">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                        <label class="form-label" style="font-size: 15px" for="floor">Select Floor to Copy *</label>
-                        <select class="select2-size-lg form-select" id="floor" name="floor"
-                            onchange="floorValue(this.value)">
-                            <option value="" selected>Select Floor to Copy</option>
-                            @foreach ($floors as $floor)
-                                <option value="{{ $floor->id }}" {{ $floor->units_count == 0 ? 'disabled' : '' }}
-                                    {{ old('additionalCost') == $floor->id ? 'selected' : '' }}>
-                                    {{ $loop->index + 1 }} - {{ $floor->name }} ({{ $floor->units_count }} Units)
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('floor')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
+                                <div class="card m-0 border-primary">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                <div class="card m-0" id="bulkOptionSlider">
+                                                    <div class="card-body">
 
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                                        <input type="hidden" name="copy_floor_from" id="copy_floor_from"
+                                                            value="1">
+                                                        <input type="hidden" name="copy_floor_to" id="copy_floor_to"
+                                                            value="20">
 
-                        <div class="card m-0 border-primary">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <div class="card m-0" id="bulkOptionSlider">
-                                            <div class="card-body">
-
-                                                <input type="hidden" name="copy_floor_from" id="copy_floor_from"
-                                                    value="1">
-                                                <input type="hidden" name="copy_floor_to" id="copy_floor_to"
-                                                    value="20">
-
-                                                <div id="primary-color-slider"
-                                                    class="circle-filled slider-primary mt-md-1 mt-3 mb-4">
+                                                        <div id="primary-color-slider"
+                                                            class="circle-filled slider-primary mt-md-1 mt-3 mb-4">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,40 +98,51 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="row mt-2">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <div class="row mt-2">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 
-                        <div id="shortLabelForm">
+                                <div id="shortLabelForm">
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-
-            <div class="card-footer d-flex align-items-center justify-content-end">
-                <button id="copy_floor_button" type="submit"
-                    class="btn btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1">
-                    <i data-feather='copy'></i>
-                    <span id="copy_floor_button_span">Copy Floor </span>
-                </button>
-                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                        <i data-feather='save'></i>
+                                        <span id="copy_floor_button_span">Copy Floor </span>
+                                    </button>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]) }}"
+                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        </form>
-    </div>
+    </form>
 
     @php
-    $siteConfiguration = getSiteConfiguration($site_id);
-    $max_floors = max($floors->pluck('order')->toArray());
+        $siteConfiguration = getSiteConfiguration($site_id);
+        $max_floors = max($floors->pluck('order')->toArray());
     @endphp
 
 @endsection
@@ -278,7 +289,7 @@
         }
 
         function getDifference(a, b) {
-            shortLabel(a,b);
+            shortLabel(a, b);
             return Math.abs(a - b);
         }
 
@@ -299,13 +310,15 @@
             // });
         }
 
-        function shortLabel(a,b){
+        function shortLabel(a, b) {
             $('#shortLabelForm').empty();
             // $('#shortLabelForm').append('<label class="form-label" style="font-size: 15px" for="floor">Enter Short Labels for floor ('+parseInt(a)+' to '+parseInt(b)+')*</label>')
-            for(let i = parseInt(a); i<=parseInt(b); i++){
-                $('#shortLabelForm').append('<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor ('+i+')*</label><input type="text" required class="form-control mb-2" name="shortLabel['+i+']" placeholder="Short label for floor '+i+'">');
+            for (let i = parseInt(a); i <= parseInt(b); i++) {
+                $('#shortLabelForm').append(
+                    '<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor (' + i +
+                    ')*</label><input type="text" required class="form-control mb-2" name="shortLabel[' + i +
+                    ']" placeholder="Short label for floor ' + i + '">');
             }
         }
-
     </script>
 @endsection

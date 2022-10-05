@@ -10,9 +10,11 @@ use App\Http\Requests\floors\{
     storeRequest as floorStoreRequest,
     updateRequest as floorUpdateRequest,
 };
-use App\Models\Floor;
-use App\Models\Unit;
-use App\Models\Site;
+use App\Models\{
+    Floor,
+    Unit,
+    Site,
+};
 use App\Services\Interfaces\{
     FloorInterface,
     UserBatchInterface,
@@ -43,7 +45,6 @@ class FloorController extends Controller
      */
     public function index(FloorsDataTable $dataTable, $site_id, Request $request)
     {
-
         $nonActiveFloors = (new Floor())->where('active', false)->where('site_id', decryptParams($site_id))->get();
         if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
             return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
@@ -133,12 +134,15 @@ class FloorController extends Controller
      */
     public function create(Request $request, $site_id)
     {
-        $site = Site::where('id',decryptParams($site_id))->with('siteConfiguration')->first();
+        $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
         if (!request()->ajax()) {
             $data = [
-                'site_id' => $site_id,
+                'site_id' => $site->id,
                 'floorShortLable' => $site->siteConfiguration->floor_prefix,
+                'floorOrder' => getMaxFloorOrder(decryptParams($site_id)) + 1,
             ];
+
+            // dd($data);
             return view('app.sites.floors.create', $data);
         } else {
             abort(403);
@@ -186,12 +190,12 @@ class FloorController extends Controller
      */
     public function edit(Request $request, $site_id, $id)
     {
-        $site = Site::where('id',decryptParams($site_id))->with('siteConfiguration')->first();
+        $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
         try {
             $floor = $this->floorInterface->getById($site_id, $id);
             if ($floor && !empty($floor)) {
                 $data = [
-                    'site_id' => $site_id,
+                    'site_id' => $site->id,
                     'floor' => $floor,
                     'floorShortLable' => $site->siteConfiguration->floor_prefix,
                 ];

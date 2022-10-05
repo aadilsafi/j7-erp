@@ -36,10 +36,11 @@ class DatabaseSeeder extends Seeder
             SalesPlanTemplatesSeeder::class,
             StakeholderTypeSeeder::class,
             ReceiptsTemplateSeeder::class,
+            FileActionSeeder::class,
             FileManagementTableSeeder::class,
             ReceiptsTableSeeder::class,
             UnitStakeholdersTableSeeder::class,
-            RebateIncentiveSeeder::class,
+            // RebateIncentiveSeeder::class,
             TeamSeeder::class,
             TeamUserSeeder::class,
         ]);

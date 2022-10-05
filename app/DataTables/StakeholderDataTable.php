@@ -20,7 +20,7 @@ class StakeholderDataTable extends DataTable
 
     private $stakeholderInterface;
 
-    public function __construct( StakeholderInterface $stakeholderInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
     }
@@ -36,14 +36,14 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->editColumn('parent_id', function ($stakeholder) {
-                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst(): '-' ;
+                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() : '-';
             })
             ->editColumn('cnic', function ($stakeholder) {
                 return cnicFormat($stakeholder->cnic);
             })
-            ->editColumn('relation', function ($stakeholder) {
-                    return  $stakeholder->relation  ? $stakeholder->relation  : '-';
-            })
+            // ->editColumn('relation', function ($stakeholder) {
+            //         return  $stakeholder->relation  ? $stakeholder->relation  : '-';
+            // })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
             })
@@ -93,14 +93,14 @@ class StakeholderDataTable extends DataTable
                     ->text('<i class="bi bi-plus"></i> Add New')->attr([
                         'onclick' => 'addNew()',
                     ])
-                :
-                Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                    'onclick' => 'addNew()',
-                ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
 
-            ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -114,16 +114,16 @@ class StakeholderDataTable extends DataTable
 
                 ($selectedDeletePermission ?
                     Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                            'onclick' => 'deleteSelected()',
-                        ])
-                        :
-                        Button::raw('delete-selected')
-                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                            'onclick' => 'deleteSelected()',
-                        ])
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                        'onclick' => 'deleteSelected()',
+                    ])
                 ),
             )
             // ->rowGroupDataSrc('parent_id')
@@ -159,27 +159,28 @@ class StakeholderDataTable extends DataTable
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('sites.stakeholders.edit');
-        return [
-            ( $selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
 
+        $columns = [
             Column::make('full_name')->title('Name'),
             Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
             Column::make('contact')->title('Contact'),
-            Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
-            Column::make('relation')->title('Relation'),
-            (
-                $editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
-
+            // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
+            // Column::make('relation')->title('Relation'),
+            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('updated_at')->addClass('text-nowrap'),
         ];
+
+        if ($selectedDeletePermission) {
+            $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+            array_unshift($columns, $checkColumn);
+        }
+
+        if ($editPermission) {
+            $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        }
+
+        return $columns;
     }
 
     /**

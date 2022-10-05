@@ -37,7 +37,8 @@ class Stakeholder extends Model implements HasMedia
         'father_name' => 'required|string|min:1|max:50',
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
-        'cnic' => 'required|numeric|digits_between:1,15|unique:stakeholders,cnic',
+        'cnic' => 'required|numeric|unique:stakeholders,cnic',
+        // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
         'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
@@ -47,7 +48,7 @@ class Stakeholder extends Model implements HasMedia
         'attachment' => 'sometimes|min:2',
         'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
-        'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
+        // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
     public $ruleMessages = [
@@ -93,5 +94,10 @@ class Stakeholder extends Model implements HasMedia
     public function contacts()
     {
         return $this->hasMany(StakeholderContact::class);
+    }
+
+    public function dealer_stakeholder()
+    {
+        return $this->hasMany(StakeholderType::class)->where('type','D')->where('status',1);
     }
 }

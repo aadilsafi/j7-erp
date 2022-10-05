@@ -14,7 +14,7 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="floor_no">Floor No</label>
                 <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
-                    placeholder="Floor No" value="{{ $floor->short_label }}" readonly />
+                    placeholder="Floor No" value="{{ $floor->name }} ({{ $floor->short_label }})" readonly />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">

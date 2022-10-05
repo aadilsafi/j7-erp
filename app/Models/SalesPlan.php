@@ -26,6 +26,7 @@ class SalesPlan extends Model
         'comments',
         'status',
         'approved_date',
+        'cancel',
     ];
 
     public function getActivitylogOptions(): LogOptions

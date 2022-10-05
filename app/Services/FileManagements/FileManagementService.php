@@ -42,6 +42,7 @@ class FileManagementService implements FileManagementInterface
             'application_no' => $inputs['application_form']['application_no'],
             'deal_type'=> $inputs['application_form']['deal_type'],
             'status' => 1,
+            'file_action_id' => 1,
         ];
         $file = $this->model()->create($data);
 

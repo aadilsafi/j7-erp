@@ -70,7 +70,7 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" >
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" value="1">
                                 <label class="form-check-label" for="colorCheck3">
                                         Attachement Attached
                                 </label>

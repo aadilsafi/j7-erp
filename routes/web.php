@@ -389,10 +389,11 @@ Route::group([
                     Route::group(['prefix' => 'file-cancellation', 'as' => 'file-cancellation.'], function () {
 
                         Route::get('/', [FileCancellationController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'ApproveFileCancellation'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
-                        Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileCancellationController::class, 'show'])->name('preview');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
                     });
 
                     // file release

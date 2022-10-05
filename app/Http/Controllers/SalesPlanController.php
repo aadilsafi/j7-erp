@@ -173,7 +173,7 @@ class SalesPlanController extends Controller
             'sales_person_phone_no' => Auth::user()->phone_no,
             'sales_person_sales_type' => $salesPlan->sales_type,
             'indirect_source' => $salesPlan->indirect_source,
-            'instalments' => $salesPlan->installments,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
             'additional_costs' => $salesPlan->additionalCosts,
             'validity' =>  $salesPlan->validity,
             'contact' => $salesPlan->stakeholder->contact,

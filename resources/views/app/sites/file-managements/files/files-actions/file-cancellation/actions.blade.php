@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-cetner align-items-center ">
     @if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index')
-        @can('sites.file-managements.file-refund.approve')
+        @can('sites.file-managements.file-cancellation.approve')
             @php
                 $checkFileCancellation = DB::table('file_canecllations')
                     ->where('unit_id', $unit_id)

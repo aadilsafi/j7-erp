@@ -13,7 +13,7 @@
         </div>
 
         <div class="line">
-            {{-- <i data-feather="chevron-right" class="font-medium-2"></i> --}}
+            <i data-feather="chevron-right" class="font-medium-2"></i>
         </div>
 
         <div class="step" data-target="#sales-agreement" role="tab" id="sales-agreement-trigger">
@@ -27,7 +27,7 @@
         </div>
 
         <div class="line">
-            {{-- <i data-feather="chevron-right" class="font-medium-2"></i> --}}
+            <i data-feather="chevron-right" class="font-medium-2"></i>
         </div>
 
         <div class="step" data-target="#sales-plan" role="tab" id="sales-plan-trigger">
@@ -41,7 +41,7 @@
         </div>
 
         <div class="line">
-            {{-- <i data-feather="chevron-right" class="font-medium-2"></i> --}}
+            <i data-feather="chevron-right" class="font-medium-2"></i>
         </div>
 
         <div class="step" data-target="#receipts" role="tab" id="receipts-trigger">
@@ -55,7 +55,7 @@
         </div>
 
         <div class="line">
-            {{-- <i data-feather="chevron-right" class="font-medium-2"></i> --}}
+            <i data-feather="chevron-right" class="font-medium-2"></i>
         </div>
 
         <div class="step" data-target="#booking-form" role="tab" id="booking-form-trigger">
@@ -219,11 +219,18 @@
                                 </div>
 
                                 <div class="row g-1 mb-1">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="customer_address">Mail Address</label>
                                         <input type="text" class="form-control form-control-lg"
                                             id="customer_address" placeholder="Mail Address"
                                             value="{{ $customer->address ?? '-' }}" disabled />
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="customer_comments">Comments</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_comments" placeholder="Comments"
+                                            value="{{ $customer->comments ?? '-' }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -734,10 +741,9 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Mail Address"
-                                            value="{{ $customer->address ?? '-' }}" disabled />
+                                        <label class="form-label fs-5" for="customer_ntn">NTN Number</label>
+                                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
+                                            placeholder="NTN Number" value="{{ $customer->ntn ?? '-' }}" disabled />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                         <label class="form-label fs-5" for="customer_phone">Cell</label>
@@ -750,6 +756,22 @@
                                         <input type="text" class="form-control form-control-lg"
                                             id="customer_occupation" placeholder="Occupation"
                                             value="{{ $customer->occupation ?? '-' }}" disabled />
+                                    </div>
+                                </div>
+
+                                <div class="row g-1 mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_address" placeholder="Mail Address"
+                                            value="{{ $customer->address ?? '-' }}" disabled />
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="customer_comments">Comments</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="customer_comments" placeholder="Comments"
+                                            value="{{ $customer->comments ?? '-' }}" disabled />
                                     </div>
                                 </div>
                             </div>

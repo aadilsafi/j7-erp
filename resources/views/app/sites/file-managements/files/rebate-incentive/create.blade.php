@@ -20,8 +20,8 @@
 @section('custom-css')
     <style>
         .hideDiv {
-                display: none;
-            }
+            display: none;
+        }
     </style>
 @endsection
 
@@ -44,16 +44,16 @@
         method="post" class=" ">
         @csrf
 
-        <div  class="row">
-            <div  class="col-lg-9 col-md-9 col-sm-12 position-relative">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
                 {{ view('app.sites.file-managements.files.rebate-incentive.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
-                    'dealer_data' =>$dealer_data,
-                    'rebate_files' => $rebate_files
+                    'dealer_data' => $dealer_data,
+                    'rebate_files' => $rebate_files,
                 ]) }}
             </div>
-            <div  class="col-lg-3 col-md-3 col-sm-3 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
@@ -88,8 +88,8 @@
 @endsection
 
 @section('page-js')
-<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
-<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -113,6 +113,8 @@
                         $('#customer_name').val(response.stakeholder.full_name);
                         $('#customer_father_name').val(response.stakeholder.father_name);
                         $('#customer_cnic').val(response.cnic);
+                        $('#customer_ntn').val(response.stakeholder.ntn);
+                        $('#customer_comments').val(response.stakeholder.comments);
                         $('#customer_address').val(response.stakeholder.address);
                         $('#customer_phone').val(response.stakeholder.contact);
                         $('#customer_occupation').val(response.stakeholder.occupation);
@@ -144,8 +146,9 @@
                         }
 
                         $('#td_unit_discount_value').html(response.salesPlan.discount_total.toLocaleString());
-                        $('#td_unit_total_value').html(response.salesPlan.total_price.toLocaleString());
-                        $('#td_unit_downpayment_value').html(response.salesPlan.down_payment_total.toLocaleString());
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price).toLocaleString());
+                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
+                            .toLocaleString());
 
 
                     } else {
@@ -162,38 +165,43 @@
             });
         }
 
-        function rebateValue(){
+        $('#rebate_percentage').on('change', function() {
             showBlockUI('#rebate-form');
-            let rebate_percentage =  $('#rebate_percentage').val();
-            let unit_total = $('#unit_total').val()
-            let percentage = rebate_percentage / 100;
-            let rebate_value = unit_total * percentage;
+            let rebate_percentage = parseInt($('#rebate_percentage').val());
+            rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
+            rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
+
+            let unit_total = parseFloat($('#unit_total').val());
+            let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
+
             $('#td_rebate').html(rebate_percentage + '%');
+
             $('#td_rebate_value').html(rebate_value.toLocaleString());
+
             $('#rebate_total').val(rebate_value);
             $('.hideDiv').css("display", "block");
             hideBlockUI('#rebate-form');
-        }
+        });
 
         var e = $("#dealer");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            }).on("change", function(e) {
-                let dealer = $(this).val();
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).on("change", function(e) {
+            let dealer = $(this).val();
 
-                if (dealer === "0") {
-                    $('#div_new_dealer').show();
-                } else {
-                    $('#div_new_dealer').hide();
-                }
-            });
+            if (dealer === "0") {
+                $('#div_new_dealer').show();
+            } else {
+                $('#div_new_dealer').hide();
+            }
+        });
 
-            var validator = $("#rebateForm").validate({
-                rules: {
+        var validator = $("#rebateForm").validate({
+            rules: {
                 'dealer[full_name]': {
                     required: true
                 },
@@ -223,15 +231,15 @@
                 'deal_type': {
                     required: true,
                 },
-                
+
             },
-                errorClass: 'is-invalid text-danger',
-                errorElement: "span",
-                wrapper: "div",
-                submitHandler: function(form) {
-                    form.submit();
-                }
-                });
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
 
         $("#saveButton").click(function() {
             $("#rebateForm").submit();

@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
+use App\Models\Receipt;
+use App\Models\Stakeholder;
 use Illuminate\Http\Request;
+use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\DataTables\ViewFilesDatatable;
+use App\Models\RebateIncentiveModel;
+use App\Utils\Enums\StakeholderTypeEnum;
+use App\Services\Stakeholder\Interface\StakeholderInterface;
 
 class FileReleaseController extends Controller
 {
@@ -13,6 +20,14 @@ class FileReleaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private $stakeholderInterface;
+
+    public function __construct(StakeholderInterface $stakeholderInterface)
+    {
+        $this->stakeholderInterface = $stakeholderInterface;
+    }
+
     public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
     {
         $data = [
@@ -29,9 +44,29 @@ class FileReleaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($site_id, $unit_id, $customer_id)
     {
-        //
+        if (!request()->ajax()) {
+            $unit = Unit::find(decryptParams($unit_id));
+            $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
+            $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'unit' => Unit::find(decryptParams($unit_id)),
+                'customer' => Stakeholder::find(decryptParams($customer_id)),
+                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'total_paid_amount' => $total_paid_amount,
+                'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                'stakeholderTypes' => StakeholderTypeEnum::array(),
+                'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
+                'rebate_incentive' => RebateIncentiveModel::where('unit_id',$unit->id)->where('stakeholder_id',decryptParams($customer_id))->first()
+            ];
+            unset($data['emptyRecord'][0]['stakeholder_types']);
+            // dd($data['stakeholderTypes']);
+            return view('app.sites.file-managements.files.files-actions.file-resale.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**

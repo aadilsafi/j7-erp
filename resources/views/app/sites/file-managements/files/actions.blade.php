@@ -55,28 +55,52 @@
 
     @endif
 
-     {{-- File Cancellation  --}}
-     @if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index')
-     @php
-         $checkFileCancellation = DB::table('file_canecllations')
-             ->where('unit_id', $unit_id)
-             ->where('stakeholder_id', $customer_id)
-             ->first();
-     @endphp
-     @if (isset($checkFileCancellation))
-         <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
-             data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
-             href="{{ route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_cancellation_id' => encryptParams($checkFileCancellation->id)]) }}">
-             <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
-         </a>
-     @else
-         <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
-             data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Cancellation"
-             href="{{ route('sites.file-managements.file-cancellation.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
-             <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
-         </a>
-     @endif
+    {{-- File Cancellation  --}}
+    @if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index')
+        @php
+            $checkFileCancellation = DB::table('file_canecllations')
+                ->where('unit_id', $unit_id)
+                ->where('stakeholder_id', $customer_id)
+                ->first();
+        @endphp
+        @if (isset($checkFileCancellation))
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
+                href="{{ route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_cancellation_id' => encryptParams($checkFileCancellation->id)]) }}">
+                <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @else
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Cancellation"
+                href="{{ route('sites.file-managements.file-cancellation.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
+                <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @endif
 
- @endif
+    @endif
+
+    {{-- File Resale  --}}
+    @if (Route::current()->getName() == 'sites.file-managements.file-resale.index')
+        @php
+            $checkFileResale = DB::table('file_resales')
+                ->where('unit_id', $unit_id)
+                ->where('stakeholder_id', $customer_id)
+                ->first();
+        @endphp
+        @if (isset($checkFileResale))
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="View File Refund"
+                href="{{ route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_resale_id' => encryptParams($checkFileResale->id)]) }}">
+                <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @else
+            <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Cancellation"
+                href="{{ route('sites.file-managements.file-resale.create', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id)]) }}">
+                <i class="bi bi-folder-plus" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @endif
+
+    @endif
 
 </div>

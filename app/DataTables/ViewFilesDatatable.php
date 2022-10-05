@@ -96,6 +96,18 @@ class ViewFilesDatatable extends DataTable
                     return editBadgeColumn(' File Cancellation Request Not Found');
                 }
             })
+            // resale status
+            ->editColumn('resale_status', function ($fileManagement) {
+                if (isset($fileManagement->fileResale[0])) {
+                    if ($fileManagement->fileResale[0]['status'] == 1) {
+                        return editBadgeColumn('File Resale Request Approved');
+                    } else {
+                        return editBadgeColumn('Pending');
+                    }
+                } else {
+                    return editBadgeColumn(' File Resale Request Not Found');
+                }
+            })
             // All File Actions
             ->editColumn('actions', function ($fileManagement) {
                 return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id]);
@@ -124,6 +136,14 @@ class ViewFilesDatatable extends DataTable
                     return "-";
                 }
             })
+            // Resale Actions
+            ->editColumn('resale_actions', function ($fileManagement) {
+                if (isset($fileManagement->fileResale[0])) {
+                    return view('app.sites.file-managements.files.files-actions.file-cancellation.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileResale[0]['id'], 'file_refund_status' => $fileManagement->fileResale[0]['status'],]);
+                } else {
+                    return "-";
+                }
+            })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
@@ -137,28 +157,28 @@ class ViewFilesDatatable extends DataTable
     public function query(FileManagement $model): QueryBuilder
     {
         if (Route::current()->getName() == 'sites.file-managements.view-files') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-refund.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 2);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 2);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-buy-back.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 3);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 3);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 4);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 4);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-resale.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 5);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 5);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-title-transfer.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 6);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 6);
         }
         if (Route::current()->getName() == 'sites.file-managements.file-adjustment.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 7);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 7);
         }
         if (Route::current()->getName() == 'sites.file-managements.unit-shifting.index') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 8);
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack','fileCancellation','fileResale')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 8);
         }
     }
 
@@ -208,6 +228,7 @@ class ViewFilesDatatable extends DataTable
         $refundRoute = false;
         $buyBackroute = false;
         $cancelationRoute = false;
+        $resaleRoute = false;
         if (Route::current()->getName() == "sites.file-managements.file-refund.index") {
             $refundRoute = true;
         }
@@ -216,6 +237,9 @@ class ViewFilesDatatable extends DataTable
         }
         if (Route::current()->getName() == "sites.file-managements.file-cancellation.index") {
             $cancelationRoute = true;
+        }
+        if (Route::current()->getName() == "sites.file-managements.file-resale.index") {
+            $resaleRoute = true;
         }
         return [
             Column::computed('DT_RowIndex')->title('#'),
@@ -264,6 +288,18 @@ class ViewFilesDatatable extends DataTable
                 Column::computed('cancellation_actions')->title('Cancellation Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
                 :
                 Column::computed('cancellation_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+
+            // Resale Actions
+            ($resaleRoute ?
+                Column::computed('resale_status')->title('File Resale Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('resale_status')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+            ($resaleRoute ?
+                Column::computed('resale_actions')->title('Resale Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('resale_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
             ),
 
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

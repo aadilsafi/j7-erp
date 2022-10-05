@@ -329,3 +329,20 @@ Breadcrumbs::for('sites.file-managements.file-cancellation.preview', function (B
     $trail->parent('sites.file-managements.file-cancellation.index', $site_id);
     $trail->push('Preview Cancellation', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 });
+
+//File Resale  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-resale.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Resale', route('sites.file-managements.file-resale.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-resale.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-resale.index', $site_id);
+    $trail->push('Create File Resale', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-resale.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-resale.index', $site_id);
+    $trail->push('Preview Resale', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});

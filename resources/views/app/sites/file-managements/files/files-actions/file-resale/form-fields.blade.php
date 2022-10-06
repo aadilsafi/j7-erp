@@ -13,15 +13,13 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Profit Amount</label>
                         <input type="number" min="1" onchange="calculateRefundedAmount()" required
                             name="amount_profit" class="form-control form-control-lg"
-                            {{ isset($resale) ? 'disabled' : '' }} id="profit_charges"
-                            placeholder=" Profit Amount"
+                            {{ isset($resale) ? 'disabled' : '' }} id="profit_charges" placeholder=" Profit Amount"
                             value="{{ isset($resale) ? number_format($resale->amount_profit) : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
-                            {{ isset($resale) ? 'disabled' : '' }} id="payment_due_date"
-                            placeholder="Payment Due Date"
+                            {{ isset($resale) ? 'disabled' : '' }} id="payment_due_date" placeholder="Payment Due Date"
                             value="{{ isset($resale) ? $resale->payment_due_date : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -42,15 +40,15 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Rebate Deduction </label>
-                        <input type="text" readonly required name="rebate_amount" class="form-control form-control-lg"
-                            id="rebate_deductions" placeholder=" Rebate Deduction"
+                        <input type="text" readonly required name="rebate_amount"
+                            class="form-control form-control-lg" id="rebate_deductions" placeholder=" Rebate Deduction"
                             value="{{ isset($rebate_incentive) ? number_format($rebate_incentive->commision_total) : 0 }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
                         <input type="text" readonly required name="amount_to_be_refunded"
-                            class="form-control form-control-lg" {{ isset($resale) ? 'disabled' : '' }}
+                            class="form-control form-control-lg"
                             id="amount_to_be_refunded" placeholder="Amount to be Refunded"
                             value="{{ isset($resale) ? number_format($resale->amount_to_be_refunded) : '' }}" />
                     </div>
@@ -69,39 +67,34 @@
             </div>
             <div class="card-body">
                 @if (isset($resale))
-                    @foreach ($labels as $key => $label)
-                        <div class="card m-0">
-                            <div class="card-body">
-                                <div>
-                                    <div class="row mb-1">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                            <label class="form-label fs-5" for="expense_label">Attachement
-                                                label</label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                id="expense_label" name="attachments[attachment_label]"
-                                                value="{{ $label->label }}" disabled
-                                                placeholder="Attachment Label" />
-                                        </div>
-
-                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
-                                            <label class="form-label fs-5" for="type_name">Attachment</label>
-                                            <input id="attachment" type="file" class="filepond attachment"
-                                                disabled name="attachment[image]"
-                                                accept="image/png, image/jpeg, image/gif" />
-                                        </div>
+                    <div class="row mb-1 g-1">
+                        @foreach ($labels as $key => $label)
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="expense_label">Attachement
+                                            label</label>
+                                        <input type="text" class="form-control form-control-lg" id="expense_label"
+                                            name="attachments[attachment_label]" value="{{ $label->label }}" disabled
+                                            placeholder="Attachment Label" />
                                     </div>
 
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                        <label class="form-label fs-5" for="type_name">Attachment</label>
+                                        <input id="attachment" type="file" class="filepond attachment" disabled
+                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @else
                     <div class="expenses-list">
 
                         <div data-repeater-list="attachments">
                             <div data-repeater-item>
                                 <div class="card m-0">
-                                    <div class="card-body">
+                                    <div class="card-body pb-0">
                                         <div>
                                             <div class="row mb-1">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
@@ -143,6 +136,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr>
                             </div>
                         </div>
                         <div class="row">
@@ -175,50 +169,55 @@
             </div>
 
             <div class="card-body">
-
-                <div class="row mb-1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                        <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
-                            <option value="0">Create new Stakeholder...</option>
-                            @forelse ($stakeholders as $stakeholder)
-                                @if ($customer->id == $stakeholder->id)
-                                    @continue;
-                                @endif
-                                <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
-                                    {{ $stakeholder->father_name }} {{ $stakeholder->cnic }},
-                                    {{ $stakeholder->contact }}
-                                </option>
-                            @empty
-                            @endforelse
-                        </select>
+                @if (isset($stakeholders))
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
+                            <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
+                                <option value="0">Create new Stakeholder...</option>
+                                @forelse ($stakeholders as $stakeholder)
+                                    @if ($customer->id == $stakeholder->id)
+                                        @continue;
+                                    @endif
+                                    <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
+                                        {{ $stakeholder->father_name }} {{ $stakeholder->cnic }},
+                                        {{ $stakeholder->contact }}
+                                    </option>
+                                @empty
+                                @endforelse
+                            </select>
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="row mb-1">
                     {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
-                            name="stackholder[full_name]" placeholder="Full Name" />
+                        <input @if (isset($buyer)) disabled @endif type="text" class="form-control form-control-lg" id="stackholder_full_name"
+                            name="stackholder[full_name]" placeholder="Full Name"
+                            value="{{ isset($buyer) ? $buyer->full_name : '' }}"/>
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
-                            name="stackholder[father_name]" placeholder="Father Name" />
+                        <input @if (isset($buyer)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_father_name"
+                            name="stackholder[father_name]" placeholder="Father Name"
+                            value="{{ isset($buyer) ? $buyer->father_name : '' }}"/>
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
-                            name="stackholder[occupation]" placeholder="Occupation" />
+                        <input @if (isset($buyer)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_occupation"
+                            name="stackholder[occupation]" placeholder="Occupation"
+                            value="{{ isset($buyer) ? $buyer->occupation : '' }}"/>
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_designation"
-                            name="stackholder[designation]" placeholder="Designation" />
+                        <input @if (isset($buyer)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_designation"
+                            name="stackholder[designation]" placeholder="Designation"
+                            value="{{ isset($buyer) ? $buyer->designation : '' }}"/>
                     </div>
                 </div>
 
@@ -226,33 +225,36 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input type="number" name="stackholder[ntn]" value=""
-                            class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN" />
+                        <input @if (isset($buyer)) disabled  type="text" @else type="number" @endif   name="stackholder[ntn]"
+                            class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN"
+                            value="{{ isset($buyer) ? $buyer->ntn : '' }}"/>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                        <input type="number" class="form-control form-control-lg" id="stackholder_cnic"
-                            name="stackholder[cnic]" placeholder="CNIC" />
+                        <input  @if (isset($buyer)) disabled  type="text" @else type="number" @endif  type="number" class="form-control form-control-lg" id="stackholder_cnic"
+                            name="stackholder[cnic]" placeholder="CNIC"
+                            value="{{ isset($buyer) ? cnicFormat($buyer->cnic) : '' }}"/>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input type="number" class="form-control form-control-lg" id="stackholder_contact"
-                            name="stackholder[contact]" placeholder="Contact" />
+                        <input @if (isset($buyer)) disabled   type="text" @else type="number" @endif  type="number" class="form-control form-control-lg" id="stackholder_contact"
+                            name="stackholder[contact]" placeholder="Contact"
+                            value="{{ isset($buyer) ? $buyer->contact : '' }}"/>
                     </div>
                 </div>
 
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                            placeholder="Address" rows="5"></textarea>
+                        <textarea @if (isset($buyer)) disabled @endif  class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
+                            placeholder="Address" rows="5"> {{ isset($buyer) ? $buyer->address : '' }}</textarea>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg"  id="stackholder_comments" name="stackholder[comments]"
-                            placeholder="Comments" rows="5"></textarea>
+                        <textarea @if (isset($buyer)) disabled @endif  class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                            placeholder="Comments" rows="5">{{ isset($buyer) ? $buyer->comments : '' }}</textarea>
                     </div>
                 </div>
             </div>
@@ -279,8 +281,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
                         <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id=""
-                            placeholder="Father Name" />
+                            class="form-control form-control-lg" id="" placeholder="Father Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -292,8 +293,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_designation">Designation</label>
                         <input type="text" readonly value="{{ $customer->designation }}"
-                            class="form-control form-control-lg" id=""
-                            placeholder="Designation" />
+                            class="form-control form-control-lg" id="" placeholder="Designation" />
                     </div>
                 </div>
 
@@ -321,14 +321,14 @@
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="" name=""
-                            placeholder="Address" rows="5">{{ $customer->address }}</textarea>
+                        <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
+                            rows="5">{{ $customer->address }}</textarea>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" readonly id="" name=""
-                            placeholder="Address" rows="5">{{ $customer->comments }}</textarea>
+                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Address"
+                            rows="5">{{ $customer->comments }}</textarea>
                     </div>
                 </div>
             </div>

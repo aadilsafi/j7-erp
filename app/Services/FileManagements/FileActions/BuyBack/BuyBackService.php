@@ -69,7 +69,7 @@ class BuyBackService implements BuyBackInterface
 
             $notificationData = [
 
-                'title' => 'File Refund Notificaton',
+                'title' => 'File Buy Back Notificaton',
                 'message' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'description' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'url' => str_replace('/store', '', $currentURL),

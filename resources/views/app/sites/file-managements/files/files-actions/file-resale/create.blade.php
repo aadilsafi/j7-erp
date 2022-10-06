@@ -231,56 +231,116 @@
             });
         });
 
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
+
         $(".expenses-list").repeater({
             initEmpty: true,
-            show: function() {
-                $(this).slideDown(), feather && feather.replace({
+            show: function(e) {
+                $(this).slideDown();
+                feather && feather.replace({
                     width: 14,
                     height: 14
-                })
+                });
+                initializeFilePond();
+                // console.log(e);
             },
             hide: function(e) {
                 $(this).slideUp(e)
             }
         });
         // const input = $('.attachment');
-        $('#add-new-attachment').on('click', function() {
-            FilePond.registerPlugin(
-                FilePondPluginImagePreview,
-                FilePondPluginFileValidateType,
-                FilePondPluginFileValidateSize,
-                FilePondPluginImageValidateSize,
-                FilePondPluginImageCrop,
-            );
+        // $('#add-new-attachment').on('click', function() {
+        //     initializeFilePond();
+        // });
 
-            FilePond.create(document.getElementById('attachment'), {
-                styleButtonRemoveItemPosition: 'right',
-                imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/jpeg'],
-                maxFileSize: '1536KB',
-                ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-                storeAsFile: true,
-                allowMultiple: true,
-                maxFiles: 1,
-                checkValidity: true,
-                credits: {
-                    label: '',
-                    url: ''
-                }
+        function initializeFilePond() {
+            const inputElements = document.querySelectorAll('input.filepond');
+            console.log(inputElements.length);
+            Array.from(inputElements).forEach(inputElement => {
+
+                // create a FilePond instance at the input element location
+                FilePond.create(inputElement, {
+                    styleButtonRemoveItemPosition: 'right',
+                    imageCropAspectRatio: '1:1',
+                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    maxFileSize: '1536KB',
+                    ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+                    storeAsFile: true,
+                    allowMultiple: true,
+                    maxFiles: 1,
+                    checkValidity: true,
+                    credits: {
+                        label: '',
+                        url: ''
+                    }
+                });
             });
-        });
+        }
+
+        var checkbtn = $('#colorCheck3').is(':checked')
+        formValidations();
 
         $('#colorCheck3').change(function() {
-            var check = $('#colorCheck3').is(':checked')
-            if (check) {
-                var validator = $("#fileRefundForm").validate({
+            checkbtn = $('#colorCheck3').is(':checked');
+            formValidations();
+        })
+
+        function formValidations(){
+            var validator = $("#fileRefundForm").validate({
                     rules: {
-                        'attachments[0][attachment_label]': {
+                        'amount_profit' : {
                             required: true
+                        },
+                        'payment_due_date' : {
+                            required: true
+                        },
+                        'amount_to_be_refunded' : {
+                            required: true
+                        },
+                        'amount_remarks' : {
+                            required: true
+                        },
+                        'attachments[0][attachment_label]': {
+                            required: function(){
+                                return checkbtn;
+                            }
                         },
                         'attachment[0][image]': {
+                            required: function(){
+                                return checkbtn;
+                            }
+                        },
+                        'stackholder[full_name]':{
                             required: true
                         },
+                        'stackholder[father_name]':{
+                            required: true
+                        },
+                        'stackholder[occupation]':{
+                            required: true
+                        },
+                        'stackholder[designation]':{
+                            required: true
+                        },
+                        'stackholder[ntn]':{
+                            required: true
+                        },
+                        'stackholder[cnic]':{
+                            required: true
+                        },
+                        'stackholder[contact]':{
+                            required: true
+                        },
+                        'stackholder[address]':{
+                            required: true
+                        },
+                        
                     },
                     errorClass: 'is-invalid text-danger',
                     errorElement: "span",
@@ -289,8 +349,8 @@
                         form.submit();
                     }
                 });
-            }
-        })
+        }
+        
 
         function calculateRefundedAmount(){
             let paid_amount = '{{ $total_paid_amount }}';

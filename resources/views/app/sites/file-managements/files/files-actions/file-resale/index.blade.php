@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.customers', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'File Buy Back')
+@section('page-title', 'File Resale')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"

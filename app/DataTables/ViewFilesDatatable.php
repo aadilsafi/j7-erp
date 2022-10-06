@@ -139,7 +139,7 @@ class ViewFilesDatatable extends DataTable
             // Resale Actions
             ->editColumn('resale_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileResale[0])) {
-                    return view('app.sites.file-managements.files.files-actions.file-cancellation.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileResale[0]['id'], 'file_refund_status' => $fileManagement->fileResale[0]['status'],]);
+                    return view('app.sites.file-managements.files.files-actions.file-resale.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileResale[0]['id'], 'file_refund_status' => $fileManagement->fileResale[0]['status'],]);
                 } else {
                     return "-";
                 }

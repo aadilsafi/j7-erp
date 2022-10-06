@@ -11,22 +11,26 @@
 
                 <div class="row mb-1">
 
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
                             id="paid_amount" placeholder=" Paid Amount"
                             value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
                     </div>
 
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
-                        <input type="text" required name="amount_to_be_refunded" class="form-control form-control-lg"
-                            {{ isset($refund_file) ? 'disabled' : '' }} id="amount_to_be_refunded"
-                            placeholder="Amount to be refunded"
-                            value="{{ isset($refund_file) ? $refund_file->amount_to_be_refunded : '' }}" />
+                        <input type="text" readonly required name="amount_to_be_refunded"
+                            class="form-control form-control-lg" {{ isset($refund_file) ? 'disabled' : '' }}
+                            id="amount_to_be_refunded" placeholder="Amount to be refunded"
+                            value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
                     </div>
 
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                </div>
+
+                <div class="row mb-1">
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
                             {{ isset($refund_file) ? 'disabled' : '' }} id="payment_due_date"
@@ -34,7 +38,7 @@
                             value="{{ isset($refund_file) ? $refund_file->payment_due_date : '' }}" />
                     </div>
 
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
                         <input type="text" name="amount_remarks" required class="form-control form-control-lg"
                             id="remarks" {{ isset($refund_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
@@ -65,9 +69,9 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_label">Attachement
                                             label</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="expense_label" name="attachments[attachment_label]"
-                                            value="{{ $label->label }}" disabled placeholder="Attachment Label" />
+                                        <input type="text" class="form-control form-control-lg" id="expense_label"
+                                            name="attachments[attachment_label]" value="{{ $label->label }}" disabled
+                                            placeholder="Attachment Label" />
                                     </div>
 
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">

@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use File;
+use Exception;
 use App\Models\Unit;
 use App\Models\Receipt;
+use App\Models\SalesPlan;
+use App\Models\FileResale;
 use App\Models\Stakeholder;
 use Illuminate\Http\Request;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
-use App\DataTables\ViewFilesDatatable;
 use App\Models\RebateIncentiveModel;
+use App\DataTables\ViewFilesDatatable;
+use App\Http\Requests\FileBuyBack\storeRequest;
+use App\Http\Requests\FileResale\storeRequest as FileResaleStoreRequest;
+use App\Models\FileResaleAttachment;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
 
 class FileReleaseController extends Controller
 {
@@ -22,11 +30,15 @@ class FileReleaseController extends Controller
      */
 
     private $stakeholderInterface;
+    private $resaleInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
+        $this->resaleInterface = $resaleInterface;
     }
+
+
 
     public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
     {
@@ -48,13 +60,12 @@ class FileReleaseController extends Controller
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
-            $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
-            $rebate_incentive = RebateIncentiveModel::where('unit_id',$unit->id)->where('stakeholder_id',decryptParams($customer_id))->first();
-            if(isset($rebate_incentive)){
+            $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
+            if (isset($rebate_incentive)) {
                 $rebate_total = $rebate_incentive->commision_total;
-            }
-            else{
+            } else {
                 $rebate_total = 0;
             }
             $data = [
@@ -67,9 +78,8 @@ class FileReleaseController extends Controller
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
-                'rebate_total'=> $rebate_total,
+                'rebate_total' => $rebate_total,
             ];
-
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-resale.create', $data);
         } else {
@@ -83,10 +93,20 @@ class FileReleaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FileResaleStoreRequest $request, $site_id)
     {
         //
-        dd($request->all());
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->resaleInterface->store($site_id, $data);
+                return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**
@@ -95,9 +115,40 @@ class FileReleaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $unit_id, $customer_id, $id)
     {
-        //
+        $files_labels = FileResaleAttachment::where('file_resale_id', decryptParams($id))->get();
+        $images = [];
+        $unit = Unit::find(decryptParams($unit_id));
+        $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
+        $resale_file = (new FileResale())->find(decryptParams($id));
+        if (isset($rebate_incentive)) {
+            $rebate_total = $rebate_incentive->commision_total;
+        } else {
+            $rebate_total = 0;
+        }
+
+        foreach ($files_labels as $key => $file) {
+            $image = $file->getFirstMedia('file_resale_attachments');
+            $images[$key] = $image->getUrl();
+        }
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'unit' => Unit::find(decryptParams($unit_id)),
+            'customer' => Stakeholder::find(decryptParams($customer_id)),
+            'resale_file' => $resale_file,
+            'images' => $images,
+            'labels' => $files_labels,
+            'total_paid_amount' => $total_paid_amount,
+            'buyer' => Stakeholder::find($resale_file->buyer_id),
+            'rebate_incentive' => $rebate_incentive,
+            'rebate_total' => $rebate_total,
+        ];
+
+        return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);
     }
 
     /**
@@ -132,5 +183,37 @@ class FileReleaseController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function ApproveFileResale($site_id, $unit_id, $customer_id, $file_refund_id)
+    {
+
+        $file_buy_back = FileResale::find(decryptParams($file_refund_id));
+        $file_buy_back->status = 1;
+        $file_buy_back->update();
+
+        $unit = Unit::find(decryptParams($unit_id));
+        $unit->status_id = 1;
+        $unit->update();
+
+        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file->file_action_id = 5;
+        $file->update();
+
+        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+        foreach ($salesPlan as $salesPlan) {
+            $SalesPlan = SalesPlan::find($salesPlan->id);
+            $SalesPlan->status = 3;
+            $SalesPlan->update();
+        }
+
+        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+        foreach ($receipt as $receipt) {
+            $Receipt = Receipt::find($receipt->id);
+            $Receipt->status = 2;
+            $Receipt->update();
+        }
+
+        return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 }

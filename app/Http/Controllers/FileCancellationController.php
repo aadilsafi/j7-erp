@@ -183,6 +183,6 @@ class FileCancellationController extends Controller
             $Receipt->update();
         }
 
-        return redirect()->route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+        return redirect()->route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 }

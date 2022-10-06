@@ -70,7 +70,7 @@ class CancellationService implements CancellationInterface
             $approvePermission = $permission->roles;
 
             $notificationData = [
-                'title' => 'File Refund Notificaton',
+                'title' => 'File Cancellation Notificaton',
                 'message' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'description' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'url' => str_replace('/store', '', $currentURL),

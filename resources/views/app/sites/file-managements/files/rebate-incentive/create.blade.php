@@ -146,7 +146,8 @@
                         }
 
                         $('#td_unit_discount_value').html(response.salesPlan.discount_total.toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price).toLocaleString());
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
+                            .toLocaleString());
                         $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
                             .toLocaleString());
 
@@ -191,13 +192,54 @@
             width: "100%",
             containerCssClass: "select-lg",
         }).on("change", function(e) {
-            let dealer = $(this).val();
+            let dealer = parseInt($(this).val());
+            showBlockUI('#stakeholders_card');
+            let stakeholderData = {
+                id: 0,
+                full_name: '',
+                father_name: '',
+                occupation: '',
+                designation: '',
+                cnic: '',
+                ntn: '',
+                contact: '',
+                address: '',
+            };
 
-            if (dealer === "0") {
-                $('#div_new_dealer').show();
-            } else {
-                $('#div_new_dealer').hide();
-            }
+            $.ajax({
+                url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}"
+                    .replace(':id', dealer),
+                type: 'GET',
+                data: {},
+                success: function(response) {
+
+                    if (response.status) {
+                        if (response.data) {
+                            stakeholderData = response.data;
+                        }
+                        // $('#stackholder_id').val(stakeholderData.id);
+                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (stakeholderData.full_name.length > 0));
+                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled', (stakeholderData.father_name.length > 0));
+                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (stakeholderData.occupation.length > 0));
+                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled', (stakeholderData.designation.length > 0));
+                        $('#stackholder_cnic').val(stakeholderData.cnic).attr('disabled', (stakeholderData.cnic.length > 0));
+                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (stakeholderData.contact.length > 0));
+                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData.ntn.length > 0));
+                        $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (stakeholderData.comments.length > 0));
+                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (stakeholderData.address.length > 0));
+                    }
+                    hideBlockUI('#stakeholders_card');
+                },
+                error: function(errors) {
+                    console.error(errors);
+                    hideBlockUI('#stakeholders_card');
+                }
+            });
+            // if (dealer === "0") {
+            //     $('#div_new_dealer').show();
+            // } else {
+            //     $('#div_new_dealer').hide();
+            // }
         });
 
         var validator = $("#rebateForm").validate({

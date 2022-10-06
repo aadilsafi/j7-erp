@@ -45,7 +45,7 @@ class FileManagement extends Model implements HasMedia
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class)->with('type','status');
+        return $this->belongsTo(Unit::class)->with('type', 'status');
     }
 
     public function stakeholder()
@@ -55,27 +55,31 @@ class FileManagement extends Model implements HasMedia
 
     public function fileAction()
     {
-        return $this->belongsTo(FileAction::class,'file_action_id');
+        return $this->belongsTo(FileAction::class, 'file_action_id');
     }
 
     public function fileRefund()
     {
-        return $this->hasMany(FileRefund::class,'file_id');
+        return $this->hasMany(FileRefund::class, 'file_id');
     }
 
     public function fileBuyBack()
     {
-        return $this->hasMany(FileBuyBack::class,'file_id');
+        return $this->hasMany(FileBuyBack::class, 'file_id');
     }
 
     public function fileCancellation()
     {
-        return $this->hasMany(FileCanecllation::class,'file_id');
+        return $this->hasMany(FileCanecllation::class, 'file_id');
     }
 
     public function fileResale()
     {
-        return $this->hasMany(FileResale::class,'file_id');
+        return $this->hasMany(FileResale::class, 'file_id');
+    }
+
+    public function fileTitleTransfer()
+    {
+        return $this->hasMany(FileTitleTransfer::class, 'file_id');
     }
 }
-

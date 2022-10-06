@@ -396,7 +396,7 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
                     });
 
-                    // file release
+                    // file resalse
                     Route::group(['prefix' => 'file-resale', 'as' => 'file-resale.'], function () {
 
                         Route::get('/', [FileReleaseController::class, 'index'])->name('index');
@@ -411,9 +411,11 @@ Route::group([
                     Route::group(['prefix' => 'file-title-transfer', 'as' => 'file-title-transfer.'], function () {
 
                         Route::get('/', [FileTitleTransferController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'ApproveFileTitleTransfer'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
                     });
 
                     // file adjustment

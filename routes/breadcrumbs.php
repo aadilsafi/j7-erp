@@ -346,3 +346,20 @@ Breadcrumbs::for('sites.file-managements.file-resale.preview', function (Breadcr
     $trail->parent('sites.file-managements.file-resale.index', $site_id);
     $trail->push('Preview Resale', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 });
+
+//File Title Transfer Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-title-transfer.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Title Transfer', route('sites.file-managements.file-title-transfer.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-title-transfer.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-title-transfer.index', $site_id);
+    $trail->push('Create File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-title-transfer.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-title-transfer.index', $site_id);
+    $trail->push('Preview File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});

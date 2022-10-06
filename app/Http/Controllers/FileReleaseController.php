@@ -187,9 +187,9 @@ class FileReleaseController extends Controller
     public function ApproveFileResale($site_id, $unit_id, $customer_id, $file_refund_id)
     {
 
-        $file_buy_back = FileResale::find(decryptParams($file_refund_id));
-        $file_buy_back->status = 1;
-        $file_buy_back->update();
+        $file_resale = FileResale::find(decryptParams($file_refund_id));
+        $file_resale->status = 1;
+        $file_resale->update();
 
         $unit = Unit::find(decryptParams($unit_id));
         $unit->status_id = 1;
@@ -213,6 +213,6 @@ class FileReleaseController extends Controller
             $Receipt->update();
         }
 
-        return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+        return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Resale Approved');
     }
 }

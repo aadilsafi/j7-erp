@@ -59,6 +59,7 @@
                     'unit' => $unit,
                     'customer' => $customer,
                     'file' => $file,
+                    'total_paid_amount' => $total_paid_amount,
                 ]) }}
             </div>
 

@@ -283,17 +283,64 @@
             });
         }
 
+        var checkbtn = $('#colorCheck3').is(':checked')
+        formValidations();
+
         $('#colorCheck3').change(function() {
-            var check = $('#colorCheck3').is(':checked')
-            if (check) {
-                var validator = $("#fileRefundForm").validate({
+            checkbtn = $('#colorCheck3').is(':checked');
+            formValidations();
+        })
+
+        function formValidations(){
+            var validator = $("#fileRefundForm").validate({
                     rules: {
-                        'attachments[0][attachment_label]': {
+                        'transfer_rate' : {
                             required: true
+                        },
+                        'payment_due_date' : {
+                            required: true
+                        },
+                        'amount_to_be_paid' : {
+                            required: true
+                        },
+                        'amount_remarks' : {
+                            required: true
+                        },
+                        'attachments[0][attachment_label]': {
+                            required: function(){
+                                return checkbtn;
+                            }
                         },
                         'attachment[0][image]': {
+                            required: function(){
+                                return checkbtn;
+                            }
+                        },
+                        'stackholder[full_name]':{
                             required: true
                         },
+                        'stackholder[father_name]':{
+                            required: true
+                        },
+                        'stackholder[occupation]':{
+                            required: true
+                        },
+                        'stackholder[designation]':{
+                            required: true
+                        },
+                        'stackholder[ntn]':{
+                            required: true
+                        },
+                        'stackholder[cnic]':{
+                            required: true
+                        },
+                        'stackholder[contact]':{
+                            required: true
+                        },
+                        'stackholder[address]':{
+                            required: true
+                        },
+                        
                     },
                     errorClass: 'is-invalid text-danger',
                     errorElement: "span",
@@ -302,8 +349,7 @@
                         form.submit();
                     }
                 });
-            }
-        })
+        }
 
         function calculateTransferAmount() {
             let paid_amount = '{{ $total_paid_amount }}';

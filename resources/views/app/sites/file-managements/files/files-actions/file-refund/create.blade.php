@@ -131,24 +131,6 @@
             FilePondPluginImageCrop,
         );
 
-        // FilePond.create(document.getElementById('attachment'), {
-        //     styleButtonRemoveItemPosition: 'right',
-        //     imageCropAspectRatio: '1:1',
-        //     acceptedFileTypes: ['image/png', 'image/jpeg'],
-        //     maxFileSize: '1536KB',
-        //     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-        //     storeAsFile: true,
-        //     allowMultiple: true,
-        //     maxFiles: 1,
-        //     checkValidity: true,
-        //     credits: {
-        //         label: '',
-        //         url: ''
-        //     }
-        // });
-    </script>
-
-    <script type="text/javascript">
         $(".expenses-list").repeater({
             initEmpty: true,
             show: function(e) {

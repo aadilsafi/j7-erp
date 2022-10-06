@@ -115,7 +115,7 @@ class StakeholderController extends Controller
                     'site_id' => $site_id,
                     'id' => $id,
                     'stakeholderTypes' => StakeholderTypeEnum::array(),
-                    'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                    'stakeholders' => $this->stakeholderInterface->getByAll($site_id),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]

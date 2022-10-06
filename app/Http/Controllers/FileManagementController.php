@@ -107,7 +107,7 @@ class FileManagementController extends Controller
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
         }
         // && $data['customer_file']['file_action_id'] == 1
-        if (isset($data['customer_file']) ) {
+        if (isset($data['customer_file'])) {
             return view('app.sites.file-managements.files.viewFile', $data);
         }
         return view('app.sites.file-managements.files.create', $data);
@@ -116,8 +116,19 @@ class FileManagementController extends Controller
     public function store(store $request, $site_id, $customer_id, $unit_id)
     {
         try {
+
             if (!request()->ajax()) {
                 $data = $request->all();
+                $file = $this->fileManagementInterface->model()->where([
+                    'site_id' => decryptParams($site_id),
+                    'unit_id' => $data['application_form']['unit_id'],
+                    'stakeholder_id' => $data['application_form']['stakeholder_id'],
+                ])->first();
+
+                if (!is_null($file) && !empty($file)) {
+                    return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withWarning('File already created!');
+                }
+
                 $record = $this->fileManagementInterface->store($site_id, $data);
                 return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {

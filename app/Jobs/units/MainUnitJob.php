@@ -2,6 +2,7 @@
 
 namespace App\Jobs\units;
 
+use App\Models\Floor;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -11,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class MainUnitJob implements ShouldQueue
 {
@@ -44,14 +46,18 @@ class MainUnitJob implements ShouldQueue
     {
         $data = [];
         $jobs = [];
+        $floor = (new Floor())->find($this->floor_id);
+
+        $unitNumberDigits = $floor->site->siteConfiguration->unit_number_digits;
 
         for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
             $data[] = [
                 'floor_id' => $this->floor_id,
-                'name' => $this->inputs['name'] ?? null,
+                'name' => 'Unit ' . $i,
                 'width' => $this->inputs['width'],
                 'length' => $this->inputs['length'],
                 'unit_number' => $i,
+                'floor_unit_number' => $floor->short_label . '-' . Str::padLeft($i, $unitNumberDigits, '0'),
                 'net_area' => $this->inputs['net_area'],
                 'gross_area' => $this->inputs['gross_area'],
                 'price_sqft' => $this->inputs['price_sqft'],

@@ -20,6 +20,7 @@
                 <label class="form-label" style="font-size: 15px" for="status_id">Unit Status</label>
                 <select class="select2-size-lg form-select" id="status_id" name="status_id">
                     @foreach ($statuses as $row)
+                        @continue($row->id != 1)
                         <option value="{{ $row->id }}"
                             {{ (isset($unit) ? $unit->status_id : old('status_id')) == $row->id ? 'selected' : '' }}>
                             {{ $loop->index + 1 }} - {{ $row->name }}</option>
@@ -44,7 +45,8 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="floor_name">Floor Name</label>
                 <input type="text" class="form-control form-control-lg @error('floor_name') is-invalid @enderror"
-                    id="floor_name" name="floor_name" placeholder="Floor Name" value="{{ $floor->name }} ({{ $floor->short_label }})" readonly />
+                    id="floor_name" name="floor_name" placeholder="Floor Name"
+                    value="{{ $floor->name }} ({{ $floor->short_label }})" readonly />
                 @error('floor_name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -63,7 +65,8 @@
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <input type="hidden" name="unit_number_digits" value="{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}">
+                <input type="hidden" name="unit_number_digits"
+                    value="{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}">
                 <label class="form-label fs-5" for="unit_number">Unit Number</label>
                 <input type="number" class="form-control form-control-lg @error('unit_number') is-invalid @enderror"
                     id="unit_number" name="unit_number" min="{{ $max_unit_number ?? 1 }}"

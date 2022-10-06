@@ -95,7 +95,6 @@ class FileReleaseController extends Controller
      */
     public function store(FileResaleStoreRequest $request, $site_id)
     {
-        dd($request->all());
         //
         try {
             if (!request()->ajax()) {

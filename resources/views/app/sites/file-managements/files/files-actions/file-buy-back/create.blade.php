@@ -170,6 +170,49 @@
             });
         }
 
+        var checkbtn = $('#colorCheck3').is(':checked')
+        formValidations();
+
+        $('#colorCheck3').change(function() {
+            checkbtn = $('#colorCheck3').is(':checked');
+            formValidations();
+        })
+
+        function formValidations(){
+            var validator = $("#fileRefundForm").validate({
+                    rules: {
+                        'amount_profit' : {
+                            required: true
+                        },
+                        'payment_due_date' : {
+                            required: true
+                        },
+                        'amount_remarks' : {
+                            required: true
+                        },
+                        'amount_to_be_refunded' : {
+                            required: true
+                        },
+                        'attachments[0][attachment_label]': {
+                            required: function(){
+                                return checkbtn;
+                            }
+                        },
+                        'attachment[0][image]': {
+                            required: function(){
+                                return checkbtn;
+                            }
+                        },
+                    },
+                    errorClass: 'is-invalid text-danger',
+                    errorElement: "span",
+                    wrapper: "div",
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+                });
+        }
+
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });

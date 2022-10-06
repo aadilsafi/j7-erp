@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\FileBuyBack;
+namespace App\Http\Requests\FileResale;
 
 use Illuminate\Foundation\Http\FormRequest;
 

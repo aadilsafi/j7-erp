@@ -2,21 +2,22 @@
 
 namespace App\Services\FileManagements\FileActions\Resale;
 
-use App\Models\FileBuyBackLabelsAttachment;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\FileResale;
 use App\Models\Stakeholder;
+use App\Models\StakeholderType;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
-use App\Models\FileResale;
 use App\Models\FileResaleAttachment;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use App\Models\FileBuyBackLabelsAttachment;
 use Illuminate\Support\Facades\Notification;
+
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface as ResaleInterface;
-
-use Illuminate\Support\Facades\DB;
 
 class ResaleService implements ResaleInterface
 {
@@ -41,8 +42,59 @@ class ResaleService implements ResaleInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
 
-            if($inputs['stackholder']['stackholder_id'] == 0){
+            if ($inputs['stackholder']['stackholder_id'] == 0) {
+                $buyer_data = [
+                    'site_id' => decryptParams($site_id),
+                    'full_name' => $inputs['stackholder']['full_name'],
+                    'father_name' => $inputs['stackholder']['father_name'],
+                    'occupation' => $inputs['stackholder']['occupation'],
+                    'designation' => $inputs['stackholder']['designation'],
+                    'cnic' => $inputs['stackholder']['cnic'],
+                    'ntn' => $inputs['stackholder']['ntn'],
+                    'contact' => $inputs['stackholder']['contact'],
+                    'address' => $inputs['stackholder']['address'],
+                    'comments' => $inputs['stackholder']['comments'],
+                ];
 
+                $buyer = Stakeholder::create($buyer_data);
+                $buyer_id = $buyer->id;
+
+                $stakeholdertype = [
+                    [
+                        'stakeholder_id' => $buyer_id,
+                        'type' => 'C',
+                        'stakeholder_code' => 'C-00' . $buyer_id,
+                        'status' => 1,
+                    ],
+                    [
+                        'stakeholder_id' => $buyer_id,
+                        'type' => 'V',
+                        'stakeholder_code' => 'V-00' . $buyer_id,
+                        'status' => 0,
+                    ],
+                    [
+                        'stakeholder_id' => $buyer_id,
+                        'type' => 'D',
+                        'stakeholder_code' => 'D-00' . $buyer_id,
+                        'status' => 0,
+                    ],
+                    [
+                        'stakeholder_id' => $buyer_id,
+                        'type' => 'K',
+                        'stakeholder_code' => 'K-00' . $buyer_id,
+                        'status' => 0,
+                    ],
+                    [
+                        'stakeholder_id' => $buyer_id,
+                        'type' => 'L',
+                        'stakeholder_code' => 'L-00' . $buyer_id,
+                        'status' => 1,
+                    ]
+                ];
+
+                $stakeholder_type = StakeholderType::insert($stakeholdertype);
+            } else {
+                $buyer_id = $inputs['stackholder']['stackholder_id'];
             }
 
 
@@ -52,16 +104,16 @@ class ResaleService implements ResaleInterface
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['customer_id'],
-                // 'buyer_id' => '',
-                // 'buyer_data' => '',
+                'buyer_id' => $buyer_id,
+                'buyer_data' => json_encode(Stakeholder::find($buyer_id)),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
-                'amount_to_be_refunded' => str_replace( ',', '', $inputs['amount_to_be_refunded']) ,
+                'amount_to_be_refunded' => str_replace(',', '', $inputs['amount_to_be_refunded']),
                 'payment_due_date' => $inputs['payment_due_date'],
                 'rebate_amount' => $inputs['rebate_amount'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
-                'amount_profit' =>$inputs['amount_profit'],
+                'amount_profit' => $inputs['amount_profit'],
                 'comments' => $inputs['comments'],
             ];
 
@@ -72,14 +124,14 @@ class ResaleService implements ResaleInterface
 
             $currentURL = URL::current();
             $authRoleId = auth()->user()->roles->pluck('id')->first();
-            $approvePermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.file-managements.file-buy-back.approve');
-            $permission = (new Permission())->where('name', 'sites.file-managements.file-buy-back.approve')->first();
+            $approvePermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.file-managements.file-resale.approve');
+            $permission = (new Permission())->where('name', 'sites.file-managements.file-resale.approve')->first();
 
             $approvePermission = $permission->roles;
 
             $notificationData = [
 
-                'title' => 'File Refund Notificaton',
+                'title' => 'File Resale Notificaton',
                 'message' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'description' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
                 'url' => str_replace('/store', '', $currentURL),

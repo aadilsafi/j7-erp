@@ -400,6 +400,7 @@ Route::group([
                     Route::group(['prefix' => 'file-resale', 'as' => 'file-resale.'], function () {
 
                         Route::get('/', [FileReleaseController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'ApproveFileResale'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');

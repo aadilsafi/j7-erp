@@ -156,20 +156,20 @@
 
                     <div class="row mb-1">
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="unit_no">AREA(sq.ft)</label>
+                            <label class="form-label fs-5" for="unit_no">Area(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
                                 placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="floor_no">UNIT SIZE(sq.ft)</label>
+                            <label class="form-label fs-5" for="floor_no">Unit Size(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no"
                                 name="unit[floor_no]" placeholder="Floor No"
                                 value="{{ number_format($unit_data->price_sqft) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="unit_type">TOTAL PRICE</label>
+                            <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
                                 placeholder="Unit Type" value="{{ number_format($unit_data->total_price) }}" readonly />
                         </div>
@@ -258,7 +258,7 @@
                                 @endif
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="floor_no">Aount In Words</label>
+                                    <label class="form-label fs-5" for="floor_no">Amount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
                                         value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."

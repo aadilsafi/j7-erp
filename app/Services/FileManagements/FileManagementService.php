@@ -32,6 +32,7 @@ class FileManagementService implements FileManagementInterface
     // Store
     public function store($site_id, $inputs)
     {
+
         $data = [
             'site_id' => decryptParams($site_id),
             'unit_id' => $inputs['application_form']['unit_id'],
@@ -40,7 +41,7 @@ class FileManagementService implements FileManagementInterface
             'stakeholder_data' => json_encode(Stakeholder::find($inputs['application_form']['stakeholder_id'])),
             'registration_no' => $inputs['application_form']['registration_no'],
             'application_no' => $inputs['application_form']['application_no'],
-            'deal_type'=> $inputs['application_form']['deal_type'],
+            'deal_type' => $inputs['application_form']['deal_type'],
             'status' => 1,
             'file_action_id' => 1,
         ];

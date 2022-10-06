@@ -38,7 +38,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
         'cnic' => 'required|numeric|unique:stakeholders,cnic',
-        // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
+        'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
         'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',

@@ -222,7 +222,8 @@
                         $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled', (stakeholderData.father_name.length > 0));
                         $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (stakeholderData.occupation.length > 0));
                         $('#stackholder_designation').val(stakeholderData.designation).attr('disabled', (stakeholderData.designation.length > 0));
-                        $('#stackholder_cnic').val(stakeholderData.cnic).attr('disabled', (stakeholderData.cnic.length > 0));
+
+                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic)).attr('disabled', (stakeholderData.cnic.length > 0));
                         $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (stakeholderData.contact.length > 0));
                         $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData.ntn.length > 0));
                         $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (stakeholderData.comments.length > 0));

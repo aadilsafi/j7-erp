@@ -5,6 +5,7 @@ namespace App\Services\FileManagements\FileActions\Cancellation;
 use App\Models\FileBuyBack;
 use App\Models\FileBuyBackLabelsAttachment;
 use App\Models\FileCanecllation;
+use App\Models\FileCanecllationAttachment;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Stakeholder;
@@ -59,7 +60,7 @@ class CancellationService implements CancellationInterface
             $unit_data = Unit::find($inputs['unit_id']);
             $stakeholder_data = Stakeholder::find($inputs['customer_id']);
 
-            $buyBackfile = $this->model()->create($data);
+            $fileCancel = $this->model()->create($data);
 
             $currentURL = URL::current();
             $authRoleId = auth()->user()->roles->pluck('id')->first();
@@ -82,11 +83,11 @@ class CancellationService implements CancellationInterface
 
                     $refund_attachment_data = [
                         'site_id' => decryptParams($site_id),
-                        'file_buy_back_id' => $buyBackfile->id,
+                        'file_cancellation_id' => $fileCancel->id,
                         'label' => $inputs['attachments'][$i]['attachment_label'],
                     ];
-                    $refund_attachment = (new FileBuyBackLabelsAttachment())->create($refund_attachment_data);
-                    $refund_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_buy_back_attachments');
+                    $cancel_attachment = (new FileCanecllationAttachment())->create($refund_attachment_data);
+                    $cancel_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_cancel_attachments');
                 }
             } else {
                 $specificUsers = collect();
@@ -95,7 +96,7 @@ class CancellationService implements CancellationInterface
                 }
                 Notification::send($specificUsers, new FileRefundNotification($notificationData));
             }
-            return $buyBackfile;
+            return $fileCancel;
         });
     }
 

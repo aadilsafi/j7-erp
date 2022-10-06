@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-cetner align-items-center ">
     @if (Route::current()->getName() == 'sites.file-managements.file-buy-back.index')
-        @can('sites.file-managements.file-refund.approve')
+        @can('sites.file-managements.file-buy-back.approve')
             @php
                 $checkFileRefund = DB::table('file_buy_backs')
                     ->where('unit_id', $unit_id)

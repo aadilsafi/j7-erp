@@ -403,6 +403,7 @@ Route::group([
 
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
                     });
 
                     // file title transfer

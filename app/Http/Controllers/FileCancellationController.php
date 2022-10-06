@@ -13,6 +13,8 @@ use App\Models\FileCanecllation;
 use App\DataTables\ViewFilesDatatable;
 use App\Models\FileCanecllationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
+use App\Http\Requests\FileCancel\store;
+
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 
 class FileCancellationController extends Controller
@@ -70,7 +72,7 @@ class FileCancellationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $site_id)
+    public function store(store $request, $site_id)
     {
         //
         try {

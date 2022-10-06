@@ -72,4 +72,10 @@ class FileManagement extends Model implements HasMedia
     {
         return $this->hasMany(FileCanecllation::class,'file_id');
     }
+
+    public function fileResale()
+    {
+        return $this->hasMany(FileResale::class,'file_id');
+    }
 }
+

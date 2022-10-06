@@ -175,17 +175,39 @@
                 });
             });
         }
+       
+        var checkbtn = $('#colorCheck3').is(':checked')
+        formValidations();
 
         $('#colorCheck3').change(function() {
-            var check = $('#colorCheck3').is(':checked')
-            if (check) {
-                var validator = $("#fileRefundForm").validate({
+            checkbtn = $('#colorCheck3').is(':checked');
+            formValidations();
+        })
+
+        function formValidations(){
+            var validator = $("#fileRefundForm").validate({
                     rules: {
-                        'attachments[0][attachment_label]': {
+                        'paid_amount' : {
                             required: true
                         },
-                        'attachment[0][image]': {
+                        'amount_to_be_refunded' : {
                             required: true
+                        },
+                        'payment_due_date' : {
+                            required: true
+                        },
+                        'amount_remarks' : {
+                            required: true
+                        },
+                        'attachments[0][attachment_label]': {
+                            required: function(){
+                                return checkbtn;
+                            }
+                        },
+                        'attachment[0][image]': {
+                            required: function(){
+                                return checkbtn;
+                            }
                         },
                     },
                     errorClass: 'is-invalid text-danger',
@@ -195,8 +217,7 @@
                         form.submit();
                     }
                 });
-            }
-        })
+        }
 
 
 

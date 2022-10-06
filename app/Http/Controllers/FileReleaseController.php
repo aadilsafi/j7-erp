@@ -15,6 +15,7 @@ use App\Models\UnitStakeholder;
 use App\Models\RebateIncentiveModel;
 use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileBuyBack\storeRequest;
+use App\Http\Requests\FileResale\storeRequest as FileResaleStoreRequest;
 use App\Models\FileResaleAttachment;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
@@ -92,7 +93,7 @@ class FileReleaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(storeRequest $request, $site_id)
+    public function store(FileResaleStoreRequest $request, $site_id)
     {
         //
         try {

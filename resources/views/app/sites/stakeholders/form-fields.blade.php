@@ -149,9 +149,9 @@
         <div class="row mb-1" id="div-next-of-kin"
             style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label" style="font-size: 15px" for="parent_id">Customers</label>
+                <label class="form-label" style="font-size: 15px" for="parent_id">Select Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
-                    <option value="0" selected>Select Customer</option>
+                    <option value="0" selected>Select Kin</option>
                     @foreach ($stakeholders as $stakeholderRow)
                         @continue(!$stakeholderRow->stakeholder_types->where('type', 'C')->first()->status)
                         <option value="{{ $stakeholderRow['id'] }}"

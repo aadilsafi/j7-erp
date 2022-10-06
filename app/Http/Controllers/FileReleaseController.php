@@ -50,6 +50,13 @@ class FileReleaseController extends Controller
             $unit = Unit::find(decryptParams($unit_id));
             $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $rebate_incentive = RebateIncentiveModel::where('unit_id',$unit->id)->where('stakeholder_id',decryptParams($customer_id))->first();
+            if(isset($rebate_incentive)){
+                $rebate_total = $rebate_incentive->commision_total;
+            }
+            else{
+                $rebate_total = 0;
+            }
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
@@ -59,10 +66,11 @@ class FileReleaseController extends Controller
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
-                'rebate_incentive' => RebateIncentiveModel::where('unit_id',$unit->id)->where('stakeholder_id',decryptParams($customer_id))->first()
+                'rebate_incentive' => $rebate_incentive,
+                'rebate_total'=> $rebate_total,
             ];
+
             unset($data['emptyRecord'][0]['stakeholder_types']);
-            // dd($data['stakeholderTypes']);
             return view('app.sites.file-managements.files.files-actions.file-resale.create', $data);
         } else {
             abort(403);
@@ -78,6 +86,7 @@ class FileReleaseController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
     }
 
     /**

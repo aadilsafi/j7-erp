@@ -15,6 +15,9 @@ return new class extends Migration
     {
         Schema::create('file_resale_attachments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')->constrained();
+            $table->foreignId('file_resale_id')->constrained();
+            $table->string('label');
             $table->timestamps();
         });
     }

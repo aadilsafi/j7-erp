@@ -21,11 +21,15 @@ return new class extends Migration
             $table->foreignId('dealer_id')->nullable();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->longText('stakeholder_data')->nullable();
+            $table->foreignId('buyer_id')->constrained('stakeholders');
+            $table->longText('buyer_data')->nullable();
             $table->longText('unit_data')->nullable();
             $table->longText('dealer_data')->nullable();
             $table->string('amount_to_be_refunded')->nullable();
+            $table->string('amount_profit')->nullable();
             $table->string('payment_due_date')->nullable();
             $table->string('amount_remarks')->nullable();
+            $table->string('rebate_amount')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->timestamps();

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                            width: calc(20% - 0.5em);
-                                                                        } */
+                                                                                width: calc(20% - 0.5em);
+                                                                            } */
     </style>
 @endsection
 
@@ -58,7 +58,7 @@
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
-                    'file' =>$file,
+                    'file' => $file,
                     'total_paid_amount' => $total_paid_amount,
                 ]) }}
             </div>
@@ -70,9 +70,10 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" >
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input"
+                                    id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                        Attachement Attached
+                                    Attachement Attached
                                 </label>
                             </div>
                         </div>
@@ -190,12 +191,13 @@
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });
-        function calculateRefundedAmount(){
+
+        function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
             let amount_refunded = 0.0;
             let profitCharges = $('#profit_charges').val();
             amount_refunded = parseFloat(paid_amount) + parseFloat(profitCharges);
-                $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
+            $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
         }
     </script>
 @endsection

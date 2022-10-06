@@ -67,7 +67,7 @@ class SalesPlanService implements SalesPlanInterface
         $floor = (new Floor())->find($floor_id);
         $unit = (new Unit())->find($unit_id);
 
-        dd($unit);
+        // dd($unit);
 
         $authRoleId = auth()->user()->roles->pluck('id')->first();
 
@@ -140,7 +140,7 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
         }
 
-        $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
+        // $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
 
         $unitInput = $inputs['unit'];
 

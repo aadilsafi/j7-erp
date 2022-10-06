@@ -74,9 +74,9 @@ class RefundService implements RefundServiceRefundInterface
 
 
             if (isset($inputs['checkAttachment'])) {
-                
+
                 for ($i = 0; $i < count($inputs['attachments']); $i++) {
-                
+
                     $refund_attachment_data = [
                         'site_id' => decryptParams($site_id),
                         'file_refund_id' => $refundfile->id,

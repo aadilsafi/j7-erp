@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-            width: calc(20% - 0.5em);
-        } */
+                                width: calc(20% - 0.5em);
+                            } */
     </style>
 @endsection
 
@@ -58,7 +58,7 @@
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
-                    'file' =>$file,
+                    'file' => $file,
                 ]) }}
             </div>
 
@@ -69,9 +69,10 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" name="checkAttachment" class="form-check-input" value="1" id="colorCheck3">
+                                <input type="checkbox" name="checkAttachment" class="form-check-input" value="1"
+                                    id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                        Attachement Attached
+                                    Attachement Attached
                                 </label>
                             </div>
                         </div>
@@ -122,13 +123,13 @@
 @section('custom-js')
 
     <script>
-        // FilePond.registerPlugin(
-        //     FilePondPluginImagePreview,
-        //     FilePondPluginFileValidateType,
-        //     FilePondPluginFileValidateSize,
-        //     FilePondPluginImageValidateSize,
-        //     FilePondPluginImageCrop,
-        // );
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
 
         // FilePond.create(document.getElementById('attachment'), {
         //     styleButtonRemoveItemPosition: 'right',
@@ -150,69 +151,74 @@
     <script type="text/javascript">
         $(".expenses-list").repeater({
             initEmpty: true,
-            show: function() {
-                $(this).slideDown(), feather && feather.replace({
+            show: function(e) {
+                $(this).slideDown();
+                feather && feather.replace({
                     width: 14,
                     height: 14
-                })
+                });
+                initializeFilePond();
+                // console.log(e);
             },
             hide: function(e) {
                 $(this).slideUp(e)
             }
         });
         // const input = $('.attachment');
-        $('#add-new-attachment').on('click', function() {
-            FilePond.registerPlugin(
-                FilePondPluginImagePreview,
-                FilePondPluginFileValidateType,
-                FilePondPluginFileValidateSize,
-                FilePondPluginImageValidateSize,
-                FilePondPluginImageCrop,
-            );
+        // $('#add-new-attachment').on('click', function() {
+        //     initializeFilePond();
+        // });
 
-            FilePond.create(document.getElementById('attachment'), {
-                styleButtonRemoveItemPosition: 'right',
-                imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/jpeg'],
-                maxFileSize: '1536KB',
-                ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-                storeAsFile: true,
-                allowMultiple: true,
-                maxFiles: 1,
-                checkValidity: true,
-                credits: {
-                    label: '',
-                    url: ''
-                }
+        function initializeFilePond() {
+            const inputElements = document.querySelectorAll('input.filepond');
+            console.log(inputElements.length);
+            Array.from(inputElements).forEach(inputElement => {
+
+                // create a FilePond instance at the input element location
+                FilePond.create(inputElement, {
+                    styleButtonRemoveItemPosition: 'right',
+                    imageCropAspectRatio: '1:1',
+                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    maxFileSize: '1536KB',
+                    ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+                    storeAsFile: true,
+                    allowMultiple: true,
+                    maxFiles: 1,
+                    checkValidity: true,
+                    credits: {
+                        label: '',
+                        url: ''
+                    }
+                });
             });
-        });
+        }
 
-        $('#colorCheck3').change(function(){
+        $('#colorCheck3').change(function() {
             var check = $('#colorCheck3').is(':checked')
-            if(check){
+            if (check) {
                 var validator = $("#fileRefundForm").validate({
-                rules: {
-                'attachments[0][attachment_label]': {
-                    required: true
-                },
-                'attachment[0][image]': {
-                    required: true
-                },
-            },
-                errorClass: 'is-invalid text-danger',
-                errorElement: "span",
-                wrapper: "div",
-                submitHandler: function(form) {
-                    form.submit();
-                }
-        });
+                    rules: {
+                        'attachments[0][attachment_label]': {
+                            required: true
+                        },
+                        'attachment[0][image]': {
+                            required: true
+                        },
+                    },
+                    errorClass: 'is-invalid text-danger',
+                    errorElement: "span",
+                    wrapper: "div",
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+                });
             }
         })
-     
-       
+
+
 
         $("#saveButton").click(function() {
-            $("#fileRefundForm").removeClass('is-invalid text-danger')  
+            $("#fileRefundForm").removeClass('is-invalid text-danger')
             $("#fileRefundForm").submit();
         });
     </script>

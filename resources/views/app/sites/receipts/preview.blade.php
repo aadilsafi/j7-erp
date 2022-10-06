@@ -190,27 +190,27 @@
                         <div class="col-lg-9 col-md-9 col-sm-12">
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">TOTAL AMOUNT RECEIVED</label>
+                                    <label class="form-label fs-5" for="unit_no">Total Amount Received</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">AMOUNT IN NUMBERS</label>
+                                    <label class="form-label fs-5" for="unit_no">Amount In Numbers</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         name="unit[no]" placeholder=""
                                         value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">MODE OF PAYMENT</label>
+                                    <label class="form-label fs-5" for="unit_type">Mode Of Payment</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_type"
                                         name="unit[type]" placeholder="Unit Type"
                                         value="{{ $receipt->mode_of_payment }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_type">CREATED AT</label>
+                                    <label class="form-label fs-5" for="unit_type">Created At</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_type"
                                         name="unit[type]" placeholder="Unit Type"
                                         value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}"
@@ -258,7 +258,7 @@
                                 @endif
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="floor_no">AMOUNT IN WORDS</label>
+                                    <label class="form-label fs-5" for="floor_no">Aount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
                                         value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."

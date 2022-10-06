@@ -24,6 +24,8 @@ use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationService;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 use App\Services\FileManagements\FileActions\Refund\RefundService;
+use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
+use App\Services\FileManagements\FileActions\Resale\ResaleService;
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface};
 use App\Services\User\{UserService, Interface\UserInterface};
@@ -63,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RefundInterface::class, RefundService::class);
         $this->app->bind(BuyBackInterface::class, BuyBackService::class);
         $this->app->bind(CancellationInterface::class, CancellationService::class);
+        $this->app->bind(ResaleInterface::class, ResaleService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

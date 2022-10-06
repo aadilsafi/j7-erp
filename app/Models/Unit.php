@@ -121,7 +121,7 @@ class Unit extends Model
 
     public function salesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource');
+        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource','installments');
     }
 
     public function file()

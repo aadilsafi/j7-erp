@@ -49,7 +49,7 @@
 
 @section('content')
     <form id="fileRefundForm" enctype="multipart/form-data"
-        action="{{ route('sites.file-managements.file-refund.store', ['site_id' => encryptParams($site_id)]) }}"
+        action="{{ route('sites.file-managements.file-resale.store', ['site_id' => encryptParams($site_id)]) }}"
         method="post" class="">
         @csrf
         <div class="row">
@@ -63,6 +63,8 @@
                     'stakeholderTypes' => $stakeholderTypes,
                     'emptyRecord' => $emptyRecord,
                     'rebate_incentive' =>$rebate_incentive,
+                    'total_paid_amount' =>$total_paid_amount,
+                    'rebate_total' =>$rebate_total,
                 ]) }}
             </div>
 
@@ -84,10 +86,10 @@
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                             <i data-feather='save'></i>
-                            Save File Refund
+                            Save File Resale
                         </a>
 
-                        <a href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -191,7 +193,7 @@
                             if (response.data) {
                                 stakeholderData = response.data;
                             }
-                            // $('#stackholder_id').val(stakeholderData.id);
+
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
                             $('#stackholder_occupation').val(stakeholderData.occupation);
@@ -199,6 +201,9 @@
                             $('#stackholder_cnic').val(stakeholderData.cnic);
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
+                            $('#stackholder_comments').text(stakeholderData.comments);
+                            $('#stackholder_ntn').val(stakeholderData.ntn);
+
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
@@ -287,7 +292,16 @@
             }
         })
 
+        function calculateRefundedAmount(){
+            let paid_amount = '{{ $total_paid_amount }}';
+            let rebate_amount = '{{ $rebate_total }}';
 
+            let amount_refunded = 0.0;
+            let profitCharges = $('#profit_charges').val();
+            amount_refunded = parseFloat(paid_amount) + parseFloat(profitCharges);
+            amount_refunded = amount_refunded - parseFloat(rebate_amount);
+                $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
+        }
 
         $("#saveButton").click(function() {
             $("#fileRefundForm").removeClass('is-invalid text-danger')

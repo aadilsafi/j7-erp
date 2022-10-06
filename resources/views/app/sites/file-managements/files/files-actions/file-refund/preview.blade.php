@@ -58,6 +58,7 @@
                     'customer' => $customer,
                     'refund_file' => $refund_file,
                     'labels' => $labels,
+                    'total_paid_amount' => $total_paid_amount,
                 ]) }}
             </div>
 

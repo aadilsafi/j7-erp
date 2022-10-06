@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                width: calc(20% - 0.5em);
-            } */
+                                                                                width: calc(20% - 0.5em);
+                                                                            } */
     </style>
 @endsection
 
@@ -173,7 +173,6 @@
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });
-
 
         function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';

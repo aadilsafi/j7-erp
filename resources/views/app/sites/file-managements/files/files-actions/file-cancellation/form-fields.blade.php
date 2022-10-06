@@ -13,7 +13,8 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges</label>
-                        <input type="number" min="1" onchange="calculateRefundedAmount()" required name="cancellation_charges" class="form-control form-control-lg"
+                        <input type="number" min="1" onchange="calculateRefundedAmount()" required
+                            name="cancellation_charges" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
                             placeholder=" Cancellation Charges"
                             value="{{ isset($cancellation_file) ? number_format($cancellation_file->cancellation_charges) : '' }}" />
@@ -30,9 +31,8 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
-                        <input type="text" name="amount_remarks" class="form-control form-control-lg"
-                            id="remarks" {{ isset($cancellation_file) ? 'disabled' : '' }}
-                            placeholder="Amount Remarks"
+                        <input type="text" name="amount_remarks" class="form-control form-control-lg" id="remarks"
+                            {{ isset($cancellation_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
                             value="{{ isset($cancellation_file) ? $cancellation_file->amount_remarks : '' }}" />
                     </div>
 
@@ -74,37 +74,34 @@
             </div>
             <div class="card-body">
                 @if (isset($cancellation_file))
-                    @foreach ($labels as $key => $label)
-                        <div class="card m-0">
-                            <div class="card-body">
-                                <div>
-                                    <div class="row mb-1">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                            <label class="form-label fs-5" for="expense_label">Attachement
-                                                label</label>
-                                            <input type="text" class="form-control form-control-lg"
-                                                id="expense_label" name="attachments[attachment_label]"
-                                                value="{{ $label->label }}" disabled placeholder="Attachment Label" />
-                                        </div>
-
-                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
-                                            <label class="form-label fs-5" for="type_name">Attachment</label>
-                                            <input id="attachment" type="file" class="filepond attachment" disabled
-                                                name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
-                                        </div>
+                    <div class="row mb-1 g-1">
+                        @foreach ($labels as $key => $label)
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="expense_label">Attachement
+                                            label</label>
+                                        <input type="text" class="form-control form-control-lg" id="expense_label"
+                                            name="attachments[attachment_label]" value="{{ $label->label }}" disabled
+                                            placeholder="Attachment Label" />
                                     </div>
 
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                        <label class="form-label fs-5" for="type_name">Attachment</label>
+                                        <input id="attachment" type="file" class="filepond attachment" disabled
+                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 @else
                     <div class="expenses-list">
 
                         <div data-repeater-list="attachments">
                             <div data-repeater-item>
                                 <div class="card m-0">
-                                    <div class="card-body">
+                                    <div class="card-body pb-0">
                                         <div>
                                             <div class="row mb-1">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
@@ -128,7 +125,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row mb-1">
+                                            <div class="row">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                                     <div class="d-flex h-100 justify-content-end align-items-end">
                                                         <div>
@@ -146,6 +143,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr>
                             </div>
                         </div>
                         <div class="row">

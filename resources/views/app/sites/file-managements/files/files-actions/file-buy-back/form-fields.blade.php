@@ -90,7 +90,7 @@
                         <div data-repeater-list="attachments">
                             <div data-repeater-item>
                                 <div class="card m-0">
-                                    <div class="card-body">
+                                    <div class="card-body pb-0">
                                         <div>
                                             <div class="row mb-1">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
@@ -132,6 +132,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <hr>
                             </div>
                         </div>
                         <div class="row">

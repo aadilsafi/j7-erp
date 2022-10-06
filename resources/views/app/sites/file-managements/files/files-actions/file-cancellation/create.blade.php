@@ -123,70 +123,51 @@
 @section('custom-js')
 
     <script>
-        // FilePond.registerPlugin(
-        //     FilePondPluginImagePreview,
-        //     FilePondPluginFileValidateType,
-        //     FilePondPluginFileValidateSize,
-        //     FilePondPluginImageValidateSize,
-        //     FilePondPluginImageCrop,
-        // );
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
 
-        // FilePond.create(document.getElementById('attachment'), {
-        //     styleButtonRemoveItemPosition: 'right',
-        //     imageCropAspectRatio: '1:1',
-        //     acceptedFileTypes: ['image/png', 'image/jpeg'],
-        //     maxFileSize: '1536KB',
-        //     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-        //     storeAsFile: true,
-        //     allowMultiple: true,
-        //     maxFiles: 1,
-        //     checkValidity: true,
-        //     credits: {
-        //         label: '',
-        //         url: ''
-        //     }
-        // });
-    </script>
-
-    <script type="text/javascript">
         $(".expenses-list").repeater({
             initEmpty: true,
             show: function() {
                 $(this).slideDown(), feather && feather.replace({
                     width: 14,
                     height: 14
-                })
+                });
+                initializeFilePond();
             },
             hide: function(e) {
                 $(this).slideUp(e)
             }
         });
-        // const input = $('.attachment');
-        $('#add-new-attachment').on('click', function() {
-            FilePond.registerPlugin(
-                FilePondPluginImagePreview,
-                FilePondPluginFileValidateType,
-                FilePondPluginFileValidateSize,
-                FilePondPluginImageValidateSize,
-                FilePondPluginImageCrop,
-            );
 
-            FilePond.create(document.getElementById('attachment'), {
-                styleButtonRemoveItemPosition: 'right',
-                imageCropAspectRatio: '1:1',
-                acceptedFileTypes: ['image/png', 'image/jpeg'],
-                maxFileSize: '1536KB',
-                ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-                storeAsFile: true,
-                allowMultiple: true,
-                maxFiles: 1,
-                checkValidity: true,
-                credits: {
-                    label: '',
-                    url: ''
-                }
+        function initializeFilePond() {
+            const inputElements = document.querySelectorAll('input.filepond');
+            console.log(inputElements.length);
+            Array.from(inputElements).forEach(inputElement => {
+
+                // create a FilePond instance at the input element location
+                FilePond.create(inputElement, {
+                    styleButtonRemoveItemPosition: 'right',
+                    imageCropAspectRatio: '1:1',
+                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    maxFileSize: '1536KB',
+                    ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+                    storeAsFile: true,
+                    allowMultiple: true,
+                    maxFiles: 1,
+                    checkValidity: true,
+                    credits: {
+                        label: '',
+                        url: ''
+                    }
+                });
             });
-        });
+        }
 
         var validator = $("#fileRefundForm").validate({
                 rules: {

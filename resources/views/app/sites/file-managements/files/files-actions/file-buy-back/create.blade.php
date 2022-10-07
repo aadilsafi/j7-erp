@@ -182,7 +182,8 @@
             var validator = $("#fileRefundForm").validate({
                     rules: {
                         'amount_profit' : {
-                            required: true
+                            required: true,
+                            digits: true,
                         },
                         'payment_due_date' : {
                             required: true
@@ -191,7 +192,7 @@
                             required: true
                         },
                         'amount_to_be_refunded' : {
-                            required: true
+                            required: true,
                         },
                         'attachments[0][attachment_label]': {
                             required: function(){

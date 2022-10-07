@@ -295,13 +295,14 @@
             var validator = $("#fileRefundForm").validate({
                     rules: {
                         'amount_profit' : {
-                            required: true
+                            required: true,
+                            digits: true,
                         },
                         'payment_due_date' : {
                             required: true
                         },
                         'amount_to_be_refunded' : {
-                            required: true
+                            required: true,
                         },
                         'amount_remarks' : {
                             required: true
@@ -332,7 +333,11 @@
                             required: true
                         },
                         'stackholder[cnic]':{
-                            required: true
+                            required: true,
+                            digits: true,
+                            maxlength: 13,
+                            minlength: 13
+
                         },
                         'stackholder[contact]':{
                             required: true
@@ -341,6 +346,12 @@
                             required: true
                         },
                         
+                    },
+                    messages: {
+                        'stackholder[cnic]': {
+                            maxlength: "Cnic can't be greater then {0} digits without dashes",
+                            minlength: "Cnic can't be less then {0} digits without dashes",
+                        }
                     },
                     errorClass: 'is-invalid text-danger',
                     errorElement: "span",

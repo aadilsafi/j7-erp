@@ -29,6 +29,8 @@
 @endsection
 
 @section('content')
+
+
     <p class="mb-2">
     </p>
 
@@ -43,10 +45,10 @@
                                     <tr class="text-center">
                                         <th rowspan="2">CHECK</th>
                                         <th rowspan="2">FLOORS</th>
-                                        <th rowspan="2">ORDER</th>
+                                        <th rowspan="2">UNITS</th>
+                                        <th rowspan="2">Unit</th>
                                         <th rowspan="2">AREA</th>
                                         <th rowspan="2">SHORT LABEL</th>
-                                        <th rowspan="2">UNITS</th>
                                         <th colspan="5">STATUSES</th>
                                         <th rowspan="2">CREATED AT</th>
                                         <th rowspan="2">UPDATED AT</th>

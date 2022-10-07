@@ -27,7 +27,7 @@ class updateRequest extends FormRequest
     {
         $rules = (new Unit())->rules;
         $rules['unit_number'] = [
-            'required', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->ignore(decryptParams($this->id))->where('floor_id', decryptParams($this->floor_id))
+            'required', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->ignore(decryptParams($this->id))
         ];
         return $rules;
     }

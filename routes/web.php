@@ -468,6 +468,7 @@ Route::group([
                     Route::group(['prefix' => 'recovery', 'as' => 'recovery.'], function () {
                         Route::get('/dashboard', [AccountsRecoveryController::class, 'dashboard'])->name('dashboard');
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
+                        Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
                     });
 
                 });

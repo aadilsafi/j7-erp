@@ -369,3 +369,8 @@ Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail 
     $trail->parent('dashboard');
     $trail->push('File Title Transfer', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
 });
+
+Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
+});

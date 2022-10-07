@@ -303,7 +303,6 @@
                         },
                         'amount_to_be_refunded' : {
                             required: true,
-                            digits: true,
                         },
                         'amount_remarks' : {
                             required: true

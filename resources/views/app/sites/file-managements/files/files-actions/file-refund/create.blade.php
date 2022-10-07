@@ -193,7 +193,6 @@
                         },
                         'amount_to_be_refunded' : {
                             required: true,
-                            digits: true,
                         },
                         'payment_due_date' : {
                             required: true

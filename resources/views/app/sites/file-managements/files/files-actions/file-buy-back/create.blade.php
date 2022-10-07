@@ -193,7 +193,6 @@
                         },
                         'amount_to_be_refunded' : {
                             required: true,
-                            digits: true,
                         },
                         'attachments[0][attachment_label]': {
                             required: function(){

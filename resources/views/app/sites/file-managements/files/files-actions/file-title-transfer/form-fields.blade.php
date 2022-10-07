@@ -11,7 +11,7 @@
                 <div class="row mb-1">
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges</label>
-                        <input type="number" min="1" onchange="calculateTransferAmount()" required
+                        <input type="text" min="1" onchange="calculateTransferAmount()" required
                             name="transfer_rate" class="form-control form-control-lg"
                             {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate" placeholder="Transfer Charges"
                             value="{{ isset($transfer_file) ? number_format($transfer_file->transfer_rate) : '' }}" />
@@ -425,19 +425,36 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dynamic_installment_rows">
-                                            @foreach ($unit->salesPlan[0]['installments'] as $intsallment)
-                                                <tr class="text-center text-nowrap">
-                                                    <td>{{ $loop->index + 1 }}</td>
-                                                    <td>{{ $intsallment->details }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
-                                                    </td>
-                                                    <td>{{ number_format($intsallment->amount) }}</td>
-                                                    <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                    <td>{{ number_format($intsallment->remaining_amount) }}</td>
-                                                    <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                            @if (isset($unit->salesPlan[0]))
+                                                @foreach ($unit->salesPlan[0]['installments'] as $intsallment)
+                                                    <tr class="text-center text-nowrap">
+                                                        <td>{{ $loop->index + 1 }}</td>
+                                                        <td>{{ $intsallment->details }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
+                                                        </td>
+                                                        <td>{{ number_format($intsallment->amount) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                @foreach ($unit->CancelsalesPlan[0]['installments'] as $intsallment)
+                                                    <tr class="text-center text-nowrap">
+                                                        <td>{{ $loop->index + 1 }}</td>
+                                                        <td>{{ $intsallment->details }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
+                                                        </td>
+                                                        <td>{{ number_format($intsallment->amount) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
+
                                         </tbody>
                                     </table>
                                 </div>

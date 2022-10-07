@@ -120,7 +120,11 @@ class FileReleaseController extends Controller
         $files_labels = FileResaleAttachment::where('file_resale_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
-        $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        if (isset($unit->salesPlan[0])) {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        } else {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+        }
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
         $resale_file = (new FileResale())->find(decryptParams($id));
@@ -147,7 +151,7 @@ class FileReleaseController extends Controller
             'rebate_incentive' => $rebate_incentive,
             'rebate_total' => $rebate_total,
         ];
-
+        // dd($data);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);
     }
 

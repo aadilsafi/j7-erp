@@ -1194,6 +1194,15 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            //Recovery Accounts
+            [
+                'name' => 'sites.accounts.recovery.dashboard',
+                'show_name' => 'Can View Accounts Recovery Dashboard',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

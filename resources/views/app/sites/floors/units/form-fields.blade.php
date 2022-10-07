@@ -72,7 +72,7 @@
                     id="unit_number" name="unit_number" min="{{ $max_unit_number ?? 1 }}"
                     max="{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}" placeholder="Unit Number"
                     value="{{ isset($unit) ? $unit->unit_number : old('unit_number') ?? $max_unit_number }}"
-                    {{ isset($unit) ? 'disabled' : '' }} />
+                    {{ isset($unit) ? 'readonly' : '' }} />
                 @error('unit_number')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

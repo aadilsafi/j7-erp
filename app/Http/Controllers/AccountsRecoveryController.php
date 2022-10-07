@@ -10,4 +10,9 @@ class AccountsRecoveryController extends Controller
     {
         return view('app.sites.accounts.recovery.dashboard');
     }
+
+    public function calender(Request $request)
+    {
+        return view('app.sites.accounts.recovery.calender');
+    }
 }

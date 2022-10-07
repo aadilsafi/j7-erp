@@ -303,7 +303,7 @@
                         },
                         'amount_to_be_paid' : {
                             required: true,
-                            digits: true,
+                           
                         },
                         'amount_remarks' : {
                             required: true

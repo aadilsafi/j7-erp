@@ -295,13 +295,15 @@
             var validator = $("#fileRefundForm").validate({
                     rules: {
                         'transfer_rate' : {
-                            required: true
+                            required: true,
+                            digits: true,
                         },
                         'payment_due_date' : {
                             required: true
                         },
                         'amount_to_be_paid' : {
-                            required: true
+                            required: true,
+                            digits: true,
                         },
                         'amount_remarks' : {
                             required: true
@@ -332,7 +334,10 @@
                             required: true
                         },
                         'stackholder[cnic]':{
-                            required: true
+                            required: true,
+                            digits: true,
+                            maxlength: 13,
+                            minlength: 13
                         },
                         'stackholder[contact]':{
                             required: true

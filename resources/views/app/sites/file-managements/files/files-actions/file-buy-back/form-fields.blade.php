@@ -11,7 +11,7 @@
                 <div class="row mb-1">
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Profit Charges</label>
-                        <input type="number" min="1" onchange="calculateRefundedAmount()" required
+                        <input type="text" min="1" onchange="calculateRefundedAmount()" required
                             name="amount_profit" class="form-control form-control-lg"
                             {{ isset($buy_back_file) ? 'disabled' : '' }} id="profit_charges"
                             placeholder=" Profit Charges"

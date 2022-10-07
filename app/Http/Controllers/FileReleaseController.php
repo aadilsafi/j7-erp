@@ -151,7 +151,7 @@ class FileReleaseController extends Controller
             'rebate_incentive' => $rebate_incentive,
             'rebate_total' => $rebate_total,
         ];
-
+        // dd($data);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);
     }
 

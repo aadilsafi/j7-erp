@@ -101,7 +101,11 @@ class FileBuyBackController extends Controller
         $images = [];
 
         $unit = Unit::find(decryptParams($unit_id));
-        $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        if (isset($unit->salesPlan[0])) {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        } else {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+        }
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
         foreach ($files_labels as $key=>$file) {

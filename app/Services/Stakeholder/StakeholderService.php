@@ -106,10 +106,20 @@ class StakeholderService implements StakeholderInterface
                     'status' => $inputs['stakeholder_type'] == $value ? 1 : 0,
                 ];
 
-                if ($inputs['stakeholder_type'] == 'C' || $inputs['parent_id'] > 0) {
-                    if (in_array($value, ['C', 'L', 'K'])) {
+                if ($inputs['stakeholder_type'] == 'C') {
+                    if (in_array($value, ['C', 'L'])) {
                         $stakeholderType['status'] = 1;
                     }
+                }
+
+
+                if ($inputs['parent_id'] > 0) {
+                    (new StakeholderType())->where([
+                        'stakeholder_id' => $inputs['parent_id'],
+                        'type' => 'K',
+                    ])->update([
+                        'status' => true,
+                    ]);
                 }
 
                 $stakeholderTypeData[] = $stakeholderType;
@@ -157,6 +167,16 @@ class StakeholderService implements StakeholderInterface
                     ]);
                 }
             }
+
+            if ($inputs['parent_id'] > 0) {
+                (new StakeholderType())->where([
+                    'stakeholder_id' => $inputs['parent_id'],
+                    'type' => 'K',
+                ])->update([
+                    'status' => true,
+                ]);
+            }
+
             // dd($inputs);
             $stakeholder->contacts()->delete();
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {

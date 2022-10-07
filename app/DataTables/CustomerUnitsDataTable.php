@@ -60,8 +60,14 @@ class CustomerUnitsDataTable extends DataTable
             })
             ->editColumn('actions', function ($unit) {
                 $file_Action_id = 0;
+
                 if(isset($unit->file->file_action_id)){
-                    $file_Action_id = $unit->file->file_action_id;
+                    foreach($unit->file as $fileCheck){
+                        if($fileCheck->file_action_id != 0){
+                            $file_Action_id = $unit->file->file_action_id;
+                            break;
+                        }
+                    }
                 }
                 if (isset($unit->salesPlan[0])) {
                     return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'file_Action_id' =>$file_Action_id, 'unit_id' => $unit->id]);

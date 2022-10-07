@@ -110,7 +110,7 @@
             <tr>
                 <th colspan="2" style="text-align: start; white-space: nowrap;">Price Of Unit</th>
                 <td colspan="2" style="text-align: center;border-bottom: 1px solid black;">
-                    {{ number_format($data['rate'] * $data['size'] ) }}
+                    {{ number_format($data['total']) }}
                 </td>
                 <th style="text-align: center; white-space: nowrap;">Date</th>
                 <td id="date" colspan="3" style="text-align: center;border-bottom: 1px solid black;">

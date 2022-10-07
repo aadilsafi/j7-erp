@@ -372,7 +372,7 @@
                                             Request</span>
                                     </a>
                                 </li>
-                                <li
+                                {{-- <li
                                     class="nav-item {{ request()->routeIs('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                     <a class="d-flex align-items-center"
                                         href="{{ route('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) }}">
@@ -390,7 +390,7 @@
                                         </i>
                                         <span class="menu-title text-truncate" data-i18n="Email">Unit Shifting</span>
                                     </a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </li>
 

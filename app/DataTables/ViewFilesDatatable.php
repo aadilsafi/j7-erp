@@ -110,12 +110,27 @@ class ViewFilesDatatable extends DataTable
             })
             // Title Transfer status
             ->editColumn('title_transfer_status', function ($fileManagement) {
-                if (isset($fileManagement->fileTitleTransfer[0])) {
-                    if ($fileManagement->fileTitleTransfer[0]['status'] == 1) {
-                        return editBadgeColumn('File Title Transfer Request Approved');
-                    } else {
+
+                if(isset($fileManagement->fileTitleTransfer[0])){
+                    $statuses = 0;
+                    foreach($fileManagement->fileTitleTransfer as $fileCheck){
+
+                        if($fileCheck->status == 1){
+                            $statuses = false;
+                        }
+                        else{
+                            $statuses = true;
+                            break;
+                        }
+                    }
+
+                    if($statuses == true){
                         return editBadgeColumn('Pending');
                     }
+                    else{
+                        return editBadgeColumn('File Title Transfer Request Approved');
+                    }
+
                 } else {
                     return editBadgeColumn(' File Title Transfer Request Not Found');
                 }
@@ -159,7 +174,20 @@ class ViewFilesDatatable extends DataTable
             // Title Transfer Actions
             ->editColumn('title_transfer_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileTitleTransfer[0])) {
-                    return view('app.sites.file-managements.files.files-actions.file-title-transfer.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileTitleTransfer[0]['id'], 'file_refund_status' => $fileManagement->fileTitleTransfer[0]['status'],]);
+                    $statuses = 0;
+                    $id = 0;
+                    foreach($fileManagement->fileTitleTransfer as $fileCheck){
+
+                        if($fileCheck->status == 1){
+                            $statuses = false;
+                        }
+                        else{
+                            $statuses = true;
+                            $id = $fileCheck->id;
+                            break;
+                        }
+                    }
+                    return view('app.sites.file-managements.files.files-actions.file-title-transfer.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $id, 'file_titleTransfer_status' => $statuses,]);
                 } else {
                     return "-";
                 }

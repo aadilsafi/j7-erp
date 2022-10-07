@@ -157,12 +157,12 @@ class FileCancellationController extends Controller
     public function ApproveFileCancellation($site_id, $unit_id, $customer_id, $file_refund_id)
     {
 
-        $file_buy_back = FileCanecllation::find(decryptParams($file_refund_id));
-        $file_buy_back->status = 1;
-        $file_buy_back->update();
+        $file_cancellation = FileCanecllation::find(decryptParams($file_refund_id));
+        $file_cancellation->status = 1;
+        $file_cancellation->update();
 
         $unit = Unit::find(decryptParams($unit_id));
-        $unit->status_id = 1;
+        $unit->status_id = 4;
         $unit->update();
 
         $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -183,6 +183,6 @@ class FileCancellationController extends Controller
             $Receipt->update();
         }
 
-        return redirect()->route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+        return redirect()->route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Cancellation Approved');
     }
 }

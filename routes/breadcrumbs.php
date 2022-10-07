@@ -363,3 +363,14 @@ Breadcrumbs::for('sites.file-managements.file-title-transfer.preview', function 
     $trail->parent('sites.file-managements.file-title-transfer.index', $site_id);
     $trail->push('Preview File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 });
+
+//Recovery Accounts BreadCrumbs
+Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Title Transfer', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
+});

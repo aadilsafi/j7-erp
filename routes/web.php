@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\{
+    AccountsRecoveryController,
     AdditionalCostController,
     ArtisanCommandController,
     DashboardController,
@@ -382,7 +383,6 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
-
                     });
 
                     // file Cancellation
@@ -457,6 +457,20 @@ Route::group([
                             });
                         });
                     });
+                });
+
+                // Accounts Routes
+                Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+
+                    // Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
+
+                    // Accounts Recovery Routes
+                    Route::group(['prefix' => 'recovery', 'as' => 'recovery.'], function () {
+                        Route::get('/dashboard', [AccountsRecoveryController::class, 'dashboard'])->name('dashboard');
+                        Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
+                        Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
+                    });
+
                 });
             });
         });

@@ -109,11 +109,9 @@ class FileManagementController extends Controller
         return view('app.sites.file-managements.files.create', $data);
     }
 
-    public function show($site_id, $unit_id, $customer_id)
+    public function show($site_id, $customer_id, $unit_id)
     {
-
         $customer_file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
-
 
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),

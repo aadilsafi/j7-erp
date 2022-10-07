@@ -416,7 +416,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg"
                                                     id="unit_price" placeholder="Unit Price"
-                                                    value="{{ number_format($unit->price_sqft, 2) }}" disabled />
+                                                    value="{{ number_format($salesPlan->unit_price, 2) }}" disabled />
                                             </div>
 
                                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -424,7 +424,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg" disabled
                                                     id="total-price-unit" placeholder="Amount"
-                                                    value="{{ number_format($unit->total_price, 2) }}" />
+                                                    value="{{ number_format($salesPlan->total_price, 2) }}" />
                                             </div>
                                         </div>
 

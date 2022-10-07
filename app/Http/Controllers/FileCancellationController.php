@@ -99,7 +99,13 @@ class FileCancellationController extends Controller
         $files_labels = FileCanecllationAttachment::where('file_cancellation_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
-        $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+
+        if (isset($unit->salesPlan[0])) {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        } else {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+        }
+
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
         foreach ($files_labels as $key => $file) {
@@ -116,7 +122,6 @@ class FileCancellationController extends Controller
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
         ];
-
         return view('app.sites.file-managements.files.files-actions.file-cancellation.preview', $data);
     }
 

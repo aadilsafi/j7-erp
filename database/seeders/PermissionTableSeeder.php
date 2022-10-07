@@ -732,6 +732,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.file-managements.customers.units.files.show',
+                'show_name' => 'View Created Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.file-managements.customers.units.files.create',
                 'show_name' => 'Create Files',
                 'guard_name' => 'web',

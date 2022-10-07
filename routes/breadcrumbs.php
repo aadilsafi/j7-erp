@@ -253,6 +253,11 @@ Breadcrumbs::for('sites.file-managements.customers.units', function (BreadcrumbT
 
 Breadcrumbs::for('sites.file-managements.customers.units.files.index', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
     $trail->parent('sites.file-managements.customers.units', $site_id, $customer_id, $unit_id);
+    $trail->push('Preview Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.show', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.view-files', $site_id, $customer_id, $unit_id);
     $trail->push('Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });
 

@@ -348,6 +348,12 @@
                         },
                         
                     },
+                    messages: {
+                        'stackholder[cnic]': {
+                            maxlength: "Cnic can't be greater then {0} digits without dashes",
+                            minlength: "Cnic can't be less then {0} digits without dashes",
+                        }
+                    },
                     errorClass: 'is-invalid text-danger',
                     errorElement: "span",
                     wrapper: "div",

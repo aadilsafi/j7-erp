@@ -38,17 +38,19 @@ class storeRequest extends FormRequest
             'stackholder.occupation' => 'required|string|min:1|max:50',
             'stackholder.designation' => 'required|string|min:1|max:50',
             'stackholder.ntn' => 'required|numeric',
-            'stackholder.cnic' => 'required|numeric|unique:stakeholders,cnic',
+            // 'stackholder.cnic' => 'required|numeric|unique:stakeholders,cnic',
             'stackholder.contact' => 'required|string|min:1|max:20',
             'stackholder.address' => 'required|string',
         ];
-        $rule['stackholder.cnic'] = ['required', 'numeric', Rule::unique('stakeholders')->ignore($this->input('stackholder.stackholder_id'))];
+
+        $rules['stackholder.cnic'] = ['required', 'numeric', Rule::unique('stakeholders','cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;
     }
 
     public function messages()
     {
         return [
+            'stackholder.cnic.unique' => "Stakeholder Cnic Must be Unique",
             "amount_to_be_refunded.required" => "Amount To Be Refunded is Required.",
             "payment_due_date.required" => "Payment Due Date Is Required.",
             'amount_remarks.required' => 'Amount Remark is Required',

@@ -38,7 +38,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create File Title Trasnfer</h2>
+                <h2 class="content-header-title float-start mb-0">Create File Title Transfer</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.file-managements.file-title-transfer.create', encryptParams($site_id)) }}
                 </div>
@@ -340,7 +340,7 @@
                         'stackholder[address]':{
                             required: true
                         },
-                        
+
                     },
                     errorClass: 'is-invalid text-danger',
                     errorElement: "span",

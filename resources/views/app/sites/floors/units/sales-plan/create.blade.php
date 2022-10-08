@@ -230,6 +230,7 @@
                             $('#stackholder_ntn').val(stakeholderData.ntn);
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
+                            $('#stackholder_comments').text(stakeholderData.comments);
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {

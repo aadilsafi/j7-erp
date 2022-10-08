@@ -81,9 +81,10 @@ class SalesPlanService implements SalesPlanInterface
         $stakeholderData = [
             'site_id' => $site->id,
             'full_name' => $stakeholderInput['full_name'],
-            'farther_name' => $stakeholderInput['father_name'],
+            'father_name' => $stakeholderInput['father_name'],
             'occupation' => $stakeholderInput['occupation'],
             'designation' => $stakeholderInput['designation'],
+            'ntn' => $stakeholderInput['ntn'],
             'cnic' => $stakeholderInput['cnic'],
             'contact' => $stakeholderInput['contact'],
             'address' => $stakeholderInput['address'],

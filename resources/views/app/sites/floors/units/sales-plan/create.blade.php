@@ -223,6 +223,7 @@
                             $('#stackholder_occupation').val(stakeholderData.occupation);
                             $('#stackholder_designation').val(stakeholderData.designation);
                             $('#stackholder_cnic').val(stakeholderData.cnic);
+                            $('#stackholder_ntn').val(stakeholderData.ntn);
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
 

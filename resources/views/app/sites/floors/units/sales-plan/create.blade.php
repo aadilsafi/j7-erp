@@ -649,6 +649,10 @@
                 'stackholder[full_name]': {
                     required: true
                 },
+                'stackholder[cnic]': {
+                    minlength:13,
+                    maxlength:13,
+                },
 
                 // 4. SALES SOURCE
                 'sales_source[sales_type]': {

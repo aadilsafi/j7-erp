@@ -168,7 +168,7 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="relation">Relation</label>
                 <input type="text" class="form-control form-control-lg @error('relation') is-invalid @enderror"
-                    id="stakeholder_name" name="relation" placeholder="Relation"
+                    id="stakeholder_name" name="relation" placeholder="Relation" {{strlen($stakeholder->relation) > 0 ? '' : 'disabled'}}
                     value="{{ isset($stakeholder) ? $stakeholder->relation : old('stakeholder_name') }}" />
                 @error('relation')
                     <div class="invalid-feedback">{{ $message }}</div>

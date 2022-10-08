@@ -65,8 +65,8 @@
         }
 
         /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+                                                    width: calc(20% - 0.5em);
+                                                } */
     </style>
 @endsection
 
@@ -243,6 +243,15 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+            $(".online-mode-of-payment").trigger('change');
+            $("#transaction_date").flatpickr({
+                defaultDate: 'today',
+                minDate: 'today',
+                // altInput: !0,
+                dateFormat: "Y-m-d",
+            });
+
             $('.repeater').repeater({
                 show: function() {
                     $(this).slideDown();
@@ -273,51 +282,45 @@
                 dropdownParent: e.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
-            })
-        });
-
-
-
-        $(document).ready(function() {
+            });
 
             $(".other-mode-of-payment").click(function() {
-                $('#otherValueDiv').css("display", "block");
-                $('.onlineValueDiv').css("display", "none");
-                $('.chequeValueDiv').css("display", "none");
+                $('#otherValueDiv').show();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').hide();
             });
 
             $(".cheque-mode-of-payment").click(function() {
-                $('#otherValueDiv').css("display", "none");
-                $('.onlineValueDiv').css("display", "none");
-                $('.chequeValueDiv').css("display", "block");
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').show();
             });
 
             $(".online-mode-of-payment").click(function() {
-                $('#otherValueDiv').css("display", "none");
-                $('.onlineValueDiv').css("display", "block");
-                $('.chequeValueDiv').css("display", "none");
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').show();
+                $('#chequeValueDiv').hide();
             });
 
-
             $(".mode-of-payment").click(function() {
-                $('#otherValueDiv').css("display", "none");
-                $('.onlineValueDiv').css("display", "none");
-                $('.chequeValueDiv').css("display", "none");
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').hide();
             });
 
             $(".other-purpose").click(function() {
-                $('#otherPurposeValueDiv').css("display", "block");
-                $('#installmentValueDiv').css("display", "none");
+                $('#otherPurposeValueDiv').show();
+                $('#installmentValueDiv').hide();
             });
 
             $(".installment-purpose").click(function() {
-                $('#installmentValueDiv').css("display", "block");
-                $('#otherPurposeValueDiv').css("display", "none");
+                $('#installmentValueDiv').show();
+                $('#otherPurposeValueDiv').hide();
             });
 
             $(".purpose").click(function() {
-                $('#otherPurposeValueDiv').css("display", "none");
-                $('#installmentValueDiv').css("display", "none");
+                $('#otherPurposeValueDiv').hide();
+                $('#installmentValueDiv').hide();
             });
 
         });
@@ -372,10 +375,10 @@
                     success: function(response) {
                         if (response.success) {
 
-                            $('#paidInstllmentTableDiv').css("display", "block");
-                            $('#instllmentTableDiv').css("display", "block");
-                            $('#modeOfPaymentDiv').css("display", "block");
-                            $('#customerData').css("display", "block");
+                            $('#paidInstllmentTableDiv').show().parent().addClass('mb-2');
+                            $('#instllmentTableDiv').show().parent().addClass('mb-2');
+                            $('#modeOfPaymentDiv').show().parent().addClass('mb-2');
+                            $('#customerData').show().parent().addClass('mb-2');
                             $('#paid_dynamic_total_installment_rows').empty();
                             $('#dynamic_total_installment_rows').empty();
                             $('#installments').empty();
@@ -535,7 +538,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     let url =
-                    "{{ route('sites.receipts.destroy-draft', ['site_id' => encryptParams($site_id)]) }}";
+                        "{{ route('sites.receipts.destroy-draft', ['site_id' => encryptParams($site_id)]) }}";
                     location.href = url;
                 }
             });

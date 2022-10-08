@@ -48,12 +48,15 @@ class SalesPlanDataTable extends DataTable
                     return '<span class="badge badge-glow bg-success">Approved</span>';
                 } elseif ($salesPlan->status == 3) {
                     return '<span class="badge badge-glow bg-danger">Cancelled</span>';
-                }
-                 else {
+                } else {
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
+
+                $staleholder = json_decode($salesPlan->stakeholder_data);
+                return $staleholder->full_name;
+
                 return $salesPlan->stakeholder->full_name;
             })
             ->editColumn('created_at', function ($salesPlan) {
@@ -173,7 +176,8 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('user_id')->title('Sales Person'),
-            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            // Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            Column::computed('stakeholder_id')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

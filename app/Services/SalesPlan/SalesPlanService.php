@@ -161,6 +161,7 @@ class SalesPlanService implements SalesPlanInterface
             'unit_id' => $unit->id,
             'user_id' => auth()->user()->id,
             'stakeholder_id' => $stakeholder->id,
+            'stakeholder_data' => json_encode($stakeholder),
             'unit_price' => $unitInput['price']['unit'],
             'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
             'discount_percentage' => $unitInput['discount']['percentage'],

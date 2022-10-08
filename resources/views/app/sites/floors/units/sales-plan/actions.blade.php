@@ -26,4 +26,17 @@
                 </a>
         @endcan
     @endif
+
+
+    @if ($status == 1 && $unit_status == 1)
+    @can('sites.floors.units.sales-plans.disapprove-sales-plan')
+
+    <a id="disapproveSalesPlan" disapproveSalesPlanId='{{ $id }}'
+        class="btn btn-relief-outline-danger waves-effect waves-float waves-light me-1" style="margin: 5px"
+        data-bs-toggle="tooltip" data-bs-placement="top" title="Disapprove Sales Plan" href="#"
+        onclick="disapproveSalesPlan({{ $id }})">
+        <i class="bi bi-x-octagon-fill"></i>
+    </a>
+    @endcan
+    @endif
 </div>

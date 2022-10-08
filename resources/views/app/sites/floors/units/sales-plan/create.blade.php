@@ -93,7 +93,11 @@
                                         </span>
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder"></span>
-                                            <span class="fw-bolder">{{ $additionalCost->site_percentage }}%</span>
+                                            @if ($additionalCost->applicable_on_unit)
+                                                <span class="fw-bolder">{{ $additionalCost->unit_percentage }} %</span>
+                                            @else
+                                                <span class="fw-bolder">0 %</span>
+                                            @endif
                                         </span>
                                     </label>
                                 </div>

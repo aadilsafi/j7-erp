@@ -65,7 +65,9 @@
                                 @continue($additionalCost->has_child)
 
                                 @php
-                                    $additionalCostTotalAmount = ($unit->total_price * $additionalCost->site_percentage) / 100;
+                                    $additionalCostPercentage = ($additionalCost->applicable_on_unit) ? $additionalCost->unit_percentage : 0;
+
+                                    $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
                                 @endphp
 
                                 <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
@@ -86,7 +88,7 @@
                                             id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                             name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
                                             placeholder="{{ $additionalCost->name }}"
-                                            value="{{ $additionalCost->site_percentage }}" />
+                                            value="{{ $additionalCostPercentage }}" />
 
                                     </div>
 

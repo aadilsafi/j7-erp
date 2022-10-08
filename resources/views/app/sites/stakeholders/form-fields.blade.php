@@ -147,16 +147,17 @@
         </div>
 
         <div class="row mb-1" id="div-next-of-kin"
-            style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'K')->first()->status ? null : 'display: none;' }}">
+            style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'C')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label" style="font-size: 15px" for="parent_id">Next Of Kin</label>
+                <label class="form-label" style="font-size: 15px" for="parent_id">Select Kin</label>
                 <select class="form-select form-select-lg" id="parent_id" name="parent_id">
-                    <option value="0" selected>Select Next Of Kin</option>
+                    <option value="0" selected>Select Kin</option>
                     @foreach ($stakeholders as $stakeholderRow)
                         @continue(!$stakeholderRow->stakeholder_types->where('type', 'C')->first()->status)
+                        @continue(isset($stakeholder) && $stakeholderRow['id'] == $stakeholder->id)
                         <option value="{{ $stakeholderRow['id'] }}"
                             {{ (isset($stakeholder) ? $stakeholder->parent_id : old('type')) == $stakeholderRow['id'] ? 'selected' : '' }}>
-                            {{ $loop->index + 1 }} - {{ $stakeholderRow['tree'] }}</option>
+                            {{ $loop->index + 1 }} - {{ $stakeholderRow['full_name'] }}</option>
                     @endforeach
                 </select>
                 @error('parent_id')
@@ -165,9 +166,9 @@
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="relation">Next Of Kin Relation</label>
+                <label class="form-label fs-5" for="relation">Relation</label>
                 <input type="text" class="form-control form-control-lg @error('relation') is-invalid @enderror"
-                    id="stakeholder_name" name="relation" placeholder="Next Of Kin Relation"
+                    id="stakeholder_name" name="relation" placeholder="Relation" {{strlen($stakeholder->relation) > 0 ? '' : 'disabled'}}
                     value="{{ isset($stakeholder) ? $stakeholder->relation : old('stakeholder_name') }}" />
                 @error('relation')
                     <div class="invalid-feedback">{{ $message }}</div>

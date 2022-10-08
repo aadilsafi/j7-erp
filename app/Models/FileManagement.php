@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
 
 class FileManagement extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, SoftDeletes;
+    use HasFactory, InteractsWithMedia, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -38,6 +40,11 @@ class FileManagement extends Model implements HasMedia
         "application_form.*.photo" => "Maximum 1 attachments are required.",
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+
     public function site()
     {
         return $this->belongsTo(Site::class);
@@ -45,7 +52,7 @@ class FileManagement extends Model implements HasMedia
 
     public function unit()
     {
-        return $this->belongsTo(Unit::class)->with('type','status');
+        return $this->belongsTo(Unit::class)->with('type', 'status');
     }
 
     public function stakeholder()
@@ -55,16 +62,31 @@ class FileManagement extends Model implements HasMedia
 
     public function fileAction()
     {
-        return $this->belongsTo(FileAction::class,'file_action_id');
+        return $this->belongsTo(FileAction::class, 'file_action_id');
     }
 
     public function fileRefund()
     {
-        return $this->hasMany(FileRefund::class,'file_id');
+        return $this->hasMany(FileRefund::class, 'file_id');
     }
 
     public function fileBuyBack()
     {
-        return $this->hasMany(FileBuyBack::class,'file_id');
+        return $this->hasMany(FileBuyBack::class, 'file_id');
+    }
+
+    public function fileCancellation()
+    {
+        return $this->hasMany(FileCanecllation::class, 'file_id');
+    }
+
+    public function fileResale()
+    {
+        return $this->hasMany(FileResale::class, 'file_id');
+    }
+
+    public function fileTitleTransfer()
+    {
+        return $this->hasMany(FileTitleTransfer::class, 'file_id');
     }
 }

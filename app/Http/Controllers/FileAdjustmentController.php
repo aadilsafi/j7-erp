@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\FileAdjustmentDatatable;
 use Illuminate\Http\Request;
 use App\Models\UnitStakeholder;
 use App\DataTables\ViewFilesDatatable;
@@ -13,7 +14,7 @@ class FileAdjustmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileAdjustmentDatatable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),

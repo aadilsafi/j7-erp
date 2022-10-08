@@ -25,9 +25,15 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this->input());
         $rules = (new Unit())->rules;
         $rules['unit_number'] = [
-            'nullable', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
+            Rule::requiredIf(function () {
+                return $this->add_bulk_unit == 0;
+            }),
+            'numeric',
+            'between:1,' . $this->unit_number_digits,
+            Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
         ];
 
         return $rules;

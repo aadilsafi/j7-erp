@@ -48,12 +48,15 @@ class SalesPlanDataTable extends DataTable
                     return '<span class="badge badge-glow bg-success">Approved</span>';
                 } elseif ($salesPlan->status == 3) {
                     return '<span class="badge badge-glow bg-danger">Cancelled</span>';
-                }
-                 else {
+                } else {
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
+
+                $staleholder = json_decode($salesPlan->stakeholder_data);
+                return $staleholder->full_name;
+
                 return $salesPlan->stakeholder->full_name;
             })
             ->editColumn('created_at', function ($salesPlan) {
@@ -66,7 +69,7 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -173,7 +176,8 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('user_id')->title('Sales Person'),
-            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            // Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            Column::computed('stakeholder_id')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

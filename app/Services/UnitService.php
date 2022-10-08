@@ -42,7 +42,7 @@ class UnitService implements UnitInterface
     public function store($site_id, $floor_id, $inputs, $isUnitActive = true)
     {
         $site_id = decryptParams($site_id);
-        $floor = (new Floor())->find(decryptParams($floor_id));
+        $floor = (new Floor())->find($floor_id);
 
         $totalPrice = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
 

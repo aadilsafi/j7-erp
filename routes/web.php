@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\{
+    AccountsRecoveryController,
     AdditionalCostController,
     ArtisanCommandController,
     DashboardController,
@@ -382,34 +383,39 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
-
                     });
 
                     // file Cancellation
                     Route::group(['prefix' => 'file-cancellation', 'as' => 'file-cancellation.'], function () {
 
                         Route::get('/', [FileCancellationController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'ApproveFileCancellation'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
                     });
 
-                    // file release
+                    // file resalse
                     Route::group(['prefix' => 'file-resale', 'as' => 'file-resale.'], function () {
 
                         Route::get('/', [FileReleaseController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'ApproveFileResale'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
                     });
 
                     // file title transfer
                     Route::group(['prefix' => 'file-title-transfer', 'as' => 'file-title-transfer.'], function () {
 
                         Route::get('/', [FileTitleTransferController::class, 'index'])->name('index');
+                        Route::get('approve/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'ApproveFileTitleTransfer'])->name('approve');
 
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
+                        Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
                     });
 
                     // file adjustment
@@ -439,6 +445,8 @@ Route::group([
                             Route::group(['prefix' => 'files', 'as' => 'files.'], function () {
                                 Route::get('/', [FileManagementController::class, 'index'])->name('index');
 
+                                Route::get('/show', [FileManagementController::class, 'show'])->name('show');
+
                                 Route::get('create', [FileManagementController::class, 'create'])->name('create');
                                 Route::post('store', [FileManagementController::class, 'store'])->name('store');
 
@@ -451,6 +459,20 @@ Route::group([
                             });
                         });
                     });
+                });
+
+                // Accounts Routes
+                Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+
+                    // Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
+
+                    // Accounts Recovery Routes
+                    Route::group(['prefix' => 'recovery', 'as' => 'recovery.'], function () {
+                        Route::get('/dashboard', [AccountsRecoveryController::class, 'dashboard'])->name('dashboard');
+                        Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
+                        Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
+                    });
+
                 });
             });
         });

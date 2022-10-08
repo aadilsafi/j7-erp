@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class RebateIncentiveModel extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -23,6 +25,11 @@ class RebateIncentiveModel extends Model
         'dealer_id',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+
     public function site()
     {
         return $this->belongsTo(Site::class);
@@ -37,5 +44,8 @@ class RebateIncentiveModel extends Model
     {
         return $this->belongsTo(Stakeholder::class);
     }
-
+    public function dealer()
+    {
+        return $this->belongsTo(Stakeholder::class,'dealer_id','id');
+    }
 }

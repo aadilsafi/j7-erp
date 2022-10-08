@@ -732,6 +732,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.file-managements.customers.units.files.show',
+                'show_name' => 'View Created Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.file-managements.customers.units.files.create',
                 'show_name' => 'Create Files',
                 'guard_name' => 'web',
@@ -932,6 +939,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-cancellation.preview',
+                'show_name' => 'Preview File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File resale
             [
                 'name' => 'sites.file-managements.file-resale.index',
@@ -957,6 +971,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-resale.approve',
                 'show_name' => 'Approve File Resale Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-resale.preview',
+                'show_name' => 'Preview File Resale',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -990,6 +1011,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-title-transfer.preview',
+                'show_name' => 'Preview File Title Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File title adjustment
             [
                 'name' => 'sites.file-managements.file-adjustment.index',
@@ -1019,6 +1047,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-adjustment.preview',
+                'show_name' => 'Preview File Adjustment',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File unit shifting
             [
                 'name' => 'sites.file-managements.unit-shifting.index',
@@ -1037,6 +1072,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.unit-shifting.store',
                 'show_name' => 'View File Unit Shifting',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.unit-shifting.preview',
+                'show_name' => 'Preview File Unit Shifting',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -1155,6 +1197,29 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.teams.destroy-selected',
                 'show_name' => 'Destroy Selected Sites Users Teams',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //Recovery Accounts
+            [
+                'name' => 'sites.accounts.recovery.dashboard',
+                'show_name' => 'Can View Accounts Recovery Dashboard',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.accounts.recovery.calender',
+                'show_name' => 'Can View Accounts Recovery Calender',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.accounts.recovery.salesPlan',
+                'show_name' => 'Can View Accounts Recovery Sales Plan',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

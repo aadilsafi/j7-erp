@@ -39,10 +39,10 @@
                 <td style="border: 1px solid #eee!important;">
                     <p class="m-0">Total Installments : {{ count($data['instalments']) }}</p>
                     <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span> {{ count($data['instalments']) }} </p>
-                    <p class="m-0">Total Amount : {{ number_format($data['amount']) }}</p>
+                    <p class="m-0">Total Amount : {{ number_format($data['total']) }}</p>
                     <p class="m-0">Total Paid Amount: - </p>
                     <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span> {{ number_format($data['amount']) }}</p>
-                    <p class="m-0">Total Remaining Amount: {{ number_format($data['amount']) }}</p>
+                    <p class="m-0">Total Remaining Amount: {{ number_format($data['total']) }}</p>
                 </td>
                 <td style="border: 1px solid #eee!important;">
                     <p class="m-0">Invoice # : -</p>
@@ -72,7 +72,7 @@
                     <td>{{ $key+1 }}</td>
                     <td class="text-start">{{ $installment->details }}</td>
                     <td> {{  date_format (new DateTime($installment->date), 'd/m/Y') }}</td>
-                    <td>{{ $installment->amount }}</td>
+                    <td>{{ number_format($installment->amount) }}</td>
                     <td>-</td>
                     <td>-</td>
                     <td><span class="fw-bold text-success">UnPaid</span></td>

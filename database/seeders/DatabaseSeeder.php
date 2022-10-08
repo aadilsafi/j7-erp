@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
             // RebateIncentiveSeeder::class,
             TeamSeeder::class,
             TeamUserSeeder::class,
+            TemplatesSeeder::class,
         ]);
     }
 }

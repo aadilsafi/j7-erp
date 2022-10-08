@@ -67,7 +67,7 @@ class SalesPlanService implements SalesPlanInterface
         $floor = (new Floor())->find($floor_id);
         $unit = (new Unit())->find($unit_id);
 
-        // dd($inputs);
+        // dd($unit);
 
         $authRoleId = auth()->user()->roles->pluck('id')->first();
 
@@ -81,9 +81,10 @@ class SalesPlanService implements SalesPlanInterface
         $stakeholderData = [
             'site_id' => $site->id,
             'full_name' => $stakeholderInput['full_name'],
-            'farther_name' => $stakeholderInput['father_name'],
+            'father_name' => $stakeholderInput['father_name'],
             'occupation' => $stakeholderInput['occupation'],
             'designation' => $stakeholderInput['designation'],
+            'ntn' => $stakeholderInput['ntn'],
             'cnic' => $stakeholderInput['cnic'],
             'contact' => $stakeholderInput['contact'],
             'address' => $stakeholderInput['address'],
@@ -140,7 +141,7 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
         }
 
-        $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
+        // $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
 
         $unitInput = $inputs['unit'];
 
@@ -160,6 +161,7 @@ class SalesPlanService implements SalesPlanInterface
             'unit_id' => $unit->id,
             'user_id' => auth()->user()->id,
             'stakeholder_id' => $stakeholder->id,
+            'stakeholder_data' => json_encode($stakeholder),
             'unit_price' => $unitInput['price']['unit'],
             'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
             'discount_percentage' => $unitInput['discount']['percentage'],

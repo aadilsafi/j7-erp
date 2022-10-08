@@ -65,7 +65,9 @@
                                 @continue($additionalCost->has_child)
 
                                 @php
-                                    $additionalCostTotalAmount = ($unit->total_price * $additionalCost->site_percentage) / 100;
+                                    $additionalCostPercentage = ($additionalCost->applicable_on_unit) ? $additionalCost->unit_percentage : 0;
+
+                                    $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
                                 @endphp
 
                                 <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
@@ -86,7 +88,7 @@
                                             id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                             name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
                                             placeholder="{{ $additionalCost->name }}"
-                                            value="{{ $additionalCost->site_percentage }}" />
+                                            value="{{ $additionalCostPercentage }}" />
 
                                     </div>
 
@@ -365,31 +367,37 @@
 
         <div class="row mb-1">
             {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
                     name="stackholder[full_name]" placeholder="Full Name" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
                     name="stackholder[father_name]" placeholder="Father Name" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
                     name="stackholder[occupation]" placeholder="Occupation" />
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_designation"
+                    name="stackholder[designation]" placeholder="Designation" />
             </div>
         </div>
 
         <div class="row mb-1">
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                <input type="text" class="form-control form-control-lg" id="stackholder_designation"
-                    name="stackholder[designation]" placeholder="Designation" />
+                <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
+                <input type="text" class="form-control form-control-lg" id="stackholder_ntn"
+                    name="stackholder[ntn]" placeholder="NTN" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -406,10 +414,15 @@
         </div>
 
         <div class="row mb-1">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_address">Address</label>
                 <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
                     placeholder="Address" rows="5"></textarea>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="stackholder_comments">Comments</label>
+                <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                    placeholder="Comments" rows="5"></textarea>
             </div>
         </div>
     </div>

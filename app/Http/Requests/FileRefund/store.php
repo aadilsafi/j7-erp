@@ -27,15 +27,22 @@ class store extends FormRequest
             'amount_to_be_refunded' => 'required',
             'payment_due_date' => 'required',
             'amount_remarks' => 'required',
+            'checkAttachment' => 'sometimes',
+            'attachments' => 'bail|required_if:checkAttachment,1',
+            'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
+            'attachments.*.image' => 'required_if:checkAttachment,1',
         ];
     }
 
     public function messages()
     {
         return [
+            'attachments' => 'Attachments Required if you check Attachements Attached.',
             "amount_to_be_refunded.required" => "Amount To Be Refunded is Required.",
             "payment_due_date.required" => "Payment Due Date Is Required.",
             'amount_remarks.required' => 'Amount Remark is Required',
+            'attachments.*.attachment_label' => "Attachments are Required.",
+            'attachments.*.image' => "Attachments are Required if you check Attachements Attached.",
         ];
     }
 }

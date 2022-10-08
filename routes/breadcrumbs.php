@@ -253,6 +253,11 @@ Breadcrumbs::for('sites.file-managements.customers.units', function (BreadcrumbT
 
 Breadcrumbs::for('sites.file-managements.customers.units.files.index', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
     $trail->parent('sites.file-managements.customers.units', $site_id, $customer_id, $unit_id);
+    $trail->push('Preview Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.customers.units.files.show', function (BreadcrumbTrail $trail, $site_id, $customer_id, $unit_id) {
+    $trail->parent('sites.file-managements.view-files', $site_id, $customer_id, $unit_id);
     $trail->push('Files', route('sites.file-managements.customers.units.files.index', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });
 
@@ -311,4 +316,66 @@ Breadcrumbs::for('sites.file-managements.file-buy-back.preview', function (Bread
     $trail->parent('sites.file-managements.file-buy-back.index', $site_id);
     $trail->push('Preview File Buy Back', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 
+});
+
+//File Cancellation  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-cancellation.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Cancellation', route('sites.file-managements.file-cancellation.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-cancellation.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-cancellation.index', $site_id);
+    $trail->push('Create Cancellation', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-cancellation.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-cancellation.index', $site_id);
+    $trail->push('Preview Cancellation', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+//File Resale  Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-resale.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Resale', route('sites.file-managements.file-resale.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-resale.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-resale.index', $site_id);
+    $trail->push('Create File Resale', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-resale.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-resale.index', $site_id);
+    $trail->push('Preview Resale', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+//File Title Transfer Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.file-title-transfer.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Title Transfer', route('sites.file-managements.file-title-transfer.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.file-title-transfer.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-title-transfer.index', $site_id);
+    $trail->push('Create File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+
+});
+
+Breadcrumbs::for('sites.file-managements.file-title-transfer.preview', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.file-title-transfer.index', $site_id);
+    $trail->push('Preview File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+//Recovery Accounts BreadCrumbs
+Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Title Transfer', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
 });

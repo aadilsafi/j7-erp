@@ -56,12 +56,19 @@ class FileRefundController extends Controller
         // dd(decryptParams($site_id),decryptParams($unit_id),decryptParams($customer_id));
         //
         if (!request()->ajax()) {
-
+            $unit = Unit::find(decryptParams($unit_id));
+            if (isset($unit->salesPlan[0])) {
+                $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+            } else {
+                $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+            }
+            $total_paid_amount = $receipts->sum('amount_in_numbers');
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'total_paid_amount' => $total_paid_amount,
             ];
             return view('app.sites.file-managements.files.files-actions.file-refund.create', $data);
         } else {
@@ -100,7 +107,13 @@ class FileRefundController extends Controller
     {
         $files_labels = FileRefundAttachment::where('file_refund_id', decryptParams($id))->get();
         $images = [];
-
+        $unit = Unit::find(decryptParams($unit_id));
+        if (isset($unit->salesPlan[0])) {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        } else {
+            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+        }
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
         foreach ($files_labels as $key=>$file) {
             $image = $file->getFirstMedia('file_refund_attachments');
             $images[$key] = $image->getUrl();
@@ -113,6 +126,7 @@ class FileRefundController extends Controller
             'refund_file' => (new FileRefund())->find(decryptParams($id)),
             'images' => $images,
             'labels' => $files_labels,
+            'total_paid_amount' => $total_paid_amount,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);

@@ -116,8 +116,6 @@ class ReceiptService implements ReceiptInterface
     //update Installments
     public function updateInstallments($receipt)
     {
-
-        dd($receipt);
         $sales_plan = SalesPlan::where('unit_id', $receipt->unit_id)->where('status', 1)->with('installments', 'unPaidInstallments')->first();
         $unit = Unit::find($receipt->unit_id);
         $stakeholder = Stakeholder::find($sales_plan->stakeholder_id);

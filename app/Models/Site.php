@@ -6,10 +6,13 @@ use App\Models\Receipt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Site extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
     protected $fillable = [
         'name',
         'city_id',
@@ -25,6 +28,11 @@ class Site extends Model
         'area_width'    => 'required',
         'area_length'   => 'required',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function city()
     {

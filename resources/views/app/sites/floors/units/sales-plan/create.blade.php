@@ -648,24 +648,6 @@
                 'stackholder[full_name]': {
                     required: true
                 },
-                'stackholder[father_name]': {
-                    required: true
-                },
-                'stackholder[occupation]': {
-                    required: true
-                },
-                'stackholder[designation]': {
-                    required: true
-                },
-                'stackholder[cnic]': {
-                    required: true
-                },
-                'stackholder[contact]': {
-                    required: true
-                },
-                'stackholder[address]': {
-                    required: true
-                },
 
                 // 4. SALES SOURCE
                 'sales_source[sales_type]': {

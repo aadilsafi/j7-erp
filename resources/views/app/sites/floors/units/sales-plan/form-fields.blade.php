@@ -414,10 +414,15 @@
         </div>
 
         <div class="row mb-1">
-            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_address">Address</label>
                 <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
                     placeholder="Address" rows="5"></textarea>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="stackholder_comments">Comments</label>
+                <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                    placeholder="Comments" rows="5"></textarea>
             </div>
         </div>
     </div>

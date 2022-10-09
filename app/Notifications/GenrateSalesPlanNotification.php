@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class GenrateSalesPlanNotification extends Notification
+class GenrateSalesPlanNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -63,6 +63,19 @@ class GenrateSalesPlanNotification extends Notification
             'message' => $this->data['message'],
             'description' => $this->data['description'],
             'url' => $this->data['url'],
+        ];
+    }
+
+    /**
+     * Determine the notification's delivery delay.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function withDelay($notifiable)
+    {
+        return [
+            'database' => now()->addMinutes(1),
         ];
     }
 }

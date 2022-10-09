@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Queues;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
+class QueueCompletedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $data;
+    private $data;
 
     /**
      * Create a new notification instance.
@@ -20,7 +20,6 @@ class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
      */
     public function __construct($data)
     {
-        //
         $this->data = $data;
     }
 
@@ -58,7 +57,6 @@ class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            //
             'title' => $this->data['title'],
             'message' => $this->data['message'],
             'description' => $this->data['description'],

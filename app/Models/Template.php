@@ -2,22 +2,14 @@
 
 namespace App\Models;
 
-use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class FileCanecllationAttachment extends Model implements HasMedia
+class Template extends Model
 {
-    use HasFactory, InteractsWithMedia, LogsActivity;
-
-    protected $fillable = [
-        'site_id',
-        'file_cancellation_id',
-        'label',
-    ];
+    use HasFactory, LogsActivity;
 
     public function getActivitylogOptions(): LogOptions
     {

@@ -166,6 +166,12 @@
                 dropdownParent: e.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
+            }).change(function(){
+                if($(this).val() == 0){
+                    $('#stakeholder_name').attr("disabled", true);
+                } else {
+                    $('#stakeholder_name').removeAttr("disabled");
+                }
             });
 
             $(".contact-persons-list").repeater({

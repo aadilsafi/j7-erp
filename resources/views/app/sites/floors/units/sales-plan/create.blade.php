@@ -93,7 +93,11 @@
                                         </span>
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder"></span>
-                                            <span class="fw-bolder">{{ $additionalCost->site_percentage }}%</span>
+                                            @if ($additionalCost->applicable_on_unit)
+                                                <span class="fw-bolder">{{ $additionalCost->unit_percentage }} %</span>
+                                            @else
+                                                <span class="fw-bolder">0 %</span>
+                                            @endif
                                         </span>
                                     </label>
                                 </div>
@@ -223,8 +227,10 @@
                             $('#stackholder_occupation').val(stakeholderData.occupation);
                             $('#stackholder_designation').val(stakeholderData.designation);
                             $('#stackholder_cnic').val(stakeholderData.cnic);
+                            $('#stackholder_ntn').val(stakeholderData.ntn);
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
+                            $('#stackholder_comments').text(stakeholderData.comments);
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
@@ -643,23 +649,9 @@
                 'stackholder[full_name]': {
                     required: true
                 },
-                'stackholder[father_name]': {
-                    required: true
-                },
-                'stackholder[occupation]': {
-                    required: true
-                },
-                'stackholder[designation]': {
-                    required: true
-                },
                 'stackholder[cnic]': {
-                    required: true
-                },
-                'stackholder[contact]': {
-                    required: true
-                },
-                'stackholder[address]': {
-                    required: true
+                    minlength:13,
+                    maxlength:13,
                 },
 
                 // 4. SALES SOURCE

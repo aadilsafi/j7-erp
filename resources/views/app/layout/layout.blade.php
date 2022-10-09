@@ -33,6 +33,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/animate/animate.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/sweetalert2.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
     @yield('page-vendor')
 
     <!-- END: Vendor CSS-->
@@ -54,6 +56,8 @@
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sweet-alerts.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-toastr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
     @yield('page-css')
     <!-- END: Page CSS-->
 
@@ -159,6 +163,7 @@
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/polyfill.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
     @yield('vendor-js')
 
     <!-- END: Page Vendor JS-->

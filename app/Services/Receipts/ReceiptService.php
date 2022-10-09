@@ -24,28 +24,22 @@ class ReceiptService implements ReceiptInterface
     public function store($site_id, $requested_data)
     {
         $data = $requested_data['receipts'];
+
         $amount_received = $requested_data['amount_received'];
 
         for ($i = 0; $i < count($data); $i++) {
             $unit = Unit::find($data[$i]['unit_id']);
             $sales_plan = $unit->salesPlan->toArray();
-            $sales_plan_id = $sales_plan[0]['id'];
+
             $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
-            $name = $stakeholder->full_name;
-            $cnic = $stakeholder->cnic;
-            $phone_no = $stakeholder->contact;
-            $receipt_status = 0;
-            if ($data[$i]['mode_of_payment'] != 'Cheque') {
-                $receipt_status = 1;
-            }
 
             $receiptData = [
                 'site_id' => decryptParams($site_id),
                 'unit_id'  => $data[$i]['unit_id'],
-                'sales_plan_id'  => $sales_plan_id,
-                'name'  => $name,
-                'cnic'  => $cnic,
-                'phone_no' => $phone_no,
+                'sales_plan_id'  => $sales_plan[0]['id'],
+                'name'  => $stakeholder->full_name,
+                'cnic'  => $stakeholder->cnic,
+                'phone_no' => $stakeholder->contact,
                 'mode_of_payment' => $data[$i]['mode_of_payment'],
                 'other_value' => $data[$i]['other_value'],
                 'cheque_no' => $data[$i]['cheque_no'],
@@ -57,7 +51,7 @@ class ReceiptService implements ReceiptInterface
                 'installment_number' => '1',
                 'amount_received' => $requested_data['amount_received'],
                 'comments' => $data[$i]['comments'],
-                'status' => $receipt_status,
+                'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                 'bank_details' => $data[$i]['bank_details']
             ];
 
@@ -99,7 +93,7 @@ class ReceiptService implements ReceiptInterface
                             'purpose' => 'installments',
                             'installment_number' => '1',
                             'amount_received' => $requested_data['amount_received'],
-                            'status' => $receipt_status,
+                            'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                             'bank_details' => $draftReceiptData->bank_details,
                         ];
                         $receipt_Draft = Receipt::create($receiptDraftData);
@@ -122,7 +116,6 @@ class ReceiptService implements ReceiptInterface
     //update Installments
     public function updateInstallments($receipt)
     {
-
         $sales_plan = SalesPlan::where('unit_id', $receipt->unit_id)->where('status', 1)->with('installments', 'unPaidInstallments')->first();
         $unit = Unit::find($receipt->unit_id);
         $stakeholder = Stakeholder::find($sales_plan->stakeholder_id);

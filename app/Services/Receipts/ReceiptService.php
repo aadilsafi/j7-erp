@@ -219,17 +219,21 @@ class ReceiptService implements ReceiptInterface
         $approved_sales_plan_date = $sales_plan->approved_date;
         $site_token_percentage = SiteConfigration::where('site_id', $receipt->site_id)->first()->site_token_percentage;
         $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
-        $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status','paid')->orWhere('status','partially_paid')->latest("id")->first()->date;
+        $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
+
+        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('date', $approved_sales_plan_date)->get();
+        $total_committed_amount = $total_committed_amount->sum('amount');
+
 
         if ($total_paid_amount >= $token_price) {
             $unit->status_id = 2;
         }
 
-        if ($total_paid_amount > $token_price &&  $installment_date < $approved_sales_plan_date) {
+        if ($total_paid_amount > $token_price &&  $total_paid_amount < $total_committed_amount) {
             $unit->status_id = 3;
         }
 
-        if ($installment_date >= $approved_sales_plan_date) {
+        if ($total_paid_amount >= $total_committed_amount) {
 
             $unit->status_id = 5;
 
@@ -243,7 +247,6 @@ class ReceiptService implements ReceiptInterface
         }
 
         $unit->update();
-
     }
 
     public function update($site_id, $id, $inputs)

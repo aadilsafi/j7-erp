@@ -109,9 +109,9 @@ class FileManagementController extends Controller
         return view('app.sites.file-managements.files.create', $data);
     }
 
-    public function show($site_id, $customer_id, $unit_id)
+    public function show($site_id, $customer_id, $unit_id,$file_id)
     {
-        $customer_file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $customer_file = FileManagement::find(decryptParams($file_id));
 
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
@@ -119,7 +119,7 @@ class FileManagementController extends Controller
             'nextOfKin' => null,
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
-            'customer_file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+            'customer_file' => FileManagement::find(decryptParams($file_id)),
         ];
 
         if($customer_file->file_action_id == 1){

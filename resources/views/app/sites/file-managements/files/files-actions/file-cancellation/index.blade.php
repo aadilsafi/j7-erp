@@ -51,7 +51,7 @@
             {{-- </form> --}}
 
              {{-- Printing Modal --}}
-             @include('app.sites.file-managements.files.files-actions.file-cancellation.partials.print-templates', [
+             @include('app.sites.file-managements.files.partials.print-templates', [
                 'fileTemplates' => $fileTemplates,
             ])
         </div>

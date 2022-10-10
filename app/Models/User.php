@@ -70,6 +70,6 @@ class User extends Authenticatable implements HasMedia
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class,'team_users')->withPivot('site_id');;
+        return $this->belongsToMany(Team::class,'team_users')->withPivot('site_id');
     }
 }

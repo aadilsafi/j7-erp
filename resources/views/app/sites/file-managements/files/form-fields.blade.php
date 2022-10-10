@@ -600,7 +600,11 @@
                                         </thead>
 
                                         <tbody>
-                                            @forelse ($salesPlan->receipts as $receipt)
+                                            @php
+                                                $receipts = collect($salesPlan->receipts)->sortBy('transaction_date')->values()->all();
+                                            @endphp
+
+                                            @forelse ($receipts as $receipt)
                                                 <tr class="text-center">
                                                     <td>{{ $loop->index + 1 }}</td>
 

@@ -132,6 +132,14 @@
             FilePondPluginImageCrop,
         );
 
+        $("#payment_due_date").flatpickr({
+            defaultDate: "today",
+            minDate: "today",
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
+
         $(".expenses-list").repeater({
             initEmpty: true,
             show: function(e) {

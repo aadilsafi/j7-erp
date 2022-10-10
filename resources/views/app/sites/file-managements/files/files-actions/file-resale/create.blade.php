@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                width: calc(20% - 0.5em);
-            } */
+                    width: calc(20% - 0.5em);
+                } */
     </style>
 @endsection
 
@@ -62,9 +62,9 @@
                     'stakeholders' => $stakeholders,
                     'stakeholderTypes' => $stakeholderTypes,
                     'emptyRecord' => $emptyRecord,
-                    'rebate_incentive' =>$rebate_incentive,
-                    'total_paid_amount' =>$total_paid_amount,
-                    'rebate_total' =>$rebate_total,
+                    'rebate_incentive' => $rebate_incentive,
+                    'total_paid_amount' => $total_paid_amount,
+                    'rebate_total' => $rebate_total,
                 ]) }}
             </div>
 
@@ -156,6 +156,14 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+
+            $("#payment_due_date").flatpickr({
+                defaultDate: "today",
+                minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
 
             var e = $("#stackholders");
             e.wrap('<div class="position-relative"></div>');
@@ -291,79 +299,79 @@
             formValidations();
         })
 
-        function formValidations(){
+        function formValidations() {
             var validator = $("#fileRefundForm").validate({
-                    rules: {
-                        'amount_profit' : {
-                            required: true,
-                            digits: true,
-                        },
-                        'payment_due_date' : {
-                            required: true
-                        },
-                        'amount_to_be_refunded' : {
-                            required: true,
-                        },
-                        'amount_remarks' : {
-                            required: true
-                        },
-                        'attachments[0][attachment_label]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
-                        'attachment[0][image]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
-                        'stackholder[full_name]':{
-                            required: true
-                        },
-                        'stackholder[father_name]':{
-                            required: true
-                        },
-                        'stackholder[occupation]':{
-                            required: true
-                        },
-                        'stackholder[designation]':{
-                            required: true
-                        },
-                        'stackholder[ntn]':{
-                            required: true
-                        },
-                        'stackholder[cnic]':{
-                            required: true,
-                            digits: true,
-                            maxlength: 13,
-                            minlength: 13
-
-                        },
-                        'stackholder[contact]':{
-                            required: true
-                        },
-                        'stackholder[address]':{
-                            required: true
-                        },
-
+                rules: {
+                    'amount_profit': {
+                        required: true,
+                        digits: true,
                     },
-                    messages: {
-                        'stackholder[cnic]': {
-                            maxlength: "Cnic can't be greater then {0} digits without dashes",
-                            minlength: "Cnic can't be less then {0} digits without dashes",
+                    'payment_due_date': {
+                        required: true
+                    },
+                    'amount_to_be_refunded': {
+                        required: true,
+                    },
+                    'amount_remarks': {
+                        required: true
+                    },
+                    'attachments[0][attachment_label]': {
+                        required: function() {
+                            return checkbtn;
                         }
                     },
-                    errorClass: 'is-invalid text-danger',
-                    errorElement: "span",
-                    wrapper: "div",
-                    submitHandler: function(form) {
-                        form.submit();
+                    'attachment[0][image]': {
+                        required: function() {
+                            return checkbtn;
+                        }
+                    },
+                    'stackholder[full_name]': {
+                        required: true
+                    },
+                    'stackholder[father_name]': {
+                        required: true
+                    },
+                    'stackholder[occupation]': {
+                        required: true
+                    },
+                    'stackholder[designation]': {
+                        required: true
+                    },
+                    'stackholder[ntn]': {
+                        required: true
+                    },
+                    'stackholder[cnic]': {
+                        required: true,
+                        digits: true,
+                        maxlength: 13,
+                        minlength: 13
+
+                    },
+                    'stackholder[contact]': {
+                        required: true
+                    },
+                    'stackholder[address]': {
+                        required: true
+                    },
+
+                },
+                messages: {
+                    'stackholder[cnic]': {
+                        maxlength: "Cnic can't be greater then {0} digits without dashes",
+                        minlength: "Cnic can't be less then {0} digits without dashes",
                     }
-                });
+                },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
         }
 
 
-        function calculateRefundedAmount(){
+        function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
             let rebate_amount = '{{ $rebate_total }}';
 
@@ -371,7 +379,7 @@
             let profitCharges = $('#profit_charges').val();
             amount_refunded = parseFloat(paid_amount) + parseFloat(profitCharges);
             amount_refunded = amount_refunded - parseFloat(rebate_amount);
-                $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
+            $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
         }
 
         $("#saveButton").click(function() {

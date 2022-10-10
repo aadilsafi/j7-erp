@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Notifications\Queues;
+namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class QueueCompletedNotification extends Notification implements ShouldQueue
+class DefaultNotification extends Notification
 {
     use Queueable;
 
-    private $data;
-
+    protected $data;
     /**
      * Create a new notification instance.
      *
@@ -20,6 +19,7 @@ class QueueCompletedNotification extends Notification implements ShouldQueue
      */
     public function __construct($data)
     {
+        //
         $this->data = $data;
     }
 
@@ -56,12 +56,7 @@ class QueueCompletedNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return [
-            'title' => $this->data['title'],
-            'message' => $this->data['message'],
-            'description' => $this->data['description'],
-            'url' => $this->data['url'],
-        ];
+        return $this->data;
     }
 
     /**
@@ -73,7 +68,7 @@ class QueueCompletedNotification extends Notification implements ShouldQueue
     public function withDelay($notifiable)
     {
         return [
-            'database' => now()->addMinutes(1),
+            'database' => now()->addSecond(2),
         ];
     }
 }

@@ -2,20 +2,15 @@
 
 namespace App\Jobs\floors;
 
-use App\Models\Floor;
-use App\Models\UserBatch;
-use App\Utils\Enums\{
-    UserBatchStatusEnum,
-    UserBatchActionsEnum
-};
-use Illuminate\Bus\{Batchable, Queueable};
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use App\Models\{Floor, UserBatch};
+use App\Notifications\DefaultNotification;
+use App\Utils\Enums\{UserBatchStatusEnum, UserBatchActionsEnum};
+use Illuminate\Bus\{Batchable, Queueable, Batch};
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\{InteractsWithQueue, SerializesModels};
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class FloorCopyMainJob implements ShouldQueue
 {
@@ -64,10 +59,19 @@ class FloorCopyMainJob implements ShouldQueue
                 'order' => $i,
                 'active' => $this->isFloorActive,
             ];
-            // sleep(2);
+
             $batch = Bus::batch([
                 new FloorCopyCreateJob($floor->id, $data),
-            ])->dispatch();
+            ])->finally(function (Batch $batch) {
+
+                $data = [
+                    'title' => 'Job Done!',
+                    'message' => 'Unit Construction Completed',
+                    'description' => 'Unit Construction Completed',
+                    'url' => route('sites.floors.index', ['site_id' => $this->site_id]),
+                ];
+                Notification::send($this->site_id, new DefaultNotification($data));
+            })->dispatch();
 
             (new UserBatch())->create([
                 'site_id' => $this->site_id,

@@ -7,7 +7,7 @@ use App\Models\{
     Floor,
     Unit,
 };
-use App\Notifications\Queues\QueueCompletedNotification;
+use App\Notifications\DefaultNotification;
 use App\Services\Interfaces\UnitInterface;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Str;
@@ -100,7 +100,7 @@ class UnitService implements UnitInterface
                 'description' => 'Unit Construction Completed',
                 'url' => route('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]),
             ];
-            Notification::send($user, new QueueCompletedNotification($data));
+            Notification::send($user, new DefaultNotification($data));
         })->dispatch();
 
         return $batch;

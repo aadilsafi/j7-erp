@@ -459,6 +459,7 @@ Route::group([
                                 Route::get('/', [FileManagementController::class, 'index'])->name('index');
 
                                 Route::get('/show/{file_id}', [FileManagementController::class, 'show'])->name('show');
+                                Route::get('/print/{file_id}', [FileManagementController::class, 'print'])->name('print');
 
                                 Route::get('create', [FileManagementController::class, 'create'])->name('create');
                                 Route::post('store', [FileManagementController::class, 'store'])->name('store');

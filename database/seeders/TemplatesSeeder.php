@@ -59,6 +59,13 @@ class TemplatesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Booking Form',
+                'slug' => 'booking_form_template',
+                'image' => '/images/templates/booking_form_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

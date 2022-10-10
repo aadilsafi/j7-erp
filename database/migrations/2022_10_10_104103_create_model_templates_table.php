@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('model_type');
             $table->integer('template_id');
+            $table->integer('parent_id')->default(0);
             $table->boolean('default');
             $table->timestamps();
             $table->softDeletes();

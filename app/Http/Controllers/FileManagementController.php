@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use Exception;
 use App\Models\Site;
 use App\Models\Unit;
@@ -17,6 +18,8 @@ use App\Services\FileManagements\FileManagementInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Http\Requests\File\store;
 use App\Models\FileManagement;
+use App\Models\ModelTemplate;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class FileManagementController extends Controller
 {
@@ -122,7 +125,7 @@ class FileManagementController extends Controller
             'customer_file' => FileManagement::find(decryptParams($file_id)),
         ];
 
-        if($customer_file->file_action_id == 1){
+        if ($customer_file->file_action_id == 1) {
 
             $data['salesPlan'] = (new SalesPlan())->with([
                 'additionalCosts', 'installments', 'leadSource', 'receipts'
@@ -130,9 +133,7 @@ class FileManagementController extends Controller
                 'status' => 1,
                 'unit_id' => $data['unit']->id,
             ])->first();
-        }
-        else
-        {
+        } else {
             $data['salesPlan'] = (new SalesPlan())->with([
                 'additionalCosts', 'installments', 'leadSource', 'receipts'
             ])->where([
@@ -164,8 +165,8 @@ class FileManagementController extends Controller
                     'unit_id' => $data['application_form']['unit_id'],
                     'stakeholder_id' => $data['application_form']['stakeholder_id'],
                 ])
-                ->where('file_action_id' , 1)
-                ->first();
+                    ->where('file_action_id', 1)
+                    ->first();
 
                 if (!is_null($file) && !empty($file)) {
                     return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withWarning('File already created!');
@@ -187,5 +188,22 @@ class FileManagementController extends Controller
             'site_id' => decryptParams($site_id),
         ];
         return $dataTable->with($data)->render('app.sites.file-managements.files.view', $data);
+    }
+
+    public function print($site_id, $customer_id, $unit_id, $file_id)
+    {
+        // $customer_file = FileManagement::find(decryptParams($file_id));
+
+        $templates = (new ModelTemplate())->Model_Templates(get_class(new FileManagement()));
+        $printFile = 'app.sites.file-managements.files.templates.' . $templates[0]['slug'];
+        $html = view($printFile)->render();
+        // dd($html);
+        // $pdf = App::make('dompdf.wrapper');
+        // $pdf->loadHTML($html);
+        $pdf = Pdf::loadView('welcome');
+
+        return $pdf->download('invoice.pdf');
+
+        // return view('app.sites.file-managements.files.preview', $data);
     }
 }

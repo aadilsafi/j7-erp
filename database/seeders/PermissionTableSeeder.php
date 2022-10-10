@@ -773,6 +773,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.print',
+                'show_name' => 'Print File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // file management rebate incentive
             [
                 'name' => 'sites.file-managements.rebate-incentive.index',

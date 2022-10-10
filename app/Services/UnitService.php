@@ -35,13 +35,13 @@ class UnitService implements UnitInterface
         return $this->model()->where('floor_id', $floor_id)->get();
     }
 
-    public function getById($site_id, $floor_id, $id)
+    public function getById($site_id, $floor_id, $id, $relationships = [])
     {
         $site_id = decryptParams($site_id);
         $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
-        return $this->model()->where([
+        return $this->model()->with($relationships)->where([
             'floor_id' => $floor_id,
             'id' => $id,
         ])->first();

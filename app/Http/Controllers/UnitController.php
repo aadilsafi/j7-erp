@@ -128,7 +128,7 @@ class UnitController extends Controller
     public function edit(Request $request, $site_id, $floor_id, $id)
     {
         try {
-            $unit = $this->unitInterface->getById($site_id, $floor_id, $id);
+            $unit = $this->unitInterface->getById($site_id, $floor_id, $id, ['salesPlan']);
             if ($unit && !empty($unit)) {
                 // dd($unit);
                 $data = [

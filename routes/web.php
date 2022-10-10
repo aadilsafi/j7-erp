@@ -35,6 +35,7 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -400,8 +401,6 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
 
                         Route::get('/print/{file_cancellation_id}/{template_id}', [FileCancellationController::class, 'printPage'])->name('print');
-
-
                     });
 
                     // file resalse
@@ -480,7 +479,6 @@ Route::group([
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
                     });
-
                 });
             });
         });
@@ -517,3 +515,7 @@ Route::get('/read-all-notifications', [NotificationController::class, 'readAllNo
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
 
 Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
+
+Route::get('/logs', function () {
+    return Activity::latest()->get();
+});

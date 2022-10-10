@@ -41,9 +41,9 @@ class store extends FormRequest
             "payment_due_date.required" => "Payment Due Date Is Required.",
             'amount_remarks.required' => 'Amount Remark is Required',
             'amount_profit.required' => 'Profit Amount is Required',
-            'attachments' => 'Attachments Required if you check Attachements Attached.',
-            'attachments.*.attachment_label' => "Attachments Label Required if you check Attachements Attached.",
-            'attachments.*.image' => "Attachments Image Required if you check Attachements Attached.",
+            'attachments' => 'Attachments Required if you check Attachments Attached.',
+            'attachments.*.attachment_label' => "Attachments Label Required if you check Attachments Attached.",
+            'attachments.*.image' => "Attachments Image Required if you check Attachments Attached.",
         ];
     }
 }

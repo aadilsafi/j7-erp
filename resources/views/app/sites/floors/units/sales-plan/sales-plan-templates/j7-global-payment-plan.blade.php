@@ -21,7 +21,7 @@
                     <h1>PAYMENT PLAN</h1>
                 </td>
                 <td class="text-end">
-                    <p>Print Date:{{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}</p>
+                    <p>Print Date:{{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</p>
                     <p>User: {{ Auth::user()->name }}</p>
                 </td>
             </tr>
@@ -32,21 +32,23 @@
                 <td style="border: 0px solid #eee!important;">
                     <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
                     <p class="m-0">Customer ID : 00000084</p>
-                    <p class="m-0">Contact #: {{  $data['contact'] }}</p>
-                    <p class="m-0">Plan Effected From:{{  date_format (new DateTime($data['validity']), 'D d-M-Y') }}
+                    <p class="m-0">Contact #: {{ $data['contact'] }}</p>
+                    <p class="m-0">Plan Effected From:{{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}
                     </p>
                 </td>
                 <td style="border: 1px solid #eee!important;">
                     <p class="m-0">Total Installments : {{ count($data['instalments']) }}</p>
-                    <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span> {{ count($data['instalments']) }} </p>
+                    <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span>
+                        {{ count($data['instalments']) }} </p>
                     <p class="m-0">Total Amount : {{ number_format($data['total']) }}</p>
                     <p class="m-0">Total Paid Amount: - </p>
-                    <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span> {{ number_format($data['amount']) }}</p>
+                    <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span>
+                        {{ number_format($data['amount']) }}</p>
                     <p class="m-0">Total Remaining Amount: {{ number_format($data['total']) }}</p>
                 </td>
                 <td style="border: 1px solid #eee!important;">
                     <p class="m-0">Invoice # : -</p>
-                    <p>Invoice Date : {{  date_format (new DateTime($data['validity']), 'D d-M-Y') }}</p>
+                    <p>Invoice Date : {{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}</p>
                     <p class="m-0">Account # :-</p>
                     <p class="m-0">Sale Voucher # :-</p>
                 </td>
@@ -66,18 +68,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data['instalments'] as $key=>$installment)
-
-                <tr>
-                    <td>{{ $key+1 }}</td>
-                    <td class="text-start">{{ $installment->details }}</td>
-                    <td> {{  date_format (new DateTime($installment->date), 'd/m/Y') }}</td>
-                    <td>{{ number_format($installment->amount) }}</td>
-                    <td>-</td>
-                    <td>-</td>
-                    <td><span class="fw-bold text-success">UnPaid</span></td>
-                </tr>
-
+                @foreach ($data['instalments'] as $key => $installment)
+                    <tr>
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td class="text-start">{{ $installment->details }}</td>
+                        <td> {{ date_format(new DateTime($installment->date), 'd/m/Y') }}</td>
+                        <td>{{ number_format($installment->amount) }}</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><span class="fw-bold text-success">UnPaid</span></td>
+                    </tr>
                 @endforeach
 
             </tbody>
@@ -91,7 +91,7 @@
                     <hr width="50%">
 
                     <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
-                    <p class="m-0">Print Date: {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}</p>
+                    <p class="m-0">Print Date: {{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</p>
                     <p class="m-0">Customer</p>
                 </td>
                 <td class="text-center">

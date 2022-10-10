@@ -6,10 +6,9 @@ use Exception;
 use App\Models\User;
 use Carbon\{Carbon, CarbonPeriod};
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\{URL, Auth};
+use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 use Spatie\Permission\Models\Permission;
 use App\Services\SalesPlan\Interface\SalesPlanInterface;
-use App\Jobs\SalesPlan\GeneratedSalesPlanNotificationJob;
 use App\Models\{
     AdditionalCost,
     SalesPlanAdditionalCost,
@@ -21,9 +20,12 @@ use App\Models\{
     StakeholderType,
     Unit
 };
+use App\Notifications\DefaultNotification;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Facades\LogBatch;
+use Spatie\Activitylog\Models\Activity;
 
 class SalesPlanService implements SalesPlanInterface
 {
@@ -63,216 +65,225 @@ class SalesPlanService implements SalesPlanInterface
     public function store($site_id, $floor_id, $unit_id, $inputs)
     {
 
-        $site = (new Site())->find($site_id);
-        $floor = (new Floor())->find($floor_id);
-        $unit = (new Unit())->find($unit_id);
+        DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
 
-        // dd($unit);
+            LogBatch::startBatch();
 
-        $authRoleId = auth()->user()->roles->pluck('id')->first();
+            $site = (new Site())->find($site_id);
+            $floor = (new Floor())->find($floor_id);
+            $unit = (new Unit())->find($unit_id);
 
-        $approveSalesPlanPermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
-        $permission = (new Permission())->where('name', 'sites.floors.units.sales-plans.approve-sales-plan')->first();
+            // dd($unit);
 
-        $approveSalesPlanPermissionRole = $permission->roles;
+            $authRoleId = auth()->user()->roles->pluck('id')->first();
 
-        $stakeholderInput = $inputs['stackholder'];
+            $approveSalesPlanPermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
+            $permission = (new Permission())->where('name', 'sites.floors.units.sales-plans.approve-sales-plan')->first();
 
-        $stakeholderData = [
-            'site_id' => $site->id,
-            'full_name' => $stakeholderInput['full_name'],
-            'father_name' => $stakeholderInput['father_name'],
-            'occupation' => $stakeholderInput['occupation'],
-            'designation' => $stakeholderInput['designation'],
-            'ntn' => $stakeholderInput['ntn'],
-            'cnic' => $stakeholderInput['cnic'],
-            'contact' => $stakeholderInput['contact'],
-            'address' => $stakeholderInput['address'],
-        ];
+            $approveSalesPlanPermissionRole = $permission->roles;
 
-        $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
-            'id' => $stakeholderInput['stackholder_id'],
-        ], $stakeholderData);
+            $stakeholderInput = $inputs['stackholder'];
 
-        if ($stakeholderInput['stackholder_id'] == 0) {
-            $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
-            $stakeholderTypeData  = [
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => StakeholderTypeEnum::CUSTOMER->value,
-                    'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $stakeholderTypeCode,
-                    'status' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => StakeholderTypeEnum::VENDOR->value,
-                    'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $stakeholderTypeCode,
-                    'status' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => StakeholderTypeEnum::DEALER->value,
-                    'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $stakeholderTypeCode,
-                    'status' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                    'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $stakeholderTypeCode,
-                    'status' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => StakeholderTypeEnum::LEAD->value,
-                    'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
-                    'status' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-            ];
-            $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
-        }
-
-        // $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
-
-        $unitInput = $inputs['unit'];
-
-        $leadSource = $inputs['sales_source'];
-
-        if ($leadSource['lead_source'] == 0) {
-
-            $leadSourceData = [
-                'site_id' => $site->id,
-                'name' => $leadSource['new'],
-            ];
-
-            $leadSource = (new LeadSource())->create($leadSourceData);
-        }
-
-        $sales_plan_data = [
-            'unit_id' => $unit->id,
-            'user_id' => auth()->user()->id,
-            'stakeholder_id' => $stakeholder->id,
-            'stakeholder_data' => json_encode($stakeholder),
-            'unit_price' => $unitInput['price']['unit'],
-            'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
-            'discount_percentage' => $unitInput['discount']['percentage'],
-            'discount_total' => intval(str_replace(',', '', $unitInput['discount']['total'])),
-            'down_payment_percentage' => $unitInput['downpayment']['percentage'],
-            'down_payment_total' => intval(str_replace(',', '', $unitInput['downpayment']['total'])),
-            'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
-            'validity' => $inputs['sales_plan_validity'],
-            'comments' => $inputs['comments']['custom'],
-            'status' => false,
-        ];
-
-        $salesPlan = $this->model()->create($sales_plan_data);
-
-        $additionalCosts = $inputs['unit']['additional_cost'];
-        $additionalCostData = [];
-        foreach ($additionalCosts as $key => $value) {
-            if ($value['status'] == 'true') {
-                $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
-
-                $additionalCostData[] = [
-                    'sales_plan_id' => $salesPlan->id,
-                    'additional_cost_id' => $additonalCost->id,
-                    'percentage' => $value['percentage'],
-                    'amount' => str_replace(',', '', $value['total']),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+            if($this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+                throw new Exception('Stakeholder CNIC already exists');
             }
-        }
 
-        // dd($additionalCostData);
-        $salesPlanAdditionalCosts = (new SalesPlanAdditionalCost())->insert($additionalCostData);
+            $stakeholderData = [
+                'site_id' => $site->id,
+                'full_name' => $stakeholderInput['full_name'],
+                'father_name' => $stakeholderInput['father_name'],
+                'occupation' => $stakeholderInput['occupation'],
+                'designation' => $stakeholderInput['designation'],
+                'ntn' => $stakeholderInput['ntn'],
+                'cnic' => $stakeholderInput['cnic'],
+                'contact' => $stakeholderInput['contact'],
+                'address' => $stakeholderInput['address'],
+            ];
 
-        $downpaymentTotal = $inputs['unit']['downpayment']['total'];
-        $installments = $inputs['installments']['table'];
-        $installmentsData = [];
+            $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
+                'id' => $stakeholderInput['stackholder_id'],
+            ], $stakeholderData);
 
-        $installmentsData[] = [
-            'sales_plan_id' => $salesPlan->id,
-            'date' => now(),
-            'details' => 'Downpayment',
-            'amount' => floatval(str_replace(',', '', $downpaymentTotal)),
-            'paid_amount' => 0,
-            'remaining_amount' => floatval(str_replace(',', '', $downpaymentTotal)),
-            'remarks' => null,
-            'installment_order' => 0,
-            'status' => 'unpaid',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ];
+            if ($stakeholderInput['stackholder_id'] == 0) {
+                $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
+                $stakeholderTypeData  = [
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::CUSTOMER->value,
+                        'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::VENDOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::DEALER->value,
+                        'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
+                        'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::LEAD->value,
+                        'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
+                        'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                ];
+                $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
+            }
 
-        array_pop($installments);
-        foreach ($installments as $key => $installment) {
+            // $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
+
+            $unitInput = $inputs['unit'];
+
+            $leadSource = $inputs['sales_source'];
+
+            if ($leadSource['lead_source'] == 0) {
+
+                $leadSourceData = [
+                    'site_id' => $site->id,
+                    'name' => $leadSource['new'],
+                ];
+
+                $leadSource = (new LeadSource())->create($leadSourceData);
+            }
+
+            $sales_plan_data = [
+                'unit_id' => $unit->id,
+                'user_id' => auth()->user()->id,
+                'stakeholder_id' => $stakeholder->id,
+                'stakeholder_data' => json_encode($stakeholder),
+                'unit_price' => $unitInput['price']['unit'],
+                'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
+                'discount_percentage' => $unitInput['discount']['percentage'],
+                'discount_total' => intval(str_replace(',', '', $unitInput['discount']['total'])),
+                'down_payment_percentage' => $unitInput['downpayment']['percentage'],
+                'down_payment_total' => intval(str_replace(',', '', $unitInput['downpayment']['total'])),
+                'lead_source_id' => ($leadSource['lead_source'] == 0) ? $leadSource->id : $leadSource['lead_source'],
+                'validity' => $inputs['sales_plan_validity'],
+                'comments' => $inputs['comments']['custom'],
+                'status' => false,
+            ];
+
+            $salesPlan = $this->model()->create($sales_plan_data);
+
+            $additionalCosts = $inputs['unit']['additional_cost'];
+
+            foreach ($additionalCosts as $key => $value) {
+                if ($value['status'] == 'true') {
+                    $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
+
+                    $additionalCostData = [
+                        'sales_plan_id' => $salesPlan->id,
+                        'additional_cost_id' => $additonalCost->id,
+                        'percentage' => $value['percentage'],
+                        'amount' => str_replace(',', '', $value['total']),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+
+                    (new SalesPlanAdditionalCost())->create($additionalCostData);
+                }
+            }
+
+            $downpaymentTotal = $inputs['unit']['downpayment']['total'];
+            $installments = $inputs['installments']['table'];
+            $installmentsData = [];
+
             $installmentsData[] = [
                 'sales_plan_id' => $salesPlan->id,
-                'date' => Carbon::parse($installment['due_date']),
-                'details' => $installment['installment'],
-                'amount' => floatval($installment['total_amount']),
+                'date' => now(),
+                'details' => 'Downpayment',
+                'amount' => floatval(str_replace(',', '', $downpaymentTotal)),
                 'paid_amount' => 0,
-                'remaining_amount' => floatval($installment['total_amount']),
-                'remarks' => $installment['remarks'],
-                'installment_order' => $key,
+                'remaining_amount' => floatval(str_replace(',', '', $downpaymentTotal)),
+                'remarks' => null,
+                'installment_order' => 0,
                 'status' => 'unpaid',
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-        }
 
-        if (isset($inputs['expenses'])) {
-            $expenses = $inputs['expenses'];
-            $count = count($installmentsData);
-            foreach ($expenses as $key => $expense) {
+            array_pop($installments);
+            foreach ($installments as $key => $installment) {
                 $installmentsData[] = [
                     'sales_plan_id' => $salesPlan->id,
-                    'date' => Carbon::parse($expense['due_date']),
-                    'details' => $expense['expense_label'],
-                    'amount' => floatval($expense['amount']),
+                    'date' => Carbon::parse($installment['due_date']),
+                    'details' => $installment['installment'],
+                    'amount' => floatval($installment['total_amount']),
                     'paid_amount' => 0,
-                    'remaining_amount' => floatval($expense['expense_label']),
-                    'remarks' => $expense['remarks'],
-                    'installment_order' => $count,
+                    'remaining_amount' => floatval($installment['total_amount']),
+                    'remarks' => $installment['remarks'],
+                    'installment_order' => $key,
                     'status' => 'unpaid',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-
-                $count++;
             }
-        }
-        // dd($installmentsData);
 
-        $SalesPlanInstallments = (new SalesPlanInstallments())->insert($installmentsData);
+            if (isset($inputs['expenses'])) {
+                $expenses = $inputs['expenses'];
+                $count = count($installmentsData);
+                foreach ($expenses as $key => $expense) {
+                    $installmentsData[] = [
+                        'sales_plan_id' => $salesPlan->id,
+                        'date' => Carbon::parse($expense['due_date']),
+                        'details' => $expense['expense_label'],
+                        'amount' => floatval($expense['amount']),
+                        'paid_amount' => 0,
+                        'remaining_amount' => floatval($expense['expense_label']),
+                        'remarks' => $expense['remarks'],
+                        'installment_order' => $count,
+                        'status' => 'unpaid',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
 
-        //Notification of Sales Plan
-        $specificUsers = collect();
-        foreach ($approveSalesPlanPermissionRole as $role) {
-            $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
-        }
-        $currentURL = URL::current();
+                    $count++;
+                }
+            }
 
-        $notificaionData = [
-            'title' => 'New Sales Plan Genration Notification',
-            'description' => Auth::User()->name . ' generated new sales plan',
-            'message' => 'xyz message',
-            'url' => str_replace('/store', '', $currentURL),
-        ];
+            foreach ($installmentsData as $installment) {
+                (new SalesPlanInstallments())->create($installment);
+            }
 
-        // GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
+            //Notification of Sales Plan
+            $specificUsers = collect();
+            foreach ($approveSalesPlanPermissionRole as $role) {
+                $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
+            }
+            $currentURL = URL::current();
 
-        return $salesPlan;
+            $notificaionData = [
+                'title' => 'New Sales Plan Genration Notification',
+                'description' => Auth::User()->name . ' generated new sales plan',
+                'message' => 'xyz message',
+                'url' => str_replace('/store', '', $currentURL),
+            ];
+
+            Notification::send($specificUsers, new DefaultNotification($notificaionData));
+            LogBatch::endBatch();
+            return $salesPlan;
+        });
     }
 
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)

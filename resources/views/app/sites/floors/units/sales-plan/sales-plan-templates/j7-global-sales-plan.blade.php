@@ -179,7 +179,7 @@
             @foreach ($data['instalments'] as $key => $instalment )
                 <tr>
                     <th   style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
-                        {{ $key + 1 }}
+                        {{ $loop->index + 1 }}
                     </th>
                     <td   style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
                         {{  date_format (new DateTime($instalment->date), 'd/m/Y') }}

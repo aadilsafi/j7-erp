@@ -59,18 +59,20 @@ class CustomerUnitsDataTable extends DataTable
                 return editDateColumn($unit->updated_at);
             })
             ->editColumn('actions', function ($unit) {
-                $file_Action_id = 0;
 
-                if(isset($unit->file->file_action_id)){
-                    foreach($unit->file as $fileCheck){
-                        if($fileCheck->file_action_id != 0){
-                            $file_Action_id = $unit->file->file_action_id;
-                            break;
-                        }
+                $isShowFileCreationButton = true;
+                $file_id = 0;
+
+                foreach ($unit->file as $fileCheck) {
+                    if ($fileCheck->file_action_id == 1) {
+                        $isShowFileCreationButton = false;
+                        $file_id = $fileCheck->id;
+                        break;
                     }
                 }
+
                 if (isset($unit->salesPlan[0])) {
-                    return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file' => $unit->file, 'file_Action_id' =>$file_Action_id, 'unit_id' => $unit->id]);
+                    return view('app.sites.file-managements.customers.units.actions', ['site_id' => $this->site_id, 'customer_id' => $unit->salesPlan[0]['stakeholder']['id'], 'file_id' => $file_id, 'isShowFileCreationButton' => $isShowFileCreationButton, 'unit_id' => $unit->id]);
                 }
             })
             ->setRowId('id')
@@ -85,7 +87,7 @@ class CustomerUnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status', 'salesPlan', 'file'])->whereIn('id', $this->unit_ids)->where('status_id',5);
+        return $model->newQuery()->select('units.*')->with(['type', 'status', 'salesPlan', 'file'])->whereIn('id', $this->unit_ids)->where('status_id', 5);
     }
 
     public function html(): HtmlBuilder

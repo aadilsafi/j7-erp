@@ -13,6 +13,7 @@ use App\Http\Requests\units\{
 use App\Services\AdditionalCosts\AdditionalCostInterface;
 use App\Utils\Enums\{UserBatchActionsEnum, UserBatchStatusEnum};
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UnitController extends Controller
@@ -106,6 +107,7 @@ class UnitController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
             return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }

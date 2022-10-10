@@ -84,6 +84,10 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
 
+            if($this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+                throw new Exception('Stakeholder CNIC already exists');
+            }
+
             $stakeholderData = [
                 'site_id' => $site->id,
                 'full_name' => $stakeholderInput['full_name'],

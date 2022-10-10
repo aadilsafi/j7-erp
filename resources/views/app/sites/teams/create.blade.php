@@ -13,7 +13,8 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
-
+        <link rel="stylesheet" type="text/css"
+        href="{{ asset('public_assets/admin') }}/vendors/css/forms/select/select2.min.css">
 @endsection
 
 @section('page-css')
@@ -45,12 +46,13 @@
                 <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                     @csrf
+
                     {{ view('app.sites.teams.form-fields', ['teams' => $teams, 'users' => $users]) }}
 
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                    <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto">
                         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
                                 <div class="row g-1">

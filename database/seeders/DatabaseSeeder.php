@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             TeamUserSeeder::class,
             TemplatesSeeder::class,
+            ModelTemplateSeeder::class,
         ]);
     }
 }

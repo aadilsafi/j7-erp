@@ -17,6 +17,8 @@ use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileBuyBack\storeRequest;
 use App\Http\Requests\FileResale\storeRequest as FileResaleStoreRequest;
 use App\Models\FileResaleAttachment;
+use App\Models\ModelTemplate;
+use App\Models\Template;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
@@ -44,6 +46,8 @@ class FileReleaseController extends Controller
     {
         $data = [
             'site_id' => decryptParams($site_id),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileResale())),
+
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -219,5 +223,21 @@ class FileReleaseController extends Controller
         }
 
         return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Resale Approved');
+    }
+
+    public function printPage($site_id, $file_id, $template_id)
+    {
+
+        $file_refund = (new FileResale())->find(decryptParams($file_id));
+       
+        $template = Template::find(decryptParams($template_id));
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+        ];
+
+        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        
+        return view($printFile, compact('data'));
     }
 }

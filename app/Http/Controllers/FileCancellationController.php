@@ -14,6 +14,7 @@ use App\DataTables\ViewFilesDatatable;
 use App\Models\FileCanecllationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\Http\Requests\FileCancel\store;
+use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 
@@ -33,10 +34,10 @@ class FileCancellationController extends Controller
 
     public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
     {
+
         $data = [
             'site_id' => decryptParams($site_id),
-
-            'fileTemplates' => (new Template())->all(),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileCanecllation())),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -195,7 +196,7 @@ class FileCancellationController extends Controller
 
     public function printPage($site_id, $file_id, $template_id)
     {
-        
+
         $file_cancel = (new FileCanecllation())->find(decryptParams($file_id));
         $unit = json_decode($file_cancel->unit_data);
         $template = Template::find(decryptParams($template_id));
@@ -217,7 +218,7 @@ class FileCancellationController extends Controller
             // 'total_paid_amount' => $total_paid_amount,
         ];
 
-        $printFile = 'app.sites.file-managements.files..templates.'. $template->slug;
+        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
         
         return view($printFile, compact('data'));
     }

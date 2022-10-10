@@ -14,7 +14,11 @@ use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileBuyBack\store;
 use App\Models\FileBuyBack;
 use App\Models\FileBuyBackLabelsAttachment;
+use App\Models\FileRefund;
+use App\Models\ModelTemplate;
+use App\Models\Template;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
+use Maatwebsite\Excel\Imports\ModelManager;
 
 class FileBuyBackController extends Controller
 {
@@ -36,6 +40,7 @@ class FileBuyBackController extends Controller
     {
         $data = [
             'site_id' => decryptParams($site_id),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileBuyBack())),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -190,5 +195,21 @@ class FileBuyBackController extends Controller
         }
 
         return redirect()->route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Buy Back Approved');
+    }
+
+    public function printPage($site_id, $file_id, $template_id)
+    {
+
+        $file_refund = (new FileRefund())->find(decryptParams($file_id));
+       
+        $template = Template::find(decryptParams($template_id));
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+        ];
+
+        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        
+        return view($printFile, compact('data'));
     }
 }

@@ -225,6 +225,9 @@ class ReceiptService implements ReceiptInterface
         $total_committed_amount = $total_committed_amount->sum('amount');
 
 
+        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('date',$approved_sales_plan_date)->get();
+        $total_committed_amount = $total_committed_amount->sum('amount');
+
         if ($total_paid_amount >= $token_price) {
             $unit->status_id = 2;
         }

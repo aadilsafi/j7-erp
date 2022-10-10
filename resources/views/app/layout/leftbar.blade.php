@@ -310,7 +310,7 @@
 
                                 <li
                                     class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                    <a class="d-flex align-items-center" href="#">
+                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
                                         <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
                                             Incentive Form

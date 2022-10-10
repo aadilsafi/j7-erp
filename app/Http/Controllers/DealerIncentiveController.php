@@ -57,6 +57,7 @@ class DealerIncentiveController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -102,5 +103,17 @@ class DealerIncentiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getData(Request $request)
+    {
+        $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id',$request->dealer_id)->get();
+        foreach($rebate_incentives as $Units){
+            $units[] = Unit::find($Units->unit_id);
+        }
+        return response()->json([
+            'success' => true,
+            'units' => $units,
+        ], 200);
     }
 }

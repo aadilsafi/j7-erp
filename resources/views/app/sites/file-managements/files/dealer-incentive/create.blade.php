@@ -19,9 +19,6 @@
 
 @section('custom-css')
     <style>
-        .hideDiv {
-            display: none;
-        }
     </style>
 @endsection
 
@@ -95,63 +92,26 @@
 
 @section('custom-js')
     <script type="text/javascript">
-        function getData(unit_id) {
+        function getData(dealer_id) {
             var _token = '{{ csrf_token() }}';
             let url =
-                "{{ route('sites.file-managements.rebate-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
+                "{{ route('sites.file-managements.dealer-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
             $.ajax({
                 url: url,
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    'unit_id': unit_id,
+                    'dealer_id': dealer_id,
                     '_token': _token
                 },
                 success: function(response) {
                     if (response.success) {
-                        $('#sales_source_lead_source').val(response.leadSource.name);
-                        $('#stakeholder_id').val(response.stakeholder.id);
-                        $('#customer_name').val(response.stakeholder.full_name);
-                        $('#customer_father_name').val(response.stakeholder.father_name);
-                        $('#customer_cnic').val(response.cnic);
-                        $('#customer_ntn').val(response.stakeholder.ntn);
-                        $('#customer_comments').val(response.stakeholder.comments);
-                        $('#customer_address').val(response.stakeholder.address);
-                        $('#customer_phone').val(response.stakeholder.contact);
-                        $('#customer_occupation').val(response.stakeholder.occupation);
-
-                        $('#td_unit_id').html(response.unit.unit_number);
-                        $('#td_unit_area').html(response.unit.gross_area);
-                        $('#td_unit_rate').html(response.unit.price_sqft.toLocaleString());
-                        $('#td_unit_floor').html(response.floor);
-
-                        if (response.unit.facing != null) {
-                            $('#td_unit_facing_charges').html(response.unit.facing.unit_percentage + '%');
-                        } else {
-                            $('#td_unit_facing_charges').html(0 + '%');
-                        }
-
-                        let unit_total = response.unit.price_sqft * response.unit.gross_area;
-                        $('#unit_total').val(unit_total)
-
-                        $('#td_unit_discount').html(response.salesPlan.discount_percentage + '%');
-                        $('#td_unit_total').html(unit_total.toLocaleString());
-                        $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
-
-                        if (response.unit.facing != null) {
-                            let facing_value = response.salesPlan.discount_percentage * response.salesPlan
-                                .total_price;
-                            $('#td_unit_facing_charges_value').html(facing_value)
-                        } else {
-                            $('#td_unit_facing_charges_value').html(0);
-                        }
-
-                        $('#td_unit_discount_value').html(response.salesPlan.discount_total.toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
-                            .toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
-                            .toLocaleString());
-
+                        $.each(response.units, function(i, item) {
+                            $('.unit_id').append($('<option>', {
+                                value: item.id + '_' + item.gross_area,
+                                text: item.name,
+                            }));
+                        });
 
                     } else {
                         Swal.fire({
@@ -165,6 +125,28 @@
                     console.log(error);
                 }
             });
+        }
+
+        function CalculateTotalArea(selectdUnits) {
+            var selectedValues = $('#unit_id').val();
+            let element = [];
+            let total_area = 0.0;
+            for (let index = 0; index < selectedValues.length; index++) {
+                element = selectedValues[index].split("_");
+                total_area = parseFloat(total_area) + parseFloat(element[1]);
+            }
+
+            $('#total_unit_area').val(total_area);
+
+        }
+
+        function CalculateTotalDealerIncentive() {
+            var inputValue = $('#dealer_incentive').val();
+            var total_unit_area = $('#total_unit_area').val();
+            var total_incentive = parseFloat(inputValue) * parseFloat(total_unit_area);
+
+            $('#total_dealer_incentive').val(total_incentive);
+
         }
 
         $('#rebate_percentage').on('change', function() {
@@ -219,16 +201,25 @@
                             stakeholderData = response.data;
                         }
                         // $('#stackholder_id').val(stakeholderData.id);
-                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (stakeholderData.full_name.length > 0));
-                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled', (stakeholderData.father_name.length > 0));
-                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (stakeholderData.occupation.length > 0));
-                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled', (stakeholderData.designation.length > 0));
+                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (
+                            stakeholderData.full_name.length > 0));
+                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',
+                            (stakeholderData.father_name.length > 0));
+                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (
+                            stakeholderData.occupation.length > 0));
+                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',
+                            (stakeholderData.designation.length > 0));
 
-                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic)).attr('disabled', (stakeholderData.cnic.length > 0));
-                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (stakeholderData.contact.length > 0));
-                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData.ntn.length > 0));
-                        $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (stakeholderData.comments.length > 0));
-                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (stakeholderData.address.length > 0));
+                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
+                            .attr('disabled', (stakeholderData.cnic.length > 0));
+                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (
+                            stakeholderData.contact.length > 0));
+                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData
+                            .ntn.length > 0));
+                        $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (
+                            stakeholderData.comments.length > 0));
+                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (
+                            stakeholderData.address.length > 0));
                     }
                     hideBlockUI('#stakeholders_card');
                 },
@@ -246,7 +237,7 @@
 
         var validator = $("#rebateForm").validate({
             rules: {
-                'rebate_percentage' : {
+                'rebate_percentage': {
                     required: true,
                     digits: true,
                 },

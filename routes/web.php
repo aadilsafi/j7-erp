@@ -362,6 +362,10 @@ Route::group([
 
                         Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-data', [DealerIncentiveController::class, 'getData'])->name('get-data');
+                        });
                     });
 
                     // file refund

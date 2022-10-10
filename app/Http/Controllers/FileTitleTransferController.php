@@ -16,8 +16,11 @@ use App\DataTables\ViewFilesDatatable;
 use App\Http\Requests\FileTitleTransfer\storeRequest;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
+use App\Models\ModelTemplate;
+use App\Models\Template;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
+use Maatwebsite\Excel\Imports\ModelManager;
 
 class FileTitleTransferController extends Controller
 {
@@ -40,6 +43,7 @@ class FileTitleTransferController extends Controller
     {
         $data = [
             'site_id' => decryptParams($site_id),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileTitleTransfer())),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -213,5 +217,21 @@ class FileTitleTransferController extends Controller
         }
 
         return redirect()->route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Title Transfer Approved');
+    }
+
+    public function printPage($site_id, $file_id, $template_id)
+    {
+
+        $file_refund = (new FileTitleTransfer())->find(decryptParams($file_id));
+       
+        $template = Template::find(decryptParams($template_id));
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+        ];
+
+        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        
+        return view($printFile, compact('data'));
     }
 }

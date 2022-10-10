@@ -4,6 +4,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
             <div class="modal-header mb-1">
                 <h5 class="modal-title" id="salesTemplateModalLabel">Select File Template</h5>
+               
             </div>
             <div class="modal-body flex-grow-1">
                 <div class="mb-1">
@@ -16,6 +17,8 @@
                                         alt="Card image cap">
                                         <hr>
                                     <h5 class="card-title m-0">{{ $template->name }}</h5>
+                                    <h5 class="card-title m-0">{{ $template->template_id }}</h5>
+
                                 </div>
                             </div>
                         </a>

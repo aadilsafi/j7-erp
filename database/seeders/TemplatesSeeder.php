@@ -31,6 +31,34 @@ class TemplatesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'File Refund Form',
+                'slug' => 'file_refund_template',
+                'image' => '/images/templates/file_refund_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'File Buy Back Form',
+                'slug' => 'file_buy_back_template',
+                'image' => '/images/templates/file_buy_back_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'File Resale Form',
+                'slug' => 'file_resale_template',
+                'image' => '/images/templates/file_resale_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'File Title Transfer Form',
+                'slug' => 'file_title_transfer_template',
+                'image' => '/images/templates/file_title_transfer_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

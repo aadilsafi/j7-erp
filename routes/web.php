@@ -373,6 +373,9 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
                         Route::post('store', [FileRefundController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_refund_id}/{template_id}', [FileRefundController::class, 'printPage'])->name('print');
+
                     });
 
                     // file buy back
@@ -383,6 +386,9 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
+                    
+                        Route::get('/print/{file_buy_back_id}/{template_id}', [FileBuyBackController::class, 'printPage'])->name('print');
+                    
                     });
 
                     // file Cancellation
@@ -396,8 +402,6 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
 
                         Route::get('/print/{file_cancellation_id}/{template_id}', [FileCancellationController::class, 'printPage'])->name('print');
-
-
                     });
 
                     // file resalse
@@ -409,6 +413,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
+                    
+                        Route::get('/print/{file_resale_id}/{template_id}', [FileReleaseController::class, 'printPage'])->name('print');
                     });
 
                     // file title transfer
@@ -420,6 +426,9 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
+                    
+                        Route::get('/print/{file_title_transfer_id}/{template_id}', [FileTitleTransferController::class, 'printPage'])->name('print');
+
                     });
 
                     // file adjustment

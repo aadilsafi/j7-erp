@@ -874,6 +874,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-refund.print',
+                'show_name' => 'Print File Refund',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File Buy Back
             [
                 'name' => 'sites.file-managements.file-buy-back.index',
@@ -906,6 +913,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-buy-back.preview',
                 'show_name' => 'Preview File Buy Back',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-buy-back.print',
+                'show_name' => 'Print File Buy Back',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -989,6 +1003,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-resale.print',
+                'show_name' => 'Print File Resale',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File title transfer
             [
                 'name' => 'sites.file-managements.file-title-transfer.index',
@@ -1021,6 +1042,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.file-title-transfer.preview',
                 'show_name' => 'Preview File Title Transfer',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.file-title-transfer.print',
+                'show_name' => 'Print File Title Transfer',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

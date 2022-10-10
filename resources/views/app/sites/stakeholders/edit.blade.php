@@ -168,9 +168,9 @@
                 containerCssClass: "select-lg",
             }).change(function(){
                 if($(this).val() == 0){
-                    $('#stakeholder_name').attr("disabled", true);
+                    $('#stakeholder_name').attr("readonly", true).val('');
                 } else {
-                    $('#stakeholder_name').removeAttr("disabled");
+                    $('#stakeholder_name').removeAttr("readonly");
                 }
             });
 

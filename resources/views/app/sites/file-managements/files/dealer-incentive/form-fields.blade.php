@@ -11,10 +11,11 @@
                             class="select2 form-select  @error('unit_id') is-invalid @enderror" name="dealer_id"
                             onchange="getData(this.options[this.selectedIndex].value)">
                             <option>Select Dealer</option>
-                            @foreach ($stakeholders as $row)
-                                @continue ($row->stakeholder_types[2]->status == 0)
-                                <option value="{{ $row->id }}">
-                                    {{ $row->full_name }} ( {{ cnicFormat($row->cnic) }})
+                            @foreach ($dealer_data as $dealer)
+                            @continue(isset($incentives) && in_array($dealer->id, $incentives))
+                                <option value="{{ $dealer->stakeholder->id }}">
+                                    {{ $dealer->stakeholder->full_name }} ( {{ cnicFormat($dealer->stakeholder->cnic )}} )
+                                    - {{ $dealer->stakeholder->designation }}
                                 </option>
                             @endforeach
                         </select>

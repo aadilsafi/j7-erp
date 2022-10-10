@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\RebateIncentive;
+namespace App\Services\DealerIncentive;
 
 use App\Models\DealerIncentiveModel;
 use App\Models\Stakeholder;
@@ -34,20 +34,18 @@ class DealerService implements DealerInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
 
-            $rebatedata = [
-                'site_id' => $site_id,
-                'unit_id' => $inputs['unit_id'],
-                'stakeholder_id' => $inputs['stakeholder_id'],
-                'stakeholder_data' => json_encode(Stakeholder::find($inputs['stakeholder_id'])),
-                'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
-                'deal_type' => $inputs['deal_type'],
-                'commision_percentage' => $inputs['rebate_percentage'],
-                'commision_total' => $inputs['rebate_total'],
+            $dealerIncentive = [
+                'site_id' => decryptParams($site_id) ,
+                'dealer_id' => $inputs['dealer_id'],
+                'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),
+                'dealer_incentive' => $inputs['dealer_incentive'],
+                'total_unit_area' => $inputs['total_unit_area'],
+                'total_dealer_incentive' => $inputs['total_dealer_incentive'],
                 'status' => 0,
                 'comments' => $inputs['comments'],
             ];
 
-            $dealer_incentive = $this->model()->create($rebatedata);
+            $dealer_incentive = $this->model()->create($dealerIncentive);
 
             return $dealer_incentive;
         });

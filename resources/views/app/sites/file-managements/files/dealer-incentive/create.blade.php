@@ -49,6 +49,7 @@
                     'dealer_data' => $dealer_data,
                     'rebate_files' => $rebate_files,
                     'stakeholders' => $stakeholders,
+                    'incentives'  => $incentives
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -237,48 +238,22 @@
 
         var validator = $("#rebateForm").validate({
             rules: {
-                'rebate_percentage': {
+                'dealer_id': {
                     required: true,
-                    digits: true,
                 },
-                'dealer[full_name]': {
+                'multiple[0]': {
                     required: true
                 },
-                'dealer[father_name]': {
+                'dealer_incentive': {
+                    required: true,
+                    digits: true
+                },
+                'total_unit_area': {
                     required: true
                 },
-                'dealer[occupation]': {
+                'total_dealer_incentive': {
                     required: true
                 },
-                'dealer[designation]': {
-                    required: true
-                },
-                'dealer[contact]': {
-                    required: true,
-                    digits: true,
-                },
-                'dealer[cnic]': {
-                    required: true,
-                    digits: true,
-                    maxlength: 13,
-                    minlength: 13
-                },
-                'dealer[ntn]': {
-                    required: true,
-                },
-                'dealer[address]': {
-                    required: true,
-                },
-                'deal_type': {
-                    required: true,
-                },
-
-            },
-            messages: {
-                'dealer[cnic]': {
-                    maxlength: "Cnic can't be greater then {0} digits without dashes",
-                    minlength: "Cnic can't be less then {0} digits without dashes",
-                }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",

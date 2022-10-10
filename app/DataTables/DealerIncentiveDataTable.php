@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\DealerIncentiveModel;
 use App\Models\RebateIncentiveModel;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
 use Illuminate\Support\Str;
@@ -13,17 +14,17 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use App\Services\Stakeholder\Interface\rebateIncentive;
+use App\Services\DealerIncentive\DealerInterface;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class DealerIncentiveDataTable extends DataTable
 {
 
-    private $rebateIncentive;
+    private $dealerIncentive;
 
-    public function __construct(RebateIncentiveInterface $rebateIncentive)
+    public function __construct(DealerInterface $dealerIncentive)
     {
-        $this->rebateIncentive = $rebateIncentive;
+        $this->dealerIncentive = $dealerIncentive;
     }
 
     /**
@@ -36,29 +37,11 @@ class DealerIncentiveDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('unit_id', function ($rebateIncentive) {
-                return $rebateIncentive->unit->floor_unit_number;
-            })
-            ->editColumn('unit_name', function ($rebateIncentive) {
-                return $rebateIncentive->unit->name;
-            })
-            ->editColumn('stakeholder_id', function ($rebateIncentive) {
-                return $rebateIncentive->stakeholder->full_name;
-            })
-            ->editColumn('stakeholder_cnic', function ($rebateIncentive) {
-                return cnicFormat($rebateIncentive->stakeholder->cnic);
-            })
-            ->editColumn('stakeholder_contact', function ($rebateIncentive) {
-                return $rebateIncentive->stakeholder->contact;
-            })
-            ->editColumn('commision_percentage', function ($rebateIncentive) {
-                return $rebateIncentive->commision_percentage .'%';
-            })
             ->editColumn('dealer_id', function ($rebateIncentive) {
-                return $rebateIncentive->dealer->full_name ;
+                return $rebateIncentive->dealer->full_name;
             })
-            ->editColumn('commision_total', function ($rebateIncentive) {
-                return number_format($rebateIncentive->commision_total) ;
+            ->editColumn('total_dealer_incentive', function ($rebateIncentive) {
+                return number_format($rebateIncentive->total_dealer_incentive);
             })
             ->editColumn('created_at', function ($rebateIncentive) {
                 return editDateColumn($rebateIncentive->created_at);
@@ -67,7 +50,11 @@ class DealerIncentiveDataTable extends DataTable
                 return editDateColumn($rebateIncentive->updated_at);
             })
             ->editColumn('status', function ($rebateIncentive) {
-                return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span><br>
+                <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center" style="margin: 5px"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Approve request" href="'. route('sites.file-managements.dealer-incentive.approve', ['site_id' =>  encryptParams($this->site_id) , 'dealer_incentive_id' =>  encryptParams($rebateIncentive->id)  ]) .'">
+                    Approve Request
+                </a>';
             })
             // ->editColumn('actions', function ($rebateIncentive) {
             //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $rebateIncentive->id]);
@@ -84,7 +71,7 @@ class DealerIncentiveDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(RebateIncentiveModel $model): QueryBuilder
+    public function query(DealerIncentiveModel $model): QueryBuilder
     {
         return $model->newQuery()->where('site_id', $this->site_id);
     }
@@ -139,7 +126,7 @@ class DealerIncentiveDataTable extends DataTable
                         'onclick' => 'deleteSelected()',
                     ])
             )
-            ->rowGroupDataSrc('stakeholder_id')
+            // ->rowGroupDataSrc('stakeholder_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -175,19 +162,12 @@ class DealerIncentiveDataTable extends DataTable
         return [
 
             Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::computed('unit_id')->title('Unit Number')->addClass('text-nowrap text-center'),
-            Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
-            // Column::computed('unit_type')->title('Unit Type')->addClass('text-nowrap text-center'),
-
-            Column::computed('stakeholder_id')->title('Full Name')->addClass('text-nowrap text-center'),
-            Column::computed('stakeholder_cnic')->title('Cnic')->addClass('text-nowrap '),
-            Column::computed('stakeholder_contact')->title('Contact')->addClass('text-nowrap text-center'),
             Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
-            Column::make('deal_type')->title('Deal Type')->addClass('text-nowrap text-center'),
-            Column::computed('commision_percentage')->title('Commision Percentage')->addClass('text-nowrap text-center'),
-            Column::computed('commision_total')->title('Commision Total')->addClass('text-nowrap text-center'),
-            Column::computed('status')->title('Status')->addClass('text-nowrap text-center'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap text-center'),
+            Column::make('dealer_incentive')->title('Dealer Incentive')->addClass('text-nowrap text-center'),
+            Column::make('total_unit_area')->title('Total Unit Area')->addClass('text-nowrap text-center'),
+            Column::make('total_dealer_incentive')->title('Total Incentive')->addClass('text-nowrap '),
+            Column::make('status')->title('Status')->addClass('text-nowrap text-center'),
+            Column::computed('created_at')->title('Created At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
 
 

@@ -73,7 +73,7 @@
                                 <input type="checkbox" checked name="checkAttachment" class="form-check-input"
                                     id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                    Attachement Attached
+                                    Attachment Attached
                                 </label>
                             </div>
                         </div>

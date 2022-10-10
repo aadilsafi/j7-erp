@@ -67,7 +67,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                                 <div class="row mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_label">Attachement
+                                        <label class="form-label fs-5" for="expense_label">Attachment
                                             label</label>
                                         <input type="text" class="form-control form-control-lg" id="expense_label"
                                             name="attachments[attachment_label]" value="{{ $label->label }}" disabled

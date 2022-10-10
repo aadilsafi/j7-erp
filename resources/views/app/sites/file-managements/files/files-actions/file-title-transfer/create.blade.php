@@ -78,7 +78,7 @@
                                 <input type="checkbox" name="checkAttachment" class="form-check-input" value="1"
                                     id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                    Attachement Attached
+                                    Attachment Attached
                                 </label>
                             </div>
                         </div>
@@ -303,7 +303,7 @@
                         },
                         'amount_to_be_paid' : {
                             required: true,
-                           
+
                         },
                         'amount_remarks' : {
                             required: true
@@ -344,7 +344,7 @@
                         },
                         'stackholder[address]':{
                             required: true
-                        },  
+                        },
                     },
                     messages: {
                         'stackholder[cnic]': {

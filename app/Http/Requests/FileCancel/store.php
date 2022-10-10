@@ -34,9 +34,9 @@ class store extends FormRequest
     public function messages()
     {
         return [
-            'attachments' => 'Attachments Required if you check Attachements Attached.',
-            'attachments.*.attachment_label' => "Attachments Label Required if you check Attachements Attached.",
-            'attachments.*.image' => "Attachments Image Required if you check Attachements Attached.",
+            'attachments' => 'Attachments Required if you check Attachments Attached.',
+            'attachments.*.attachment_label' => "Attachments Label Required if you check Attachments Attached.",
+            'attachments.*.image' => "Attachments Image Required if you check Attachments Attached.",
         ];
     }
 }

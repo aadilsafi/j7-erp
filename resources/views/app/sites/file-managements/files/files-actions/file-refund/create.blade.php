@@ -73,7 +73,7 @@
                                 <input type="checkbox" name="checkAttachment" class="form-check-input" value="1"
                                     id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                    Attachement Attached
+                                    Attachment Attached
                                 </label>
                             </div>
                         </div>
@@ -175,7 +175,7 @@
                 });
             });
         }
-       
+
         var checkbtn = $('#colorCheck3').is(':checked')
         formValidations();
 

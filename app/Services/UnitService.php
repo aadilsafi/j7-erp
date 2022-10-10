@@ -107,8 +107,8 @@ class UnitService implements UnitInterface
         })->dispatch();
 
         (new UserBatch())->create([
-            'site_id' => $this->site_id,
-            'user_id' => $this->user_id,
+            'site_id' => decryptParams($site_id),
+            'user_id' => auth()->user()->id,
             'job_batch_id' => $batch->id,
             'actions' => UserBatchActionsEnum::COPY_UNITS,
             'batch_status' => UserBatchStatusEnum::PENDING,

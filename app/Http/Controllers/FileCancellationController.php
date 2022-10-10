@@ -14,7 +14,7 @@ use App\DataTables\ViewFilesDatatable;
 use App\Models\FileCanecllationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\Http\Requests\FileCancel\store;
-
+use App\Models\Template;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 
 class FileCancellationController extends Controller
@@ -35,6 +35,8 @@ class FileCancellationController extends Controller
     {
         $data = [
             'site_id' => decryptParams($site_id),
+
+            'fileTemplates' => (new Template())->all(),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -189,5 +191,34 @@ class FileCancellationController extends Controller
         }
 
         return redirect()->route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Cancellation Approved');
+    }
+
+    public function printPage($site_id, $file_id, $template_id)
+    {
+        
+        $file_cancel = (new FileCanecllation())->find(decryptParams($file_id));
+        $unit = json_decode($file_cancel->unit_data);
+        $template = Template::find(decryptParams($template_id));
+
+        // dd($unit->CancelsalesPlan);
+        // if (isset($unit->salesPlan[0])) {
+        //     $receipts = Receipt::where('unit_id', $unit->id)->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+        // } else {
+        //     $receipts = Receipt::where('unit_id', $unit->id)->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
+        // }
+
+        // $total_paid_amount = $receipts->sum('amount_in_numbers');
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'unit' => $unit,
+            'customer' => json_decode($file_cancel->stakeholder_data),
+            'cancellation_file' => $file_cancel,
+            // 'total_paid_amount' => $total_paid_amount,
+        ];
+
+        $printFile = 'app.sites.file-managements.files..templates.'. $template->slug;
+        
+        return view($printFile, compact('data'));
     }
 }

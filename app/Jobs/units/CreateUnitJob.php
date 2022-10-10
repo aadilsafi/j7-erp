@@ -38,13 +38,13 @@ class CreateUnitJob implements ShouldQueue
     public function handle()
     {
         DB::transaction(function () {
-            foreach ($this->data as $key => $value) {
-                $prevRecord = (new Unit)->where('floor_id', $value['floor_id'])->where('unit_number', $value['unit_number'])->first();
-                if($prevRecord) {
-                    throw new Exception('Unit already exists');
-                }
-                (new Unit())->create($value);
+            sleep(5);
+            $prevRecord = (new Unit)->where('floor_id', $this->data['floor_id'])->where('unit_number', $this->data['unit_number'])->first();
+            if ($prevRecord) {
+                $exception = new Exception('Unit already exists');
+                $this->fail($exception);
             }
+            (new Unit())->create($this->data);
         });
     }
 }

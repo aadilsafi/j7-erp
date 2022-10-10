@@ -20,11 +20,17 @@ class TemplatesSeeder extends Seeder
             [
                 'name' => 'Application Form',
                 'slug' => 'application_form_template',
-                'image' => '/images/Templates/application_form_template.png',
+                'image' => '/images/templates/application_form_template.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'File Cancellation Form',
+                'slug' => 'file_cancellation_template',
+                'image' => '/images/templates/file_cancellation_template.jpg',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

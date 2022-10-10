@@ -946,6 +946,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.file-cancellation.print',
+                'show_name' => 'Print File Cancellation',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File resale
             [
                 'name' => 'sites.file-managements.file-resale.index',

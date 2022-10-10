@@ -394,6 +394,10 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_cancellation_id}/{template_id}', [FileCancellationController::class, 'printPage'])->name('print');
+
+
                     });
 
                     // file resalse

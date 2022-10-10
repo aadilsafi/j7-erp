@@ -49,6 +49,11 @@
             {{-- <form action="{{ route('sites.file-managements.destroy-selected', ['site_id' => $site_id]) }}" id="file-managements-table-form" method="get"> --}}
             {{ $dataTable->table() }}
             {{-- </form> --}}
+
+             {{-- Printing Modal --}}
+             @include('app.sites.file-managements.files.files-actions.file-cancellation.partials.print-templates', [
+                'fileTemplates' => $fileTemplates,
+            ])
         </div>
     </div>
 
@@ -107,6 +112,23 @@
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
                 });
             }
+        }
+
+        function openTemplatesModal(file_id) {
+            $('#file_id').val(file_id);
+            $('#modal-sales-plan-template').modal('show');
+        }
+
+        function printTemplate(template_id) {
+            let file_id = $('#file_id').val();
+            
+            let url =
+                "{{ route('sites.file-managements.file-cancellation.print', ['site_id' => encryptParams($site_id), 'file_cancellation_id' => ':file_id', 'template_id' =>  ':template_id']) }}"
+                .replace(':file_id', file_id)
+                .replace(':template_id', template_id)
+                
+            window.open(url, '_blank').focus();
+           
         }
     </script>
 @endsection

@@ -18,9 +18,13 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="status_id">Unit Status</label>
-                <select class="select2-size-lg form-select" id="status_id" name="status_id">
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                    <input type="hidden" name="status_id" value="{{ $unit->status_id }}">
+                @endif
+                <select class="select2-size-lg form-select" id="status_id" name="status_id"
+                    {{ isset($unit) && count($unit->salesPlan) && $unit->salesPlan[0]->status == 1 ? 'disabled' : null }}>
                     @foreach ($statuses as $row)
-                        @continue($row->id != 1)
+                        @continue(!isset($unit) && $row->id != 1)
                         <option value="{{ $row->id }}"
                             {{ (isset($unit) ? $unit->status_id : old('status_id')) == $row->id ? 'selected' : '' }}>
                             {{ $loop->index + 1 }} - {{ $row->name }}</option>

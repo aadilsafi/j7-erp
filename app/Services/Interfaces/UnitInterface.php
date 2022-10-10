@@ -7,7 +7,7 @@ interface UnitInterface
     public function model();
 
     public function getByAll($site_id, $floor_id);
-    public function getById($site_id, $floor_id, $id);
+    public function getById($site_id, $floor_id, $id, $relationships = []);
 
     public function store($site_id, $floor_id, $inputs, $isUnitActive = true);
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false);

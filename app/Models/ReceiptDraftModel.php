@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
 
 class ReceiptDraftModel extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -35,5 +37,10 @@ class ReceiptDraftModel extends Model implements HasMedia
         'status',
         'bank_details',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
 }

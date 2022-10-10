@@ -60,6 +60,17 @@
                                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
                                                 style="width: 100%"></div>
                                         </div>
+                                        {{-- <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+                                                15%
+                                            </div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                                                50%
+                                            </div>
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                                10%
+                                            </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             @empty
@@ -131,8 +142,6 @@
                 }
             }
         });
-
-        window.clearInterval(interval_id);
     }
 
     function QueueCompletedAction(progressBarID) {

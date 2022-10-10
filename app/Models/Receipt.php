@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Receipt extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia;
+    use HasFactory , InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -43,6 +45,11 @@ class Receipt extends Model implements HasMedia
         'receipts.mode_of_payment' => 'required',
         'receipts.amount_in_numbers' => 'required',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function site()
     {

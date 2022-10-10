@@ -5,14 +5,13 @@ namespace App\Jobs\units;
 use App\Models\Floor;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Facades\CauserResolver;
+use Spatie\Activitylog\Models\Activity;
 
 class MainUnitJob implements ShouldQueue
 {
@@ -44,6 +43,7 @@ class MainUnitJob implements ShouldQueue
      */
     public function handle()
     {
+        sleep(5);
         $data = [];
         $jobs = [];
         $floor = (new Floor())->find($this->floor_id);
@@ -51,7 +51,7 @@ class MainUnitJob implements ShouldQueue
         $unitNumberDigits = $floor->site->siteConfiguration->unit_number_digits;
 
         for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
-            $data[] = [
+            $job = [
                 'floor_id' => $this->floor_id,
                 'name' => 'Unit ' . $i,
                 'width' => $this->inputs['width'],
@@ -72,12 +72,7 @@ class MainUnitJob implements ShouldQueue
                 'created_at' => now(),
                 'updated_at' => now()
             ];
+            $this->batch()->add(new CreateUnitJob($job));
         }
-
-        $jobs = array_map(function ($data) {
-            return new CreateUnitJob($data);
-        }, array_chunk($data, 5));
-
-        $this->batch()->add($jobs);
     }
 }

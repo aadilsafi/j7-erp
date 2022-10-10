@@ -449,7 +449,7 @@ Route::group([
                             Route::group(['prefix' => 'files', 'as' => 'files.'], function () {
                                 Route::get('/', [FileManagementController::class, 'index'])->name('index');
 
-                                Route::get('/show', [FileManagementController::class, 'show'])->name('show');
+                                Route::get('/show/{file_id}', [FileManagementController::class, 'show'])->name('show');
 
                                 Route::get('create', [FileManagementController::class, 'create'])->name('create');
                                 Route::post('store', [FileManagementController::class, 'store'])->name('store');

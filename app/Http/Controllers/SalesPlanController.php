@@ -14,11 +14,12 @@ use Carbon\{Carbon, CarbonPeriod};
 use App\Services\LeadSource\LeadSourceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
-use App\Jobs\SalesPlan\ApprovedSalesPlanNotificationJob;
+use App\Notifications\ApprovedSalesPlanNotification;
 use App\Services\AdditionalCosts\AdditionalCostInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class SalesPlanController extends Controller
 {
@@ -227,7 +228,7 @@ class SalesPlanController extends Controller
             'url' => str_replace('/approve-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
+        Notification::send($user, new ApprovedSalesPlanNotification($notificaionData));
 
         return response()->json([
             'success' => true,
@@ -250,7 +251,7 @@ class SalesPlanController extends Controller
             'url' => str_replace('/disapprove-sales-plan', '', $currentURL),
         ];
 
-        ApprovedSalesPlanNotificationJob::dispatch($notificaionData, $user)->delay(Carbon::now()->addMinutes(1));
+        Notification::send($user, new ApprovedSalesPlanNotification($notificaionData));
 
         return response()->json([
             'success' => true,

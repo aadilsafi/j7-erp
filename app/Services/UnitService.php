@@ -3,11 +3,17 @@
 namespace App\Services;
 
 use App\Jobs\units\MainUnitJob;
-use App\Models\Floor;
-use App\Models\Unit;
+use App\Models\{
+    Floor,
+    Unit,
+};
+use App\Notifications\DefaultNotification;
 use App\Services\Interfaces\UnitInterface;
-use Illuminate\Support\Facades\Bus;
+use Illuminate\Bus\Batch;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Facades\CauserResolver;
+use Illuminate\Support\Facades\{Notification, Bus};
+
 
 class UnitService implements UnitInterface
 {
@@ -77,11 +83,25 @@ class UnitService implements UnitInterface
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {
 
+        $user = auth()->user();
         $inputs['total_price'] = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
+
+        CauserResolver::setCauser($user);
 
         $batch = Bus::batch([
             new MainUnitJob($site_id, $floor_id, $inputs, $isUnitActive),
-        ])->dispatch();
+        ])->finally(function (Batch $batch) use ($site_id, $floor_id, $user) {
+            $site_id = decryptParams($site_id);
+            $floor_id = decryptParams($floor_id);
+
+            $data = [
+                'title' => 'Job Done!',
+                'message' => 'Unit Construction Completed',
+                'description' => 'Unit Construction Completed',
+                'url' => route('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]),
+            ];
+            Notification::send($user, new DefaultNotification($data));
+        })->dispatch();
 
         return $batch;
     }

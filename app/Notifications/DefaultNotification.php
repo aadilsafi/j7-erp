@@ -7,12 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
+class DefaultNotification extends Notification
 {
     use Queueable;
 
     protected $data;
-
     /**
      * Create a new notification instance.
      *
@@ -57,13 +56,7 @@ class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return [
-            //
-            'title' => $this->data['title'],
-            'message' => $this->data['message'],
-            'description' => $this->data['description'],
-            'url' => $this->data['url'],
-        ];
+        return $this->data;
     }
 
     /**
@@ -75,7 +68,7 @@ class ApprovedSalesPlanNotification extends Notification implements ShouldQueue
     public function withDelay($notifiable)
     {
         return [
-            'database' => now()->addMinutes(1),
+            'database' => now()->addSecond(2),
         ];
     }
 }

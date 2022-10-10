@@ -17,6 +17,8 @@ use App\Services\{
     UserBatchService,
 };
 use App\Services\AdditionalCosts\{AdditionalCostInterface, AdditionalCostService};
+use App\Services\DealerIncentive\DealerInterface;
+use App\Services\DealerIncentive\DealerService;
 use App\Services\FileManagements\{FileManagementInterface, FileManagementService};
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackService;
@@ -69,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CancellationInterface::class, CancellationService::class);
         $this->app->bind(ResaleInterface::class, ResaleService::class);
         $this->app->bind(TitleTransferInterface::class, TitleTransferService::class);
+        $this->app->bind(DealerInterface::class, DealerService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

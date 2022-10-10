@@ -335,7 +335,7 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Address"
+                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Comments"
                             rows="5">{{ $customer->comments }}</textarea>
                     </div>
                 </div>

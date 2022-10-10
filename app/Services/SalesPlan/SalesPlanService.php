@@ -270,7 +270,7 @@ class SalesPlanService implements SalesPlanInterface
             'url' => str_replace('/store', '', $currentURL),
         ];
 
-        GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
+        // GeneratedSalesPlanNotificationJob::dispatch($notificaionData, $specificUsers)->delay(Carbon::now()->addMinutes(1));
 
         return $salesPlan;
     }

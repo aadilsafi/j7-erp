@@ -6,9 +6,12 @@ use App\Jobs\units\MainUnitJob;
 use App\Models\{
     Floor,
     Unit,
+    UserBatch,
 };
 use App\Notifications\DefaultNotification;
 use App\Services\Interfaces\UnitInterface;
+use App\Utils\Enums\UserBatchActionsEnum;
+use App\Utils\Enums\UserBatchStatusEnum;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\CauserResolver;
@@ -102,6 +105,14 @@ class UnitService implements UnitInterface
             ];
             Notification::send($user, new DefaultNotification($data));
         })->dispatch();
+
+        (new UserBatch())->create([
+            'site_id' => $this->site_id,
+            'user_id' => $this->user_id,
+            'job_batch_id' => $batch->id,
+            'actions' => UserBatchActionsEnum::COPY_UNITS,
+            'batch_status' => UserBatchStatusEnum::PENDING,
+        ]);
 
         return $batch;
     }

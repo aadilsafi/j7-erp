@@ -73,7 +73,7 @@
                                 <input type="checkbox" checked name="checkAttachment" class="form-check-input"
                                     id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
-                                    Attachement Attached
+                                    Attachment Attached
                                 </label>
                             </div>
                         </div>
@@ -131,6 +131,14 @@
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
         );
+
+        $("#payment_due_date").flatpickr({
+            defaultDate: "today",
+            minDate: "today",
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
 
         $(".expenses-list").repeater({
             initEmpty: true,

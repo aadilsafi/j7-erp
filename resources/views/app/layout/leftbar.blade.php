@@ -423,7 +423,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    @can('sites.accounts.recovery.salesPlan')
+                                    {{-- @can('sites.accounts.recovery.salesPlan')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -432,7 +432,7 @@
                                                 <span class="menu-title text-truncate" data-i18n="Sales Plans">Sales Plans</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endcan --}}
                                     @can('sites.accounts.recovery.calender')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">

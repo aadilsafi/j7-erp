@@ -48,7 +48,7 @@
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
                     <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         <div class="card-body">
                             <div class="row g-1">

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sales_plan_id')->constrained();
             $table->string('details')->nullable();
-            $table->string('date')->nullable();
+            $table->datetime('date')->nullable();
             $table->double('amount')->default(0);
             $table->double('paid_amount')->default(0);
             $table->double('remaining_amount')->default(0);

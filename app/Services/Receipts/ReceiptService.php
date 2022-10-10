@@ -221,12 +221,8 @@ class ReceiptService implements ReceiptInterface
         $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
         $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
 
-        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('date', '<=', $approved_sales_plan_date)->get();
-        $total_committed_amount = $total_committed_amount->sum('amount');
-
-
-        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('date',$approved_sales_plan_date)->get();
-        $total_committed_amount = $total_committed_amount->sum('amount');
+        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=',$approved_sales_plan_date)->get();
+        $total_committed_amount = collect($total_committed_amount)->sum('amount');
 
         if ($total_paid_amount >= $token_price) {
             $unit->status_id = 2;

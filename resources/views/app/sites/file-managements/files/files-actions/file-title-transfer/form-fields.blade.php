@@ -13,19 +13,22 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges</label>
                         <input type="text" min="1" onchange="calculateTransferAmount()" required
                             name="transfer_rate" class="form-control form-control-lg"
-                            {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate" placeholder="Transfer Charges"
+                            {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate"
+                            placeholder="Transfer Charges"
                             value="{{ isset($transfer_file) ? number_format($transfer_file->transfer_rate) : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
-                            {{ isset($transfer_file) ? 'disabled' : '' }} id="payment_due_date" placeholder="Payment Due Date"
+                            {{ isset($transfer_file) ? 'disabled' : '' }} id="payment_due_date"
+                            placeholder="Payment Due Date"
                             value="{{ isset($transfer_file) ? $transfer_file->payment_due_date : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Transfer Amount Remarks</label>
                         <input type="text" name="amount_remarks" required class="form-control form-control-lg"
-                            id="remarks" {{ isset($transfer_file) ? 'disabled' : '' }} placeholder="Transfer Amount Remarks"
+                            id="remarks" {{ isset($transfer_file) ? 'disabled' : '' }}
+                            placeholder="Transfer Amount Remarks"
                             value="{{ isset($transfer_file) ? $transfer_file->amount_remarks : '' }}" />
                     </div>
                 </div>
@@ -41,15 +44,13 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Unit Area</label>
                         <input type="text" disabled required name="unit_area" class="form-control form-control-lg"
-                            id="unit_area" placeholder=" Unit Area"
-                            value="{{ number_format($unit->gross_area) }} "/>
+                            id="unit_area" placeholder=" Unit Area" value="{{ number_format($unit->gross_area) }} " />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges To Be Paid </label>
                         <input type="text" readonly required name="amount_to_be_paid"
-                            class="form-control form-control-lg"
-                            id="amount_to_be_paid" placeholder="Amount to be Paid"
+                            class="form-control form-control-lg" id="amount_to_be_paid" placeholder="Amount to be Paid"
                             value="{{ isset($transfer_file) ? number_format($transfer_file->amount_to_be_paid) : '' }}" />
                     </div>
                 </div>
@@ -194,30 +195,34 @@
                     {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif type="text" class="form-control form-control-lg" id="stackholder_full_name"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_full_name"
                             name="stackholder[full_name]" placeholder="Full Name"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->full_name : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->full_name : '' }}" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_father_name"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_father_name"
                             name="stackholder[father_name]" placeholder="Father Name"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->father_name : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->father_name : '' }}" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_occupation"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_occupation"
                             name="stackholder[occupation]" placeholder="Occupation"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->occupation : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->occupation : '' }}" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif  type="text" class="form-control form-control-lg" id="stackholder_designation"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_designation"
                             name="stackholder[designation]" placeholder="Designation"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->designation : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->designation : '' }}" />
                     </div>
                 </div>
 
@@ -225,36 +230,39 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif   name="stackholder[ntn]"
-                            class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}"/>
+                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
+                            name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
+                            placeholder="NTN"
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                        <input  @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif  type="number" class="form-control form-control-lg" id="stackholder_cnic"
+                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
+                            type="number" class="form-control form-control-lg" id="stackholder_cnic"
                             name="stackholder[cnic]" placeholder="CNIC"
-                            value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input @if (isset($titleTransferPerson)) disabled   type="text" @else type="number" @endif  type="number" class="form-control form-control-lg" id="stackholder_contact"
+                        <input @if (isset($titleTransferPerson)) disabled   type="text" @else type="number" @endif
+                            type="number" class="form-control form-control-lg" id="stackholder_contact"
                             name="stackholder[contact]" placeholder="Contact"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}" />
                     </div>
                 </div>
 
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea @if (isset($titleTransferPerson)) disabled @endif  class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                            placeholder="Address" rows="5"> {{ isset($titleTransferPerson) ? $titleTransferPerson->address : '' }}</textarea>
+                        <textarea @if (isset($titleTransferPerson)) disabled @endif class="form-control form-control-lg"
+                            id="stackholder_address" name="stackholder[address]" placeholder="Address" rows="5"> {{ isset($titleTransferPerson) ? $titleTransferPerson->address : '' }}</textarea>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea @if (isset($titleTransferPerson)) disabled @endif  class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
-                            placeholder="Comments" rows="5">{{ isset($titleTransferPerson) ? $titleTransferPerson->comments : '' }}</textarea>
+                        <textarea @if (isset($titleTransferPerson)) disabled @endif class="form-control form-control-lg"
+                            id="stackholder_comments" name="stackholder[comments]" placeholder="Comments" rows="5">{{ isset($titleTransferPerson) ? $titleTransferPerson->comments : '' }}</textarea>
                     </div>
                 </div>
             </div>
@@ -270,7 +278,7 @@
             </div>
 
             <div class="card-body">
-
+                {{-- @dd($customer) --}}
                 <div class="row mb-1">
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
@@ -426,7 +434,14 @@
                                         </thead>
                                         <tbody id="dynamic_installment_rows">
                                             @if (isset($unit->salesPlan[0]))
-                                                @foreach ($unit->salesPlan[0]['installments'] as $intsallment)
+                                                @php
+                                                    $imstallments = collect($unit->salesPlan[0]['installments'])
+                                                        ->sortBy('installment_order')
+                                                        ->values()
+                                                        ->all();
+                                                @endphp
+
+                                                @foreach ($imstallments as $intsallment)
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $loop->index + 1 }}</td>
                                                         <td>{{ $intsallment->details }}</td>
@@ -440,7 +455,13 @@
                                                     </tr>
                                                 @endforeach
                                             @else
-                                                @foreach ($unit->CancelsalesPlan[0]['installments'] as $intsallment)
+                                                @php
+                                                    $imstallments = collect($unit->CancelsalesPlan[0]['installments'])
+                                                        ->sortBy('installment_order')
+                                                        ->values()
+                                                        ->all();
+                                                @endphp
+                                                @foreach ($imstallments as $intsallment)
                                                     <tr class="text-center text-nowrap">
                                                         <td>{{ $loop->index + 1 }}</td>
                                                         <td>{{ $intsallment->details }}</td>

@@ -270,6 +270,7 @@ Breadcrumbs::for('sites.file-managements.customers.units.files.viewFile', functi
     $trail->parent('sites.file-managements.customers', $site_id);
     $trail->push('View File', route('sites.file-managements.customers.units.files.create', ['site_id' => $site_id, 'customer_id' => $customer_id, 'unit_id' => $unit_id]));
 });
+
 //Rebate Incentive Breadcrumbs Main
 Breadcrumbs::for('sites.file-managements.rebate-incentive.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
@@ -279,6 +280,17 @@ Breadcrumbs::for('sites.file-managements.rebate-incentive.index', function (Brea
 Breadcrumbs::for('sites.file-managements.rebate-incentive.create', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.file-managements.rebate-incentive.index', $site_id);
     $trail->push('Create Rebate Incentive', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
+});
+
+//Dealer Incentive Breadcrumbs Main
+Breadcrumbs::for('sites.file-managements.dealer-incentive.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Dealer Incentive Details', route('sites.file-managements.dealer-incentive.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-managements.dealer-incentive.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-managements.dealer-incentive.index', $site_id);
+    $trail->push('Create Dealer Incentive', route('sites.file-managements.dealer-incentive.index', ['site_id' => $site_id]));
 });
 
 

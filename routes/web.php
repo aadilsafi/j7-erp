@@ -35,6 +35,7 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -362,6 +363,10 @@ Route::group([
 
                         Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-data', [DealerIncentiveController::class, 'getData'])->name('get-data');
+                        });
                     });
 
                     // file refund
@@ -486,7 +491,6 @@ Route::group([
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
                     });
-
                 });
             });
         });
@@ -523,3 +527,7 @@ Route::get('/read-all-notifications', [NotificationController::class, 'readAllNo
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
 
 Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
+
+Route::get('/logs', function () {
+    return Activity::latest()->get();
+});

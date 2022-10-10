@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use App\Models\StakeholderType;
+use App\Models\RebateIncentiveModel;
+use App\DataTables\DealerIncentiveDataTable;
+use App\Models\Stakeholder;
 
 class DealerIncentiveController extends Controller
 {
@@ -11,9 +16,14 @@ class DealerIncentiveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(DealerIncentiveDataTable $dataTable, Request $request, $site_id)
     {
         //
+        $data = [
+            'site_id' => decryptParams($site_id),
+        ];
+
+        return $dataTable->with($data)->render('app.sites.file-managements.files.dealer-incentive.index', $data);
     }
 
     /**
@@ -21,9 +31,21 @@ class DealerIncentiveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
-        //
+
+        if (!request()->ajax()) {
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
+                'rebate_files' => RebateIncentiveModel::pluck('id')->toArray(),
+                'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                'stakeholders' => Stakeholder::where('site_id',decryptParams($site_id))->with('dealer_stakeholder','stakeholder_types')->get(),
+            ];
+            return view('app.sites.file-managements.files.dealer-incentive.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -35,6 +57,7 @@ class DealerIncentiveController extends Controller
     public function store(Request $request)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -80,5 +103,17 @@ class DealerIncentiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getData(Request $request)
+    {
+        $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id',$request->dealer_id)->get();
+        foreach($rebate_incentives as $Units){
+            $units[] = Unit::find($Units->unit_id);
+        }
+        return response()->json([
+            'success' => true,
+            'units' => $units,
+        ], 200);
     }
 }

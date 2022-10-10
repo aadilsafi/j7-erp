@@ -2,6 +2,7 @@
 
 namespace App\Services\SalesPlan;
 
+use App\Exceptions\GeneralException;
 use Exception;
 use App\Models\User;
 use Carbon\{Carbon, CarbonPeriod};
@@ -84,8 +85,8 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
 
-            if($this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
-                throw new Exception('Stakeholder CNIC already exists');
+            if($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+                throw new GeneralException('Stakeholder CNIC already exists');
             }
 
             $stakeholderData = [

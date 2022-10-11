@@ -316,7 +316,7 @@
             for (let i = parseInt(a); i <= parseInt(b); i++) {
                 $('#shortLabelForm').append(
                     '<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor (' + i +
-                    ')*</label><input type="text" required class="form-control mb-2" name="shortLabel[' + i +
+                    ')<span class="text-danger">*</span></label><input type="text" required class="form-control mb-2" value="' + i + 'F" name="shortLabel[' + i +
                     ']" placeholder="Short label for floor ' + i + '">');
             }
         }

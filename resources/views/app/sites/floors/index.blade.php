@@ -191,13 +191,13 @@
                         className: 'text-center',
                     },
                     {
-                        data: 'units_dp_count',
-                        name: 'units_dp_count',
+                        data: 'units_hold_count',
+                        name: 'units_hold_count',
                         className: 'text-center',
                     },
                     {
-                        data: 'units_hold_count',
-                        name: 'units_hold_count',
+                        data: 'units_dp_count',
+                        name: 'units_dp_count',
                         className: 'text-center',
                     },
                     {

@@ -26,4 +26,9 @@ class DealerIncentiveModel extends Model
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
+    public function dealer()
+    {
+        return $this->belongsTo(Stakeholder::class,'dealer_id','id');
+    }
 }

@@ -364,6 +364,8 @@ Route::group([
                         Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
 
+                        Route::get('approve/{dealer_incentive_id}', [DealerIncentiveController::class, 'approve'])->name('approve');
+
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-data', [DealerIncentiveController::class, 'getData'])->name('get-data');
                         });

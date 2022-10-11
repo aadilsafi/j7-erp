@@ -845,6 +845,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.dealer-incentive.approve',
+                'show_name' => 'Approve Dealer Incentive',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // File Refund
             [
                 'name' => 'sites.file-managements.file-refund.index',

@@ -155,7 +155,7 @@ class FileReleaseController extends Controller
             'rebate_incentive' => $rebate_incentive,
             'rebate_total' => $rebate_total,
         ];
-        // dd($data);
+        // dd($data['unit']['salesPlan']);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);
     }
 
@@ -229,7 +229,7 @@ class FileReleaseController extends Controller
     {
 
         $file_refund = (new FileResale())->find(decryptParams($file_id));
-       
+
         $template = Template::find(decryptParams($template_id));
 
         $data = [
@@ -237,7 +237,7 @@ class FileReleaseController extends Controller
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
-        
+
         return view($printFile, compact('data'));
     }
 }

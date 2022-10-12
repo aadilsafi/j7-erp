@@ -3,9 +3,6 @@
 namespace App\Services\CustomFields;
 
 use App\Models\CustomField;
-use App\Models\Permission;
-use App\Services\CustomFields\PermissionInterface;
-
 
 class CustomFieldService implements CustomFieldInterface
 {
@@ -15,19 +12,17 @@ class CustomFieldService implements CustomFieldInterface
         return new CustomField();
     }
 
-    // Get
-    public function getByAll()
+    public function getAll($relationships = [])
     {
-        return $this->model()->all();
+        return $this->model()->with($relationships)->get();
     }
 
-    public function getById($id)
+    public function getById($id, $relationships = [])
     {
         $id = decryptParams($id);
-        return $this->model()->find($id);
+        return $this->model()->with($relationships)->find($id);
     }
 
-    // Store
     public function store($inputs)
     {
         $data = [
@@ -38,7 +33,7 @@ class CustomFieldService implements CustomFieldInterface
         return $permission;
     }
 
-    public function update($inputs, $id)
+    public function update($id, $inputs)
     {
 
         $id = decryptParams($id);
@@ -53,17 +48,8 @@ class CustomFieldService implements CustomFieldInterface
 
     public function destroy($id)
     {
-        $id = decryptParams($id);
-        $type = $this->model()->find($id)->delete();
-        return $type;
-    }
-
-    public function destroySelected($ids)
-    {
-        if (!empty($ids)) {
-            // $ids = decryptParams($ids);
-            // dd($ids);
-            $this->model()->whereIn('id', $ids)->delete();
+        if (!empty($id)) {
+            $this->model()->whereIn('id', $id)->delete();
             return true;
         }
         return false;

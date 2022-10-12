@@ -124,6 +124,28 @@
                 </li>
             @endcan
 
+            {{-- Accounts Menu --}}
+            @canany(['sites.settings.custom-fields.index'])
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='settings'></i>
+                        <span class="menu-title text-truncate" data-i18n="Settings">Settings</span>
+                    </a>
+                    <ul class="menu-context">
+                        @can('sites.settings.custom-fields.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.custom-fields.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='list'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Custom Fields">Custom Fields</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+
             @canany(['sites.types.index', 'sites.additional-costs.index', 'sites.floors.index'])
                 <li class="navigation-header">
                     <span data-i18n="Others">Others</span>
@@ -143,7 +165,7 @@
                         @can('sites.stakeholders.index')
                             <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
-                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams(1)]) }}">
+                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='users'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
                                 </a>
@@ -310,7 +332,8 @@
 
                                 <li
                                     class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                    <a class="d-flex align-items-center" href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
                                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
                                         <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
                                             Incentive Form
@@ -407,8 +430,8 @@
                     </a>
                     <ul>
                         @canany(['sites.accounts.recovery.dashboard'])
-                        <li>
-                            <a class="d-flex align-items-center" href="javascript:void(0);">
+                            <li>
+                                <a class="d-flex align-items-center" href="javascript:void(0);">
                                     <i data-feather='dollar-sign'></i>
                                     <span class="menu-title text-truncate" data-i18n="Recovery">Recovery</span>
                                 </a>

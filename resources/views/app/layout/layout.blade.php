@@ -182,6 +182,8 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
+        window.addEventListener('online', () => console.log('Became online'));
+        window.addEventListener('offline', () => console.log('Became offline'));
         // showBlockUI();
         $("#unreadNotification").on('click', function() {
             var id = $(this).attr('getNotificationID');

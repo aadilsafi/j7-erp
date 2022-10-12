@@ -6,14 +6,11 @@ interface CustomFieldInterface
 {
     public function model();
 
-    public function getByAll();
-    public function getById($id);
+    public function getAll($relationships = []);
+    public function getById($id, $relationships = []);
 
     public function store($inputs);
-    public function update($inputs, $id);
+    public function update($id, $inputs);
 
     public function destroy($id);
-
-    public function destroySelected($ids);
-
 }

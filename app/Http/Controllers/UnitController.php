@@ -80,6 +80,25 @@ class UnitController extends Controller
         }
     }
 
+    function fabUnits($site_id, $floor_id)
+    {
+
+        if (!request()->ajax()) {
+            $data = [
+                'site' => (new Site())->find(decryptParams($site_id)),
+                'floor' => (new Floor())->find(decryptParams($floor_id)),
+                'siteConfiguration' => getSiteConfiguration($site_id),
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                'units' => (new Unit())->where('status_id',1)->with('status', 'type')->get(),
+                'types' => $this->unitTypeInterface->getAllWithTree(),
+                'statuses' => (new Status())->all(),
+            ];
+
+            return view('app.sites.floors.units.fab-units.create', $data);
+        } else {
+            abort(403);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -103,7 +122,7 @@ class UnitController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
@@ -442,5 +461,18 @@ class UnitController extends Controller
         } catch (Exception $ex) {
             return apiErrorResponse($ex->getMessage());
         }
+    }
+
+
+    public function getUnitData(Request $request, $site_id, $floor_id){
+ 
+        $unit = (new Unit())->find($request->unit_id);
+        
+        return response()->json([
+            'success' => true,
+            'unit' => $unit,
+            'max_unit_number' => getMaxUnitNumber($unit->floor_id) + 1,
+            'floor_name' => $unit->floor->name
+        ], 200);
     }
 }

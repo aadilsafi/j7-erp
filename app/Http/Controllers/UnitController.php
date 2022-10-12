@@ -7,6 +7,7 @@ use App\Models\{Floor, Site, Status, Unit};
 use App\Services\Interfaces\{UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
+    fabstoreRequest,
     storeRequest as unitStoreRequest,
     updateRequest as unitUpdateRequest
 };
@@ -80,9 +81,11 @@ class UnitController extends Controller
         }
     }
 
-    function fabUnits($site_id, $floor_id)
+    function createfabUnit($site_id, $floor_id)
     {
 
+        abort(403);
+        
         if (!request()->ajax()) {
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
@@ -107,6 +110,29 @@ class UnitController extends Controller
      */
     public function store(unitStoreRequest $request, $site_id, $floor_id)
     {
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->validated();
+                if ($inputs['add_bulk_unit']) {
+                    $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
+                    return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withSuccess('Unit(s) will be contructed shortly!');
+                } else {
+                    $record = $this->unitInterface->store($site_id, decryptParams($floor_id), $inputs);
+                }
+
+                return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function storefabUnit(Request $request, $site_id, $floor_id)
+    {
+        dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();

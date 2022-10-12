@@ -186,7 +186,10 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
                        
-                            Route::get('fab-unit', [UnitController::class, 'fabUnits'])->name('fabUnit');
+                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                                Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
+                                Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
+                            });
 
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');

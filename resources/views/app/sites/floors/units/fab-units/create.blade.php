@@ -29,6 +29,10 @@ encryptParams($floor->id)) }}
         font-size: 15px !important;
         color: #7367f0 !important;
     }
+
+    .hidediv {
+        display: none;
+    }
 </style>
 @endsection
 
@@ -48,7 +52,7 @@ encryptParams($floor->id)) }}
 
 @section('content')
 <form class="form form-vertical"
-    action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
+    action="{{ route('sites.floors.units.fab.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
     method="POST">
 
     <div class="row">
@@ -63,7 +67,6 @@ encryptParams($floor->id)) }}
             'additionalCosts' => $additionalCosts,
             'types' => $types,
             'statuses' => $statuses,
-            'bulkOptions' => true,
             ]) }}
 
         </div>
@@ -99,9 +102,13 @@ encryptParams($floor->id)) }}
 @section('vendor-js')
 <script src="{{ asset('app-assets') }}/vendors/js/extensions/wNumb.min.js"></script>
 <script src="{{ asset('app-assets') }}/vendors/js/extensions/nouislider.min.js"></script>
+<script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+
 @endsection
 
 @section('page-js')
+<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+<script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -134,11 +141,13 @@ encryptParams($floor->id)) }}
                         $('#total_price1').val(response.unit.total_price);
                         $('#unit_number').val(response.max_unit_number);
                         $('#floor_name').val(response.floor_name);
+                       
+                         $('.hidediv').show();
 
                         hideBlockUI('#loader');
-
                     } else {
                         hideBlockUI('#loader');
+                        
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -348,5 +357,18 @@ encryptParams($floor->id)) }}
 
             });
         });
+
+        $(".fab-units").repeater({
+                // initEmpty: true,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            });
 </script>
 @endsection

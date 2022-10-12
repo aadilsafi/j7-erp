@@ -87,7 +87,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="values">Field Values <span
                         class="text-danger"></span></label>
-                <select class="form-select" id="values" name="values" multiple></select>
+                <select class="form-select" id="values" name="values[]" multiple></select>
                 @error('values')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -235,8 +235,3 @@
 
     </div>
 </div>
-
-'min',
-'max',
-'minlength',
-'maxlength',

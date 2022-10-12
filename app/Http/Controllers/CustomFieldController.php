@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\CustomFieldsDataTable;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Utils\Enums\CustomFieldsEnum;
+use Exception;
 use Illuminate\Http\Request;
 
 class CustomFieldController extends Controller
@@ -41,6 +42,21 @@ class CustomFieldController extends Controller
             return view('app.sites.settings.custom-fields.create', $data);
         } else {
             abort(403);
+        }
+    }
+
+    public function store(store $request, $site_id)
+    {
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->validated();
+                $record = $this->unitTypeInterface->store($site_id, $inputs);
+                return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
         }
     }
 }

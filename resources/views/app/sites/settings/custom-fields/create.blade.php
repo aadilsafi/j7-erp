@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.lead-sources.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.custom-fields.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create Lead Sources')
+@section('page-title', 'Create Custom Fields')
 
 @section('page-vendor')
 @endsection
@@ -19,9 +19,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Lead Sources</h2>
+                <h2 class="content-header-title float-start mb-0">Create Custom Fields</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.lead-sources.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.settings.custom-fields.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -29,14 +29,17 @@
 @endsection
 
 @section('content')
-    <form class="form form-vertical" action="{{ route('sites.lead-sources.store', ['site_id' => encryptParams($site_id)]) }}"
-        method="POST">
+    <form class="form form-vertical"
+        action="{{ route('sites.settings.custom-fields.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.lead-sources.form-fields') }}
+                {{ view('app.sites.settings.custom-fields.form-fields', [
+                    'fieldTypes' => $fieldTypes,
+                    'models' => $models,
+                ]) }}
 
             </div>
 
@@ -49,11 +52,11 @@
                                     <button type="submit"
                                         class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
                                         <i data-feather='save'></i>
-                                        Save Lead Source
+                                        Save Custom Field
                                     </button>
                                 </div>
                                 <div class="col-md-12">
-                                    <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"
+                                    <a href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
                                         {{ __('lang.commons.cancel') }}
@@ -76,4 +79,16 @@
 @endsection
 
 @section('custom-js')
+    <script>
+        e = $("#values");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+            tags: true,
+            multiple: true,
+        });
+    </script>
 @endsection

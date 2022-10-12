@@ -398,3 +398,8 @@ Breadcrumbs::for('sites.settings.custom-fields.index', function (BreadcrumbTrail
     $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
     $trail->push('Custom Fields', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
 });
+
+Breadcrumbs::for('sites.settings.custom-fields.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.settings.custom-fields.index', $site_id);
+    $trail->push('Create Custom Fields', route('sites.settings.custom-fields.create', ['site_id' => $site_id]));
+});

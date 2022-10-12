@@ -244,8 +244,17 @@ class SalesPlanController extends Controller
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 2;
-        $salesPlan->save();
+
+        if ($salesPlan->status == 1) {
+            $salesPlan->unit->status_id = 1;
+            $salesPlan->unit->save();
+
+            $salesPlan->status = 3;
+            $salesPlan->save();
+        } else {
+            $salesPlan->status = 2;
+            $salesPlan->save();
+        }
 
         $currentURL = URL::current();
         $notificaionData = [

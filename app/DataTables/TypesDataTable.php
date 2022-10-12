@@ -111,6 +111,7 @@ class TypesDataTable extends DataTable
             ->minifiedAjax()
             ->serverSide()
             ->processing()
+            ->scrollX()
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])

@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\CustomField;
 use App\Models\Unit;
 use App\Models\Floor;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -27,23 +28,17 @@ class CustomFieldsDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('check', function ($unit) {
-                return $unit;
+            ->editColumn('check', function ($customField) {
+                return $customField;
             })
-            ->editColumn('status_id', function ($unit) {
-                return editBadgeColumn($unit->status->name);
+            ->editColumn('created_at', function ($customField) {
+                return editDateColumn($customField->created_at);
             })
-            ->editColumn('type_id', function ($unit) {
-                return $unit->type->name;
+            ->editColumn('updated_at', function ($customField) {
+                return editDateColumn($customField->updated_at);
             })
-            ->editColumn('created_at', function ($unit) {
-                return editDateColumn($unit->created_at);
-            })
-            ->editColumn('updated_at', function ($unit) {
-                return editDateColumn($unit->updated_at);
-            })
-            ->editColumn('actions', function ($unit) {
-                return view('app.sites.floors.units.actions', ['site_id' => $unit->floor->site->id, 'floor_id' => $unit->floor_id, 'id' => $unit->id, 'status' => $unit->status->id]);
+            ->editColumn('actions', function ($customField) {
+                return view('app.sites.settings.custom-fields.actions');
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -52,70 +47,61 @@ class CustomFieldsDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Unit $model
+     * @param \App\Models\CustomField $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Unit $model): QueryBuilder
+    public function query(CustomField $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status'])->whereFloorId($this->floor->id)->whereActive(true);
+        return $model->newQuery();
     }
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
+        $createPermission = auth()->user()->can('sites.settings.custom-fields.index');
+        $selectedDeletePermission = auth()->user()->can('sites.settings.custom-fields.destroy-selected');
+
+        $buttons = [];
+
+        if ($createPermission) {
+            $buttons[] = Button::raw('add-new')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+        }
+
+        $buttons = array_merge($buttons, [
+            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('print')->addClass('dropdown-item'),
+                Button::make('copy')->addClass('dropdown-item'),
+                Button::make('csv')->addClass('dropdown-item'),
+                Button::make('excel')->addClass('dropdown-item'),
+                Button::make('pdf')->addClass('dropdown-item'),
+            ]),
+            Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+        ]);
+
+        if ($selectedDeletePermission) {
+            $buttons[] = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                ->attr([
+                    'onclick' => 'deleteSelected()',
+                ]);
+        }
+
         return $this->builder()
             ->addTableClass(['table-striped', 'table-hover'])
-            ->setTableId('floors-units-table')
+            ->setTableId('custom-fields-table')
             ->columns($this->getColumns())
             ->deferRender()
             ->scrollX()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons(
-                ($createPermission ?
-                    Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ])
-                    :
-                    Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ])
-                ),
-                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
-                    Button::make('print')->addClass('dropdown-item'),
-                    Button::make('copy')->addClass('dropdown-item'),
-                    Button::make('csv')->addClass('dropdown-item'),
-                    Button::make('excel')->addClass('dropdown-item'),
-                    Button::make('pdf')->addClass('dropdown-item'),
-                ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                ),
-
-            )
-            ->rowGroupDataSrc('type_id')
+            ->buttons($buttons)
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -125,16 +111,16 @@ class CustomFieldsDataTable extends DataTable
                     'searchable' => false,
                     'responsivePriority' => 0,
                     'render' => "function (data, type, full, setting) {
-                        var tableRow = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                    }",
+                    var tableRow = JSON.parse(data);
+                    return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
+                }",
                     'checkboxes' => [
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
             ])
             ->orders([
-                [5, 'desc'],
+                [1, 'desc'],
             ]);
     }
 
@@ -145,22 +131,28 @@ class CustomFieldsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $destroyPermission = Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
-        return [
-            (
-                ($destroyPermission) ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
-            Column::make('floor_unit_number')->title('Unit Number'),
-            Column::make('name')->title('Units'),
-            Column::make('type_id')->name('type.name')->title('Type'),
-            Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center'),
+        $destroyPermission = auth()->user()->can('sites.settings.custom-fields.destroy');
+
+        $columns = [];
+
+        if ($destroyPermission) {
+            $columns[] = Column::computed('check')->exportable(false)->printable(false)->width(60);
+        }
+
+        $columns = array_merge($columns, [
+            Column::make('name')->addClass('text-nowrap'),
+            Column::make('type')->addClass('text-nowrap'),
+            Column::make('disabled')->addClass('text-nowrap'),
+            Column::make('required')->addClass('text-nowrap'),
+            Column::make('in_table')->addClass('text-nowrap'),
+            Column::make('order')->addClass('text-nowrap'),
+            Column::make('custom_field_model')->title('Bind To')->addClass('text-nowrap'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center'),
-        ];
+        ]);
+
+        return $columns;
     }
 
     /**
@@ -170,7 +162,7 @@ class CustomFieldsDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Units_' . date('YmdHis');
+        return 'CustomField_' . date('YmdHis');
     }
 
     /**

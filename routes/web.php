@@ -33,6 +33,8 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
 };
+use App\Notifications\DefaultNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Spatie\Activitylog\Models\Activity;
@@ -393,9 +395,9 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
-                    
+
                         Route::get('/print/{file_buy_back_id}/{template_id}', [FileBuyBackController::class, 'printPage'])->name('print');
-                    
+
                     });
 
                     // file Cancellation
@@ -420,7 +422,7 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
-                    
+
                         Route::get('/print/{file_resale_id}/{template_id}', [FileReleaseController::class, 'printPage'])->name('print');
                     });
 
@@ -433,7 +435,7 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
-                    
+
                         Route::get('/print/{file_title_transfer_id}/{template_id}', [FileTitleTransferController::class, 'printPage'])->name('print');
 
                     });
@@ -532,4 +534,16 @@ Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
 
 Route::get('/logs', function () {
     return Activity::latest()->get();
+});
+
+Route::get('/fire', function () {
+    $data = [
+        'title' => 'Job Done!',
+        'message' => 'Unit Construction Completed',
+        'description' => 'Unit Construction Completed',
+        'url' => 'asdadasd',
+    ];
+    Notification::sendNow(auth()->user(), new DefaultNotification($data));
+
+    return 'fire';
 });

@@ -6,10 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class DefaultNotification extends Notification
 {
-    use Queueable;
 
     protected $data;
     /**
@@ -31,7 +31,7 @@ class DefaultNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -60,6 +60,17 @@ class DefaultNotification extends Notification
     }
 
     /**
+     * Get the broadcastable representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return BroadcastMessage
+     */
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage($this->data);
+    }
+
+    /**
      * Determine the notification's delivery delay.
      *
      * @param  mixed  $notifiable
@@ -67,6 +78,7 @@ class DefaultNotification extends Notification
      */
     public function withDelay($notifiable)
     {
+        return [];
         return [
             'database' => now()->addSecond(2),
         ];

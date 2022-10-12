@@ -67,7 +67,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <!-- END: Custom CSS-->
-
+    <meta name="user_id" content="{{ auth()->user()->id }}" />
     <style>
         .select2-container--default .select2-results>.select2-results__options {
             max-height: 250px !important;
@@ -179,6 +179,7 @@
     <!-- BEGIN: Page JS-->
     @yield('page-js')
     <!-- END: Page JS-->
+    @vite('resources/js/app.js')
 
     <script>
         // showBlockUI();

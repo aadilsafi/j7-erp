@@ -72,4 +72,14 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Team::class,'team_users')->withPivot('site_id');
     }
+
+    /**
+     * The channels the user receives notification broadcasts on.
+     *
+     * @return string
+     */
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'users';
+    }
 }

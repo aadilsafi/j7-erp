@@ -14,7 +14,7 @@ use Psy\Readline\Hoa\FileRead;
 use App\Models\UnitStakeholder;
 use App\Models\ReceiptDraftModel;
 use App\Models\FileRefundAttachment;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileRefundDataTable;
 use App\Http\Requests\FileRefund\store;
 use App\Models\ModelTemplate;
 use App\Models\Template;
@@ -37,7 +37,7 @@ class FileRefundController extends Controller
         $this->refundInterface = $refundInterface;
     }
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileRefundDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
@@ -205,7 +205,7 @@ class FileRefundController extends Controller
     {
 
         $file_refund = (new FileRefund())->find(decryptParams($file_id));
-       
+
         $template = Template::find(decryptParams($template_id));
 
         $data = [
@@ -213,7 +213,7 @@ class FileRefundController extends Controller
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
-        
+
         return view($printFile, compact('data'));
     }
 }

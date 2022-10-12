@@ -10,7 +10,7 @@ use App\Models\Stakeholder;
 use Illuminate\Http\Request;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileBuyBackDataTable;
 use App\Http\Requests\FileBuyBack\store;
 use App\Models\FileBuyBack;
 use App\Models\FileBuyBackLabelsAttachment;
@@ -36,7 +36,7 @@ class FileBuyBackController extends Controller
         $this->buyBackInterface = $buyBackInterface;
     }
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileBuyBackDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
@@ -201,7 +201,7 @@ class FileBuyBackController extends Controller
     {
 
         $file_refund = (new FileRefund())->find(decryptParams($file_id));
-       
+
         $template = Template::find(decryptParams($template_id));
 
         $data = [
@@ -209,7 +209,7 @@ class FileBuyBackController extends Controller
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
-        
+
         return view($printFile, compact('data'));
     }
 }

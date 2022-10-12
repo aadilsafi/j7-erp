@@ -167,6 +167,8 @@ Route::group([
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
+                       
+                            Route::get('fab-unit', [UnitController::class, 'fabUnits'])->name('fabUnit');
 
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
@@ -178,6 +180,11 @@ Route::group([
                                 Route::put('update', [UnitController::class, 'update'])->name('update');
                             });
 
+                            Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                                Route::post('get-unit-data', [UnitController::class, 'getUnitData'])->name('get-unit-data');
+                            });
+
+
                             Route::group(['prefix' => '/{unit_id}'], function () {
 
                                 Route::group(['prefix' => 'sales-plans', 'as' => 'sales-plans.'], function () {
@@ -187,6 +194,7 @@ Route::group([
                                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                                     Route::post('/approve-sales-plan', [SalesPlanController::class, 'approveSalesPlan'])->name('approve-sales-plan');
+
 
                                     Route::post('/disapprove-sales-plan', [SalesPlanController::class, 'disApproveSalesPlan'])->name('disapprove-sales-plan');
                                     Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy-selected');

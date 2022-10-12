@@ -179,7 +179,7 @@
     <!-- BEGIN: Page JS-->
     @yield('page-js')
     <!-- END: Page JS-->
-    @vite('resources/js/app.js')
+    {{-- @vite('resources/js/app.js') --}}
 
     <script>
         // showBlockUI();

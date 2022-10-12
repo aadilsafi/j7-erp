@@ -13,7 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class ViewFilesDatatable extends DataTable
+class FileCancellationDatatable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -59,9 +59,29 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('file_status', function ($fileManagement) {
                 return editBadgeColumn($fileManagement->fileAction->name);
             })
+            // cancellation status
+            ->editColumn('cancellation_status', function ($fileManagement) {
+                if (isset($fileManagement->fileCancellation[0])) {
+                    if ($fileManagement->fileCancellation[0]['status'] == 1) {
+                        return editBadgeColumn('File Cancellation Request Approved');
+                    } else {
+                        return editBadgeColumn('Pending');
+                    }
+                } else {
+                    return editBadgeColumn(' File Cancellation Request Not Found');
+                }
+            })
             // All File Actions
             ->editColumn('actions', function ($fileManagement) {
                 return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id,'file_id' =>$fileManagement->id]);
+            })
+            // Cancellation Actions
+            ->editColumn('cancellation_actions', function ($fileManagement) {
+                if (isset($fileManagement->fileCancellation[0])) {
+                    return view('app.sites.file-managements.files.files-actions.file-cancellation.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileCancellation[0]['id'], 'file_refund_status' => $fileManagement->fileCancellation[0]['status'],]);
+                } else {
+                    return "-";
+                }
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -75,8 +95,8 @@ class ViewFilesDatatable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        if (Route::current()->getName() == 'sites.file-managements.view-files') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id);
+        if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 4);
         }
     }
 
@@ -123,6 +143,10 @@ class ViewFilesDatatable extends DataTable
      */
     protected function getColumns(): array
     {
+        $cancelationRoute = false;
+        if (Route::current()->getName() == "sites.file-managements.file-cancellation.index") {
+            $cancelationRoute = true;
+        }
         return [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
@@ -136,6 +160,18 @@ class ViewFilesDatatable extends DataTable
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center'),
             // // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             // // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            // Cancellation Actions
+            ($cancelationRoute ?
+                Column::computed('cancellation_status')->title('File Cancellation Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('cancellation_status')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+            ($cancelationRoute ?
+                Column::computed('cancellation_actions')->title('Cancellation Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('cancellation_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
@@ -147,7 +183,7 @@ class ViewFilesDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Customers_Files_' . date('YmdHis');
+        return 'File_Cancellation' . date('YmdHis');
     }
 
     /**

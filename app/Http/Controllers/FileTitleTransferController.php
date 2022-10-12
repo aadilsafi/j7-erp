@@ -12,7 +12,7 @@ use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\Models\FileTitleTransfer;
 use App\Models\RebateIncentiveModel;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileTitleTransferDataTable;
 use App\Http\Requests\FileTitleTransfer\storeRequest;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
@@ -39,7 +39,7 @@ class FileTitleTransferController extends Controller
         $this->titleTransferInterface = $titleTransferInterface;
     }
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileTitleTransferDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
@@ -223,7 +223,7 @@ class FileTitleTransferController extends Controller
     {
 
         $file_refund = (new FileTitleTransfer())->find(decryptParams($file_id));
-       
+
         $template = Template::find(decryptParams($template_id));
 
         $data = [
@@ -231,7 +231,7 @@ class FileTitleTransferController extends Controller
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
-        
+
         return view($printFile, compact('data'));
     }
 }

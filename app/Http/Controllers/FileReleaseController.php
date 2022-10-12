@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\Models\RebateIncentiveModel;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileResaleDataTable;
 use App\Http\Requests\FileBuyBack\storeRequest;
 use App\Http\Requests\FileResale\storeRequest as FileResaleStoreRequest;
 use App\Models\FileResaleAttachment;
@@ -42,7 +42,7 @@ class FileReleaseController extends Controller
 
 
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileResaleDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),

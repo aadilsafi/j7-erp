@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\Models\FileCanecllation;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileCancellationDatatable;
 use App\Models\FileCanecllationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\Http\Requests\FileCancel\store;
@@ -32,7 +32,7 @@ class FileCancellationController extends Controller
         $this->cancellationInterface = $cancellationInterface;
     }
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileCancellationDatatable $dataTable, Request $request, $site_id)
     {
 
         $data = [
@@ -219,7 +219,7 @@ class FileCancellationController extends Controller
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
-        
+
         return view($printFile, compact('data'));
     }
 }

@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.lead-sources.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.custom-fields.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Custom Fields')
@@ -30,7 +30,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Custom Fields</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.lead-sources.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.settings.custom-fields.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="{{ route('sites.settings.custom-fields.index', ['site_id' => $site_id]) }}" id="custom-fields-table-form" method="get">
+                            <form action="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}" id="custom-fields-table-form" method="get">
                                 {{ $dataTable->table() }}
                             </form>
                         </div>
@@ -123,7 +123,7 @@
         }
 
         function addNew() {
-            location.href = '{{ route('sites.types.create', ['site_id' => $site_id]) }}';
+            location.href = '{{ route('sites.settings.custom-fields.create', ['site_id' => encryptParams($site_id)]) }}';
         }
     </script>
 @endsection

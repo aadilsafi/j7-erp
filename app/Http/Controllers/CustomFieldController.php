@@ -19,7 +19,7 @@ class CustomFieldController extends Controller
     public function index(Request $request, CustomFieldsDataTable $dataTable, $site_id)
     {
         $data = [
-            'site_id' => $site_id
+            'site_id' => decryptParams($site_id),
         ];
 
         return $dataTable->with($data)->render('app.sites.settings.custom-fields.index', $data);

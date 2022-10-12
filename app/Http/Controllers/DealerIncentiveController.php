@@ -137,6 +137,7 @@ class DealerIncentiveController extends Controller
         foreach ($rebate_incentives as $Units) {
             $units[] = Unit::find($Units->unit_id);
         }
+
         return response()->json([
             'success' => true,
             'units' => $units,

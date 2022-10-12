@@ -19,6 +19,9 @@
 
 @section('custom-css')
     <style>
+        .hideDiv{
+            display: none;
+        }
     </style>
 @endsection
 
@@ -42,14 +45,14 @@
         @csrf
 
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            <div id="loader"  class="col-lg-9 col-md-9 col-sm-12 position-relative">
                 {{ view('app.sites.file-managements.files.dealer-incentive.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
                     'dealer_data' => $dealer_data,
                     'rebate_files' => $rebate_files,
                     'stakeholders' => $stakeholders,
-                    'incentives'  => $incentives
+                    'incentives' => $incentives,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -62,7 +65,7 @@
                             <i data-feather='save'></i>
                             Save
                         </a>
-                        <a href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -106,15 +109,50 @@
                     '_token': _token
                 },
                 success: function(response) {
+                    showBlockUI('#loader');
                     if (response.success) {
-                        $.each(response.units, function(i, item) {
-                            $('.unit_id').append($('<option>', {
-                                value: item.id + '_' + item.gross_area,
-                                text: item.name,
-                            }));
-                        });
+                        $('.hideDiv').css("display", "block");
+                        // $.each(response.units, function(i, item) {
+                        //     // $('.unit_id').append($('<option>', {
+                        //     //     value: item.id + '_' + item.gross_area,
+                        //     //     text: item.name,
+                        //     // }));
 
+                        //     $('#dynamic_unit_rows').append('<tr>',
+                        //         '<td class="checkedInput"><input type="checkbox" ></td>',
+                        //         '<td>'+item.name+'</td>',
+                        //         '<td>'+item.floor_unit_number+'</td>',
+                        //         '<td>'+item.gross_area.toLocaleString()+'</td>',
+                        //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
+                        //     );
+
+                        // });
+                        $('#dynamic_unit_rows').empty();
+                        for (var i = 0; i <= response.units.length; i++) {
+                            if (response.units[i] != null) {
+                                $('#dynamic_unit_rows').append(
+                                    '<tr class="text-nowrap">',
+                                    '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
+                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name=type type="checkbox" area="' +
+                                    response.units[i]['gross_area'] + '" name="" unit_id="' + response
+                                    .units[i]['id'] + '"></td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .units[i]['name'] + '</td>',
+                                    // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .units[i]['floor_unit_number'].toLocaleString('en') + '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .units[i]['gross_area'].toLocaleString('en') +
+                                    '</td>',
+                                    '<td class="text-nowrap text-center">' + response
+                                    .units[i]['price_sqft'].toLocaleString('en') +
+                                    '</td>',
+                                    '</tr>', );
+                            }
+                        }
+                        hideBlockUI('#loader');
                     } else {
+                        hideBlockUI('#loader');
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -123,126 +161,54 @@
                     }
                 },
                 error: function(error) {
+                    hideBlockUI('#loader');
                     console.log(error);
                 }
             });
         }
 
-        function CalculateTotalArea(selectdUnits) {
-            var selectedValues = $('#unit_id').val();
+        function CalculateTotalArea() {
+            $('.hideDiv').css("display", "block");
+            showBlockUI('#loader');
+            // var selectedValues = $('#unit_id').val();
             let element = [];
             let total_area = 0.0;
-            for (let index = 0; index < selectedValues.length; index++) {
-                element = selectedValues[index].split("_");
-                total_area = parseFloat(total_area) + parseFloat(element[1]);
-            }
+            // for (let index = 0; index < selectedValues.length; index++) {
+            //     element = selectedValues[index].split("_");
+            //     total_area = parseFloat(total_area) + parseFloat(element[1]);
+            // }
+
+            $("input:checkbox[name=type]:checked").each(function() {
+                element.push($(this).attr('area'));
+            });
+
+            $.each(element,function(){total_area+=parseFloat(this) || 0;});
 
             $('#total_unit_area').val(total_area);
 
+
+            var inputValue = $('#dealer_incentive').val();
+            var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
+
+            $('#total_dealer_incentive').val(total_incentive);
+            hideBlockUI('#loader');
         }
 
         function CalculateTotalDealerIncentive() {
+            $('.hideDiv').css("display", "block");
+            showBlockUI('#loader');
             var inputValue = $('#dealer_incentive').val();
             var total_unit_area = $('#total_unit_area').val();
             var total_incentive = parseFloat(inputValue) * parseFloat(total_unit_area);
 
             $('#total_dealer_incentive').val(total_incentive);
-
+            hideBlockUI('#loader');
         }
-
-        $('#rebate_percentage').on('change', function() {
-            showBlockUI('#rebate-form');
-            let rebate_percentage = parseInt($('#rebate_percentage').val());
-            rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
-            rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
-
-            let unit_total = parseFloat($('#unit_total').val());
-            let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
-
-            $('#td_rebate').html(rebate_percentage + '%');
-
-            $('#td_rebate_value').html(rebate_value.toLocaleString());
-
-            $('#rebate_total').val(rebate_value);
-            $('.hideDiv').css("display", "block");
-            hideBlockUI('#rebate-form');
-        });
-
-        var e = $("#dealer");
-        e.wrap('<div class="position-relative"></div>');
-        e.select2({
-            dropdownAutoWidth: !0,
-            dropdownParent: e.parent(),
-            width: "100%",
-            containerCssClass: "select-lg",
-        }).on("change", function(e) {
-            let dealer = parseInt($(this).val());
-            showBlockUI('#stakeholders_card');
-            let stakeholderData = {
-                id: 0,
-                full_name: '',
-                father_name: '',
-                occupation: '',
-                designation: '',
-                cnic: '',
-                ntn: '',
-                contact: '',
-                address: '',
-            };
-
-            $.ajax({
-                url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}"
-                    .replace(':id', dealer),
-                type: 'GET',
-                data: {},
-                success: function(response) {
-
-                    if (response.status) {
-                        if (response.data) {
-                            stakeholderData = response.data;
-                        }
-                        // $('#stackholder_id').val(stakeholderData.id);
-                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (
-                            stakeholderData.full_name.length > 0));
-                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',
-                            (stakeholderData.father_name.length > 0));
-                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (
-                            stakeholderData.occupation.length > 0));
-                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',
-                            (stakeholderData.designation.length > 0));
-
-                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
-                            .attr('disabled', (stakeholderData.cnic.length > 0));
-                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (
-                            stakeholderData.contact.length > 0));
-                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData
-                            .ntn.length > 0));
-                        $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (
-                            stakeholderData.comments.length > 0));
-                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (
-                            stakeholderData.address.length > 0));
-                    }
-                    hideBlockUI('#stakeholders_card');
-                },
-                error: function(errors) {
-                    console.error(errors);
-                    hideBlockUI('#stakeholders_card');
-                }
-            });
-            // if (dealer === "0") {
-            //     $('#div_new_dealer').show();
-            // } else {
-            //     $('#div_new_dealer').hide();
-            // }
-        });
 
         var validator = $("#rebateForm").validate({
             rules: {
                 'dealer_id': {
                     required: true,
-                },
-                'multiple[0]': {
-                    required: true
                 },
                 'dealer_incentive': {
                     required: true,

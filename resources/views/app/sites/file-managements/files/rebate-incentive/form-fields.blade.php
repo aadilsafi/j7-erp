@@ -299,9 +299,9 @@
 
                 <div class="row g-1 mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                        <label class="form-label fs-5" for="customer_address">Address</label>
                         <input type="text" class="form-control form-control-lg" id="customer_address"
-                            placeholder="Mail Address" value="" disabled />
+                            placeholder="Address" value="" disabled />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="customer_comments">Comments</label>

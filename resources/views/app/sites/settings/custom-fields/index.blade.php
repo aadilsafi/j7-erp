@@ -15,8 +15,7 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 @endsection
 
 @section('page-css')
@@ -49,7 +48,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="#" id="custom-fields-table-form" method="get">
+                            <form action="{{ route('sites.settings.custom-fields.index', ['site_id' => $site_id]) }}" id="custom-fields-table-form" method="get">
                                 {{ $dataTable->table() }}
                             </form>
                         </div>
@@ -86,4 +85,45 @@
 
 @section('custom-js')
     {{ $dataTable->scripts() }}
+    <script>
+        function deleteSelected() {
+            var selectedCheckboxes = $('.dt-checkboxes:checked').length;
+            if (selectedCheckboxes > 0) {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: '{{ __('lang.commons.are_you_sure_you_want_to_delete_the_selected_items') }}',
+                    showCancelButton: true,
+                    cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                    confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+                    confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#types-table-form').submit();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
+                });
+            }
+        }
+
+        function addNew() {
+            location.href = '{{ route('sites.types.create', ['site_id' => $site_id]) }}';
+        }
+    </script>
 @endsection

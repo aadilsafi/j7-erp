@@ -12,6 +12,7 @@ class CustomField extends Model
     use HasFactory, LogsActivity;
 
     protected $fillable = [
+        'site_id',
         'name',
         'type',
         'values',
@@ -30,6 +31,7 @@ class CustomField extends Model
     ];
 
     protected $casts = [
+        'site_id' => 'integer',
         'values' => 'array',
         'disabled' => 'boolean',
         'required' => 'boolean',
@@ -47,5 +49,10 @@ class CustomField extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
 }

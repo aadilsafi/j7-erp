@@ -63,7 +63,7 @@ class UnitsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.create');
-        $createfabUnitPermission =  Auth::user()->hasPermissionTo('sites.floors.units.fabUnit');
+        $createfabUnitPermission =  Auth::user()->hasPermissionTo('sites.floors.units.fab.create');
 
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return $this->builder()

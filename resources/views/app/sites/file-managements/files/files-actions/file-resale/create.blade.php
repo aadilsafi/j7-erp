@@ -325,41 +325,41 @@
                             return checkbtn;
                         }
                     },
-                    'stackholder[full_name]': {
-                        required: true
-                    },
-                    'stackholder[father_name]': {
-                        required: true
-                    },
-                    'stackholder[occupation]': {
-                        required: true
-                    },
-                    'stackholder[designation]': {
-                        required: true
-                    },
-                    'stackholder[ntn]': {
-                        required: true
-                    },
-                    'stackholder[cnic]': {
-                        required: true,
-                        digits: true,
-                        maxlength: 13,
-                        minlength: 13
+                    // 'stackholder[full_name]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[father_name]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[occupation]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[designation]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[ntn]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[cnic]': {
+                    //     required: true,
+                    //     digits: true,
+                    //     maxlength: 13,
+                    //     minlength: 13
 
-                    },
-                    'stackholder[contact]': {
-                        required: true
-                    },
-                    'stackholder[address]': {
-                        required: true
-                    },
+                    // },
+                    // 'stackholder[contact]': {
+                    //     required: true
+                    // },
+                    // 'stackholder[address]': {
+                    //     required: true
+                    // },
 
                 },
                 messages: {
-                    'stackholder[cnic]': {
-                        maxlength: "Cnic can't be greater then {0} digits without dashes",
-                        minlength: "Cnic can't be less then {0} digits without dashes",
-                    }
+                    // 'stackholder[cnic]': {
+                    //     maxlength: "Cnic can't be greater then {0} digits without dashes",
+                    //     minlength: "Cnic can't be less then {0} digits without dashes",
+                    // }
                 },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
@@ -378,7 +378,7 @@
             let amount_refunded = 0.0;
             let profitCharges = $('#profit_charges').val();
             amount_refunded = parseFloat(paid_amount) + parseFloat(profitCharges);
-            amount_refunded = amount_refunded - parseFloat(rebate_amount);
+            // amount_refunded = amount_refunded - parseFloat(rebate_amount);
             $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
         }
 

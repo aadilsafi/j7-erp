@@ -42,60 +42,60 @@ class ResaleService implements ResaleInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
 
-            if ($inputs['stackholder']['stackholder_id'] == 0) {
-                $buyer_data = [
-                    'site_id' => decryptParams($site_id),
-                    'full_name' => $inputs['stackholder']['full_name'],
-                    'father_name' => $inputs['stackholder']['father_name'],
-                    'occupation' => $inputs['stackholder']['occupation'],
-                    'designation' => $inputs['stackholder']['designation'],
-                    'cnic' => $inputs['stackholder']['cnic'],
-                    'ntn' => $inputs['stackholder']['ntn'],
-                    'contact' => $inputs['stackholder']['contact'],
-                    'address' => $inputs['stackholder']['address'],
-                    'comments' => $inputs['stackholder']['comments'],
-                ];
+            // if ($inputs['stackholder']['stackholder_id'] == 0) {
+            //     $buyer_data = [
+            //         'site_id' => decryptParams($site_id),
+            //         'full_name' => $inputs['stackholder']['full_name'],
+            //         'father_name' => $inputs['stackholder']['father_name'],
+            //         'occupation' => $inputs['stackholder']['occupation'],
+            //         'designation' => $inputs['stackholder']['designation'],
+            //         'cnic' => $inputs['stackholder']['cnic'],
+            //         'ntn' => $inputs['stackholder']['ntn'],
+            //         'contact' => $inputs['stackholder']['contact'],
+            //         'address' => $inputs['stackholder']['address'],
+            //         'comments' => $inputs['stackholder']['comments'],
+            //     ];
 
-                $buyer = Stakeholder::create($buyer_data);
-                $buyer_id = $buyer->id;
+            //     $buyer = Stakeholder::create($buyer_data);
+            //     $buyer_id = $buyer->id;
 
-                $stakeholdertype = [
-                    [
-                        'stakeholder_id' => $buyer_id,
-                        'type' => 'C',
-                        'stakeholder_code' => 'C-00' . $buyer_id,
-                        'status' => 1,
-                    ],
-                    [
-                        'stakeholder_id' => $buyer_id,
-                        'type' => 'V',
-                        'stakeholder_code' => 'V-00' . $buyer_id,
-                        'status' => 0,
-                    ],
-                    [
-                        'stakeholder_id' => $buyer_id,
-                        'type' => 'D',
-                        'stakeholder_code' => 'D-00' . $buyer_id,
-                        'status' => 0,
-                    ],
-                    [
-                        'stakeholder_id' => $buyer_id,
-                        'type' => 'K',
-                        'stakeholder_code' => 'K-00' . $buyer_id,
-                        'status' => 0,
-                    ],
-                    [
-                        'stakeholder_id' => $buyer_id,
-                        'type' => 'L',
-                        'stakeholder_code' => 'L-00' . $buyer_id,
-                        'status' => 1,
-                    ]
-                ];
+            //     $stakeholdertype = [
+            //         [
+            //             'stakeholder_id' => $buyer_id,
+            //             'type' => 'C',
+            //             'stakeholder_code' => 'C-00' . $buyer_id,
+            //             'status' => 1,
+            //         ],
+            //         [
+            //             'stakeholder_id' => $buyer_id,
+            //             'type' => 'V',
+            //             'stakeholder_code' => 'V-00' . $buyer_id,
+            //             'status' => 0,
+            //         ],
+            //         [
+            //             'stakeholder_id' => $buyer_id,
+            //             'type' => 'D',
+            //             'stakeholder_code' => 'D-00' . $buyer_id,
+            //             'status' => 0,
+            //         ],
+            //         [
+            //             'stakeholder_id' => $buyer_id,
+            //             'type' => 'K',
+            //             'stakeholder_code' => 'K-00' . $buyer_id,
+            //             'status' => 0,
+            //         ],
+            //         [
+            //             'stakeholder_id' => $buyer_id,
+            //             'type' => 'L',
+            //             'stakeholder_code' => 'L-00' . $buyer_id,
+            //             'status' => 1,
+            //         ]
+            //     ];
 
-                $stakeholder_type = StakeholderType::insert($stakeholdertype);
-            } else {
-                $buyer_id = $inputs['stackholder']['stackholder_id'];
-            }
+            //     $stakeholder_type = StakeholderType::insert($stakeholdertype);
+            // } else {
+            //     $buyer_id = $inputs['stackholder']['stackholder_id'];
+            // }
 
 
 
@@ -104,13 +104,10 @@ class ResaleService implements ResaleInterface
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['customer_id'],
-                'buyer_id' => $buyer_id,
-                'buyer_data' => json_encode(Stakeholder::find($buyer_id)),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
                 'amount_to_be_refunded' => str_replace(',', '', $inputs['amount_to_be_refunded']),
                 'payment_due_date' => $inputs['payment_due_date'],
-                'rebate_amount' => $inputs['rebate_amount'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
                 'amount_profit' => $inputs['amount_profit'],

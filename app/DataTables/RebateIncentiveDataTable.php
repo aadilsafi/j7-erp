@@ -139,7 +139,7 @@ class RebateIncentiveDataTable extends DataTable
                         'onclick' => 'deleteSelected()',
                     ])
             )
-            ->rowGroupDataSrc('stakeholder_id')
+            ->rowGroupDataSrc('dealer_id')
             ->columnDefs([
                 [
                     'targets' => 0,

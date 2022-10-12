@@ -28,7 +28,7 @@
     @endif
 
 
-    @if ($status == 1 && $unit_status == 1)
+    @if ($status == 1 || $status == 2 || $status == 3 && $unit_status == 1)
     @can('sites.floors.units.sales-plans.disapprove-sales-plan')
 
     <a id="disapproveSalesPlan" disapproveSalesPlanId='{{ $id }}'

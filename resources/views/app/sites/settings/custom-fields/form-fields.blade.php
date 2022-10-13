@@ -7,7 +7,7 @@
                 <label class="form-label fs-5" for="name">Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                     id="name" name="name" placeholder="Name"
-                    value="{{ isset($customFiled) ? $customFiled->name : old('name') }}" />
+                    value="{{ isset($customField) ? $customField->name : old('name') }}" />
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -23,7 +23,7 @@
                     <option value="0" selected>Field Type</option>
                     @foreach ($fieldTypes as $key => $value)
                         <option value="{{ $value }}"
-                            {{ (isset($customFiled) ? $customFiled->type : old('type')) == $value ? 'selected' : '' }}>
+                            {{ (isset($customField) ? $customField->type : old('type')) == $value ? 'selected' : '' }}>
                             {{ $loop->index + 1 }} - {{ $key }}</option>
                     @endforeach
                 </select>
@@ -40,7 +40,7 @@
                 <label class="form-label fs-5" for="order">Order <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg @error('order') is-invalid @enderror"
                     id="order" name="order" placeholder="Order" min="1" max="50" minlength="1"
-                    maxlength="2" value="{{ isset($customFiled) ? $customFiled->order : old('order') ?? 1 }}" />
+                    maxlength="2" value="{{ isset($customField) ? $customField->order : old('order') ?? 1 }}" />
                 @error('order')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -54,7 +54,7 @@
                 <input type="number"
                     class="form-control form-control-lg @error('bootstrap_column') is-invalid @enderror"
                     id="bootstrap_column" name="bootstrap_column" placeholder="Bootstrap Columns"
-                    value="{{ isset($customFiled) ? $customFiled->bootstrap_column : old('bootstrap_column') }}" />
+                    value="{{ isset($customField) ? $customField->bootstrap_column : old('bootstrap_column') }}" />
                 @error('bootstrap_column')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -71,7 +71,7 @@
                     <option value="" selected>Bind To</option>
                     @foreach ($models as $path => $name)
                         <option value="{{ $path }}"
-                            {{ (isset($customFiled) ? $customFiled->custom_field_model : old('custom_field_model')) == $path ? 'selected' : '' }}>
+                            {{ (isset($customField) ? $customField->custom_field_model : old('custom_field_model')) == $path ? 'selected' : '' }}>
                             {{ $loop->index + 1 }} - {{ Str::of($name)->plural()->replace('_', ' ')->title() }}
                         </option>
                     @endforeach
@@ -90,7 +90,14 @@
                 <label class="form-label" style="font-size: 15px" for="values">Field Values <span
                         class="text-danger"></span></label>
                 <select class="form-select @error('values') is-invalid @enderror" id="values" name="values[]"
-                    multiple></select>
+                    multiple>
+                    @isset($customField)
+
+                        @foreach ($customField->values as $key => $value)
+                            <option value="{{ $key }}" selected>{{ $value }}</option>
+                        @endforeach
+                    @endisset
+                </select>
                 @error('values')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -118,6 +125,7 @@
                                 <div class="form-check form-check-inline">
                                     <input type="hidden" value="0" name="required">
                                     <input class="form-check-input" type="checkbox" name="required" id="required"
+                                        {{ isset($customField) && $customField->required ? 'checked' : '' }}
                                         value="1">
                                     <label class="form-check-label" for="required">Required</label>
                                 </div>
@@ -132,6 +140,7 @@
                                 <div class="form-check form-check-inline">
                                     <input type="hidden" value="0" name="disabled">
                                     <input class="form-check-input" type="checkbox" name="disabled" id="disabled"
+                                        {{ isset($customField) && $customField->disabled ? 'checked' : '' }}
                                         value="1">
                                     <label class="form-check-label" for="disabled">Disabled</label>
                                 </div>
@@ -146,6 +155,7 @@
                                 <div class="form-check form-check-inline">
                                     <input type="hidden" value="0" name="in_table">
                                     <input class="form-check-input" type="checkbox" name="in_table" id="in_table"
+                                        {{ isset($customField) && $customField->in_table ? 'checked' : '' }}
                                         value="1">
                                     <label class="form-check-label" for="in_table">Show in Table</label>
                                 </div>
@@ -160,6 +170,7 @@
                                 <div class="form-check form-check-inline">
                                     <input type="hidden" value="0" name="multiple">
                                     <input class="form-check-input" type="checkbox" name="multiple" id="multiple"
+                                        {{ isset($customField) && $customField->multiple ? 'checked' : '' }}
                                         value="1">
                                     <label class="form-check-label" for="multiple">Multiple Values</label>
                                 </div>
@@ -189,7 +200,7 @@
                                 <input type="number"
                                     class="form-control form-control-lg @error('min') is-invalid @enderror"
                                     id="min" name="min" placeholder="Min"
-                                    value="{{ isset($customFiled) ? $customFiled->min : old('min') ?? 0 }}" />
+                                    value="{{ isset($customField) ? $customField->min : old('min') ?? 0 }}" />
                                 @error('min')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
@@ -204,7 +215,7 @@
                                 <input type="number"
                                     class="form-control form-control-lg @error('max') is-invalid @enderror"
                                     id="max" name="max" placeholder="Max"
-                                    value="{{ isset($customFiled) ? $customFiled->max : old('max') ?? 0 }}" />
+                                    value="{{ isset($customField) ? $customField->max : old('max') ?? 0 }}" />
                                 @error('max')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
@@ -219,7 +230,7 @@
                                 <input type="number"
                                     class="form-control form-control-lg @error('minlength') is-invalid @enderror"
                                     id="minlength" name="minlength" placeholder="Min length" min="0"
-                                    value="{{ isset($customFiled) ? $customFiled->minlength : old('minlength') ?? 0 }}" />
+                                    value="{{ isset($customField) ? $customField->minlength : old('minlength') ?? 0 }}" />
                                 @error('minlength')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
@@ -233,7 +244,7 @@
                                 <input type="number"
                                     class="form-control form-control-lg @error('maxlength') is-invalid @enderror"
                                     id="maxlength" name="maxlength" placeholder="Max length" min="0"
-                                    value="{{ isset($customFiled) ? $customFiled->maxlength : old('maxlength') ?? 0 }}" />
+                                    value="{{ isset($customField) ? $customField->maxlength : old('maxlength') ?? 0 }}" />
                                 @error('maxlength')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else

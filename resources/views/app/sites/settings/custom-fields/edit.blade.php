@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.lead-sources.edit', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.custom-fields.edit', encryptParams($site_id), encryptParams($id)) }}
 @endsection
 
-@section('page-title', 'Edit Lead Source')
+@section('page-title', 'Edit Custom Fields')
 
 @section('page-vendor')
 @endsection
@@ -19,9 +19,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Edit Lead Source</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Custom Fields</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.lead-sources.edit', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.settings.custom-fields.edit', encryptParams($site_id), encryptParams($id)) }}
                 </div>
             </div>
         </div>
@@ -29,8 +29,8 @@
 @endsection
 
 @section('content')
-    <form
-        action="{{ route('sites.lead-sources.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($leadSource->id)]) }}"
+    <form class="form form-vertical"
+        action="{{ route('sites.settings.custom-fields.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($id)]) }}"
         method="POST">
 
         <div class="row">
@@ -38,7 +38,11 @@
 
                 @csrf
                 @method('PUT')
-                {{ view('app.sites.lead-sources.form-fields', ['leadSource' => $leadSource]) }}
+                {{ view('app.sites.settings.custom-fields.form-fields', [
+                    'fieldTypes' => $fieldTypes,
+                    'models' => $models,
+                    'customField' => $customField,
+                ]) }}
 
             </div>
 
@@ -51,11 +55,11 @@
                                     <button type="submit"
                                         class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
                                         <i data-feather='save'></i>
-                                        Update Lead Source
+                                        Update Custom Field
                                     </button>
                                 </div>
                                 <div class="col-md-12">
-                                    <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"
+                                    <a href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
                                         {{ __('lang.commons.cancel') }}
@@ -67,6 +71,7 @@
                 </div>
             </div>
         </div>
+
     </form>
 @endsection
 
@@ -77,4 +82,16 @@
 @endsection
 
 @section('custom-js')
+    <script>
+        e = $("#values");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+            tags: true,
+            multiple: true,
+        });
+    </script>
 @endsection

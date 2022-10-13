@@ -48,7 +48,7 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <form action="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}" id="custom-fields-table-form" method="get">
+                            <form action="{{ route('sites.settings.custom-fields.destroy', ['site_id' => encryptParams($site_id)]) }}" id="custom-fields-table-form" method="get">
                                 {{ $dataTable->table() }}
                             </form>
                         </div>
@@ -105,7 +105,7 @@
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#types-table-form').submit();
+                        $('#custom-fields-table-form').submit();
                     }
                 });
             } else {

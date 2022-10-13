@@ -2,7 +2,9 @@
 
 namespace App\Services\CustomFields;
 
+use App\Exceptions\GeneralException;
 use App\Models\CustomField;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CustomFieldService implements CustomFieldInterface
@@ -13,69 +15,96 @@ class CustomFieldService implements CustomFieldInterface
         return new CustomField();
     }
 
-    public function getAll($relationships = [])
+    public function getAll($site_id, $relationships = [])
     {
-        return $this->model()->with($relationships)->get();
+        return $this->model()->whereSiteId($site_id)->with($relationships)->get();
     }
 
-    public function getById($id, $relationships = [])
+    public function getById($site_id, $id, $relationships = [])
     {
-        $id = decryptParams($id);
-        return $this->model()->with($relationships)->find($id);
+        return $this->model()->whereSiteId($site_id)->with($relationships)->find($id);
     }
 
     public function store($site_id, $inputs)
     {
-        $data = [
-            'site_id' => $site_id,
-            'name' => $inputs['name'],
-            'type' => $inputs['type'],
-            'custom_field_model' => $inputs['custom_field_model'],
-            'disabled' => $inputs['disabled'] ? true : false,
-            'required' => $inputs['required'] ? true : false,
-            'in_table' => $inputs['in_table'] ? true : false,
-            'multiple' => $inputs['multiple'] ? true : false,
-            'min' => $inputs['min'],
-            'max' => $inputs['max'],
-            'minlength' => $inputs['minlength'],
-            'maxlength' => $inputs['maxlength'],
-            'bootstrap_column' => $inputs['bootstrap_column'] ?? 6,
-            'order' => $inputs['order'],
-        ];
+        $returnValue = DB::transaction(function () use ($site_id, $inputs) {
 
-        if (isset($inputs['values'])) {
-            $values = [];
+            $data = [
+                'site_id' => $site_id,
+                'name' => $inputs['name'],
+                'type' => $inputs['type'],
+                'custom_field_model' => $inputs['custom_field_model'],
+                'disabled' => $inputs['disabled'] ? true : false,
+                'required' => $inputs['required'] ? true : false,
+                'in_table' => $inputs['in_table'] ? true : false,
+                'multiple' => $inputs['multiple'] ? true : false,
+                'min' => $inputs['min'],
+                'max' => $inputs['max'],
+                'minlength' => $inputs['minlength'],
+                'maxlength' => $inputs['maxlength'],
+                'bootstrap_column' => $inputs['bootstrap_column'] ?? 6,
+                'order' => $inputs['order'],
+            ];
 
-            foreach ($inputs['values'] as $key => $value) {
-                $slug = Str::of($value)->slug()->value();
-                $values[$slug] = $value;
+            if (isset($inputs['values'])) {
+                $values = [];
+
+                foreach ($inputs['values'] as $key => $value) {
+                    $slug = Str::of($value)->slug()->value();
+                    $values[$slug] = $value;
+                }
+
+                $data['values'] = $values;
             }
-
-            $data['values'] = $values;
-        }
-
-        return $this->model()->create($data);
+            return $this->model()->create($data);
+        });
+        return $returnValue;
     }
 
-    public function update($id, $inputs)
+    public function update($site_id, $id, $inputs)
     {
+        $returnValue = DB::transaction(function () use ($site_id, $id, $inputs) {
 
-        $id = decryptParams($id);
+            $data = [
+                'name' => $inputs['name'],
+                'type' => $inputs['type'],
+                'custom_field_model' => $inputs['custom_field_model'],
+                'disabled' => $inputs['disabled'] ? true : false,
+                'required' => $inputs['required'] ? true : false,
+                'in_table' => $inputs['in_table'] ? true : false,
+                'multiple' => $inputs['multiple'] ? true : false,
+                'min' => $inputs['min'],
+                'max' => $inputs['max'],
+                'minlength' => $inputs['minlength'],
+                'maxlength' => $inputs['maxlength'],
+                'bootstrap_column' => $inputs['bootstrap_column'] ?? 6,
+                'order' => $inputs['order'],
+            ];
 
-        $data = [
-            'name' => $inputs['permission_name'],
-            'guard_name' => $inputs['guard_name'],
-        ];
-        $type = $this->model()->where('id', $id)->update($data);
-        return $type;
+            if (isset($inputs['values'])) {
+                $values = [];
+
+                foreach ($inputs['values'] as $key => $value) {
+                    $slug = Str::of($value)->slug()->value();
+                    $values[$slug] = $value;
+                }
+
+                $data['values'] = $values;
+            }
+            return $this->model()->find($id)->update($data);
+        });
+        return $returnValue;
     }
 
-    public function destroy($id)
+    public function destroy($site_id, $id)
     {
-        if (!empty($id)) {
-            $this->model()->whereIn('id', $id)->delete();
+        $returnValue = DB::transaction(function () use ($site_id, $id) {
+            $this->model()->whereIn('id', $id)->get()->each(function ($row) {
+                $row->delete();
+            });
+
             return true;
-        }
-        return false;
+        });
+        return $returnValue;
     }
 }

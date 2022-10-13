@@ -28,6 +28,10 @@ class CustomFieldsDataTable extends DataTable
             ->editColumn('check', function ($customField) {
                 return $customField;
             })
+            ->editColumn('custom_field_model', function ($customField) {
+                $data = explode('\\', $customField->custom_field_model);
+                return array_pop($data);
+            })
             ->editColumn('created_at', function ($customField) {
                 return editDateColumn($customField->created_at);
             })
@@ -99,6 +103,7 @@ class CustomFieldsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
+            ->rowGroupDataSrc('custom_field_model')
             ->columnDefs([
                 [
                     'targets' => 0,

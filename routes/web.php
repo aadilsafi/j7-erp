@@ -133,7 +133,7 @@ Route::group([
                         Route::get('create', [CustomFieldController::class, 'create'])->name('create');
                         Route::post('store', [CustomFieldController::class, 'store'])->name('store');
 
-                        Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy-selected');
+                        Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
                             Route::put('update', [CustomFieldController::class, 'update'])->name('update');
@@ -185,7 +185,7 @@ Route::group([
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
-                       
+
                             Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
                                 Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
                                 Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');

@@ -65,7 +65,6 @@ class SalesPlanService implements SalesPlanInterface
     // // Store
     public function store($site_id, $floor_id, $unit_id, $inputs)
     {
-
         DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
 
             LogBatch::startBatch();
@@ -174,7 +173,7 @@ class SalesPlanService implements SalesPlanInterface
                 'stakeholder_id' => $stakeholder->id,
                 'stakeholder_data' => json_encode($stakeholder),
                 'unit_price' => $unitInput['price']['unit'],
-                'total_price' => intval(str_replace(',', '', $unitInput['price']['total'])),
+                'total_price' => intval(str_replace(',', '', $unitInput['grand_total'])),
                 'discount_percentage' => $unitInput['discount']['percentage'],
                 'discount_total' => intval(str_replace(',', '', $unitInput['discount']['total'])),
                 'down_payment_percentage' => $unitInput['downpayment']['percentage'],

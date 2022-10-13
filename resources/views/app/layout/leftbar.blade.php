@@ -422,7 +422,7 @@
             @endcan
 
             {{-- Accounts Menu --}}
-            @canany(['sites.accounts.recovery.dashboard'])
+            {{-- @canany(['sites.accounts.recovery.dashboard'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
@@ -446,7 +446,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.accounts.recovery.salesPlan')
+                                    @can('sites.accounts.recovery.salesPlan')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -455,7 +455,7 @@
                                                 <span class="menu-title text-truncate" data-i18n="Sales Plans">Sales Plans</span>
                                             </a>
                                         </li>
-                                    @endcan --}}
+                                    @endcan
                                     @can('sites.accounts.recovery.calender')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
@@ -471,7 +471,7 @@
                         @endcanany
                     </ul>
                 </li>
-            @endcanany
+            @endcanany --}}
 
         </ul>
     </div>

@@ -11,7 +11,7 @@
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="nameHelp" class="form-text">Enter custom field name.</div>
+                    <p class="m-0"><small class="text-muted">Enter custom field name.</small></p>
                 @enderror
             </div>
 
@@ -29,7 +29,7 @@
                 @error('type')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="typeHelp" class="form-text">Enter custom field type.</div>
+                    <p class="m-0"><small class="text-muted">Enter custom field type.</small></p>
                 @enderror
             </div>
         </div>
@@ -43,7 +43,7 @@
                 @error('order')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="orderHelp" class="form-text">Enter the order of column visibility.</div>
+                    <p class="m-0"><small class="text-muted">Enter the order of column visibility.</small></p>
                 @enderror
             </div>
 
@@ -57,8 +57,8 @@
                 @error('bootstrap_column')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="bootstrap_columnHelp" class="form-text">By default system will consider 6 columns. 0 will hide
-                        the field.</div>
+                    <p class="m-0"><small class="text-muted">By default system will consider 6 columns. 0 will hide
+                            the field.</small></p>
                 @enderror
             </div>
 
@@ -77,7 +77,7 @@
                 @error('custom_field_model')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="emailHelp" class="form-text">Bind this feild to the List</div>
+                    <p class="m-0"><small class="text-muted">Bind this feild to the List.</small></p>
                 @enderror
             </div>
         </div>
@@ -91,8 +91,8 @@
                 @error('values')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <div id="emailHelp" class="form-text">Enter custom field values (Applicable only on Multi-Select,
-                        RadioBox, CheckBox).</div>
+                    <p class="m-0"><small class="text-muted">Enter custom field values (Applicable only on Multi-Select,
+                            RadioBox, CheckBox).</small></p>
                 @enderror
             </div>
 
@@ -121,7 +121,7 @@
                                 @error('required')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="requiredHelp" class="form-text">Check if field is required.</div>
+                                    <p class="m-0"><small class="text-muted">Check if field is required.</small></p>
                                 @enderror
                             </div>
 
@@ -135,7 +135,7 @@
                                 @error('disabled')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="disabledHelp" class="form-text">Check if field is required.</div>
+                                    <p class="m-0"><small class="text-muted">Check if field is required.</small></p>
                                 @enderror
                             </div>
 
@@ -149,7 +149,7 @@
                                 @error('in_table')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="in_tableHelp" class="form-text">Check if field will show in the table.</div>
+                                    <p class="m-0"><small class="text-muted">Check if field is required.</small></p>
                                 @enderror
                             </div>
 
@@ -163,7 +163,8 @@
                                 @error('multiple')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="multipleHelp" class="form-text">Applicable only on Multi-Select Type.</div>
+                                    <p class="m-0"><small class="text-muted">Applicable only on Multi-Select
+                                            Type.</small></p>
                                 @enderror
                             </div>
                         </div>
@@ -180,32 +181,40 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="min">Min (Number) <span class="text-danger"></span></label>
-                                <input type="number" class="form-control form-control-lg @error('min') is-invalid @enderror"
+                                <label class="form-label fs-5" for="min">Min (Number) <span
+                                        class="text-danger"></span></label>
+                                <input type="number"
+                                    class="form-control form-control-lg @error('min') is-invalid @enderror"
                                     id="min" name="min" placeholder="Min"
                                     value="{{ isset($customFiled) ? $customFiled->min : old('min') ?? 0 }}" />
                                 @error('min')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="minHelp" class="form-text">Applicable on only numbers (Negative allowed).</div>
+                                    <div id="minHelp" class="form-text">Applicable on only numbers (Negative allowed).
+                                    </div>
                                 @enderror
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="max">Max (Number) <span class="text-danger"></span></label>
-                                <input type="number" class="form-control form-control-lg @error('max') is-invalid @enderror"
+                                <label class="form-label fs-5" for="max">Max (Number) <span
+                                        class="text-danger"></span></label>
+                                <input type="number"
+                                    class="form-control form-control-lg @error('max') is-invalid @enderror"
                                     id="max" name="max" placeholder="Max"
                                     value="{{ isset($customFiled) ? $customFiled->max : old('max') ?? 0 }}" />
                                 @error('max')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @else
-                                    <div id="maxHelp" class="form-text">Applicable on only numbers (Negative allowed).</div>
+                                    <div id="maxHelp" class="form-text">Applicable on only numbers (Negative allowed).
+                                    </div>
                                 @enderror
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="minlength">Min length (Characters) <span class="text-danger"></span></label>
-                                <input type="number" class="form-control form-control-lg @error('minlength') is-invalid @enderror"
+                                <label class="form-label fs-5" for="minlength">Min length (Characters) <span
+                                        class="text-danger"></span></label>
+                                <input type="number"
+                                    class="form-control form-control-lg @error('minlength') is-invalid @enderror"
                                     id="minlength" name="minlength" placeholder="Min length" min="0"
                                     value="{{ isset($customFiled) ? $customFiled->minlength : old('minlength') ?? 0 }}" />
                                 @error('minlength')
@@ -216,8 +225,10 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="maxlength">Max length (Characters) <span class="text-danger"></span></label>
-                                <input type="number" class="form-control form-control-lg @error('maxlength') is-invalid @enderror"
+                                <label class="form-label fs-5" for="maxlength">Max length (Characters) <span
+                                        class="text-danger"></span></label>
+                                <input type="number"
+                                    class="form-control form-control-lg @error('maxlength') is-invalid @enderror"
                                     id="maxlength" name="maxlength" placeholder="Max length" min="0"
                                     value="{{ isset($customFiled) ? $customFiled->maxlength : old('maxlength') ?? 0 }}" />
                                 @error('maxlength')

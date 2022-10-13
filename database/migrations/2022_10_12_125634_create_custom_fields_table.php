@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->string('name', 120)->nullable();
-            $table->string('type', 10)->nullable();
+            $table->string('type', 50)->nullable();
             $table->text('values')->nullable();
             $table->boolean('disabled')->default(false)->nullable();
             $table->boolean('required')->default(false)->nullable();

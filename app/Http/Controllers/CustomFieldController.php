@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\CustomFieldsDataTable;
+use App\Http\Requests\CustomFields\storeRequest;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Utils\Enums\CustomFieldsEnum;
 use Exception;
@@ -45,8 +46,9 @@ class CustomFieldController extends Controller
         }
     }
 
-    public function store(store $request, $site_id)
+    public function store(storeRequest $request, $site_id)
     {
+        dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();

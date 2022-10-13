@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\CustomFields;
 
+use App\Models\CustomField;
+use App\Utils\Enums\CustomFieldsEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class storeRequest extends FormRequest
 {
@@ -23,6 +26,27 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
+        dd($this->all());
+        $data = [
+            'name' => ['required', 'string', 'between:1,120'],
+            'type' => ['required', 'string', 'between:1,50', 'in:' . implode(',', CustomFieldsEnum::values())],
+            'values' => ['nullable', 'array'],
+            'disabled' => ['nullable', 'boolean'],
+            'required' => ['nullable', 'boolean'],
+            'in_table' => ['nullable', 'boolean'],
+            'multiple' => ['nullable', 'boolean'],
+            'min' => ['nullable', 'numeric'],
+            'max' => ['nullable', 'numeric'],
+            'minlength' => ['nullable', 'numeric'],
+            'maxlength' => ['nullable', 'numeric'],
+            'bootstrap_column' => ['nullable', 'numeric', 'between:1,12'],
+            'order' => ['nullable', 'numeric', Rule::unique('custom_fields')->where('site_id', $this->site_id)->where('custom_field_model', $this->custom_field_model)],
+            'order' => ['nullable', 'string',
+            // $table->string('custom_field_model')->nullable();
+        ];
 
+        dd($data);
+        return $data;
     }
 }
+

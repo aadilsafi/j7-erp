@@ -62,11 +62,10 @@ $isSalesplanApproved = isset($unit) && count($unit->salesPlan) > 0 && $unit->sal
             
             <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                id="name" name="name" placeholder="Name"
-               {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->name : old('name') }}" readonly />
+               {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->name : old('name') }}"  />
             @error('name')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
-
          </div>
          <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
             <input type="hidden" name="unit_number_digits"
@@ -133,7 +132,7 @@ $isSalesplanApproved = isset($unit) && count($unit->salesPlan) > 0 && $unit->sal
             <label class="form-label fs-5" for="length">Length (sqft)</label>
             <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
             id="length" name="length" placeholder="Length (sqft)"
-            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" readonly />
+            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}"  />
             @error('length')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -142,15 +141,9 @@ $isSalesplanApproved = isset($unit) && count($unit->salesPlan) > 0 && $unit->sal
       <div class="row mb-2">
          <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
             <label class="form-label fs-5" for="net_area">Net Area (sqft)</label>
-            <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
-            id="length" name="length" placeholder="Length (sqft)"
-            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" readonly />
-            @error('length')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
             <input type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
                id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
-               value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" readonly />
+               {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}"  />
             @error('net_area')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -160,7 +153,7 @@ $isSalesplanApproved = isset($unit) && count($unit->salesPlan) > 0 && $unit->sal
             <input type="number"
             class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
             id="gross_area" name="gross_area" placeholder="Gross Area (sqft)" min="0"
-            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" readonly />
+            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}"  />
             @error('gross_area')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -170,7 +163,7 @@ $isSalesplanApproved = isset($unit) && count($unit->salesPlan) > 0 && $unit->sal
             <input type="number"
             class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
             id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
-            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" readonly />
+            {{ $isSalesplanApproved ? 'readonly' : '' }} value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}"  />
             @error('price_sqft')
             <div class="invalid-feedback">{{ $message }}</div>
             @enderror

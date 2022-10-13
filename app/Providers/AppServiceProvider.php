@@ -2,34 +2,18 @@
 
 namespace App\Providers;
 
-use App\Services\Interfaces\{
-    FloorInterface,
-    SiteConfigurationInterface,
-    UnitInterface,
-    UnitTypeInterface,
-    UserBatchInterface,
-};
-use App\Services\{
-    FloorService,
-    SiteConfiurationService,
-    UnitService,
-    UnitTypeService,
-    UserBatchService,
-};
+use App\Services\Interfaces\{FloorInterface, SiteConfigurationInterface, UnitInterface, UnitTypeInterface, UserBatchInterface};
+use App\Services\{FloorService, SiteConfiurationService, UnitService, UnitTypeService, UserBatchService};
 use App\Services\AdditionalCosts\{AdditionalCostInterface, AdditionalCostService};
-use App\Services\DealerIncentive\DealerInterface;
-use App\Services\DealerIncentive\DealerService;
+use App\Services\CustomFields\{CustomFieldInterface, CustomFieldService};
+use App\Services\CustomFieldValues\{CustomFieldValueInterface};
+use App\Services\DealerIncentive\{DealerInterface, DealerService};
 use App\Services\FileManagements\{FileManagementInterface, FileManagementService};
-use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
-use App\Services\FileManagements\FileActions\BuyBack\BuyBackService;
-use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
-use App\Services\FileManagements\FileActions\Cancellation\CancellationService;
-use App\Services\FileManagements\FileActions\Refund\RefundInterface;
-use App\Services\FileManagements\FileActions\Refund\RefundService;
-use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
-use App\Services\FileManagements\FileActions\Resale\ResaleService;
-use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
-use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferService;
+use App\Services\FileManagements\FileActions\BuyBack\{BuyBackInterface, BuyBackService};
+use App\Services\FileManagements\FileActions\Cancellation\{CancellationInterface, CancellationService};
+use App\Services\FileManagements\FileActions\Refund\{RefundInterface, RefundService};
+use App\Services\FileManagements\FileActions\Resale\{ResaleInterface, ResaleService};
+use App\Services\FileManagements\FileActions\TitleTransfer\{TitleTransferInterface, TitleTransferService};
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface};
 use App\Services\User\{UserService, Interface\UserInterface};
@@ -72,6 +56,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ResaleInterface::class, ResaleService::class);
         $this->app->bind(TitleTransferInterface::class, TitleTransferService::class);
         $this->app->bind(DealerInterface::class, DealerService::class);
+        $this->app->bind(CustomFieldInterface::class, CustomFieldService::class);
+        $this->app->bind(CustomFieldValueInterface::class, CustomFieldService::class);
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

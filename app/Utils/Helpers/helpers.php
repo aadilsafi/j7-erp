@@ -592,12 +592,12 @@ if (!function_exists('actionLog')) {
     function actionLog($logName, $causedByModel, $performedOnModel, $log, $properties = [], $event = '')
     {
         return activity()
-        ->causedBy($causedByModel)
-        ->performedOn($performedOnModel)
-        ->inLog($logName)
-        ->event($event)
-        ->withProperties($properties)
-        ->log($log);
+            ->causedBy($causedByModel)
+            ->performedOn($performedOnModel)
+            ->inLog($logName)
+            ->event($event)
+            ->withProperties($properties)
+            ->log($log);
     }
 }
 
@@ -612,5 +612,34 @@ if (!function_exists('getMaxUnitNumber')) {
     function getMaxUnitNumber($floor_id)
     {
         return (new Unit())->where('floor_id', $floor_id)->max('unit_number');
+    }
+}
+
+if (!function_exists('getModelsClasses')) {
+    function getModelsClasses(string $dir, array $excepts = null)
+    {
+        if ($excepts === null) {
+            $excepts = [
+                'App\Models\Upload',
+                'App\Models\CustomField',
+                'App\Models\Media',
+                'App\Models\CustomFieldValue',
+            ];
+        }
+        $customFieldModels = array();
+        $cdir = scandir($dir);
+        foreach ($cdir as $key => $value) {
+            if (!in_array($value, array(".", ".."))) {
+                if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
+                    $customFieldModels[$value] = getModelsClasses($dir . DIRECTORY_SEPARATOR . $value);
+                } else {
+                    $fullClassName = "App\\Models\\" . basename($value, '.php');
+                    if (!in_array($fullClassName, $excepts)) {
+                        $customFieldModels[$fullClassName] = Str::snake(basename($value, '.php')) ;
+                    }
+                }
+            }
+        }
+        return $customFieldModels;
     }
 }

@@ -3,6 +3,7 @@
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="type_id">Unit Type</label>
+                
                 <select class="select2-size-lg form-select" id="type_id" name="type_id">
                     <option value="" selected>Unit Type</option>
                     @foreach ($types as $row)
@@ -60,12 +61,22 @@
         <div class="row mb-2" id="hide_div">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="name">Name</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
+                    id="name" name="name" placeholder="Name"
+                    value="{{ isset($unit) ? $unit->name : old('name') }}" readonly/>
+                @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
                 <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                     id="name" name="name" placeholder="Name"
                     value="{{ isset($unit) ? $unit->name : old('name') }}" />
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+                
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -126,54 +137,116 @@
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="width">Width (sqft)</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="number" class="form-control form-control-lg @error('width') is-invalid @enderror"
+                    id="width" name="width" placeholder="Width (sqft)"
+                    value="{{ isset($unit) ? $unit->width : old('width') ?? 0 }}" readonly/>
+                @error('width')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
                 <input type="number" class="form-control form-control-lg @error('width') is-invalid @enderror"
                     id="width" name="width" placeholder="Width (sqft)"
                     value="{{ isset($unit) ? $unit->width : old('width') ?? 0 }}" />
                 @error('width')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+              
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="length">Length (sqft)</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
+                    id="length" name="length" placeholder="Length (sqft)"
+                    value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" readonly/>
+                @error('length')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
                 <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
                     id="length" name="length" placeholder="Length (sqft)"
                     value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" />
                 @error('length')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+               
             </div>
         </div>
 
         <div class="row mb-2">
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="net_area">Net Area (sqft)</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
+                    id="length" name="length" placeholder="Length (sqft)"
+                    value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" readonly/>
+                @error('length')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                <input type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
+                    id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
+                    value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" readonly/>
+                @error('net_area')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
+                <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
+                    id="length" name="length" placeholder="Length (sqft)"
+                    value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" />
+                @error('length')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
                 <input type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
                     id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
                     value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" />
                 @error('net_area')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+                
             </div>
 
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="gross_area">Gross Area (sqft)</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="number" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
+                    id="gross_area" name="gross_area" placeholder="Gross Area (sqft)" min="0"
+                    value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" readonly/>
+                @error('gross_area')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
                 <input type="number" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
                     id="gross_area" name="gross_area" placeholder="Gross Area (sqft)" min="0"
                     value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" />
                 @error('gross_area')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+               
             </div>
 
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="price_sqft">Price (sqft)</label>
+                @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <input type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
+                    id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
+                    value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" readonly/>
+                @error('price_sqft')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+                @else
                 <input type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
                     id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
                     value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" />
                 @error('price_sqft')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
+                @endif
+               
             </div>
 
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">

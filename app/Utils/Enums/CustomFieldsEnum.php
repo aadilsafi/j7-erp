@@ -8,7 +8,6 @@ enum CustomFieldsEnum: string
 {
     use EnumToArray;
 
-    case BOOLEAN = 'boolean';
     case CHECKBOX = 'checkbox';
     case DATE = 'date';
     case EMAIL = 'email';

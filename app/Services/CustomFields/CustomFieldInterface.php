@@ -9,7 +9,7 @@ interface CustomFieldInterface
     public function getAll($relationships = []);
     public function getById($id, $relationships = []);
 
-    public function store($inputs);
+    public function store($site_id, $inputs);
     public function update($id, $inputs);
 
     public function destroy($id);

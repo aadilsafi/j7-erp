@@ -424,7 +424,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg" disabled
                                                     id="total-price-unit" placeholder="Amount"
-                                                    value="{{ number_format($salesPlan->total_price, 2) }}" />
+                                                    value="{{ number_format($salesPlan->unit_price * $unit->gross_area) }}" />
                                             </div>
                                         </div>
 
@@ -499,7 +499,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg"
                                                     id="unit_rate_total" placeholder="Total"
-                                                    value="{{ number_format($salesPlan->total_price + $total_additional_cost - $salesPlan->discount_total, 2) }}"
+                                                    value="{{ number_format($salesPlan->total_price, 2) }}"
                                                     disabled />
                                             </div>
                                         </div>

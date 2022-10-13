@@ -391,3 +391,15 @@ Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail 
     $trail->parent('dashboard');
     $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
 });
+
+// Custom Fields Breadcrumbs
+Breadcrumbs::for('sites.settings.custom-fields.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Custom Fields', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.settings.custom-fields.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.settings.custom-fields.index', $site_id);
+    $trail->push('Create Custom Fields', route('sites.settings.custom-fields.create', ['site_id' => $site_id]));
+});

@@ -2,28 +2,20 @@
 
 namespace App\DataTables;
 
-use App\Models\Type;
-use Illuminate\Support\Str;
+use App\Models\CustomField;
+use App\Models\Unit;
+use App\Models\Floor;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
-use App\Services\Interfaces\UnitTypeInterface;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Barryvdh\DomPDF\Facade\Pdf;
 
-class TypesDataTable extends DataTable
+class CustomFieldsDataTable extends DataTable
 {
-
-    private $unitTypeInterface;
-
-    public function __construct(UnitTypeInterface $unitTypeInterface)
-    {
-        $this->unitTypeInterface = $unitTypeInterface;
-    }
 
     /**
      * Build DataTable class.
@@ -31,24 +23,22 @@ class TypesDataTable extends DataTable
      * @param QueryBuilder $query Results from query() method.
      * @return \Yajra\DataTables\EloquentDataTable
      */
+
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('parent_id', function ($type) {
-                return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
+            ->editColumn('check', function ($customField) {
+                return $customField;
             })
-            ->editColumn('created_at', function ($type) {
-                return editDateColumn($type->created_at);
+            ->editColumn('created_at', function ($customField) {
+                return editDateColumn($customField->created_at);
             })
-            ->editColumn('updated_at', function ($type) {
-                return editDateColumn($type->updated_at);
+            ->editColumn('updated_at', function ($customField) {
+                return editDateColumn($customField->updated_at);
             })
-            ->editColumn('actions', function ($type) {
-                return view('app.sites.types.actions', ['site_id' => decryptParams($this->site_id), 'id' => $type->id]);
-            })
-            ->editColumn('check', function ($type) {
-                return $type;
+            ->editColumn('actions', function ($customField) {
+                return view('app.sites.settings.custom-fields.actions');
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -57,22 +47,31 @@ class TypesDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
+     * @param \App\Models\CustomField $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(): QueryBuilder
+    public function query(CustomField $model): QueryBuilder
     {
-        return $this->unitTypeInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
+        return $model->newQuery();
     }
 
     public function html(): HtmlBuilder
     {
-
-        $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+        $createPermission = auth()->user()->can('sites.settings.custom-fields.index');
+        $selectedDeletePermission = auth()->user()->can('sites.settings.custom-fields.destroy-selected');
 
         $buttons = [];
 
-        $buttons = [
+        if ($createPermission) {
+            $buttons[] = Button::raw('add-new')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+        }
+
+        $buttons = array_merge($buttons, [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
                 Button::make('copy')->addClass('dropdown-item'),
@@ -82,20 +81,9 @@ class TypesDataTable extends DataTable
             ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-        ];
-
-        if ($createPermission) {
-            $newButton = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')
-                ->attr([
-                    'onclick' => 'addNew()',
-                ]);
-            array_unshift($buttons, $newButton);
-        }
+        ]);
 
         if ($selectedDeletePermission) {
-
             $buttons[] = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
                 ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
@@ -105,19 +93,15 @@ class TypesDataTable extends DataTable
         }
 
         return $this->builder()
-            ->setTableId('types-table')
-            ->addTableClass(['table-hover'])
+            ->addTableClass(['table-striped', 'table-hover'])
+            ->setTableId('custom-fields-table')
             ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->serverSide()
-            ->processing()
-            ->scrollX()
             ->deferRender()
+            ->scrollX()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('parent_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -125,19 +109,18 @@ class TypesDataTable extends DataTable
                     'width' => '10%',
                     'orderable' => false,
                     'searchable' => false,
-                    'responsivePriority' => 3,
+                    'responsivePriority' => 0,
                     'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
+                    var tableRow = JSON.parse(data);
+                    return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
+                }",
                     'checkboxes' => [
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
             ])
             ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
+                [1, 'desc'],
             ]);
     }
 
@@ -148,22 +131,26 @@ class TypesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
+        $destroyPermission = auth()->user()->can('sites.settings.custom-fields.destroy');
 
+        $columns = [];
 
-        $columns = [
-            Column::make('name')->title('Type Name'),
-            Column::make('parent_id')->title('Parent'),
+        if ($destroyPermission) {
+            $columns[] = Column::computed('check')->exportable(false)->printable(false)->width(60);
+        }
+
+        $columns = array_merge($columns, [
+            Column::make('name')->addClass('text-nowrap'),
+            Column::make('type')->addClass('text-nowrap'),
+            Column::make('disabled')->addClass('text-nowrap'),
+            Column::make('required')->addClass('text-nowrap'),
+            Column::make('in_table')->addClass('text-nowrap'),
+            Column::make('order')->addClass('text-nowrap'),
+            Column::make('custom_field_model')->title('Bind To')->addClass('text-nowrap'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
-        ];
-
-        if($selectedDeletePermission){
-            $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
-            array_unshift($columns, $newColumn);
-        }
+            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center'),
+        ]);
 
         return $columns;
     }
@@ -175,7 +162,7 @@ class TypesDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Types_' . date('YmdHis');
+        return 'CustomField_' . date('YmdHis');
     }
 
     /**

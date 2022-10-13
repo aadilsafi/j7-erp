@@ -3,8 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\DealerIncentiveModel;
-use App\Models\RebateIncentiveModel;
-use App\Services\RebateIncentive\RebateIncentiveInterface;
+use App\Services\dealerIncentive\dealerIncentiveInterface;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -37,30 +36,30 @@ class DealerIncentiveDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('dealer_id', function ($rebateIncentive) {
-                return $rebateIncentive->dealer->full_name;
+            ->editColumn('dealer_id', function ($dealerIncentive) {
+                return $dealerIncentive->dealer->full_name;
             })
-            ->editColumn('total_dealer_incentive', function ($rebateIncentive) {
-                return number_format($rebateIncentive->total_dealer_incentive);
+            ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
+                return number_format($dealerIncentive->total_dealer_incentive);
             })
-            ->editColumn('created_at', function ($rebateIncentive) {
-                return editDateColumn($rebateIncentive->created_at);
+            ->editColumn('created_at', function ($dealerIncentive) {
+                return editDateColumn($dealerIncentive->created_at);
             })
-            ->editColumn('updated_at', function ($rebateIncentive) {
-                return editDateColumn($rebateIncentive->updated_at);
+            ->editColumn('updated_at', function ($dealerIncentive) {
+                return editDateColumn($dealerIncentive->updated_at);
             })
-            ->editColumn('status', function ($rebateIncentive) {
-                return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span><br>
-                <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center" style="margin: 5px"
-                    data-bs-toggle="tooltip" data-bs-placement="top" title="Approve request" href="'. route('sites.file-managements.dealer-incentive.approve', ['site_id' =>  encryptParams($this->site_id) , 'dealer_incentive_id' =>  encryptParams($rebateIncentive->id)  ]) .'">
+            ->editColumn('status', function ($dealerIncentive) {
+                return $dealerIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span><br>
+                <a onClick="ApproveModal()" id="approveID" dealer_id="' . encryptParams($dealerIncentive->id) . '" class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center" style="margin: 5px"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="Approve request" href="#">
                     Approve Request
                 </a>';
             })
-            // ->editColumn('actions', function ($rebateIncentive) {
-            //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $rebateIncentive->id]);
+            // ->editColumn('actions', function ($dealerIncentive) {
+            //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $dealerIncentive->id]);
             // })
-            ->editColumn('check', function ($rebateIncentive) {
-                return $rebateIncentive;
+            ->editColumn('check', function ($dealerIncentive) {
+                return $dealerIncentive;
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -120,13 +119,13 @@ class DealerIncentiveDataTable extends DataTable
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
+                // Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
             )
-            // ->rowGroupDataSrc('stakeholder_id')
+            ->rowGroupDataSrc('dealer_id')
             ->columnDefs([
                 [
                     'targets' => 0,

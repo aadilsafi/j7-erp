@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     TypeController,
     SiteController,
     CountryController,
+    CustomFieldController,
     FileManagementController,
     FloorController,
     JobBatchController,
@@ -123,6 +124,23 @@ Route::group([
 
             Route::group(['prefix' => '/{site_id}'], function () {
 
+                Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+
+                    //Custom Fields Routes
+                    Route::group(['prefix' => 'custom-fields', 'as' => 'custom-fields.'], function () {
+                        Route::get('/', [CustomFieldController::class, 'index'])->name('index');
+
+                        Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                        Route::post('store', [CustomFieldController::class, 'store'])->name('store');
+
+                        Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy-selected');
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
+                            Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                        });
+                    });
+                });
+
                 //Additional Costs Routes
                 Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
                     Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
@@ -168,7 +186,10 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
                        
-                            Route::get('fab-unit', [UnitController::class, 'fabUnits'])->name('fabUnit');
+                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                                Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
+                                Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
+                            });
 
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
@@ -392,7 +413,6 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'show'])->name('preview');
 
                         Route::get('/print/{file_refund_id}/{template_id}', [FileRefundController::class, 'printPage'])->name('print');
-
                     });
 
                     // file buy back
@@ -405,7 +425,6 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
 
                         Route::get('/print/{file_buy_back_id}/{template_id}', [FileBuyBackController::class, 'printPage'])->name('print');
-
                     });
 
                     // file Cancellation
@@ -445,7 +464,6 @@ Route::group([
                         Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
 
                         Route::get('/print/{file_title_transfer_id}/{template_id}', [FileTitleTransferController::class, 'printPage'])->name('print');
-
                     });
 
                     // file adjustment

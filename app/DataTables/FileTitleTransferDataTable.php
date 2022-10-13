@@ -13,7 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class ViewFilesDatatable extends DataTable
+class FileTitleTransferDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -59,9 +59,57 @@ class ViewFilesDatatable extends DataTable
             ->editColumn('file_status', function ($fileManagement) {
                 return editBadgeColumn($fileManagement->fileAction->name);
             })
+            // Title Transfer status
+            ->editColumn('title_transfer_status', function ($fileManagement) {
+
+                if(isset($fileManagement->fileTitleTransfer[0])){
+                    $statuses = 0;
+                    foreach($fileManagement->fileTitleTransfer as $fileCheck){
+
+                        if($fileCheck->status == 1){
+                            $statuses = false;
+                        }
+                        else{
+                            $statuses = true;
+                            break;
+                        }
+                    }
+
+                    if($statuses == true){
+                        return editBadgeColumn('Pending');
+                    }
+                    else{
+                        return editBadgeColumn('File Title Transfer Request Approved');
+                    }
+
+                } else {
+                    return editBadgeColumn(' File Title Transfer Request Not Found');
+                }
+            })
             // All File Actions
             ->editColumn('actions', function ($fileManagement) {
                 return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id,'file_id' =>$fileManagement->id]);
+            })
+            // Title Transfer Actions
+            ->editColumn('title_transfer_actions', function ($fileManagement) {
+                if (isset($fileManagement->fileTitleTransfer[0])) {
+                    $statuses = 0;
+                    $id = 0;
+                    foreach($fileManagement->fileTitleTransfer as $fileCheck){
+
+                        if($fileCheck->status == 1){
+                            $statuses = false;
+                        }
+                        else{
+                            $statuses = true;
+                            $id = $fileCheck->id;
+                            break;
+                        }
+                    }
+                    return view('app.sites.file-managements.files.files-actions.file-title-transfer.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $id, 'file_titleTransfer_status' => $statuses,]);
+                } else {
+                    return "-";
+                }
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -75,8 +123,8 @@ class ViewFilesDatatable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        if (Route::current()->getName() == 'sites.file-managements.view-files') {
-            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id);
+        if (Route::current()->getName() == 'sites.file-managements.file-title-transfer.index') {
+            return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 6);
         }
     }
 
@@ -123,6 +171,10 @@ class ViewFilesDatatable extends DataTable
      */
     protected function getColumns(): array
     {
+        $titleTransferRoute = false;
+        if (Route::current()->getName() == "sites.file-managements.file-title-transfer.index") {
+            $titleTransferRoute = true;
+        }
         return [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
@@ -136,6 +188,18 @@ class ViewFilesDatatable extends DataTable
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center'),
             // // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             // // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            // titleTransfer Actions
+            ($titleTransferRoute ?
+                Column::computed('title_transfer_status')->title('File Title Transfer Status')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('title_transfer_status')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+            ($titleTransferRoute ?
+                Column::computed('title_transfer_actions')->title('File Title Transfer Actions')->exportable(false)->printable(false)->width(60)->addClass('text-center text-nowrap')
+                :
+                Column::computed('title_transfer_actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            ),
+
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }
@@ -147,7 +211,7 @@ class ViewFilesDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Customers_Files_' . date('YmdHis');
+        return 'File_Title_transfer' . date('YmdHis');
     }
 
     /**

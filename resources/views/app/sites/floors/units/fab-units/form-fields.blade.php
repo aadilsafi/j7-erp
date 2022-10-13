@@ -15,6 +15,7 @@
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
+            <input type="hidden" name="unit_total_area" id="unit_total_area">
         </div>
 
         <div class="hidediv">
@@ -55,22 +56,16 @@
                     <div data-repeater-list="fab-units">
                         <div data-repeater-item>
                             <div class="card m-0">
-                                <div class="card-header">
-                                    <h3>Fabricated Units</h3>
+                                <div class="card-header mt-1">
+                                    <h3>Fabricated Unit</h3>
+                                    <button
+                                        class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                        data-repeater-delete id="delete-contact-person" type="button">
+                                        <i data-feather="x" class="me-25"></i>
+                                        <span>Delete</span>
+                                    </button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row mb-1">
-                                        <div class="col text-right">
-                                            <button
-                                                class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1 my-1"
-                                                data-repeater-delete id="delete-contact-person" type="button">
-                                                <i data-feather="x" class="me-25"></i>
-                                                <span>Delete</span>
-                                            </button>
-                                        </div>
-
-                                    </div>
-
 
                                     <div class="row mb-2" id="hide_div">
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -87,12 +82,14 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label" style="font-size: 15px" for="status_id">Unit
                                                 Status</label>
-                                            @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                                            @if (isset($unit) && count($unit->salesPlan) > 0 &&
+                                            $unit->salesPlan[0]->status == 1)
                                             <input type="hidden" name="fab-units[status_id]"
                                                 value="{{ $unit->status_id }}">
                                             @endif
                                             <select class="select2-size-lg form-select" id="status_id"
-                                                name="fab-units[status_id]" {{ isset($unit) && count($unit->salesPlan) &&
+                                                name="fab-units[status_id]" {{ isset($unit) && count($unit->salesPlan)
+                                                &&
                                                 $unit->salesPlan[0]->status == 1 ?
                                                 'disabled'
                                                 :
@@ -154,7 +151,7 @@
                                             <label class="form-label fs-5" for="gross_area">Gross Area
                                                 (sqft)</label>
                                             <input type="number"
-                                                class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
+                                                class="checkArea tocheckArea form-control form-control-lg @error('gross_area') is-invalid @enderror"
                                                 id="gross_area" name="fab-units[gross_area]"
                                                 placeholder="Gross Area (sqft)" min="0"
                                                 value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" />
@@ -190,68 +187,7 @@
 
                                     </div>
 
-                                    <div class="row">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                                            <div class="card m-0"
-                                                style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                                                <div class="card-body">
-
-                                                    {{-- Is Corner --}}
-                                                    <div class="row mb-2">
-                                                        <div class="col-xl-3 col-lg-3">
-                                                            <div class="d-flex align-items-center h-100">
-                                                                <div class="form-check form-check-primary">
-                                                                    <input type="hidden" name="fab-units[is_corner]"
-                                                                        value="0">
-                                                                    <input type="checkbox" class="form-check-input"
-                                                                        name="fab-units[is_corner]" id="is_corner"
-                                                                        value="1" {{ isset($unit) ? ($unit->is_corner == 1 ? 'checked' :  'unchecked') : (is_null(old('is_corner')) ? '' : (old('is_corner') == 1  ? 'checked' : 'unchecked')) }} />
-                                                                    <label class="form-check-label"
-                                                                        for="is_corner">Corner</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    {{-- Floor --}}
-                                                    <div class="row">
-                                                        <div class="col-xl-3 col-lg-3">
-                                                            <div class="d-flex align-items-center h-100">
-                                                                <div class="form-check form-check-primary">
-                                                                    <input type="hidden" name="fab-units[is_facing]"
-                                                                        value="0">
-                                                                    <input type="checkbox" class="form-check-input"
-                                                                        name="fab-units[is_facing]" id="is_facing"
-                                                                        value="1" 
-                                                                        {{ isset($unit) ? ($unit->is_facing == 1 ? 'checked' : 'unchecked') : (is_null(old('is_facing')) ? '' :  (old('is_facing')  == 1 ?  'checked' : 'unchecked')) }} />
-                                                                    <label class="form-check-label"
-                                                                        for="is_facing">Facing</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-9 col-lg-9">
-                                                            <label class="form-label" style="font-size: 15px"
-                                                                for="facing_id">Facing
-                                                                Charges</label>
-                                                            <select class="select2-size-lg form-select" id="facing_id"
-                                                                name="fab-units[facing_id]" disabled />
-                                                            <option value="" selected>Select Facing Charges</option>
-                                                            @foreach ($additionalCosts as $row)
-                                                            <option value="{{ $row['id'] }}" {{ $row->has_child ? 'disabled' : '' }}
-                                                                {{ (isset($unit) ? $unit->facing_id : old('facing_id')) == $row['id'] ? 'selected' : '' }}>
-                                                                {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
-                                                            @endforeach
-                                                            </select>
-                                                            @error('facing_id')
-                                                            <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                  
                                 </div>
                             </div>
                         </div>

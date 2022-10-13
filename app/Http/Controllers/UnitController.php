@@ -128,9 +128,9 @@ class UnitController extends Controller
         }
     }
 
-    public function storefabUnit(Request $request, $site_id, $floor_id)
+    public function storefabUnit(fabstoreRequest $request, $site_id, $floor_id)
     {
-        dd($request->all());
+        
         try {
             if (!request()->ajax()) {
                 // $inputs = $request->validated();

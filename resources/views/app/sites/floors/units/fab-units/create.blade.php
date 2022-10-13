@@ -53,7 +53,7 @@ encryptParams($floor->id)) }}
 @section('content')
 <form class="form form-vertical"
     action="{{ route('sites.floors.units.fab.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
-    method="POST">
+    method="POST" id="fabUnitForm">
 
     <div class="row">
         <div id="loader" class="col-lg-9 col-md-9 col-sm-12 position-relative">
@@ -114,6 +114,7 @@ encryptParams($floor->id)) }}
 @section('custom-js')
 <script>
     $(document).ready(function() {
+
         $('#unit_id').trigger('change');
 
         $('#unit_id').on('change', function() {
@@ -144,7 +145,8 @@ encryptParams($floor->id)) }}
                         $('#unit_number').val(response.max_unit_number);
                         $('#floor_name').val(response.floor_name);
                         $('#floor_id').val(response.unit.floor_id);
-                       
+                        $('#unit_total_area').val(response.unit.gross_area);
+
                          $('.hidediv').show();
 
                         hideBlockUI('#loader');
@@ -164,11 +166,10 @@ encryptParams($floor->id)) }}
                 }
             });
             }
-            
             });
 
-        
-            $('#is_corner').on('change', function() {
+            $('.is_corner').on('change', function() {
+                // alert($(this).attr("name"));
                 if ($(this).is(':checked')) {
                     $('#corner_id').attr('disabled', false);
                 } else {
@@ -176,7 +177,13 @@ encryptParams($floor->id)) }}
                 }
             });
 
-            $('#is_facing').on('change', function() {
+            // $("name=['fab-units'][0]['is_corner'][]").on('change', function(){
+            //     alert(1);
+            // });
+
+            $('.is_facing').on('change', function() {
+              
+
                 if ($(this).is(':checked')) {
                     $('#facing_id').attr('disabled', false);
                 } else {
@@ -184,167 +191,12 @@ encryptParams($floor->id)) }}
                 }
             });
 
-            $('#is_corner').trigger('change');
-            $('#is_facing').trigger('change');
-
-            $('#add_bulk_unit').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#bulkOptionSlider').show();
-                    $('#bulk_units_checkbox_column').addClass('mb-3');
-                    $('#hide_div').hide();
-                    $("#unit_number, #name").attr('disabled', true);
-                    mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
-                } else {
-                    $('#bulkOptionSlider').hide();
-                    $('#bulk_units_checkbox_column').removeClass('mb-3');
-                    $('#hide_div').show();
-                    $("#unit_number, #name").attr('disabled', false);
-                    $('#create_unit_button_span').html('Save Unit');
-                }
-            });
-
-            var unitSlider = document.getElementById("primary-color-slider");
-
-            noUiSlider.create(unitSlider, {
-                behaviour: "tap-drag",
-                tooltips: wNumb({
-                    decimals: 0,
-                    postfix: ' <i class="bi bi-door-open" class="m-10"></i>'
-                }),
-                connect: !0,
-                step: 1,
-                start: [0, 20],
-                range: {
-                    min: 1,
-                    max: parseInt('{{ getNHeightestNumber($siteConfiguration->unit_number_digits) }}') + 1,
-                },
-                pips: {
-                    mode: "range",
-                    stepped: !0,
-                    density: 10,
-                    format: wNumb({
-                        decimals: 0,
-                        postfix: ' <i class="bi bi-door-open" class="m-10"></i>'
-                    })
-                },
-                direction: 'ltr'
-            });
-
-            var inputs = [
-
-            ];
-
-            var inputs = [
-                document.getElementById('slider_input_1'),
-                document.getElementById('slider_input_2')
-            ];
-
-            unitSlider.noUiSlider.on('update', function(values, handle, unencoded) {
-                inputs[handle].value = parseInt(values[handle]);
-            });
-
-            // mergeTooltips(unitSlider, 15, ' <i class="bi bi-door-open" class="m-10"></i> - ');
-
-            function mergeTooltips(slider, threshold, separator) {
-
-                var textIsRtl = getComputedStyle(slider).direction === 'rtl';
-                var isRtl = slider.noUiSlider.options.direction === 'rtl';
-                var isVertical = slider.noUiSlider.options.orientation === 'vertical';
-                var tooltips = slider.noUiSlider.getTooltips();
-                var origins = slider.noUiSlider.getOrigins();
-
-                // Move tooltips into the origin element. The default stylesheet handles this.
-                tooltips.forEach(function(tooltip, index) {
-                    if (tooltip) {
-                        origins[index].appendChild(tooltip);
-                    }
-                });
-
-                slider.noUiSlider.on('update', function(values, handle, unencoded, tap, positions) {
-
-                    if ($('#add_bulk_unit').is(':checked')) {
-                        $('#create_unit_button_span').html('Save Units [' + parseInt(
-                            getDifference(values[0], values[1]) + 1) + ']');
-                    }
-
-                    var pools = [
-                        []
-                    ];
-                    var poolPositions = [
-                        []
-                    ];
-                    var poolValues = [
-                        []
-                    ];
-                    var atPool = 0;
-
-                    // Assign the first tooltip to the first pool, if the tooltip is configured
-                    if (tooltips[0]) {
-                        pools[0][0] = 0;
-                        poolPositions[0][0] = positions[0];
-                        poolValues[0][0] = values[0];
-                    }
-
-                    for (var i = 1; i < positions.length; i++) {
-                        if (!tooltips[i] || (positions[i] - positions[i - 1]) > threshold) {
-                            atPool++;
-                            pools[atPool] = [];
-                            poolValues[atPool] = [];
-                            poolPositions[atPool] = [];
-                        }
-
-                        if (tooltips[i]) {
-                            pools[atPool].push(i);
-                            poolValues[atPool].push(values[i]);
-                            poolPositions[atPool].push(positions[i]);
-                        }
-                    }
-
-                    pools.forEach(function(pool, poolIndex) {
-                        var handlesInPool = pool.length;
-
-                        for (var j = 0; j < handlesInPool; j++) {
-                            var handleNumber = pool[j];
-
-                            if (j === handlesInPool - 1) {
-                                var offset = 0;
-
-                                poolPositions[poolIndex].forEach(function(value) {
-                                    offset += 1000 - value;
-                                });
-
-                                var direction = isVertical ? 'bottom' : 'right';
-                                var last = isRtl ? 0 : handlesInPool - 1;
-                                var lastOffset = 1000 - poolPositions[poolIndex][last];
-                                offset = (textIsRtl && !isVertical ? 100 : 0) + (offset /
-                                    handlesInPool) - lastOffset;
-
-                                // Center this tooltip over the affected handles
-
-                                tooltips[handleNumber].innerHTML = poolValues[poolIndex].map(
-                                        function(item) {
-                                            return parseInt(item, 10);
-                                        }).join(separator) +
-                                    ' <i class="bi bi-door-open" class="m-10"></i>';
-                                tooltips[handleNumber].style.display = 'block';
-                                tooltips[handleNumber].style[direction] = offset + '%';
-                            } else {
-                                // Hide this tooltip
-                                tooltips[handleNumber].style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            }
-
-            function getDifference(a, b) {
-                return Math.abs(a - b);
-            }
+            // $('.is_corner').trigger('change');
+            // $('.is_facing').trigger('change');
 
 
             //Calculate Unit Price and Total Price from Gross Area
             $('#gross_area, #price_sqft').on('keyup', function() {
-                alert(1);
                 var total_price = 0;
                 var gross_area = 0;
                 var price_sqft = 0;
@@ -362,12 +214,14 @@ encryptParams($floor->id)) }}
             });
         });
 
+        // function test(){
+        //     alert('test');
+        // }
         $(".fab-units").repeater({
-            defaultValues: {
-                'fabUnits[name]': function(){
-                    alert(1);
-                },
-            },
+            // defaultValues: {
+            //     'fabUnits[name]': test(),
+            // },
+            isFirstItemUndeletable: true,
                 show: function() {
                     $(this).slideDown(), feather && feather.replace({
                         width: 14,
@@ -379,18 +233,32 @@ encryptParams($floor->id)) }}
                 }
             });
 
-            // $.validator.addMethod("checkArea", function(value, element) {
-            //     var parentForm = $(element).closest('form');
-            //     var total_area = 0;
-            //     if (value != '') {
-            //         $(parentForm.find('.tocheckArea')).each(function() {
-            //             if ($(this).val() === value) {
-            //                 cnicRepeated++;
-            //             }
-            //         });
-            //     }
-            //     return cnicRepeated === 1 || cnicRepeated === 0;
+            $.validator.addMethod("checkArea", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var unit_total_area = $('#unit_total_area').val();
+                var sum_area = 0;
+                if (value != '') {  
+                    $(parentForm.find('.checkArea')).each(function() {
+                        sum_area += Number($(this).val());
+                    });
+                }
+               
+                if(sum_area > unit_total_area){
+                    return false;
+                }else{
+                    return true;
+                }
 
-            // }, "Contact Person CNIC can't be duplicated");
+            }, "Sub Units Gross area must be less than Total Gross area");
+
+            var validator = $("#fabUnitForm").validate({
+
+                    errorClass: 'is-invalid text-danger',
+                    errorElement: "span",
+                    wrapper: "div",
+                    submitHandler: function(form) {
+                        form.submit();
+                    }
+                    });
 </script>
 @endsection

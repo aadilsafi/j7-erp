@@ -25,15 +25,16 @@ class fabstoreRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->input());
-        $rules = (new Unit())->rules;
-        $rules['unit_number'] = [
-            Rule::requiredIf(function () {
-                return $this->add_bulk_unit == 0;
-            }),
-            'numeric',
-            'between:1,' . $this->unit_number_digits,
-            Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
+        $rules = [
+            'fab-units.*.name' => 'nullable|string|max:255',
+            'fab-units.*.width' => 'required|numeric',
+            'fab-units.*.length' => 'required|numeric',
+            'fab-units.*.net_area' => 'required|numeric|gt:0',
+            'fab-units.*.gross_area' => 'required|numeric|gte:fab-units.*.net_area',
+            // 'fab-units.*.price_sqft' => 'required|numeric|gt:0',
+            // 'fab-units.*.is_corner' => 'required|boolean|in:0,1',
+            // 'fab-units.*.is_facing' => 'required|boolean|in:0,1',
+            // 'fab-units.*.facing_id' => 'required_if:is_facing,1|integer',
         ];
 
         return $rules;
@@ -46,7 +47,13 @@ class fabstoreRequest extends FormRequest
      */
     public function messages()
     {
-        return (new Unit())->ruleMessages;
+        $ruleMessages = [
+            'fab-units.*.corner_id.required_if' => 'The Corner charges field is required when :other is checked.',
+            'fab-units.*.facing_id.required_if' => 'The Facing charges field is required when :other is checked.',
+            'fab-units.*.gross_area.gte' => 'The Gross Area must be greater than or equal to Net Area.',
+        ];
+
+        return $ruleMessages;
     }
 
     // /**

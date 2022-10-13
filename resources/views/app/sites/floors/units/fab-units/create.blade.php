@@ -114,11 +114,13 @@ encryptParams($floor->id)) }}
 @section('custom-js')
 <script>
     $(document).ready(function() {
+        $('#unit_id').trigger('change');
 
         $('#unit_id').on('change', function() {
-            showBlockUI('#loader');
             var unit_id = $(this).val();
             if(unit_id !=0){
+            showBlockUI('#loader');
+
                 var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.floors.units.ajax-get-unit-data', ['site_id' => encryptParams($site->id),'floor_id' => encryptParams($floor->id)]) }}";
@@ -141,6 +143,7 @@ encryptParams($floor->id)) }}
                         $('#total_price1').val(response.unit.total_price);
                         $('#unit_number').val(response.max_unit_number);
                         $('#floor_name').val(response.floor_name);
+                        $('#floor_id').val(response.unit.floor_id);
                        
                          $('.hidediv').show();
 
@@ -341,6 +344,7 @@ encryptParams($floor->id)) }}
 
             //Calculate Unit Price and Total Price from Gross Area
             $('#gross_area, #price_sqft').on('keyup', function() {
+                alert(1);
                 var total_price = 0;
                 var gross_area = 0;
                 var price_sqft = 0;
@@ -359,7 +363,11 @@ encryptParams($floor->id)) }}
         });
 
         $(".fab-units").repeater({
-                // initEmpty: true,
+            defaultValues: {
+                'fabUnits[name]': function(){
+                    alert(1);
+                },
+            },
                 show: function() {
                     $(this).slideDown(), feather && feather.replace({
                         width: 14,
@@ -370,5 +378,19 @@ encryptParams($floor->id)) }}
                     $(this).slideUp(e)
                 }
             });
+
+            // $.validator.addMethod("checkArea", function(value, element) {
+            //     var parentForm = $(element).closest('form');
+            //     var total_area = 0;
+            //     if (value != '') {
+            //         $(parentForm.find('.tocheckArea')).each(function() {
+            //             if ($(this).val() === value) {
+            //                 cnicRepeated++;
+            //             }
+            //         });
+            //     }
+            //     return cnicRepeated === 1 || cnicRepeated === 0;
+
+            // }, "Contact Person CNIC can't be duplicated");
 </script>
 @endsection

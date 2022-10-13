@@ -84,15 +84,13 @@ class UnitController extends Controller
     function createfabUnit($site_id, $floor_id)
     {
 
-        abort(403);
-        
         if (!request()->ajax()) {
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'units' => (new Unit())->where('status_id',1)->with('status', 'type')->get(),
+                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
             ];
@@ -135,13 +133,10 @@ class UnitController extends Controller
         dd($request->all());
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
-                if ($inputs['add_bulk_unit']) {
-                    $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
-                    return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withSuccess('Unit(s) will be contructed shortly!');
-                } else {
-                    $record = $this->unitInterface->store($site_id, decryptParams($floor_id), $inputs);
-                }
+                // $inputs = $request->validated();
+                $inputs = $request->all();
+
+                $record = $this->unitInterface->storeFabUnit($site_id, $request->floor_id, $inputs);
 
                 return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -490,10 +485,11 @@ class UnitController extends Controller
     }
 
 
-    public function getUnitData(Request $request, $site_id, $floor_id){
- 
+    public function getUnitData(Request $request, $site_id, $floor_id)
+    {
+
         $unit = (new Unit())->find($request->unit_id);
-        
+
         return response()->json([
             'success' => true,
             'unit' => $unit,

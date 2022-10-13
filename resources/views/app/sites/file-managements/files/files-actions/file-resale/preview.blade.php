@@ -64,6 +64,9 @@
                     'rebate_total' => $rebate_total,
                     'buyer' => $buyer,
                     'resale' => $resale_file,
+                    'paid_instalments' =>$paid_instalments,
+                'un_paid_instalments'=> $un_paid_instalments,
+                'partially_paid_instalments' => $partially_paid_instalments,
                 ]) }}
             </div>
 

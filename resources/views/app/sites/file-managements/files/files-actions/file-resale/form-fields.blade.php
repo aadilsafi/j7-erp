@@ -459,7 +459,7 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Downpayemnt %</label>
+                        <label class="form-label fs-5" for="stackholder_occupation">Downpayment %</label>
                         <input type="text" readonly
                             @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_percentage']) }}"
                             @else
@@ -485,11 +485,7 @@
                         <label class="form-label fs-5 text-nowrap" for="stackholder_father_name">Installments
                             Received</label>
                         <input type="text" readonly
-                            @if (isset($unit->salesPlan[0]))
-                                value="{{ count($unit->salesPlan[0]['PaidorPartiallyPaidInstallments']) }}"
-                            @else
-                                value="{{ count($unit->CancelsalesPlan[0]['PaidorPartiallyPaidInstallments']) }}"
-                            @endif
+                            value="{{ count($paid_instalments) + count($partially_paid_instalments) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -498,11 +494,7 @@
                         <label class="form-label fs-5 text-nowrap" for="stackholder_father_name">Installments
                             Pending</label>
                         <input type="text" readonly
-                            @if (isset($unit->salesPlan[0]))
-                                value="{{ count($unit->salesPlan[0]['unPaidInstallments']) }}"
-                            @else
-                                value="{{ count($unit->CancelsalesPlan[0]['unPaidInstallments']) }}"
-                            @endif
+                            value="{{ count($un_paid_instalments) + count($partially_paid_instalments) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -510,11 +502,9 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Date Of Purchase</label>
                         <input type="text" readonly
-                            @if (isset($unit->salesPlan[0]))
-                                 value="{{ date_format(new DateTime($unit->salesPlan[0]['updated_at']), 'D d-M-Y') }}"
+                            @if (isset($unit->salesPlan[0])) value="{{ date_format(new DateTime($unit->salesPlan[0]['updated_at']), 'D d-M-Y') }}"
                             @else
-                                value="{{ date_format(new DateTime($unit->CancelsalesPlan[0]['updated_at']), 'D d-M-Y') }}"
-                            @endif
+                                value="{{ date_format(new DateTime($unit->CancelsalesPlan[0]['updated_at']), 'D d-M-Y') }}" @endif
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -580,38 +570,39 @@
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
-                                                @endforeach @endif
-                            </tbody>
-                        </table>
+                                                @endforeach
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
 
-<div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
-    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-        id="stakeholders_card">
-        <div class="card-header justify-content-between">
-            <h3>Comments </h3>
-        </div>
+    <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+            id="stakeholders_card">
+            <div class="card-header justify-content-between">
+                <h3>Comments </h3>
+            </div>
 
-        <div class="card-body">
+            <div class="card-body">
 
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <div class="row mb-1">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
-                            {{ isset($resale) ? 'disabled' : '' }} placeholder="Comments" rows="5">{{ isset($resale) ? $resale->comments : '' }}</textarea>
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
+                                {{ isset($resale) ? 'disabled' : '' }} placeholder="Comments" rows="5">{{ isset($resale) ? $resale->comments : '' }}</textarea>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
         </div>
     </div>
-</div>
 
 </div>

@@ -18,6 +18,7 @@ use App\Http\Requests\FileBuyBack\storeRequest;
 use App\Http\Requests\FileResale\storeRequest as FileResaleStoreRequest;
 use App\Models\FileResaleAttachment;
 use App\Models\ModelTemplate;
+use App\Models\SalesPlanInstallments;
 use App\Models\Template;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
@@ -67,6 +68,10 @@ class FileReleaseController extends Controller
             $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
+            $paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','paid')->get();
+            $un_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','unpaid')->get();
+            $partially_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','partially_paid')->get();
+
             if (isset($rebate_incentive)) {
                 $rebate_total = $rebate_incentive->commision_total;
             } else {
@@ -83,6 +88,9 @@ class FileReleaseController extends Controller
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
                 'rebate_total' => $rebate_total,
+                'paid_instalments' =>$paid_instalments,
+                'un_paid_instalments'=> $un_paid_instalments,
+                'partially_paid_instalments' => $partially_paid_instalments,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-resale.create', $data);
@@ -138,6 +146,20 @@ class FileReleaseController extends Controller
             $rebate_total = 0;
         }
 
+        if(isset($unit->salesPlan[0])){
+            $paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','paid')->get();
+            $un_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','unpaid')->get();
+            $partially_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->salesPlan[0]->id)->where('status','partially_paid')->get();
+        }
+        else{
+            $paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->CancelsalesPlan[0]->id)->where('status','paid')->get();
+            $un_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->CancelsalesPlan[0]->id)->where('status','unpaid')->get();
+            $partially_paid_instalments = SalesPlanInstallments::where('sales_plan_id',$unit->CancelsalesPlan[0]->id)->where('status','partially_paid')->get();
+        }
+
+
+
+
         foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_resale_attachments');
             $images[$key] = $image->getUrl();
@@ -154,6 +176,9 @@ class FileReleaseController extends Controller
             'buyer' => Stakeholder::find($resale_file->buyer_id),
             'rebate_incentive' => $rebate_incentive,
             'rebate_total' => $rebate_total,
+            'paid_instalments' =>$paid_instalments,
+                'un_paid_instalments'=> $un_paid_instalments,
+                'partially_paid_instalments' => $partially_paid_instalments,
         ];
         // dd($data['unit']['salesPlan']);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);

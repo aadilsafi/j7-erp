@@ -227,7 +227,7 @@ class ReceiptService implements ReceiptInterface
         $total_paid_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->get();
         $total_paid_amount = collect($total_paid_amount)->sum('paid_amount');
 
-        if ($total_paid_amount >= $token_price) {
+        if ($total_paid_amount <= $token_price) {
             $unit->status_id = 2;
         }
 

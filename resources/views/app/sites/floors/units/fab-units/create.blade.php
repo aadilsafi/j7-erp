@@ -120,6 +120,7 @@ encryptParams($floor->id)) }}
         $('#unit_id').on('change', function() {
             var unit_id = $(this).val();
             if(unit_id !=0){
+                $('.hidediv').hide();
             showBlockUI('#loader');
 
                 var _token = '{{ csrf_token() }}';
@@ -138,16 +139,28 @@ encryptParams($floor->id)) }}
                         // $('#floor_name').val(response.unit.name);
                         $('#width').val(response.unit.width);
                         $('#length').val(response.unit.length);
-                        $('#net_area').val(response.unit.net_area);
-                        $('#gross_area').val(response.unit.gross_area);
+                        $('#net_area').val(response.remaing_net);
+                        $('#gross_area').val(response.remaing_gross);
                         $('#price_sqft').val(response.unit.price_sqft);
                         $('#total_price1').val(response.unit.total_price);
                         $('#unit_number').val(response.max_unit_number);
                         $('#floor_name').val(response.floor_name);
                         $('#floor_id').val(response.unit.floor_id);
-                        $('#unit_total_area').val(response.unit.gross_area);
+                        $('#unit_total_area').val(response.remaing_gross);
 
-                         $('.hidediv').show();
+                        if(response.remaing_gross == 0){
+                            toastr.error('Unit is Already Fabricated.',
+                                "Error!", {
+                                    showMethod: "slideDown",
+                                    hideMethod: "slideUp",
+                                    timeOut: 2e3,
+                                    closeButton: !0,
+                                    tapToDismiss: !1,
+                                });
+                        }else{
+                            $('.hidediv').show();
+
+                        }
 
                         hideBlockUI('#loader');
                     } else {
@@ -241,6 +254,8 @@ encryptParams($floor->id)) }}
                     $(parentForm.find('.checkArea')).each(function() {
                         sum_area += Number($(this).val());
                     });
+
+                    $('#sub_unit_total_area').val(sum_area);
                 }
                
                 if(sum_area > unit_total_area){
@@ -249,7 +264,7 @@ encryptParams($floor->id)) }}
                     return true;
                 }
 
-            }, "Sub Units Gross area must be less than Total Gross area");
+            }, "Sub Units Gross area must be less than Total Unit Gross area");
 
             var validator = $("#fabUnitForm").validate({
 

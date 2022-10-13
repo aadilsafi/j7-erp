@@ -16,6 +16,8 @@
                 @enderror
             </div>
             <input type="hidden" name="unit_total_area" id="unit_total_area">
+            <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area">
+
         </div>
 
         <div class="hidediv">

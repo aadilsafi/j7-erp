@@ -489,12 +489,15 @@ class UnitController extends Controller
     {
 
         $unit = (new Unit())->find($request->unit_id);
+        $remaing = (new Unit())->where('parent_id', $unit->id);
 
         return response()->json([
             'success' => true,
             'unit' => $unit,
             'max_unit_number' => getMaxUnitNumber($unit->floor_id) + 1,
-            'floor_name' => $unit->floor->name
+            'floor_name' => $unit->floor->name,
+            'remaing_gross' => $unit->gross_area - $remaing->sum('gross_area'),
+            'remaing_net' => $unit->net_area - $remaing->sum('net_area'),
         ], 200);
     }
 }

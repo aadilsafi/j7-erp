@@ -61,7 +61,7 @@
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
-
+                            <input type="hidden" id="units_ids" name="unit_ids[]">
                                 <table class="table table-hover table-striped table-borderless" id="installments_table"
                                     style="position: relative;">
                                     <thead style="position: sticky; top: 0; z-index: 10;">

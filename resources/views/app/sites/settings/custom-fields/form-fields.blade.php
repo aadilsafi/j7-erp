@@ -18,7 +18,8 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="type">Field Type <span
                         class="text-danger">*</span></label>
-                <select class="select2-size-lg form-select" id="type" name="type">
+                <select class="select2-size-lg form-select @error('type') is-invalid @enderror" id="type"
+                    name="type">
                     <option value="0" selected>Field Type</option>
                     @foreach ($fieldTypes as $key => $value)
                         <option value="{{ $value }}"
@@ -65,8 +66,9 @@
             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="custom_field_model">Bind To <span
                         class="text-danger">*</span></label>
-                <select class="select2-size-lg form-select" id="custom_field_model" name="custom_field_model">
-                    <option value="0" selected>Bind To</option>
+                <select class="select2-size-lg form-select @error('custom_field_model') is-invalid @enderror"
+                    id="custom_field_model" name="custom_field_model">
+                    <option value="" selected>Bind To</option>
                     @foreach ($models as $path => $name)
                         <option value="{{ $path }}"
                             {{ (isset($customFiled) ? $customFiled->custom_field_model : old('custom_field_model')) == $path ? 'selected' : '' }}>
@@ -87,7 +89,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="values">Field Values <span
                         class="text-danger"></span></label>
-                <select class="form-select" id="values" name="values[]" multiple></select>
+                <select class="form-select @error('values') is-invalid @enderror" id="values" name="values[]"
+                    multiple></select>
                 @error('values')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else

@@ -22,7 +22,6 @@ class Unit extends Model
         'unit_number',
         'floor_unit_number',
         'net_area',
-        'has_sub_units',
         'parent_id',
         'gross_area',
         'price_sqft',

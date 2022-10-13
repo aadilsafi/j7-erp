@@ -16,6 +16,7 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\CauserResolver;
 use Illuminate\Support\Facades\{Notification, Bus};
+use Illuminate\Support\Facades\DB;
 
 
 class UnitService implements UnitInterface
@@ -82,6 +83,53 @@ class UnitService implements UnitInterface
         $floor = $this->model()->create($data);
         return $floor;
     }
+
+    // Store Fab Unit
+    public function storeFabUnit($site_id, $floor_id, $inputs, $isUnitActive = true)
+    {
+        DB::transaction(function () use ($site_id, $floor_id, $inputs) {
+
+        $site_id = decryptParams($site_id);
+        $floor = (new Floor())->find($floor_id);
+        $unit = (new Unit())->find($inputs['unit_id']);
+        $unit_number = filter_strip_tags($inputs['unit_number']);
+        $unitNumberDigits = (new Floor())->find($floor_id)->site->siteConfiguration->unit_number_digits;
+
+        foreach ($inputs['fab-units'] as $input) {
+            $totalPrice = floatval($input['gross_area']) * floatval($input['price_sqft']);
+
+            $data = [
+                'parent_id' => $unit->id,
+                'floor_id' => $floor_id,
+                'name' => filter_strip_tags($input['name'] ?? ''),
+                'width' => filter_strip_tags($input['width']),
+                'length' => filter_strip_tags($input['length']),
+                'unit_number' => $unit_number,
+                'floor_unit_number' => $unit->floor_unit_number . '-FAB-' . Str::padLeft($unit_number, $unitNumberDigits, '0'),
+                'net_area' => filter_strip_tags($input['net_area']),
+                'gross_area' => filter_strip_tags($input['gross_area']),
+                'price_sqft' => filter_strip_tags($input['price_sqft']),
+                'total_price' => $totalPrice,
+                'is_corner' => filter_strip_tags($input['is_corner']),
+                'corner_id' => isset($input['corner_id']) ? filter_strip_tags($input['corner_id']) : null,
+                'is_facing' => filter_strip_tags($input['is_facing']),
+                'facing_id' => isset($input['facing_id']) ? filter_strip_tags($input['facing_id']) : null,
+                'status_id' => 1,
+                'type_id' => $unit->type_id,
+                'active' => true,
+            ];
+
+            // dd($data);
+
+            $floor = $this->model()->create($data);
+            $unit_number++;
+        }
+
+
+        return $floor;
+    });
+    }
+
 
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {

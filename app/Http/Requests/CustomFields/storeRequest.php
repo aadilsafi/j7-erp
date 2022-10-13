@@ -26,11 +26,11 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->all());
         $data = [
             'name' => ['required', 'string', 'between:1,120'],
             'type' => ['required', 'string', 'between:1,50', 'in:' . implode(',', CustomFieldsEnum::values())],
             'values' => ['nullable', 'array'],
+            'custom_field_model' => ['required', 'string'],
             'disabled' => ['nullable', 'boolean'],
             'required' => ['nullable', 'boolean'],
             'in_table' => ['nullable', 'boolean'],
@@ -40,13 +40,9 @@ class storeRequest extends FormRequest
             'minlength' => ['nullable', 'numeric'],
             'maxlength' => ['nullable', 'numeric'],
             'bootstrap_column' => ['nullable', 'numeric', 'between:1,12'],
-            'order' => ['nullable', 'numeric', Rule::unique('custom_fields')->where('site_id', $this->site_id)->where('custom_field_model', $this->custom_field_model)],
-            'order' => ['nullable', 'string',
-            // $table->string('custom_field_model')->nullable();
+            'order' => ['nullable', 'numeric', Rule::unique('custom_fields')->where('site_id', decryptParams($this->site_id))->where('custom_field_model', $this->custom_field_model)],
         ];
 
-        dd($data);
         return $data;
     }
 }
-

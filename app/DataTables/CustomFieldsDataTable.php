@@ -3,12 +3,9 @@
 namespace App\DataTables;
 
 use App\Models\CustomField;
-use App\Models\Unit;
-use App\Models\Floor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -38,7 +35,7 @@ class CustomFieldsDataTable extends DataTable
                 return editDateColumn($customField->updated_at);
             })
             ->editColumn('actions', function ($customField) {
-                return view('app.sites.settings.custom-fields.actions');
+                return view('app.sites.settings.custom-fields.actions', ['site_id' => $this->site_id, 'id' => $customField->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

@@ -11,6 +11,7 @@ interface UnitInterface
 
     public function store($site_id, $floor_id, $inputs, $isUnitActive = true);
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false);
+    public function storeFabUnit($site_id, $floor_id, $inputs, $isUnitActive = true);
 
     public function update($site_id, $floor_id, $id, $inputs);
 

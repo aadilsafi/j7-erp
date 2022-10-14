@@ -42,6 +42,9 @@ class DealerIncentiveDataTable extends DataTable
             ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
                 return number_format($dealerIncentive->total_dealer_incentive);
             })
+            ->editColumn('dealer_incentive', function ($dealerIncentive) {
+                return number_format($dealerIncentive->dealer_incentive);
+            })
             ->editColumn('created_at', function ($dealerIncentive) {
                 return editDateColumn($dealerIncentive->created_at);
             })
@@ -164,7 +167,7 @@ class DealerIncentiveDataTable extends DataTable
             Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
             Column::make('dealer_incentive')->title('Dealer Incentive')->addClass('text-nowrap text-center'),
             Column::make('total_unit_area')->title('Total Unit Area')->addClass('text-nowrap text-center'),
-            Column::make('total_dealer_incentive')->title('Total Incentive')->addClass('text-nowrap '),
+            Column::make('total_dealer_incentive')->title('Total Incentive')->addClass('text-nowrap text-center'),
             Column::make('status')->title('Status')->addClass('text-nowrap text-center'),
             Column::computed('created_at')->title('Created At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

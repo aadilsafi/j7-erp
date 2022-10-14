@@ -601,7 +601,10 @@
 
                                         <tbody>
                                             @php
-                                                $receipts = collect($salesPlan->receipts)->sortBy('transaction_date')->values()->all();
+                                                $receipts = collect($salesPlan->receipts)
+                                                    ->sortBy('transaction_date')
+                                                    ->values()
+                                                    ->all();
                                             @endphp
 
                                             @forelse ($receipts as $receipt)
@@ -810,14 +813,37 @@
                                                 <th style="vertical-align: middle;" rowspan="2" scope="col">
                                                     Rate
                                                 </th>
-                                                <th style="vertical-align: middle;" scope="col">Face Charges</th>
+
+                                                @if (isset($salesPlan->additionalCosts[0]))
+                                                    @foreach ($salesPlan->additionalCosts as $additionalCosts)
+                                                        <th style="vertical-align: middle;" class="text-nowrap" scope="col">
+                                                            {{ $additionalCosts->name }}
+                                                        </th>
+                                                    @endforeach
+                                                @else
+                                                    <th style="vertical-align: middle;" scope="col">Face Charges
+                                                    </th>
+                                                @endif
+
+
                                                 <th style="vertical-align: middle;" scope="col">Discount</th>
                                                 <th style="vertical-align: middle;" scope="col">Total</th>
                                                 <th style="vertical-align: middle;" scope="col">Downpayment</th>
                                             </tr>
 
                                             <tr class="text-center">
-                                                <th style="vertical-align: middle;" scope="col">%</th>
+                                                @if (isset($salesPlan->additionalCosts[0]))
+                                                    @foreach ($salesPlan->additionalCosts as $additionalCosts)
+                                                        <th style="vertical-align: middle;" scope="col">
+                                                            {{ $additionalCosts->unit_percentage }}%
+                                                        </th>
+                                                    @endforeach
+                                                @else
+                                                    <th style="vertical-align: middle;" scope="col">
+                                                        %
+                                                    </th>
+                                                @endif
+
                                                 <th style="vertical-align: middle;" scope="col">
                                                     {{ $salesPlan->discount_percentage }} %</th>
                                                 <th style="vertical-align: middle;" scope="col">Value</th>
@@ -833,14 +859,30 @@
                                                 <td>{{ $unit->unit_number }}</td>
                                                 <td>{{ $unit->gross_area }}</td>
                                                 <td>{{ number_format($unit->price_sqft, 2) }}</td>
-                                                <td></td>
+                                                @if (isset($salesPlan->additionalCosts[0]))
+                                                    @foreach ($salesPlan->additionalCosts as $additionalCosts)
+                                                        <td >
+                                                            {{ number_format(($additionalCosts->unit_percentage / 100) * ($salesPlan->unit_price * $unit->gross_area)) }}
+                                                        </td>
+                                                    @endforeach
+                                                @else
+                                                    <td>-</td>
+                                                @endif
                                                 <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
                                                 <td>{{ number_format($salesPlan->total_price, 2) }}</td>
                                                 <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>
                                             </tr>
                                             <tr class="text-center">
                                                 <td colspan="4"></td>
-                                                <td>-</td>
+                                                @if (isset($salesPlan->additionalCosts[0]))
+                                                    @foreach ($salesPlan->additionalCosts as $additionalCosts)
+                                                        <td >
+                                                            {{ number_format(($additionalCosts->unit_percentage / 100) * ($salesPlan->unit_price * $unit->gross_area)) }}
+                                                        </td>
+                                                    @endforeach
+                                                @else
+                                                    <td>-</td>
+                                                @endif
                                                 <td>{{ number_format($salesPlan->discount_total, 2) }}</td>
                                                 <td>{{ number_format($salesPlan->total_price, 2) }}</td>
                                                 <td>{{ number_format($salesPlan->down_payment_total, 2) }}</td>

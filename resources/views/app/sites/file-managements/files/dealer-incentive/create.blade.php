@@ -133,7 +133,7 @@
                                 $('#dynamic_unit_rows').append(
                                     '<tr class="text-nowrap">',
                                     '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name=type type="checkbox" area="' +
+                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="type" type="checkbox" area="' +
                                     response.units[i]['gross_area'] + '" name="" unit_id="' + response
                                     .units[i]['id'] + '"></td>',
                                     '<td class="text-nowrap text-center">' + response
@@ -149,6 +149,7 @@
                                     '</td>',
                                     '</tr>', );
                             }
+                          
                         }
                         hideBlockUI('#loader');
                     } else {
@@ -172,6 +173,7 @@
             showBlockUI('#loader');
             // var selectedValues = $('#unit_id').val();
             let element = [];
+            let ids = [];
             let total_area = 0.0;
             // for (let index = 0; index < selectedValues.length; index++) {
             //     element = selectedValues[index].split("_");
@@ -181,12 +183,15 @@
             $("input:checkbox[name=type]:checked").each(function() {
                 element.push($(this).attr('area'));
             });
-
+            
+            $("input:checkbox[name=type]:checked").each(function() {
+                ids.push($(this).attr('unit_id'));
+            });
             $.each(element,function(){total_area+=parseFloat(this) || 0;});
 
             $('#total_unit_area').val(total_area);
 
-
+            $('#units_ids').val(ids);
             var inputValue = $('#dealer_incentive').val();
             var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
 

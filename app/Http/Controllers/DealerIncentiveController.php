@@ -58,7 +58,7 @@ class DealerIncentiveController extends Controller
             ];
 
             return view('app.sites.file-managements.files.dealer-incentive.create', $data);
-        } else {
+        } else { 
             abort(403);
         }
     }
@@ -71,6 +71,7 @@ class DealerIncentiveController extends Controller
      */
     public function store(Request $request, $site_id)
     {
+       
         try {
 
             if (!request()->ajax()) {
@@ -134,8 +135,25 @@ class DealerIncentiveController extends Controller
     public function getData(Request $request)
     {
         $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)->get();
+        $dealer_incentives =DealerIncentiveModel::where('dealer_id',$request->dealer_id)->get();
+        $units= [];
+        $already_incentive_paid_to_units = [];
+        foreach($dealer_incentives as $dealer_incentives)
+        {
+            $already_incentive_paid_to_units = json_decode($dealer_incentives->unit_IDs);
+        }
+     
         foreach ($rebate_incentives as $Units) {
-            $units[] = Unit::find($Units->unit_id);
+           
+            if (in_array($Units->unit_id, $already_incentive_paid_to_units)) {
+                
+                continue;
+            }
+            else{
+               
+                $units[] = Unit::find($Units->unit_id);
+                
+            }     
         }
 
         return response()->json([

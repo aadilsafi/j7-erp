@@ -125,6 +125,8 @@ class UnitService implements UnitInterface
             $unit_number++;
         }
 
+        $unit->has_sub_units = true;
+        $unit->save();
 
         return $floor;
     });

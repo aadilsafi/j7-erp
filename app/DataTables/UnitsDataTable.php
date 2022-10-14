@@ -57,7 +57,7 @@ class UnitsDataTable extends DataTable
      */
     public function query(Unit $model): QueryBuilder
     {
-        return $model->newQuery()->select('units.*')->with(['type', 'status'])->whereFloorId($this->floor->id)->whereActive(true);
+        return $model->newQuery()->select('units.*')->where('has_sub_units', false)->with(['type', 'status'])->whereFloorId($this->floor->id)->whereActive(true);
     }
 
     public function html(): HtmlBuilder

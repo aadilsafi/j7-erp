@@ -90,7 +90,7 @@ class UnitController extends Controller
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
+                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('has_sub_units', false)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
             ];

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('width')->default(0);
             $table->float('length')->default(0);
             $table->integer('parent_id')->default(0);
+            $table->boolean('has_sub_units')->default(false);
             $table->tinyInteger('unit_number')->default(0);
             $table->string('floor_unit_number')->nullable();
             $table->float('net_area')->default(0);

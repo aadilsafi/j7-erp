@@ -25,6 +25,11 @@ class CustomFieldService implements CustomFieldInterface
         return $this->model()->whereSiteId($site_id)->with($relationships)->find($id);
     }
 
+    public function getAllByModel($site_id, $model, $relationships = [])
+    {
+        return $this->model()->whereSiteId($site_id)->with($relationships)->whereCustomFieldModel($model)->get();
+    }
+
     public function store($site_id, $inputs)
     {
         $returnValue = DB::transaction(function () use ($site_id, $inputs) {
@@ -45,6 +50,8 @@ class CustomFieldService implements CustomFieldInterface
                 'bootstrap_column' => $inputs['bootstrap_column'] ?? 6,
                 'order' => $inputs['order'],
             ];
+
+            $data['slug'] = generateSlug($site_id, $data['name'], $this->model());
 
             if (isset($inputs['values'])) {
                 $values = [];

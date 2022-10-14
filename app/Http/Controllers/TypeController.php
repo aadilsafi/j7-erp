@@ -8,6 +8,7 @@ use App\Http\Requests\types\{
     updateRequest as typeUpdateRequest
 };
 use App\Models\Type;
+use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\Interfaces\{
     UnitTypeInterface
 };
@@ -18,10 +19,12 @@ class TypeController extends Controller
 {
 
     private $unitTypeInterface;
+    private $customFieldInterface;
 
-    public function __construct(UnitTypeInterface $unitTypeInterface)
+    public function __construct(UnitTypeInterface $unitTypeInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->unitTypeInterface = $unitTypeInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     /**
@@ -45,17 +48,22 @@ class TypeController extends Controller
      */
     public function create(Request $request, $site_id)
     {
-        if (!request()->ajax()) {
+        abort_if(request()->ajax(), 403);
 
-            $data = [
-                'site_id' => decryptParams($site_id),
-                'types' => $this->unitTypeInterface->getAllWithTree(),
-            ];
+        $site_id = decryptParams($site_id);
 
-            return view('app.sites.types.create', $data);
-        } else {
-            abort(403);
-        }
+        $customFieldsHtml = [];
+        $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->unitTypeInterface->model()));
+        $customFields = collect($customFields)->sortBy('order');
+        $customFields = generateCustomFields($customFields);
+
+        $data = [
+            'site_id' => $site_id,
+            'types' => $this->unitTypeInterface->getAllWithTree(),
+            'customFields' => $customFields
+        ];
+
+        return view('app.sites.types.create', $data);
     }
 
     /**

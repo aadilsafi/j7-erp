@@ -93,9 +93,10 @@
                     multiple>
                     @isset($customField)
 
-                        @foreach ($customField->values as $key => $value)
+                        @forelse ($customField->values ?? [] as $key => $value)
                             <option value="{{ $key }}" selected>{{ $value }}</option>
-                        @endforeach
+                        @empty
+                        @endforelse
                     @endisset
                 </select>
                 @error('values')

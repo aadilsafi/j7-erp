@@ -4,7 +4,7 @@ namespace App\Services\Interfaces;
 
 interface UnitTypeInterface
 {
-    public function model();
+    public function model(mixed $parameters = []);
 
     public function getByAll();
     public function getById($id);

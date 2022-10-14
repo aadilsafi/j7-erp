@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\FileCancellationAttachment;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FileCanecllation extends Model
 {
@@ -55,7 +56,7 @@ class FileCanecllation extends Model
 
     public function FileCancelLabelsAttachment()
     {
-        return $this->hasMany(FileCanecllationAttachment::class);
+        return $this->hasMany(FileCancellationAttachment::class);
     }
 
     public function templates(){

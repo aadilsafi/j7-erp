@@ -41,9 +41,8 @@
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-
                 @csrf
-                {{ view('app.sites.types.form-fields', ['types' => $types]) }}
+                {{ view('app.sites.types.form-fields', ['types' => $types, 'customFields' => $customFields]) }}
 
             </div>
 

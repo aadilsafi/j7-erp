@@ -11,9 +11,9 @@ use Spatie\Permission\Models\Role;
 class UnitTypeService implements UnitTypeInterface
 {
 
-    public function model()
+    public function model(mixed $parameters = [])
     {
-        return new Type();
+        return new Type($parameters);
     }
 
     // Get

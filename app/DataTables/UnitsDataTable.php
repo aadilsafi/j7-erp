@@ -94,14 +94,14 @@ class UnitsDataTable extends DataTable
                 ($createfabUnitPermission ?  
                 Button::raw('new-sub-unit')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add Fabricated Unit')
+                    ->text('<i class="bi bi-plus"></i> Add Bifurcated Unit')
                     ->attr([
                         'onclick' => 'fabUnit()',
                     ])
                     :
                     Button::raw('new-sub-unit')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-plus"></i> Add Fabricated Unit')
+                    ->text('<i class="bi bi-plus"></i> Add Bifurcated Unit')
                     ->attr([
                         'onclick' => 'fabUnit()',
                     ])

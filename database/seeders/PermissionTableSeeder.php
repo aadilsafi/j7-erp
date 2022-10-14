@@ -425,14 +425,14 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.units.fab.create',
-                'show_name' => 'Create Site Fabricated Units',
+                'show_name' => 'Create Site Bifurcated Units',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.floors.units.fab.store',
-                'show_name' => 'Store Site Floor Fabricated Units',
+                'show_name' => 'Store Site Floor Bifurcated Units',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -61,7 +61,7 @@
                         <div data-repeater-item>
                             <div class="card m-0">
                                 <div class="card-header mt-1">
-                                    <h3>Fabricated Unit</h3>
+                                    <h3>Bifurcated Unit</h3>
                                     <button
                                         class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
                                         data-repeater-delete id="delete-contact-person" type="button">

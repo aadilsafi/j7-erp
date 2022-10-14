@@ -5,7 +5,7 @@
 encryptParams($floor->id)) }}
 @endsection
 
-@section('page-title', 'Create Unit')
+@section('page-title', 'Create Bifurcated Unit')
 
 @section('page-vendor')
 @endsection
@@ -41,7 +41,7 @@ encryptParams($floor->id)) }}
 <div class="content-header-left col-md-9 col-12 mb-2">
     <div class="row breadcrumbs-top">
         <div class="col-12">
-            <h2 class="content-header-title float-start mb-0">Create Unit</h2>
+            <h2 class="content-header-title float-start mb-0">Create Bifurcated Unit</h2>
             <div class="breadcrumb-wrapper">
                 {{ Breadcrumbs::render('sites.floors.units.create', encryptParams($site->id), encryptParams($floor->id))
                 }}
@@ -168,7 +168,7 @@ encryptParams($floor->id)) }}
                         $('#unit_net_area').val(response.unit.net_area);
                         $('#sub_unit_total_area').val(response.unit.net_area);
                         if(response.remaing_gross == 0){
-                            toastr.error('Unit is Already Fabricated.',
+                            toastr.error('Unit is Already Bifurcated.',
                                 "Error!", {
                                     showMethod: "slideDown",
                                     hideMethod: "slideUp",

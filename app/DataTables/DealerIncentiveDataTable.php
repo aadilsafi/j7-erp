@@ -42,6 +42,9 @@ class DealerIncentiveDataTable extends DataTable
             ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
                 return number_format($dealerIncentive->total_dealer_incentive);
             })
+            ->editColumn('dealer_incentive', function ($dealerIncentive) {
+                return number_format($dealerIncentive->dealer_incentive);
+            })
             ->editColumn('created_at', function ($dealerIncentive) {
                 return editDateColumn($dealerIncentive->created_at);
             })

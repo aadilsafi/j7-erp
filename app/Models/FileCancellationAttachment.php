@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class FileCanecllationAttachment extends Model implements HasMedia
+class FileCancellationAttachment extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, LogsActivity;
 

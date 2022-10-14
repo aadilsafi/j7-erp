@@ -37,12 +37,12 @@ class store extends FormRequest
     public function messages()
     {
         return [
-            'attachments' => 'Attachments Required if you check Attachements Attached.',
+            'attachments' => 'Attachments Required if you check Attachments Attached.',
             "amount_to_be_refunded.required" => "Amount To Be Refunded is Required.",
             "payment_due_date.required" => "Payment Due Date Is Required.",
             'amount_remarks.required' => 'Amount Remark is Required',
             'attachments.*.attachment_label' => "Attachments are Required.",
-            'attachments.*.image' => "Attachments are Required if you check Attachements Attached.",
+            'attachments.*.image' => "Attachments are Required if you check Attachments Attached.",
         ];
     }
 }

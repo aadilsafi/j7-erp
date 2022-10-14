@@ -396,19 +396,19 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                <input type="text" class="form-control form-control-lg" id="stackholder_ntn"
+                <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
                     name="stackholder[ntn]" placeholder="NTN" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
+                <input type="number" class="form-control form-control-lg" id="stackholder_cnic"
                     name="stackholder[cnic]" placeholder="CNIC" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                <input type="text" class="form-control form-control-lg" id="stackholder_contact"
+                <input type="number" class="form-control form-control-lg" id="stackholder_contact"
                     name="stackholder[contact]" placeholder="Contact" />
             </div>
         </div>

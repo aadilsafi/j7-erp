@@ -168,23 +168,23 @@
                     $totalDiscount = 0.0;
                 @endphp
                 @foreach ($data['additional_costs'] as $additionalCost)
-                    @isset($additionalCost->additionalCost->site_percentage)
+                    @isset($additionalCost->unit_percentage)
                         @php
-                            $totalAdditionalCost += ($additionalCost->additionalCost->site_percentage / 100) * ($data['rate'] * $data['size']);
+                            $totalAdditionalCost += ($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']);
 
                         @endphp
                     @endisset
 
                     <tr style="text-align: start;">
                         <th style="text-align: start; white-space: nowrap;">
-                            @isset ($additionalCost->additionalCost->name)
-                                {{ $additionalCost->additionalCost->name }}
+                            @isset ($additionalCost->name)
+                                {{ $additionalCost->name }}
                             @endisset
 
                         </th>
                         <td style="text-align: end; border-bottom: 1px solid black;">
-                            @if ( isset($additionalCost->additionalCost->site_percentage))
-                                {{ $additionalCost->additionalCost->site_percentage }} %
+                            @if ( isset($additionalCost->unit_percentage))
+                                {{ $additionalCost->unit_percentage }} %
                             @else
                                 -
                             @endif
@@ -193,8 +193,8 @@
                         <th style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                         <td style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
-                            @if (isset($additionalCost->additionalCost->site_percentage) )
-                                {{ number_format(($additionalCost->additionalCost->site_percentage / 100) * ($data['rate'] * $data['size'])) }}
+                            @if (isset($additionalCost->unit_percentage) )
+                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size'])) }}
                             @else
                                 -
                             @endif
@@ -230,7 +230,7 @@
                 <th style="text-align: start;">&nbsp;&nbsp;&nbsp;Total </th>
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
-                    {{ number_format($totalAdditionalCost + $data['rate'] * $data['size'] - $totalDiscount) }}
+                    {{ number_format($data['amount']) }}
                     &nbsp;&nbsp;
                 </td>
             </tr>
@@ -319,7 +319,7 @@
             @foreach ($data['instalments'] as $key => $instalment)
                 <tr>
                     <th style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
-                        {{ $key + 1 }}
+                        {{ $loop->index + 1 }}
                     </th>
                     <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
                         {{ date_format(new DateTime($instalment->date), 'd/m/Y') }}

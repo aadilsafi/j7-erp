@@ -86,6 +86,7 @@ class SiteController extends Controller
      */
     public function edit($id)
     {
+        
         try {
             $site = (new Site())->find(decryptParams($id));
             $countries = (new Country())->all();

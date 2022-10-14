@@ -7,12 +7,14 @@ use App\Models\{Floor, Site, Status, Unit};
 use App\Services\Interfaces\{UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
+    fabstoreRequest,
     storeRequest as unitStoreRequest,
     updateRequest as unitUpdateRequest
 };
 use App\Services\AdditionalCosts\AdditionalCostInterface;
 use App\Utils\Enums\{UserBatchActionsEnum, UserBatchStatusEnum};
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UnitController extends Controller
@@ -79,6 +81,25 @@ class UnitController extends Controller
         }
     }
 
+    function createfabUnit($site_id, $floor_id)
+    {
+
+        if (!request()->ajax()) {
+            $data = [
+                'site' => (new Site())->find(decryptParams($site_id)),
+                'floor' => (new Floor())->find(decryptParams($floor_id)),
+                'siteConfiguration' => getSiteConfiguration($site_id),
+                'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
+                'types' => $this->unitTypeInterface->getAllWithTree(),
+                'statuses' => (new Status())->all(),
+            ];
+
+            return view('app.sites.floors.units.fab-units.create', $data);
+        } else {
+            abort(403);
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -90,13 +111,9 @@ class UnitController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
-                // dd($inputs);
                 if ($inputs['add_bulk_unit']) {
                     $record = $this->unitInterface->storeInBulk($site_id, $floor_id, $inputs);
-
-                    $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_UNITS, UserBatchStatusEnum::PENDING);
-                    // dd('true');
-                    return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess('Unit(s) will be contructed shortly!');
+                    return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id])->withSuccess('Unit(s) will be contructed shortly!');
                 } else {
                     $record = $this->unitInterface->store($site_id, decryptParams($floor_id), $inputs);
                 }
@@ -106,6 +123,27 @@ class UnitController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
+            return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function storefabUnit(fabstoreRequest $request, $site_id, $floor_id)
+    {
+        
+        try {
+            if (!request()->ajax()) {
+                // $inputs = $request->validated();
+                $inputs = $request->all();
+
+                $record = $this->unitInterface->storeFabUnit($site_id, $request->floor_id, $inputs);
+
+                return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.floors.units.index', ['site_id' => $site_id, 'floor_id' => $floor_id,])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
@@ -130,7 +168,7 @@ class UnitController extends Controller
     public function edit(Request $request, $site_id, $floor_id, $id)
     {
         try {
-            $unit = $this->unitInterface->getById($site_id, $floor_id, $id);
+            $unit = $this->unitInterface->getById($site_id, $floor_id, $id, ['salesPlan']);
             if ($unit && !empty($unit)) {
                 // dd($unit);
                 $data = [
@@ -444,5 +482,22 @@ class UnitController extends Controller
         } catch (Exception $ex) {
             return apiErrorResponse($ex->getMessage());
         }
+    }
+
+
+    public function getUnitData(Request $request, $site_id, $floor_id)
+    {
+
+        $unit = (new Unit())->find($request->unit_id);
+        $remaing = (new Unit())->where('parent_id', $unit->id);
+
+        return response()->json([
+            'success' => true,
+            'unit' => $unit,
+            'max_unit_number' => getMaxUnitNumber($unit->floor_id) + 1,
+            'floor_name' => $unit->floor->name,
+            'remaing_gross' => $unit->gross_area - $remaing->sum('gross_area'),
+            'remaing_net' => $unit->net_area - $remaing->sum('net_area'),
+        ], 200);
     }
 }

@@ -113,7 +113,7 @@
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto">
                     <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         <div class="card-body">
                             <div class="row g-1">
@@ -316,7 +316,7 @@
             for (let i = parseInt(a); i <= parseInt(b); i++) {
                 $('#shortLabelForm').append(
                     '<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor (' + i +
-                    ')*</label><input type="text" required class="form-control mb-2" name="shortLabel[' + i +
+                    ')<span class="text-danger">*</span></label><input type="text" required class="form-control mb-2" value="' + i + 'F" name="shortLabel[' + i +
                     ']" placeholder="Short label for floor ' + i + '">');
             }
         }

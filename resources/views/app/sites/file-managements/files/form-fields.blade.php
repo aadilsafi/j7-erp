@@ -220,9 +220,9 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <label class="form-label fs-5" for="customer_address">Address</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Mail Address"
+                                            id="customer_address" placeholder="Address"
                                             value="{{ $customer->address ?? '-' }}" disabled />
                                     </div>
 
@@ -302,9 +302,9 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <label class="form-label fs-5" for="customer_address">Address</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Mail Address"
+                                            id="customer_address" placeholder="Address"
                                             value="{{ !is_null($nextOfKin) ? $nextOfKin->address : '-' }}" disabled />
                                     </div>
                                 </div>
@@ -424,7 +424,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg" disabled
                                                     id="total-price-unit" placeholder="Amount"
-                                                    value="{{ number_format($salesPlan->total_price, 2) }}" />
+                                                    value="{{ number_format($salesPlan->unit_price * $unit->gross_area) }}" />
                                             </div>
                                         </div>
 
@@ -499,7 +499,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg"
                                                     id="unit_rate_total" placeholder="Total"
-                                                    value="{{ number_format($salesPlan->total_price + $total_additional_cost - $salesPlan->discount_total, 2) }}"
+                                                    value="{{ number_format($salesPlan->total_price, 2) }}"
                                                     disabled />
                                             </div>
                                         </div>
@@ -600,7 +600,11 @@
                                         </thead>
 
                                         <tbody>
-                                            @forelse ($salesPlan->receipts as $receipt)
+                                            @php
+                                                $receipts = collect($salesPlan->receipts)->sortBy('transaction_date')->values()->all();
+                                            @endphp
+
+                                            @forelse ($receipts as $receipt)
                                                 <tr class="text-center">
                                                     <td>{{ $loop->index + 1 }}</td>
 
@@ -761,9 +765,9 @@
 
                                 <div class="row g-1 mb-1">
                                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Mail Address</label>
+                                        <label class="form-label fs-5" for="customer_address">Address</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Mail Address"
+                                            id="customer_address" placeholder="Address"
                                             value="{{ $customer->address ?? '-' }}" disabled />
                                     </div>
 

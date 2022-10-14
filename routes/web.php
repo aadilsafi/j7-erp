@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     TypeController,
     SiteController,
     CountryController,
+    CustomFieldController,
     FileManagementController,
     FloorController,
     JobBatchController,
@@ -33,8 +34,11 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
 };
+use App\Notifications\DefaultNotification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -120,6 +124,23 @@ Route::group([
 
             Route::group(['prefix' => '/{site_id}'], function () {
 
+                Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+
+                    //Custom Fields Routes
+                    Route::group(['prefix' => 'custom-fields', 'as' => 'custom-fields.'], function () {
+                        Route::get('/', [CustomFieldController::class, 'index'])->name('index');
+
+                        Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                        Route::post('store', [CustomFieldController::class, 'store'])->name('store');
+
+                        Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
+                            Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                        });
+                    });
+                });
+
                 //Additional Costs Routes
                 Route::group(['prefix' => 'additional-costs', 'as' => 'additional-costs.'], function () {
                     Route::get('/', [AdditionalCostController::class, 'index'])->name('index');
@@ -165,6 +186,11 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
+                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                                Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
+                                Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
+                            });
+
                             Route::get('preview', [UnitController::class, 'preview'])->name('preview');
                             Route::get('save-changes', [UnitController::class, 'saveChanges'])->name('changes.save');
 
@@ -175,6 +201,11 @@ Route::group([
                                 Route::put('update', [UnitController::class, 'update'])->name('update');
                             });
 
+                            Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                                Route::post('get-unit-data', [UnitController::class, 'getUnitData'])->name('get-unit-data');
+                            });
+
+
                             Route::group(['prefix' => '/{unit_id}'], function () {
 
                                 Route::group(['prefix' => 'sales-plans', 'as' => 'sales-plans.'], function () {
@@ -184,6 +215,7 @@ Route::group([
                                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                                     Route::post('/approve-sales-plan', [SalesPlanController::class, 'approveSalesPlan'])->name('approve-sales-plan');
+
 
                                     Route::post('/disapprove-sales-plan', [SalesPlanController::class, 'disApproveSalesPlan'])->name('disapprove-sales-plan');
                                     Route::get('delete-selected', [SalesPlanController::class, 'destroySelected'])->name('destroy-selected');
@@ -362,6 +394,12 @@ Route::group([
 
                         Route::get('create', [DealerIncentiveController::class, 'create'])->name('create');
                         Route::post('store', [DealerIncentiveController::class, 'store'])->name('store');
+
+                        Route::get('approve/{dealer_incentive_id}', [DealerIncentiveController::class, 'approve'])->name('approve');
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-data', [DealerIncentiveController::class, 'getData'])->name('get-data');
+                        });
                     });
 
                     // file refund
@@ -373,6 +411,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
                         Route::post('store', [FileRefundController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_refund_id}/{template_id}', [FileRefundController::class, 'printPage'])->name('print');
                     });
 
                     // file buy back
@@ -383,6 +423,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_buy_back_id}/{template_id}', [FileBuyBackController::class, 'printPage'])->name('print');
                     });
 
                     // file Cancellation
@@ -394,6 +436,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_cancellation_id}/{template_id}', [FileCancellationController::class, 'printPage'])->name('print');
                     });
 
                     // file resalse
@@ -405,6 +449,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_resale_id}/{template_id}', [FileReleaseController::class, 'printPage'])->name('print');
                     });
 
                     // file title transfer
@@ -416,6 +462,8 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
+
+                        Route::get('/print/{file_title_transfer_id}/{template_id}', [FileTitleTransferController::class, 'printPage'])->name('print');
                     });
 
                     // file adjustment
@@ -446,6 +494,7 @@ Route::group([
                                 Route::get('/', [FileManagementController::class, 'index'])->name('index');
 
                                 Route::get('/show/{file_id}', [FileManagementController::class, 'show'])->name('show');
+                                Route::get('/print/{file_id}', [FileManagementController::class, 'print'])->name('print');
 
                                 Route::get('create', [FileManagementController::class, 'create'])->name('create');
                                 Route::post('store', [FileManagementController::class, 'store'])->name('store');
@@ -472,7 +521,6 @@ Route::group([
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
                     });
-
                 });
             });
         });
@@ -509,3 +557,19 @@ Route::get('/read-all-notifications', [NotificationController::class, 'readAllNo
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
 
 Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
+
+Route::get('/logs', function () {
+    return Activity::latest()->get();
+});
+
+Route::get('/fire', function () {
+    $data = [
+        'title' => 'Job Done!',
+        'message' => 'Unit Construction Completed',
+        'description' => 'Unit Construction Completed',
+        'url' => 'asdadasd',
+    ];
+    Notification::sendNow(auth()->user(), new DefaultNotification($data));
+
+    return 'fire';
+});

@@ -6,13 +6,17 @@ use App\Jobs\units\MainUnitJob;
 use App\Models\{
     Floor,
     Unit,
+    UserBatch,
 };
-use App\Notifications\Queues\QueueCompletedNotification;
+use App\Notifications\DefaultNotification;
 use App\Services\Interfaces\UnitInterface;
+use App\Utils\Enums\UserBatchActionsEnum;
+use App\Utils\Enums\UserBatchStatusEnum;
 use Illuminate\Bus\Batch;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\CauserResolver;
 use Illuminate\Support\Facades\{Notification, Bus};
+use Illuminate\Support\Facades\DB;
 
 
 class UnitService implements UnitInterface
@@ -32,13 +36,13 @@ class UnitService implements UnitInterface
         return $this->model()->where('floor_id', $floor_id)->get();
     }
 
-    public function getById($site_id, $floor_id, $id)
+    public function getById($site_id, $floor_id, $id, $relationships = [])
     {
         $site_id = decryptParams($site_id);
         $floor_id = decryptParams($floor_id);
         $id = decryptParams($id);
 
-        return $this->model()->where([
+        return $this->model()->with($relationships)->where([
             'floor_id' => $floor_id,
             'id' => $id,
         ])->first();
@@ -80,6 +84,53 @@ class UnitService implements UnitInterface
         return $floor;
     }
 
+    // Store Fab Unit
+    public function storeFabUnit($site_id, $floor_id, $inputs, $isUnitActive = true)
+    {
+        DB::transaction(function () use ($site_id, $floor_id, $inputs) {
+
+        $site_id = decryptParams($site_id);
+        $floor = (new Floor())->find($floor_id);
+        $unit = (new Unit())->find($inputs['unit_id']);
+        $unit_number = filter_strip_tags($inputs['unit_number']);
+        $unitNumberDigits = (new Floor())->find($floor_id)->site->siteConfiguration->unit_number_digits;
+
+        foreach ($inputs['fab-units'] as $input) {
+            $totalPrice = floatval($input['gross_area']) * floatval($input['price_sqft']);
+
+            $data = [
+                'parent_id' => $unit->id,
+                'floor_id' => $floor_id,
+                'name' => filter_strip_tags($input['name'] ?? ''),
+                'width' => filter_strip_tags($input['width']),
+                'length' => filter_strip_tags($input['length']),
+                'unit_number' => $unit_number,
+                'floor_unit_number' => $unit->floor_unit_number . '-FAB-' . Str::padLeft($unit_number, $unitNumberDigits, '0'),
+                'net_area' => filter_strip_tags($input['net_area']),
+                'gross_area' => filter_strip_tags($input['gross_area']),
+                'price_sqft' => filter_strip_tags($input['price_sqft']),
+                'total_price' => $totalPrice,
+                'is_corner' =>  false ,
+                'corner_id' => null,
+                'is_facing' => false,
+                'facing_id' => null,
+                'status_id' => 1,
+                'type_id' => $unit->type_id,
+                'active' => true,
+            ];
+
+            // dd($data);
+
+            $floor = $this->model()->create($data);
+            $unit_number++;
+        }
+
+
+        return $floor;
+    });
+    }
+
+
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {
 
@@ -100,8 +151,16 @@ class UnitService implements UnitInterface
                 'description' => 'Unit Construction Completed',
                 'url' => route('sites.floors.units.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($floor_id)]),
             ];
-            Notification::send($user, new QueueCompletedNotification($data));
+            Notification::send($user, new DefaultNotification($data));
         })->dispatch();
+
+        (new UserBatch())->create([
+            'site_id' => decryptParams($site_id),
+            'user_id' => auth()->user()->id,
+            'job_batch_id' => $batch->id,
+            'actions' => UserBatchActionsEnum::COPY_UNITS,
+            'batch_status' => UserBatchStatusEnum::PENDING,
+        ]);
 
         return $batch;
     }

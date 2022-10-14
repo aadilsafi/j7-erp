@@ -31,21 +31,21 @@
                 </div>
 
                 <div class="row mb-1">
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
                             id="paid_amount" placeholder=" Paid Amount"
                             value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    {{-- <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Rebate Deduction </label>
                         <input type="text" readonly required name="rebate_amount"
                             class="form-control form-control-lg" id="rebate_deductions" placeholder=" Rebate Deduction"
                             value="{{ isset($rebate_incentive) ? number_format($rebate_incentive->commision_total) : 0 }}" />
-                    </div>
+                    </div> --}}
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Amount To Be Refunded</label>
                         <input type="text" readonly required name="amount_to_be_refunded"
                             class="form-control form-control-lg" id="amount_to_be_refunded"
@@ -72,7 +72,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                                 <div class="row mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_label">Attachement
+                                        <label class="form-label fs-5" for="expense_label">Attachment
                                             label</label>
                                         <input type="text" class="form-control form-control-lg" id="expense_label"
                                             name="attachments[attachment_label]" value="{{ $label->label }}" disabled
@@ -98,7 +98,7 @@
                                         <div>
                                             <div class="row mb-1">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                                    <label class="form-label fs-5" for="expense_label">Attachement
+                                                    <label class="form-label fs-5" for="expense_label">Attachment
                                                         label</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('attachments') is-invalid @enderror"
@@ -155,17 +155,11 @@
         </div>
     </div>
 
-    <div id="buyerInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+    {{-- <div id="buyerInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">
             <div class="card-header justify-content-between">
                 <h3> Buyer Information</h3>
-                {{-- <div id="div_stakeholder_type">
-                    @forelse ($stakeholderTypes as $stakeholderType)
-                        <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
-                    @empty
-                    @endforelse
-                </div> --}}
             </div>
 
             <div class="card-body">
@@ -191,7 +185,6 @@
                 @endif
 
                 <div class="row mb-1">
-                    {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                         <input @if (isset($buyer)) disabled @endif type="text"
@@ -265,14 +258,14 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div id="sellerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="">
             <input type="hidden" value="{{ $customer->id }}" name="customer_id">
             <div class="card-header justify-content-between">
-                <h3> Seller Information </h3>
+                <h3> Owner Information </h3>
             </div>
 
             <div class="card-body">
@@ -341,7 +334,7 @@
         </div>
     </div>
 
-    <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+    {{-- <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">
             <input type="hidden" value="{{ $unit->id }}" name="unit_id">
@@ -393,6 +386,125 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
                         <input type="text" readonly value="{{ number_format($unit->total_price) }}"
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div> --}}
+
+    <div id="SalesPlanData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+            id="stakeholders_card">
+            <input type="hidden" value="{{ $unit->id }}" name="unit_id">
+            <div class="card-header justify-content-between">
+                <h3> Sales Plan Information </h3>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row mb-1">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_occupation">Unit No</label>
+                        <input type="text" readonly value="{{ $unit->floor_unit_number }}"
+                            class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_full_name">Unit Name</label>
+                        <input type="text" readonly value="{{ $unit->name }}"
+                            class="form-control form-control-lg" id="stackholder_full_name"
+                            placeholder="Unit Name" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_father_name">Unit Type</label>
+                        <input type="text" readonly value="{{ $unit->type->name }}"
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_occupation">Unit Gross Area</label>
+                        <input type="text" readonly value="{{ number_format($unit->gross_area) }}"
+                            class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
+                    </div>
+
+                </div>
+
+                <div class="row mb-1">
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
+                        <input type="text" readonly
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['unit_price']) }}"
+                        @else
+                        value="{{ number_format($unit->CancelsalesPlan[0]['unit_price']) }}" @endif
+                            class="form-control form-control-lg" id="stackholder_full_name"
+                            placeholder="Unit Name" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
+                        <input type="text" readonly
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['total_price']) }}"
+                        @else
+                        value="{{ number_format($unit->CancelsalesPlan[0]['total_price']) }}" @endif
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_occupation">Downpayment %</label>
+                        <input type="text" readonly
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_percentage']) }}"
+                            @else
+                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_percentage']) }}" @endif
+                            class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_full_name">Downpayment Total</label>
+                        <input type="text" readonly
+                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['down_payment_total']) }}"
+                            @else
+                            value="{{ number_format($unit->CancelsalesPlan[0]['down_payment_total']) }}" @endif
+                            class="form-control form-control-lg" id="stackholder_full_name"
+                            placeholder="Unit Name" />
+                    </div>
+
+                </div>
+
+                <div class="row mb-1">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5 text-nowrap" for="stackholder_father_name">Installments
+                            Received</label>
+                        <input type="text" readonly
+                            value="{{ count($paid_instalments) + count($partially_paid_instalments) }}"
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5 text-nowrap" for="stackholder_father_name">Installments
+                            Pending</label>
+                        <input type="text" readonly
+                            value="{{ count($un_paid_instalments) + count($partially_paid_instalments) }}"
+                            class="form-control form-control-lg" id="stackholder_father_name"
+                            placeholder="Unit Type" />
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="stackholder_father_name">Date Of Purchase</label>
+                        <input type="text" readonly
+                            @if (isset($unit->salesPlan[0])) value="{{ date_format(new DateTime($unit->salesPlan[0]['updated_at']), 'D d-M-Y') }}"
+                            @else
+                                value="{{ date_format(new DateTime($unit->CancelsalesPlan[0]['updated_at']), 'D d-M-Y') }}" @endif
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -460,7 +572,6 @@
                                                     </tr>
                                                 @endforeach
                                             @endif
-
                                         </tbody>
                                     </table>
                                 </div>

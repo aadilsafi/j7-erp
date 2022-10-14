@@ -92,6 +92,7 @@ class PermissionsDataTable extends DataTable
                     Button::make('excel')->addClass('dropdown-item'),
                     Button::make('pdf')->addClass('dropdown-item'),
                 ]),
+                // Button::make('colvis')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')->text('<i class="fa fa-columns"></i> Columns'),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
                 // Button::raw('delete-selected')

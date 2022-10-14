@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
+                                    <button type="submit" @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)disabled='disabled' @endif
                                         class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI">
                                         <i data-feather='save'></i>
                                         <span id="update_unit_button_span">Update Unit</span>

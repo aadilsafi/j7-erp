@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SalesPlanDataTable;
+use App\Exceptions\GeneralException;
 use App\Models\{SalesPlan, Floor, Site, Unit, User};
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
@@ -97,6 +98,9 @@ class SalesPlanController extends Controller
 
             $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withSuccess('Sales Plan Saved!');
+        } catch (GeneralException $ex) {
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong') . ' '. $ex->getMessage());
         } catch (Exception $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong'));
@@ -240,8 +244,17 @@ class SalesPlanController extends Controller
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $user = User::find($salesPlan->user_id);
-        $salesPlan->status = 2;
-        $salesPlan->save();
+
+        if ($salesPlan->status == 1) {
+            $salesPlan->unit->status_id = 1;
+            $salesPlan->unit->save();
+
+            $salesPlan->status = 3;
+            $salesPlan->save();
+        } else {
+            $salesPlan->status = 2;
+            $salesPlan->save();
+        }
 
         $currentURL = URL::current();
         $notificaionData = [

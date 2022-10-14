@@ -57,4 +57,9 @@ class FileCanecllation extends Model
     {
         return $this->hasMany(FileCanecllationAttachment::class);
     }
+
+    public function templates(){
+        return Template::select('templates.*')->join('model_templates','model_templates.template_id' , '=', 'templates.id')->where('model_type', get_class($this))->get();
+        // return $this->belongsToMany(Template::class,'model_templates','model_type')->wherePivot('model_type','=',get_class($this));
+    }
 }

@@ -14,8 +14,10 @@ use Psy\Readline\Hoa\FileRead;
 use App\Models\UnitStakeholder;
 use App\Models\ReceiptDraftModel;
 use App\Models\FileRefundAttachment;
-use App\DataTables\ViewFilesDatatable;
+use App\DataTables\FileRefundDataTable;
 use App\Http\Requests\FileRefund\store;
+use App\Models\ModelTemplate;
+use App\Models\Template;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 
 class FileRefundController extends Controller
@@ -35,10 +37,11 @@ class FileRefundController extends Controller
         $this->refundInterface = $refundInterface;
     }
 
-    public function index(ViewFilesDatatable $dataTable, Request $request, $site_id)
+    public function index(FileRefundDataTable $dataTable, Request $request, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileRefund())),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -196,5 +199,21 @@ class FileRefundController extends Controller
         }
 
         return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+    }
+
+    public function printPage($site_id, $file_id, $template_id)
+    {
+
+        $file_refund = (new FileRefund())->find(decryptParams($file_id));
+
+        $template = Template::find(decryptParams($template_id));
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+        ];
+
+        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+
+        return view($printFile, compact('data'));
     }
 }

@@ -42,9 +42,6 @@ class DealerIncentiveDataTable extends DataTable
             ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
                 return number_format($dealerIncentive->total_dealer_incentive);
             })
-            ->editColumn('dealer_incentive', function ($dealerIncentive) {
-                return number_format($dealerIncentive->dealer_incentive);
-            })
             ->editColumn('created_at', function ($dealerIncentive) {
                 return editDateColumn($dealerIncentive->created_at);
             })
@@ -139,10 +136,10 @@ class DealerIncentiveDataTable extends DataTable
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
                         var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        return '';
                     }",
                     'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        'selectAllRender' =>  '',
                     ]
                 ],
             ])

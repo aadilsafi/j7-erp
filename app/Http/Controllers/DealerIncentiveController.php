@@ -136,7 +136,7 @@ class DealerIncentiveController extends Controller
     {
         $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)->get();
         $dealer_incentives =DealerIncentiveModel::where('dealer_id',$request->dealer_id)->get();
-        $unit= 
+        $units= [];
         $already_incentive_paid_to_units = [];
         foreach($dealer_incentives as $dealer_incentives)
         {
@@ -146,11 +146,15 @@ class DealerIncentiveController extends Controller
         $already_incentive_paid_to_units;
         foreach ($rebate_incentives as $Units) {
             
-           foreach($already_incentive_paid_to_units as  $ids ){
+           foreach($already_incentive_paid_to_units as $key => $ids ){
            
-            if($ids !=  $Units->unit_id){
+            if($ids =  $Units->unit_id){
                 
+                continue;
+            }
+            else{
                 $units[] = Unit::find($Units->unit_id);
+                
             }
            
            }

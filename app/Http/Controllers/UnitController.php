@@ -90,7 +90,7 @@ class UnitController extends Controller
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
+                'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('has_sub_units', false)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
             ];
@@ -130,7 +130,7 @@ class UnitController extends Controller
 
     public function storefabUnit(fabstoreRequest $request, $site_id, $floor_id)
     {
-        
+
         try {
             if (!request()->ajax()) {
                 // $inputs = $request->validated();
@@ -489,15 +489,13 @@ class UnitController extends Controller
     {
 
         $unit = (new Unit())->find($request->unit_id);
-        $remaing = (new Unit())->where('parent_id', $unit->id);
-
         return response()->json([
             'success' => true,
             'unit' => $unit,
             'max_unit_number' => getMaxUnitNumber($unit->floor_id) + 1,
             'floor_name' => $unit->floor->name,
-            'remaing_gross' => $unit->gross_area - $remaing->sum('gross_area'),
-            'remaing_net' => $unit->net_area - $remaing->sum('net_area'),
+            'remaing_gross' => $unit->gross_area,
+            'remaing_net' => $unit->net_area,
         ], 200);
     }
 }

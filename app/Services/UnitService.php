@@ -102,8 +102,8 @@ class UnitService implements UnitInterface
                 'parent_id' => $unit->id,
                 'floor_id' => $floor_id,
                 'name' => filter_strip_tags($input['name'] ?? ''),
-                'width' => filter_strip_tags($input['width']),
-                'length' => filter_strip_tags($input['length']),
+                'width' => 0,
+                'length' => 0,
                 'unit_number' => $unit_number,
                 'floor_unit_number' => $unit->floor_unit_number . '-FAB-' . Str::padLeft($unit_number, $unitNumberDigits, '0'),
                 'net_area' => filter_strip_tags($input['net_area']),
@@ -125,6 +125,8 @@ class UnitService implements UnitInterface
             $unit_number++;
         }
 
+        $unit->has_sub_units = true;
+        $unit->save();
 
         return $floor;
     });

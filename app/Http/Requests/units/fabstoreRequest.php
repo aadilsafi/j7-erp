@@ -27,8 +27,6 @@ class fabstoreRequest extends FormRequest
     {
         $rules = [
             'fab-units.*.name' => 'nullable|string|max:255',
-            'fab-units.*.width' => 'required|numeric',
-            'fab-units.*.length' => 'required|numeric',
             'fab-units.*.net_area' => 'required|numeric|gt:0',
             'fab-units.*.gross_area' => 'required|numeric|gte:fab-units.*.net_area',
             // 'fab-units.*.price_sqft' => 'required|numeric|gt:0',

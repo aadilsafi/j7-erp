@@ -20,6 +20,7 @@ return new class extends Migration
             $table->longText('dealer_data')->nullable();
             $table->string('dealer_incentive')->nullable();
             $table->string('total_unit_area')->nullable();
+            $table->string('unit_IDs')->nullable();
             $table->string('total_dealer_incentive')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();

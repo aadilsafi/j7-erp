@@ -19,6 +19,7 @@ class DealerIncentiveModel extends Model
         'total_unit_area',
         'total_dealer_incentive',
         'status',
+        'unit_IDs',
         'comments',
     ];
 

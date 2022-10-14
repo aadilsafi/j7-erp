@@ -5,7 +5,7 @@ namespace App\Services\FileManagements\FileActions\Cancellation;
 use App\Models\FileBuyBack;
 use App\Models\FileBuyBackLabelsAttachment;
 use App\Models\FileCanecllation;
-use App\Models\FileCanecllationAttachment;
+use App\Models\FileCancellationAttachment;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Stakeholder;
@@ -86,7 +86,7 @@ class CancellationService implements CancellationInterface
                         'file_cancellation_id' => $fileCancel->id,
                         'label' => $inputs['attachments'][$i]['attachment_label'],
                     ];
-                    $cancel_attachment = (new FileCanecllationAttachment())->create($refund_attachment_data);
+                    $cancel_attachment = (new FileCancellationAttachment())->create($refund_attachment_data);
                     $cancel_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_cancel_attachments');
                 }
             } else {

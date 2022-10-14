@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use App\Models\Receipt;
+use App\Models\Template;
 use App\Models\SalesPlan;
 use App\Models\Stakeholder;
 use Illuminate\Http\Request;
+use App\Models\ModelTemplate;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
 use App\Models\FileCanecllation;
-use App\DataTables\FileCancellationDatatable;
-use App\Models\FileCanecllationAttachment;
-use SebastianBergmann\LinesOfCode\Exception;
 use App\Http\Requests\FileCancel\store;
-use App\Models\ModelTemplate;
-use App\Models\Template;
+use App\Models\FileCancellationAttachment;
+use SebastianBergmann\LinesOfCode\Exception;
+use App\DataTables\FileCancellationDatatable;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 
 class FileCancellationController extends Controller
@@ -99,7 +99,7 @@ class FileCancellationController extends Controller
      */
     public function show($site_id, $unit_id, $customer_id, $id)
     {
-        $files_labels = FileCanecllationAttachment::where('file_cancellation_id', decryptParams($id))->get();
+        $files_labels = FileCancellationAttachment::where('file_cancellation_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
 
@@ -112,7 +112,7 @@ class FileCancellationController extends Controller
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
         foreach ($files_labels as $key => $file) {
-            $image = $file->getFirstMedia('file_buy_back_attachments');
+            $image = $file->getFirstMedia('file_cancel_attachments');
             $images[$key] = $image->getUrl();
         }
 

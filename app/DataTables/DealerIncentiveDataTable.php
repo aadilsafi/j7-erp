@@ -136,10 +136,10 @@ class DealerIncentiveDataTable extends DataTable
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
                         var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        return '';
                     }",
                     'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        'selectAllRender' =>  '',
                     ]
                 ],
             ])
@@ -164,7 +164,7 @@ class DealerIncentiveDataTable extends DataTable
             Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
             Column::make('dealer_incentive')->title('Dealer Incentive')->addClass('text-nowrap text-center'),
             Column::make('total_unit_area')->title('Total Unit Area')->addClass('text-nowrap text-center'),
-            Column::make('total_dealer_incentive')->title('Total Incentive')->addClass('text-nowrap '),
+            Column::make('total_dealer_incentive')->title('Total Incentive')->addClass('text-nowrap text-center'),
             Column::make('status')->title('Status')->addClass('text-nowrap text-center'),
             Column::computed('created_at')->title('Created At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

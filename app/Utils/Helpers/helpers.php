@@ -635,11 +635,113 @@ if (!function_exists('getModelsClasses')) {
                 } else {
                     $fullClassName = "App\\Models\\" . basename($value, '.php');
                     if (!in_array($fullClassName, $excepts)) {
-                        $customFieldModels[$fullClassName] = Str::snake(basename($value, '.php')) ;
+                        $customFieldModels[$fullClassName] = Str::snake(basename($value, '.php'));
                     }
                 }
             }
         }
         return $customFieldModels;
+    }
+}
+
+if (!function_exists('generateCheckbox')) {
+    function generateCheckbox($id, $name, $label, $bootstrapCols, $value = '', $required = false, $checked = false, $disabled = false, $with_col = true)
+    {
+        $element = view('app.partial-components.checkbox', [
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'value' => $value,
+            'required' => $required,
+            'checked' => $checked,
+            'disabled' => $disabled,
+        ])->render();
+
+        return $element;
+    }
+}
+
+if (!function_exists('generateDate')) {
+    function generateDate($id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    {
+        $element = view('app.partial-components.date', [
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'value' => $value,
+            'required' => $required,
+            'disabled' => $disabled,
+            'readonly' => $readonly,
+        ])->render();
+
+        return $element;
+    }
+}
+
+if (!function_exists('generateCustomFields')) {
+    function generateCustomFields($customFields)
+    {
+        $customFieldHTML = [];
+
+        foreach ($customFields as $customField) {
+            switch ($customField->type) {
+                case 'checkbox':
+                    $customFieldHTML[] = generateCheckbox(
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
+                        $customField->value[0] ?? '',
+                        $customField->required,
+                        $customField->checked,
+                        $customField->disabled,
+                    );
+
+                    break;
+
+                case 'date':
+                    $customFieldHTML[] = generateDate(
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
+                        $customField->value[0] ?? 'today',
+                        $customField->required,
+                        $customField->disabled,
+                    );
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+
+        return $customFieldHTML;
+    }
+}
+
+if (!function_exists('generateSlug')) {
+    function generateSlug($site_id, $name, $model)
+    {
+        $slugCount = 0;
+        $slug = Str::slug($name);
+        $tmpSlug = $slug;
+        $isUniqueSlug = false;
+        while (!$isUniqueSlug) {
+            if ($model->where('site_id', $site_id)->where('slug', $tmpSlug)->exists()) {
+                $slugCount++;
+                $tmpSlug = $slug . '-' . $slugCount;
+            } else {
+                $isUniqueSlug = true;
+                $slug = $tmpSlug;
+            }
+        }
+        return $slug;
     }
 }

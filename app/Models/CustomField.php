@@ -14,6 +14,7 @@ class CustomField extends Model
     protected $fillable = [
         'site_id',
         'name',
+        'slug',
         'type',
         'values',
         'disabled',

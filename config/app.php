@@ -193,7 +193,6 @@ return [
         App\Providers\FortifyServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Spatie\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...

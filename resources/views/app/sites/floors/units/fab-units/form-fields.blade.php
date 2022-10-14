@@ -18,6 +18,8 @@
             <input type="hidden" name="unit_total_area" id="unit_total_area">
             <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area">
 
+            <input type="hidden" name="unit_net_area" id="unit_net_area">
+            <input type="hidden" name="sub_unit_net_area" id="sub_unit_net_area">
         </div>
 
         <div class="hidediv">
@@ -90,12 +92,7 @@
                                                 value="{{ $unit->status_id }}">
                                             @endif
                                             <select class="select2-size-lg form-select" id="status_id"
-                                                name="fab-units[status_id]" {{ isset($unit) && count($unit->salesPlan)
-                                                &&
-                                                $unit->salesPlan[0]->status == 1 ?
-                                                'disabled'
-                                                :
-                                                null }}>
+                                                name="fab-units[status_id]" disabled>
                                                 @foreach ($statuses as $row)
                                                 @continue(!isset($unit) && $row->id != 1)
                                                 <option value="{{ $row->id }}" {{ (isset($unit) ? $unit->status_id :
@@ -118,8 +115,8 @@
                                             <input type="number"
                                                 class="form-control form-control-lg @error('width') is-invalid @enderror"
                                                 id="width" name="fab-units[width]" placeholder="Width (sqft)"
-                                                value="{{ isset($unit) ? $unit->width : old('width') ?? 0 }}" />
-                                            @error('width')
+                                                value="0" />
+                                            @error('fab-units[width]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -129,8 +126,8 @@
                                             <input type="number"
                                                 class="form-control form-control-lg @error('length') is-invalid @enderror"
                                                 id="length" name="fab-units[length]" placeholder="Length (sqft)"
-                                                value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" />
-                                            @error('length')
+                                                value="0" />
+                                            @error('fab-units[length]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -140,7 +137,7 @@
                                         <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="net_area">Net Area (sqft)</label>
                                             <input type="number"
-                                                class="form-control form-control-lg @error('net_area') is-invalid @enderror"
+                                                class="RequiredField netArea form-control form-control-lg @error('net_area') is-invalid @enderror"
                                                 id="net_area" name="fab-units[net_area]" placeholder="Net Area (sqft)"
                                                 min="0"
                                                 value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" />
@@ -153,7 +150,7 @@
                                             <label class="form-label fs-5" for="gross_area">Gross Area
                                                 (sqft)</label>
                                             <input type="number"
-                                                class="checkArea tocheckArea form-control form-control-lg @error('gross_area') is-invalid @enderror"
+                                                class="RequiredField gross_area checkArea tocheckArea form-control form-control-lg @error('gross_area') is-invalid @enderror"
                                                 id="gross_area" name="fab-units[gross_area]"
                                                 placeholder="Gross Area (sqft)" min="0"
                                                 value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" />
@@ -165,7 +162,7 @@
                                         <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="price_sqft">Price (sqft)</label>
                                             <input type="number"
-                                                class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
+                                                class="RequiredField calculateArea price_sqft form-control form-control-lg @error('price_sqft') is-invalid @enderror"
                                                 id="price_sqft" name="fab-units[price_sqft]" placeholder="Price (sqft)"
                                                 min="0"
                                                 value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" />
@@ -179,9 +176,9 @@
                                                 value="0">
                                             <label class="form-label fs-5" for="total_price">Total Price</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('total_price') is-invalid @enderror"
-                                                id="total_price1" placeholder="Total Price (sqft)" readonly
-                                                value="{{ isset($unit) ? number_format($unit->total_price) : number_format(old('total_price')) ?? '0.00' }}" />
+                                                class="total_price1 RequiredField form-control form-control-lg @error('total_price') is-invalid @enderror"
+                                                id="total_price1" name="fab-units[total_price1]" placeholder="Total Price (sqft)" readonly
+                                                value="0.00" />
                                             @error('total_price')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror

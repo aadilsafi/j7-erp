@@ -134,7 +134,9 @@ encryptParams($floor->id)) }}
             var unit_id = $(this).val();
             if(unit_id !=0){
                 
-                $('[data-repeater-item]').slice(1).empty();
+                @if(!$errors->any())
+                     $('[data-repeater-item]').slice(1).empty();
+                @endif
                 restInputs();
                 $('.hidediv').hide();
                 showBlockUI('#loader');

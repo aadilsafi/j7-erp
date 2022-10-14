@@ -41,6 +41,7 @@ class DealerService implements DealerInterface
                 'dealer_incentive' => $inputs['dealer_incentive'],
                 'total_unit_area' => $inputs['total_unit_area'],
                 'total_dealer_incentive' => $inputs['total_dealer_incentive'],
+                'unit_IDs' => json_encode($inputs['unit_ids']),
                 'status' => 0,
                 'comments' => $inputs['comments'],
             ];

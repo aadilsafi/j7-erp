@@ -140,25 +140,20 @@ class DealerIncentiveController extends Controller
         $already_incentive_paid_to_units = [];
         foreach($dealer_incentives as $dealer_incentives)
         {
-            $already_incentive_paid_to_units[] = json_decode($dealer_incentives->unit_IDs);
+            $already_incentive_paid_to_units = json_decode($dealer_incentives->unit_IDs);
         }
-
-        $already_incentive_paid_to_units;
+     
         foreach ($rebate_incentives as $Units) {
-            
-           foreach($already_incentive_paid_to_units as $key => $ids ){
            
-            if($ids =  $Units->unit_id){
+            if (in_array($Units->unit_id, $already_incentive_paid_to_units)) {
                 
                 continue;
             }
             else{
+               
                 $units[] = Unit::find($Units->unit_id);
                 
-            }
-           
-           }
-             
+            }     
         }
 
         return response()->json([

@@ -124,6 +124,7 @@ class FileCancellationController extends Controller
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
+            'salesPlan'=>$salesPlan,
         ];
         return view('app.sites.file-managements.files.files-actions.file-cancellation.preview', $data);
     }

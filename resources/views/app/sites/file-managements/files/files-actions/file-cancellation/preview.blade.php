@@ -59,6 +59,7 @@
                     'cancellation_file' => $cancellation_file,
                     'labels' => $labels,
                     'total_paid_amount' => $total_paid_amount,
+                    'salesPlan'=>$salesPlan,
                 ]) }}
             </div>
 

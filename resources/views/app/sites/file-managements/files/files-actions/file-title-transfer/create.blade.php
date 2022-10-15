@@ -65,6 +65,7 @@
                     'rebate_incentive' => $rebate_incentive,
                     'total_paid_amount' => $total_paid_amount,
                     'rebate_total' => $rebate_total,
+                    'salesPlan' => $salesPlan,
                 ]) }}
             </div>
 

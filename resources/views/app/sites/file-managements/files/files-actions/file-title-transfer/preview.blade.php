@@ -60,6 +60,7 @@
                     'labels' => $labels,
                     'total_paid_amount' => $total_paid_amount,
                     'titleTransferPerson' => $titleTransferPerson,
+                    'salesPlan'=>$salesPlan,
                 ]) }}
             </div>
 

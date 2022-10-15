@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+                        width: calc(20% - 0.5em);
+                    } */
     </style>
 @endsection
 
@@ -64,9 +64,10 @@
                     'rebate_total' => $rebate_total,
                     'buyer' => $buyer,
                     'resale' => $resale_file,
-                    'paid_instalments' =>$paid_instalments,
-                'un_paid_instalments'=> $un_paid_instalments,
-                'partially_paid_instalments' => $partially_paid_instalments,
+                    'paid_instalments' => $paid_instalments,
+                    'un_paid_instalments' => $un_paid_instalments,
+                    'partially_paid_instalments' => $partially_paid_instalments,
+                    'salesPlan' => $salesPlan,
                 ]) }}
             </div>
 

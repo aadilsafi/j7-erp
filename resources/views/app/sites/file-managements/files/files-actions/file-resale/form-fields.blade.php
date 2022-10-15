@@ -440,20 +440,14 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['unit_price']) }}"
-                        @else
-                        value="{{ number_format($unit->CancelsalesPlan[0]['unit_price']) }}" @endif
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['total_price']) }}"
-                        @else
-                        value="{{ number_format($unit->CancelsalesPlan[0]['total_price']) }}" @endif
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>

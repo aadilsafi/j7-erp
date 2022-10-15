@@ -99,12 +99,12 @@
         @php
             $checkFileResale = DB::table('file_resales')
             ->where('file_id', $file_id)
-                ->first();
+            ->first();
         @endphp
         @if (isset($checkFileResale))
             <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
                 data-bs-toggle="tooltip" data-bs-placement="top" title="View File Resale"
-                href="{{ route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_resale_id' => encryptParams($checkFileResale->id)]) }}">
+                href="{{ route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_resale_id' => encryptParams($checkFileResale->id )]) }}">
                 <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
             </a>
             <a href="javascript:void(0);"

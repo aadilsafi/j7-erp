@@ -150,6 +150,7 @@ class FileTitleTransferController extends Controller
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
             'titleTransferPerson' => Stakeholder::find($transfer_file->transfer_person_id),
+            'salesPlan'=>$salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-title-transfer.preview', $data);

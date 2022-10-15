@@ -139,7 +139,6 @@ class FileReleaseController extends Controller
         $file = FileManagement::where('id', $resale_file->file_id)->first();
         $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
-
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
 
@@ -172,6 +171,7 @@ class FileReleaseController extends Controller
             'paid_instalments' => $paid_instalments,
             'un_paid_instalments' => $un_paid_instalments,
             'partially_paid_instalments' => $partially_paid_instalments,
+            'salesPlan'=>$salesPlan,
         ];
         // dd($data['unit']['salesPlan']);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);

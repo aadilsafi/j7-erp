@@ -15,6 +15,7 @@ class FileTitleTransfer extends Model
         'site_id',
         'file_id',
         'unit_id',
+        'sales_plan_id',
         'stakeholder_id',
         'transfer_person_id',
         'transfer_person_data',

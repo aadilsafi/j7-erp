@@ -2,9 +2,10 @@
 
 namespace App\Services\FileManagements;
 
-use App\Models\FileManagement;
-use App\Models\Stakeholder;
 use App\Models\Unit;
+use App\Models\SalesPlan;
+use App\Models\Stakeholder;
+use App\Models\FileManagement;
 use App\Services\FileManagements\FileManagementInterface;
 
 class FileManagementService implements FileManagementInterface
@@ -33,6 +34,13 @@ class FileManagementService implements FileManagementInterface
     public function store($site_id, $inputs)
     {
 
+        $sales_plan = (new SalesPlan())->with([
+            'additionalCosts', 'installments', 'leadSource', 'receipts'
+        ])->where([
+            'status' => 1,
+            'unit_id' => $inputs['application_form']['unit_id'],
+        ])->first();
+
         $data = [
             'site_id' => decryptParams($site_id),
             'unit_id' => $inputs['application_form']['unit_id'],
@@ -44,6 +52,7 @@ class FileManagementService implements FileManagementInterface
             'deal_type' => $inputs['application_form']['deal_type'],
             'status' => 1,
             'file_action_id' => 1,
+            'sales_plan_id'=> $sales_plan->id,
         ];
         $file = $this->model()->create($data);
 

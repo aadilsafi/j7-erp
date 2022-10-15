@@ -263,6 +263,28 @@
 
                 </div>
 
+                {{-- <div class="row mb-1">
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="stackholder_occupation">Floor Name</label>
+                        <input type="text" readonly value="{{$unit->floor->name }}" class="form-control form-control-lg"
+                            id="stackholder_occupation" placeholder="Unit No" />
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="stackholder_full_name">Short Label</label>
+                        <input type="text" readonly value="{{ $unit->floor->short_label }}" class="form-control form-control-lg"
+                            id="stackholder_full_name" placeholder="Unit Name" />
+                    </div>
+
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="stackholder_father_name">Unit Status</label>
+                        <input type="text" readonly value="{{ $unit->status->name }}" class="form-control form-control-lg"
+                            id="stackholder_father_name" placeholder="Unit Type" />
+                    </div>
+
+                </div> --}}
+
                 <div class="row mb-1">
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -273,14 +295,14 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($unit->price_sqft) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($unit->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>

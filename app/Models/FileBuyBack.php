@@ -14,6 +14,7 @@ class FileBuyBack extends Model
     protected $fillable = [
         'site_id',
         'file_id',
+        'sales_plan_id',
         'unit_id',
         'stakeholder_id',
         'dealer_id',

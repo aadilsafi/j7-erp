@@ -408,7 +408,7 @@ Route::group([
                         Route::get('/', [FileRefundController::class, 'index'])->name('index');
 
                         Route::get('approve/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'ApproveFileRefund'])->name('approve');
-                        Route::get('create/{unit_id}/{customer_id}', [FileRefundController::class, 'create'])->name('create');
+                        Route::get('create/{unit_id}/{customer_id}/{file_id}', [FileRefundController::class, 'create'])->name('create');
                         Route::post('store', [FileRefundController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_refund_id}', [FileRefundController::class, 'show'])->name('preview');
 
@@ -420,7 +420,7 @@ Route::group([
 
                         Route::get('/', [FileBuyBackController::class, 'index'])->name('index');
                         Route::get('approve/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'ApproveFileBuyBack'])->name('approve');
-                        Route::get('create/{unit_id}/{customer_id}', [FileBuyBackController::class, 'create'])->name('create');
+                        Route::get('create/{unit_id}/{customer_id}/{file_id}', [FileBuyBackController::class, 'create'])->name('create');
                         Route::post('store', [FileBuyBackController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_buy_back_id}', [FileBuyBackController::class, 'show'])->name('preview');
 
@@ -433,7 +433,7 @@ Route::group([
                         Route::get('/', [FileCancellationController::class, 'index'])->name('index');
                         Route::get('approve/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'ApproveFileCancellation'])->name('approve');
 
-                        Route::get('create/{unit_id}/{customer_id}', [FileCancellationController::class, 'create'])->name('create');
+                        Route::get('create/{unit_id}/{customer_id}/{file_id}', [FileCancellationController::class, 'create'])->name('create');
                         Route::post('store', [FileCancellationController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_cancellation_id}', [FileCancellationController::class, 'show'])->name('preview');
 
@@ -446,7 +446,7 @@ Route::group([
                         Route::get('/', [FileReleaseController::class, 'index'])->name('index');
                         Route::get('approve/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'ApproveFileResale'])->name('approve');
 
-                        Route::get('create/{unit_id}/{customer_id}', [FileReleaseController::class, 'create'])->name('create');
+                        Route::get('create/{unit_id}/{customer_id}/{file_id}', [FileReleaseController::class, 'create'])->name('create');
                         Route::post('store', [FileReleaseController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_resale_id}', [FileReleaseController::class, 'show'])->name('preview');
 
@@ -459,7 +459,7 @@ Route::group([
                         Route::get('/', [FileTitleTransferController::class, 'index'])->name('index');
                         Route::get('approve/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'ApproveFileTitleTransfer'])->name('approve');
 
-                        Route::get('create/{unit_id}/{customer_id}', [FileTitleTransferController::class, 'create'])->name('create');
+                        Route::get('create/{unit_id}/{customer_id}/{file_id}', [FileTitleTransferController::class, 'create'])->name('create');
                         Route::post('store', [FileTitleTransferController::class, 'store'])->name('store');
                         Route::get('preview/{unit_id}/{customer_id}/{file_title_transfer_id}', [FileTitleTransferController::class, 'show'])->name('preview');
 

@@ -125,23 +125,11 @@ class FileManagementController extends Controller
             'customer_file' => FileManagement::find(decryptParams($file_id)),
         ];
 
-        if ($customer_file->file_action_id == 1) {
-
-            $data['salesPlan'] = (new SalesPlan())->with([
-                'additionalCosts', 'installments', 'leadSource', 'receipts'
-            ])->where([
-                'status' => 1,
-                'unit_id' => $data['unit']->id,
-            ])->first();
-        } else {
-            $data['salesPlan'] = (new SalesPlan())->with([
-                'additionalCosts', 'installments', 'leadSource', 'receipts'
-            ])->where([
-                'status' => 3,
-                'unit_id' => $data['unit']->id,
-            ])->first();
-        }
-
+        $data['salesPlan'] = (new SalesPlan())->with([
+            'additionalCosts', 'installments', 'leadSource', 'receipts'
+        ])->where([
+            'id' => $customer_file->sales_plan_id,
+        ])->first();
 
         if (isset($customer_file)) {
             $data['image'] = $customer_file->getFirstMediaUrl('application_form_photo');

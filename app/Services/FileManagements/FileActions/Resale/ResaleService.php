@@ -6,6 +6,7 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\FileResale;
 use App\Models\Stakeholder;
+use App\Models\FileManagement;
 use App\Models\StakeholderType;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -14,8 +15,8 @@ use App\Models\FileResaleAttachment;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use App\Models\FileBuyBackLabelsAttachment;
-use Illuminate\Support\Facades\Notification;
 
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface as ResaleInterface;
 
@@ -41,68 +42,12 @@ class ResaleService implements ResaleInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
-
-            // if ($inputs['stackholder']['stackholder_id'] == 0) {
-            //     $buyer_data = [
-            //         'site_id' => decryptParams($site_id),
-            //         'full_name' => $inputs['stackholder']['full_name'],
-            //         'father_name' => $inputs['stackholder']['father_name'],
-            //         'occupation' => $inputs['stackholder']['occupation'],
-            //         'designation' => $inputs['stackholder']['designation'],
-            //         'cnic' => $inputs['stackholder']['cnic'],
-            //         'ntn' => $inputs['stackholder']['ntn'],
-            //         'contact' => $inputs['stackholder']['contact'],
-            //         'address' => $inputs['stackholder']['address'],
-            //         'comments' => $inputs['stackholder']['comments'],
-            //     ];
-
-            //     $buyer = Stakeholder::create($buyer_data);
-            //     $buyer_id = $buyer->id;
-
-            //     $stakeholdertype = [
-            //         [
-            //             'stakeholder_id' => $buyer_id,
-            //             'type' => 'C',
-            //             'stakeholder_code' => 'C-00' . $buyer_id,
-            //             'status' => 1,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $buyer_id,
-            //             'type' => 'V',
-            //             'stakeholder_code' => 'V-00' . $buyer_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $buyer_id,
-            //             'type' => 'D',
-            //             'stakeholder_code' => 'D-00' . $buyer_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $buyer_id,
-            //             'type' => 'K',
-            //             'stakeholder_code' => 'K-00' . $buyer_id,
-            //             'status' => 0,
-            //         ],
-            //         [
-            //             'stakeholder_id' => $buyer_id,
-            //             'type' => 'L',
-            //             'stakeholder_code' => 'L-00' . $buyer_id,
-            //             'status' => 1,
-            //         ]
-            //     ];
-
-            //     $stakeholder_type = StakeholderType::insert($stakeholdertype);
-            // } else {
-            //     $buyer_id = $inputs['stackholder']['stackholder_id'];
-            // }
-
-
-
+            $file = FileManagement::find($inputs['file_id']);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
+                'sales_plan_id'=>$file->sales_plan_id,
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),

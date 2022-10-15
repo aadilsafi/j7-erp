@@ -53,18 +53,21 @@ class FileBuyBackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($site_id, $unit_id, $customer_id)
+    public function create($site_id, $unit_id, $customer_id,$file_id)
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
-            $receipts = Receipt::where('unit_id',decryptParams($unit_id))->where('sales_plan_id',$unit->salesPlan[0]['id'])->get();
+            $file = FileManagement::where('id', decryptParams($file_id))->first();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $salesPlan = SalesPlan::find($file->sales_plan_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
-                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
+                'salesPlan'=>$salesPlan,
             ];
             return view('app.sites.file-managements.files.files-actions.file-buy-back.create', $data);
         } else {
@@ -78,7 +81,7 @@ class FileBuyBackController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(store $request,$site_id)
+    public function store(store $request, $site_id)
     {
         //
         try {
@@ -104,16 +107,15 @@ class FileBuyBackController extends Controller
     {
         $files_labels = FileBuyBackLabelsAttachment::where('file_buy_back_id', decryptParams($id))->get();
         $images = [];
+        $buy_back_file = (new FileBuyBack())->find(decryptParams($id));
 
         $unit = Unit::find(decryptParams($unit_id));
-        if (isset($unit->salesPlan[0])) {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
-        } else {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
-        }
+        $file = FileManagement::where('id', $buy_back_file->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
-        foreach ($files_labels as $key=>$file) {
+        foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_buy_back_attachments');
             $images[$key] = $image->getUrl();
         }
@@ -165,7 +167,7 @@ class FileBuyBackController extends Controller
         //
     }
 
-    public function ApproveFileBuyBack ($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_refund_id)
     {
 
         $file_buy_back = FileBuyBack::find(decryptParams($file_refund_id));
@@ -208,7 +210,7 @@ class FileBuyBackController extends Controller
             'site_id' => decryptParams($site_id),
         ];
 
-        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
         return view($printFile, compact('data'));
     }

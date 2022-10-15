@@ -17,6 +17,7 @@ class FileManagement extends Model implements HasMedia
     protected $fillable = [
         'site_id',
         'unit_id',
+        'sales_plan_id',
         'unit_data',
         'stakeholder_id',
         'stakeholder_data',

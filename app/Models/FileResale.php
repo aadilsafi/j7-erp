@@ -16,6 +16,7 @@ class FileResale extends Model
         'site_id',
         'file_id',
         'unit_id',
+        'sales_plan_id',
         'stakeholder_id',
         'buyer_id',
         'buyer_data',

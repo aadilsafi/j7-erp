@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->foreignId('file_id')->constrained('file_management');
             $table->foreignId('unit_id')->constrained('units');
+            $table->foreignId('sales_plan_id')->constrained();
             $table->foreignId('dealer_id')->nullable();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->longText('stakeholder_data')->nullable();

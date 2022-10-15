@@ -194,7 +194,6 @@ class FileTitleTransferController extends Controller
     {
 
         $file_title_transfer = FileTitleTransfer::find(decryptParams($file_title_transfer_id));
-        dd(decryptParams($file_title_transfer_id),$file_title_transfer);
         $file_title_transfer->status = 1;
         $file_title_transfer->update();
 

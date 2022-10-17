@@ -21,7 +21,7 @@
         color: #7367F0 !important;
     }
 
-    / the background color of the file and file panel (used when dropping an image) / .filepond--item-panel {
+    .filepond--item-panel {
         background-color: #7367F0;
     }
 

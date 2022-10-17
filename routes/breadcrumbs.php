@@ -374,17 +374,6 @@ Breadcrumbs::for('sites.file-managements.file-title-transfer.preview', function 
     $trail->push('Preview File Title Transfer', route('sites.file-managements.rebate-incentive.index', ['site_id' => $site_id]));
 });
 
-//Recovery Accounts BreadCrumbs
-Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('dashboard');
-    $trail->push('File Title Transfer', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
-});
-
-Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('dashboard');
-    $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
-});
-
 // Custom Fields Breadcrumbs
 Breadcrumbs::for('sites.settings.custom-fields.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
@@ -400,4 +389,17 @@ Breadcrumbs::for('sites.settings.custom-fields.create', function (BreadcrumbTrai
 Breadcrumbs::for('sites.settings.custom-fields.edit', function (BreadcrumbTrail $trail, $site_id, $id) {
     $trail->parent('sites.settings.custom-fields.index', $site_id);
     $trail->push('Edit Custom Fields', route('sites.settings.custom-fields.edit', ['site_id' => $site_id, 'id' => $id]));
+});
+
+// Accounts Breadcrumbs
+Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Accounts', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
+    $trail->push('Dashboard', route('sites.accounts.recovery.dashboard', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Accounts', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
+    $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
 });

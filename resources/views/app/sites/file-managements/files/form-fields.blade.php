@@ -483,7 +483,7 @@
                                                     (Rs)</label>
                                                 <input type="text" class="form-control form-control-lg" disabled
                                                     id="total-price-discount" placeholder="Discount"
-                                                    value="{{ $salesPlan->discount_total }}" />
+                                                    value="{{ number_format($salesPlan->discount_total) }}" />
                                             </div>
                                         </div>
 

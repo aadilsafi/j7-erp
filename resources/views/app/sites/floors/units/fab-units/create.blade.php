@@ -68,6 +68,7 @@ encryptParams($floor->id)) }}
             'additionalCosts' => $additionalCosts,
             'types' => $types,
             'statuses' => $statuses,
+            'emptyUnit' => $emptyUnit,
             ]) }}
 
         </div>
@@ -159,7 +160,7 @@ encryptParams($floor->id)) }}
                         $('#net_area').val(response.remaing_net);
                         $('#gross_area').val(response.remaing_gross);
                         $('#price_sqft').val(response.unit.price_sqft);
-                        $('#total_price1').val(response.unit.total_price);
+                        $('#total_price1').val(numberFormat(parseFloat(response.unit.total_price).toFixed(2)));
                         $('#unit_number').val(response.max_unit_number);
                         $('#floor_name').val(response.floor_name);
                         $('#floor_id').val(response.unit.floor_id);
@@ -218,31 +219,37 @@ encryptParams($floor->id)) }}
                         alert(1);
                     }
 
-            //Calculate Total Price from Gross Area
-            $('.gross_area, .price_sqft').on('keyup', function() {
-                
-                var total_price = 0;
-                var gross_area = 0;
-                var price_sqft = 0;
-                if ($(this).val() > 0) {
-                    gross_area = parseFloat($('.gross_area').val());
-                    price_sqft = parseFloat($('.price_sqft').val());
-                    total_price = gross_area * price_sqft;
-                } else {
-                    total_price = 0;
-                    // $(this).val('0');
-                }
-                $('#total_price1').val('' + numberFormat(parseFloat(total_price).toFixed(2)));
-                $('#total_price').val('' + parseFloat(total_price).toFixed(2));
-
-            });
-        });
-
-        jQuery.validator.addClassRules({
+                    jQuery.validator.addClassRules({
                 RequiredField: {
                     required: true,
                 },
             });
+
+            $.validator.addMethod("ValidateArea", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var net_area;
+                var gross_area;
+                if (value != '') {  
+                    $(parentForm.find('.tocheckArea')).each(function() {
+                      
+                        var name = $(this).attr('name');
+                      var index = Number(name.substring(10,11));
+
+                      net_area = $('[name="fab-units['+index+'][net_area]"]').val()
+                      gross_area = $('[name="fab-units['+index+'][gross_area]"]').val();
+                    
+                    });
+                   
+                }
+                if(Number(gross_area) >= Number(net_area)){
+                    return true
+                }else{
+                    return false;
+                }
+
+            }, "Net area Must be less than or Equal to Gross area.");
+
+
             $.validator.addMethod("calculateArea", function(value, element) {
                 var parentForm = $(element).closest('form');
                 
@@ -255,7 +262,7 @@ encryptParams($floor->id)) }}
                       var price = $('[name="fab-units['+index+'][price_sqft]"]').val()
                       var total_price = Number(price) * Number($(this).val());
 
-                      $('[name="fab-units['+index+'][total_price]"]').val(numberFormat(parseFloat(total_price).toFixed(2)))
+                      $('[name="fab-units['+index+'][total_price]"]').val(parseFloat(total_price).toFixed(2))
                       $('[name="fab-units['+index+'][total_price1]"]').val(numberFormat(parseFloat(total_price).toFixed(2)))
                       
                       
@@ -315,7 +322,7 @@ encryptParams($floor->id)) }}
                     return false;
                 }
 
-            }, "Sub Units Gross area must be Less Total Unit Gross area");
+            }, "Sub Units Gross area must be Less then or Equal to Total Unit Net Area");
 
             var validator = $("#fabUnitForm").validate({
                     validClass: "success",
@@ -363,16 +370,7 @@ encryptParams($floor->id)) }}
                         
                     }
                     });
-
-                    function isAvalibleSubUnits(){
-                        validator
-                        var sum_area = $('#sub_unit_total_area').val()
-                        var unit_total_area = $('#unit_total_area').val();
-
-                        return Number(sum_area) < Number(unit_total_area)
-
-                    }
-
+          
                     $(".fab-units").repeater({
                         defaultValues: {
                                 'fab-units[width]': 0,
@@ -407,6 +405,14 @@ encryptParams($floor->id)) }}
                             }
                         });
 
-           
+                        function isAvalibleSubUnits(){
+                        validator
+                        var sum_area = $('#sub_unit_total_area').val()
+                        var unit_total_area = $('#unit_total_area').val();
+
+                        return Number(sum_area) < Number(unit_total_area)
+
+                    }
+        });   
 </script>
 @endsection

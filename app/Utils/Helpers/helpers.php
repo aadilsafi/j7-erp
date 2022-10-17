@@ -682,6 +682,26 @@ if (!function_exists('generateDate')) {
     }
 }
 
+if (!function_exists('generateEmail')) {
+    function generateEmail($id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    {
+        $element = view('app.partial-components.email', [
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'value' => $value,
+            'required' => $required,
+            'disabled' => $disabled,
+            'readonly' => $readonly,
+        ])->render();
+
+        // dd($element);
+        return $element;
+    }
+}
+
 if (!function_exists('generateCustomFields')) {
     function generateCustomFields($customFields)
     {
@@ -710,6 +730,18 @@ if (!function_exists('generateCustomFields')) {
                         $customField->name,
                         $customField->bootstrap_column,
                         $customField->value[0] ?? 'today',
+                        $customField->required,
+                        $customField->disabled,
+                    );
+
+                    break;
+                case 'email':
+
+                    $customFieldHTML[] = generateEmail(
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
                         $customField->required,
                         $customField->disabled,
                     );

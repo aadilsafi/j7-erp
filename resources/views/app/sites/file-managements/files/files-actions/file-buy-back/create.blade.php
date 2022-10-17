@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-buy-back.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create File Refund ')
+@section('page-title', 'Create File Buy Back ')
 
 @section('page-vendor')
 @endsection

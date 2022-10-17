@@ -15,11 +15,11 @@
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <input type="hidden" name="unit_total_area" id="unit_total_area">
-            <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area">
+            <input type="hidden" name="unit_total_area" id="unit_total_area" value="{{old('unit_total_area')}}">
+            <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area" value="{{old('sub_unit_total_area')}}">
 
-            <input type="hidden" name="unit_net_area" id="unit_net_area">
-            <input type="hidden" name="sub_unit_net_area" id="sub_unit_net_area">
+            <input type="hidden" name="unit_net_area" id="unit_net_area" value="{{old('unit_net_area')}}">
+            <input type="hidden" name="sub_unit_net_area" id="sub_unit_net_area" value="{{old('sub_unit_net_area')}}">
         </div>
 
         <div class="{{$errors->any() ? '' : 'hidediv'}}">
@@ -34,7 +34,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <input type="hidden" name="floor_id" id="floor_id">
+                    <input type="hidden" name="floor_id" id="floor_id" value="{{old('floor_id')}}">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="floor_name">Floor Name</label>
                         <input type="text"
@@ -59,6 +59,9 @@
                 <div class="fab-units">
                     <div data-repeater-list="fab-units">
                         <div data-repeater-item>
+
+                            @forelse ($errors->any() ? old('fab-units') : $emptyUnit as $key => $subUnit)
+
                             <div class="card m-0">
                                 <div class="card-header mt-1">
                                     <h3>Bifurcated Unit</h3>
@@ -76,8 +79,8 @@
                                             <label class="form-label fs-5" for="name">Name</label>
                                             <input type="text"
                                                 class="form-control form-control-lg @error('name') is-invalid @enderror"
-                                                id="name" name="fab-units[name]" placeholder="Name"
-                                                value="{{ old('fab-units[name]') }}" />
+                                                id="name" name="fab-units[{{$key}}][name]" placeholder="Name"
+                                                value="{{ $subUnit['name'] }}" />
                                             @error('name')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -92,7 +95,7 @@
                                                 value="{{ $unit->status_id }}">
                                             @endif
                                             <select class="select2-size-lg form-select" id="status_id"
-                                                name="fab-units[status_id]" disabled>
+                                                name="fab-units[{{$key}}][status_id]" disabled>
                                                 @foreach ($statuses as $row)
                                                 @continue(!isset($unit) && $row->id != 1)
                                                 <option value="{{ $row->id }}" {{ (isset($unit) ? $unit->status_id :
@@ -114,8 +117,8 @@
                                             <label class="form-label fs-5" for="width">Width (sqft)</label>
                                             <input type="number"
                                                 class="form-control form-control-lg @error('width') is-invalid @enderror"
-                                                id="width" name="fab-units[width]" placeholder="Width (sqft)"
-                                                value="{{old('fab-units.*.width')}}" />
+                                                id="width" name="fab-units[{{$key}}][width]" placeholder="Width (sqft)"
+                                                value="{{$subUnit['width']}}" />
                                             @error('fab-units[width]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -125,8 +128,8 @@
                                             <label class="form-label fs-5" for="length">Length (sqft)</label>
                                             <input type="number"
                                                 class="form-control form-control-lg @error('length') is-invalid @enderror"
-                                                id="length" name="fab-units[length]" placeholder="Length (sqft)"
-                                                value="{{old('fab-units[length]')}}" />
+                                                id="length" name="fab-units[{{$key}}][length]"
+                                                placeholder="Length (sqft)" value="{{$subUnit['length']}}" />
                                             @error('fab-units[length]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -138,8 +141,9 @@
                                             <label class="form-label fs-5" for="net_area">Net Area (sqft)</label>
                                             <input type="number"
                                                 class="RequiredField netArea form-control form-control-lg @error('net_area') is-invalid @enderror"
-                                                id="net_area" name="fab-units[net_area]" placeholder="Net Area (sqft)"
-                                                min="0" value="{{ old('fab-units[net_area]')  }}" />
+                                                id="net_area" name="fab-units[{{$key}}][net_area]"
+                                                placeholder="Net Area (sqft)" min="0"
+                                                value="{{ $subUnit['net_area']}}" />
                                             @error('fab-units[net_area]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -150,9 +154,9 @@
                                                 (sqft)</label>
                                             <input type="number"
                                                 class="RequiredField gross_area checkArea tocheckArea form-control form-control-lg @error('gross_area') is-invalid @enderror"
-                                                id="gross_area" name="fab-units[gross_area]"
+                                                id="gross_area" name="fab-units[{{$key}}][gross_area]"
                                                 placeholder="Gross Area (sqft)" min="0"
-                                                value="{{old('fab-units[gross_area]') }}" />
+                                                value="{{$subUnit['gross_area'] }}" />
                                             @error('fab-units[gross_area]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -162,22 +166,23 @@
                                             <label class="form-label fs-5" for="price_sqft">Price (sqft)</label>
                                             <input type="number"
                                                 class="RequiredField calculateArea price_sqft form-control form-control-lg @error('price_sqft') is-invalid @enderror"
-                                                id="price_sqft" name="fab-units[price_sqft]" placeholder="Price (sqft)"
-                                                min="0" value="{{ old('fab-units[price_sqft]') }}" />
+                                                id="price_sqft" name="fab-units[{{$key}}][price_sqft]"
+                                                placeholder="Price (sqft)" min="0"
+                                                value="{{ $subUnit['price_sqft'] }}" />
                                             @error('fab-units[price_sqft]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
-                                            <input type="hidden" name="fab-units[total_price]" id="total_price"
-                                                value="0">
+                                            <input type="hidden" name="fab-units[{{$key}}][total_price]"
+                                                id="total_price" value="{{$subUnit['total_price']}}">
                                             <label class="form-label fs-5" for="total_price">Total Price</label>
                                             <input type="text"
                                                 class="total_price1 RequiredField form-control form-control-lg @error('total_price') is-invalid @enderror"
-                                                id="total_price1" name="fab-units[total_price1]"
+                                                id="total_price1" name="fab-units[{{$key}}][total_price1]"
                                                 placeholder="Total Price (sqft)" readonly
-                                                value="{{old('fab-units.*.total_price1')}}" />
+                                                value="{{$subUnit['total_price1']}}" />
                                             @error('fab-units[total_price1]')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -185,6 +190,12 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @empty
+
+                            @endforelse
+
+
                         </div>
                     </div>
                     <div class="row mt-5">

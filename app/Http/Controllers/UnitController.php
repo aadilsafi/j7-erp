@@ -93,6 +93,7 @@ class UnitController extends Controller
                 'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('has_sub_units', false)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
+                'emptyUnit' => $this->unitInterface->getEmptyInstance(),
             ];
 
             return view('app.sites.floors.units.fab-units.create', $data);

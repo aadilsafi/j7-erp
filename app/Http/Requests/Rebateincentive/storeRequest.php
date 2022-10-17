@@ -25,14 +25,14 @@ class storeRequest extends FormRequest
     public function rules()
     {
 
-        $rules['dealer.cnic'] = ['sometimes|required', 'numeric', Rule::unique('stakeholders','cnic')->ignore($this->input('stackholder.stackholder_id'))];
+        $rules['dealer.cnic'] = ['sometimes','required', 'numeric', Rule::unique('stakeholders','cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;
     }
 
     public function messages()
     {
         return [
-            'dealer.cnic.unique' => " Cnic Must be Unique",
+            'dealer.cnic.unique' => " CNIC Must Be Unique",
 
         ];
     }

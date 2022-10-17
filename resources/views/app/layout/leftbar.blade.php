@@ -422,7 +422,7 @@
             @endcan
 
             {{-- Accounts Menu --}}
-            {{-- @canany(['sites.accounts.recovery.dashboard'])
+            @canany(['sites.accounts.recovery.dashboard'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
@@ -471,7 +471,7 @@
                         @endcanany
                     </ul>
                 </li>
-            @endcanany --}}
+            @endcanany
 
         </ul>
     </div>

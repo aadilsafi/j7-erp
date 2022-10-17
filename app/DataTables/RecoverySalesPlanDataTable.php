@@ -63,6 +63,12 @@ class RecoverySalesPlanDataTable extends DataTable
             ->editColumn('lead_source_id', function ($salesPlan) {
                 return $salesPlan->leadSource->name;
             })
+
+            ->editColumn('installment_remaining_amout', function ($salesPlan) {
+                return '';
+                // return $salesPlan->installments->;
+            })
+
             ->editColumn('status', function ($salesPlan) use ($data) {
                 return '<span class="badge badge-pill ' . $data[$salesPlan->status][1] . '">' . $data[$salesPlan->status][0] . '</span>';
             })
@@ -144,6 +150,9 @@ class RecoverySalesPlanDataTable extends DataTable
             Column::make('down_payment_percentage')->addClass('text-nowrap'),
             Column::make('down_payment_total')->addClass('text-nowrap'),
             Column::make('lead_source_id')->addClass('text-nowrap'),
+
+            Column::make('installment_remaining_amout')->addClass('text-nowrap'),
+
             Column::make('status')->addClass('text-nowrap'),
             Column::make('approved_date')->addClass('text-nowrap'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

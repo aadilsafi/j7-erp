@@ -118,6 +118,8 @@ class ReceiptController extends Controller
         //     $unpadid_installments = null;
         // }
 
+        $sales_plan = SalesPlan::find($receipt->sales_plan_id);
+
         return view('app.sites.receipts.preview', [
             'site' => $site,
             'receipt' => $receipt,
@@ -125,7 +127,8 @@ class ReceiptController extends Controller
             'unit_data' => $unit_data,
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,
-            'stakeholder_data' => $stakeholder_data
+            'stakeholder_data' => $stakeholder_data,
+            'sales_plan'=>$sales_plan,
         ]);
     }
 

@@ -10,6 +10,7 @@ use App\Models\StakeholderType;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\RebateIncentive\storeRequest;
 
 class RebateIncentiveController extends Controller
 {
@@ -65,8 +66,9 @@ class RebateIncentiveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $site_id)
+    public function store(storeRequest $request, $site_id)
     {
+       // dd($request->all());
         try {
             $inputs = $request->input();
 

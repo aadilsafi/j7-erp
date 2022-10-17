@@ -537,35 +537,19 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dynamic_installment_rows">
-                                            @if (isset($unit->salesPlan[0]))
-                                                @foreach ($unit->salesPlan[0]['installments'] as $intsallment)
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
-                                                        <td>{{ $intsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
-                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                                @foreach ($unit->CancelsalesPlan[0]['installments'] as $intsallment)
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
-                                                        <td>{{ $intsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
-                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                            @foreach ($salesPlan->installments as $intsallment)
+                                                <tr class="text-center text-nowrap">
+                                                    <td>{{ $loop->index + 1 }}</td>
+                                                    <td>{{ $intsallment->details }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
+                                                    </td>
+                                                    <td>{{ number_format($intsallment->amount) }}</td>
+                                                    <td>{{ number_format($intsallment->paid_amount) }}</td>
+                                                    <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                    <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>

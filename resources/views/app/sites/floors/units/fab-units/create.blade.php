@@ -322,7 +322,7 @@ encryptParams($floor->id)) }}
                     return false;
                 }
 
-            }, "Sub Units Gross area must be Less Total Unit Gross area");
+            }, "Sub Units Gross area must be Less then or Equal to Total Unit Net Area");
 
             var validator = $("#fabUnitForm").validate({
                     validClass: "success",

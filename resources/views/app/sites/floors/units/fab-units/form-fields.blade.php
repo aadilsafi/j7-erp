@@ -15,11 +15,11 @@
                 <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
-            <input type="hidden" name="unit_total_area" id="unit_total_area">
-            <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area">
+            <input type="hidden" name="unit_total_area" id="unit_total_area" value="{{old('unit_total_area')}}">
+            <input type="hidden" name="sub_unit_total_area" id="sub_unit_total_area" value="{{old('sub_unit_total_area')}}">
 
-            <input type="hidden" name="unit_net_area" id="unit_net_area">
-            <input type="hidden" name="sub_unit_net_area" id="sub_unit_net_area">
+            <input type="hidden" name="unit_net_area" id="unit_net_area" value="{{old('unit_net_area')}}">
+            <input type="hidden" name="sub_unit_net_area" id="sub_unit_net_area" value="{{old('sub_unit_net_area')}}">
         </div>
 
         <div class="{{$errors->any() ? '' : 'hidediv'}}">
@@ -34,7 +34,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <input type="hidden" name="floor_id" id="floor_id">
+                    <input type="hidden" name="floor_id" id="floor_id" value="{{old('floor_id')}}">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="floor_name">Floor Name</label>
                         <input type="text"

@@ -11,7 +11,7 @@ use App\Services\RebateIncentive\RebateIncentiveInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\RebateIncentive\storeRequest;
+use App\Http\Requests\Rebateincentive\storeRequest;
 
 class RebateIncentiveController extends Controller
 {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\AdditionalCostsDataTable;
+use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Http\Request;
 use App\Http\Requests\additionalCosts\{
     storeRequest as additionalCostStoreRequest,
@@ -15,9 +16,11 @@ class AdditionalCostController extends Controller
 {
     private $additionalCostInterface;
 
-    public function __construct(AdditionalCostInterface $additionalCostInterface)
+    public function __construct(AdditionalCostInterface $additionalCostInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->additionalCostInterface = $additionalCostInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -38,9 +41,15 @@ class AdditionalCostController extends Controller
     public function create(Request $request, $site_id)
     {
         if (!request()->ajax()) {
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->additionalCostInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => $site_id,
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                'customFields' => $customFields
             ];
             return view('app.additional-costs.create', $data);
         } else {

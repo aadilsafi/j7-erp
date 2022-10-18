@@ -8,9 +8,10 @@ use App\DataTables\RebateIncentiveDataTable;
 use App\Models\RebateIncentiveModel;
 use App\Models\StakeholderType;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Requests\RebateIncentive\storeRequest;
+use App\Http\Requests\Rebateincentive\storeRequest;
 
 class RebateIncentiveController extends Controller
 {
@@ -23,9 +24,10 @@ class RebateIncentiveController extends Controller
     private $rebateIncentive;
 
     public function __construct(
-        RebateIncentiveInterface $rebateIncentive
+        RebateIncentiveInterface $rebateIncentive, CustomFieldInterface $customFieldInterface
     ) {
         $this->rebateIncentive = $rebateIncentive;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(RebateIncentiveDataTable $dataTable, Request $request, $site_id)
@@ -47,11 +49,18 @@ class RebateIncentiveController extends Controller
     {
 
         if (!request()->ajax()) {
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->rebateIncentive->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
                 'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                'customFields' => $customFields
+
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);
@@ -176,7 +185,9 @@ class RebateIncentiveController extends Controller
             'leadSource' => $leadSource,
             'cnic' => cnicFormat($stakeholder->cnic),
             'salesPlan' => $salesPlan,
-            'floor' => $floor
+            'floor' => $floor,
+            'facing' => $unit->facing,
+            // 'corner' => $unit->corner,
         ], 200);
     }
 }

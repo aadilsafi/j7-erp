@@ -8,7 +8,7 @@ interface UnitTypeInterface
 
     public function getByAll();
     public function getById($id);
-    public function getAllWithTree();
+    public function getAllWithTree($site_id);
 
     public function store($site_id, $inputs);
     public function update($site_id, $inputs, $id);

@@ -67,6 +67,8 @@
                     'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
+                    'customFields' => $customFields
+
                 ]) }}
 
             </div>

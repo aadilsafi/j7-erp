@@ -23,6 +23,7 @@ use App\Models\Template;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileReleaseController extends Controller
 {
@@ -35,13 +36,12 @@ class FileReleaseController extends Controller
     private $stakeholderInterface;
     private $resaleInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->resaleInterface = $resaleInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
-
-
 
     public function index(FileResaleDataTable $dataTable, Request $request, $site_id)
     {
@@ -74,6 +74,10 @@ class FileReleaseController extends Controller
             $un_paid_instalments = SalesPlanInstallments::where('sales_plan_id', $unit->salesPlan[0]->id)->where('status', 'unpaid')->get();
             $partially_paid_instalments = SalesPlanInstallments::where('sales_plan_id', $unit->salesPlan[0]->id)->where('status', 'partially_paid')->get();
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->resaleInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             if (isset($rebate_incentive)) {
                 $rebate_total = $rebate_incentive->commision_total;
             } else {
@@ -94,6 +98,7 @@ class FileReleaseController extends Controller
                 'un_paid_instalments' => $un_paid_instalments,
                 'partially_paid_instalments' => $partially_paid_instalments,
                 'salesPlan' => $salesPlan,
+                'customFields' => $customFields
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-resale.create', $data);

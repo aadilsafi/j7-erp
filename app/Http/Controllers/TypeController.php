@@ -59,7 +59,7 @@ class TypeController extends Controller
 
         $data = [
             'site_id' => $site_id,
-            'types' => $this->unitTypeInterface->getAllWithTree(),
+            'types' => $this->unitTypeInterface->getAllWithTree($site_id),
             'customFields' => $customFields
         ];
 
@@ -116,7 +116,7 @@ class TypeController extends Controller
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
-                    'types' => $this->unitTypeInterface->getAllWithTree(),
+                    'types' => $this->unitTypeInterface->getAllWithTree($site_id),
                     'type' => $type,
                 ];
 

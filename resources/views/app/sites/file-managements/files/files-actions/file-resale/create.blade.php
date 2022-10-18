@@ -69,6 +69,8 @@
                     'un_paid_instalments' => $un_paid_instalments,
                     'partially_paid_instalments' => $partially_paid_instalments,
                     'salesPlan' => $salesPlan,
+                    'customFields' => $customFields
+
                 ]) }}
             </div>
 

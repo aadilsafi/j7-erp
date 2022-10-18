@@ -59,6 +59,7 @@
             'stakeholders' => $stakeholders,
             'stakeholderTypes' => $stakeholderTypes,
             'emptyRecord' => $emptyRecord,
+            'customFields' => $customFields
             ]) }}
 
         </div>

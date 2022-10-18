@@ -624,6 +624,37 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\CustomField',
                 'App\Models\Media',
                 'App\Models\CustomFieldValue',
+                'App\Models\City',
+                'App\Models\Country',
+                'App\Models\AppSetting',
+                'App\Models\FileAction',
+                'App\Models\FileAdjustment',
+                'App\Models\FileRefundAttachment',
+                'App\Models\FileAdjustmentAttachment',
+                'App\Models\FileTitleTransferAttachment',
+                'App\Models\FileCancellationAttachment',
+                'App\Models\FileBuyBackLabelsAttachment',
+                'App\Models\FileResaleAttachment',
+                'App\Models\ModelTemplate',
+                'App\Models\UserBatch',
+                'App\Models\UnitStakeholder',
+                'App\Models\Template',
+                'App\Models\TeamUser',
+                'App\Models\Status',
+                'App\Models\State',
+                'App\Models\SalesPlanTemplate',
+                'App\Models\Permission',
+                'App\Models\Role',
+                'App\Models\Status',
+                'App\Models\StakeholderContact',
+                'App\Models\StakeholderType',
+                'App\Models\SalesPlanAdditionalCost',
+                'App\Models\SalesPlanInstallments',
+                'App\Models\ReceiptDraftModel',
+                'App\Models\ReceiptTemplate',
+                'App\Models\Notification',
+                'App\Models\MultiValue',
+                'App\Models\SiteOwner',
             ];
         }
         $customFieldModels = array();
@@ -645,7 +676,7 @@ if (!function_exists('getModelsClasses')) {
 }
 
 if (!function_exists('generateCheckbox')) {
-    function generateCheckbox($id, $name, $label, $bootstrapCols, $value = '', $required = false, $checked = false, $disabled = false, $with_col = true)
+    function generateCheckbox($id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
     {
         $element = view('app.partial-components.checkbox', [
             'id' => $id,
@@ -653,7 +684,7 @@ if (!function_exists('generateCheckbox')) {
             'label' => $label,
             'bootstrapCols' => $bootstrapCols,
             'with_col' => $with_col,
-            'value' => $value,
+            'value' => $values,
             'required' => $required,
             'checked' => $checked,
             'disabled' => $disabled,
@@ -682,10 +713,38 @@ if (!function_exists('generateDate')) {
     }
 }
 
-if (!function_exists('generateEmail')) {
-    function generateEmail($id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+
+
+if (!function_exists('generateInput')) {
+    function generateInput($maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
-        $element = view('app.partial-components.email', [
+        $element = view('app.partial-components.input', [
+            'type' => $type,
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'value' => $value,
+            'required' => $required,
+            'disabled' => $disabled,
+            'readonly' => $readonly,
+            'maxlength' => $maxlength,
+            'minlength' => $minlength,
+            'min' => $min,
+            'max' => $max,
+        ])->render();
+
+        return $element;
+    }
+}
+
+if (!function_exists('generateTextarea')) {
+    function generateTextarea($maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    {
+        $element = view('app.partial-components.textarea', [
+            'maxlength' => $maxlength,
+            'minlength' => $minlength,
             'id' => $id,
             'name' => $name,
             'label' => $label,
@@ -697,7 +756,47 @@ if (!function_exists('generateEmail')) {
             'readonly' => $readonly,
         ])->render();
 
-        // dd($element);
+        return $element;
+    }
+}
+
+if (!function_exists('generateSelect')) {
+    function generateSelect($multiple, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    {
+
+        $element = view('app.partial-components.select', [
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'values' => $values,
+            'required' => $required,
+            'disabled' => $disabled,
+            'readonly' => $readonly,
+            'multiple' => $multiple,
+        ])->render();
+
+        return $element;
+    }
+}
+
+if (!function_exists('generateRadio')) {
+    function generateRadio($id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    {
+
+        $element = view('app.partial-components.radio', [
+            'id' => $id,
+            'name' => $name,
+            'label' => $label,
+            'bootstrapCols' => $bootstrapCols,
+            'with_col' => $with_col,
+            'values' => $values,
+            'required' => $required,
+            'disabled' => $disabled,
+            'readonly' => $readonly,
+        ])->render();
+
         return $element;
     }
 }
@@ -715,7 +814,7 @@ if (!function_exists('generateCustomFields')) {
                         $customField->name,
                         $customField->name,
                         $customField->bootstrap_column,
-                        $customField->value[0] ?? '',
+                        $customField->values[0] ?? '',
                         $customField->required,
                         $customField->checked,
                         $customField->disabled,
@@ -735,9 +834,18 @@ if (!function_exists('generateCustomFields')) {
                     );
 
                     break;
-                case 'email':
 
-                    $customFieldHTML[] = generateEmail(
+                case 'email':
+                case 'number':
+                case 'password':
+                case 'text':
+
+                    $customFieldHTML[] = generateInput(
+                        $customField->maxlength,
+                        $customField->minlength,
+                        $customField->min,
+                        $customField->max,
+                        $customField->type,
                         $customField->slug,
                         $customField->name,
                         $customField->name,
@@ -748,6 +856,45 @@ if (!function_exists('generateCustomFields')) {
 
                     break;
 
+                case 'textarea':
+                    $customFieldHTML[] = generateTextarea(
+                        $customField->maxlength,
+                        $customField->minlength,
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
+                        $customField->required,
+                        $customField->disabled,
+                    );
+
+                    break;
+
+                case 'select':
+                    $customFieldHTML[] = generateSelect(
+                        $customField->multiple,
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
+                        $customField->values,
+                        $customField->required,
+                        $customField->disabled,
+                    );
+
+                    break;
+                case 'radio':
+                    $customFieldHTML[] = generateRadio(
+                        $customField->slug,
+                        $customField->name,
+                        $customField->name,
+                        $customField->bootstrap_column,
+                        $customField->values,
+                        $customField->required,
+                        $customField->disabled,
+                    );
+
+                    break;
                 default:
                     # code...
                     break;

@@ -7,14 +7,14 @@
                 <select class="select2-size-lg form-select" id="teamsTree" name="team">
                     <option value="0" selected>Parent Team</option>
                     @foreach ($teams as $typeRow)
-                        @continue($typeRow['has_team'] == 0 || (isset($team) && $team->id == $typeRow['id']))
-                        <option value="{{ $typeRow['id'] }}"
-                            {{ (isset($team) ? $team->parent_id : old('team')) == $typeRow['id'] ? 'selected' : '' }}>
-                            {{ $loop->index + 1 }} - {{ $typeRow['tree'] }}</option>
+                    @continue($typeRow['has_team'] == 0 || (isset($team) && $team->id == $typeRow['id']))
+                    <option value="{{ $typeRow['id'] }}" {{ (isset($team) ? $team->parent_id : old('team')) ==
+                        $typeRow['id'] ? 'selected' : '' }}>
+                        {{ $loop->index + 1 }} - {{ $typeRow['tree'] }}</option>
                     @endforeach
                 </select>
                 @error('team')
-                    <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
         </div>
@@ -26,7 +26,7 @@
                     id="team_name" name="team_name" placeholder="Team Name"
                     value="{{ isset($team) ? $team->name : old('team_name') }}" onkeyup="convertToSlug(this.value);" />
                 @error('team_name')
-                    <div class="invalid-tooltip">{{ $message }}</div>
+                <div class="invalid-tooltip">{{ $message }}</div>
                 @enderror
             </div>
         </div>
@@ -37,8 +37,9 @@
                     <label class="form-check-label mb-50" for="has_team">Has sub team</label>
                     <div class="form-check form-switch form-check-primary">
                         <input type="hidden" name="has_team" value="0" />
-                        <input type="checkbox" class="form-check-input" id="has_team" name="has_team" value="1"
-                            {{ isset($team) ? ($team->has_team == 1 ? 'checked' : 'unchecked') : (is_null(old('has_team')) ? 'checked' : (old('has_team') == 1 ? 'checked' : 'unchecked')) }} />
+                        <input type="checkbox" class="form-check-input" id="has_team" name="has_team" value="1" {{
+                            isset($team) ? ($team->has_team == 1 ? 'checked' : 'unchecked') : (is_null(old('has_team'))
+                        ? 'checked' : (old('has_team') == 1 ? 'checked' : 'unchecked')) }} />
                         <label class="form-check-label" for="has_team">
                             <span class="switch-icon-left"><i data-feather="check"></i></span>
                             <span class="switch-icon-right"><i data-feather="x"></i></span>
@@ -55,16 +56,26 @@
                     placeholder="Select Users">
                     <option disabled>Select User</option>
                     @foreach ($users as $key => $value)
-                        <option value="{{ $value->id }}"
-                            {{ isset($team_users) && in_array($value->name, $team_users) ? 'selected' : null }}>
-                            {{ $value->name }}</option>
+                    <option value="{{ $value->id }}" {{ isset($team_users) && in_array($value->name, $team_users) ?
+                        'selected' : null }}>
+                        {{ $value->name }}</option>
                     @endforeach
                 </select>
                 @error('role')
-                    <span class="text-danger">{{ $message }}</span>
+                <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
 
         </div>
+
+        @if (isset($customFields) && count($customFields) > 0)
+        <hr>
+        <div class="row mb-1 g-1">
+           @forelse ($customFields as $field)
+           {!! $field !!}
+           @empty
+           @endforelse
+        </div>
+        @endif
     </div>
 </div>

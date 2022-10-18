@@ -17,6 +17,7 @@ use App\Models\FileCancellationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\DataTables\FileCancellationDatatable;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileCancellationController extends Controller
 {
@@ -27,9 +28,10 @@ class FileCancellationController extends Controller
      */
 
     public function __construct(
-        CancellationInterface $cancellationInterface
+        CancellationInterface $cancellationInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->cancellationInterface = $cancellationInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileCancellationDatatable $dataTable, Request $request, $site_id)
@@ -58,6 +60,11 @@ class FileCancellationController extends Controller
             $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->cancellationInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => $unit,
@@ -65,6 +72,7 @@ class FileCancellationController extends Controller
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
                 'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
             ];
             return view('app.sites.file-managements.files.files-actions.file-cancellation.create', $data);
         } else {

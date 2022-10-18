@@ -716,7 +716,7 @@ if (!function_exists('generateDate')) {
 
 
 if (!function_exists('generateInput')) {
-    function generateInput($maxlength, $minlength, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateInput($maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.input', [
             'type' => $type,
@@ -731,6 +731,8 @@ if (!function_exists('generateInput')) {
             'readonly' => $readonly,
             'maxlength' => $maxlength,
             'minlength' => $minlength,
+            'min' => $min,
+            'max' => $max,
         ])->render();
 
         return $element;
@@ -841,6 +843,8 @@ if (!function_exists('generateCustomFields')) {
                     $customFieldHTML[] = generateInput(
                         $customField->maxlength,
                         $customField->minlength,
+                        $customField->min,
+                        $customField->max,
                         $customField->type,
                         $customField->slug,
                         $customField->name,

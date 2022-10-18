@@ -26,6 +26,7 @@ use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
 use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
 use App\Services\Roles\{RoleInterface, RoleService};
 use Illuminate\Support\ServiceProvider;
+use Laravel\Telescope\Telescope;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -61,6 +62,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CustomFieldInterface::class, CustomFieldService::class);
         $this->app->bind(CustomFieldValueInterface::class, CustomFieldService::class);
         $this->app->bind(AccountRecevoryInterface::class, AccountRecevoryService::class);
+
+        Telescope::ignoreMigrations();
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

@@ -80,7 +80,7 @@ class UnitController extends Controller
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
                 'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                'types' => $this->unitTypeInterface->getAllWithTree(),
+                'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id)),
                 'statuses' => (new Status())->all(),
                 'max_unit_number' => getMaxUnitNumber(decryptParams($floor_id)) + 1,
                 'customFields' => $customFields
@@ -103,7 +103,7 @@ class UnitController extends Controller
                 'siteConfiguration' => getSiteConfiguration($site_id),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'units' => (new Unit())->where('status_id', 1)->where('parent_id', 0)->where('has_sub_units', false)->where('floor_id', decryptParams($floor_id))->with('status', 'type')->get(),
-                'types' => $this->unitTypeInterface->getAllWithTree(),
+                'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id)),
                 'statuses' => (new Status())->all(),
                 'emptyUnit' => $this->unitInterface->getEmptyInstance(),
             ];
@@ -189,7 +189,7 @@ class UnitController extends Controller
                     'floor' => (new Floor())->find(decryptParams($floor_id)),
                     'siteConfiguration' => getSiteConfiguration(encryptParams(decryptParams($site_id))),
                     'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
-                    'types' => $this->unitTypeInterface->getAllWithTree(),
+                    'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id)),
                     'statuses' => (new Status())->all(),
                     'unit' => $unit,
                 ];
@@ -253,7 +253,7 @@ class UnitController extends Controller
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'floor' => (new Floor())->find(decryptParams($floor_id)),
-            'types' => $this->unitTypeInterface->getAllWithTree(),
+            'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id)),
         ];
         // $data = [
         //     'site' => (new Site())->find(1),
@@ -434,7 +434,7 @@ class UnitController extends Controller
         }
     }
 
-    public function getUnitInput(Request $request)
+    public function getUnitInput(Request $request, $site_id)
     {
         try {
 
@@ -451,7 +451,7 @@ class UnitController extends Controller
                     break;
 
                 case 'type_id':
-                    $types = $this->unitTypeInterface->getAllWithTree();
+                    $types = $this->unitTypeInterface->getAllWithTree(decryptParams($site_id));
                     $response = view('app.components.select-dropdown', [
                         'id' => $request->get('id'), 'field' => $field, 'data_id' => $unit->type->id,
                         'type' => 'type', 'value' => $unit->type->name, 'values' => $types

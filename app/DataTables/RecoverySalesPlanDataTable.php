@@ -33,6 +33,7 @@ class RecoverySalesPlanDataTable extends DataTable
             2 => ['Disapproved', 'bg-light-danger'],
             3 => ['Cancelled', 'bg-light-danger'],
         ];
+
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()

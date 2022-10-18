@@ -146,9 +146,9 @@
                         }
 
                         $('#td_unit_discount_value').html(response.salesPlan.discount_total.toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_pricetoLocaleString())
                             .toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
+                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_totaltoLocaleString())
                             .toLocaleString());
 
 
@@ -298,7 +298,7 @@
             }
         });
 
-       
+
 
         $("#saveButton").click(function() {
             $("#rebateForm").submit();

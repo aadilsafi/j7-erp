@@ -37,36 +37,73 @@
                             <h5 class="section-label mb-1">
                                 <span class="align-middle">Filter</span>
                             </h5>
-                            <div class="form-check mb-1">
-                                <input type="checkbox" class="form-check-input select-all" id="select-all" checked />
+                            {{-- <div class="form-check mb-1">
+                                <input type="checkbox" class="form-check-input select-all " id="select-all" checked />
                                 <label class="form-check-label" for="select-all">View All</label>
-                            </div>
+                            </div> --}}
                             <div class="calendar-events-filter">
-                                {{-- <div class="form-check form-check-danger mb-1">
-                                    <input type="checkbox" class="form-check-input input-filter" id="personal"
-                                        data-value="personal" checked />
-                                    <label class="form-check-label" for="personal">Personal</label>
-                                </div> --}}
-                                <div class="form-check form-check-primary mb-1">
-                                    <input type="checkbox" class="form-check-input input-filter" id="units"
-                                        data-value="units" checked />
-                                    <label class="form-check-label" for="units">Due Installments</label>
+                                <div class="form-check form-check-danger mb-2">
+
+                                    <label class="form-check-label" for="personal">Select Units</label>
+                                    <select name="units" multiple class="select2 form-select unitSelect" id="">
+                                        @foreach ($units as $unit)
+                                            <option value="{{ $unit->id }}">
+                                                {{ $unit->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                {{-- <div class="form-check form-check-warning mb-1">
-                                    <input type="checkbox" class="form-check-input input-filter" id="family"
-                                        data-value="family" checked />
-                                    <label class="form-check-label" for="family">Family</label>
+
+                                <div class="form-check form-check-danger mb-2">
+                                    <label class="form-check-label" for="personal">Select Customers</label>
+                                    <select name="units" multiple class="select2 form-select customerSelect"
+                                        id="">
+                                        @foreach ($stakeholders as $stakeholders)
+                                            <option value="{{ $stakeholders->id }}">
+                                                {{ $stakeholders->full_name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="form-check form-check-success mb-1">
-                                    <input type="checkbox" class="form-check-input input-filter" id="holiday"
-                                        data-value="holiday" checked />
-                                    <label class="form-check-label" for="holiday">Holiday</label>
+
+                                <div class="form-check form-check-danger mb-2">
+                                    <label class="form-check-label" for="personal">Select Floors</label>
+                                    <select name="units" multiple class="select2 form-select floorSelect" id="">
+                                        @foreach ($floors as $floors)
+                                            <option value="{{ $floors->id }}">
+                                                {{ $floors->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="form-check form-check-info">
-                                    <input type="checkbox" class="form-check-input input-filter" id="etc"
-                                        data-value="etc" checked />
-                                    <label class="form-check-label" for="etc">ETC</label>
-                                </div> --}}
+
+                                <div class="form-check form-check-danger mb-2">
+                                    <label class="form-check-label" for="personal">Select Dealer</label>
+                                    <select name="units" multiple class="select2 form-select dealerSelect" id="">
+                                        @foreach ($dealers as $dealers)
+                                                <option value="{{ $dealers->stakeholder->id }}">
+                                                    {{ $dealers->stakeholder->full_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-check form-check-danger mb-2">
+                                    <label class="form-check-label" for="personal">Select Sales Person</label>
+                                    <select name="units" multiple class="select2 form-select salesPersonSelect" id="">
+                                        @foreach ($users as $users)
+                                                <option value="{{ $users->id }}">
+                                                    {{ $users->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-check form-check-danger mb-2">
+                                    <label class="form-check-label" for="personal">Select Unit Types</label>
+                                    <select name="units" multiple class="select2 form-select categorySelect" id="">
+                                        @foreach ($types as $types)
+                                                <option value="{{ $types->id }}">
+                                                    {{ $types->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -94,7 +131,7 @@
                 <div class="modal-content p-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">×</button>
                     <div class="modal-header mb-1">
-                        <h5 class="modal-title">Installment  Details</h5>
+                        <h5 class="modal-title">Installment Details</h5>
                     </div>
                     <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
                         <form class="event-form needs-validation" data-ajax="false" novalidate>
@@ -115,59 +152,14 @@
                             </div>
                             <div class="mb-1">
                                 <label for="title" class="form-label">Remaining Amount</label>
-                                <input disabled type="text" class="form-control" id="remaining_amount" name="remaining_amount"
-                                    placeholder="Remaining Amount" required />
+                                <input disabled type="text" class="form-control" id="remaining_amount"
+                                    name="remaining_amount" placeholder="Remaining Amount" required />
                             </div>
                             <div class="mb-1 position-relative">
                                 <label for="start-date" class="form-label">Due Date</label>
                                 <input disabled type="text" class="form-control" id="start-date" name="start-date"
                                     placeholder="Start Date" />
                             </div>
-                            {{-- <div class="mb-1 position-relative">
-                                <label for="end-date" class="form-label">End Date</label>
-                                <input disabled type="text" class="form-control" id="end-date" name="end-date"
-                                    placeholder="End Date" />
-                            </div> --}}
-                            {{-- <div class="mb-1">
-                                <div class="form-check form-switch">
-                                    <input disabled type="checkbox" class="form-check-input allDay-switch" id="customSwitch3" />
-                                    <label class="form-check-label" for="customSwitch3">All Day</label>
-                                </div>
-                            </div> --}}
-                            {{-- <div class="mb-1">
-                                <label for="event-url" class="form-label">Event URL</label>
-                                <input disabled type="url" class="form-control" id="event-url"
-                                    placeholder="https://www.google.com/" />
-                            </div> --}}
-                            {{-- <div class="mb-1 select2-primary">
-                                <label for="event-guests" class="form-label">Add Guests</label>
-                                <select  disabled class="select2 select-add-guests form-select w-100" id="event-guests" multiple>
-                                    <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
-                                    <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>
-                                    <option data-avatar="5-small.png" value="Gabrielle Robertson">Gabrielle Robertson
-                                    </option>
-                                    <option data-avatar="7-small.png" value="Lori Spears">Lori Spears</option>
-                                    <option data-avatar="9-small.png" value="Sandy Vega">Sandy Vega</option>
-                                    <option data-avatar="11-small.png" value="Cheryl May">Cheryl May</option>
-                                </select>
-                            </div> --}}
-                            {{-- <div class="mb-1">
-                                <label for="event-location" class="form-label">Location</label>
-                                <input disabled type="text" class="form-control" id="event-location"
-                                    placeholder="Enter Location" />
-                            </div> --}}
-                            <div class="mb-1">
-                                <label class="form-label">Description</label>
-                                <textarea disabled name="event-description-editor" id="event-description-editor" class="form-control"></textarea>
-                            </div>
-                            {{-- <div class="mb-1 d-flex">
-                                <button type="submit" class="btn btn-primary add-event-btn me-1">Add</button>
-                                <button type="button" class="btn btn-outline-secondary btn-cancel"
-                                    data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit"
-                                    class="btn btn-primary update-event-btn d-none me-1">Update</button>
-                                <button class="btn btn-outline-danger btn-delete-event d-none">Delete</button>
-                            </div> --}}
                         </form>
                     </div>
                 </div>
@@ -187,21 +179,363 @@
 @endsection
 
 @section('page-js')
-    {{-- <script src="{{ asset('app-assets') }}/js/scripts/pages/app-calendar-events.min.js"></script> --}}
-    <script src="{{ asset('app-assets') }}/js/scripts/pages/app-calendar.min.js"></script>
 @endsection
 
 @section('custom-js')
 
     <script>
-        "use strict";
-        var date = new Date,
-            nextDay = new Date((new Date).getTime() + 864e5),
-            nextMonth = 11 === date.getMonth() ? new Date(date.getFullYear() + 1, 0, 1) : new Date(date.getFullYear(), date
-                .getMonth() + 1, 1),
-            prevMonth = 11 === date.getMonth() ? new Date(date.getFullYear() - 1, 0, 1) : new Date(date.getFullYear(), date
-                .getMonth() - 1, 1),
-                events =JSON.parse( '{!! $events !!}');
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    start: "sidebarToggle, prev,next, title",
+                    end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                },
+                events: JSON.parse('{!! $events !!}'),
+                // eventColor: '#7367f0',
+                eventClick: function(info) {
+                    $('#add-new-sidebar').modal('show');
+                    $('#title').val(info.event.title);
+                    $('#start-date').val(info.event.start);
+                    $("#amount").val(info.event.extendedProps.amount);
+                    $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                    $("#remaining_amount").val(info.event.extendedProps.remaining_amount);
+                }
+
+            });
+            calendar.render();
+        });
     </script>
+
+    {{-- ajax --}}
+    <script>
+        // unit wise  filter
+        $(".unitSelect").change(function() {
+            let selectedValue = [];
+            $('.unitSelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+
+        // Customer Wise filter
+        $(".customerSelect").change(function() {
+            let selectedValue = [];
+            $('.customerSelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    customer_ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // Floor Wise filter
+        $(".floorSelect").change(function() {
+            let selectedValue = [];
+            $('.floorSelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    floor_ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // Dealer Wise filter
+        $(".dealerSelect").change(function() {
+            let selectedValue = [];
+            $('.dealerSelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    dealer_ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // salesPerson filter
+        $(".salesPersonSelect").change(function() {
+            let selectedValue = [];
+            $('.salesPersonSelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    salesPerson_ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+        // categorySelect
+        $(".categorySelect").change(function() {
+            let selectedValue = [];
+            $('.categorySelect :selected').each(function() {
+                selectedValue.push($(this).val());
+            });
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('sites.accounts.recovery.ajax-get-filtered-calender-events', ['site_id' => $site_id]) }}";
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    type_ids: selectedValue,
+                    '_token': _token
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // eventScript(response.events)
+                        var calendarEl = document.getElementById('calendar');
+                        var calendar = new FullCalendar.Calendar(calendarEl, {
+                            initialView: 'dayGridMonth',
+                            headerToolbar: {
+                                start: "sidebarToggle, prev,next, title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                            },
+                            events: response.events,
+                            eventClick: function(info) {
+                                $('#add-new-sidebar').modal('show');
+                                $('#title').val(info.event.title);
+                                $('#start-date').val(info.event.start);
+                                $("#amount").val(info.event.extendedProps.amount);
+                                $("#paid_amount").val(info.event.extendedProps.paid_amount);
+                                $("#remaining_amount").val(info.event.extendedProps
+                                    .remaining_amount);
+                            }
+                        });
+                        calendar.render();
+
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Something Went Wrong!!',
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+
+    </script>
+
 
 @endsection

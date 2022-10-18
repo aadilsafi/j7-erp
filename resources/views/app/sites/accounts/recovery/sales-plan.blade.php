@@ -258,7 +258,9 @@
                     if (data) {
                         return '<span class="badge badge-pill ' + statusArray[data][1] + '">' +
                             statusArray[data][0] + '</span>';
-                    } else { return '-'; }
+                    } else {
+                        return '-';
+                    }
                 }
             }, {
                 name: 'sales_plan_status',
@@ -268,10 +270,11 @@
                     if (data) {
                         return '<span class="badge badge-pill ' + statusArray[data][1] + '">' +
                             statusArray[data][0] + '</span>';
-                    } else { return '-'; }
+                    } else {
+                        return '-';
+                    }
                 }
-            }
-            ,{
+            }, {
                 name: 'sales_plan_status',
                 data: 'sales_plan.status',
                 className: 'text-center align-middle text-nowrap',
@@ -279,7 +282,9 @@
                     if (data) {
                         return '<span class="badge badge-pill ' + statusArray[data][1] + '">' +
                             statusArray[data][0] + '</span>';
-                    } else { return '-'; }
+                    } else {
+                        return '-';
+                    }
                 }
             });
 

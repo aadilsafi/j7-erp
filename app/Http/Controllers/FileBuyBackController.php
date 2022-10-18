@@ -19,6 +19,7 @@ use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileBuyBackController extends Controller
 {
@@ -31,9 +32,10 @@ class FileBuyBackController extends Controller
     private $buyBackInterface;
 
     public function __construct(
-        BuyBackInterface $buyBackInterface
+        BuyBackInterface $buyBackInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->buyBackInterface = $buyBackInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileBuyBackDataTable $dataTable, Request $request, $site_id)
@@ -61,6 +63,11 @@ class FileBuyBackController extends Controller
             $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->buyBackInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
@@ -68,6 +75,7 @@ class FileBuyBackController extends Controller
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
                 'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
             ];
             return view('app.sites.file-managements.files.files-actions.file-buy-back.create', $data);
         } else {

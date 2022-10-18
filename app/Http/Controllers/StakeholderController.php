@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Http\Request;
 use App\DataTables\StakeholderDataTable;
 use App\Http\Requests\stakeholders\{
@@ -16,9 +17,11 @@ class StakeholderController extends Controller
 {
     private $stakeholderInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -45,11 +48,16 @@ class StakeholderController extends Controller
     {
         if (!request()->ajax()) {
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
-                'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]
+                'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
+                'customFields' => $customFields,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             // dd($data);

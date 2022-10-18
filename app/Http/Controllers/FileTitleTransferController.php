@@ -21,6 +21,7 @@ use App\Models\Template;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileTitleTransferController extends Controller
 {
@@ -33,10 +34,11 @@ class FileTitleTransferController extends Controller
     private $stakeholderInterface;
     private $titleTransferInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->titleTransferInterface = $titleTransferInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileTitleTransferDataTable $dataTable, Request $request, $site_id)
@@ -70,6 +72,11 @@ class FileTitleTransferController extends Controller
             } else {
                 $rebate_total = 0;
             }
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->titleTransferInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
@@ -82,6 +89,7 @@ class FileTitleTransferController extends Controller
                 'rebate_incentive' => $rebate_incentive,
                 'rebate_total' => $rebate_total,
                 'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-title-transfer.create', $data);

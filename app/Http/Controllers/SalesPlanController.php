@@ -13,6 +13,7 @@ use App\Services\{
 };
 use Carbon\{Carbon, CarbonPeriod};
 use App\Services\LeadSource\LeadSourceInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Notifications\ApprovedSalesPlanNotification;
@@ -33,12 +34,15 @@ class SalesPlanController extends Controller
         SalesPlanInterface $salesPlanInterface,
         AdditionalCostInterface $additionalCostInterface,
         StakeholderInterface $stakeholderInterface,
-        LeadSourceInterface $leadSourceInterface
+        LeadSourceInterface $leadSourceInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->salesPlanInterface = $salesPlanInterface;
         $this->additionalCostInterface = $additionalCostInterface;
         $this->stakeholderInterface = $stakeholderInterface;
         $this->leadSourceInterface = $leadSourceInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -65,6 +69,11 @@ class SalesPlanController extends Controller
     public function create(Request $request, $site_id, $floor_id, $unit_id)
     {
         if (!request()->ajax()) {
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->salesPlanInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
@@ -76,6 +85,8 @@ class SalesPlanController extends Controller
                 'stakeholderTypes' => StakeholderTypeEnum::values(),
                 'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
                 'user' => auth()->user(),
+                'customFields' => $customFields
+
             ];
 
             return view('app.sites.floors.units.sales-plan.create', $data);

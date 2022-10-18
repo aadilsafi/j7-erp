@@ -19,6 +19,7 @@ use App\Http\Requests\FileRefund\store;
 use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileRefundController extends Controller
 {
@@ -32,9 +33,10 @@ class FileRefundController extends Controller
     private $refundInterface;
 
     public function __construct(
-        RefundInterface $refundInterface
+        RefundInterface $refundInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->refundInterface = $refundInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileRefundDataTable $dataTable, Request $request, $site_id)
@@ -65,6 +67,10 @@ class FileRefundController extends Controller
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->refundInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
@@ -72,6 +78,8 @@ class FileRefundController extends Controller
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
                 'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
+
             ];
             return view('app.sites.file-managements.files.files-actions.file-refund.create', $data);
         } else {

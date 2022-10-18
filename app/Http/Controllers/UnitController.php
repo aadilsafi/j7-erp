@@ -12,6 +12,8 @@ use App\Http\Requests\units\{
     updateRequest as unitUpdateRequest
 };
 use App\Services\AdditionalCosts\AdditionalCostInterface;
+use App\Services\CustomFields\CustomFieldInterface;
+
 use App\Utils\Enums\{UserBatchActionsEnum, UserBatchStatusEnum};
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -29,11 +31,14 @@ class UnitController extends Controller
         AdditionalCostInterface $additionalCostInterface,
         UnitTypeInterface $unitTypeInterface,
         UserBatchInterface $userBatchInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->unitInterface = $unitInterface;
         $this->additionalCostInterface = $additionalCostInterface;
         $this->unitTypeInterface = $unitTypeInterface;
         $this->userBatchInterface = $userBatchInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -65,6 +70,11 @@ class UnitController extends Controller
     public function create(Request $request, $site_id, $floor_id)
     {
         if (!request()->ajax()) {
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->unitInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 'floor' => (new Floor())->find(decryptParams($floor_id)),
@@ -73,6 +83,8 @@ class UnitController extends Controller
                 'types' => $this->unitTypeInterface->getAllWithTree(),
                 'statuses' => (new Status())->all(),
                 'max_unit_number' => getMaxUnitNumber(decryptParams($floor_id)) + 1,
+                'customFields' => $customFields
+
             ];
 
             return view('app.sites.floors.units.create', $data);

@@ -50,8 +50,8 @@
             {{ $dataTable->table() }}
             {{-- </form> --}}
 
-             {{-- Printing Modal --}}
-             @include('app.sites.file-managements.files.partials.print-templates', [
+            {{-- Printing Modal --}}
+            @include('app.sites.file-managements.files.partials.print-templates', [
                 'fileTemplates' => $fileTemplates,
             ])
         </div>
@@ -121,14 +121,37 @@
 
         function printTemplate(template_id) {
             let file_id = $('#file_id').val();
-            
+
             let url =
-                "{{ route('sites.file-managements.file-title-transfer.print', ['site_id' => encryptParams($site_id), 'file_title_transfer_id' => ':file_id', 'template_id' =>  ':template_id']) }}"
+                "{{ route('sites.file-managements.file-title-transfer.print', ['site_id' => encryptParams($site_id), 'file_title_transfer_id' => ':file_id', 'template_id' => ':template_id']) }}"
                 .replace(':file_id', file_id)
                 .replace(':template_id', template_id)
-                
+
             window.open(url, '_blank').focus();
-           
+
+        }
+
+        function ApproveModal(site_id,customer_id,unit_id,file_title_transfer_id) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure You Want To Approve This Request?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Approve it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                    '{{ route('sites.file-managements.file-title-transfer.approve', ['site_id' => ':site_id' , 'customer_id' => ':customer_id' ,'unit_id' => ':unit_id' ,'file_title_transfer_id' => ':file_title_transfer_id']) }}'.replace(':site_id', site_id).replace(':customer_id', customer_id).replace(':unit_id', unit_id).replace(':file_title_transfer_id', file_title_transfer_id);
+                    location.href = url;
+                }
+            });
         }
     </script>
 @endsection

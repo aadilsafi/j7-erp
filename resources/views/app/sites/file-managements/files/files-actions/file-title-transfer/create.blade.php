@@ -203,15 +203,15 @@
                                 stakeholderData = response.data;
                             }
 
-                            $('#stackholder_full_name').val(stakeholderData.full_name);
-                            $('#stackholder_father_name').val(stakeholderData.father_name);
-                            $('#stackholder_occupation').val(stakeholderData.occupation);
-                            $('#stackholder_designation').val(stakeholderData.designation);
-                            $('#stackholder_cnic').val(stakeholderData.cnic);
-                            $('#stackholder_contact').val(stakeholderData.contact);
-                            $('#stackholder_address').text(stakeholderData.address);
-                            $('#stackholder_comments').text(stakeholderData.comments);
-                            $('#stackholder_ntn').val(stakeholderData.ntn);
+                            $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (stakeholderData.full_name.length > 0));
+                            $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled', (stakeholderData.father_name.length > 0));
+                            $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (stakeholderData.occupation.length > 0));
+                            $('#stackholder_designation').val(stakeholderData.designation).attr('disabled', (stakeholderData.designation.length > 0));
+                            $('#stackholder_cnic').val(stakeholderData.cnic).attr('disabled', (stakeholderData.cnic.length > 0));
+                            $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (stakeholderData.contact.length > 0));
+                            $('#stackholder_address').text(stakeholderData.address).attr('disabled', (stakeholderData.address.length > 0));
+                            $('#stackholder_comments').text(stakeholderData.comments).attr('disabled', (stakeholderData.comments.length > 0));
+                            $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData.ntn.length > 0));
 
 
                             let stakeholderType = '';

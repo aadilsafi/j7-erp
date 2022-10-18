@@ -176,7 +176,9 @@ class RebateIncentiveController extends Controller
             'leadSource' => $leadSource,
             'cnic' => cnicFormat($stakeholder->cnic),
             'salesPlan' => $salesPlan,
-            'floor' => $floor
+            'floor' => $floor,
+            'facing' => $unit->facing,
+            // 'corner' => $unit->corner,
         ], 200);
     }
 }

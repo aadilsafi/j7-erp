@@ -124,8 +124,8 @@
                         $('#td_unit_rate').html(response.unit.price_sqft.toLocaleString());
                         $('#td_unit_floor').html(response.floor);
 
-                        if (response.unit.facing != null) {
-                            $('#td_unit_facing_charges').html(response.unit.facing.unit_percentage + '%');
+                        if (response.facing != null) {
+                            $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
                         } else {
                             $('#td_unit_facing_charges').html(0 + '%');
                         }

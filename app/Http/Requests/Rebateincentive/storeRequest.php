@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\RebateIncentive;
+namespace App\Http\Requests\Rebateincentive;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

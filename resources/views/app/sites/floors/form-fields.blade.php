@@ -63,5 +63,15 @@
                 @enderror
             </div>
         </div>
+
+        @if (isset($customFields) && count($customFields) > 0)
+        <hr>
+        <div class="row mb-1 g-1">
+           @forelse ($customFields as $field)
+           {!! $field !!}
+           @empty
+           @endforelse
+        </div>
+        @endif
     </div>
 </div>

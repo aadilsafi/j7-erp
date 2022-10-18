@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
+use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\floors\{
@@ -33,9 +34,12 @@ class FloorController extends Controller
     public function __construct(
         FloorInterface $floorInterface,
         UserBatchInterface $userBatchInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->floorInterface = $floorInterface;
         $this->userBatchInterface = $userBatchInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -65,11 +69,17 @@ class FloorController extends Controller
     public function create(Request $request, $site_id)
     {
         $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
+
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
+        $customFields = collect($customFields)->sortBy('order');
+        $customFields = generateCustomFields($customFields);
+
         if (!request()->ajax()) {
             $data = [
                 'site_id' => $site->id,
                 'floorShortLable' => $site->siteConfiguration->floor_prefix,
                 'floorOrder' => getMaxFloorOrder(decryptParams($site_id)) + 1,
+                'customFields' => $customFields
             ];
 
             // dd($data);

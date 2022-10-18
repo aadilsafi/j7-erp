@@ -36,7 +36,9 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.lead-sources.form-fields') }}
+                {{ view('app.sites.lead-sources.form-fields',[
+                        'customFields' => $customFields
+                ]) }}
 
             </div>
 

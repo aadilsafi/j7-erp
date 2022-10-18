@@ -57,7 +57,7 @@
             <div class="card">
                 <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     @csrf
-                    {{ view('app.sites.users.form-fields',['roles'=> $role]) }}
+                    {{ view('app.sites.users.form-fields',['roles'=> $role, 'customFields' => $customFields]) }}
                 </div>
             </div>
         </div>

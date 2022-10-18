@@ -11,16 +11,17 @@ use App\Models\DealerIncentiveModel;
 use App\Models\Stakeholder;
 use App\Services\DealerIncentive\DealerInterface;
 use Exception;
-
+use App\Services\CustomFields\CustomFieldInterface;
 
 class DealerIncentiveController extends Controller
 {
 
     private $dealerIncentiveInterface;
 
-    public function __construct(DealerInterface $dealerIncentiveInterface)
+    public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->dealerIncentiveInterface = $dealerIncentiveInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
 
@@ -48,6 +49,10 @@ class DealerIncentiveController extends Controller
     {
 
         if (!request()->ajax()) {
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->dealerIncentiveInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
@@ -55,6 +60,8 @@ class DealerIncentiveController extends Controller
                 'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 'stakeholders' => Stakeholder::where('site_id', decryptParams($site_id))->with('dealer_stakeholder', 'stakeholder_types')->get(),
                 'incentives' => DealerIncentiveModel::pluck('dealer_id')->toArray(),
+                'customFields' => $customFields
+
             ];
 
             return view('app.sites.file-managements.files.dealer-incentive.create', $data);

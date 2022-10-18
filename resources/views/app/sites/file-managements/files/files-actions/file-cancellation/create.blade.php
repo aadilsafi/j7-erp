@@ -61,6 +61,8 @@
                     'file' =>$file,
                     'total_paid_amount' => $total_paid_amount,
                     'salesPlan'=>$salesPlan,
+                    'customFields' => $customFields
+
                 ]) }}
             </div>
 

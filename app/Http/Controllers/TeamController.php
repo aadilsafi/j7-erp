@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\TeamsDataTable;
 use App\Services\Team\Interface\TeamInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Http\Request;
 use App\Http\Requests\teams\{
     storeRequest as teamStoreRequest,
@@ -17,9 +18,11 @@ class TeamController extends Controller
 {
     private $teamInterface;
 
-    public function __construct(TeamInterface $teamInterface)
+    public function __construct(TeamInterface $teamInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->teamInterface = $teamInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -47,11 +50,17 @@ class TeamController extends Controller
         if (!request()->ajax()) {
 
             $users = User::all();
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->teamInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
 
             $data = [
                 'site_id' => decryptParams($site_id),
                 'teams' => $this->teamInterface->getAllWithTree(),
                 'users' => $users,
+                'customFields' => $customFields
+
             ];
             return view('app.sites.teams.create', $data);
         } else {

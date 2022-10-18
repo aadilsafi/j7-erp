@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\UserDataTable;
 use App\Services\User\Interface\UserInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Http\Request;
 use App\Http\Requests\users\{
     storeRequest as userStoreRequest,
@@ -17,9 +18,11 @@ class UserController extends Controller
 {
     private $userInterface;
 
-    public function __construct(UserInterface $userInterface)
+    public function __construct(UserInterface $userInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->userInterface = $userInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -48,9 +51,14 @@ class UserController extends Controller
 
             $role = Role::get();
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->userInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'role' => $role,
+                'customFields' => $customFields,
             ];
             return view('app.sites.users.create', $data);
         } else {

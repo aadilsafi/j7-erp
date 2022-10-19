@@ -91,7 +91,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="{{ asset('app-assets') }}/js/scripts/pages/auth-login.js"></script>
+    {{-- <script src="{{ asset('app-assets') }}/js/scripts/pages/auth-login.js"></script> --}}
     <!-- END: Page JS-->
 
     <script>

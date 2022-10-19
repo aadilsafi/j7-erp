@@ -85,7 +85,7 @@ class AccountsRecoveryController extends Controller
                 'events' => json_encode($events),
                 'units' => $units,
                 'site_id' => $site_id,
-                'stakeholders' => $stakeholders,
+                'stakeholders' => Stakeholder::all(),
                 'floors' => $floors,
                 'dealers' => $dealer_stakeholders,
                 'users' => $users,

@@ -78,28 +78,30 @@
                                     <label class="form-check-label" for="personal">Select Dealer</label>
                                     <select name="units" multiple class="select2 form-select dealerSelect" id="">
                                         @foreach ($dealers as $dealers)
-                                                <option value="{{ $dealers->stakeholder->id }}">
-                                                    {{ $dealers->stakeholder->full_name }}</option>
+                                            <option value="{{ $dealers->stakeholder->id }}">
+                                                {{ $dealers->stakeholder->full_name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-check form-check-danger mb-2">
                                     <label class="form-check-label" for="personal">Select Sales Person</label>
-                                    <select name="units" multiple class="select2 form-select salesPersonSelect" id="">
+                                    <select name="units" multiple class="select2 form-select salesPersonSelect"
+                                        id="">
                                         @foreach ($users as $users)
-                                                <option value="{{ $users->id }}">
-                                                    {{ $users->name }}</option>
+                                            <option value="{{ $users->id }}">
+                                                {{ $users->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
 
                                 <div class="form-check form-check-danger mb-2">
                                     <label class="form-check-label" for="personal">Select Unit Types</label>
-                                    <select name="units" multiple class="select2 form-select categorySelect" id="">
+                                    <select name="units" multiple class="select2 form-select categorySelect"
+                                        id="">
                                         @foreach ($types as $types)
-                                                <option value="{{ $types->id }}">
-                                                    {{ $types->name }}</option>
+                                            <option value="{{ $types->id }}">
+                                                {{ $types->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -189,9 +191,16 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
-                    start: "sidebarToggle, prev,next, title",
-                    end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                    start: "prevYear,prev,next,nextYear, title",
+                    end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
                 },
+                titleFormat: {
+                    year: 'numeric', month: 'long', day: 'numeric',
+                },
+                // footerToolbar: {
+                //     start: "prevYear,prev,next,nextYear, title",
+                //     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
+                // },
                 events: JSON.parse('{!! $events !!}'),
                 // eventColor: '#7367f0',
                 eventClick: function(info) {
@@ -534,7 +543,6 @@
                 }
             });
         });
-
     </script>
 
 

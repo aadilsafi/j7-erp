@@ -200,6 +200,7 @@
                                         <th rowspan="2" class="align-middle text-nowrap">DISCOUNT PRICE</th>
                                         <th rowspan="2" class="align-middle text-nowrap">DOWNPAYMENT (%)</th>
                                         <th rowspan="2" class="align-middle text-nowrap">DOWNPAYMENT PRICE</th>
+                                        <th rowspan="2" class="align-middle text-nowrap">Customer</th>
                                         <th rowspan="2" class="align-middle text-nowrap">LEAD SOURCE</th>
                                         @for ($i = 1; $i <= $max_installments; $i++)
                                             <th colspan="4" class="align-middle text-nowrap border">
@@ -348,11 +349,17 @@
                     }
                 },
                 {
+                    name: 'sales_plan_customer_name',
+                    data: 'sales_plan.stakeholder.full_name',
+                    className: 'text-center align-middle text-nowrap',
+                    orderable: false,
+                },
+                {
                     name: 'sales_plan_lead_source_name',
                     data: 'sales_plan.lead_source.name',
                     className: 'text-center align-middle text-nowrap',
                     orderable: false,
-                }
+                },
             ];
 
             for (let index = 1; index <= maxInstallments; index++) {

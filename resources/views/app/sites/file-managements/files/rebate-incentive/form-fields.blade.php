@@ -109,7 +109,8 @@
 {{-- Dealer Data --}}
 <div class="row mb-1 hideDiv">
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" id="stakeholders_card">
+        <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+            id="stakeholders_card">
             <div class="card-header">
                 <h3>Dealer</h3>
             </div>
@@ -140,7 +141,8 @@
                                     <label class="form-label fs-5" for="full_name">Full Name</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                                        id="stackholder_full_name" name="dealer[full_name]" placeholder="Stakeholder Name"
+                                        id="stackholder_full_name" name="dealer[full_name]"
+                                        placeholder="Stakeholder Name"
                                         value="{{ isset($stakeholder) ? $stakeholder->full_name : old('full_name') }}" />
                                     @error('full_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -151,7 +153,8 @@
                                     <label class="form-label fs-5" for="father_name">Father Name</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                                        id="stackholder_father_name" name="dealer[father_name]" placeholder="Father Name"
+                                        id="stackholder_father_name" name="dealer[father_name]"
+                                        placeholder="Father Name"
                                         value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                                     @error('father_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -162,7 +165,8 @@
                                     <label class="form-label fs-5" for="occupation">Occupation</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                                        id="stackholder_occupation" name="dealer[occupation]" placeholder="Occupation"
+                                        id="stackholder_occupation" name="dealer[occupation]"
+                                        placeholder="Occupation"
                                         value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
                                     @error('occupation')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -177,7 +181,8 @@
                                     <label class="form-label fs-5" for="designation">Designation</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                                        id="stackholder_designation" name="dealer[designation]" placeholder="Designation"
+                                        id="stackholder_designation" name="dealer[designation]"
+                                        placeholder="Designation"
                                         value="{{ isset($stakeholder) ? $stakeholder->designation : old('designation') }}" />
                                     @error('designation')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -211,7 +216,7 @@
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="ntn">NTN</label>
-                                    <input type="text"
+                                    <input type="number"
                                         class="form-control form-control-lg @error('ntn') is-invalid @enderror"
                                         id="stackholder_ntn" name="dealer[ntn]" placeholder="NTN Number"
                                         value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
@@ -232,8 +237,8 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="comments">Comments</label>
-                                    <textarea class="form-control @error('comments') is-invalid @enderror" name="dealer[comments]" id="stackholder_comments"
-                                        rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
+                                    <textarea class="form-control @error('comments') is-invalid @enderror" name="dealer[comments]"
+                                        id="stackholder_comments" rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
                                     @error('comments')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -439,18 +444,18 @@
 
 @if (isset($customFields) && count($customFields) > 0)
 
-<div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
 
-    <div class="card-body">
+        <div class="card-body">
 
-        <div class="row mb-1 g-1">
-            @forelse ($customFields as $field)
-            {!! $field !!}
-            @empty
-            @endforelse
+            <div class="row mb-1 g-1">
+                @forelse ($customFields as $field)
+                    {!! $field !!}
+                @empty
+                @endforelse
+            </div>
         </div>
     </div>
-</div>
 @endif
 
 <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative hideDiv">

@@ -168,7 +168,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-12">
-                                            <button onclick="resetFilter()" type="button"
+                                            <button onclick="resetFilter()"
                                                 class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
                                                 type="reset">
                                                 <i data-feather='x'></i>Reset</button>
@@ -189,7 +189,7 @@
                     <form action="{{ route('sites.floors.destroy-selected', ['site_id' => $site_id]) }}"
                         id="floors-table-form" method="get">
                         <div class="table-responsive">
-                            <table class="dt-complex-header table table-bordered">
+                            <table class="dt-complex-header table">
                                 <thead>
                                     <tr class="text-center">
                                         <th rowspan="2" class="align-middle text-nowrap">FLOOR</th>
@@ -202,7 +202,7 @@
                                         <th rowspan="2" class="align-middle text-nowrap">DOWNPAYMENT PRICE</th>
                                         <th rowspan="2" class="align-middle text-nowrap">LEAD SOURCE</th>
                                         @for ($i = 1; $i <= $max_installments; $i++)
-                                            <th colspan="4" class="align-middle text-nowrap">{{ englishCounting($i) }}
+                                            <th colspan="4" class="align-middle text-nowrap border">{{ englishCounting($i) }}
                                                 Installment</th>
                                         @endfor
                                         <th rowspan="2" class="align-middle text-nowrap">STATUS</th>
@@ -212,10 +212,10 @@
 
                                     <tr class="text-center">
                                         @for ($i = 1; $i <= $max_installments; $i++)
-                                            <th class="align-middle text-nowrap">Remaining Amount</th>
-                                            <th class="align-middle text-nowrap">Due Date</th>
-                                            <th class="align-middle text-nowrap">Paid Amount</th>
-                                            <th class="align-middle text-nowrap">Paid At</th>
+                                        <th class="align-middle text-nowrap border">Due Date</th>
+                                        <th class="align-middle text-nowrap border">Paid Amount</th>
+                                        <th class="align-middle text-nowrap border">Paid At</th>
+                                        <th class="align-middle text-nowrap border">Remaining Amount</th>
                                         @endfor
                                     </tr>
 
@@ -256,10 +256,17 @@
     <script>
         window['moment-range'].extendMoment(moment);
 
-        var flatpicker_approved_at = null;
+        var flatpicker_approved_at = null, flatpicker_generated_at = null;
         $(document).ready(function() {
 
-            flatpicker_approved_at = $(".filter_date_ranger").flatpickr({
+            flatpicker_generated_at = $("#filter_generated_at").flatpickr({
+                mode: "range",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
+            flatpicker_approved_at = $("#filter_approved_at").flatpickr({
                 mode: "range",
                 altInput: !0,
                 altFormat: "F j, Y",
@@ -347,15 +354,6 @@
             ];
 
             for (let index = 1; index <= maxInstallments; index++) {
-                dataTableColumns.push({
-                    name: 'installment_' + index + '_remaining_amount',
-                    data: 'installments.installment_' + index + '_remaining_amount',
-                    className: 'text-center align-middle text-nowrap',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return data ? numberFormat(data) : '-';
-                    }
-                });
 
                 dataTableColumns.push({
                     name: 'installment_' + index + '_date',
@@ -392,6 +390,16 @@
                         } else {
                             return '-';
                         }
+                    }
+                });
+
+                dataTableColumns.push({
+                    name: 'installment_' + index + '_remaining_amount',
+                    data: 'installments.installment_' + index + '_remaining_amount',
+                    className: 'text-center align-middle text-nowrap',
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return data ? numberFormat(data) : '-';
                     }
                 });
             }
@@ -544,7 +552,7 @@
                 hideBlockUI();
                 showBlockUI('#table-card');
                 let filter_date_from = '',
-                        filter_date_to = '';
+                    filter_date_to = '';
 
                 let filter_floors = $('#filter_floors').val();
                 let filter_unit = $('#filter_unit').val();
@@ -586,7 +594,8 @@
                         filter_date_to = generated_at_date_range[2];
                     }
 
-                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' + filter_date_to;
+                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
+                        filter_date_to;
                 }
                 if (filter_approved_at) {
                     var approved_date_range = filter_approved_at.split(' ');
@@ -600,7 +609,8 @@
                         filter_date_to = approved_date_range[2];
                     }
 
-                    data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' + filter_date_to;
+                    data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' +
+                        filter_date_to;
                 }
 
                 salesPlanDataTable.ajax.url(data).load();
@@ -610,6 +620,9 @@
         });
 
         function resetFilter() {
+            console.log(flatpicker_generated_at,
+flatpicker_approved_at);
+            flatpicker_generated_at.clear();
             flatpicker_approved_at.clear();
         }
     </script>

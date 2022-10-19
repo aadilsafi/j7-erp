@@ -18,13 +18,13 @@ class AccountRecevoryService implements AccountRecevoryInterface
         if (count($filters) > 0) {
             if (isset($filters['filter_floors']) && $filters['filter_floors'] > 0) {
                 $salesPlans = $salesPlans->whereHas('unit.floor', function ($query) use ($filters) {
-                    $query->where('sales_plans.id', $filters['filter_floors']);
+                    $query->where('floors.id', intval($filters['filter_floors']));
                 });
             }
 
             if (isset($filters['filter_unit'])) {
                 $salesPlans = $salesPlans->whereHas('unit', function ($query) use ($filters) {
-                    $query->where('floor_unit_number', $filters['filter_unit']);
+                    $query->where('units.floor_unit_number', $filters['filter_unit']);
                 });
             }
 

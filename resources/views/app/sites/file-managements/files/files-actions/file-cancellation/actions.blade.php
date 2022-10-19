@@ -3,9 +3,8 @@
         @can('sites.file-managements.file-cancellation.approve')
             @php
                 $checkFileCancellation = DB::table('file_canecllations')
-                    ->where('unit_id', $unit_id)
-                    ->where('stakeholder_id', $customer_id)
-                    ->first();
+                ->where('id', $file_cancellation_id)
+                ->first();
             @endphp
             @if (isset($checkFileCancellation) && $file_refund_status == 0)
                 <a onclick="ApproveModal('{{ encryptParams($site_id) }}','{{ encryptParams($customer_id) }}','{{ encryptParams($unit_id) }}','{{ encryptParams($checkFileCancellation->id) }}')" class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center" style="margin: 5px"

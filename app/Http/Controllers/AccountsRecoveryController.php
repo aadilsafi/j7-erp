@@ -164,6 +164,7 @@ class AccountsRecoveryController extends Controller
     {
         $unit_ids = $request->ids;
         $events = [];
+        $maxInstallments = 0;
 
         if (isset($request->customer_ids)) {
             $stakeholder_ids = $request->customer_ids;
@@ -321,7 +322,7 @@ class AccountsRecoveryController extends Controller
         if (isset($request->type_ids)) {
             $typeIds = $request->type_ids;
             for ($i = 0; $i < count($typeIds); $i++) {
-                $type =Type::find($typeIds[$i]);
+                $type = Type::find($typeIds[$i]);
                 $unit = Unit::where('type_id', $typeIds[$i])->get();
                 foreach ($unit as $unit) {
                     $salesPlans = (new SalesPlan())->with(['unit', 'unPaidInstallments'])->where(['status' => 1, 'unit_id' => $unit->id])->get();
@@ -346,6 +347,33 @@ class AccountsRecoveryController extends Controller
                             ];
                         }
                     }
+                }
+            }
+        }
+
+        // All Data Filter
+        if (!isset($unit_ids) && !isset($request->customer_ids) && !isset($request->floor_ids) && !isset($request->dealer_ids) && !isset($request->salesPerson_ids) && !isset($request->type_ids)) {
+            $salesPlans = (new SalesPlan())->with(['unit', 'stakeholder', 'additionalCosts', 'installments', 'leadSource', 'receipts', 'unPaidInstallments'])->where(['status' => 1])->get();
+
+            foreach ($salesPlans as $key => $salesPlans) {
+                $stakeholders[] = $salesPlans->stakeholder;
+
+                foreach ($salesPlans->unPaidInstallments as $unPaidInstallments) {
+                    $events[] = [
+                        'id' => $unPaidInstallments->id,
+                        'title' => $salesPlans->unit->name . ' ' . $unPaidInstallments->details . ' ( ' . number_format($unPaidInstallments->amount) . ' ) ',
+                        'paid_amount' => number_format($unPaidInstallments->paid_amount),
+                        'remaining_amount' => number_format($unPaidInstallments->remaining_amount),
+                        'amount' => number_format($unPaidInstallments->amount),
+                        'start' =>  $unPaidInstallments->date,
+                        'end ' => $unPaidInstallments->date,
+                        'allDay' => !0,
+                        'backgroundColor' => "#7367f0",
+                        'textColor' => "#ffffff",
+                        'extendedProps' => [
+                            'calendar' => "all",
+                        ],
+                    ];
                 }
             }
         }

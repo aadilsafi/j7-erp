@@ -3,8 +3,7 @@
         @can('sites.file-managements.file-refund.approve')
             @php
                 $checkFileRefund = DB::table('file_refunds')
-                    ->where('unit_id', $unit_id)
-                    ->where('stakeholder_id', $customer_id)
+                    ->where('id', $file_refund_id)
                     ->first();
             @endphp
             @if (isset($checkFileRefund) && $file_refund_status == 0)

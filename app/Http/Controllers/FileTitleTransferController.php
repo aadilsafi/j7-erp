@@ -202,8 +202,8 @@ class FileTitleTransferController extends Controller
     {
 
         $file_title_transfer = FileTitleTransfer::find(decryptParams($file_title_transfer_id));
-        $file_title_transfer->status = 1;
-        $file_title_transfer->update();
+        // $file_title_transfer->status = 1;
+        // $file_title_transfer->update();
 
         $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);
 
@@ -219,14 +219,14 @@ class FileTitleTransferController extends Controller
             $SalesPlan->update();
         }
 
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->name = $stakeholder->full_name;
-            $Receipt->cnic = $stakeholder->cnic;
-            $Receipt->phone_no = $stakeholder->contact;
-            $Receipt->update();
-        }
+        // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+        // foreach ($receipt as $receipt) {
+        //     $Receipt = Receipt::find($receipt->id);
+        //     $Receipt->name = $stakeholder->full_name;
+        //     $Receipt->cnic = $stakeholder->cnic;
+        //     $Receipt->phone_no = $stakeholder->contact;
+        //     $Receipt->update();
+        // }
 
         return redirect()->route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Title Transfer Approved');
     }

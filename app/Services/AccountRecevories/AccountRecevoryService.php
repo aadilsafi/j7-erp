@@ -18,7 +18,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
         if (count($filters) > 0) {
             if (isset($filters['filter_floors']) && $filters['filter_floors'] > 0) {
                 $salesPlans = $salesPlans->whereHas('unit.floor', function ($query) use ($filters) {
-                    $query->where('id', $filters['filter_floors']);
+                    $query->where('sales_plans.id', $filters['filter_floors']);
                 });
             }
 
@@ -29,7 +29,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
             }
 
             if (isset($filters['filter_customer']) && $filters['filter_customer'] > 0) {
-                $salesPlans = $salesPlans->where('stakeholder_id', $filters['filter_customer']);
+                $salesPlans = $salesPlans->where('sales_plans.stakeholder_id', $filters['filter_customer']);
             }
 
             if (isset($filters['filter_dealer']) && $filters['filter_dealer'] > 0) {
@@ -39,13 +39,21 @@ class AccountRecevoryService implements AccountRecevoryInterface
             }
 
             if (isset($filters['filter_sale_source']) && $filters['filter_sale_source'] > 0) {
-                $salesPlans = $salesPlans->where('user_id', $filters['filter_sale_source']);
+                $salesPlans = $salesPlans->where('sales_plans.user_id', $filters['filter_sale_source']);
             }
 
             if (isset($filters['filter_type']) && $filters['filter_type'] > 0) {
                 $salesPlans = $salesPlans->whereHas('unit.type', function ($query) use ($filters) {
                     $query->where('id', $filters['filter_type']);
                 });
+            }
+
+            if (isset($filters['filter_generated_from']) && isset($filters['filter_generated_to']) ) {
+                $salesPlans = $salesPlans->whereBetween('sales_plans.created_at', [$filters['filter_generated_from'], $filters['filter_generated_to']]);
+            }
+
+            if (isset($filters['filter_approveed_from']) && isset($filters['filter_approveed_to']) ) {
+                $salesPlans = $salesPlans->whereBetween('sales_plans.approved_date', [$filters['filter_generated_from'], $filters['filter_generated_to']]);
             }
         }
 

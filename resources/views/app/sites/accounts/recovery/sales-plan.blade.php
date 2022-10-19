@@ -71,6 +71,12 @@
                                         </select>
                                     </div>
 
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="type_name">Unit</label>
+                                        <input type="text" class="form-control" id="filter_unit" name="filter_unit"
+                                            placeholder="Unit" />
+                                    </div>
+
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label" style="font-size: 15px"
                                             for="filter_customer">Customers</label>
@@ -84,7 +90,9 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                </div>
 
+                                <div class="row mb-1 g-1">
                                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label" style="font-size: 15px" for="filter_dealer">Dealer</label>
                                         <select class="select2-size-lg form-select col-filter" id="filter_dealer"
@@ -97,10 +105,8 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
 
-                                <div class="row mb-1 g-1">
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label" style="font-size: 15px" for="filter_sale_source">Sale
                                             Source</label>
                                         <select class="select2-size-lg form-select col-filter" id="filter_sale_source"
@@ -113,7 +119,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label" style="font-size: 15px" for="filter_type">Unit
                                             Type</label>
                                         <select class="select2-size-lg form-select col-filter" id="filter_type"
@@ -129,10 +135,18 @@
                                 </div>
 
                                 <div class="row mb-1 g-1">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="type_name">Unit</label>
-                                        <input type="text" class="form-control form-control-lg" id="filter_unit"
-                                            name="filter_unit" placeholder="Unit" />
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label" for="filter_generated_at">Generated At</label>
+                                        <input type="text" id="filter_generated_at" name="filter_generated_at"
+                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
+                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
+                                    </div>
+
+                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label" for="filter_approved_at">Approved At</label>
+                                        <input type="text" id="filter_approved_at" name="filter_approved_at"
+                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
+                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +156,8 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                         <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
-                            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card"
+                                style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                                 <div class="card-body">
                                     <div class="row g-1">
                                         <div class="col-md-12">
@@ -153,7 +168,7 @@
                                             </button>
                                         </div>
                                         <div class="col-md-12">
-                                            <button
+                                            <button onclick="resetFilter()" type="button"
                                                 class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
                                                 type="reset">
                                                 <i data-feather='x'></i>Reset</button>
@@ -241,7 +256,16 @@
     <script>
         window['moment-range'].extendMoment(moment);
 
+        var flatpicker_approved_at = null;
         $(document).ready(function() {
+
+            flatpicker_approved_at = $(".filter_date_ranger").flatpickr({
+                mode: "range",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
 
             var maxInstallments = parseInt("{{ $max_installments }}");
 
@@ -519,6 +543,8 @@
                 e.preventDefault();
                 hideBlockUI();
                 showBlockUI('#table-card');
+                let filter_date_from = '',
+                        filter_date_to = '';
 
                 let filter_floors = $('#filter_floors').val();
                 let filter_unit = $('#filter_unit').val();
@@ -526,6 +552,8 @@
                 let filter_dealer = $('#filter_dealer').val();
                 let filter_sale_source = $('#filter_sale_source').val();
                 let filter_type = $('#filter_type').val();
+                let filter_approved_at = $('#filter_approved_at').val();
+                let filter_generated_at = $('#filter_generated_at').val();
 
                 let data = '?';
                 if (filter_floors) {
@@ -546,11 +574,43 @@
                 if (filter_type) {
                     data += '&filter_type=' + filter_type;
                 }
+                if (filter_generated_at) {
+                    let generated_at_date_range = filter_generated_at.split(' ');
+
+                    if (generated_at_date_range[0]) {
+                        filter_date_from = generated_at_date_range[0];
+                        filter_date_to = generated_at_date_range[0];
+                    }
+
+                    if (generated_at_date_range[2]) {
+                        filter_date_to = generated_at_date_range[2];
+                    }
+
+                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' + filter_date_to;
+                }
+                if (filter_approved_at) {
+                    var approved_date_range = filter_approved_at.split(' ');
+
+                    if (approved_date_range[0]) {
+                        filter_date_from = approved_date_range[0];
+                        filter_date_to = approved_date_range[0];
+                    }
+
+                    if (approved_date_range[2]) {
+                        filter_date_to = approved_date_range[2];
+                    }
+
+                    data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' + filter_date_to;
+                }
 
                 salesPlanDataTable.ajax.url(data).load();
 
                 hideBlockUI('#table-card');
             });
         });
+
+        function resetFilter() {
+            flatpicker_approved_at.clear();
+        }
     </script>
 @endsection

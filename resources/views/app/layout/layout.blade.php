@@ -56,9 +56,9 @@
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sweet-alerts.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-toastr.min.css">
-        <link rel="stylesheet" type="text/css"
+    <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
-        @yield('page-css')
+    @yield('page-css')
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
@@ -164,6 +164,7 @@
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/toastr.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/sweetalert2.all.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/polyfill.min.js"></script>
+
     @yield('vendor-js')
 
     <!-- END: Page Vendor JS-->
@@ -182,8 +183,15 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
-        window.addEventListener('online', () => console.log('Became online'));
-        window.addEventListener('offline', () => console.log('Became offline'));
+        window.addEventListener('online', () => hideBlockUI());
+        window.addEventListener('offline', () => showBlockUI(null, 'You are offline. Please check internet connection!'));
+
+        if (navigator.onLine) {
+            hideBlockUI()
+        } else {
+            showBlockUI(null, 'You are offline. Please check internet connection!');
+        }
+
         // showBlockUI();
         $("#unreadNotification").on('click', function() {
             var id = $(this).attr('getNotificationID');
@@ -252,9 +260,10 @@
             }
         });
 
-        function showBlockUI(element = null) {
+        function showBlockUI(element = null, message = '') {
             blockUIOptions = {
-                message: '<div class="spinner-grow text-primary" role="status"></div>',
+                message: '<div class="spinner-grow text-primary" role="status"></div><br><div class="text-primary">' +
+                    message + '</div>',
                 css: {
                     backgroundColor: 'transparent',
                     border: '0'

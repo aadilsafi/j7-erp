@@ -202,7 +202,8 @@
                                         <th rowspan="2" class="align-middle text-nowrap">DOWNPAYMENT PRICE</th>
                                         <th rowspan="2" class="align-middle text-nowrap">LEAD SOURCE</th>
                                         @for ($i = 1; $i <= $max_installments; $i++)
-                                            <th colspan="4" class="align-middle text-nowrap border">{{ englishCounting($i) }}
+                                            <th colspan="4" class="align-middle text-nowrap border">
+                                                {{ englishCounting($i) }}
                                                 Installment</th>
                                         @endfor
                                         <th rowspan="2" class="align-middle text-nowrap">STATUS</th>
@@ -212,10 +213,10 @@
 
                                     <tr class="text-center">
                                         @for ($i = 1; $i <= $max_installments; $i++)
-                                        <th class="align-middle text-nowrap border">Due Date</th>
-                                        <th class="align-middle text-nowrap border">Paid Amount</th>
-                                        <th class="align-middle text-nowrap border">Paid At</th>
-                                        <th class="align-middle text-nowrap border">Remaining Amount</th>
+                                            <th class="align-middle text-nowrap border">Due Date</th>
+                                            <th class="align-middle text-nowrap border">Paid Amount</th>
+                                            <th class="align-middle text-nowrap border">Paid At</th>
+                                            <th class="align-middle text-nowrap border">Remaining Amount</th>
                                         @endfor
                                     </tr>
 
@@ -256,7 +257,8 @@
     <script>
         window['moment-range'].extendMoment(moment);
 
-        var flatpicker_approved_at = null, flatpicker_generated_at = null;
+        var flatpicker_approved_at = null,
+            flatpicker_generated_at = null;
         $(document).ready(function() {
 
             flatpicker_generated_at = $("#filter_generated_at").flatpickr({
@@ -620,6 +622,7 @@
         });
 
         function resetFilter() {
+            $("#filter_floors").select2("val", "0");
             $("#filter_customer").select2("val", "0");
             $("#filter_dealer").select2("val", "0");
             $("#filter_sale_source").select2("val", "0");

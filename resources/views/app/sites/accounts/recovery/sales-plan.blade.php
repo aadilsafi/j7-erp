@@ -620,10 +620,14 @@
         });
 
         function resetFilter() {
-            console.log(flatpicker_generated_at,
-flatpicker_approved_at);
+            $("#filter_customer").select2("val", "0");
+            $("#filter_dealer").select2("val", "0");
+            $("#filter_sale_source").select2("val", "0");
+            $("#filter_type").select2("val", "0");
             flatpicker_generated_at.clear();
             flatpicker_approved_at.clear();
+
+            $('#dt_adv_search1').trigger('submit');
         }
     </script>
 @endsection

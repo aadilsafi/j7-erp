@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.recovery.calender', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Calender')
@@ -19,9 +19,18 @@
 @section('custom-css')
 @endsection
 
-{{-- @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
-@endsection --}}
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Calendar</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::render('sites.accounts.recovery.calender', encryptParams($site_id)) }}
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
 @section('content')
     <!-- Full calendar start -->
@@ -195,6 +204,7 @@
                     center: " title",
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
+                displayEventTime:true,
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",
                 //     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",

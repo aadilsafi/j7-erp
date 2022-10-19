@@ -202,8 +202,8 @@ class FileTitleTransferController extends Controller
     {
 
         $file_title_transfer = FileTitleTransfer::find(decryptParams($file_title_transfer_id));
-        // $file_title_transfer->status = 1;
-        // $file_title_transfer->update();
+        $file_title_transfer->status = 1;
+        $file_title_transfer->update();
 
         $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);
 

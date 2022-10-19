@@ -3,8 +3,7 @@
         @can('sites.file-managements.file-buy-back.approve')
             @php
                 $checkFileRefund = DB::table('file_buy_backs')
-                    ->where('unit_id', $unit_id)
-                    ->where('stakeholder_id', $customer_id)
+                    ->where('id', $file_buy_back_id)
                     ->first();
             @endphp
             @if (isset($checkFileRefund) && $file_refund_status == 0)

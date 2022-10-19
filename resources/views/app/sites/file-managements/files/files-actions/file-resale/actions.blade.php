@@ -3,8 +3,7 @@
         @can('sites.file-managements.file-resale.approve')
             @php
                 $checkFileResale = DB::table('file_resales')
-                    ->where('unit_id', $unit_id)
-                    ->where('stakeholder_id', $customer_id)
+                    ->where('id', $file_resale_id)
                     ->first();
             @endphp
             @if (isset($checkFileResale) && $file_refund_status == 0)

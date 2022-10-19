@@ -51,137 +51,131 @@
     <div class="row">
         <div class="col-12">
 
-            <form class="dt_adv_search1" id="dt_adv_search1">
-
-                <div class="row">
-                    <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                            <div class="card-body">
-                                <div class="row mb-1 g-1">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px" for="filter_floors">Floors</label>
-                                        <select class="select2-size-lg form-select col-filter" id="filter_floors"
-                                            name="filter_floors">
-                                            <option value="0" selected>Select Floor</option>
-                                            @foreach ($floors as $floor)
-                                                <option value="{{ $floor->id }}">{{ $loop->index + 1 }} -
-                                                    {{ $floor->name }} (
-                                                    {{ $floor->short_label }} )</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="type_name">Unit</label>
-                                        <input type="text" class="form-control" id="filter_unit" name="filter_unit"
-                                            placeholder="Unit" />
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px"
-                                            for="filter_customer">Customers</label>
-                                        <select class="select2-size-lg form-select col-filter" id="filter_customer"
-                                            name="filter_customer">
-                                            <option value="0" selected>Select Customer</option>
-                                            @foreach ($stakeholders as $stakeholder)
-                                                @continue(!$stakeholder->stakeholder_types->where('type', 'C')->first()->status)
-                                                <option value="{{ $stakeholder['id'] }}">
-                                                    {{ $loop->index + 1 }} - {{ $stakeholder['full_name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row mb-1 g-1">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="filter_floors">Floors</label>
+                                    <select class="select2-size-lg form-select col-filter" id="filter_floors"
+                                        name="filter_floors">
+                                        <option value="0" selected>Select Floor</option>
+                                        @foreach ($floors as $floor)
+                                            <option value="{{ $floor->id }}">{{ $loop->index + 1 }} -
+                                                {{ $floor->name }} (
+                                                {{ $floor->short_label }} )</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
-                                <div class="row mb-1 g-1">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px" for="filter_dealer">Dealer</label>
-                                        <select class="select2-size-lg form-select col-filter" id="filter_dealer"
-                                            name="filter_dealer">
-                                            <option value="0" selected>Select Dealer</option>
-                                            @foreach ($stakeholders as $stakeholder)
-                                                @continue(!$stakeholder->stakeholder_types->where('type', 'D')->first()->status)
-                                                <option value="{{ $stakeholder['id'] }}">
-                                                    {{ $loop->index + 1 }} - {{ $stakeholder['full_name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px" for="filter_sale_source">Sale
-                                            Source</label>
-                                        <select class="select2-size-lg form-select col-filter" id="filter_sale_source"
-                                            name="filter_sale_source">
-                                            <option value="0" selected>Select Sale Source</option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}">
-                                                    {{ $loop->index + 1 }} - {{ $user->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px" for="filter_type">Unit
-                                            Type</label>
-                                        <select class="select2-size-lg form-select col-filter" id="filter_type"
-                                            name="filter_type">
-                                            <option value="0" selected>Select Unit Type</option>
-                                            @foreach ($types as $type)
-                                                {{-- @continue($type->parent_id == 0) --}}
-                                                <option value="{{ $type->id }}">
-                                                    {{ $loop->index + 1 }} - {{ $type->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                    <label class="form-label fs-5" for="type_name">Unit</label>
+                                    <input type="text" class="form-control" id="filter_unit" name="filter_unit"
+                                        placeholder="Unit" />
                                 </div>
 
-                                <div class="row mb-1 g-1">
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" for="filter_generated_at">Generated At</label>
-                                        <input type="text" id="filter_generated_at" name="filter_generated_at"
-                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
-                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
-                                    </div>
-
-                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                        <label class="form-label" for="filter_approved_at">Approved At</label>
-                                        <input type="text" id="filter_approved_at" name="filter_approved_at"
-                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
-                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
-                                    </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" style="font-size: 15px"
+                                        for="filter_customer">Customers</label>
+                                    <select class="select2-size-lg form-select col-filter" id="filter_customer"
+                                        name="filter_customer">
+                                        <option value="0" selected>Select Customer</option>
+                                        @foreach ($stakeholders as $stakeholder)
+                                            @continue(!$stakeholder->stakeholder_types->where('type', 'C')->first()->status)
+                                            <option value="{{ $stakeholder['id'] }}">
+                                                {{ $loop->index + 1 }} - {{ $stakeholder['full_name'] }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
+                            <div class="row mb-1 g-1">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="filter_dealer">Dealer</label>
+                                    <select class="select2-size-lg form-select col-filter" id="filter_dealer"
+                                        name="filter_dealer">
+                                        <option value="0" selected>Select Dealer</option>
+                                        @foreach ($stakeholders as $stakeholder)
+                                            @continue(!$stakeholder->stakeholder_types->where('type', 'D')->first()->status)
+                                            <option value="{{ $stakeholder['id'] }}">
+                                                {{ $loop->index + 1 }} - {{ $stakeholder['full_name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
-                            <div class="card"
-                                style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                                <div class="card-body">
-                                    <div class="row g-1">
-                                        <div class="col-md-12">
-                                            <button type="submit" value="asd" name="apply_filter"
-                                                class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                                <i data-feather='save'></i>
-                                                Apply Filter
-                                            </button>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button onclick="resetFilter()"
-                                                class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
-                                                type="reset">
-                                                <i data-feather='x'></i>Reset</button>
-                                        </div>
-                                    </div>
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="filter_sale_source">Sale
+                                        Source</label>
+                                    <select class="select2-size-lg form-select col-filter" id="filter_sale_source"
+                                        name="filter_sale_source">
+                                        <option value="0" selected>Select Sale Source</option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">
+                                                {{ $loop->index + 1 }} - {{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="filter_type">Unit
+                                        Type</label>
+                                    <select class="select2-size-lg form-select col-filter" id="filter_type"
+                                        name="filter_type">
+                                        <option value="0" selected>Select Unit Type</option>
+                                        @foreach ($types as $type)
+                                            {{-- @continue($type->parent_id == 0) --}}
+                                            <option value="{{ $type->id }}">
+                                                {{ $loop->index + 1 }} - {{ $type->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-1 g-1">
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" for="filter_generated_at">Generated At</label>
+                                    <input type="text" id="filter_generated_at" name="filter_generated_at"
+                                        class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
+                                        placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
+                                </div>
+
+                                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label" for="filter_approved_at">Approved At</label>
+                                    <input type="text" id="filter_approved_at" name="filter_approved_at"
+                                        class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
+                                        placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-            </form>
 
+                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                    <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
+                        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card-body">
+                                <div class="row g-1">
+                                    <div class="col-md-12">
+                                        <button type="button" value="asd" name="apply_filter" id="apply_filter"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Apply Filter
+                                        </button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <button onclick="resetFilter()"
+                                            class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
+                                            type="button">
+                                            <i data-feather='x'></i>Reset</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
                 id="table-card">
@@ -539,6 +533,7 @@
 
             var salesPlanDataTable = $(".dt-complex-header").DataTable({
                 processing: true,
+
                 select: true,
                 serverSide: true,
                 scrollX: true,
@@ -550,16 +545,21 @@
                         .replace(':site_id', "{{ encryptParams($site_id) }}"),
 
                 },
+                "language": {
+                    "processing": '<div class="spinner-grow text-primary" role="status">' +
+                        '<span class="visually-hidden">Loading...</span>' +
+                        '</div>'
+                },
                 columns: dataTableColumns,
                 buttons: buttons,
                 displayLength: 20,
                 lengthMenu: [20, 25, 50, 75, 100],
             });
 
-            $('#dt_adv_search1').on('submit', function(e) {
+            $('#apply_filter').on('click', function(e) {
                 e.preventDefault();
                 hideBlockUI();
-                showBlockUI('#table-card');
+                // showBlockUI('#table-card');
                 let filter_date_from = '',
                     filter_date_to = '';
 
@@ -624,11 +624,15 @@
 
                 salesPlanDataTable.ajax.url(data).load();
 
-                hideBlockUI('#table-card');
+                // hideBlockUI('#table-card');
             });
         });
 
         function resetFilter() {
+
+            $('#filter_unit').val('');
+            $('#filter_approved_at').val('');
+            $('#filter_generated_at').val('');
             $("#filter_floors").select2("val", "0");
             $("#filter_customer").select2("val", "0");
             $("#filter_dealer").select2("val", "0");
@@ -637,7 +641,7 @@
             flatpicker_generated_at.clear();
             flatpicker_approved_at.clear();
 
-            $('#dt_adv_search1').trigger('submit');
+            $('#apply_filter').trigger('click');
         }
     </script>
 @endsection

@@ -811,7 +811,7 @@ if (!function_exists('generateCustomFields')) {
                 case 'checkbox':
                     $customFieldHTML[] = generateCheckbox(
                         $customField->slug,
-                        $customField->name,
+                        $customField->slug,
                         $customField->name,
                         $customField->bootstrap_column,
                         $customField->values[0] ?? '',
@@ -825,12 +825,13 @@ if (!function_exists('generateCustomFields')) {
                 case 'date':
                     $customFieldHTML[] = generateDate(
                         $customField->slug,
-                        $customField->name,
+                        $customField->slug,
                         $customField->name,
                         $customField->bootstrap_column,
                         $customField->value[0] ?? 'today',
                         $customField->required,
                         $customField->disabled,
+                        $customField->readonly,
                     );
 
                     break;
@@ -847,11 +848,12 @@ if (!function_exists('generateCustomFields')) {
                         $customField->max,
                         $customField->type,
                         $customField->slug,
+                        $customField->slug,
                         $customField->name,
-                        $customField->name,
-                        $customField->bootstrap_column,
+                        $customField->bootstrap_column,'',
                         $customField->required,
                         $customField->disabled,
+                        $customField->readonly,
                     );
 
                     break;
@@ -861,11 +863,12 @@ if (!function_exists('generateCustomFields')) {
                         $customField->maxlength,
                         $customField->minlength,
                         $customField->slug,
+                        $customField->slug,
                         $customField->name,
-                        $customField->name,
-                        $customField->bootstrap_column,
+                        $customField->bootstrap_column, '',
                         $customField->required,
                         $customField->disabled,
+                        $customField->readonly,
                     );
 
                     break;
@@ -874,27 +877,30 @@ if (!function_exists('generateCustomFields')) {
                     $customFieldHTML[] = generateSelect(
                         $customField->multiple,
                         $customField->slug,
-                        $customField->name,
+                        $customField->slug,
                         $customField->name,
                         $customField->bootstrap_column,
                         $customField->values,
                         $customField->required,
                         $customField->disabled,
+                        $customField->readonly,
                     );
 
                     break;
                 case 'radio':
                     $customFieldHTML[] = generateRadio(
                         $customField->slug,
-                        $customField->name,
+                        $customField->slug,
                         $customField->name,
                         $customField->bootstrap_column,
                         $customField->values,
                         $customField->required,
                         $customField->disabled,
+                        $customField->readonly,
                     );
 
                     break;
+
                 default:
                     # code...
                     break;

@@ -191,11 +191,9 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
-                    start: "prevYear,prev,next,nextYear, title",
-                    end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
-                },
-                titleFormat: {
-                    year: 'numeric', month: 'long', day: 'numeric',
+                    start: "prevYear,prev,next,nextYear,today",
+                    center: " title",
+                    end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",
@@ -243,9 +241,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -298,9 +298,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -352,9 +354,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -406,9 +410,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -460,9 +466,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -514,9 +522,11 @@
                         var calendar = new FullCalendar.Calendar(calendarEl, {
                             initialView: 'dayGridMonth',
                             headerToolbar: {
-                                start: "sidebarToggle, prev,next, title",
-                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth"
+                                start: "prevYear,prev,next,nextYear,today",
+                                center: " title",
+                                end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
+
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');

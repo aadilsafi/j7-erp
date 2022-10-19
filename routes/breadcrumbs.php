@@ -401,5 +401,13 @@ Breadcrumbs::for('sites.accounts.recovery.dashboard', function (BreadcrumbTrail 
 Breadcrumbs::for('sites.accounts.recovery.salesPlan', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Accounts', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
+    $trail->push('Recovery', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
     $trail->push('Sales Plan', route('sites.accounts.recovery.salesPlan', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.accounts.recovery.calender', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Accounts', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
+    $trail->push('Recovery', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
+    $trail->push('Calendar', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
 });

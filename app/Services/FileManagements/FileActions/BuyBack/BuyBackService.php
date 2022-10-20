@@ -2,21 +2,22 @@
 
 namespace App\Services\FileManagements\FileActions\BuyBack;
 
-use App\Models\FileBuyBack;
-use App\Models\FileBuyBackLabelsAttachment;
 use App\Models\Unit;
 use App\Models\User;
+use App\Models\FileBuyBack;
 use App\Models\Stakeholder;
+use App\Models\FileManagement;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Models\FileRefundAttachment;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
+use App\Models\FileBuyBackLabelsAttachment;
 use Illuminate\Support\Facades\Notification;
+
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface as BuyBackInterface;
-
-use Illuminate\Support\Facades\DB;
 
 class BuyBackService implements BuyBackInterface
 {
@@ -40,10 +41,12 @@ class BuyBackService implements BuyBackInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
+            $file = FileManagement::find($inputs['file_id']);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
+                'sales_plan_id'=>$file->sales_plan_id,
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),

@@ -62,6 +62,8 @@
                     'statuses' => $statuses,
                     'max_unit_number' => $max_unit_number,
                     'bulkOptions' => true,
+                    'customFields' => $customFields
+
                 ]) }}
 
             </div>

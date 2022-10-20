@@ -18,13 +18,10 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->foreignId('file_id')->constrained('file_management');
             $table->foreignId('unit_id')->constrained('units');
-            // $table->foreignId('dealer_id')->nullable();
+            $table->foreignId('sales_plan_id')->constrained();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->longText('stakeholder_data')->nullable();
-            // $table->foreignId('buyer_id')->constrained('stakeholders');
-            // $table->longText('buyer_data')->nullable();
             $table->longText('unit_data')->nullable();
-            // $table->longText('dealer_data')->nullable();
             $table->string('amount_to_be_refunded')->nullable();
             $table->string('amount_profit')->nullable();
             $table->string('payment_due_date')->nullable();

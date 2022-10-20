@@ -6,7 +6,9 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\FileResale;
 use App\Models\Stakeholder;
+use App\Models\FileManagement;
 use App\Models\StakeholderType;
+use App\Models\FileTitleTransfer;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
@@ -14,10 +16,9 @@ use App\Models\FileResaleAttachment;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use App\Models\FileBuyBackLabelsAttachment;
-use App\Models\FileTitleTransfer;
 use App\Models\FileTitleTransferAttachment;
-use Illuminate\Support\Facades\Notification;
 
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface as TitleTransferInterface;
 
@@ -101,13 +102,14 @@ class TitleTransferService implements TitleTransferInterface
             }
 
 
-
+            $file = FileManagement::find($inputs['file_id']);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'transfer_person_id' => $transfer_person_id,
+                'sales_plan_id'=>$file->sales_plan_id,
                 'transfer_person_data' => json_encode(Stakeholder::find($transfer_person_id)),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),

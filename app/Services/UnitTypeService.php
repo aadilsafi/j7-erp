@@ -27,9 +27,9 @@ class UnitTypeService implements UnitTypeInterface
         return $this->model()->find($id);
     }
 
-    public function getAllWithTree()
+    public function getAllWithTree($site_id)
     {
-        $types = $this->model()->all();
+        $types = $this->model()->whereSiteId($site_id)->get();
         return getTreeData(collect($types), $this->model());
     }
 

@@ -144,3 +144,19 @@
 
     </div>
 </div>
+
+@if (isset($customFields) && count($customFields) > 0)
+
+<div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+
+    <div class="card-body">
+    
+        <div class="row mb-1 g-1">
+            @forelse ($customFields as $field)
+            {!! $field !!}
+            @empty
+            @endforelse
+        </div>
+    </div>
+</div>
+@endif

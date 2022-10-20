@@ -15,6 +15,7 @@ use App\Models\SalesPlanInstallments;
 use App\Models\Site;
 use App\Models\Stakeholder;
 use App\Services\Receipts\Interface\ReceiptInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class ReceiptController extends Controller
 {
@@ -22,9 +23,11 @@ class ReceiptController extends Controller
     private $receiptInterface;
 
     public function __construct(
-        ReceiptInterface $receiptInterface
+        ReceiptInterface $receiptInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->receiptInterface = $receiptInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
     /**
      * Display a listing of the resource.
@@ -51,10 +54,16 @@ class ReceiptController extends Controller
         //
         if (!request()->ajax()) {
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->receiptInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
+                'customFields' => $customFields
+
             ];
             return view('app.sites.receipts.create', $data);
         } else {
@@ -118,6 +127,8 @@ class ReceiptController extends Controller
         //     $unpadid_installments = null;
         // }
 
+        $sales_plan = SalesPlan::find($receipt->sales_plan_id);
+
         return view('app.sites.receipts.preview', [
             'site' => $site,
             'receipt' => $receipt,
@@ -125,7 +136,8 @@ class ReceiptController extends Controller
             'unit_data' => $unit_data,
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,
-            'stakeholder_data' => $stakeholder_data
+            'stakeholder_data' => $stakeholder_data,
+            'sales_plan'=>$sales_plan,
         ]);
     }
 

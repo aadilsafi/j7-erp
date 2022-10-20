@@ -51,6 +51,8 @@
                     'units' => $units,
                     'dealer_data' => $dealer_data,
                     'rebate_files' => $rebate_files,
+                    'customFields' => $customFields
+
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -124,8 +126,8 @@
                         $('#td_unit_rate').html(response.unit.price_sqft.toLocaleString());
                         $('#td_unit_floor').html(response.floor);
 
-                        if (response.unit.facing != null) {
-                            $('#td_unit_facing_charges').html(response.unit.facing.unit_percentage + '%');
+                        if (response.facing != null) {
+                            $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
                         } else {
                             $('#td_unit_facing_charges').html(0 + '%');
                         }
@@ -137,19 +139,17 @@
                         $('#td_unit_total').html(unit_total.toLocaleString());
                         $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
 
-                        if (response.unit.facing != null) {
+                        if (response.facing != null) {
                             let facing_value = response.salesPlan.discount_percentage * response.salesPlan
                                 .total_price;
-                            $('#td_unit_facing_charges_value').html(facing_value)
+                            $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
                         } else {
                             $('#td_unit_facing_charges_value').html(0);
                         }
 
-                        $('#td_unit_discount_value').html(response.salesPlan.discount_total.toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
-                            .toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
-                            .toLocaleString());
+                        $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total).toLocaleString());
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price).toLocaleString());
+                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total).toLocaleString());
 
 
                     } else {
@@ -298,7 +298,7 @@
             }
         });
 
-       
+
 
         $("#saveButton").click(function() {
             $("#rebateForm").submit();

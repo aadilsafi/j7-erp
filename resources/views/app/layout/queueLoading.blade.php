@@ -1,6 +1,6 @@
-<div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100">
+<div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100" style="pointer-events: none;">
     <div class="w-50">
-        <div class="accordion accordion-margin" id="accordionMargin">
+        <div class="accordion accordion-margin" id="accordionMargin" style="pointer-events: auto !important;">
             <div class="accordion-item border-primary" style="border-radius: 10px 10px 0 0 !important; overflow: hidden;">
                 <h2 class="accordion-header" id="headingMarginOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"

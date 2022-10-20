@@ -109,7 +109,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC</label>
                 <input type="number" class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC Without Dashes" min="13"
+                    id="cnic" name="cnic" placeholder="CNIC Without Dashes" minlength="13"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
                 @error('cnic')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -175,6 +175,16 @@
                 @enderror
             </div>
         </div>
+
+        @if (isset($customFields) && count($customFields) > 0)
+        <hr>
+        <div class="row mb-1 g-1">
+           @forelse ($customFields as $field)
+           {!! $field !!}
+           @empty
+           @endforelse
+        </div>
+        @endif
     </div>
 </div>
 

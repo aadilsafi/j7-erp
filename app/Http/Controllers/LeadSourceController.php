@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DataTables\LeadSourceDataTable;
 use App\Services\LeadSource\LeadSourceInterface;
+use App\Services\CustomFields\CustomFieldInterface;
+
 use Illuminate\Http\Request;
 use App\Http\Requests\leadSources\{
     storeRequest as leadSourcesStoreRequest,
@@ -17,9 +19,11 @@ class LeadSourceController extends Controller
 
     private $leadSourceInterface;
 
-    public function __construct(LeadSourceInterface $leadSourceInterface)
+    public function __construct(LeadSourceInterface $leadSourceInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->leadSourceInterface = $leadSourceInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -45,8 +49,14 @@ class LeadSourceController extends Controller
     {
         if (!request()->ajax()) {
 
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->leadSourceInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
+                'customFields' => $customFields
+
             ];
 
             return view('app.sites.lead-sources.create', $data);
@@ -65,6 +75,7 @@ class LeadSourceController extends Controller
     {
         try {
             if (!request()->ajax()) {
+
                 $inputs = $request->validated();
 
                 $site_id = decryptParams($site_id);

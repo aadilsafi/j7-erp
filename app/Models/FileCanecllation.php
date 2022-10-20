@@ -16,6 +16,7 @@ class FileCanecllation extends Model
         'site_id',
         'file_id',
         'unit_id',
+        'sales_plan_id',
         'stakeholder_id',
         'dealer_id',
         'stakeholder_data',

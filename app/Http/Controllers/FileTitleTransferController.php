@@ -21,6 +21,7 @@ use App\Models\Template;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileTitleTransferController extends Controller
 {
@@ -33,10 +34,11 @@ class FileTitleTransferController extends Controller
     private $stakeholderInterface;
     private $titleTransferInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface , TitleTransferInterface $titleTransferInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->titleTransferInterface = $titleTransferInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileTitleTransferDataTable $dataTable, Request $request, $site_id)
@@ -56,29 +58,38 @@ class FileTitleTransferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($site_id, $unit_id, $customer_id)
+    public function create($site_id, $unit_id, $customer_id,$file_id)
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+            $file = FileManagement::where('id', decryptParams($file_id))->first();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $salesPlan = SalesPlan::find($file->sales_plan_id);
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
             if (isset($rebate_incentive)) {
                 $rebate_total = $rebate_incentive->commision_total;
             } else {
                 $rebate_total = 0;
             }
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->titleTransferInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
-                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
                 'rebate_total' => $rebate_total,
+                'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-title-transfer.create', $data);
@@ -120,11 +131,11 @@ class FileTitleTransferController extends Controller
         $files_labels = FileTitleTransferAttachment::where('file_title_transfer_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
-        if (isset($unit->salesPlan[0])) {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
-        } else {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
-        }
+        $file_title_transfer = FileTitleTransfer::find(decryptParams($id));
+        $file = FileManagement::where('id', $file_title_transfer->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $transfer_file = (new FileTitleTransfer())->find(decryptParams($id));
         if (isset($rebate_incentive)) {
@@ -147,6 +158,7 @@ class FileTitleTransferController extends Controller
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
             'titleTransferPerson' => Stakeholder::find($transfer_file->transfer_person_id),
+            'salesPlan'=>$salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-title-transfer.preview', $data);
@@ -186,10 +198,10 @@ class FileTitleTransferController extends Controller
         //
     }
 
-    public function ApproveFileTitleTransfer($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileTitleTransfer($site_id, $unit_id, $customer_id, $file_title_transfer_id)
     {
 
-        $file_title_transfer = FileTitleTransfer::find(decryptParams($file_refund_id));
+        $file_title_transfer = FileTitleTransfer::find(decryptParams($file_title_transfer_id));
         $file_title_transfer->status = 1;
         $file_title_transfer->update();
 
@@ -207,14 +219,14 @@ class FileTitleTransferController extends Controller
             $SalesPlan->update();
         }
 
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->name = $stakeholder->full_name;
-            $Receipt->cnic = $stakeholder->cnic;
-            $Receipt->phone_no = $stakeholder->contact;
-            $Receipt->update();
-        }
+        // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+        // foreach ($receipt as $receipt) {
+        //     $Receipt = Receipt::find($receipt->id);
+        //     $Receipt->name = $stakeholder->full_name;
+        //     $Receipt->cnic = $stakeholder->cnic;
+        //     $Receipt->phone_no = $stakeholder->contact;
+        //     $Receipt->update();
+        // }
 
         return redirect()->route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Title Transfer Approved');
     }
@@ -230,7 +242,7 @@ class FileTitleTransferController extends Controller
             'site_id' => decryptParams($site_id),
         ];
 
-        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
         return view($printFile, compact('data'));
     }

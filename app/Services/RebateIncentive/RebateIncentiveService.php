@@ -8,6 +8,7 @@ use App\Models\StakeholderType;
 use App\Models\Unit;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Rebateincentive\storeRequest;
 
 class RebateIncentiveService implements RebateIncentiveInterface
 {
@@ -25,7 +26,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
 
     public function getById($site_id, $id)
     {
-        
+
         return $this->model()->find($id);
     }
 
@@ -85,7 +86,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 ];
 
                 $stakeholder_type = StakeholderType::insert($stakeholdertype);
-                
+
                 $dealer_id = $dealer->id;
             }
 
@@ -164,7 +165,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 ];
 
                 $stakeholder_type = StakeholderType::insert($stakeholdertype);
-                
+
                 $dealer_id = $dealer->id;
             }
 

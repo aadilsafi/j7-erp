@@ -19,6 +19,7 @@ use App\Http\Requests\FileRefund\store;
 use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileRefundController extends Controller
 {
@@ -32,9 +33,10 @@ class FileRefundController extends Controller
     private $refundInterface;
 
     public function __construct(
-        RefundInterface $refundInterface
+        RefundInterface $refundInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->refundInterface = $refundInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileRefundDataTable $dataTable, Request $request, $site_id)
@@ -54,24 +56,30 @@ class FileRefundController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request, $site_id, $unit_id, $customer_id)
+    public function create(Request $request, $site_id, $unit_id, $customer_id, $file_id)
     {
         // dd(decryptParams($site_id),decryptParams($unit_id),decryptParams($customer_id));
         //
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
-            if (isset($unit->salesPlan[0])) {
-                $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
-            } else {
-                $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
-            }
+            $file = FileManagement::where('id', decryptParams($file_id))->first();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $salesPlan = SalesPlan::find($file->sales_plan_id);
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->refundInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
-                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
+                'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
+
             ];
             return view('app.sites.file-managements.files.files-actions.file-refund.create', $data);
         } else {
@@ -110,14 +118,13 @@ class FileRefundController extends Controller
     {
         $files_labels = FileRefundAttachment::where('file_refund_id', decryptParams($id))->get();
         $images = [];
+        $file_refund = FileRefund::find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
-        if (isset($unit->salesPlan[0])) {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
-        } else {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
-        }
+        $file = FileManagement::where('id', $file_refund->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
-        foreach ($files_labels as $key=>$file) {
+        foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_refund_attachments');
             $images[$key] = $image->getUrl();
         }
@@ -130,6 +137,7 @@ class FileRefundController extends Controller
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
+            'salesPlan'=>$salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);
@@ -212,7 +220,7 @@ class FileRefundController extends Controller
             'site_id' => decryptParams($site_id),
         ];
 
-        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
         return view($printFile, compact('data'));
     }

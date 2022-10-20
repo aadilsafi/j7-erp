@@ -37,7 +37,7 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.additional-costs.form-fields', ['additionalCosts' => $additionalCosts]) }}
+                {{ view('app.additional-costs.form-fields', ['additionalCosts' => $additionalCosts, 'customFields' => $customFields]) }}
 
             </div>
 

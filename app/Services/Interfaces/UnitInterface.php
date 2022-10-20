@@ -16,4 +16,6 @@ interface UnitInterface
     public function update($site_id, $floor_id, $id, $inputs);
 
     public function destroy($site_id, $floor_id, $id);
+
+    public function getEmptyInstance();
 }

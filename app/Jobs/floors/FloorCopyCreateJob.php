@@ -45,6 +45,7 @@ class FloorCopyCreateJob implements ShouldQueue
         $floorUnits = (new Unit())->where([
             'floor_id' => $this->prevFloorId,
             'active' => true,
+            'parent_id' => 0
         ])->get();
 
         $prevFloor = (new Floor())->with(['site', 'site.siteConfiguration'])->find($this->prevFloorId);

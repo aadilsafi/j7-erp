@@ -2,6 +2,7 @@
 
 namespace App\Services\FileManagements\FileActions\Refund;
 
+use App\Models\FileManagement;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\FileRefund;
@@ -38,9 +39,11 @@ class RefundService implements RefundServiceRefundInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
+            $file = FileManagement::find($inputs['file_id']);
             $data = [
                 'site_id' => decryptParams($site_id),
-                'file_id' => $inputs['file_id'],
+                'file_id' => $file->id,
+                'sales_plan_id' => $file->sales_plan_id,
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),

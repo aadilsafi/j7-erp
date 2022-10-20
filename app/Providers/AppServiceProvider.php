@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\Interfaces\{FloorInterface, SiteConfigurationInterface, UnitInterface, UnitTypeInterface, UserBatchInterface};
 use App\Services\{FloorService, SiteConfiurationService, UnitService, UnitTypeService, UserBatchService};
+use App\Services\AccountRecevories\AccountRecevoryInterface;
+use App\Services\AccountRecevories\AccountRecevoryService;
 use App\Services\AdditionalCosts\{AdditionalCostInterface, AdditionalCostService};
 use App\Services\CustomFields\{CustomFieldInterface, CustomFieldService};
 use App\Services\CustomFieldValues\{CustomFieldValueInterface};
@@ -24,6 +26,7 @@ use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
 use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
 use App\Services\Roles\{RoleInterface, RoleService};
 use Illuminate\Support\ServiceProvider;
+use Laravel\Telescope\Telescope;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -58,6 +61,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DealerInterface::class, DealerService::class);
         $this->app->bind(CustomFieldInterface::class, CustomFieldService::class);
         $this->app->bind(CustomFieldValueInterface::class, CustomFieldService::class);
+        $this->app->bind(AccountRecevoryInterface::class, AccountRecevoryService::class);
+
+        Telescope::ignoreMigrations();
 
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);

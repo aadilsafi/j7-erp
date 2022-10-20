@@ -37,42 +37,42 @@ class FloorsDataTable extends DataTable
                 return $floor->length . '\'\'';
             })
             ->editColumn('units_count', function ($floor) {
-                $count = $floor->units->count();
+                $count = $floor->units->where('has_sub_units', false)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_open_count', function ($floor) {
-                $count = $floor->units->where('status_id', 1)->count();
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 1)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_sold_count', function ($floor) {
-                $count = $floor->units->where('status_id', 5)->count();
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 5)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_token_count', function ($floor) {
-                $count = $floor->units->where('status_id', 2)->count();
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 2)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_hold_count', function ($floor) {
-                $count = $floor->units->where('status_id', 4)->count();
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 4)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }
                 return '-';
             })
             ->editColumn('units_dp_count', function ($floor) {
-                $count = $floor->units->where('status_id', 3)->count();
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 3)->count();
                 if (!is_null($count)) {
                     return $count > 0 ? $count : '-';
                 }

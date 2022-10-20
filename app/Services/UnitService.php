@@ -211,4 +211,22 @@ class UnitService implements UnitInterface
 
         return true;
     }
+
+    public function getEmptyInstance()
+    {
+        $unit = [
+        [
+            'name' => '',
+            'width' => 0,
+            'length' => 0,
+            'net_area' => 0,
+            'gross_area' => 0,
+            'price_sqft' => 0,
+            'total_price' => 0,
+            'total_price1' => 0,
+           
+        ]
+        ];
+        return $unit;
+    }
 }

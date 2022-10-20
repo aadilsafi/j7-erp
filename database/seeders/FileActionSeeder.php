@@ -31,7 +31,7 @@ class FileActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Canceled',
+                'name' => 'File Cancelled',
             ],
             [
                 'site_id' => 1,

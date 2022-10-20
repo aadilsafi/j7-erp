@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-managements.file-buy-back.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create File Refund ')
+@section('page-title', 'Create File Buy Back ')
 
 @section('page-vendor')
 @endsection
@@ -60,6 +60,9 @@
                     'customer' => $customer,
                     'file' => $file,
                     'total_paid_amount' => $total_paid_amount,
+                    'salesPlan'=>$salesPlan,
+                    'customFields' => $customFields
+
                 ]) }}
             </div>
 

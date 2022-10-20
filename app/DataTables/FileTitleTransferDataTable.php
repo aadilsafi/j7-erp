@@ -106,7 +106,7 @@ class FileTitleTransferDataTable extends DataTable
                             break;
                         }
                     }
-                    return view('app.sites.file-managements.files.files-actions.file-title-transfer.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $id, 'file_titleTransfer_status' => $statuses,]);
+                    return view('app.sites.file-managements.files.files-actions.file-title-transfer.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_title_transfer_id' => $id, 'file_titleTransfer_status' => $statuses,'file_id'=>$fileManagement->id]);
                 } else {
                     return "-";
                 }

@@ -93,6 +93,8 @@
                 {{ view('app.sites.receipts.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
+                    'customFields' => $customFields
+
                 ]) }}
             </div>
             @isset($draft_receipts)

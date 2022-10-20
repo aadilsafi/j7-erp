@@ -37,7 +37,7 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.floors.form-fields', ['floorShortLable' => $floorShortLable, 'floorOrder' => $floorOrder]) }}
+                {{ view('app.sites.floors.form-fields', ['floorShortLable' => $floorShortLable, 'floorOrder' => $floorOrder, 'customFields' => $customFields]) }}
 
             </div>
 

@@ -165,13 +165,13 @@
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no"
                                 name="unit[floor_no]" placeholder="Floor No"
-                                value="{{ number_format($unit_data->price_sqft) }}" readonly />
+                                value="{{ number_format($sales_plan->unit_price) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($unit_data->total_price) }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price) }}" readonly />
                         </div>
 
                     </div>

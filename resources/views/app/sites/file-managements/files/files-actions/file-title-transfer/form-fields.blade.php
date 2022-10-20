@@ -230,7 +230,7 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
+                        <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
                             name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
                             placeholder="NTN"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}" />
@@ -387,14 +387,14 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($unit->price_sqft) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($unit->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -443,7 +443,7 @@
 
                                                 @foreach ($imstallments as $intsallment)
                                                     <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
+                                                        <td>{{ $loop->index }}</td>
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
@@ -486,7 +486,23 @@
             </div>
         </div>
     </div>
+    @if (isset($customFields) && count($customFields) > 0)
 
+    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+            <div class="card-body">
+
+                <div class="row mb-1 g-1">
+                    @forelse ($customFields as $field)
+                    {!! $field !!}
+                    @empty
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @endif
     <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">

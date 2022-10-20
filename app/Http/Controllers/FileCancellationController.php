@@ -17,6 +17,7 @@ use App\Models\FileCancellationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\DataTables\FileCancellationDatatable;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 
 class FileCancellationController extends Controller
 {
@@ -27,9 +28,10 @@ class FileCancellationController extends Controller
      */
 
     public function __construct(
-        CancellationInterface $cancellationInterface
+        CancellationInterface $cancellationInterface, CustomFieldInterface $customFieldInterface
     ) {
         $this->cancellationInterface = $cancellationInterface;
+        $this->customFieldInterface = $customFieldInterface;
     }
 
     public function index(FileCancellationDatatable $dataTable, Request $request, $site_id)
@@ -50,18 +52,27 @@ class FileCancellationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($site_id, $unit_id, $customer_id)
+    public function create($site_id, $unit_id, $customer_id,$file_id)
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
+            $file = FileManagement::where('id', decryptParams($file_id))->first();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $salesPlan = SalesPlan::find($file->sales_plan_id);
+
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->cancellationInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => $unit,
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
-                'file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
+                'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
+                'salesPlan'=>$salesPlan,
+                'customFields' => $customFields
             ];
             return view('app.sites.file-managements.files.files-actions.file-cancellation.create', $data);
         } else {
@@ -102,13 +113,10 @@ class FileCancellationController extends Controller
         $files_labels = FileCancellationAttachment::where('file_cancellation_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
-
-        if (isset($unit->salesPlan[0])) {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->salesPlan[0]['id'])->get();
-        } else {
-            $receipts = Receipt::where('unit_id', decryptParams($unit_id))->where('sales_plan_id', $unit->CancelsalesPlan[0]['id'])->get();
-        }
-
+        $file_cancel = (new FileCanecllation())->find(decryptParams($id));
+        $file = FileManagement::where('id', $file_cancel->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
         foreach ($files_labels as $key => $file) {
@@ -124,6 +132,7 @@ class FileCancellationController extends Controller
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
+            'salesPlan'=>$salesPlan,
         ];
         return view('app.sites.file-managements.files.files-actions.file-cancellation.preview', $data);
     }
@@ -218,7 +227,7 @@ class FileCancellationController extends Controller
             // 'total_paid_amount' => $total_paid_amount,
         ];
 
-        $printFile = 'app.sites.file-managements.files.templates.'. $template->slug;
+        $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
         return view($printFile, compact('data'));
     }

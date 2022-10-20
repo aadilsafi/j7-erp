@@ -440,20 +440,14 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['unit_price']) }}"
-                        @else
-                        value="{{ number_format($unit->CancelsalesPlan[0]['unit_price']) }}" @endif
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly
-                            @if (isset($unit->salesPlan[0])) value="{{ number_format($unit->salesPlan[0]['total_price']) }}"
-                        @else
-                        value="{{ number_format($unit->CancelsalesPlan[0]['total_price']) }}" @endif
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -543,35 +537,19 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dynamic_installment_rows">
-                                            @if (isset($unit->salesPlan[0]))
-                                                @foreach ($unit->salesPlan[0]['installments'] as $intsallment)
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
-                                                        <td>{{ $intsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
-                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @else
-                                                @foreach ($unit->CancelsalesPlan[0]['installments'] as $intsallment)
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
-                                                        <td>{{ $intsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
-                                                        <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                            @foreach ($salesPlan->installments as $intsallment)
+                                                <tr class="text-center text-nowrap">
+                                                    <td>{{ $loop->index }}</td>
+                                                    <td>{{ $intsallment->details }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
+                                                    </td>
+                                                    <td>{{ number_format($intsallment->amount) }}</td>
+                                                    <td>{{ number_format($intsallment->paid_amount) }}</td>
+                                                    <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                    <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -582,7 +560,23 @@
             </div>
         </div>
     </div>
+    @if (isset($customFields) && count($customFields) > 0)
 
+    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+            <div class="card-body">
+
+                <div class="row mb-1 g-1">
+                    @forelse ($customFields as $field)
+                    {!! $field !!}
+                    @empty
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @endif
     <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">

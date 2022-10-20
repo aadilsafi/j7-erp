@@ -238,7 +238,8 @@ class ReceiptService implements ReceiptInterface
         if ($total_paid_amount >= $total_committed_amount) {
 
             $unit->status_id = 5;
-
+            $unit->is_for_rebate = true;
+            
             $unitStakeholderData = [
                 'site_id' => $receipt->site_id,
                 'unit_id' => $unit->id,

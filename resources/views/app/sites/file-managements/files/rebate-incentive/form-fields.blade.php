@@ -18,7 +18,7 @@
                                 <option>Select Unit No</option>
 
                                 @foreach ($units as $row)
-                                    @continue(isset($rebate_files) && in_array($row->id, $rebate_files))
+                                    {{-- @continue(isset($rebate_files) && in_array($row->id, $rebate_files)) --}}
                                     <option value="{{ $row->id }}">
                                         {{ $row->name }} ( {{ $row->floor_unit_number }} -
                                         {{ $row->floor->name }} - {{ $row->type->name }})

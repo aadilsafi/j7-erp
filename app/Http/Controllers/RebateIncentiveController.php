@@ -56,7 +56,7 @@ class RebateIncentiveController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
+                'units' => Unit::where('status_id', 5)->where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
                 'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
                 'customFields' => $customFields

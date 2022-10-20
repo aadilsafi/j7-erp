@@ -13,16 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('account_ledgers', function (Blueprint $table) {
+        Schema::create('account_actions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->string('account_head_code', 20);
-            $table->float('credit')->default(0);
-            $table->float('debit')->default(0);
-            $table->float('balance')->default(0);
-            $table->string('nature_of_account', 3);
-            $table->boolean('status')->default(true);
-            $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('name')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_ledgers');
+        Schema::dropIfExists('account_actions');
     }
 };

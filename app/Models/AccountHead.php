@@ -15,6 +15,7 @@ class AccountHead extends Model
     protected $primaryKey = 'code';
 
     protected $fillable = [
+        'site_id',
         'code',
         'name',
         'level',

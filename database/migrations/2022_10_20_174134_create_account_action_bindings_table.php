@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('account_heads', function (Blueprint $table) {
+        Schema::create('account_action_bindings', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->string('code', 20)->primary();
-            $table->string('name', 250);
-            $table->tinyInteger('level')->default(1);
+            // $table->foreignId('account_action_id')->constrained();
+            // $table->foreignId('account_id')->constrained();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_heads');
+        Schema::dropIfExists('account_action_bindings');
     }
 };

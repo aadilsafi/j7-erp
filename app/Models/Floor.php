@@ -5,64 +5,42 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpOffice\PhpSpreadsheet\Chart\Chart;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * App\Models\Floor
- *
- * @property int $id
- * @property string $name
- * @property float $width
- * @property float $length
- * @property int $site_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|Floor newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Floor newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Floor query()
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereLength($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereSiteId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereWidth($value)
- * @mixin \Eloquent
- * @property int $order
- * @property-read \App\Models\Site $site
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
- * @property-read int|null $units_count
- * @method static \Illuminate\Database\Query\Builder|Floor onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Floor whereOrder($value)
- * @method static \Illuminate\Database\Query\Builder|Floor withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Floor withoutTrashed()
- */
 class Floor extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'name',
-        'width',
-        'length',
+        'floor_area',
         'site_id',
         'order',
+        'short_label',
+        'active',
     ];
 
     protected $casts = [
-        'width' => 'float',
-        'length' => 'float',
+        'floor_area' => 'float',
         'site_id' => 'integer',
         'order' => 'integer',
+        'short_label' => 'string',
+        'active' => 'boolean',
     ];
 
     public $rules = [
         'name' => 'required|string|max:255',
-        'width' => 'required|numeric',
-        'length' => 'required|numeric',
-        'floor_order' => 'nullable|integer',
+        'floor_area' => 'required|numeric',
+        'floor_order' => 'nullable|numeric',
+        'short_label' => 'required|string|max:5|unique:floors,short_label',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function site()
     {

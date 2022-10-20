@@ -3,15 +3,17 @@
 namespace App\DataTables;
 
 use App\Models\Type;
-use App\Services\Interfaces\UnitTypeInterface;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\EloquentDataTable;
+use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
+use App\Services\Interfaces\UnitTypeInterface;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TypesDataTable extends DataTable
 {
@@ -43,7 +45,7 @@ class TypesDataTable extends DataTable
                 return editDateColumn($type->updated_at);
             })
             ->editColumn('actions', function ($type) {
-                return view('app.types.actions', ['id' => $type->id]);
+                return view('app.sites.types.actions', ['site_id' => decryptParams($this->site_id), 'id' => $type->id]);
             })
             ->editColumn('check', function ($type) {
                 return $type;
@@ -59,43 +61,62 @@ class TypesDataTable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        return $this->unitTypeInterface->model()->newQuery();
+        return $this->unitTypeInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
     }
 
     public function html(): HtmlBuilder
     {
+
+        $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+
+        $buttons = [];
+
+        $buttons = [
+            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+                Button::make('print')->addClass('dropdown-item'),
+                Button::make('copy')->addClass('dropdown-item'),
+                Button::make('csv')->addClass('dropdown-item'),
+                Button::make('excel')->addClass('dropdown-item'),
+                Button::make('pdf')->addClass('dropdown-item'),
+            ]),
+            Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+        ];
+
+        if ($createPermission) {
+            $newButton = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+            array_unshift($buttons, $newButton);
+        }
+
+        if ($selectedDeletePermission) {
+
+            $buttons[] = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                ->attr([
+                    'onclick' => 'deleteSelected()',
+                ]);
+        }
+
         return $this->builder()
             ->setTableId('types-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->serverSide()
             ->processing()
+            ->scrollX()
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
-            ->buttons(
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ]),
-                Button::make('export')->addClass('btn btn-relief-outline-secondary dropdown-toggle')->buttons([
-                    Button::make('print')->addClass('dropdown-item'),
-                    Button::make('copy')->addClass('dropdown-item'),
-                    Button::make('csv')->addClass('dropdown-item'),
-                    Button::make('excel')->addClass('dropdown-item'),
-                    Button::make('pdf')->addClass('dropdown-item'),
-                ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
-
-            )
+            ->buttons($buttons)
             ->rowGroupDataSrc('parent_id')
             ->columnDefs([
                 [
@@ -107,10 +128,10 @@ class TypesDataTable extends DataTable
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
                         var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
                     }",
                     'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
             ])
@@ -127,14 +148,24 @@ class TypesDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
+        $editPermission =  Auth::user()->hasPermissionTo('sites.types.edit');
+
+
+        $columns = [
             Column::make('name')->title('Type Name'),
             Column::make('parent_id')->title('Parent'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
+
+        if($selectedDeletePermission){
+            $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
+            array_unshift($columns, $newColumn);
+        }
+
+        return $columns;
     }
 
     /**
@@ -145,5 +176,16 @@ class TypesDataTable extends DataTable
     protected function filename(): string
     {
         return 'Types_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

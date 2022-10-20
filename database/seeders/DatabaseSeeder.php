@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,17 +17,34 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleTableSeeder::class,
             PermissionTableSeeder::class,
-            UserTableSeeder::class,
             CountryTableSeeder::class,
             StatusTableSeeder::class,
             StatesTableSeeder::class,
             CityTableSeeder::class,
             SiteTableSeeder::class,
             TypeSeeder::class,
+            UserTableSeeder::class,
             AdditionalCostsTableSeeder::class,
             SiteStatusPivotTableSeeder::class,
             FloorTableSeeder::class,
             UnitTableSeeder::class,
+            StakeholdersSeeder::class,
+            LeadSourceTableSeeder::class,
+            SalesPlanSeeder::class,
+            SalesPlanAdditionalCostSeeder::class,
+            SalesPlanInstallmentsSeeder::class,
+            SalesPlanTemplatesSeeder::class,
+            StakeholderTypeSeeder::class,
+            ReceiptsTemplateSeeder::class,
+            FileActionSeeder::class,
+            FileManagementTableSeeder::class,
+            ReceiptsTableSeeder::class,
+            UnitStakeholdersTableSeeder::class,
+            // RebateIncentiveSeeder::class,
+            TeamSeeder::class,
+            TeamUserSeeder::class,
+            TemplatesSeeder::class,
+            ModelTemplateSeeder::class,
         ]);
     }
 }

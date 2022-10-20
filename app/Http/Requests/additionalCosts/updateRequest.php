@@ -25,7 +25,7 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules = (new AdditionalCost())->rules;
-        $rules['slug'] = 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug,' . decryptParams($this->id);
+        // $rules['slug'] = 'required|alpha_dash|min:1|max:255|unique:additional_costs,slug,' . decryptParams($this->id);
         // dd($rules);
         return $rules;
     }

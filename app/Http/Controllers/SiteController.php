@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use App\DataTables\SitesDataTable;
 use App\Http\Requests\sites\{storeRequest};
-use App\Models\{Site, Country};
-use App\Services\SiteConfiurationService;
+use App\Models\{Site, Country, SiteConfigration};
+use App\Services\Interfaces\SiteConfigurationInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Schema;
 
 class SiteController extends Controller
 {
 
-    private $siteConfiurationService;
+    private $SiteConfigurationInterface;
 
-    public function __construct(SiteConfiurationService $siteConfiurationService)
+    public function __construct(SiteConfigurationInterface $SiteConfigurationInterface)
     {
-        $this->siteConfiurationService = $siteConfiurationService;
+        $this->SiteConfigurationInterface = $SiteConfigurationInterface;
     }
 
     /**
@@ -52,12 +53,12 @@ class SiteController extends Controller
         try {
 
             (new Site())->create([
-                'name'          => $request->name,
-                'city_id'       => $request->city,
-                'address'       => $request->address,
-                'area_width'    => $request->area_width,
-                'area_length'   => $request->area_length,
-                'max_floors'    => $request->max_floors,
+                'name' => $request->name,
+                'city_id' => $request->city,
+                'address' => $request->address,
+                'area_width' => $request->area_width,
+                'area_length' => $request->area_length,
+                'max_floors' => $request->max_floors,
             ]);
 
             return redirect()->route('sites.index')->withSuccess(__('lang.commons.data_saved'));
@@ -85,6 +86,7 @@ class SiteController extends Controller
      */
     public function edit($id)
     {
+        
         try {
             $site = (new Site())->find(decryptParams($id));
             $countries = (new Country())->all();
@@ -109,12 +111,12 @@ class SiteController extends Controller
     {
         try {
             $record = (new Site())->where('id', decryptParams($id))->update([
-                'name'          => $request->name,
-                'city_id'       => $request->city,
-                'address'       => $request->address,
-                'area_width'    => $request->area_width,
-                'area_length'   => $request->area_length,
-                'max_floors'    => $request->max_floors,
+                'name' => $request->name,
+                'city_id' => $request->city,
+                'address' => $request->address,
+                'area_width' => $request->area_width,
+                'area_length' => $request->area_length,
+                'max_floors' => $request->max_floors,
             ]);
 
             return redirect()->route('sites.index')->withSuccess(__('lang.commons.data_saved'));
@@ -175,11 +177,9 @@ class SiteController extends Controller
     {
         try {
             $site = (new Site())->find(decryptParams($id))->with('siteConfiguration', 'statuses')->first();
-            if ($site && !empty($site)) {
+            // dd($site);
 
-                // foreach ($site->statuses as $key => $value) {
-                //     // dd($value->name);
-                // }
+            if ($site && !empty($site)) {
                 return view('app.sites.configs', ['site' => $site]);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
@@ -190,12 +190,12 @@ class SiteController extends Controller
 
     public function configStore(Request $request, $id)
     {
+        // dd($request->all());
+        $inputs = $request->validate((new SiteConfigration())->rules, (new SiteConfigration())->ruleMessages);
+        // dd($inputs);
         try {
-
-            $inputs = $request->post();
-
-            $this->siteConfiurationService->update($inputs, $id);
-            return redirect()->route('sites.configurations.configView', ['id' => encryptParams($id)])->withSuccess(__('lang.commons.data_saved'));
+            $this->SiteConfigurationInterface->update($inputs, $id);
+            return redirect()->route('sites.configurations.configView', ['id' => encryptParams(decryptParams($id))])->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
             return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }

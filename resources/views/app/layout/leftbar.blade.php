@@ -5,7 +5,7 @@
             <li class="nav-item me-auto">
                 <a class="navbar-brand" href="{{ route('dashboard') }}">
                     <span class="brand-logo">
-                        <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        {{-- <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
                             <defs>
                                 <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%"
@@ -40,7 +40,8 @@
                                     </g>
                                 </g>
                             </g>
-                        </svg></span>
+                        </svg> --}}
+                    </span>
                     <h2 class="brand-text">{{ env('APP_NAME') }}</h2>
                 </a>
             </li>
@@ -66,186 +67,412 @@
                 </a>
             </li>
 
-            <li class="navigation-header">
-                <span data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
+            @if (Auth::user()->can('permissions.index') ||
+                Auth::user()->can('roles.index') ||
+                Auth::user()->can('sites.configurations.configView'))
+                <li class="navigation-header">
+                    <span
+                        data-i18n="{{ __('lang.leftbar.administration') }}">{{ __('lang.leftbar.administration') }}</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+            @endif
 
-            {{-- Roles & Permission Menu --}}
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='shield'></i>
-                    <span class="menu-title text-truncate"
-                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="">
-                        <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.leftbar.roles') }}">{{ __('lang.leftbar.roles') }}</span>
-                        </a>
-                        <ul class="menu-content">
-                            <li class="{{ request()->routeIs('roles.index') ? 'active' : null }}">
+            @if (Auth::user()->can('permissions.index') || Auth::user()->can('roles.index'))
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='shield'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">{{ __('lang.leftbar.roles_and_permissions') }}</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('roles.index')
+                            <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
-                                    <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.roles') }}</span>
                                 </a>
                             </li>
-                            <li class="{{ request()->routeIs('roles.create') ? 'active' : null }}">
-                                <a class="d-flex align-items-center" href="{{ route('roles.create') }}">
-                                    <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                            <i data-feather='shield'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.leftbar.permissions') }}">{{ __('lang.leftbar.permissions') }}</span>
-                        </a>
-                        <ul class="menu-content">
-                            <li class="{{ request()->routeIs('permissions.index') ? 'active' : null }}">
+                        @endcan
+
+                        @can('permissions.index')
+                            <li class="nav-item {{ request()->routeIs('permissions.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center" href="{{ route('permissions.index') }}">
-                                    <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
+                                    <i data-feather='shield'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="Email">{{ __('lang.leftbar.permissions') }}</span>
                                 </a>
                             </li>
-                            <li class="{{ request()->routeIs('permissions.create') ? 'active' : null }}">
-                                <a class="d-flex align-items-center" href="{{ route('permissions.create') }}">
-                                    <span class="menu-item text-truncate"
-                                        data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endif
 
-
-            <li class="navigation-header">
+            {{-- <li class="navigation-header">
                 <span data-i18n="Others">Configurations</span>
                 <i data-feather="more-horizontal"></i>
-            </li>
-
-            <li
-                class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams(1)]) ? 'active' : null }}">
-                <a class="d-flex align-items-center"
-                    href="{{ route('sites.configurations.configView', ['id' => encryptParams(1)]) }}">
-                    <i data-feather='settings'></i>
-                    <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
-                </a>
-            </li>
-
-            <li class="navigation-header">
-                <span data-i18n="Others">Others</span>
-                <i data-feather="more-horizontal"></i>
-            </li>
-            {{-- Types Menu --}}
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='menu'></i>
-                    <span class="menu-title text-truncate" data-i18n="Types">Types</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="{{ request()->routeIs('types.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('types.index') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('types.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('types.create') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-            {{-- Sites Menu --}}
-            {{-- <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='circle'></i>
-                    <span class="menu-title text-truncate" data-i18n="Sites">Sites</span>
-                </a>
-                <ul class="menu-content">
-                    <li class="{{ request()->routeIs('sites.index') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.index') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li class="{{ request()->routeIs('sites.create') ? 'active' : null }}">
-                        <a class="d-flex align-items-center" href="{{ route('sites.create') }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
             </li> --}}
 
+            @can('sites.configurations.configView')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
+                        <i data-feather='settings'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
+                    </a>
+                </li>
+            @endcan
+
+            {{-- Accounts Menu --}}
+            @canany(['sites.settings.custom-fields.index'])
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='settings'></i>
+                        <span class="menu-title text-truncate" data-i18n="Settings">Settings</span>
+                    </a>
+                    <ul class="menu-context">
+                        @can('sites.settings.custom-fields.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.custom-fields.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='list'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Custom Fields">Custom Fields</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+
+            @canany(['sites.types.index', 'sites.additional-costs.index', 'sites.floors.index'])
+                <li class="navigation-header">
+                    <span data-i18n="Others">Others</span>
+                    <i data-feather="more-horizontal"></i>
+                </li>
+            @endcanany
+
+            @if (Auth::user()->can('sites.stakeholders.index') || Auth::user()->can('sites.users.index'))
+                <li class="nav-item ">
+                    <a class="d-flex align-items-center" href="javascript:void(0)">
+                        <i data-feather='users'></i>
+                        <span class="menu-title text-truncate"
+                            data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                            Stakeholders</span>
+                    </a>
+                    <ul class="menu-content">
+                        @can('sites.stakeholders.index')
+                            <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        @if (Auth::user()->can('sites.teams.index') || Auth::user()->can('sites.users.index'))
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                                        Internal Stakeholders</span>
+                                </a>
+                                <ul class="menu-content">
+
+                                    @can('sites.users.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.users.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.users.index', ['site_id' => encryptParams(1)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Users</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('sites.teams.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.teams.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.teams.index', ['site_id' => encryptParams(1)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Teams</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endif
+
+
+                    </ul>
+                </li>
+            @endif
+
+
+            @can('sites.types.index')
+                <li class="nav-item {{ request()->routeIs('sites.types.index') ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='menu'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Types</span>
+                    </a>
+                </li>
+            @endcan
+
             {{-- Additional Costs Menu --}}
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='dollar-sign'></i>
-                    <span class="menu-title text-truncate" data-i18n="Additional Costs">Additional Costs</span>
-                </a>
-                <ul class="menu-content">
-                    <li
-                        class="{{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li
-                        class="{{ request()->routeIs('sites.additional-costs.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.additional-costs.create', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @can('sites.additional-costs.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='dollar-sign'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
+                    </a>
+                </li>
+            @endcan
+
 
             {{-- Floors Menu --}}
-            <li class="nav-item ">
-                <a class="d-flex align-items-center" href="javascript:void(0)">
-                    <i data-feather='layers'></i>
-                    <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
-                </a>
-                <ul class="menu-content">
-                    <li
-                        class="{{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.index', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.view_all') }}">{{ __('lang.commons.view_all') }}</span>
-                        </a>
-                    </li>
-                    <li
-                        class="{{ request()->routeIs('sites.floors.create', ['site_id' => encryptParams(1)]) ? 'active' : null }}">
-                        <a class="d-flex align-items-center"
-                            href="{{ route('sites.floors.create', ['site_id' => encryptParams(1)]) }}">
-                            <i data-feather='circle'></i>
-                            <span class="menu-item text-truncate"
-                                data-i18n="{{ __('lang.commons.add_new') }}">{{ __('lang.commons.add_new') }}</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            @can('sites.floors.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.floors.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='layers'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Floors</span>
+                    </a>
+                </li>
+            @endcan
+
+            {{-- Lead Sources Menu --}}
+            @can('sites.lead-sources.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='trello'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
+                    </a>
+                </li>
+            @endcan
+
+            {{-- File Management Menu --}}
+            @can('sites.file-managements.customers')
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                        <span class="menu-title text-truncate" data-i18n="file-managements">File Management</span>
+                    </a>
+                    <ul>
+                        @can('sites.file-managements.view-files')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.file-managements.view-files', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.file-managements.view-files', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">View Customer Files
+                                    </span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.receipts.index')
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
+                                </a>
+                                <ul>
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-receipt-cutoff"
+                                                style="
+                                    margin-bottom: 10px;">
+                                            </i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        @endcan
+                        <li>
+                            <a class="d-flex align-items-center" href="#">
+                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 2</span>
+                            </a>
+                            <ul>
+                                @can('sites.file-managements.customers')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="file-managements">File Creation
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Rebate
+                                            Incentive Form
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                        <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
+                                            Incentive Form
+                                        </span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <li>
+                            <a class="d-flex align-items-center" href="#">
+                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 3</span>
+                            </a>
+                            <ul>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Refund</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Buy Back</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Cancellation</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Resale</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Title Transfer
+                                            Request</span>
+                                    </a>
+                                </li>
+                                {{-- <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.file-adjustment.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">File Adjustment
+                                            Request</span>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->routeIs('sites.file-managements.unit-shifting.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                    <a class="d-flex align-items-center"
+                                        href="{{ route('sites.file-managements.unit-shifting.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <i class="bi bi-folder-symlink-fill">
+                                        </i>
+                                        <span class="menu-title text-truncate" data-i18n="Email">Unit Shifting</span>
+                                    </a>
+                                </li> --}}
+                            </ul>
+                        </li>
+
+                    </ul>
+                </li>
+            @endcan
+
+            {{-- Accounts Menu --}}
+            @canany(['sites.accounts.recovery.dashboard'])
+                <li class="nav-item">
+                    <a class="d-flex align-items-center" href="#">
+                        <i data-feather='dollar-sign'></i>
+                        <span class="menu-title text-truncate" data-i18n="Account">Accounts</span>
+                    </a>
+                    <ul>
+                        @canany(['sites.accounts.recovery.dashboard'])
+                            <li>
+                                <a class="d-flex align-items-center" href="javascript:void(0);">
+                                    <i data-feather='dollar-sign'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Recovery">Recovery</span>
+                                </a>
+                                <ul>
+                                    @can('sites.accounts.recovery.dashboard')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='layout'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.accounts.recovery.salesPlan')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='layout'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Sales Plans">Sales Plans</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.accounts.recovery.calender')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='calendar'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Calender">Calender</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
+                    </ul>
+                </li>
+            @endcanany
+
         </ul>
     </div>
 </div>

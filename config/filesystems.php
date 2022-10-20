@@ -61,6 +61,13 @@ return [
             'url'    => env('APP_URL').'/media',
         ],
 
+        'attachments' => [
+            'driver' => 'local',
+            'root' => public_path('app-assets/server-uploads/attachments'),
+            'url' => env('APP_URL').'/app-assets/server-uploads/attachments',
+            'visibility' => 'private',
+            'throw' => false,
+        ],
     ],
 
     /*

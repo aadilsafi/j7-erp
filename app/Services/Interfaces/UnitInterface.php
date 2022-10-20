@@ -6,11 +6,16 @@ interface UnitInterface
 {
     public function model();
 
-    public function getByAll($site_id);
-    public function getById($site_id, $id);
+    public function getByAll($site_id, $floor_id);
+    public function getById($site_id, $floor_id, $id, $relationships = []);
 
-    public function store($site_id, $inputs);
-    public function update($site_id, $id, $inputs);
+    public function store($site_id, $floor_id, $inputs, $isUnitActive = true);
+    public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false);
+    public function storeFabUnit($site_id, $floor_id, $inputs, $isUnitActive = true);
 
-    public function destroy($site_id, $id);
+    public function update($site_id, $floor_id, $id, $inputs);
+
+    public function destroy($site_id, $floor_id, $id);
+
+    public function getEmptyInstance();
 }

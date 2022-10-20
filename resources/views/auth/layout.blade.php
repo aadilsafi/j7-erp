@@ -48,7 +48,6 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/pages/authentication.css">
     <!-- END: Page CSS-->
 
@@ -83,7 +82,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN Vendor JS-->
 
     <!-- BEGIN: Page Vendor JS-->
-    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+
     <!-- END: Page Vendor JS-->
 
     <!-- BEGIN: Theme JS-->
@@ -92,7 +91,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- END: Theme JS-->
 
     <!-- BEGIN: Page JS-->
-    <script src="{{ asset('app-assets') }}/js/scripts/pages/auth-login.js"></script>
+    {{-- <script src="{{ asset('app-assets') }}/js/scripts/pages/auth-login.js"></script> --}}
     <!-- END: Page JS-->
 
     <script>

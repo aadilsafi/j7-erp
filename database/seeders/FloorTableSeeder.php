@@ -17,29 +17,42 @@ class FloorTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'Floor 1',
-                'width' => 1300,
-                'length' => 1300,
+                'name' => 'Ground Floor',
+                'floor_area' => 1300,
+                'short_label' => 'GF',
                 'site_id' => 1,
                 'order' => 0,
+                'active' => true,
+                'created_at' => now(),
+                'updated_at' => now()
+            ],
+            [
+                'name' => 'Floor 1',
+                'floor_area' => 1300,
+                'short_label' => '1F',
+                'site_id' => 1,
+                'order' => 1,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Floor 2',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => '2F',
                 'site_id' => 1,
-                'order' => 0,
+                'order' => 2,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
             [
                 'name' => 'Floor 3',
-                'width' => 1300,
-                'length' => 1300,
+                'floor_area' => 1300,
+                'short_label' => '3F',
                 'site_id' => 1,
-                'order' => 0,
+                'order' => 3,
+                'active' => true,
                 'created_at' => now(),
                 'updated_at' => now()
             ],

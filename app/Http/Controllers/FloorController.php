@@ -3,21 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
-use App\Services\Interfaces\FloorInterface;
+use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\floors\{
+    copyFloorRequest,
     storeRequest as floorStoreRequest,
     updateRequest as floorUpdateRequest,
 };
+use App\Models\{
+    Floor,
+    Unit,
+    Site,
+};
+use App\Services\Interfaces\{
+    FloorInterface,
+    UserBatchInterface,
+};
+use App\Utils\Enums\{
+    UserBatchActionsEnum,
+    UserBatchStatusEnum,
+};
+use Yajra\DataTables\Facades\DataTables;
 
 class FloorController extends Controller
 {
     private $floorInterface;
+    private $userBatchInterface;
 
-    public function __construct(FloorInterface $floorInterface)
-    {
+    public function __construct(
+        FloorInterface $floorInterface,
+        UserBatchInterface $userBatchInterface,
+        CustomFieldInterface $customFieldInterface
+    ) {
         $this->floorInterface = $floorInterface;
+        $this->userBatchInterface = $userBatchInterface;
+        $this->customFieldInterface = $customFieldInterface;
+
     }
 
     /**
@@ -25,9 +47,18 @@ class FloorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FloorsDataTable $dataTable, $site_id)
+    public function index(FloorsDataTable $dataTable, $site_id, Request $request)
     {
-        return $dataTable->render('app.sites.floors.index', ['site_id' => $site_id]);
+        $nonActiveFloors = (new Floor())->where('active', false)->where('site_id', decryptParams($site_id))->get();
+        if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
+            return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
+        }
+
+        if ($request->ajax()) {
+            return $dataTable->with(['site_id' => decryptParams($site_id)])->ajax();
+        }
+
+        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
     }
 
     /**
@@ -37,10 +68,21 @@ class FloorController extends Controller
      */
     public function create(Request $request, $site_id)
     {
+        $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
+
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
+        $customFields = collect($customFields)->sortBy('order');
+        $customFields = generateCustomFields($customFields);
+
         if (!request()->ajax()) {
             $data = [
-                'site_id' => $site_id,
+                'site_id' => $site->id,
+                'floorShortLable' => $site->siteConfiguration->floor_prefix,
+                'floorOrder' => getMaxFloorOrder(decryptParams($site_id)) + 1,
+                'customFields' => $customFields
             ];
+
+            // dd($data);
             return view('app.sites.floors.create', $data);
         } else {
             abort(403);
@@ -88,12 +130,14 @@ class FloorController extends Controller
      */
     public function edit(Request $request, $site_id, $id)
     {
+        $site = (new Site())->where('id', decryptParams($site_id))->with('siteConfiguration')->first();
         try {
             $floor = $this->floorInterface->getById($site_id, $id);
             if ($floor && !empty($floor)) {
                 $data = [
-                    'site_id' => $site_id,
+                    'site_id' => $site->id,
                     'floor' => $floor,
+                    'floorShortLable' => $site->siteConfiguration->floor_prefix,
                 ];
 
                 // dd($data);
@@ -149,6 +193,149 @@ class FloorController extends Controller
             }
         } catch (Exception $ex) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+    public function copyView(Request $request, $site_id)
+    {
+        if (!request()->ajax()) {
+            $data = [
+                'site_id' => encryptParams(decryptParams($site_id)),
+                'floors' => (new Floor())->whereSiteId(decryptParams($site_id))->withCount('units')->get(),
+            ];
+
+            return view('app.sites.floors.copy', $data);
+        } else {
+            abort(403);
+        }
+    }
+
+    public function copyStore(copyFloorRequest $request, $site_id)
+    {
+        // dd($request->all());
+        // return $request->input();
+        if (!request()->ajax()) {
+
+            $inputs = $request->validated();
+
+            $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
+            // dd($record);
+
+            // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
+
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess('Floor(s) will be contructed shortly!');
+        } else {
+            abort(403);
+        }
+    }
+
+    public function preview(Request $request, $site_id)
+    {
+        if ($request->ajax()) {
+            $id = $request->get('id');
+            $units = Unit::where('floor_id', $id)->where('active', 0)->get();
+            return DataTables::of($units)
+                ->addIndexColumn()
+                ->editColumn('type_id', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
+                    );
+                })
+                ->editColumn('status_id', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'status_id', 'inputtype' => 'select', 'value' => $unit->status->name]
+                    );
+                })
+                ->editColumn('name', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $unit->name]
+                    );
+                })
+                ->editColumn('created_at', function ($unit) {
+                    return editDateColumn($unit->created_at);
+                })
+                ->editColumn('width', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'width', 'inputtype' => 'number', 'value' => $unit->width]
+                    );
+                })
+                ->editColumn('length', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'length', 'inputtype' => 'number', 'value' => $unit->length]
+                    );
+                })
+                ->editColumn('is_corner', function ($unit) {
+                    return view(
+                        'app.components.checkbox',
+                        ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
+                    );
+                })
+                ->editColumn('is_facing', function ($unit) {
+                    return view(
+                        'app.components.checkbox',
+                        ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
+                    );
+                })
+                ->editColumn('net_area', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'net_area', 'inputtype' => 'number', 'value' => $unit->net_area]
+                    );
+                })
+                ->editColumn('gross_area', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'gross_area', 'inputtype' => 'number', 'value' => $unit->gross_area]
+                    );
+                })
+                ->editColumn('price_sqft', function ($unit) {
+                    return view(
+                        'app.components.unit-preview-cell',
+                        ['id' => $unit->id, 'field' => 'price_sqft', 'inputtype' => 'number', 'value' => $unit->price_sqft]
+                    );
+                })
+                ->rawColumns([
+                    'name', 'created_at', 'width', 'length', 'is_corner', 'is_facing', 'type_id',
+                    'status_id', 'net_area', 'gross_area', 'price_sqft'
+                ])
+                ->make(true);
+        }
+        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select('id')->get();
+        return view(
+            'app.sites.floors.preview',
+            ['site_id' => encryptParams(decryptParams($site_id)), 'floors' => $floors]
+        );
+    }
+
+    public function saveChanges(Request $request, $site_id)
+    {
+
+        try {
+
+            $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->get()->pluck('id')->toArray();
+            (new Floor())->where('site_id', decryptParams($site_id))->where('active', false)->update([
+                'active' => true
+            ]);
+            (new Unit())->whereIn('floor_id', $floors)->update([
+                'active' => true
+            ]);
+
+            return redirect()->route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
+        } catch (Exception $th) {
+            return redirect()->route('dashboard')->withDanger($th->getMessage());
+        }
+    }
+
+    public function getPendingFloors(Request $request, $site_id)
+    {
+        if ($request->ajax()) {
+            $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select(['id', 'site_id'])->get();
+            return response()->json($floors);
         }
     }
 }

@@ -6,45 +6,33 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * App\Models\Type
- *
- * @property int $id
- * @property string|null $name
- * @property string $slug
- * @property int $parent_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|Type newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Type newQuery()
- * @method static \Illuminate\Database\Query\Builder|Type onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Type query()
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Type whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Type withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Type withoutTrashed()
- * @mixin \Eloquent
- */
 class Type extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
+        'site_id',
         'name',
         'parent_id',
         'slug',
     ];
 
-    public $requestRules = [
+    public $rules = [
         'type' => 'required|numeric',
         'type_name' => 'required|string|min:1|max:255',
-        'type_slug' => 'required|string|min:1|max:255|unique:types,slug',
+        // 'type_slug' => 'required|string|min:1|max:255|unique:types,slug',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
 }

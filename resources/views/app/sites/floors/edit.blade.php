@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Edit Floor')
@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Edit Floor</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.edit') }}
+                    {{ Breadcrumbs::render('sites.floors.edit', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -30,35 +30,45 @@
 @endsection
 
 @section('content')
-    <div class="card">
-        <form class="form form-vertical"
-            action="{{ route('sites.floors.update', ['site_id' => $site_id, 'id' => encryptParams($floor->id)]) }}"
-            method="POST">
+    <form class="form form-vertical"
+        action="{{ route('sites.floors.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($floor->id)]) }}"
+        method="POST">
 
-            <div class="card-header">
-            </div>
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
-            <div class="card-body">
                 @method('PUT')
                 @csrf
-                {{ view('app.sites.floors.form-fields', ['floor' => $floor]) }}
+                {{ view('app.sites.floors.form-fields', ['floor' => $floor, 'floorShortLable' => $floorShortLable]) }}
 
             </div>
 
-            <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                    <i data-feather='save'></i>
-                    Update Floor
-                </button>
-                <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
-                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
-                    <i data-feather='x'></i>
-                    {{ __('lang.commons.cancel') }}
-                </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    <button type="submit"
+                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                        <i data-feather='save'></i>
+                                        Update Floor
+                                    </button>
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
+                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        </form>
-    </div>
+        </div>
+    </form>
 @endsection
 
 @section('vendor-js')

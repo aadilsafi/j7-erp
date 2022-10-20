@@ -59,7 +59,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             <div class="col-xl-4 col-lg-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <div class="d-flex justify-content-between">
+                        {{-- <div class="d-flex justify-content-between">
                             <span>Total 4 users</span>
                             <ul class="list-unstyled d-flex align-items-center avatar-group mb-0">
                                 <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
@@ -83,48 +83,52 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                                         alt="Avatar" />
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                         <div class="d-flex justify-content-between align-items-end mt-1 pt-25">
                             <div class="role-heading">
                                 <h4 class="fw-bolder">
                                     {{ __('lang.roles.pages.index.rolecard_title', ['value' => $role->name]) }} (
                                     {{ __('lang.roles.pages.index.rolecard_guard', ['value' => $role->guard_name]) }} )
                                 </h4>
-                                <a href="{{ route('roles.edit', ['id' => encryptParams($role->id)]) }}"
-                                    class="role-edit-modal">
-                                    <small class="fw-bolder">{{ __('lang.roles.edit_role') }}</small>
-                                </a>
+                                @can('roles.edit')
+                                    <a href="{{ route('roles.edit', ['id' => encryptParams($role->id)]) }}"
+                                        class="role-edit-modal">
+                                        <small class="fw-bolder">{{ __('lang.roles.edit_role') }}</small>
+                                    </a>
+                                @endcan
                             </div>
-                            <a href="javascript:void(0);" class="text-body">
+                            {{-- <a href="javascript:void(0);" class="text-body">
                                 <i data-feather="copy" class="font-medium-5"></i>
-                            </a>
+                            </a> --}}
                         </div>
                     </div>
                 </div>
             </div>
         @empty
         @endforelse
-        <div class="col-xl-4 col-lg-6 col-md-6">
-            <div class="card">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="d-flex align-items-end justify-content-center h-100">
-                            <img src="{{ asset('app-assets') }}/images/illustration/faq-illustrations.svg"
-                                class="img-fluid mt-2" alt="Image" width="85" />
+        @can('roles.create')
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <div class="d-flex align-items-end justify-content-center h-100">
+                                <img src="{{ asset('app-assets') }}/images/illustration/faq-illustrations.svg"
+                                    class="img-fluid mt-2" alt="Image" width="85" />
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-sm-7">
-                        <div class="card-body text-sm-end text-center ps-sm-0">
-                            <a href="{{ route('roles.create') }}" class="btn btn-relief-outline-primary mb-1">
-                                <span class=""><i data-feather="plus"></i>
-                                    {{ __('lang.roles.add_new_role') }}</span>
-                            </a>
-                            <p class="mb-0">{{ __('lang.roles.pages.extras.add_role_if_it_does_not_exist') }}</p>
+                        <div class="col-sm-7">
+                            <div class="card-body text-sm-end text-center ps-sm-0">
+                                <a href="{{ route('roles.create') }}" class="btn btn-relief-outline-primary mb-1">
+                                    <span class=""><i data-feather="plus"></i>
+                                        {{ __('lang.roles.add_new_role') }}</span>
+                                </a>
+                                <p class="mb-0">{{ __('lang.roles.pages.extras.add_role_if_it_does_not_exist') }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endcan
     </div>
     <!--/ Role cards -->
 
@@ -155,7 +159,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     </tr>
                 </thead>
             </table> --}}
-            <form action="{{ route('roles.destroy.selected') }}" id="roles-table-form" method="get">
+            <form action="{{ route('roles.destroy-selected') }}" id="roles-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -170,6 +174,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/responsive.bootstrap5.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.select.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.colVis.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jszip.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/pdfmake.min.js"></script>
@@ -199,6 +204,11 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
                     confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
                     confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $('#roles-table-form').submit();
@@ -211,22 +221,6 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
                 });
             }
-        }
-
-        function deleteByID(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: '{{ __('lang.commons.are_you_sure') }}',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                confirmButtonClass: 'btn-danger',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.href = '{{ route('roles.destroy', ['id' => ':id']) }}'.replace(':id', id);
-                }
-            });
         }
     </script>
 @endsection

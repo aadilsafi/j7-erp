@@ -20,7 +20,6 @@ return new class extends Migration
                 $table->boolean('is_facing')->default(0);
                 $table->unsignedBigInteger('facing_id')->nullable();
 
-                $table->foreign('corner_id')->references('id')->on('additional_costs');
                 $table->foreign('facing_id')->references('id')->on('additional_costs');
             });
         });

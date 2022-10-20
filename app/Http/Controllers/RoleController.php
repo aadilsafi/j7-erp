@@ -7,12 +7,20 @@ use App\Http\Requests\roles\{
     storeRequest as roleStoreRequest,
     updateRequest as roleUpdateRequest
 };
+use App\Models\Role;
 use Exception;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use App\Services\Roles\RoleInterface;
 
 class RoleController extends Controller
 {
+
+    private $RoleTypesInterface;
+
+    public function __construct(RoleInterface $RoleTypesInterface)
+    {
+        $this->RoleTypesInterface = $RoleTypesInterface;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +40,15 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('app.roles.create');
+        if (!request()->ajax()) {
+
+            $data = [
+                'roles' => $this->RoleTypesInterface->getAllWithTree(),
+            ];
+            return view('app.roles.create', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -47,12 +63,8 @@ class RoleController extends Controller
             $record = (new Role())->create([
                 'name' => $request->role_name,
                 'guard_name' => $request->guard_name,
+                'parent_id' => $request->parent_id,
             ]);
-
-            if ($request->default) {
-                $record = $this->makeDefaultRole($record->id);
-                // dd($record);
-            }
 
             return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
@@ -83,7 +95,12 @@ class RoleController extends Controller
             $role = (new Role())->find(decryptParams($id));
 
             if ($role && !empty($role)) {
-                return view('app.roles.edit', ['role' => $role]);
+                $data = [
+                    'roles' => $this->RoleTypesInterface->getAllWithTree(),
+                    'role' => $role,
+                ];
+
+                return view('app.roles.edit', $data);
             }
 
             return redirect()->route('roles.index')->withWarning(__('lang.commons.data_not_found'));
@@ -102,14 +119,12 @@ class RoleController extends Controller
     public function update(roleUpdateRequest $request, $id)
     {
         try {
-            $record = (new Role())->where('id', $id)->update([
+
+            $record = (new Role())->find(decryptParams($id))->update([
                 'name' => $request->role_name,
                 'guard_name' => $request->guard_name,
+                'parent_id' => $request->parent_id,
             ]);
-
-            if ($request->default) {
-                $record = $this->makeDefaultRole($record->id);
-            }
 
             return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_saved'));
         } catch (Exception $ex) {
@@ -117,79 +132,14 @@ class RoleController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        try {
-            $record = (new Role())->find(decryptParams($id));
-
-            if ($record && !empty($record)) {
-                $record->delete();
-
-                if ($record->default) {
-                    $firstRecord = (new Role())->first();
-                    $record = $this->makeDefaultRole($firstRecord->id);
-                }
-
-                return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_deleted'));
-            }
-
-            return redirect()->route('roles.index')->withWarning(__('lang.commons.data_not_found'));
-        } catch (Exception $ex) {
-            return redirect()->route('roles.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
-        }
-    }
-
-    public function makeDefault(Request $request, $id)
-    {
-        try {
-            $record = (new Role())->find(decryptParams($id));
-
-            if ($record && !empty($record)) {
-                $record = $this->makeDefaultRole($record->id);
-                return redirect()->route('roles.index')->withSuccess(__('lang.commons.made_default'));
-            }
-
-            return redirect()->route('roles.index')->withWarning(__('lang.commons.data_not_found'));
-        } catch (Exception $ex) {
-            return redirect()->route('roles.index')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
-        }
-    }
-
-    public function makeDefaultRole($id)
-    {
-        $record = (new Role())->where('id', '>', 0)->update([
-            'default' => 0,
-        ]);
-        try {
-
-            $record = (new Role())->where('id', $id)->update([
-                'default' => 1,
-            ]);
-
-            return 1;
-        } catch (Exception $ex) {
-            return $ex;
-        }
-    }
-
-    public function destroySelected(Request $request)
+    public function destroy(Request $request)
     {
         try {
             if ($request->has('chkRole')) {
 
-                (new Role())->whereIn('id', $request->chkRole)->delete();
-
-                $record = (new Role())->where('default', 1)->first();
-                if (is_null($record) || empty($record)) {
-                    $firstRecord = (new Role())->first();
-                    $record = $this->makeDefaultRole($firstRecord->id);
-                }
+                (new Role())->whereIn('id', $request->chkRole)->get()->each(function ($row) {
+                    $row->delete();
+                });
                 return redirect()->route('roles.index')->withSuccess(__('lang.commons.data_deleted'));
             } else {
                 return redirect()->route('roles.index')->withWarning(__('lang.commons.please_select_at_least_one_item'));

@@ -4,49 +4,99 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
-/**
- * App\Models\SiteConfigrations
- *
- * @property int $id
- * @property int $site_id
- * @property int $site_max_floors
- * @property string $floor_prefix
- * @property int $unit_number_digits
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property string|null $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations query()
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereFloorPrefix($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereSiteId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereSiteMaxFloors($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereUnitNumberDigits($value)
- * @method static \Illuminate\Database\Eloquent\Builder|SiteConfigrations whereUpdatedAt($value)
- * @mixin \Eloquent
- * @property-read \App\Models\Site $site
- */
 class SiteConfigration extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
-    protected $fillable = [
-        'site_id',
-        'site_max_floors',
-        'floor_prefix',
-        'unit_number_digits',
+    protected $guarded = [];
+
+    public $datatypes = [
+        'arr_site' => [
+            'site_max_floors' => 'integer',
+            'site_token_percentage' => 'float',
+            'site_down_payment_percentage' => 'float',
+        ],
+
+        'arr_floor' => [
+            'floor_prefix' => 'string',
+        ],
+
+        'arr_unit' => [
+            'unit_number_digits' => 'integer',
+        ],
+
+        'arr_salesplan' => [
+            'validity_days' => 'integer',
+            'installment_days' => 'integer',
+        ],
+
+        'arr_others' => [
+            'bank_name' => 'string',
+            'bank_account_name' => 'string',
+            'bank_account_no' => 'string',
+        ],
+
     ];
 
-    public $requestRules = [
-        'site_id' => 'required',
-        'site_max_floors' => 'required',
-        'floor_prefix' => 'required',
-        'unit_number_digits' => 'required',
+    public $rules = [
+        'name' => 'sometimes|between:1,255',
+        'address' => 'sometimes|between:1,255',
+        'area_width' => 'sometimes|numeric|gt:0',
+        'area_length' => 'sometimes|numeric|gt:0',
+        'selected_tab' => 'required|in:site,floor,unit,salesplan,others',
+        'arr_site' => 'sometimes|array',
+        'arr_floor' => 'sometimes|array',
+        'arr_unit' => 'sometimes|array',
+
+        'arr_site.site_max_floors' => 'sometimes|numeric|min:0',
+        'arr_site.site_token_percentage' => 'sometimes|numeric|gt:0|max:100',
+        'arr_site.site_down_payment_percentage' => 'sometimes|numeric|gt:0|max:100',
+
+        'arr_floor.floor_prefix' => 'sometimes|string|alpha_num|max:5',
+
+        'arr_unit.unit_number_digits' => 'sometimes|numeric|in:2,3',
+
+        'arr_salesplan.salesplan_validity_days' => 'sometimes|numeric|min:0|gt:0',
+        'arr_salesplan.salesplan_installment_days' => 'sometimes|numeric|min:0|gt:0',
+
+        'arr_others.others_bank_name' => 'sometimes|nullable|between:1,255',
+        'arr_others.others_bank_account_name' => 'sometimes|nullable|between:1,255',
+        'arr_others.others_bank_account_no' => 'sometimes|nullable|between:1,255',
+
     ];
+
+    public $ruleMessages = [
+        'arr_site.site_max_floors.numeric' => 'The site max floors must be a number.',
+        'arr_site.site_max_floors.min' => 'The site max floors must be at least 0.',
+        'arr_site.site_token_percentage.numeric' => 'The site token percentage must be a number.',
+        'arr_site.site_token_percentage.gt' => 'The site token percentage must be greater than 0.',
+        'arr_site.site_token_percentage.max' => 'The site token percentage may not be greater than 100.',
+        'arr_site.site_down_payment_percentage.numeric' => 'The site down payment percentage must be a number.',
+        'arr_site.site_down_payment_percentage.gt' => 'The site down payment percentage must be greater than 0.',
+        'arr_site.site_down_payment_percentage.max' => 'The site down payment percentage may not be greater than 100.',
+
+        'arr_floor.floor_prefix.string' => 'The floor prefix must be a string.',
+        'arr_floor.floor_prefix.alpha_num' => 'The floor prefix must only contain letters and numbers.',
+        'arr_floor.floor_prefix.max' => 'The floor prefix may not be greater than 5 characters.',
+
+        'arr_unit.unit_number_digits.numeric' => 'The unit number digits must be a number.',
+        'arr_unit.unit_number_digits.in' => 'The selected unit number digits is invalid.',
+
+        'arr_salesplan.salesplan_validity_days.numeric' => 'The validity days must be a number.',
+        'arr_salesplan.salesplan_installment_days.numeric' => 'The installment days must be a number.',
+
+        'arr_others.others_bank_name.between' => 'The bank name must be between 1 and 255 characters.',
+        'arr_others.others_bank_account_name.between' => 'The bank account name must be between 1 and 255 characters.',
+        'arr_others.others_bank_account_no.between' => 'The bank account no must be between 1 and 255 characters.',
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
+    }
 
     public function site()
     {

@@ -6,13 +6,14 @@ use App\Models\Type;
 use App\Services\Interfaces\UnitTypeInterface;
 use Exception;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UnitTypeService implements UnitTypeInterface
 {
 
-    public function model()
+    public function model(mixed $parameters = [])
     {
-        return new Type();
+        return new Type($parameters);
     }
 
     // Get
@@ -23,20 +24,20 @@ class UnitTypeService implements UnitTypeInterface
 
     public function getById($id)
     {
-        $id = decryptParams($id);
         return $this->model()->find($id);
     }
 
-    public function getAllWithTree()
+    public function getAllWithTree($site_id)
     {
-        $types = $this->model()->all();
+        $types = $this->model()->whereSiteId($site_id)->get();
         return getTreeData(collect($types), $this->model());
     }
 
     // Store
-    public function store($inputs)
+    public function store($site_id, $inputs)
     {
         $data = [
+            'site_id' => decryptParams($site_id),
             'name' => $inputs['type_name'],
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
@@ -45,12 +46,10 @@ class UnitTypeService implements UnitTypeInterface
         return $type;
     }
 
-    public function update($inputs, $id)
+    public function update($site_id, $inputs, $id)
     {
-
-        $id = decryptParams($id);
-
         $data = [
+            'site_id' => $site_id,
             'name' => $inputs['type_name'],
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
@@ -59,7 +58,7 @@ class UnitTypeService implements UnitTypeInterface
         return $type;
     }
 
-    public function destroy($id)
+    public function destroy($site_id, $id)
     {
         $id = decryptParams($id);
 
@@ -67,7 +66,9 @@ class UnitTypeService implements UnitTypeInterface
 
         $typesIDs = array_merge($id, array_column($types, 'id'));
 
-        $this->model()->whereIn('id', $typesIDs)->delete();
+        $this->model()->whereIn('id', $typesIDs)->get()->each(function ($row) {
+            $row->delete();
+        });
 
         return true;
     }

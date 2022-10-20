@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Jobs\floors\FloorCopyMainJob;
 use App\Models\Floor;
 use App\Services\Interfaces\FloorInterface;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Facades\CauserResolver;
 
 class FloorService implements FloorInterface
 {
@@ -39,13 +42,21 @@ class FloorService implements FloorInterface
         $data = [
             'site_id' => decryptParams($site_id),
             'name' => filter_strip_tags($inputs['name']),
-            'width' => filter_strip_tags($inputs['width']),
-            'length' => filter_strip_tags($inputs['length']),
+            'short_label' => Str::of(filter_strip_tags($inputs['short_label']))->upper(),
+            'floor_area' => filter_strip_tags($inputs['floor_area']),
             'order' => filter_strip_tags($inputs['floor_order']),
+            'active' => true,
         ];
 
         $floor = $this->model()->create($data);
         return $floor;
+    }
+
+    public function storeInBulk($site_id, $user_id, $inputs, $isFloorActive = false)
+    {
+        CauserResolver::setCauser(auth()->user());
+        FloorCopyMainJob::dispatch($site_id, $user_id, $inputs, $isFloorActive);
+        return true;
     }
 
     public function update($site_id, $id, $inputs)
@@ -56,8 +67,8 @@ class FloorService implements FloorInterface
         $data = [
             'site_id' => $site_id,
             'name' => filter_strip_tags($inputs['name']),
-            'width' => filter_strip_tags($inputs['width']),
-            'length' => filter_strip_tags($inputs['length']),
+            'short_label' => Str::of(filter_strip_tags($inputs['short_label']))->upper(),
+            'floor_area' => filter_strip_tags($inputs['floor_area']),
             'order' => filter_strip_tags($inputs['floor_order']),
         ];
 
@@ -74,10 +85,13 @@ class FloorService implements FloorInterface
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 
-        $this->model()->where([
+
+        $floor = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,
-        ])->delete();
+        ])->first();
+
+        $floor->delete();
 
         return true;
     }

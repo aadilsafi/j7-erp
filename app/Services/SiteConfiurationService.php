@@ -47,16 +47,43 @@ class SiteConfiurationService implements SiteConfigurationInterface
 
     public function update($inputs, $id)
     {
-
         $id = decryptParams($id);
-        dd($inputs, $id);
-        $data = [
-            'name' => $inputs['type_name'],
-            'slug' => Str::of($inputs['type_name'])->slug(),
-            'parent_id' => $inputs['type'],
-        ];
-        $type = $this->model()->where('id', $id)->update($data);
-        return $type;
+        // dd($inputs, $id);
+
+        switch ($inputs['selected_tab']) {
+            case 'site':
+                $data = [
+                    'name' => $inputs['name'],
+                    'address' => $inputs['address'],
+                    'area_width' => $inputs['area_width'],
+                    'area_length' => $inputs['area_length'],
+                ];
+
+                $this->model()->find($id)->update($data);
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_site']);
+                break;
+
+            case 'floor':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_floor']);
+                break;
+
+            case 'unit':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_unit']);
+                break;
+
+            case 'salesplan':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_salesplan']);
+                break;
+
+            case 'others':
+                $siteConfigutaion = $this->model()->find($id)->siteConfiguration->update($inputs['arr_others']);
+                break;
+
+            default:
+                break;
+        }
+        // dd('done');
+        return $siteConfigutaion;
     }
 
     // public function destroy($id)

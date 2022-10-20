@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\units;
 
-use App\Models\Floor;
+use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class storeRequest extends FormRequest
 {
@@ -24,6 +25,56 @@ class storeRequest extends FormRequest
      */
     public function rules()
     {
-        return (new Floor())->rules;
+        // dd($this->input());
+        $rules = (new Unit())->rules;
+        $rules['unit_number'] = [
+            Rule::requiredIf(function () {
+                return $this->add_bulk_unit == 0;
+            }),
+            'numeric',
+            'between:1,' . $this->unit_number_digits,
+            Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))
+        ];
+
+        return $rules;
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Unit())->ruleMessages;
+    }
+
+    // /**
+    //  * Configure the validator instance.
+    //  *
+    //  * @param  \Illuminate\Validation\Validator  $validator
+    //  * @return void
+    //  */
+    // public function withValidator($validator)
+    // {
+    //     if (!$validator->fails()) {
+    //         $validator->after(function ($validator) {
+
+
+
+
+
+
+
+
+    //             $typeId = $this->input('type');
+    //             if ($typeId != 0) {
+    //                 $type = (new Type)->where('id', $typeId)->first();
+    //                 if (!$type) {
+    //                     $validator->errors()->add('type', 'This type does not exists');
+    //                 }
+    //             }
+    //         });
+    //     }
+    // }
 }

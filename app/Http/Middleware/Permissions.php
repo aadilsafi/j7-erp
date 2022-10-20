@@ -12,7 +12,8 @@ class Permissions
     private $exceptNames = [
         'LaravelInstaller*',
         'LaravelUpdater*',
-        'debugbar*'
+        'debugbar*',
+        '*ajax-*',
     ];
 
     private $exceptControllers = [
@@ -35,7 +36,6 @@ class Permissions
     public function handle(Request $request, Closure $next)
     {
         $permission = $request->route()->getName();
-
         if ($this->match($request->route()) && auth()->user()->canNot($permission)) {
             if ($permission != 'dashboard') {
                 throw new UnauthorizedException(403, 'User does not have the permission to use ' . $permission);

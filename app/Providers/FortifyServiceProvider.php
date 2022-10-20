@@ -21,7 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Fortify::ignoreRoutes();
     }
 
     /**
@@ -31,14 +31,10 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        Fortify::ignoreRoutes();
-
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
-
 
         RateLimiter::for('login', function (Request $request) {
             $email = (string) $request->email;

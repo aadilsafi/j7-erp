@@ -2,15 +2,17 @@
 
 namespace App\DataTables;
 
+use Illuminate\Support\Str;
 use App\Models\AdditionalCost;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdditionalCostsDataTable extends DataTable
 {
@@ -33,6 +35,15 @@ class AdditionalCostsDataTable extends DataTable
             })
             ->editColumn('applicable_on_unit', function ($additionalCost) {
                 return editBooleanColumn($additionalCost->applicable_on_unit);
+            })
+            ->editColumn('site_percentage', function ($additionalCost) {
+                return $additionalCost->site_percentage > 0 ? $additionalCost->site_percentage . '%' : '-';
+            })
+            ->editColumn('floor_percentage', function ($additionalCost) {
+                return $additionalCost->floor_percentage > 0 ? $additionalCost->floor_percentage . '%' : '-';
+            })
+            ->editColumn('unit_percentage', function ($additionalCost) {
+                return $additionalCost->unit_percentage > 0 ? $additionalCost->unit_percentage . '%' : '-';
             })
             ->editColumn('parent_id', function ($additionalCost) {
                 return Str::of(getAdditionalCostByParentId($additionalCost->parent_id))->ucfirst();
@@ -66,6 +77,8 @@ class AdditionalCostsDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
+        $createPermission =  Auth::user()->hasPermissionTo('sites.additional-costs.create');
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return $this->builder()
             ->setTableId('additional-costs-table')
             ->columns($this->getColumns())
@@ -78,27 +91,50 @@ class AdditionalCostsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary')
+                (
+                    $createPermission ?
+                        Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ])
+                    :
+                    Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
                     ->text('<i class="bi bi-plus"></i> Add New')
                     ->attr([
                         'onclick' => 'addNew()',
-                    ]),
-                Button::make('export')->addClass('btn btn-relief-outline-secondary dropdown-toggle')->buttons([
+                    ])
+
+                ),
+
+                Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),
                     Button::make('csv')->addClass('dropdown-item'),
                     Button::make('excel')->addClass('dropdown-item'),
                     Button::make('pdf')->addClass('dropdown-item'),
                 ]),
-                Button::make('reset')->addClass('btn btn-relief-outline-danger'),
-                Button::make('reload')->addClass('btn btn-relief-outline-primary'),
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ]),
+                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+                (
+                    $selectedDeletePermission ?
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                    :
+                        Button::raw('delete-selected')
+                        ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                        ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                        ->attr([
+                            'onclick' => 'deleteSelected()',
+                        ])
+                ),
+
 
             )
             ->rowGroupDataSrc('parent_id')
@@ -112,10 +148,10 @@ class AdditionalCostsDataTable extends DataTable
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
                         var additionalCost = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' + additionalCost.id + '\" name=\"chkAdditionalCost[]\" id=\"chkAdditionalCost_' + additionalCost.id + '\" /><label class=\"form-check-label\" for=\"chkAdditionalCost_' + additionalCost.id + '\"></label></div>';
+                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + additionalCost.id + '\" name=\"chkAdditionalCost[]\" id=\"chkAdditionalCost_' + additionalCost.id + '\" /><label class=\"form-check-label\" for=\"chkAdditionalCost_' + additionalCost.id + '\"></label></div>';
                     }",
                     'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
             ])
@@ -132,9 +168,15 @@ class AdditionalCostsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
+        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('name')->title('Additional Cost'),
+            (
+                $selectedDeletePermission ?
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)
+                :
+                    Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            ),
+            Column::make('name')->title('Additional Cost')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
             Column::make('has_child'),
             Column::make('applicable_on_site')->addClass('text-center'),
@@ -143,7 +185,7 @@ class AdditionalCostsDataTable extends DataTable
             Column::make('floor_percentage')->title('Floor (%)')->addClass('text-center'),
             Column::make('applicable_on_unit')->addClass('text-center'),
             Column::make('unit_percentage')->title('Unit (%)')->addClass('text-center'),
-            Column::make('created_at'),
+            Column::make('created_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(100)->addClass('text-center'),
         ];
     }
@@ -156,5 +198,16 @@ class AdditionalCostsDataTable extends DataTable
     protected function filename(): string
     {
         return 'AdditionalCost_' . date('YmdHis');
+    }
+
+    /**
+     * Export PDF using DOMPDF
+     * @return mixed
+     */
+    public function pdf()
+    {
+        $data = $this->getDataForPrint();
+        $pdf = Pdf::loadView($this->printPreview, ['data' => $data])->setOption(['defaultFont' => 'sans-serif']);
+        return $pdf->download($this->filename() . '.pdf');
     }
 }

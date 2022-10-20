@@ -4,7 +4,7 @@
     <div class="auth-wrapper auth-cover">
         <div class="auth-inner row m-0">
             <!-- Brand logo--><a class="brand-logo" href="{{ route('login.view') }}">
-                <svg viewBox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                {{-- <svg viewBox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink" height="28">
                     <defs>
                         <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%"
@@ -39,7 +39,7 @@
                             </g>
                         </g>
                     </g>
-                </svg>
+                </svg> --}}
                 <h2 class="brand-text text-primary ms-1">{{ env('APP_NAME') }}</h2>
             </a>
             <!-- /Brand logo-->
@@ -68,9 +68,9 @@
                         <div class="mb-1">
                             <div class="d-flex justify-content-between">
                                 <label class="form-label" for="login-password">Password</label>
-                                <a href="auth-forgot-password-cover.html"><small>
+                                {{-- <a href="auth-forgot-password-cover.html"><small>
                                         Forgot Password?</small>
-                                </a>
+                                </a> --}}
                             </div>
                             <div class="input-group input-group-merge form-password-toggle">
                                 <input class="form-control form-control-lg form-control-merge" id="login-password"
@@ -91,12 +91,12 @@
                         </div>
                         <button class="btn btn-primary w-100" tabindex="4">Sign in</button>
                     </form>
-                    <p class="text-center mt-2">
+                    {{-- <p class="text-center mt-2">
                         <span>New on our platform?</span>
                         <a href="auth-register-cover.html">
                             <span>&nbsp;Create an account</span>
                         </a>
-                    </p>
+                    </p> --}}
                     {{-- <div class="divider my-2">
                         <div class="divider-text">or</div>
                     </div>

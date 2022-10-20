@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\units;
 
-use App\Models\Floor;
+use App\Models\Unit;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class updateRequest extends FormRequest
 {
@@ -24,7 +25,21 @@ class updateRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = (new Floor())->rules;
+        $rules = (new Unit())->rules;
+        $rules['unit_number'] = [
+            'required', 'numeric', 'between:1,' . $this->unit_number_digits, Rule::unique('units')->where('floor_id', decryptParams($this->floor_id))->ignore(decryptParams($this->id))
+        ];
+        // dd($rules);
         return $rules;
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return (new Unit())->ruleMessages;
     }
 }

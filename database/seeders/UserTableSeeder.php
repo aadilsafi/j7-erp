@@ -18,25 +18,43 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $user = (new User())->create([
-            'name' => 'Admin',
+            'name' => 'Syed Aizaz Haider Shah',
             'email' => 'admin@erp.com',
+            'phone_no' => '03100177771',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
+            'site_id' => 1,
         ]);
-        $user->assignRole([1,3]);
+        $user->assignRole([1]);
 
         $user = (new User())->create([
             'name' => 'Admin1',
             'email' => 'admin1@erp.com',
+            'phone_no' => '03100177771',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
+            'site_id' => 1,
         ]);
-        $user->assignRole([1,3]);
+        $user->assignRole([1]);
+
+        $user = (new User())->create([
+            'name' => 'Gm Sales',
+            'email' => 'gmsales@erp.com',
+            'phone_no' => '03100177771',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'created_at' => now(),
+            'updated_at' => now(),
+            'site_id' => 1,
+        ]);
+
+        $user->assignRole([2]);
     }
 }

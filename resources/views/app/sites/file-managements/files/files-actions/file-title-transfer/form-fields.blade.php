@@ -230,7 +230,7 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
+                        <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
                             name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
                             placeholder="NTN"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}" />

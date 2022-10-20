@@ -212,8 +212,9 @@
                             $('#stackholder_cnic').val(stakeholderData.cnic).attr('readonly', (stakeholderData.cnic.length > 0));
                             $('#stackholder_contact').val(stakeholderData.contact).attr('readonly', (stakeholderData.contact.length > 0));
                             $('#stackholder_address').text(stakeholderData.address).attr('readonly', (stakeholderData.address.length > 0));
-                            $('#stackholder_comments').text(stakeholderData.comments).attr('readonly', (stakeholderData.comments.length > 0));
                             $('#stackholder_ntn').val(stakeholderData.ntn).attr('readonly', (stakeholderData.ntn.length > 0));
+                            hideBlockUI('#stakeholders_card');
+                            $('#stackholder_comments').text(stakeholderData.comments).attr('readonly', (stakeholderData.comments.length > 0));
 
 
                             let stakeholderType = '';
@@ -232,7 +233,7 @@
                             div_stakeholder_type.html(stakeholderType);
                             div_stakeholder_type.show();
                         }
-                        hideBlockUI('#stakeholders_card');
+
                     },
                     error: function(errors) {
                         console.error(errors);

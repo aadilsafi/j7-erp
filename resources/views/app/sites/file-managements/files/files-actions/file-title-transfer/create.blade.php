@@ -213,7 +213,7 @@
                             $('#stackholder_contact').val(stakeholderData.contact).attr('readonly', (stakeholderData.contact.length > 0));
                             $('#stackholder_address').text(stakeholderData.address).attr('readonly', (stakeholderData.address.length > 0));
                             $('#stackholder_ntn').val(stakeholderData.ntn).attr('readonly', (stakeholderData.ntn.length > 0));
-                            $('#stackholder_comments').text(stakeholderData.comments).attr('readonly', (stakeholderData.comments.length > 0));
+                            $('#stackholder_comments').text(stakeholderData.comments).attr('readonly');
 
 
                             let stakeholderType = '';

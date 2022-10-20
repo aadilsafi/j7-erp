@@ -539,7 +539,7 @@
                                         <tbody id="dynamic_installment_rows">
                                             @foreach ($salesPlan->installments as $intsallment)
                                                 <tr class="text-center text-nowrap">
-                                                    <td>{{ $loop->index }}</td>
+                                                    <td>{{ $intsallment->installment_order }}</td>
                                                     <td>{{ $intsallment->details }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                     </td>

@@ -14,7 +14,7 @@ class LeadSourceTableSeeder extends Seeder
      */
     public function run()
     {
-        (new LeadSource())->insert([
+        $data = [
             [
                 'site_id' => 1,
                 'name' => 'Dealer',
@@ -45,6 +45,10 @@ class LeadSourceTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new LeadSource())->create($item);
+        }
     }
 }

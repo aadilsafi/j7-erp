@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\ModelTemplate;
 use Illuminate\Database\Seeder;
-use App\Models\Template;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ModelTemplateSeeder extends Seeder
@@ -17,7 +16,7 @@ class ModelTemplateSeeder extends Seeder
     public function run()
     {
         //
-        (new ModelTemplate())->insert([
+        $data = [
             [
                 'model_type' => 'App\Models\FileCanecllation',
                 'template_id' => 2,
@@ -82,6 +81,10 @@ class ModelTemplateSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new ModelTemplate())->create($item);
+        }
     }
 }

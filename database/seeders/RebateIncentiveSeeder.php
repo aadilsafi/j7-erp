@@ -16,8 +16,7 @@ class RebateIncentiveSeeder extends Seeder
     public function run()
     {
         //
-        (new RebateIncentiveModel())->insert([
-            [
+        (new RebateIncentiveModel())->create([
                 'site_id' => 1,
                 'unit_id' => 1 ,
                 'stakeholder_id' => 1,
@@ -30,7 +29,6 @@ class RebateIncentiveSeeder extends Seeder
                 'comments' => 'xyz',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ]);
     }
 }

@@ -14,7 +14,7 @@ class ReceiptsTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Receipt())->insert([
+        $data = [
             [
                 'site_id' => 1,
                 'unit_id' => 1,
@@ -126,6 +126,10 @@ class ReceiptsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new Receipt())->create($item);
+        }
     }
 }

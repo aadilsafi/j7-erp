@@ -3,7 +3,7 @@
         @can('sites.file-managements.file-cancellation.approve')
             @php
                 $checkFileCancellation = DB::table('file_canecllations')
-                ->where('id', $file_cancellation_id)
+                ->where('file_id', $file_id)
                 ->first();
             @endphp
             @if (isset($checkFileCancellation) && $file_refund_status == 0)
@@ -15,5 +15,6 @@
                  -
             @endif
         @endcan
+
     @endif
 </div>

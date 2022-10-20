@@ -20,6 +20,7 @@ use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 use App\Services\CustomFields\CustomFieldInterface;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class FileRefundController extends Controller
 {
@@ -177,10 +178,10 @@ class FileRefundController extends Controller
         //
     }
 
-    public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_refund = FileRefund::find(decryptParams($file_refund_id));
+        $file_refund = FileRefund::where('file_id',decryptParams($file_id))->first();
         $file_refund->status = 1;
         $file_refund->update();
 
@@ -188,7 +189,7 @@ class FileRefundController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file = FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 2;
         $file->update();
 

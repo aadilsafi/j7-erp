@@ -176,10 +176,10 @@ class FileBuyBackController extends Controller
         //
     }
 
-    public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_buy_back = FileBuyBack::find(decryptParams($file_refund_id));
+        $file_buy_back = FileBuyBack::where('file_id',decryptParams($file_id))->first();
         $file_buy_back->status = 1;
         $file_buy_back->update();
 
@@ -187,7 +187,7 @@ class FileBuyBackController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file =  FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 3;
         $file->update();
 

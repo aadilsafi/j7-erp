@@ -171,10 +171,10 @@ class FileCancellationController extends Controller
         //
     }
 
-    public function ApproveFileCancellation($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileCancellation($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_cancellation = FileCanecllation::find(decryptParams($file_refund_id));
+        $file_cancellation = FileCanecllation::where('file_id',decryptParams($file_id))->first();;
         $file_cancellation->status = 1;
         $file_cancellation->update();
 
@@ -182,7 +182,7 @@ class FileCancellationController extends Controller
         $unit->status_id = 4;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file = FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 4;
         $file->update();
 

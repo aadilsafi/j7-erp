@@ -7,7 +7,7 @@
                     ->first();
             @endphp
             @if (isset($checkFileRefund) && $file_refund_status == 0)
-                <a onclick="ApproveModal('{{ encryptParams($site_id) }}','{{ encryptParams($customer_id) }}','{{ encryptParams($unit_id) }}','{{ encryptParams($checkFileRefund->id) }}')"
+                <a onclick="ApproveModal('{{ encryptParams($site_id) }}','{{ encryptParams($customer_id) }}','{{ encryptParams($unit_id) }}','{{ encryptParams( $file_id) }}')"
                     class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center"
                     style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top" title="Approve request" href="#">
                     Approve Request

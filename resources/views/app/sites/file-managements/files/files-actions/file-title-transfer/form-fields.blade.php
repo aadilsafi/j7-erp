@@ -443,7 +443,7 @@
 
                                                 @foreach ($imstallments as $intsallment)
                                                     <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
+                                                        <td>{{ $loop->index }}</td>
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>

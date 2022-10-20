@@ -16,7 +16,7 @@ class FileActionSeeder extends Seeder
     public function run()
     {
         //
-        (new FileAction())->insert([
+        $data = [
             [
                 'site_id' => 1,
                 'name' => 'Active',
@@ -49,6 +49,10 @@ class FileActionSeeder extends Seeder
                 'site_id' => 1,
                 'name' => 'File Unit Shifted',
             ],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new FileAction())->create($item);
+        }
     }
 }

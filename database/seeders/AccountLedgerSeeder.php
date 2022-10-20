@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Country;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class CountryTableSeeder extends Seeder
+class AccountLedgerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,6 @@ class CountryTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Country())->create([
-            'name' => 'Pakistan'
-        ]);
+        //
     }
 }

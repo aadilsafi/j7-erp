@@ -183,13 +183,14 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
+        let offlineErrorMessage = 'You are offline. Please check your internet connection.';
         window.addEventListener('online', () => hideBlockUI());
-        window.addEventListener('offline', () => showBlockUI(null, 'You are offline. Please check internet connection!'));
+        window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
 
         if (navigator.onLine) {
             hideBlockUI()
         } else {
-            showBlockUI(null, 'You are offline. Please check internet connection!');
+            showBlockUI(null, offlineErrorMessage);
         }
 
         // showBlockUI();

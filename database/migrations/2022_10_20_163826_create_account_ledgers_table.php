@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->string('account_head_code', 20);
-            $table->float('credit')->default(0);
-            $table->float('debit')->default(0);
-            $table->float('balance')->default(0);
+            $table->double('credit')->default(0);
+            $table->double('debit')->default(0);
+            $table->double('balance')->default(0);
             $table->string('nature_of_account', 3);
             $table->boolean('status')->default(true);
             $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();

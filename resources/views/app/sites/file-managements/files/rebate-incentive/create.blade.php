@@ -120,7 +120,7 @@
 
                         if (response.additionalCosts.length > 0) {
                             for (let i = 0; i < response.additionalCosts.length; i++) {
-                                $('#floor').after('<th class="text-nowrap newAddition">' + response
+                                $('#faceCharges').before('<th class="text-nowrap newAddition">' + response
                                     .additionalCosts[i].name + '</th>');
                                 $('#faceChargesPercentage').before(
                                 '<th class="text-nowrap newAddition">%</th>');

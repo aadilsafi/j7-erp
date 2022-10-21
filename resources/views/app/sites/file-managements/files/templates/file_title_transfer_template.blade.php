@@ -32,27 +32,28 @@
 
 <body>
 
-    <div id="printable" class="bg-light m-1">
+    <div id="printable" class="bg-light mx-1">
         <table style="width:100%; margin-bottom:5px;" class="template">
             <tr>
                 <th style="width:33%; text-align:start;">
                     <br>
-                    <img height="50px" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png" alt="logo">
+                    <img height="30px" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png"
+                        alt="logo">
                 </th>
                 <th style="width:48%; ">
                 </th>
                 <th style="width:33%; text-align:start;">
                     <br>
-                    <img height="50px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
+                    <img height="30px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
                 </th>
             </tr>
         </table>
 
-        <div class="row mt-3">
+        <div class="row mt-1">
             <h2 class="text-center">File Title Transfer Form</h2>
 
             <table class="mt-1">
-                <tr height="30px">
+                <tr height="15px">
                     <td width="60%">
                         <b>Refund Data</b>
                     </td>
@@ -62,19 +63,19 @@
                                 <strong>Payment Due Date</strong>
                             </div>
                             <div class="col">
-                                22-Aug-2022
+                                {{ $transfer_file->payment_due_date }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="15px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-4">
                                 <strong>Transfer Charges</strong>
                             </div>
                             <div class="col">
-                                120
+                                {{ number_format($transfer_file->transfer_rate) }}
                             </div>
                         </div>
                     </td>
@@ -84,19 +85,19 @@
                                 <strong>Amount To Be Paid</strong>
                             </div>
                             <div class="col">
-                                6,968,852
+                                {{ number_format($transfer_file->amount_to_be_paid) }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="15px">
                     <td width="40%">
                         <div class="row">
                             <div class="col-4">
                                 <strong>Paid Amount</strong>
                             </div>
                             <div class="col">
-                                6,968,975
+                                {{ number_format($total_paid_amount) }}
                             </div>
                         </div>
                     </td>
@@ -107,29 +108,7 @@
                                 <strong>Amount Remarks</strong>
                             </div>
                             <div class="col">
-                                ok
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr height="30px">
-                    <td width="60%">
-                        <div class="row">
-                            <div class="col-4">
-                                <strong>Unit Area</strong>
-                            </div>
-                            <div class="col">
-                                523
-                            </div>
-                        </div>
-                    </td>
-                    <td width="40%">
-                        <div class="row">
-                            <div class="col-7">
-
-                            </div>
-                            <div class="col">
-
+                                {{ $transfer_file->amount_remarks }}
                             </div>
                         </div>
                     </td>
@@ -137,75 +116,74 @@
             </table>
 
 
-            <table class="mt-1">
-                <tr height="30px">
-                    <td colspan="2">
+            <table class="mt-1 text-nowrap">
+                <tr height="15px">
+                    <td colspan="3">
                         <b>Unit Information </b>
                     </td>
 
                 </tr>
-                <tr height="30px">
-                    <td width="60%">
+                <tr height="15px">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <strong>Unit No:</strong>
                             </div>
                             <div class="col">
-                                GF-01
+                                {{ $unit->floor_unit_number }}
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-4">
                                 <strong>Unit Name:</strong>
                             </div>
                             <div class="col">
-                                Unit 1
+                                {{ $unit->name }}
                             </div>
                         </div>
                     </td>
-                </tr>
-                <tr height="30px">
-                    <td width="60%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <strong>Unit Type</strong>
                             </div>
                             <div class="col">
-                                Executive Suits
-                            </div>
-                        </div>
-                    </td>
-                    <td width="40%">
-                        <div class="row">
-                            <div class="col">
-                                <strong>Gross Area</strong>
-                            </div>
-                            <div class="col">
-                                523
+                                {{ $unitType }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
-                    <td width="60%">
+
+                <tr height="15px">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
-                                <strong>Price Per Sqft</strong>
+                            <div class="col-4">
+                                <strong>Gross Area</strong>
                             </div>
                             <div class="col">
-                                Executive Suits
+                                {{ number_format($unit->gross_area) }}
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                    <td width="33%">
                         <div class="row">
+                            <div class="col-4">
+                                <strong>Price Per Sqft</strong>
+                            </div>
                             <div class="col">
+                                {{ number_format($salesPlan->unit_price) }}
+                            </div>
+                        </div>
+                    </td>
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
                                 <strong>Total Price</strong>
                             </div>
                             <div class="col">
-                                13,598,000
+                                {{ number_format($salesPlan->total_price) }}
                             </div>
                         </div>
                     </td>
@@ -213,98 +191,177 @@
             </table>
 
             <table class="mt-1">
-                <tr height="30px">
+                <tr height="15px">
                     <td width="60%">
-                        <b>Customer Information </b>
+                        <b>Owner Information </b>
                     </td>
-
                 </tr>
             </table>
 
-            <table>
-                <tr height="30px">
-                    <td width="60%">
+            <table class="text-nowrap">
+                <tr height="15px">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <strong>Name:</strong>
                             </div>
                             <div class="col">
-                                Zain Ali
+                                {{ $customer->full_name }}
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-4">
                                 <strong>Father Name</strong>
                             </div>
                             <div class="col">
-                                Hassan Raza
+                                {{ $customer->father_name }}
                             </div>
                         </div>
                     </td>
-                </tr>
-            </table>
-
-            <table>
-                <tr height="30px">
-                    <td width="60%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <strong>Designation</strong>
                             </div>
                             <div class="col">
-                                Engineer
+                                {{ $customer->designation }}
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                </tr>
+
+                <tr height="15px">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-4">
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                13302-0516802-7
+                                {{ cnicFormat($customer->cnic) }}
                             </div>
                         </div>
                     </td>
-                </tr>
-            </table>
-
-            <table>
-                <tr height="30px">
-                    <td width="60%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-4">
                                 <strong>NTN</strong>
                             </div>
                             <div class="col">
-                                123456789012
+                                {{ $customer->ntn }}
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                    <td width="33%">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-4">
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                0512226044
+                                {{ $customer->contact }}
                             </div>
                         </div>
                     </td>
                 </tr>
-            </table>
 
-            <table>
-                <tr height="40px">
-                    <td colspan="2">
+                <tr height="15px">
+                    <td colspan="3">
                         <div class="row">
                             <div class="col-2">
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                House No.380, Street No.114, Sector D-12/2, Islamabad.
+                                {{ $customer->address }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="mt-1">
+                <tr height="15px">
+                    <td width="60%">
+                        <b>Transfer Customer Information </b>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="text-nowrap">
+                <tr height="15px">
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>Name:</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->full_name }}
+                            </div>
+                        </div>
+                    </td>
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>Father Name</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->father_name }}
+                            </div>
+                        </div>
+                    </td>
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>Designation</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->designation }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr height="15px">
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>CNIC:</strong>
+                            </div>
+                            <div class="col">
+                                {{ cnicFormat($titleTransferPerson->cnic) }}
+                            </div>
+                        </div>
+                    </td>
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong>NTN</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->ntn }}
+                            </div>
+                        </div>
+                    </td>
+                    <td width="33%">
+                        <div class="row">
+                            <div class="col-4">
+                                <strong> Contact</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->contact }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr height="15px">
+                    <td colspan="3">
+                        <div class="row">
+                            <div class="col-2">
+                                <strong> Address:</strong>
+                            </div>
+                            <div class="col">
+                                {{ $titleTransferPerson->address }}
                             </div>
                         </div>
                     </td>
@@ -314,9 +371,8 @@
             <div class="m-1 text-center">
                 <h3>Installments Details</h3>
             </div>
-
             <table>
-                <tr height="70px" class="text-center">
+                <tr height="15px" class="text-center">
                     <th style="border: 1px solid black;">
                         Sr.
                     </th>
@@ -340,78 +396,18 @@
                     </th>
                 </tr>
 
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
+                @foreach ($salesPlan->installments as $installment)
+                    <tr class="text-center">
+                        <td>{{ $installment->installment_order }}</td>
+                        <td class="text-capitalize">{{ $installment->type }}</td>
+                        <td>{{ $installment->date }}</td>
+                        <td>{{ number_format($installment->amount) }}</td>
+                        <td>{{ number_format($installment->paid_amount) }}</td>
+                        <td>{{ number_format($installment->remaining_amount) }}</td>
+                        <td class="text-capitalize">{{ $installment->status }}</td>
+                    </tr>
+                @endforeach
+
             </table>
 
             <div class="row mt-3">
@@ -453,7 +449,7 @@
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.print.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             $("#printable").printThis({
                 debug: false, // show the iframe for debugging
@@ -479,7 +475,7 @@
                 afterPrint: null // function called before iframe is removed
             });
 
-            $("#print").click(function () { });
+            $("#print").click(function() {});
         });
     </script>
 </body>

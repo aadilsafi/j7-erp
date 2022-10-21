@@ -127,7 +127,7 @@
                                 $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
                                     response.additionalCosts[i].unit_percentage + '%</td>');
                                 let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
-                                    response.salesPlan.unit_price;
+                                    (response.salesPlan.unit_price * response.unit.gross_area);
                                 $('#td_unit_facing_charges_value').before(
                                     '<td class="text-nowrap newAddition">' + facing_value.toLocaleString() +
                                     '</td>');

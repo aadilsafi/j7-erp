@@ -100,4 +100,9 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->hasMany(StakeholderType::class)->where('type','D')->where('status',1);
     }
+
+    public function stakeholderAsCustomer()
+    {
+        return $this->hasMany(StakeholderType::class)->where('type','C');
+    }
 }

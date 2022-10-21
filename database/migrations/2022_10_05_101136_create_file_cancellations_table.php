@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('file_canecllations', function (Blueprint $table) {
+        Schema::create('file_cancellations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->foreignId('file_id')->constrained('file_management');

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                        width: calc(20% - 0.5em);
-                    } */
+                            width: calc(20% - 0.5em);
+                        } */
     </style>
 @endsection
 
@@ -69,8 +69,7 @@
                     'un_paid_instalments' => $un_paid_instalments,
                     'partially_paid_instalments' => $partially_paid_instalments,
                     'salesPlan' => $salesPlan,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 
@@ -81,8 +80,8 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" name="checkAttachment" class="form-check-input" value="1"
-                                    id="colorCheck3">
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input"
+                                    value="1" id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
                                     Attachment Attached
                                 </label>

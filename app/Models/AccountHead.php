@@ -2,33 +2,31 @@
 
 namespace App\Models;
 
-use App\Models\Stakeholder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class StakeholderType extends Model
+class AccountHead extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, SoftDeletes, LogsActivity;
+
+    protected $primaryKey = 'code';
 
     protected $fillable = [
-        'stakeholder_id',
-        'type',
-        'stakeholder_code',
-        'status',
-        'receivable_account',
-        'payable_account',
+        'site_id',
+        'code',
+        'name',
+        'level',
+    ];
+
+    protected $cast = [
+        'level' => 'integer',
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
-    }
-
-    public function stakeholder()
-    {
-        return $this->belongsTo(Stakeholder::class);
     }
 }

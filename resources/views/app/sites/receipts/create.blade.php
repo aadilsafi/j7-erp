@@ -65,8 +65,8 @@
         }
 
         /* .filepond--item {
-                                                    width: calc(20% - 0.5em);
-                                                } */
+                                                            width: calc(20% - 0.5em);
+                                                        } */
     </style>
 @endsection
 
@@ -93,8 +93,7 @@
                 {{ view('app.sites.receipts.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
             </div>
             @isset($draft_receipts)
@@ -118,7 +117,7 @@
 
                         <div class="d-block mb-1">
                             <label class="form-label" style="font-size: 15px" for="floor">
-                                <h6 style="font-size: 15px"> Amount Received</h6>
+                                Amount Received <span class="text-danger">*</span>
                             </label>
                             <input min="0" type="number"
                                 class="form-control  @error('amount_in_numbers') is-invalid @enderror"

@@ -12,7 +12,8 @@
                 <div class="row mb-1">
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges</label>
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges <span
+                                class="text-danger">*</span></label>
                         <input type="text" min="1" onchange="calculateRefundedAmount()" required
                             name="cancellation_charges" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
@@ -21,7 +22,8 @@
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
+                        <label class="form-label fs-5" for="payment_due_date">Payment Due Date <span
+                                class="text-danger">*</span></label>
                         <input type="date" name="payment_due_date" class="form-control form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="payment_due_date"
                             placeholder="Payment Due Date"
@@ -30,7 +32,8 @@
 
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
+                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks <span
+                                class="text-danger">*</span></label>
                         <input type="text" name="amount_remarks" class="form-control form-control-lg" id="remarks"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
                             value="{{ isset($cancellation_file) ? $cancellation_file->amount_remarks : '' }}" />
@@ -325,20 +328,20 @@
     </div>
     @if (isset($customFields) && count($customFields) > 0)
 
-    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-            <div class="card-body">
+        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                <div class="card-body">
 
-                <div class="row mb-1 g-1">
-                    @forelse ($customFields as $field)
-                    {!! $field !!}
-                    @empty
-                    @endforelse
+                    <div class="row mb-1 g-1">
+                        @forelse ($customFields as $field)
+                            {!! $field !!}
+                        @empty
+                        @endforelse
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     @endif
     <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"

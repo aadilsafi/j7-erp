@@ -1,6 +1,6 @@
 <div class="row mb-1">
     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-        <label class="form-label fs-5" for="name">Full Name</label>
+        <label class="form-label fs-5" for="name">Full Name <span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
             name="name" placeholder="Name" value="{{ isset($user) ? $user->name : old('name') }}" />
         @error('name')
@@ -9,7 +9,7 @@
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-        <label class="form-label fs-5" for="type_name">Email</label>
+        <label class="form-label fs-5" for="type_name">Email <span class="text-danger">*</span></label>
         <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" id="email"
             name="email" placeholder="Email" autocomplete="false"
             value="{{ isset($user) ? $user->email : old('email') }}" />
@@ -19,7 +19,7 @@
     </div>
 
     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-        <label class="form-label fs-5" for="type_name">Phone Number</label>
+        <label class="form-label fs-5" for="type_name">Phone Number <span class="text-danger">*</span></label>
         <input type="number" class="form-control form-control-lg @error('phone_no') is-invalid @enderror"
             id="phone_no" name="phone_no" placeholder="03xxxxxxxxx"
             value="{{ isset($user) ? $user->phone_no : old('phone_no') }}" />
@@ -33,7 +33,7 @@
 <div class="row mb-1">
     @can('sites.users.edit.password')
         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-            <label class="form-label fs-5" for="type_name">Password</label>
+            <label class="form-label fs-5" for="type_name">Password <span class="text-danger">*</span></label>
 
             <input id="password" type="password"
                 class="form-control form-control-lg @error('password') is-invalid @enderror" name="password" id="password"
@@ -48,9 +48,10 @@
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-            <label for="password-confirm" class="form-label fs-5">Confirm Password</label>
+            <label for="password-confirm" class="form-label fs-5">Confirm Password <span
+                    class="text-danger">*</span></label>
             <input id="password-confirm" class="form-control form-control-lg" type="password" class="form-control"
-            placeholder="Confirm Password"  name="password_confirmation">
+                placeholder="Confirm Password" name="password_confirmation">
         </div>
     @endcan
 
@@ -60,7 +61,8 @@
 
 <div class="row mb-1">
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <label class="form-label fs-5" style="font-size: 15px" for="role_id">Role</label>
+        <label class="form-label fs-5" style="font-size: 15px" for="role_id">Role <span
+                class="text-danger">*</span></label>
         <select class="form-select form-select-lg" id="role_id" name="role_id[]" multiple="multiple"
             placeholder="Select Roles">
             <option disabled>Select Role</option>
@@ -78,11 +80,11 @@
 </div>
 
 @if (isset($customFields) && count($customFields) > 0)
-<hr>
-<div class="row mb-1 g-1">
-   @forelse ($customFields as $field)
-   {!! $field !!}
-   @empty
-   @endforelse
-</div>
+    <hr>
+    <div class="row mb-1 g-1">
+        @forelse ($customFields as $field)
+            {!! $field !!}
+        @empty
+        @endforelse
+    </div>
 @endif

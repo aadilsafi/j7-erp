@@ -10,7 +10,8 @@
             <div class="card-body">
                 <div class="row mb-1">
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="amount_to_be_refunded">Profit Charges</label>
+                        <label class="form-label fs-5" for="amount_to_be_refunded">Profit Charges <span
+                                class="text-danger">*</span></label>
                         <input type="text" min="1" onchange="calculateRefundedAmount()" required
                             name="amount_profit" class="form-control form-control-lg"
                             {{ isset($buy_back_file) ? 'disabled' : '' }} id="profit_charges"
@@ -18,14 +19,16 @@
                             value="{{ isset($buy_back_file) ? number_format($buy_back_file->amount_profit) : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="payment_due_date">Payment Due Date</label>
+                        <label class="form-label fs-5" for="payment_due_date">Payment Due Date <span
+                                class="text-danger">*</span></label>
                         <input type="date" required name="payment_due_date" class="form-control form-control-lg"
                             {{ isset($buy_back_file) ? 'disabled' : '' }} id="payment_due_date"
                             placeholder="Payment Due Date"
                             value="{{ isset($buy_back_file) ? $buy_back_file->payment_due_date : '' }}" />
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks</label>
+                        <label class="form-label fs-5" for="stackholder_father_name">Amount Remarks <span
+                                class="text-danger">*</span></label>
                         <input type="text" name="amount_remarks" required class="form-control form-control-lg"
                             id="remarks" {{ isset($buy_back_file) ? 'disabled' : '' }} placeholder="Amount Remarks"
                             value="{{ isset($buy_back_file) ? $buy_back_file->amount_remarks : '' }}" />
@@ -315,20 +318,20 @@
 
     @if (isset($customFields) && count($customFields) > 0)
 
-    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-            <div class="card-body">
+        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                <div class="card-body">
 
-                <div class="row mb-1 g-1">
-                    @forelse ($customFields as $field)
-                    {!! $field !!}
-                    @empty
-                    @endforelse
+                    <div class="row mb-1 g-1">
+                        @forelse ($customFields as $field)
+                            {!! $field !!}
+                        @empty
+                        @endforelse
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
     @endif
     <div id="comments" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"

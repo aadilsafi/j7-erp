@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\{
+    AccountLedger,
     AdditionalCost,
     Floor,
     SiteConfigration,
@@ -930,3 +931,21 @@ if (!function_exists('generateSlug')) {
         return $slug;
     }
 }
+
+if (!function_exists('makeFinancialTransaction')) {
+    function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
+    {
+        $data = [
+            'site_id' => $site_id,
+            'account_head_code' => $account_code,
+            'balance' => 0,
+            'nature_of_account' => $nature_of_account,
+            'status' => true,
+        ];
+
+        $data[$type] = $amount;
+
+        return (new AccountLedger())->create($data);
+    }
+}
+

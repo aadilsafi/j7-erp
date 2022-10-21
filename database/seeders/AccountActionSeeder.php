@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\FileAction;
+use App\Models\AccountAction;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class FileActionSeeder extends Seeder
+class AccountActionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,44 +15,46 @@ class FileActionSeeder extends Seeder
      */
     public function run()
     {
-        //
         $data = [
             [
                 'site_id' => 1,
-                'name' => 'Active',
+                'name' => 'Sales Plan Approval',
+                'slug' => 'sales-plan-approval',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Refunded',
+                'name' => 'Receipt Voucher',
+                'slug' => 'receipt-voucher',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Buy Backed',
+                'name' => 'Buyback',
+                'slug' => 'buyback',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Cancelled',
+                'name' => 'Payment Voucher',
+                'slug' => 'payment-voucher',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Resaled',
+                'name' => 'Refund',
+                'slug' => 'refund',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Title Transfered',
+                'name' => 'Cancellation',
+                'slug' => 'cancellation',
             ],
             [
                 'site_id' => 1,
-                'name' => 'File Adjusted',
-            ],
-            [
-                'site_id' => 1,
-                'name' => 'File Unit Shifted',
+                'name' => 'Title Transfer',
+                'slug' => 'title-transfer',
             ],
         ];
 
         foreach ($data as $item) {
-            (new FileAction())->create($item);
+            (new AccountAction())->create($item);
         }
     }
 }

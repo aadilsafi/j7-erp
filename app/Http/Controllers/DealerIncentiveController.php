@@ -78,7 +78,7 @@ class DealerIncentiveController extends Controller
      */
     public function store(Request $request, $site_id)
     {
-       
+
         try {
 
             if (!request()->ajax()) {
@@ -147,11 +147,14 @@ class DealerIncentiveController extends Controller
         $already_incentive_paid_to_units = [];
         foreach($dealer_incentives as $dealer_incentives)
         {
-            $already_incentive_paid_to_units = json_decode($dealer_incentives->unit_IDs);
+            foreach(json_decode($dealer_incentives->unit_IDs) as $uids){
+                $already_incentive_paid_to_units[] = $uids;
+
+            }
         }
-     
+    
         foreach ($rebate_incentives as $Units) {
-           
+
             if (in_array($Units->unit_id, $already_incentive_paid_to_units)) {
                 
                 continue;

@@ -32,6 +32,7 @@ class Unit extends Model
         'facing_id',
         'type_id',
         'status_id',
+        'is_for_rebate',
         'active',
     ];
 
@@ -52,6 +53,8 @@ class Unit extends Model
         'type_id' => 'integer',
         'status_id' => 'integer',
         'active' => 'boolean',
+        'is_for_rebate' => 'boolean'
+
     ];
 
     public $rules = [

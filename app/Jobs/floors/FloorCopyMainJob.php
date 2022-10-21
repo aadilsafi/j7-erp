@@ -29,8 +29,8 @@ class FloorCopyMainJob implements ShouldQueue
      */
     public function __construct($site_id, $user_id, $inputs, $isFloorActive)
     {
-        $this->site_id = decryptParams($site_id);
-        $this->user_id = decryptParams($user_id);
+        $this->site_id = $site_id;
+        $this->user_id = $user_id;
         $this->inputs = $inputs;
         $this->isFloorActive = $isFloorActive;
     }
@@ -48,8 +48,6 @@ class FloorCopyMainJob implements ShouldQueue
             'active' => true,
         ])->first();
 
-        $jobs = [];
-
         for ($i = $this->inputs['copy_floor_from']; $i <= $this->inputs['copy_floor_to']; $i++) {
             $data = [
                 'site_id' => $this->site_id,
@@ -62,16 +60,7 @@ class FloorCopyMainJob implements ShouldQueue
 
             $batch = Bus::batch([
                 new FloorCopyCreateJob($floor->id, $data),
-            ])->finally(function (Batch $batch) {
-
-                $data = [
-                    'title' => 'Job Done!',
-                    'message' => 'Unit Construction Completed',
-                    'description' => 'Unit Construction Completed',
-                    'url' => route('sites.floors.index', ['site_id' => $this->site_id]),
-                ];
-                Notification::send($this->site_id, new DefaultNotification($data));
-            })->dispatch();
+            ])->dispatch();
 
             (new UserBatch())->create([
                 'site_id' => $this->site_id,

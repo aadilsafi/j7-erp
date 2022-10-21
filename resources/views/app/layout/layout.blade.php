@@ -83,7 +83,7 @@
 <!-- BEGIN: Body-->
 
 <body class="vertical-layout vertical-menu-modern  navbar-floating footer-static  " data-open="click"
-    data-menu="vertical-menu-modern" data-col="">
+    data-menu="vertical-menu-modern" data-col="" style="overflow-y: scroll">
 
     @php
         $batches = getbatchesByUserID(encryptParams(auth()->user()->id));
@@ -183,15 +183,18 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
-        let offlineErrorMessage = 'You are offline. Please check your internet connection.';
-        window.addEventListener('online', () => hideBlockUI());
-        window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
+        if ({{ App::environment('production') ? 'true' : 'false' }}) {
+            let offlineErrorMessage = 'You are offline. Please check your internet connection.';
+            window.addEventListener('online', () => hideBlockUI());
+            window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
 
-        if (navigator.onLine) {
-            hideBlockUI()
-        } else {
-            showBlockUI(null, offlineErrorMessage);
+            if (navigator.onLine) {
+                hideBlockUI()
+            } else {
+                showBlockUI(null, offlineErrorMessage);
+            }
         }
+
 
         // showBlockUI();
         $("#unreadNotification").on('click', function() {

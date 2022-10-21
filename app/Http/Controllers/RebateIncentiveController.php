@@ -12,6 +12,7 @@ use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
+use App\Models\SalesPlan;
 
 class RebateIncentiveController extends Controller
 {
@@ -175,7 +176,9 @@ class RebateIncentiveController extends Controller
         $unit = Unit::find($request->unit_id);
         $stakeholder = $unit->salesPlan[0]['stakeholder'];
         $leadSource = $unit->salesPlan[0]['leadSource'];
-        $salesPlan = $unit->salesPlan[0];
+        $salesPlan = SalesPlan::find($unit->salesPlan[0]['id']);
+        $additionalCosts = $salesPlan->additionalCosts;
+
         $floor = $unit->floor->short_label;
 
         return response()->json([
@@ -187,6 +190,7 @@ class RebateIncentiveController extends Controller
             'salesPlan' => $salesPlan,
             'floor' => $floor,
             'facing' => $unit->facing,
+            'additionalCosts' => $additionalCosts,
             // 'corner' => $unit->corner,
         ], 200);
     }

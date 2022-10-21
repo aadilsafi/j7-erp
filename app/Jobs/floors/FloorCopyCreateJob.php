@@ -45,29 +45,28 @@ class FloorCopyCreateJob implements ShouldQueue
         $floorUnits = (new Unit())->where([
             'floor_id' => $this->prevFloorId,
             'active' => true,
-            'parent_id' => 0
+            'has_sub_units' => false,
         ])->get();
 
         $prevFloor = (new Floor())->with(['site', 'site.siteConfiguration'])->find($this->prevFloorId);
 
         $floorUnits = collect($floorUnits)->map(function ($unit, $key) use ($newFloor, $prevFloor) {
-
             unset($unit->id);
             $unit->floor_id = $newFloor->id;
-            $unit->floor_unit_number = strtoupper($newFloor->short_label) . Str::padLeft($unit->unit_number, $prevFloor->site->siteConfiguration->unit_number_digits, '0');
+            $unit->name = 'Unit ' . $unit->unit_number;
+            $unit->floor_unit_number = strtoupper($newFloor->short_label) . '-' . Str::padLeft($unit->unit_number, $prevFloor->site->siteConfiguration->unit_number_digits, '0');
             $unit->status_id = 1;
             $unit->active = false;
+            $unit->has_sub_units = false;
+            $unit->is_for_rebate = false;
             $unit->created_at = now();
             $unit->updated_at = now();
 
             return $unit;
-        })->chunk(10);
+        });
 
-        $jobs = [];
         foreach ($floorUnits->toArray() as $key => $units) {
-            $jobs[] = new CreateUnitJob($units);
+            $this->batch()->add(new CreateUnitJob($units));
         }
-
-        $this->batch()->add($jobs);
     }
 }

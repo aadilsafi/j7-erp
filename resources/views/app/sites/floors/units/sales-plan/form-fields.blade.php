@@ -199,7 +199,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <p class="m-0 fw-bolder d-block mb-1">How Many (<span id="how_many">Quaters</span>)?</p>
+                        <p class="m-0 fw-bolder d-block mb-1">How Many (<span id="how_many">Quarters</span>)?</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="input-group input-group-lg ">
                                 <input type="number" min="0" class="touchspin-icon" name="installments[types][value]"
@@ -485,7 +485,7 @@
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
 
     <div class="card-body">
-    
+
         <div class="row mb-1 g-1">
             @forelse ($customFields as $field)
             {!! $field !!}

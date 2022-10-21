@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                    width: calc(20% - 0.5em);
-                                                } */
+                                                                width: calc(20% - 0.5em);
+                                                            } */
     </style>
 @endsection
 
@@ -116,7 +116,7 @@
 @section('custom-js')
 
     <script type="text/javascript">
-    var editImage = "";
+        var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
 
         FilePond.registerPlugin(
@@ -166,16 +166,19 @@
                 dropdownParent: e.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
-            }).change(function(){
-                if($(this).val() == 0){
+            }).change(function() {
+                if ($(this).val() == 0) {
                     $('#stakeholder_name').attr("readonly", true).val('');
                 } else {
                     $('#stakeholder_name').removeAttr("readonly");
                 }
             });
 
+            var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
+
             $(".contact-persons-list").repeater({
-                // initEmpty: true,
+
+                initEmpty: areStakeholderContactsExist,
                 show: function() {
                     $(this).slideDown(), feather && feather.replace({
                         width: 14,

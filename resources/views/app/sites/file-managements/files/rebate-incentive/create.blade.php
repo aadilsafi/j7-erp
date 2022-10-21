@@ -51,8 +51,7 @@
                     'units' => $units,
                     'dealer_data' => $dealer_data,
                     'rebate_files' => $rebate_files,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -110,6 +109,35 @@
                 },
                 success: function(response) {
                     if (response.success) {
+
+                        if ($('.newAddition').length > 0) {
+                            $('.newAddition').remove();
+                            $('#faceCharges').css("display", "block");
+                            $('#faceChargesPercentage').css("display", "block");
+                            $('#td_unit_facing_charges').css("display", "block");
+                            $('#td_unit_facing_charges_value').css("display", "block");
+                        }
+
+                        if (response.additionalCosts.length > 0) {
+                            for (let i = 0; i < response.additionalCosts.length; i++) {
+                                $('#floor').after('<th class="text-nowrap newAddition">' + response
+                                    .additionalCosts[i].name + '</th>');
+                                $('#faceChargesPercentage').before(
+                                '<th class="text-nowrap newAddition">%</th>');
+                                $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
+                                    response.additionalCosts[i].unit_percentage + '%</td>');
+                                let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
+                                    response.salesPlan.total_price;
+                                $('#td_unit_facing_charges_value').before(
+                                    '<td class="text-nowrap newAddition">' + facing_value.toLocaleString() +
+                                    '</td>');
+                            }
+                            $('#faceCharges').css("display", "none");
+                            $('#faceChargesPercentage').css("display", "none");
+                            $('#td_unit_facing_charges').css("display", "none");
+                            $('#td_unit_facing_charges_value').css("display", "none");
+                        }
+
                         $('#sales_source_lead_source').val(response.leadSource.name);
                         $('#stakeholder_id').val(response.stakeholder.id);
                         $('#customer_name').val(response.stakeholder.full_name);
@@ -147,10 +175,12 @@
                             $('#td_unit_facing_charges_value').html(0);
                         }
 
-                        $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total).toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price).toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total).toLocaleString());
-
+                        $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total)
+                            .toLocaleString());
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
+                            .toLocaleString());
+                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
+                            .toLocaleString());
 
                     } else {
                         Swal.fire({
@@ -167,12 +197,17 @@
         }
 
         $('#rebate_percentage').on('change', function() {
+
             showBlockUI('#rebate-form');
+
             let rebate_percentage = parseInt($('#rebate_percentage').val());
+
             rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
+
             rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
             let unit_total = parseFloat($('#unit_total').val());
+
             let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
 
             $('#td_rebate').html(rebate_percentage + '%');
@@ -180,8 +215,12 @@
             $('#td_rebate_value').html(rebate_value.toLocaleString());
 
             $('#rebate_total').val(rebate_value);
-            $('.hideDiv').css("display", "block");
+
             hideBlockUI('#rebate-form');
+
+            if (unit_total > 0) {
+                $('.hideDiv').css("display", "block");
+            }
         });
 
         var e = $("#dealer");
@@ -218,18 +257,27 @@
                             stakeholderData = response.data;
                         }
                         // $('#stackholder_id').val(stakeholderData.id);
-                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (stakeholderData.full_name.length > 0));
-                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled', (stakeholderData.father_name.length > 0));
-                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (stakeholderData.occupation.length > 0));
-                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled', (stakeholderData.designation.length > 0));
+                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (
+                            stakeholderData.full_name.length > 0));
+                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',
+                            (stakeholderData.father_name.length > 0));
+                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (
+                            stakeholderData.occupation.length > 0));
+                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',
+                            (stakeholderData.designation.length > 0));
 
-                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic)).attr('disabled', (stakeholderData.cnic.length > 0));
-                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (stakeholderData.contact.length > 0));
-                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData.ntn.length > 0));
-                        if((stakeholderData.comments != null)){
-                            $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (stakeholderData.comments.length >= 0));
+                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
+                            .attr('disabled', (stakeholderData.cnic.length > 0));
+                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (
+                            stakeholderData.contact.length > 0));
+                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData
+                            .ntn.length > 0));
+                        if ((stakeholderData.comments != null)) {
+                            $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (
+                                stakeholderData.comments.length >= 0));
                         }
-                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (stakeholderData.address.length > 0));
+                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (
+                            stakeholderData.address.length > 0));
                     }
                     hideBlockUI('#stakeholders_card');
                 },
@@ -247,7 +295,7 @@
 
         var validator = $("#rebateForm").validate({
             rules: {
-                'rebate_percentage' : {
+                'rebate_percentage': {
                     required: true,
                     digits: true,
                 },

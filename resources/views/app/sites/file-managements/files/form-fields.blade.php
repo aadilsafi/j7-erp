@@ -90,7 +90,8 @@
             <div class="card-body">
                 <div class="row g-1 mb-2">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="registration_no">Registration No</label>
+                        <label class="form-label fs-5" for="registration_no">Registration No <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-lg" id="registration_no"
                             @isset($customer_file)
                              value="{{ $customer_file->registration_no }}" readonly
@@ -98,7 +99,8 @@
                             name="application_form[registration_no]" placeholder="Registration No" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="application_no">Application No</label>
+                        <label class="form-label fs-5" for="application_no">Application No <span
+                                class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-lg" id="application_no"
                             @isset($customer_file)
                              value="{{ $customer_file->application_no }}" readonly
@@ -157,7 +159,8 @@
                     </div>
 
                     <div class="col-lg-2 col-md-2 col-sm-12">
-                        <label class="form-label fs-5" for="application_photo">Photo</label>
+                        <label class="form-label fs-5" for="application_photo">Photo <span
+                                class="text-danger">*</span></label>
                         <input @if (isset($customer_file)) disabled @endif id="application_photo" type="file"
                             class="filepond" name="application_form[photo]" accept="image/png, image/jpeg" />
                     </div>
@@ -816,7 +819,8 @@
 
                                                 @if (isset($salesPlan->additionalCosts[0]))
                                                     @foreach ($salesPlan->additionalCosts as $additionalCosts)
-                                                        <th style="vertical-align: middle;" class="text-nowrap" scope="col">
+                                                        <th style="vertical-align: middle;" class="text-nowrap"
+                                                            scope="col">
                                                             {{ $additionalCosts->name }}
                                                         </th>
                                                     @endforeach
@@ -861,7 +865,7 @@
                                                 <td>{{ number_format($unit->price_sqft, 2) }}</td>
                                                 @if (isset($salesPlan->additionalCosts[0]))
                                                     @foreach ($salesPlan->additionalCosts as $additionalCosts)
-                                                        <td >
+                                                        <td>
                                                             {{ number_format(($additionalCosts->unit_percentage / 100) * ($salesPlan->unit_price * $unit->gross_area)) }}
                                                         </td>
                                                     @endforeach
@@ -876,7 +880,7 @@
                                                 <td colspan="4"></td>
                                                 @if (isset($salesPlan->additionalCosts[0]))
                                                     @foreach ($salesPlan->additionalCosts as $additionalCosts)
-                                                        <td >
+                                                        <td>
                                                             {{ number_format(($additionalCosts->unit_percentage / 100) * ($salesPlan->unit_price * $unit->gross_area)) }}
                                                         </td>
                                                     @endforeach

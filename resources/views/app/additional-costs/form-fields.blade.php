@@ -3,7 +3,8 @@
 
         <div class="row mb-1">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <label class="form-label" style="font-size: 15px" for="additionalCost">Additional Cost</label>
+                <label class="form-label" style="font-size: 15px" for="additionalCost">Additional Cost <span
+                        class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select" id="additionalCost" name="additionalCost">
                     <option value="0" selected>Parent Additional Cost</option>
                     @php
@@ -30,7 +31,7 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="name">Name</label>
+                <label class="form-label fs-5" for="name">Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                     id="name" name="name" placeholder="Name"
                     value="{{ isset($additionalCost) ? $additionalCost->name : old('name') }}"
@@ -150,13 +151,13 @@
         </div>
 
         @if (isset($customFields) && count($customFields) > 0)
-        <hr>
-        <div class="row mb-1 g-1">
-           @forelse ($customFields as $field)
-           {!! $field !!}
-           @empty
-           @endforelse
-        </div>
+            <hr>
+            <div class="row mb-1 g-1">
+                @forelse ($customFields as $field)
+                    {!! $field !!}
+                @empty
+                @endforelse
+            </div>
         @endif
     </div>
 </div>

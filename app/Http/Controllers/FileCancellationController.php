@@ -11,13 +11,13 @@ use Illuminate\Http\Request;
 use App\Models\ModelTemplate;
 use App\Models\FileManagement;
 use App\Models\UnitStakeholder;
-use App\Models\FileCanecllation;
+use App\Models\FileCancellation;
 use App\Http\Requests\FileCancel\store;
 use App\Models\FileCancellationAttachment;
 use SebastianBergmann\LinesOfCode\Exception;
 use App\DataTables\FileCancellationDatatable;
-use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 
 class FileCancellationController extends Controller
 {
@@ -39,7 +39,7 @@ class FileCancellationController extends Controller
 
         $data = [
             'site_id' => decryptParams($site_id),
-            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileCanecllation())),
+            'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileCancellation())),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();
@@ -113,7 +113,7 @@ class FileCancellationController extends Controller
         $files_labels = FileCancellationAttachment::where('file_cancellation_id', decryptParams($id))->get();
         $images = [];
         $unit = Unit::find(decryptParams($unit_id));
-        $file_cancel = (new FileCanecllation())->find(decryptParams($id));
+        $file_cancel = (new FileCancellation())->find(decryptParams($id));
         $file = FileManagement::where('id', $file_cancel->file_id)->first();
         $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
@@ -128,7 +128,7 @@ class FileCancellationController extends Controller
             'site_id' => decryptParams($site_id),
             'unit' => Unit::find(decryptParams($unit_id)),
             'customer' => Stakeholder::find(decryptParams($customer_id)),
-            'cancellation_file' => (new FileCanecllation())->find(decryptParams($id)),
+            'cancellation_file' => (new FileCancellation())->find(decryptParams($id)),
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
@@ -174,7 +174,7 @@ class FileCancellationController extends Controller
     public function ApproveFileCancellation($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_cancellation = FileCanecllation::where('file_id',decryptParams($file_id))->first();;
+        $file_cancellation = FileCancellation::where('file_id',decryptParams($file_id))->first();;
         $file_cancellation->status = 1;
         $file_cancellation->update();
 
@@ -206,7 +206,7 @@ class FileCancellationController extends Controller
     public function printPage($site_id, $file_id, $template_id)
     {
 
-        $file_cancel = (new FileCanecllation())->find(decryptParams($file_id));
+        $file_cancel = (new FileCancellation())->find(decryptParams($file_id));
         $unit = json_decode($file_cancel->unit_data);
         $template = Template::find(decryptParams($template_id));
 

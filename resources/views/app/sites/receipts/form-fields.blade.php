@@ -10,26 +10,26 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" style="font-size: 15px" for="unit_id">
-                                        <h6 style="font-size: 15px">Unit No.</h6>
+                                        Unit No <span class="text-danger">*</span>
                                     </label>
                                     <select class="select2 form-select  unit_id @error('unit_id') is-invalid @enderror"
                                         name="unit_id" onclick="setIds(this)"
                                         onchange="getUnitTypeAndFloor(this.options[this.selectedIndex].value,this.id)">
                                         <option selected>Select Unit No</option>
                                         @foreach ($units as $row)
-                                        @if (!$row->salesPlan->isEmpty())
-                                        @continue(isset($unit) && $unit->id == $row['id'])
-                                        <option value="{{ $row->id }}" {{ (isset($unit) ? $unit->parent_id :
-                                            old('unit_id')) == $row['id'] ? 'selected' : '' }}>
-                                            {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
-                                            {{ $row->salesPlan[0]['stakeholder']['full_name'] }},
-                                            {{ $row->salesPlan[0]['stakeholder']['cnic'] }} )
-                                        </option>
-                                        @endif
+                                            @if (!$row->salesPlan->isEmpty())
+                                                @continue(isset($unit) && $unit->id == $row['id'])
+                                                <option value="{{ $row->id }}"
+                                                    {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
+                                                    {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
+                                                    {{ $row->salesPlan[0]['stakeholder']['full_name'] }},
+                                                    {{ $row->salesPlan[0]['stakeholder']['cnic'] }} )
+                                                </option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('unit_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -37,14 +37,15 @@
                             <div class="col-md-6 col-12">
                                 <div class="mb-1">
                                     <label class="form-label" style="font-size: 15px" for="floor">
-                                        <h6 style="font-size: 15px">Amount To be Paid</h6>
+                                        Amount To be Paid <span class="text-danger">*</span>
                                     </label>
-                                    <input min="0" onclick="setAmountIds(this)" id="amountToBePaid" type="number"
+                                    <input min="0" onclick="setAmountIds(this)" id="amountToBePaid"
+                                        type="number"
                                         class="form-control amountToBePaid  @error('amount_in_numbers') is-invalid @enderror"
                                         name="amount_in_numbers" placeholder="Amount To be Paid"
                                         value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
                                     @error('amount_in_numbers')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
@@ -149,8 +150,8 @@
                         <div class="row mb-1">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="stackholder_address">Address</label>
-                                <textarea class="form-control  form-control-lg" readonly id="stackholder_address"
-                                    placeholder="Address" rows="5"></textarea>
+                                <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
+                                    rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -235,8 +236,9 @@
 
                         <div class="row custom-options-checkable mb-2 g-1">
                             <div class="col-md-3">
-                                <input class="custom-option-item-check checkClass mode-of-payment" type="radio" checked
-                                    name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1" value="Cash">
+                                <input class="custom-option-item-check checkClass mode-of-payment" type="radio"
+                                    checked name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1"
+                                    value="Cash">
                                 <label class="custom-option-item text-center p-1"
                                     for="customOptionsCheckableRadiosWithIcon1">
                                     {{-- <i data-feather='dollar-sign'></i> --}}
@@ -245,8 +247,9 @@
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <input class="custom-option-item-check checkClass cheque-mode-of-payment" type="radio"
-                                    name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
+                                <input class="custom-option-item-check checkClass cheque-mode-of-payment"
+                                    type="radio" name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2"
+                                    value="Cheque">
                                 <label class="custom-option-item text-center p-1"
                                     for="customOptionsCheckableRadiosWithIcon2">
                                     <i class="bi bi-bank" style="font-size: 20px"></i>
@@ -254,8 +257,9 @@
                                 </label>
                             </div>
                             <div class="col-md-3">
-                                <input class="custom-option-item-check checkClass online-mode-of-payment" type="radio"
-                                    name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3" value="Online">
+                                <input class="custom-option-item-check checkClass online-mode-of-payment"
+                                    type="radio" name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3"
+                                    value="Online">
                                 <label class="custom-option-item text-center p-1"
                                     for="customOptionsCheckableRadiosWithIcon3">
                                     <i class="bi bi-app-indicator" style="font-size: 20px"></i>
@@ -276,13 +280,13 @@
                         <div class="row mb-2 g-1" id="otherValueDiv" style="display: none;">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="other_value">Other Payment
-                                    Mode</label>
+                                    Mode <span class="text-danger">*</span></label>
                                 <input type="text"
                                     class="form-control form-control-lg @error('other_value') is-invalid @enderror"
                                     id="other_value" name="other_value" placeholder="Other Payment Mode"
                                     value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
                                 @error('other_value')
-                                <div class="invalid-tooltip">{{ $message }}</div>
+                                    <div class="invalid-tooltip">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -290,50 +294,53 @@
                         <div class="row mb-2 g-1" id="onlineValueDiv" style="display: none;">
 
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="online_instrument_no">Transaction
-                                    No</label>
+                                <label class="form-label" style="font-size: 15px"
+                                    for="online_instrument_no">Transaction
+                                    No <span class="text-danger">*</span></label>
                                 <input type="text"
                                     class="form-control form-control-lg @error('online_instrument_no') is-invalid @enderror"
                                     id="online_instrument_no" name="online_instrument_no"
                                     placeholder="Online Transaction"
                                     value="{{ isset($receipt) ? $receipt->online_instrument_no : old('online_instrument_no') }}" />
                                 @error('online_instrument_no')
-                                <div class="invalid-tooltip">{{ $message }}</div>
+                                    <div class="invalid-tooltip">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="transaction_date">Transaction
-                                    Date</label>
+                                    Date <span class="text-danger">*</span></label>
                                 <input type="date"
                                     class="form-control form-control-lg @error('transaction_date') is-invalid @enderror"
                                     id="transaction_date" name="transaction_date" placeholder="Transaction Date"
                                     value="{{ isset($receipt) ? $receipt->transaction_date : old('transaction_date') }}" />
                                 @error('transaction_date')
-                                <div class="invalid-tooltip">{{ $message }}</div>
+                                    <div class="invalid-tooltip">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
 
                         <div class="row mb-2 g-1" id="chequeValueDiv" style="display: none;">
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="cheque_no">Cheque No</label>
+                                <label class="form-label" style="font-size: 15px" for="cheque_no">Cheque No <span
+                                        class="text-danger">*</span></label>
                                 <input type="text"
                                     class="form-control form-control-lg @error('cheque_no') is-invalid @enderror"
                                     id="cheque_no" name="cheque_no" placeholder="Cheque No"
                                     value="{{ isset($receipt) ? $receipt->cheque_no : old('cheque_no') }}" />
                                 @error('cheque_no')
-                                <div class="invalid-tooltip">{{ $message }}</div>
+                                    <div class="invalid-tooltip">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="bank_details">Bank Name</label>
+                                <label class="form-label" style="font-size: 15px" for="bank_details">Bank
+                                    Name <span class="text-danger">*</span></label>
                                 <input type="text"
                                     class="form-control form-control-lg @error('bank_details') is-invalid @enderror"
                                     id="bank_details" name="bank_details" placeholder="Bank Name" />
                                 @error('bank_details')
-                                <div class="invalid-tooltip">{{ $message }}</div>
+                                    <div class="invalid-tooltip">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -343,18 +350,18 @@
         </div>
         @if (isset($customFields) && count($customFields) > 0)
 
-        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
 
-            <div class="card-body">
+                <div class="card-body">
 
-                <div class="row mb-1 g-1">
-                    @forelse ($customFields as $field)
-                    {!! $field !!}
-                    @empty
-                    @endforelse
+                    <div class="row mb-1 g-1">
+                        @forelse ($customFields as $field)
+                            {!! $field !!}
+                        @empty
+                        @endforelse
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
 
         <div class="row mb-2">
@@ -366,9 +373,10 @@
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="custom_comments">Comments</label>
-                                <textarea class="form-control form-control-lg" id="custom_comments" name="comments"
-                                    placeholder="Comments" rows="5"></textarea>
+                                <label class="form-label" style="font-size: 15px"
+                                    for="custom_comments">Comments</label>
+                                <textarea class="form-control form-control-lg" id="custom_comments" name="comments" placeholder="Comments"
+                                    rows="5"></textarea>
                             </div>
                         </div>
                     </div>

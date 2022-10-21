@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-            width: calc(20% - 0.5em);
-        } */
+                width: calc(20% - 0.5em);
+            } */
     </style>
 @endsection
 
@@ -58,11 +58,10 @@
                     'site_id' => $site_id,
                     'unit' => $unit,
                     'customer' => $customer,
-                    'file' =>$file,
+                    'file' => $file,
                     'total_paid_amount' => $total_paid_amount,
-                    'salesPlan'=>$salesPlan,
-                    'customFields' => $customFields
-
+                    'salesPlan' => $salesPlan,
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 
@@ -73,9 +72,10 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" checked name="checkAttachment" class="form-check-input" id="colorCheck3" value="1">
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input"
+                                    id="colorCheck3" value="1">
                                 <label class="form-check-label" for="colorCheck3">
-                                        Attachment Attached
+                                    Attachment Attached
                                 </label>
                             </div>
                         </div>
@@ -181,7 +181,7 @@
         }
 
         var validator = $("#fileRefundForm").validate({
-                rules: {
+            rules: {
                 'cancellation_charges': {
                     required: true,
                     digits: true,
@@ -196,28 +196,27 @@
                     required: true,
                 },
             },
-                errorClass: 'is-invalid text-danger',
-                errorElement: "span",
-                wrapper: "div",
-                submitHandler: function(form) {
-                    form.submit();
-                }
-            });
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
+        });
 
         $("#saveButton").click(function() {
             $("#fileRefundForm").submit();
         });
 
-        function calculateRefundedAmount(){
+        function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
             let amount_refunded = 0.0;
             let cancellationCharges = $('#cancellation_charges').val();
-            if(cancellationCharges < parseFloat(paid_amount)){
+            if (cancellationCharges < parseFloat(paid_amount)) {
                 amount_refunded = parseFloat(paid_amount) - cancellationCharges;
                 $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
                 // $('#amount_to_be_refunded').attr('value',amount_refunded);
-            }
-            else{
+            } else {
                 toastr.error('Invalid Amount. Cancellation Charges should be less than Paid Amount',
                     "Error!", {
                         showMethod: "slideDown",

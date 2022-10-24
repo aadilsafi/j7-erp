@@ -12,6 +12,15 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
+
 @endsection
 
 @section('custom-css')
@@ -67,29 +76,57 @@
 
         </form>
     @else
-        <form action="{{ route('sites.floors.destroy-selected', ['site_id' => $site_id]) }}" id="floors-table-form"
+        {{-- <form action="{{ route('sites.floors.destroy-selected', ['site_id' => $site_id]) }}" id="floors-table-form"
             method="get">
             <div class="table-responsive">
-                <table class="dt-complex-header table table-striped table-hover">
+                <table class="dt-complex-header table table-striped table-hover" id="table">
                     <thead>
                         <tr class="text-center">
                             <th rowspan="2">FLOORS</th>
-                            <th rowspan="2">ORDER</th>
                             <th rowspan="2">AREA</th>
                             <th rowspan="2">SHORT LABEL</th>
                         </tr>
                     </thead>
-                    @foreach ($floors as $key => $floor)
+                    @foreach ($floors[0] as $key => $floor)
                         <tr>
-                            @foreach ($floor as $k => $row)
-                                <td>{{ $floors[$key][$k] }}</td>
-                            @endforeach
+                           <td>{{$floor[0]}}</td>
+                           <td>{{$floor[1]}}</td>
+                           <td>{{$floor[2]}}</td>
+
                         </tr>
                     @endforeach
 
                 </table>
             </div>
-        </form>
+        </form> --}}
+        <table id="kt_table_1" class="table table-sm table-responsive dt-simple-header">
+            <thead>
+                <tr>
+                    @foreach ($db_fields as $dbf)
+                        <th>
+                            <select class="form-control text-capitalize text-nowrap required" style="width: 230px;"
+                                name="fields[]">
+                                @foreach ($db_fields as $db_field)
+                                    <option value="{{ $db_field }}">
+                                        {{ $db_field }}</option>
+                                @endforeach
+                            </select>
+                        </th>
+                    @endforeach
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data as $key => $row)
+                    <tr>
+                        @foreach ($row as $key => $value)
+                            <input type="hidden" value="{{ $value }}" name="values[]">
+                            <td class="text-nowrap">{{ $value }}</td>
+                        @endforeach
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     @endif
 @endsection
 
@@ -101,6 +138,20 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/responsive.bootstrap5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.select.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jszip.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/pdfmake.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/vfs_fonts.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.html5.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.print.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.rowGroup.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -123,6 +174,10 @@
                 label: '',
                 url: ''
             }
+        });
+
+        $(document).ready(function() {
+            $('#table').DataTable();
         });
     </script>
 @endsection

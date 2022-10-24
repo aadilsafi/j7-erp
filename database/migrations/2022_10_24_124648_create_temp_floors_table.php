@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('temp_floors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->longText('import-data')->nullable();
+            $table->string('name')->nullable();
             $table->float('floor_area')->default(0);
             $table->string('short_label', 10)->default('F');
             $table->timestamps();

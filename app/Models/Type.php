@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Exception;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\AccountHead;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Type extends Model
 {
@@ -20,6 +21,7 @@ class Type extends Model
         'slug',
         'status',
         'account_added',
+        'account_number',
     ];
 
     protected $cast = [
@@ -29,6 +31,7 @@ class Type extends Model
         'slug' => 'string',
         'status' => 'boolean',
         'account_added' => 'boolean',
+        'account_number' => 'string',
     ];
 
     public $rules = [
@@ -46,4 +49,10 @@ class Type extends Model
     {
         return $this->belongsTo(Site::class);
     }
+
+    public function modelable()
+    {
+        return $this->morphOne(AccountHead::class,'modelable');
+    }
+
 }

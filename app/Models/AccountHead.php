@@ -29,4 +29,9 @@ class AccountHead extends Model
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
+    public function modelable()
+    {
+        return $this->morphTo();
+    }
 }

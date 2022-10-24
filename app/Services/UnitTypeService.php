@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\AccountHead;
 use App\Models\Type;
 use App\Services\Interfaces\UnitTypeInterface;
 use Exception;
@@ -36,13 +37,38 @@ class UnitTypeService implements UnitTypeInterface
     // Store
     public function store($site_id, $inputs)
     {
+
+        $account_head  = AccountHead::whereHasMorph(
+            'modelable',
+            Type::class,
+        )->get();
+
         $data = [
             'site_id' => decryptParams($site_id),
             'name' => $inputs['type_name'],
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
         ];
+
+        if (isset($account_head) && $inputs['type'] == 0) {
+
+            $last_account_head = collect($account_head)->last();
+            $data['account_added'] = true;
+            $data['account_number'] = $last_account_head->code + 1;
+        }
+
         $type = $this->model()->create($data);
+
+        if (isset($account_head) && $inputs['type'] == 0) {
+
+            $type->modelable()->create([
+                'site_id' => decryptParams($site_id),
+                'code' => $last_account_head->code + 1,
+                'name' => 'Accounts Receviable - ' . $inputs['type_name'],
+                'level' => 3,
+            ]);
+        }
+
         return $type;
     }
 

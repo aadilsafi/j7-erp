@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('account_heads', function (Blueprint $table) {
             $table->foreignId('site_id')->constrained();
+            $table->nullableMorphs('modelable');
             $table->string('code', 20)->primary();
             $table->string('name', 250);
             $table->tinyInteger('level')->default(1);

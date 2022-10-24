@@ -18,6 +18,17 @@ class Type extends Model
         'name',
         'parent_id',
         'slug',
+        'status',
+        'account_added',
+    ];
+
+    protected $cast = [
+        'site_id'=> 'integer',
+        'name' => 'string',
+        'parent_id' => 'integer',
+        'slug' => 'string',
+        'status' => 'boolean',
+        'account_added' => 'boolean',
     ];
 
     public $rules = [

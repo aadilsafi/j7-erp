@@ -12,7 +12,7 @@
                 <label class="form-check-label" for="{{ $key }}">{{ $value }} <span
                         class="text-danger">{{ $required ? ' *' : null }}</span></label>
                 <input class="form-check-input" type="radio" id="{{ $key }}" name="{{ $label }}"
-                    value="{{ $value }}">
+                    value="{{ $value }}" {{ $disabled ? 'disabled' : null }}>
             </div>
         </div>
     @endforeach

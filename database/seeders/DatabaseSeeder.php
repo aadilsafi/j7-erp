@@ -47,6 +47,7 @@ class DatabaseSeeder extends Seeder
             ModelTemplateSeeder::class,
             AccountActionSeeder::class,
             AccountHeadSeeder::class,
+            AccountingStartingCodeSeeder::class,
         ]);
     }
 }

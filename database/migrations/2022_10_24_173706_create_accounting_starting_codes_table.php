@@ -13,20 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('types', function (Blueprint $table) {
+        Schema::create('accounting_starting_codes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->string('name')->nullable();
-            $table->string('slug')->unique();
-            $table->integer('parent_id')->default(0);
-            $table->boolean('status')->default(true);
-            $table->boolean('account_added')->default(false);
-            $table->string('account_number')->nullable();
+            $table->string('model');
+            $table->string('level_code');
+            $table->string('starting_code');
+            $table->tinyInteger('level');
+            $table->boolean('status');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types');
+        Schema::dropIfExists('accounting_starting_codes');
     }
 };

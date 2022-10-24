@@ -130,6 +130,14 @@ class AccountHeadSeeder extends Seeder
                 'name' => '3F-01 Receviable',
                 'level' => 4,
             ],
+            [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => '10202100011001',
+                'name' => 'Zain Ali Customer A/R',
+                'level' => 5,
+            ],
 
 
             [

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->float('floor_area')->default(0);
-            $table->string('short_label', 5)->default('F');
+            $table->string('short_label', 10)->default('F');
             $table->timestamps();
         });
     }

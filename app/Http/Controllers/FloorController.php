@@ -27,9 +27,8 @@ use App\Utils\Enums\{
     UserBatchActionsEnum,
     UserBatchStatusEnum,
 };
-use Excel;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FloorController extends Controller
 {
@@ -344,8 +343,42 @@ class FloorController extends Controller
     public function ImportPreview(Request $request, $site_id)
     {
         // TempFloor::truncate();
+        // dd($request->all());
+        // $import = new FloorImport();
+        // $import->import($request->file('attachment'));
 
+        // dd($import->errors());
         $data = Excel::import(new FloorImport, $request->file('attachment'));
+        // $array = Excel::toArray(new FloorImport, $request->file('attachment'));
+        // dd($array);
+
+
+        // $reader = new Xlsx();
+
+        // $spreadsheet = $reader->load($file->getrealPath());
+
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $maxCell = $sheet->getHighestRowAndColumn();
+        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+
+        // $headerRow = $floorData[0];
+
+        // $importFloorData = [];
+        // foreach ($floorData as $key => $fd) {
+        //     if ($key > 0) {
+        //         foreach ($fd as $k => $row) {
+        //             $importFloorData[$headerRow[$k]][] = $row;
+        //         }
+        //     }
+        // }
+
+
+
+
+
+
+
+
 
         return redirect()->back()->with('success', 'All good!');
     }

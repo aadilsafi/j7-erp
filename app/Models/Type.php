@@ -19,6 +19,7 @@ class Type extends Model
         'parent_id',
         'slug',
         'status',
+        'account_added',
     ];
 
     protected $cast = [
@@ -27,6 +28,7 @@ class Type extends Model
         'parent_id' => 'integer',
         'slug' => 'string',
         'status' => 'boolean',
+        'account_added' => 'boolean',
     ];
 
     public $rules = [

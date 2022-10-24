@@ -346,10 +346,10 @@
                                 <th style="vertical-align: middle;" rowspan="2" scope="col">
                                     Rate
                                 </th>
-                                <th style="vertical-align: middle;" rowspan="2" scope="col">
+                                <th id="floor" style="vertical-align: middle;" rowspan="2" scope="col">
                                     Floor
                                 </th>
-                                <th style="vertical-align: middle;" scope="col">Face Charges</th>
+                                <th id="faceCharges" style="vertical-align: middle;" scope="col">Face Charges</th>
                                 <th style="vertical-align: middle;" scope="col">Discount</th>
                                 <th style="vertical-align: middle;" scope="col">Total</th>
                                 <th style="vertical-align: middle;" scope="col">Downpayment</th>
@@ -357,7 +357,7 @@
                             </tr>
 
                             <tr class="text-center">
-                                <th style="vertical-align: middle;" scope="col">%</th>
+                                <th id="faceChargesPercentage" style="vertical-align: middle;" scope="col">%</th>
                                 <th style="vertical-align: middle;" scope="col"> %</th>
                                 <th style="vertical-align: middle;" scope="col">Value</th>
                                 <th style="vertical-align: middle;" scope="col"> %</th>

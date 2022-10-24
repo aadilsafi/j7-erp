@@ -24,9 +24,9 @@ class AccountLedger extends Model
 
     protected $cast = [
         'site_id' => 'integer',
-        'credit' => 'float',
-        'debit' => 'float',
-        'balance' => 'float',
+        'credit' => 'double',
+        'debit' => 'double',
+        'balance' => 'double',
         'status' => 'boolean',
     ];
 

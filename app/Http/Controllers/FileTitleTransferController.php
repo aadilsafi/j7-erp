@@ -18,6 +18,7 @@ use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
 use App\Models\ModelTemplate;
 use App\Models\Template;
+use App\Models\Type;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
@@ -58,7 +59,7 @@ class FileTitleTransferController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($site_id, $unit_id, $customer_id,$file_id)
+    public function create($site_id, $unit_id, $customer_id, $file_id)
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
@@ -88,7 +89,7 @@ class FileTitleTransferController extends Controller
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
                 'rebate_total' => $rebate_total,
-                'salesPlan'=>$salesPlan,
+                'salesPlan' => $salesPlan,
                 'customFields' => $customFields
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
@@ -158,7 +159,7 @@ class FileTitleTransferController extends Controller
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
             'titleTransferPerson' => Stakeholder::find($transfer_file->transfer_person_id),
-            'salesPlan'=>$salesPlan,
+            'salesPlan' => $salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-title-transfer.preview', $data);
@@ -201,7 +202,7 @@ class FileTitleTransferController extends Controller
     public function ApproveFileTitleTransfer($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_title_transfer = FileTitleTransfer::where('file_id',decryptParams($file_id))->first();
+        $file_title_transfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
         $file_title_transfer->status = 1;
         $file_title_transfer->update();
 
@@ -234,16 +235,30 @@ class FileTitleTransferController extends Controller
     public function printPage($site_id, $file_id, $template_id)
     {
 
-        $file_refund = (new FileTitleTransfer())->find(decryptParams($file_id));
-
+        $transfer_file = (new FileTitleTransfer())->find(decryptParams($file_id));
         $template = Template::find(decryptParams($template_id));
 
+
+        $file = FileManagement::where('id', $transfer_file->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $unit_data = json_decode($transfer_file->unit_data);
+        $unitType = Type::find($unit_data->id);
+
         $data = [
-            'site_id' => decryptParams($site_id),
+            'unit' => $unit_data,
+            'unitType' => $unitType->name,
+            'customer' => json_decode($transfer_file->stakeholder_data),
+            'transfer_file' => $transfer_file,
+            'total_paid_amount' => $total_paid_amount,
+            'titleTransferPerson' => json_decode($transfer_file->transfer_person_data),
+            'salesPlan' => $salesPlan,
         ];
+
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
-        return view($printFile, compact('data'));
+        return view($printFile, $data);
     }
 }

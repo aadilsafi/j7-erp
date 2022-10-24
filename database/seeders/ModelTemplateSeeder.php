@@ -18,7 +18,7 @@ class ModelTemplateSeeder extends Seeder
         //
         $data = [
             [
-                'model_type' => 'App\Models\FileCanecllation',
+                'model_type' => 'App\Models\FileCancellation',
                 'template_id' => 2,
                 'parent_id' => 0,
                 'default' => true,

@@ -38,6 +38,9 @@ class TypesDataTable extends DataTable
             ->editColumn('parent_id', function ($type) {
                 return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
             })
+            ->editColumn('status', function ($type) {
+                return editBadgeColumn($type->status);
+            })
             ->editColumn('created_at', function ($type) {
                 return editDateColumn($type->created_at);
             })
@@ -155,6 +158,7 @@ class TypesDataTable extends DataTable
         $columns = [
             Column::make('name')->title('Type Name'),
             Column::make('parent_id')->title('Parent'),
+            Column::make('status')->title('Status'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

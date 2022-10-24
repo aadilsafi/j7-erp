@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
+use App\Http\Requests\FileBuyBack\store;
 use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,10 +12,12 @@ use App\Http\Requests\floors\{
     storeRequest as floorStoreRequest,
     updateRequest as floorUpdateRequest,
 };
+use App\Imports\FloorImport;
 use App\Models\{
     Floor,
     Unit,
     Site,
+    TempFloor,
 };
 use App\Services\Interfaces\{
     FloorInterface,
@@ -24,6 +27,8 @@ use App\Utils\Enums\{
     UserBatchActionsEnum,
     UserBatchStatusEnum,
 };
+use Excel;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use Yajra\DataTables\Facades\DataTables;
 
 class FloorController extends Controller
@@ -39,7 +44,6 @@ class FloorController extends Controller
         $this->floorInterface = $floorInterface;
         $this->userBatchInterface = $userBatchInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -334,5 +338,55 @@ class FloorController extends Controller
             $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select(['id', 'site_id'])->get();
             return response()->json($floors);
         }
+    }
+
+
+    public function ImportPreview(Request $request, $site_id)
+    {
+        // TempFloor::truncate();
+
+        $data = Excel::import(new FloorImport, $request->file('attachment'));
+
+        return redirect()->back()->with('success', 'All good!');
+    }
+
+
+    public function test()
+    {
+        // dd($data);
+        // dd($request->all());
+        // $file = $request->file('attachment');
+
+
+        // $name_gen = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
+        // $file = $file->move("imports/", $name_gen);
+
+
+        // $reader = new Xlsx();
+
+        // $spreadsheet = $reader->load($file->getrealPath());
+
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $maxCell = $sheet->getHighestRowAndColumn();
+        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+
+        // $headerRow = $floorData[0];
+
+        // $importFloorData = [];
+        // foreach ($floorData as $key => $fd) {
+        //     if ($key > 0) {
+        //         foreach ($fd as $k => $row) {
+        //             $importFloorData[$headerRow[$k]][] = $row;
+        //         }
+        //     }
+        // }
+
+
+        // $data = [
+        //     'site_id' => decryptParams($site_id),
+        //     'floors' => $importFloorData,
+        //     'preview' => true
+        // ];
+        // return view('app.sites.floors.importFloors', $data);
     }
 }

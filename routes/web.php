@@ -564,20 +564,22 @@ Route::group(['prefix' => 'tests'], function () {
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
 
-Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
-
 Route::get('/logs', function () {
     return Activity::latest()->get();
 });
 
-Route::get('/fire', function () {
-    $data = [
-        'title' => 'Job Done!',
-        'message' => 'Unit Construction Completed',
-        'description' => 'Unit Construction Completed',
-        'url' => 'asdadasd',
-    ];
-    Notification::sendNow(auth()->user(), new DefaultNotification($data));
+// Route::get('/fire', function () {
+//     $data = [
+//         'title' => 'Job Done!',
+//         'message' => 'Unit Construction Completed',
+//         'description' => 'Unit Construction Completed',
+//         'url' => 'asdadasd',
+//     ];
+//     Notification::sendNow(auth()->user(), new DefaultNotification($data));
 
-    return 'fire';
+//     return 'fire';
+// });
+
+Route::get('/createaccount', function () {
+    makeSalesPlanTransaction(1);
 });

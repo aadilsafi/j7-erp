@@ -17,6 +17,7 @@ use App\Models\FileBuyBackLabelsAttachment;
 use App\Models\FileRefund;
 use App\Models\ModelTemplate;
 use App\Models\Template;
+use App\Models\Type;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
@@ -32,7 +33,8 @@ class FileBuyBackController extends Controller
     private $buyBackInterface;
 
     public function __construct(
-        BuyBackInterface $buyBackInterface, CustomFieldInterface $customFieldInterface
+        BuyBackInterface $buyBackInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->buyBackInterface = $buyBackInterface;
         $this->customFieldInterface = $customFieldInterface;
@@ -55,7 +57,7 @@ class FileBuyBackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($site_id, $unit_id, $customer_id,$file_id)
+    public function create($site_id, $unit_id, $customer_id, $file_id)
     {
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
@@ -74,7 +76,7 @@ class FileBuyBackController extends Controller
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
-                'salesPlan'=>$salesPlan,
+                'salesPlan' => $salesPlan,
                 'customFields' => $customFields
             ];
             return view('app.sites.file-managements.files.files-actions.file-buy-back.create', $data);
@@ -136,7 +138,7 @@ class FileBuyBackController extends Controller
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
-            'salesPlan'=>$salesPlan,
+            'salesPlan' => $salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-buy-back.preview', $data);
@@ -176,10 +178,10 @@ class FileBuyBackController extends Controller
         //
     }
 
-    public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_buy_back = FileBuyBack::find(decryptParams($file_refund_id));
+        $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
         $file_buy_back->status = 1;
         $file_buy_back->update();
 
@@ -187,7 +189,7 @@ class FileBuyBackController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file =  FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 3;
         $file->update();
 
@@ -211,16 +213,27 @@ class FileBuyBackController extends Controller
     public function printPage($site_id, $file_id, $template_id)
     {
 
-        $file_refund = (new FileRefund())->find(decryptParams($file_id));
-
+        $buy_back_file = (new FileBuyBack())->find(decryptParams($file_id));
         $template = Template::find(decryptParams($template_id));
 
+        $file = FileManagement::where('id', $buy_back_file->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $unit_data = json_decode($buy_back_file->unit_data);
+        $unitType = Type::find($unit_data->id);
+
         $data = [
-            'site_id' => decryptParams($site_id),
+            'unit' => $unit_data,
+            'unitType' => $unitType->name,
+            'customer' => json_decode($buy_back_file->stakeholder_data),
+            'buy_back_file' => $buy_back_file,
+            'total_paid_amount' => $total_paid_amount,
+            'salesPlan' => $salesPlan,
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
-        return view($printFile, compact('data'));
+        return view($printFile, $data);
     }
 }

@@ -18,8 +18,8 @@ class StakeholderType extends Model
         'type',
         'stakeholder_code',
         'status',
-        'created_at',
-        'updated_at',
+        'receivable_account',
+        'payable_account',
     ];
 
     public function getActivitylogOptions(): LogOptions

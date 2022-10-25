@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
+use App\Http\Requests\FileBuyBack\store;
 use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,10 +12,12 @@ use App\Http\Requests\floors\{
     storeRequest as floorStoreRequest,
     updateRequest as floorUpdateRequest,
 };
+use App\Imports\FloorImport;
 use App\Models\{
     Floor,
     Unit,
     Site,
+    TempFloor,
 };
 use App\Services\Interfaces\{
     FloorInterface,
@@ -25,6 +28,7 @@ use App\Utils\Enums\{
     UserBatchStatusEnum,
 };
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FloorController extends Controller
 {
@@ -39,7 +43,6 @@ class FloorController extends Controller
         $this->floorInterface = $floorInterface;
         $this->userBatchInterface = $userBatchInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -218,10 +221,7 @@ class FloorController extends Controller
 
             $inputs = $request->validated();
 
-            $record = $this->floorInterface->storeInBulk($site_id, encryptParams(auth()->user()->id), $inputs);
-            // dd($record);
-
-            // $this->userBatchInterface->store($site_id, encryptParams(auth()->user()->id), $record->id, UserBatchActionsEnum::COPY_FLOORS, UserBatchStatusEnum::PENDING);
+            $record = $this->floorInterface->storeInBulk(decryptParams($site_id), auth()->user()->id, $inputs);
 
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess('Floor(s) will be contructed shortly!');
         } else {
@@ -305,7 +305,7 @@ class FloorController extends Controller
                 ])
                 ->make(true);
         }
-        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select('id')->get();
+        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->get();
         return view(
             'app.sites.floors.preview',
             ['site_id' => encryptParams(decryptParams($site_id)), 'floors' => $floors]
@@ -337,5 +337,102 @@ class FloorController extends Controller
             $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->select(['id', 'site_id'])->get();
             return response()->json($floors);
         }
+    }
+
+
+    public function ImportPreview(Request $request, $site_id)
+    {
+        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+        // return redirect()->back()->with('success', 'All good!');
+
+        $array = Excel::toArray(new FloorImport, $request->file('attachment'));
+        TempFloor::create([
+            'import-data' => json_encode($array[0]),
+
+        ]);
+        $db_fields = [
+            'Name',
+            'Area',
+            'Short Code',
+                                    
+        ];
+          $data = [
+            'site_id' => decryptParams($site_id),
+            'data' => $array[0],
+            'preview' => true,
+            'db_fields'=> $db_fields
+        ];
+        return view('app.sites.floors.importFloors', $data);
+      
+        // TempFloor::truncate();
+        // dd($request->all());
+        // $import = new FloorImport();
+        // $import->import($request->file('attachment'));
+
+        // dd($import->errors());
+        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+
+       
+
+
+        // $reader = new Xlsx();
+
+        // $spreadsheet = $reader->load($file->getrealPath());
+
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $maxCell = $sheet->getHighestRowAndColumn();
+        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+
+        // $headerRow = $floorData[0];
+
+        // $importFloorData = [];
+        // foreach ($floorData as $key => $fd) {
+        //     if ($key > 0) {
+        //         foreach ($fd as $k => $row) {
+        //             $importFloorData[$headerRow[$k]][] = $row;
+        //         }
+        //     }
+        // }
+
+
+
+    }
+    public function test()
+    {
+        // dd($data);
+        // dd($request->all());
+        // $file = $request->file('attachment');
+
+
+        // $name_gen = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
+        // $file = $file->move("imports/", $name_gen);
+
+
+        // $reader = new Xlsx();
+
+        // $spreadsheet = $reader->load($file->getrealPath());
+
+        // $sheet = $spreadsheet->getActiveSheet();
+        // $maxCell = $sheet->getHighestRowAndColumn();
+        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+
+        // $headerRow = $floorData[0];
+
+        // $importFloorData = [];
+        // foreach ($floorData as $key => $fd) {
+        //     if ($key > 0) {
+        //         foreach ($fd as $k => $row) {
+        //             $importFloorData[$headerRow[$k]][] = $row;
+        //         }
+        //     }
+        // }
+
+
+        // $data = [
+        //     'site_id' => decryptParams($site_id),
+        //     'floors' => $importFloorData,
+        //     'preview' => true
+        // ];
+        // return view('app.sites.floors.importFloors', $data);
     }
 }

@@ -16,7 +16,7 @@ class ReceiptsTemplateSeeder extends Seeder
     public function run()
     {
         //
-        (new ReceiptTemplate())->insert([
+        $data = [
             [
                 'name' => 'J7 Global',
                 'slug' => 'j7_template',
@@ -25,6 +25,10 @@ class ReceiptsTemplateSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new ReceiptTemplate())->create($item);
+        }
     }
 }

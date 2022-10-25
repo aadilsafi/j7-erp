@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                width: calc(20% - 0.5em);
-                            } */
+                                    width: calc(20% - 0.5em);
+                                } */
     </style>
 @endsection
 
@@ -60,9 +60,8 @@
                     'customer' => $customer,
                     'file' => $file,
                     'total_paid_amount' => $total_paid_amount,
-                    'salesPlan'=>$salesPlan,
-                    'customFields' => $customFields
-
+                    'salesPlan' => $salesPlan,
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 
@@ -73,8 +72,8 @@
                         <input type="hidden" name="file_id" value="{{ $file->id }}">
                         <div class="d-block mb-1">
                             <div class="form-check form-check-primary">
-                                <input type="checkbox" name="checkAttachment" class="form-check-input" value="1"
-                                    id="colorCheck3">
+                                <input type="checkbox" checked name="checkAttachment" class="form-check-input"
+                                    value="1" id="colorCheck3">
                                 <label class="form-check-label" for="colorCheck3">
                                     Attachment Attached
                                 </label>
@@ -195,40 +194,40 @@
             formValidations();
         })
 
-        function formValidations(){
+        function formValidations() {
             var validator = $("#fileRefundForm").validate({
-                    rules: {
-                        'paid_amount' : {
-                            required: true,
-                            digits: true,
-                        },
-                        'amount_to_be_refunded' : {
-                            required: true,
-                        },
-                        'payment_due_date' : {
-                            required: true
-                        },
-                        'amount_remarks' : {
-                            required: true
-                        },
-                        'attachments[0][attachment_label]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
-                        'attachment[0][image]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
+                rules: {
+                    'paid_amount': {
+                        required: true,
+                        digits: true,
                     },
-                    errorClass: 'is-invalid text-danger',
-                    errorElement: "span",
-                    wrapper: "div",
-                    submitHandler: function(form) {
-                        form.submit();
-                    }
-                });
+                    'amount_to_be_refunded': {
+                        required: true,
+                    },
+                    'payment_due_date': {
+                        required: true
+                    },
+                    'amount_remarks': {
+                        required: true
+                    },
+                    'attachments[0][attachment_label]': {
+                        required: function() {
+                            return checkbtn;
+                        }
+                    },
+                    'attachment[0][image]': {
+                        required: function() {
+                            return checkbtn;
+                        }
+                    },
+                },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
         }
 
 

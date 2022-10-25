@@ -12,6 +12,7 @@ use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
+use App\Models\SalesPlan;
 
 class RebateIncentiveController extends Controller
 {
@@ -56,7 +57,7 @@ class RebateIncentiveController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
+                'units' => Unit::where('status_id', 5)->where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
                 'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
                 'customFields' => $customFields
@@ -175,7 +176,9 @@ class RebateIncentiveController extends Controller
         $unit = Unit::find($request->unit_id);
         $stakeholder = $unit->salesPlan[0]['stakeholder'];
         $leadSource = $unit->salesPlan[0]['leadSource'];
-        $salesPlan = $unit->salesPlan[0];
+        $salesPlan = SalesPlan::find($unit->salesPlan[0]['id']);
+        $additionalCosts = $salesPlan->additionalCosts;
+
         $floor = $unit->floor->short_label;
 
         return response()->json([
@@ -187,6 +190,7 @@ class RebateIncentiveController extends Controller
             'salesPlan' => $salesPlan,
             'floor' => $floor,
             'facing' => $unit->facing,
+            'additionalCosts' => $additionalCosts,
             // 'corner' => $unit->corner,
         ], 200);
     }

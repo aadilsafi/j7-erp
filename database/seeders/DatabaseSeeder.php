@@ -45,6 +45,9 @@ class DatabaseSeeder extends Seeder
             TeamUserSeeder::class,
             TemplatesSeeder::class,
             ModelTemplateSeeder::class,
+            AccountActionSeeder::class,
+            AccountHeadSeeder::class,
+            AccountingStartingCodeSeeder::class,
         ]);
     }
 }

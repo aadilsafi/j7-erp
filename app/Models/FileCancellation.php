@@ -8,7 +8,7 @@ use App\Models\FileCancellationAttachment;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class FileCanecllation extends Model
+class FileCancellation extends Model
 {
     use HasFactory, LogsActivity;
 

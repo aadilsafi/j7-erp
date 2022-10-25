@@ -269,6 +269,15 @@
                                     '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
                             }
                         },
+                        {
+                            name: 'import-floor',
+                            text: '<i data-feather="upload"></i> Import Floor',
+                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
+                            action: function(e, dt, node, config) {
+                                location.href =
+                                    '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
+                            }
+                        },
                     @endcan {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',

@@ -37,22 +37,23 @@
             <tr>
                 <th style="width:33%; text-align:start;">
                     <br>
-                    <img height="50px" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png" alt="logo">
+                    <img height="45px" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png"
+                        alt="logo">
                 </th>
                 <th style="width:48%; ">
                 </th>
                 <th style="width:33%; text-align:start;">
                     <br>
-                    <img height="50px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
+                    <img height="45px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
                 </th>
             </tr>
         </table>
 
-        <div class="row mt-3">
+        <div class="row mt-1">
             <h2 class="text-center">Cancellation Form</h2>
 
             <table class="mt-1">
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <b>Cancellation Data</b>
                     </td>
@@ -62,19 +63,19 @@
                                 <strong>Payment Due Date</strong>
                             </div>
                             <div class="col">
-                                22-Aug-2022
+                                {{ $file_cancel->payment_due_date}}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-4 text-nowrap">
                                 <strong>Cancellation Charges</strong>
                             </div>
                             <div class="col">
-                                120
+                                {{ number_format($file_cancel->cancellation_charges) }}
                             </div>
                         </div>
                     </td>
@@ -84,19 +85,19 @@
                                 <strong>Amount To Be Refunded</strong>
                             </div>
                             <div class="col">
-                                6,968,852
+                                {{ number_format($file_cancel->amount_to_be_refunded) }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-4">
                                 <strong>Paid Amount</strong>
                             </div>
                             <div class="col">
-                                6,968,975
+                                {{ number_format($total_paid_amount) }}
                             </div>
                         </div>
                     </td>
@@ -106,7 +107,7 @@
                                 <strong>Amount Remarks</strong>
                             </div>
                             <div class="col">
-                                ok
+                                {{ $file_cancel->amount_remarks }}
                             </div>
                         </div>
                     </td>
@@ -115,20 +116,20 @@
 
 
             <table class="mt-1">
-                <tr height="30px">
+                <tr height="20px">
                     <td colspan="2">
                         <b>Unit Information </b>
                     </td>
 
                 </tr>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>Unit No:</strong>
                             </div>
                             <div class="col">
-                                GF-01
+                                {{ $unit->floor_unit_number }}
                             </div>
                         </div>
                     </td>
@@ -138,19 +139,19 @@
                                 <strong>Unit Name:</strong>
                             </div>
                             <div class="col">
-                                Unit 1
+                                {{ $unit->name }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>Unit Type</strong>
                             </div>
                             <div class="col">
-                                Executive Suits
+                                {{ $unitType }}
                             </div>
                         </div>
                     </td>
@@ -160,19 +161,19 @@
                                 <strong>Gross Area</strong>
                             </div>
                             <div class="col">
-                                523
+                                {{ number_format($unit->gross_area) }}
                             </div>
                         </div>
                     </td>
                 </tr>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>Price Per Sqft</strong>
                             </div>
                             <div class="col">
-                                Executive Suits
+                                {{ number_format($salesPlan->unit_price) }}
                             </div>
                         </div>
                     </td>
@@ -182,7 +183,7 @@
                                 <strong>Total Price</strong>
                             </div>
                             <div class="col">
-                                13,598,000
+                                {{ number_format($salesPlan->total_price) }}
                             </div>
                         </div>
                     </td>
@@ -190,7 +191,7 @@
             </table>
 
             <table class="mt-1">
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <b>Customer Information </b>
                     </td>
@@ -199,14 +200,14 @@
             </table>
 
             <table>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>Name:</strong>
                             </div>
                             <div class="col">
-                                Zain Ali
+                                {{ $customer->full_name }}
                             </div>
                         </div>
                     </td>
@@ -216,7 +217,7 @@
                                 <strong>Father Name</strong>
                             </div>
                             <div class="col">
-                                Hassan Raza
+                                {{ $customer->father_name }}
                             </div>
                         </div>
                     </td>
@@ -224,14 +225,14 @@
             </table>
 
             <table>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>Designation</strong>
                             </div>
                             <div class="col">
-                                Engineer
+                                {{ $customer->designation }}
                             </div>
                         </div>
                     </td>
@@ -241,7 +242,7 @@
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                13302-0516802-7
+                                {{ cnicFormat($customer->cnic) }}
                             </div>
                         </div>
                     </td>
@@ -249,14 +250,14 @@
             </table>
 
             <table>
-                <tr height="30px">
+                <tr height="20px">
                     <td width="60%">
                         <div class="row">
                             <div class="col-3">
                                 <strong>NTN</strong>
                             </div>
                             <div class="col">
-                                123456789012
+                                {{ $customer->ntn }}
                             </div>
                         </div>
                     </td>
@@ -266,7 +267,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                0512226044
+                                {{ $customer->contact }}
                             </div>
                         </div>
                     </td>
@@ -274,14 +275,14 @@
             </table>
 
             <table>
-                <tr height="40px">
+                <tr height="20px">
                     <td colspan="2">
                         <div class="row">
                             <div class="col-2">
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                House No.380, Street No.114, Sector D-12/2, Islamabad.
+                                {{ $customer->address }}
                             </div>
                         </div>
                     </td>
@@ -293,7 +294,7 @@
             </div>
 
             <table>
-                <tr height="70px" class="text-center">
+                <tr height="20px" class="text-center">
                     <th style="border: 1px solid black;">
                         Sr.
                     </th>
@@ -317,78 +318,18 @@
                     </th>
                 </tr>
 
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
-                <tr class="text-center">
-                    <td>1</td>
-                    <td>Downpayment</td>
-                    <td>December 18, 2022</td>
-                    <td>3,399,500</td>
-                    <td>3,399,500</td>
-                    <td>0</td>
-                    <td>Paid</td>
-                </tr>
+                @foreach ($salesPlan->installments as $installment)
+                    <tr class="text-center">
+                        <td>{{ $installment->installment_order }}</td>
+                        <td class="text-capitalize">{{ $installment->type }}</td>
+                        <td>{{ $installment->date }}</td>
+                        <td>{{ number_format($installment->amount) }}</td>
+                        <td>{{ number_format($installment->paid_amount) }}</td>
+                        <td>{{ number_format($installment->remaining_amount) }}</td>
+                        <td class="text-capitalize">{{ $installment->status }}</td>
+                    </tr>
+                @endforeach
+
             </table>
 
             <div class="row mt-3">
@@ -430,7 +371,7 @@
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.print.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             $("#printable").printThis({
                 debug: false, // show the iframe for debugging
@@ -456,7 +397,7 @@
                 afterPrint: null // function called before iframe is removed
             });
 
-            $("#print").click(function () { });
+            $("#print").click(function() {});
         });
     </script>
 </body>

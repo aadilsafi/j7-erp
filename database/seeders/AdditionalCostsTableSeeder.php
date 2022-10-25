@@ -16,7 +16,7 @@ class AdditionalCostsTableSeeder extends Seeder
      */
     public function run()
     {
-        (new AdditionalCost())->insert([
+        $data = [
             [
                 'site_id' => 1,
                 'name' => 'Facings',
@@ -77,6 +77,10 @@ class AdditionalCostsTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now()
             ],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            (new AdditionalCost())->create($item);
+        }
     }
 }

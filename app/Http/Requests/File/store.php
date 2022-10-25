@@ -24,8 +24,8 @@ class store extends FormRequest
     public function rules()
     {
         return [
-            'application_form.registration_no' => 'required',
-            'application_form.application_no' => 'required',
+            'application_form.registration_no' => 'required||unique:file_management,registration_no',
+            'application_form.application_no' => 'required||unique:file_management,application_no',
             'application_form.photo' => 'required',
         ];
     }
@@ -34,7 +34,9 @@ class store extends FormRequest
     {
         return [
             "application_form.registration_no.required" => "Registration Number Required.",
-            "application_form.application_no" => "Application Number Required.",
+            "application_form.application_no.required" => "Application Number Required.",
+            "application_form.registration_no.unique" => "Registration Number Already Existed.",
+            "application_form.application_no.unique" => "Application Number Already Existed.",
             'application_form.photo' => 'Applicant Picture  Required',
         ];
     }

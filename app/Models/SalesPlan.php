@@ -58,7 +58,7 @@ class SalesPlan extends Model
 
     public function installments()
     {
-        return $this->hasMany(SalesPlanInstallments::class);
+        return $this->hasMany(SalesPlanInstallments::class)->orderBy('installment_order');
     }
 
     public function PaidorPartiallyPaidInstallments()

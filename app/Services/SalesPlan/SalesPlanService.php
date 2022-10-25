@@ -98,6 +98,7 @@ class SalesPlanService implements SalesPlanInterface
                 'cnic' => $stakeholderInput['cnic'],
                 'contact' => $stakeholderInput['contact'],
                 'address' => $stakeholderInput['address'],
+                'comments' => $stakeholderInput['comments'],
             ];
 
             $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([

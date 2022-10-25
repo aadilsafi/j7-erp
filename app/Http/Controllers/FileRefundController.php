@@ -18,8 +18,10 @@ use App\DataTables\FileRefundDataTable;
 use App\Http\Requests\FileRefund\store;
 use App\Models\ModelTemplate;
 use App\Models\Template;
+use App\Models\Type;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 use App\Services\CustomFields\CustomFieldInterface;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class FileRefundController extends Controller
 {
@@ -177,10 +179,10 @@ class FileRefundController extends Controller
         //
     }
 
-    public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_refund = FileRefund::find(decryptParams($file_refund_id));
+        $file_refund = FileRefund::where('file_id',decryptParams($file_id))->first();
         $file_refund->status = 1;
         $file_refund->update();
 
@@ -188,7 +190,7 @@ class FileRefundController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file = FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 2;
         $file->update();
 
@@ -213,15 +215,26 @@ class FileRefundController extends Controller
     {
 
         $file_refund = (new FileRefund())->find(decryptParams($file_id));
-
         $template = Template::find(decryptParams($template_id));
 
+        $file = FileManagement::where('id', $file_refund->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $unit_data = json_decode($file_refund->unit_data);
+        $unitType = Type::find($unit_data->id);
+     
         $data = [
-            'site_id' => decryptParams($site_id),
+            'unit' => $unit_data,
+            'unitType' => $unitType->name,
+            'customer' => json_decode($file_refund->stakeholder_data),
+            'refund_file' => $file_refund,
+            'total_paid_amount' => $total_paid_amount,
+            'salesPlan'=>$salesPlan,
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
-        return view($printFile, compact('data'));
+        return view($printFile, $data);
     }
 }

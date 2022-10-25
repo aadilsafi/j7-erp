@@ -2,7 +2,8 @@
     <div class="card-body">
         <div class="row mb-1">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <label class="form-label" style="font-size: 15px" for="typesTree">Types</label>
+                <label class="form-label" style="font-size: 15px" for="typesTree">Types <span
+                        class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select" id="typesTree" name="type">
                     <option value="0" selected>Parent Type</option>
                     @foreach ($types as $typeRow)
@@ -20,7 +21,7 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="type_name">Type Name</label>
+                <label class="form-label fs-5" for="type_name">Type Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg @error('type_name') is-invalid @enderror"
                     id="type_name" name="type_name" placeholder="Type Name"
                     value="{{ isset($type) ? $type->name : old('type_name') }}" onkeyup="convertToSlug(this.value);" />

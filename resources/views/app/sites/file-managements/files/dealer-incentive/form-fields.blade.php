@@ -12,7 +12,7 @@
                             onchange="getData(this.options[this.selectedIndex].value)">
                             <option>Select Dealer</option>
                             @foreach ($stakeholders as $row)
-                                @continue ($row->stakeholder_types[2]->status == 0)
+                                 @continue ($row->stakeholder_types[2]->status == 0)
                                 <option value="{{ $row->id }}">
                                     {{ $row->full_name }} ( {{ cnicFormat($row->cnic) }})
                                 </option>
@@ -61,7 +61,7 @@
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
-                            <input type="hidden" id="units_ids" name="unit_ids[]">
+                            
                                 <table class="table table-hover table-striped table-borderless" id="installments_table"
                                     style="position: relative;">
                                     <thead style="position: sticky; top: 0; z-index: 10;">

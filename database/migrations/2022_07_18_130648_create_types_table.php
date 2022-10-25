@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('slug')->unique();
             $table->integer('parent_id')->default(0);
+            $table->boolean('status')->default(true);
+            $table->boolean('account_added')->default(false);
+            $table->string('account_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

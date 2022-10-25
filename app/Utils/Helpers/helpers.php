@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\GeneralException;
 use App\Models\{
     AccountLedger,
     AdditionalCost,
@@ -12,6 +13,7 @@ use App\Models\{
     Team,
     Unit,
     AccountHead,
+    AccountingStartingCode,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -622,6 +624,17 @@ if (!function_exists('getModelsClasses')) {
     {
         if ($excepts === null) {
             $excepts = [
+                'App\Models\AccountAction',
+                'App\Models\AccountActionBinding',
+                'App\Models\AccountHead',
+                'App\Models\AccountingStartingCode',
+                'App\Models\AccountLedger',
+                'App\Models\AccountPayable',
+                'App\Models\CustomerAccountPayable',
+                'App\Models\DealerAccountPayable',
+                'App\Models\SupplierAccountPayable',
+                'App\Models\Bank',
+                'App\Models\Cash',
                 'App\Models\Upload',
                 'App\Models\CustomField',
                 'App\Models\Media',
@@ -955,21 +968,43 @@ if (!function_exists('makeFinancialTransaction')) {
 if (!function_exists('addAccountCodes')) {
     function addAccountCodes($model)
     {
+
+        $account_starting_code = AccountingStartingCode::where([
+            'level' => 2,
+            'model' => $model,
+        ])->orderBy('starting_code')->first();
+
+        $account_ending_code = AccountingStartingCode::where([
+            'level' => 2,
+            'level_code' => $account_starting_code->level_code,
+        ])->where(
+            'starting_code' ,'>' ,$account_starting_code->starting_code
+        )->orderBy('starting_code')->first();
+
+
+        $starting_code = intval($account_starting_code->level_code.$account_starting_code->starting_code);
+        $ending_code =  intval( empty($account_ending_code) ? 999999 : $account_ending_code->level_code.$account_ending_code->starting_code);
+
         $account_head  = AccountHead::whereHasMorph(
             'modelable',
             $model,
         )->get();
-        $acoount_code = null;
+
+        $account_code = $starting_code;
 
         if (isset($account_head)) {
 
             $last_account_head = collect($account_head)->last();
             $level = $last_account_head->level;
-            // dd($level);
-            $acoount_code =  $last_account_head->code + 1;
+            $level_code = $last_account_head->level_code;
+
+            $account_code =  $last_account_head->code + 1;
+            if($account_code >= $ending_code){
+                throw new GeneralException('Accounts are reflecting please rearrange your coding system');
+            }
 
         }
 
-        return $acoount_code;
+        return $account_code;
     }
 }

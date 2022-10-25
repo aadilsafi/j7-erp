@@ -35,33 +35,41 @@
         method="POST">
 
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                @else
+                    <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            @endif
 
-                @method('PUT')
-                @csrf
-                {{ view('app.sites.floors.units.form-fields', [
-                    'site' => $site,
-                    'floor' => $floor,
-                    'siteConfiguration' => $siteConfiguration,
-                    'additionalCosts' => $additionalCosts,
-                    'types' => $types,
-                    'statuses' => $statuses,
-                    'unit' => $unit,
-                    'bulkOptions' => false,
-                ]) }}
-            </div>
-
+            @method('PUT')
+            @csrf
+            {{ view('app.sites.floors.units.form-fields', [
+                'site' => $site,
+                'floor' => $floor,
+                'siteConfiguration' => $siteConfiguration,
+                'additionalCosts' => $additionalCosts,
+                'types' => $types,
+                'statuses' => $statuses,
+                'unit' => $unit,
+                'bulkOptions' => false,
+            ]) }}
+        </div>
+        @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+        @else
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: 10 !important;">
                     <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit" @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)disabled='disabled' @endif
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI">
-                                        <i data-feather='save'></i>
-                                        <span id="update_unit_button_span">Update Unit</span>
-                                    </button>
+                                    @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
+                                    @else
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI">
+                                            <i data-feather='save'></i>
+                                            <span id="update_unit_button_span">Update Unit</span>
+                                        </button>
+                                    @endif
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
@@ -75,6 +83,8 @@
                     </div>
                 </div>
             </div>
+        @endif
+
         </div>
     </form>
 @endsection

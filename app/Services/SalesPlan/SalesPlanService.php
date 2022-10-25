@@ -284,7 +284,7 @@ class SalesPlanService implements SalesPlanInterface
                 'url' => str_replace('/store', '', $currentURL),
             ];
 
-            Notification::send($specificUsers, new DefaultNotification($notificaionData));
+            // Notification::send($specificUsers, new DefaultNotification($notificaionData));
             LogBatch::endBatch();
             return $salesPlan;
         });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TypesDataTable;
+use App\Exceptions\GeneralException;
 use App\Http\Requests\types\{
     storeRequest as typeStoreRequest,
     updateRequest as typeUpdateRequest
@@ -82,7 +83,11 @@ class TypeController extends Controller
             } else {
                 abort(403);
             }
-        } catch (Exception $ex) {
+        }
+        catch (GeneralException $ex){
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
+        }
+        catch (Exception $ex) {
             return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
         }
     }

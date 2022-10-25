@@ -27,6 +27,16 @@ class AccountingStartingCodeSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'site_id' => 1,
+                'model' => 'App\Models\Bank',
+                'level_code' => '1020',
+                'level' => 2,
+                'starting_code' => '90',
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

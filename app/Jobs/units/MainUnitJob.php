@@ -69,6 +69,8 @@ class MainUnitJob implements ShouldQueue
                 'type_id' => $this->inputs['type_id'],
                 'status_id' => $this->inputs['status_id'],
                 'active' => $this->isUnitActive,
+                'has_sub_units' => false,
+                'is_for_rebate' => false,
                 'created_at' => now(),
                 'updated_at' => now()
             ];

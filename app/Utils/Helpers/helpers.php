@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\{
+    AccountLedger,
     AdditionalCost,
     Floor,
     SiteConfigration,
@@ -10,6 +11,7 @@ use App\Models\{
     StakeholderType,
     Team,
     Unit,
+    AccountHead,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -850,7 +852,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column,'',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -865,7 +868,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column, '',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -928,5 +932,44 @@ if (!function_exists('generateSlug')) {
             }
         }
         return $slug;
+    }
+}
+
+if (!function_exists('makeFinancialTransaction')) {
+    function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
+    {
+        $data = [
+            'site_id' => $site_id,
+            'account_head_code' => $account_code,
+            'balance' => 0,
+            'nature_of_account' => $nature_of_account,
+            'status' => true,
+        ];
+
+        $data[$type] = $amount;
+
+        return (new AccountLedger())->create($data);
+    }
+}
+
+if (!function_exists('addAccountCodes')) {
+    function addAccountCodes($model)
+    {
+        $account_head  = AccountHead::whereHasMorph(
+            'modelable',
+            $model,
+        )->get();
+        $acoount_code = null;
+
+        if (isset($account_head)) {
+
+            $last_account_head = collect($account_head)->last();
+            $level = $last_account_head->level;
+            // dd($level);
+            $acoount_code =  $last_account_head->code + 1;
+
+        }
+
+        return $acoount_code;
     }
 }

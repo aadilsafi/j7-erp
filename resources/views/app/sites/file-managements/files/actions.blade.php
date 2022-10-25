@@ -68,7 +68,7 @@
     {{-- File Cancellation --}}
     @if (Route::current()->getName() == 'sites.file-managements.file-cancellation.index')
         @php
-            $checkFileCancellation = DB::table('file_canecllations')
+            $checkFileCancellation = DB::table('file_cancellations')
             ->where('file_id', $file_id)
                 ->first();
         @endphp

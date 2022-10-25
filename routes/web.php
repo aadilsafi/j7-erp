@@ -177,6 +177,10 @@ Route::group([
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
+                    Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false])->name('importFloors');
+                    Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
+
+
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 
@@ -524,7 +528,6 @@ Route::group([
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                         });
-
                     });
                 });
             });

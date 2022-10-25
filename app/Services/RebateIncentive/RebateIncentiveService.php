@@ -106,6 +106,10 @@ class RebateIncentiveService implements RebateIncentiveInterface
 
             $rebate = $this->model()->create($rebatedata);
 
+            $unit = Unit::find($inputs['unit_id']);
+            $unit->is_for_rebate = false;
+            $unit->update();
+            
             return $rebate;
         });
     }

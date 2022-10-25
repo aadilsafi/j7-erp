@@ -15,7 +15,7 @@ class CityTableSeeder extends Seeder
     public function run()
     {
 
-        $cities = [
+        $data = [
             [
                 "name" =>  "Karachi",
                 "state_id" =>  1,
@@ -649,6 +649,8 @@ class CityTableSeeder extends Seeder
                 "state_id" =>  5,
             ]
         ];
-        (new City())->insert($cities);
+        foreach ($data as $item) {
+            (new City())->create($item);
+        }
     }
 }

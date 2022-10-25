@@ -119,7 +119,7 @@ class FloorsDataTable extends DataTable
             $buttons[] = Button::raw('copy-floor')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                 ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')->attr(['onclick' => 'copyFloor()']);
         }
-
+      
         $buttons = array_merge($buttons, [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),

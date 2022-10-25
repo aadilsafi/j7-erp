@@ -19,7 +19,7 @@
 
 @section('custom-css')
     <style>
-        .hideDiv{
+        .hideDiv {
             display: none;
         }
     </style>
@@ -45,7 +45,7 @@
         @csrf
 
         <div class="row">
-            <div id="loader"  class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            <div id="loader" class="col-lg-9 col-md-9 col-sm-12 position-relative">
                 {{ view('app.sites.file-managements.files.dealer-incentive.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
@@ -53,7 +53,7 @@
                     'rebate_files' => $rebate_files,
                     'stakeholders' => $stakeholders,
                     'incentives' => $incentives,
-                    'customFields' => $customFields
+                    'customFields' => $customFields,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -134,9 +134,10 @@
                                 $('#dynamic_unit_rows').append(
                                     '<tr class="text-nowrap">',
                                     '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="type" type="checkbox" area="' +
-                                    response.units[i]['gross_area'] + '" name="" unit_id="' + response
-                                    .units[i]['id'] + '"></td>',
+                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="unit_id" type="checkbox" area="' +
+                                    response.units[i]['gross_area'] + '" value="' + response.units[i][
+                                    'id'] + '"><input type="hidden" value="' + response.units[i]['id'] +
+                                    '" name="unit_ids[][uid]"></td>',
                                     '<td class="text-nowrap text-center">' + response
                                     .units[i]['name'] + '</td>',
                                     // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
@@ -150,7 +151,7 @@
                                     '</td>',
                                     '</tr>', );
                             }
-                          
+
                         }
                         hideBlockUI('#loader');
                     } else {
@@ -181,18 +182,16 @@
             //     total_area = parseFloat(total_area) + parseFloat(element[1]);
             // }
 
-            $("input:checkbox[name=type]:checked").each(function() {
+            $("input:checkbox[name=unit_id]:checked").each(function() {  
                 element.push($(this).attr('area'));
             });
-            
-            $("input:checkbox[name=type]:checked").each(function() {
-                ids.push($(this).attr('unit_id'));
+
+            $.each(element, function() {
+                total_area += parseFloat(this) || 0;
             });
-            $.each(element,function(){total_area+=parseFloat(this) || 0;});
 
             $('#total_unit_area').val(total_area);
 
-            $('#units_ids').val(ids);
             var inputValue = $('#dealer_incentive').val();
             var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
 

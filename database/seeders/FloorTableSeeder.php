@@ -58,6 +58,8 @@ class FloorTableSeeder extends Seeder
             ],
         ];
 
-        (new Floor())->insert($data);
+        foreach ($data as $item) {
+            (new Floor())->create($item);
+        }
     }
 }

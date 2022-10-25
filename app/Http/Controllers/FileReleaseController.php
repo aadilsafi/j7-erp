@@ -216,10 +216,10 @@ class FileReleaseController extends Controller
         //
     }
 
-    public function ApproveFileResale($site_id, $unit_id, $customer_id, $file_refund_id)
+    public function ApproveFileResale($site_id, $unit_id, $customer_id, $file_id)
     {
 
-        $file_resale = FileResale::find(decryptParams($file_refund_id));
+        $file_resale = FileResale::where('file_id',decryptParams($file_id))->first();
         $file_resale->status = 1;
         $file_resale->update();
 
@@ -227,7 +227,7 @@ class FileReleaseController extends Controller
         $unit->status_id = 1;
         $unit->update();
 
-        $file = FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first();
+        $file =  FileManagement::find(decryptParams($file_id));
         $file->file_action_id = 5;
         $file->update();
 

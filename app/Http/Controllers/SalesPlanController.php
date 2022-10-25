@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Notifications\ApprovedSalesPlanNotification;
 use App\Services\AdditionalCosts\AdditionalCostInterface;
+use App\Utils\Enums\NatureOfAccountsEnum;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
 use Illuminate\Support\Facades\Log;
@@ -42,7 +43,6 @@ class SalesPlanController extends Controller
         $this->stakeholderInterface = $stakeholderInterface;
         $this->leadSourceInterface = $leadSourceInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -110,10 +110,10 @@ class SalesPlanController extends Controller
             $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withSuccess('Sales Plan Saved!');
         } catch (GeneralException $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong') . ' '. $ex->getMessage());
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         } catch (Exception $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -218,10 +218,10 @@ class SalesPlanController extends Controller
         return apiSuccessResponse($installments);
     }
 
-    public function approveSalesPlan(Request $request,$site_id, $floor_id, $unit_id)
+    public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
     {
 
-        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id',decryptParams($unit_id))->update([
+        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->update([
             'status' => 2,
             'approved_date' => now(),
         ]);
@@ -231,9 +231,13 @@ class SalesPlanController extends Controller
             'approved_date' => now(),
         ]);
 
-        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
+
+        // return $salesPlan;
 
         $user = User::find($salesPlan->user_id);
+
+        makeFinancialTransaction(decryptParams($site_id), $salesPlan->stakeholder->stakeholderAsCustomer[0]->receivable_account, 'debit', floatval($salesPlan->total_price), NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
 
         $currentURL = URL::current();
         $notificaionData = [

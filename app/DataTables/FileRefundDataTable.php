@@ -78,7 +78,7 @@ class FileRefundDataTable extends DataTable
             // Refund Actions
             ->editColumn('refund_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileRefund[0])) {
-                    return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileRefund[0]['id'], 'file_refund_status' => $fileManagement->fileRefund[0]['status'],]);
+                    return view('app.sites.file-managements.files.files-actions.file-refund.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id, 'file_refund_id' => $fileManagement->fileRefund[0]['id'], 'file_refund_status' => $fileManagement->fileRefund[0]['status'],'file_id' =>$fileManagement->id]);
                 } else {
                     return "-";
                 }

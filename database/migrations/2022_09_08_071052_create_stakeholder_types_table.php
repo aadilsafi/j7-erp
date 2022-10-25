@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('type')->nullable();
             $table->unique(['stakeholder_id', 'type']);
             $table->string('stakeholder_code')->nullable();
+            $table->string('receivable_account')->nullable();
+            $table->string('payable_account')->nullable();
             $table->boolean('status');
             $table->timestamps();
         });

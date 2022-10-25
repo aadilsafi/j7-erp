@@ -51,58 +51,50 @@
                 </Button>
             </div>
             <div class="accordion accordion-margin" id="accordionMargin">
-                @foreach($floors as $key => $value)
-                    <div class="accordion-item">
+                @foreach ($floors as $key => $value)
+                    <div class="accordion-item" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         <h2 class="accordion-header">
-                        <button
-                            class="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accordianFloor{{ $value->id }}"
-                            aria-expanded="false"
-                            aria-controls="accordianFloor{{ $value->id }}"
-                        >
-                            Floor {{ $value->id }}
-                        </button>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#accordianFloor{{ $value->id }}" aria-expanded="false"
+                                aria-controls="accordianFloor{{ $value->id }}">
+                                {{ $value->name }}
+                            </button>
                         </h2>
-                        <div
-                        id="accordianFloor{{ $value->id }}"
-                        class="accordion-collapse collapse"
-                        data-bs-parent="#accordionMargin"
-                        >
-                        <div class="accordion-body">
-                            <div class="table-responsive">
+                        <div id="accordianFloor{{ $value->id }}" class="accordion-collapse collapse"
+                            data-bs-parent="#accordionMargin">
+                            <div class="accordion-body">
+                                <div class="table-responsive">
 
-                                <table
-                                    class="table table-light table-striped table_style floor-preview-datatable-{{ $value->id }} data-table "
-                                    id="dataTables">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <td>UNITS</td>
-                                            <td>Type</td>
-                                            <td>Status</td>
-                                            <td>Width</td>
-                                            <td>Length</td>
-                                            <td>Net Area</td>
-                                            <td>Gross Area</td>
-                                            <td>Price Sqft</td>
-                                            <td>Corner</td>
-                                            <td>Facing</td>
-                                            <td>Created at</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
+                                    <table
+                                        class="table table-light table-striped table_style floor-preview-datatable-{{ $value->id }} data-table "
+                                        id="dataTables">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <td>UNITS</td>
+                                                <td>Type</td>
+                                                <td>Status</td>
+                                                <td>Width</td>
+                                                <td>Length</td>
+                                                <td>Net Area</td>
+                                                <td>Gross Area</td>
+                                                <td>Price Sqft</td>
+                                                <td>Corner</td>
+                                                <td>Facing</td>
+                                                <td>Created at</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
 
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 @endforeach
 
 
-              </div>
+            </div>
         </div>
     </div>
 
@@ -131,29 +123,33 @@
 
 @section('custom-js')
     <script>
-        $(document).ready(function(){
-            $(function () {
+        $(document).ready(function() {
+            $(function() {
                 $.ajax({
                     type: "GET",
-                    url: '{{ route('sites.floors.pending.get',['site_id'=>':site_id']) }}'.replace(':site_id',"{{ $site_id }}"),
-                    success: function (res) {
+                    url: '{{ route('sites.floors.pending.get', ['site_id' => ':site_id']) }}'.replace(
+                        ':site_id', "{{ $site_id }}"),
+                    success: function(res) {
                         res.forEach(element => {
                             console.log(element.id);
                             console.log(element.site_id);
-                            loadFloorPreviewDatatable(element.id,element.site_id);
+                            loadFloorPreviewDatatable(element.id, element.site_id);
                         });
                     }
                 });
             });
 
-            function loadFloorPreviewDatatable(id,site_id) {
+            function loadFloorPreviewDatatable(id, site_id) {
 
                 var table = $('.floor-preview-datatable-' + id).DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url: '{{ route('sites.floors.preview',['id'=>':id','site_id'=>':site_id']) }}'.replace(':id',id).replace(':site_id',site_id),
-                        data: { id: id },
+                        url: '{{ route('sites.floors.preview', ['id' => ':id', 'site_id' => ':site_id']) }}'
+                            .replace(':id', id).replace(':site_id', site_id),
+                        data: {
+                            id: id
+                        },
                     },
                     columns: [
 
@@ -232,25 +228,25 @@
         });
 
 
-        $(document).on('focusout', '.unit-p-text-input', function (e) {
+        $(document).on('focusout', '.unit-p-text-input', function(e) {
 
             field = $(this).data('field');
             value = $(this).val();
             id = $(this).data('id');
             el = $(this);
             if (value != '') {
-                showBlockUI('#unit_p_input_div_'+field+id);
-                updateUnitField(id,value,field);
+                showBlockUI('#unit_p_input_div_' + field + id);
+                updateUnitField(id, value, field);
                 {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
                 parent = el.parent();
                 parent.empty();
-                parent.append('<span>'+value+'</span>');
+                parent.append('<span>' + value + '</span>');
                 parent.data('value', value);
                 parent.removeClass('filedrendered');
             }
         });
 
-        $(document).on('change', '.unit-p-type-select', function(e){
+        $(document).on('change', '.unit-p-type-select', function(e) {
 
             value = $(this).val();
             selected = $(this).find('option:selected');
@@ -260,33 +256,32 @@
             field = $(this).data('field');
             el = $(this);
             if (value != '') {
-                showBlockUI('#unit_p_input_div_'+field+id);
-                updateUnitField(id,value,field);
+                showBlockUI('#unit_p_input_div_' + field + id);
+                updateUnitField(id, value, field);
                 {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
                 parent = el.parent();
-                if(field == 'facing_id'){
+                if (field == 'facing_id') {
                     boxel = parent.children('.unit-p-checkbox');
                     parent.empty();
                     parent.append(boxel);
-                }
-                else{
+                } else {
                     parent.empty();
                 }
 
-                parent.append('<span>'+splitedText[1]+'</span>');
+                parent.append('<span>' + splitedText[1] + '</span>');
                 parent.data('value', splitedText[1]);
                 parent.removeClass('filedrendered');
             }
 
         });
 
-        $(document).on('change', '.unit-p-checkbox', function(e){
+        $(document).on('change', '.unit-p-checkbox', function(e) {
 
             value = 1;
             id = $(this).data('id');
             field = $(this).data('field');
-            showBlockUI('#unit_p_input_div_'+field+id);
-            updateUnitField(id,value,field,$(this));
+            showBlockUI('#unit_p_input_div_' + field + id);
+            updateUnitField(id, value, field, $(this));
         });
 
         function updateUnitField(id, value, field, element = null) {
@@ -301,7 +296,7 @@
                 value: value,
                 id: id,
                 field: field,
-                'fieldsData' : {}
+                'fieldsData': {}
             };
 
             data['fieldsData'][field] = value;
@@ -311,7 +306,7 @@
                 type: 'GET',
                 data: data,
                 success: function(response) {
-                    if(response['status']){
+                    if (response['status']) {
                         toastr.success(response['message']);
                         if (response['data']['facing'] == 'yes' || response['data']['facing'] == 'no') {
                             $.ajax({
@@ -334,8 +329,7 @@
 
                         }
                         hideBlockUI('#unit_p_input_div_' + field + id);
-                    }
-                    else{
+                    } else {
                         toastr.error(response['message'][field]);
                     }
 
@@ -349,45 +343,46 @@
             });
         }
 
-        $(document).on('click', '.unit_p_input_div', function(e){
-            if(!$(this).hasClass('filedrendered')){
+        $(document).on('click', '.unit_p_input_div', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                showBlockUI('#unit_p_input_div_'+field+id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
 
                 var url = "{{ route('ajax-unit.get.input') }}";
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        data: {value:value,
-                            id:id,
-                            field:field,
-                            inputtype:inputtype
-                        },
-                        success: function (response) {
-                            console.log(response['data']);
-                            if(response['status']){
-                                console.log('insuccess');
-                                el.empty();
-                                el.append(response['data']);
-                                el.addClass('filedrendered');
-                                $(".unit-p-type-select").select2();
-                            }
-                            hideBlockUI('#unit_p_input_div_'+field+id);
-                        },
-                        error: function (response) {
-                            hideBlockUI('#unit_p_input_div_'+field+id);
-                        },
-                    });
-                }
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        value: value,
+                        id: id,
+                        field: field,
+                        inputtype: inputtype
+                    },
+                    success: function(response) {
+                        console.log(response['data']);
+                        if (response['status']) {
+                            console.log('insuccess');
+                            el.empty();
+                            el.append(response['data']);
+                            el.addClass('filedrendered');
+                            $(".unit-p-type-select").select2();
+                        }
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                    error: function(response) {
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                });
+            }
         });
 
-        function saveFloors(){
-            location.href = '{{ route('sites.floors.changes.save', ['site_id' => ':site_id']) }}'.replace(':site_id',"{{ encryptParams(decryptParams($site_id)) }}");
+        function saveFloors() {
+            location.href = '{{ route('sites.floors.changes.save', ['site_id' => ':site_id']) }}'.replace(':site_id',
+                "{{ encryptParams(decryptParams($site_id)) }}");
         }
-
     </script>
 @endsection

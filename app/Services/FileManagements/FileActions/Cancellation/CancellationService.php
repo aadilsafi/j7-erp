@@ -4,29 +4,25 @@ namespace App\Services\FileManagements\FileActions\Cancellation;
 
 use App\Models\Unit;
 use App\Models\User;
-use App\Models\FileBuyBack;
 use App\Models\Stakeholder;
 use App\Models\FileManagement;
-use App\Models\FileCanecllation;
+use App\Models\FileCancellation;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
-use App\Models\FileRefundAttachment;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
 use App\Models\FileCancellationAttachment;
-use App\Models\FileBuyBackLabelsAttachment;
 use Illuminate\Support\Facades\Notification;
 
 use App\Notifications\FileRefundNotification;
-use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface as BuyBackInterface;
 
 class CancellationService implements CancellationInterface
 {
 
     public function model()
     {
-        return new FileCanecllation();
+        return new FileCancellation();
     }
 
     // Get

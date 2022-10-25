@@ -622,6 +622,17 @@ if (!function_exists('getModelsClasses')) {
     {
         if ($excepts === null) {
             $excepts = [
+                'App\Models\AccountAction',
+                'App\Models\AccountActionBinding',
+                'App\Models\AccountHead',
+                'App\Models\AccountingStartingCode',
+                'App\Models\AccountLedger',
+                'App\Models\AccountPayable',
+                'App\Models\CustomerAccountPayable',
+                'App\Models\DealerAccountPayable',
+                'App\Models\SupplierAccountPayable',
+                'App\Models\Bank',
+                'App\Models\Cash',
                 'App\Models\Upload',
                 'App\Models\CustomField',
                 'App\Models\Media',

@@ -37,7 +37,7 @@ class UnitTypeService implements UnitTypeInterface
     // Store
     public function store($site_id, $inputs)
     {
-        $accountCode =   addAccountCodes($this->model()::class);
+        // $accountCode = addAccountCodes($this->model()::class);
         $data = [
             'site_id' => decryptParams($site_id),
             'name' => $inputs['type_name'],
@@ -45,23 +45,23 @@ class UnitTypeService implements UnitTypeInterface
             'parent_id' => $inputs['type'],
         ];
 
-        if (!is_null($accountCode) && $inputs['type'] == 0) {
+        // if (!is_null($accountCode) && $inputs['type'] == 0) {
 
-            $data['account_added'] = true;
-            $data['account_number'] = $accountCode;
-        }
+        //     $data['account_added'] = true;
+        //     $data['account_number'] = $accountCode;
+        // }
 
         $type = $this->model()->create($data);
 
-        if (!is_null($accountCode) && $inputs['type'] == 0) {
+        // if (!is_null($accountCode) && $inputs['type'] == 0) {
 
-            $type->modelable()->create([
-                'site_id' => decryptParams($site_id),
-                'code' => $accountCode,
-                'name' => 'Accounts Receviable - ' . $inputs['type_name'],
-                'level' => 3,
-            ]);
-        }
+        //     $type->modelable()->create([
+        //         'site_id' => decryptParams($site_id),
+        //         'code' => $accountCode,
+        //         'name' => 'Accounts Receviable - ' . $inputs['type_name'],
+        //         'level' => 3,
+        //     ]);
+        // }
 
         return $type;
     }

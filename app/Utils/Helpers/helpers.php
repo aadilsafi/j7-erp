@@ -959,13 +959,15 @@ if (!function_exists('addAccountCodes')) {
             'modelable',
             $model,
         )->get();
-
         $acoount_code = null;
 
         if (isset($account_head)) {
 
             $last_account_head = collect($account_head)->last();
+            $level = $last_account_head->level;
+            // dd($level);
             $acoount_code =  $last_account_head->code + 1;
+
         }
 
         return $acoount_code;

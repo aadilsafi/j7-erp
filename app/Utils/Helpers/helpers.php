@@ -11,6 +11,7 @@ use App\Models\{
     StakeholderType,
     Team,
     Unit,
+    AccountHead,
 };
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -851,7 +852,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column,'',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -866,7 +868,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column, '',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -949,3 +952,22 @@ if (!function_exists('makeFinancialTransaction')) {
     }
 }
 
+if (!function_exists('addAccountCodes')) {
+    function addAccountCodes($model)
+    {
+        $account_head  = AccountHead::whereHasMorph(
+            'modelable',
+            $model,
+        )->get();
+
+        $acoount_code = null;
+
+        if (isset($account_head)) {
+
+            $last_account_head = collect($account_head)->last();
+            $acoount_code =  $last_account_head->code + 1;
+        }
+
+        return $acoount_code;
+    }
+}

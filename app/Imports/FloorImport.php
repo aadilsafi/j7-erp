@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class FloorImport implements ToModel, WithChunkReading, ShouldQueue, WithBatchInserts, WithValidation
+class FloorImport implements ToModel, WithChunkReading, ShouldQueue, WithBatchInserts
 {
     use Importable;
     public function model(array $row)
@@ -34,12 +34,12 @@ class FloorImport implements ToModel, WithChunkReading, ShouldQueue, WithBatchIn
         return 5000;
     }
 
-    public function rules(): array
-    {
-        return [
-            '0' => ['required', 'numeric', 'max:255'],
-            '1' => ['required', 'numeric'],
-            '2' => ['required', 'string', 'max:10'],
-        ];
-    }
+    // public function rules(): array
+    // {
+    //     return [
+    //         '0' => ['required', 'numeric', 'max:255'],
+    //         '1' => ['required', 'numeric'],
+    //         '2' => ['required', 'string', 'max:10'],
+    //     ];
+    // }
 }

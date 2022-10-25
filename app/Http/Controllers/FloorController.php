@@ -342,15 +342,37 @@ class FloorController extends Controller
 
     public function ImportPreview(Request $request, $site_id)
     {
+        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+        // return redirect()->back()->with('success', 'All good!');
+
+        $array = Excel::toArray(new FloorImport, $request->file('attachment'));
+        TempFloor::create([
+            'import-data' => json_encode($array[0]),
+
+        ]);
+        $db_fields = [
+            'Name',
+            'Area',
+            'Short Code',
+                                    
+        ];
+          $data = [
+            'site_id' => decryptParams($site_id),
+            'data' => $array[0],
+            'preview' => true,
+            'db_fields'=> $db_fields
+        ];
+        return view('app.sites.floors.importFloors', $data);
+      
         // TempFloor::truncate();
         // dd($request->all());
         // $import = new FloorImport();
         // $import->import($request->file('attachment'));
 
         // dd($import->errors());
-        $data = Excel::import(new FloorImport, $request->file('attachment'));
-        // $array = Excel::toArray(new FloorImport, $request->file('attachment'));
-        // dd($array);
+        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+
+       
 
 
         // $reader = new Xlsx();
@@ -374,16 +396,7 @@ class FloorController extends Controller
 
 
 
-
-
-
-
-
-
-        return redirect()->back()->with('success', 'All good!');
     }
-
-
     public function test()
     {
         // dd($data);

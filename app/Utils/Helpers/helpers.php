@@ -987,19 +987,13 @@ if (!function_exists('addAccountCodes')) {
 
             $account_code =  $last_account_head->code + 1;
             if ($account_code >= $ending_code) {
-                throw new GeneralException('Accounts are reflecting please rearrange your coding system');
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
             }
         }
 
         return $account_code;
     }
 }
-
-// if (!function_exists('createFinancialAccount')) {
-//     function createFinancialAccount($site_id)
-//     {6
-//     }
-// }
 
 // if (!function_exists('makeFinancialTransaction')) {
 //     function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
@@ -1037,10 +1031,8 @@ if (!function_exists('makeSalesPlanTransaction')) {
         }
 
         // Get Account Head Code
-        $accountHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code);
+        $accountUnitHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code, 4);
 
-
-        dd($ancesstorType, $accountingUnitCode, $salesPlan->toArray());
     }
 }
 
@@ -1056,15 +1048,20 @@ if (!function_exists('getTypeAncesstorData')) {
 }
 
 if (!function_exists('getUnitAccountCode')) {
-    function getUnitAccountCode($AccountNumber, $StartingCode)
+    function getUnitAccountCode($AccountNumber, $StartingCode, $level, $EndingCode = 9999)
     {
         $accountHead = (new AccountHead())->where([
-            'level' => 4,
-            'level_code' => $AccountNumber,
+            'level' => $level,
+            'code' => $AccountNumber,
         ])->where('code', '>=', $AccountNumber . $StartingCode)->orderBy('code')->first();
 
         if (isset($accountHead)) {
-            $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1);
+            $code = $accountHead->code + 1;
+            if ($code < 9999) {
+                $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1, $level, $EndingCode);
+            } else {
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+            }
         } else {
             $accountHead = $AccountNumber . $StartingCode;
         }

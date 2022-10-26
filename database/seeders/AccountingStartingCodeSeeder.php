@@ -59,6 +59,16 @@ class AccountingStartingCodeSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
+                'model' => 'App\Models\Unit',
+                'level_code' => '000000',
+                'level' => 4,
+                'starting_code' => '0001',
+                'status' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'site_id' => 1,
                 'model' => 'App\Models\CustomerAccountPayable',
                 'level_code' => '202010',
                 'level' => 4,

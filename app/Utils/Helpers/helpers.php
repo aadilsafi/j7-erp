@@ -14,7 +14,9 @@ use App\Models\{
     Unit,
     AccountHead,
     AccountingStartingCode,
+    SalesPlan,
 };
+use App\Utils\Enums\NatureOfAccountsEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
@@ -948,23 +950,6 @@ if (!function_exists('generateSlug')) {
     }
 }
 
-if (!function_exists('makeFinancialTransaction')) {
-    function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
-    {
-        $data = [
-            'site_id' => $site_id,
-            'account_head_code' => $account_code,
-            'balance' => 0,
-            'nature_of_account' => $nature_of_account,
-            'status' => true,
-        ];
-
-        $data[$type] = $amount;
-
-        return (new AccountLedger())->create($data);
-    }
-}
-
 if (!function_exists('addAccountCodes')) {
     function addAccountCodes($model)
     {
@@ -978,12 +963,14 @@ if (!function_exists('addAccountCodes')) {
             'level' => 2,
             'level_code' => $account_starting_code->level_code,
         ])->where(
-            'starting_code' ,'>' ,$account_starting_code->starting_code
+            'starting_code',
+            '>',
+            $account_starting_code->starting_code
         )->orderBy('starting_code')->first();
 
 
-        $starting_code = intval($account_starting_code->level_code.$account_starting_code->starting_code);
-        $ending_code =  intval( empty($account_ending_code) ? 999999 : $account_ending_code->level_code.$account_ending_code->starting_code);
+        $starting_code = intval($account_starting_code->level_code . $account_starting_code->starting_code);
+        $ending_code =  intval(empty($account_ending_code) ? 999999 : $account_ending_code->level_code . $account_ending_code->starting_code);
 
         $account_head  = AccountHead::whereHasMorph(
             'modelable',
@@ -999,12 +986,89 @@ if (!function_exists('addAccountCodes')) {
             $level_code = $last_account_head->level_code;
 
             $account_code =  $last_account_head->code + 1;
-            if($account_code >= $ending_code){
+            if ($account_code >= $ending_code) {
                 throw new GeneralException('Accounts are reflecting please rearrange your coding system');
             }
-
         }
 
         return $account_code;
+    }
+}
+
+// if (!function_exists('createFinancialAccount')) {
+//     function createFinancialAccount($site_id)
+//     {6
+//     }
+// }
+
+// if (!function_exists('makeFinancialTransaction')) {
+//     function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
+//     {
+//         makeFinancialTransaction(decryptParams($site_id), $salesPlan->stakeholder->stakeholderAsCustomer[0]->receivable_account, 'debit', floatval($salesPlan->total_price), NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+//         $data = [
+//             'site_id' => $site_id,
+//             'account_head_code' => $account_code,
+//             'balance' => 0,
+//             'nature_of_account' => $nature_of_account,
+//             'status' => true,
+//         ];
+
+//         $data[$type] = $amount;
+
+//         return (new AccountLedger())->create($data);
+//     }
+// }
+if (!function_exists('makeSalesPlanTransaction')) {
+    function makeSalesPlanTransaction($sales_plan_id)
+    {
+        $salesPlan = (new SalesPlan())->with(['unit', 'unit.type', 'user', 'stakeholder', 'additionalCosts'])->find($sales_plan_id);
+
+        // Get Unit Starting Code
+        $accountingUnitCode = (new AccountingStartingCode())->where([
+            'level' => 4,
+            'model' => 'App\Models\Unit',
+        ])->first();
+
+        // Get Parent ID
+        $ancesstorType = $salesPlan->unit->type;
+        if ($salesPlan->unit->type->parent_id > 0) {
+            $ancesstorType = getTypeAncesstorData($salesPlan->unit->type->parent_id);
+        }
+
+        // Get Account Head Code
+        $accountHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code);
+
+
+        dd($ancesstorType, $accountingUnitCode, $salesPlan->toArray());
+    }
+}
+
+if (!function_exists('getTypeAncesstorData')) {
+    function getTypeAncesstorData($type_id)
+    {
+        $type = (new Type())->find($type_id);
+        if ($type->parent_id > 0) {
+            $type = getTypeAncesstorData($type->parent_id);
+        }
+        return $type;
+    }
+}
+
+if (!function_exists('getUnitAccountCode')) {
+    function getUnitAccountCode($AccountNumber, $StartingCode)
+    {
+        $accountHead = (new AccountHead())->where([
+            'level' => 4,
+            'level_code' => $AccountNumber,
+        ])->where('code', '>=', $AccountNumber . $StartingCode)->orderBy('code')->first();
+
+        if (isset($accountHead)) {
+            $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1);
+        } else {
+            $accountHead = $AccountNumber . $StartingCode;
+        }
+
+        return $accountHead;
     }
 }

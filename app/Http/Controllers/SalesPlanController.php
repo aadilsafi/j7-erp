@@ -237,7 +237,7 @@ class SalesPlanController extends Controller
 
         $user = User::find($salesPlan->user_id);
 
-        makeFinancialTransaction(decryptParams($site_id), $salesPlan->stakeholder->stakeholderAsCustomer[0]->receivable_account, 'debit', floatval($salesPlan->total_price), NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+        makeSalesPlanTransaction($salesPlan->id);
 
         $currentURL = URL::current();
         $notificaionData = [

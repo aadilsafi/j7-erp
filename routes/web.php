@@ -582,4 +582,5 @@ Route::get('/logs', function () {
 
 Route::get('/createaccount', function () {
     makeSalesPlanTransaction(1);
+
 });

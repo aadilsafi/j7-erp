@@ -177,8 +177,11 @@ Route::group([
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
-                    Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false])->name('importFloors');
+                    Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
+                    Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
+                  
+
 
 
                     // //Units Routes
@@ -537,6 +540,8 @@ Route::group([
         Route::get('ajax-draw-facing-field', [UnitController::class, 'drawFacingField'])->name('ajax-facing.field.draw');
         Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('ajax-unit.name.update');
 
+        Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
+
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');
@@ -581,3 +586,9 @@ Route::get('/fire', function () {
 
     return 'fire';
 });
+
+
+
+Route::get('storePreviewtest', function(){
+    dd(request()->all());
+})->name('storePreviewtest');

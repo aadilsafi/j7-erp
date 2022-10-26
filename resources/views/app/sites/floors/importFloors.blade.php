@@ -40,6 +40,7 @@
 @endsection
 
 @section('content')
+
     @if (!$preview)
         <form class="form form-vertical"
             action="{{ route('sites.floors.importFloorsPreview', ['site_id' => encryptParams($site_id)]) }}"
@@ -57,7 +58,7 @@
                             <button type="submit" value="save"
                                 class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                                 <i data-feather='save'></i>
-                                Import Floor File
+                                Preview Import File
                             </button>
 
                             <a href="#"
@@ -68,65 +69,81 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-
-
-                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 position-relative"></div>
             </div>
-
         </form>
     @else
-        {{-- <form action="{{ route('sites.floors.destroy-selected', ['site_id' => $site_id]) }}" id="floors-table-form"
-            method="get">
-            <div class="table-responsive">
-                <table class="dt-complex-header table table-striped table-hover" id="table">
-                    <thead>
-                        <tr class="text-center">
-                            <th rowspan="2">FLOORS</th>
-                            <th rowspan="2">AREA</th>
-                            <th rowspan="2">SHORT LABEL</th>
-                        </tr>
-                    </thead>
-                    @foreach ($floors[0] as $key => $floor)
-                        <tr>
-                           <td>{{$floor[0]}}</td>
-                           <td>{{$floor[1]}}</td>
-                           <td>{{$floor[2]}}</td>
-
-                        </tr>
-                    @endforeach
-
-                </table>
-            </div>
-        </form> --}}
-        <table id="kt_table_1" class="table table-sm table-responsive dt-simple-header">
-            <thead>
-                <tr>
-                    @foreach ($db_fields as $dbf)
-                        <th>
-                            <select class="form-control text-capitalize text-nowrap required" style="width: 230px;"
-                                name="fields[]">
-                                @foreach ($db_fields as $db_field)
-                                    <option value="{{ $db_field }}">
-                                        {{ $db_field }}</option>
+        <div class="row">
+            <div class="col">
+                <form class="form form-vertical"
+                    action="{{ route('sites.floors.storePreview', ['site_id' => encryptParams($site_id)]) }}"
+                    method="POST">
+                    @csrf
+                    <table id="kt_table_1" class="table table-striped table-bordered dt-responsive nowrap">
+                        <thead>
+                            <tr>
+                                @foreach ($data[0] as $key => $value)
+                                    <th>
+                                        <select class="form-control text-capitalize text-nowrap required"
+                                            style="width: 230px;" name="fields[{{ $key }}]">
+                                            <option value="">...No match,select a field...</option>
+                                            @foreach ($db_fields as $k => $db_field)
+                                                @if ($db_field == 'name' || $db_field == 'floor_area' || $db_field == 'short_label')
+                                                    <option class="text-danger" value="{{ $db_field }}"
+                                                        @if ($key == $db_field) selected @endif>
+                                                        {{ $db_field }}<span class="text-danger">*</span></option>
+                                                @else
+                                                    <option value="{{ $db_field }}"
+                                                        @if ($key == $db_field) selected @endif>
+                                                        {{ $db_field }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </th>
                                 @endforeach
-                            </select>
-                        </th>
-                    @endforeach
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $key => $row)
+                                <tr>
+                                    @foreach ($row as $k => $value)
+                                        <td class="text-nowrap">{{ $value }}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <hr>
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <a href="#"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-12">
+                            <button type="submit" value="save"
+                                class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                <i data-feather='save'></i>
+                                Save Import File
+                            </button>
+                        </div>
 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($data as $key => $row)
-                    <tr>
-                        @foreach ($row as $key => $value)
-                            <input type="hidden" value="{{ $value }}" name="values[]">
-                            <td class="text-nowrap">{{ $value }}</td>
+                    </div>
+                    <input type="hidden" name="file_path" value="{{$file_path}}"> 
+                    @foreach ($data as $key => $row)
+                        @foreach ($row as $k => $value)
+                            <input type="hidden" value="{{ $value }}"
+                                name="values[{{ $key }}][{{ $db_fields[$loop->index] }}]">
                         @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    @endforeach
+                </form>
+            </div>
+        </div>
+
     @endif
 @endsection
 
@@ -158,7 +175,14 @@
 @endsection
 
 @section('custom-js')
+
     <script>
+        showBlockUI();
+
+        $(document).ready(function() {
+            hideBlockUI();
+        });
+ 
         FilePond.registerPlugin(
             FilePondPluginFileValidateSize,
 
@@ -176,8 +200,12 @@
             }
         });
 
-        $(document).ready(function() {
-            $('#table').DataTable();
+        $('#kt_table_1').DataTable({
+            ordering: false,
+            sorting: false,
+
         });
+
+      
     </script>
 @endsection

@@ -1032,7 +1032,7 @@ if (!function_exists('makeSalesPlanTransaction')) {
 
         // Get Account Head Code
         $accountUnitHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code, 4);
-
+        return $accountUnitHeadCode;
     }
 }
 
@@ -1050,22 +1050,27 @@ if (!function_exists('getTypeAncesstorData')) {
 if (!function_exists('getUnitAccountCode')) {
     function getUnitAccountCode($AccountNumber, $StartingCode, $level, $EndingCode = 9999)
     {
+        $startNumber = ($AccountNumber) . '0001';
+        $endNumber = ($AccountNumber + 1) . '0000';
         $accountHead = (new AccountHead())->where([
             'level' => $level,
-            'code' => $AccountNumber,
-        ])->where('code', '>=', $AccountNumber . $StartingCode)->orderBy('code')->first();
+        ])->whereBetween('code', [$startNumber, $endNumber])
+            ->orderBy('code')
+            ->get();
+        // ->where('code', '<', ($AccountNumber +1) . 0001   )->where('code', '>', ($AccountNumber ) . $StartingCode)->orderBy('code')->get()
 
         if (isset($accountHead)) {
+            $accountHead = collect($accountHead)->last();
             $code = $accountHead->code + 1;
-            if ($code < 9999) {
-                $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1, $level, $EndingCode);
-            } else {
+            if ($code >  intval($AccountNumber . 9999)) {
                 throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+                // $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1, $level, $EndingCode);
+            } else {
+                $accountHead = $code;
             }
         } else {
             $accountHead = $AccountNumber . $StartingCode;
         }
-
         return $accountHead;
     }
 }

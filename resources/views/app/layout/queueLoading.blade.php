@@ -35,8 +35,11 @@
                 <div id="accordionMarginOne" class="accordion-collapse collapse" aria-labelledby="headingMarginOne"
                     data-bs-parent="#accordionMargin">
                     <div class="accordion-body">
-                        <div class="d-flex justify-content-end align-items-center" id="clear-all-queues-div" style="display: none !important;">
-                            <a href="{{ route('batches.clear-all') }}" class="btn btn-sm btn-relief-outline-danger waves-effect waves-float waves-light" id="clear-all-queues-button">
+                        <div class="d-flex justify-content-end align-items-center" id="clear-all-queues-div"
+                            style="display: none !important;">
+                            <a href="{{ route('batches.clear-all') }}"
+                                class="btn btn-sm btn-relief-outline-danger waves-effect waves-float waves-light"
+                                id="clear-all-queues-button">
                                 <i data-feather='x-circle'></i>
                                 Clear all
                             </a>
@@ -101,7 +104,9 @@
         }
     }
 
-    function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs) {
+    var hasfailedQueue = false;
+
+    function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs, data) {
         var progressBar = $('#queueProgressBar_' + progressBarID);
 
         switch (progress) {
@@ -113,7 +118,12 @@
 
             case 100:
                 progressBar.addClass('progress-bar-animated').css('width', '100%');
-                progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                if (data.failedJobs > 0) {
+                    hasfailedQueue = true;
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-danger');
+                } else {
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                }
                 $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
                     totalJobs);
                 break;
@@ -139,22 +149,28 @@
             type: 'GET',
             success: function(response) {
                 if (response.status) {
-                    setProgressTo(progressBarID, response.data.progress, response.data
-                        .pendingJobs, response
-                        .data.processedJobs, response.data.totalJobs);
+                    setProgressTo(progressBarID, (response.data.progress + response.data.failedJobs),
+                        response.data.pendingJobs, response.data.processedJobs, response.data.totalJobs,
+                        response.data);
 
-                    if (response.data.progress == 100) {
+                    if ((response.data.progress + response.data.failedJobs) == 100) {
                         window.clearInterval(interval_id);
-                        QueueCompletedAction(progressBarID);
+                        QueueCompletedAction(progressBarID, response.data);
                     }
                 }
             }
         });
     }
 
-    function QueueCompletedAction(progressBarID) {
-        console.log('progressBarID => ' + progressBarID);
-        $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
+    function QueueCompletedAction(progressBarID, data) {
+        // console.log('progressBarID => ' + progressBarID);
+        let colorClass = "primary";
+        if (hasfailedQueue == true) {
+            colorClass = "danger";
+        } else {
+            colorClass = "success";
+        }
+        $('.queueProgressCard').removeClass('border-' + colorClass).addClass('border-' + colorClass);
         pendingQueueCount--;
 
         if (pendingQueueCount == 0) {
@@ -168,10 +184,16 @@
                 });
             }
 
-            $('#accordian-queue').removeClass('border-primary').addClass('border-success');
+            $('#accordian-queue').removeClass('border-' + colorClass).addClass('border-' + colorClass);
             $('#clear-all-queues-div').show();
-            $('#accordian-heading').removeClass('text-primary').addClass('text-success').html('Queues Completed...');
-            $('#cup-svg path').attr('stroke', '#28C76F');
+            $('#accordian-heading').removeClass('text-' + colorClass).addClass('text-' + colorClass).html(
+                'Queues Completed...');
+
+            if (hasfailedQueue == true) {
+                $('#cup-svg path').attr('stroke', '#EA5455');
+            } else {
+                $('#cup-svg path').attr('stroke', '#28C76F');
+            }
 
             $('#queueSpinner_' + progressBarID).hide();
             $('#queueButton_' + progressBarID).show();

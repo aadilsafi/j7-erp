@@ -213,6 +213,7 @@ class StakeholderService implements StakeholderInterface
     {
         DB::transaction(function () use ($site_id, $id, $inputs) {
             $stakeholder = $this->model()->find($id);
+            $nextOfKinId = $stakeholder->parent_id;
             $data = [
                 'full_name' => $inputs['full_name'],
                 'father_name' => $inputs['father_name'],
@@ -226,6 +227,9 @@ class StakeholderService implements StakeholderInterface
                 'comments' => $inputs['comments'],
                 'relation' => $inputs['relation'],
             ];
+            // if( $nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']){
+            //     $newxtOFkinStakholder = StakeholderType::where('stakeholder_id',$nextOfKinId)->first()->update(['status'=>0]);
+            // }
             $stakeholder->update($data);
 
             $stakeholder->clearMediaCollection('stakeholder_cnic');

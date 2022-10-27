@@ -23,7 +23,12 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
                 'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
                 'status' => 1,
-                'receivable_account' => '1020201001',
+                'receivable_account' => [
+                    'unit_id' => 1,
+                    'account_code' => '1020201001',
+                    'default' => true,
+                    'active' => true,
+                ],
                 'payable_account' => '2020101001',
             ],
             [

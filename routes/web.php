@@ -541,6 +541,7 @@ Route::group([
         Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('ajax-unit.name.update');
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
+        Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
@@ -591,6 +592,6 @@ Route::get('/createaccount', function () {
 
 
 
-Route::get('storePreviewtest', function(){
+Route::post('storePreviewtest', function(){
     dd(request()->all());
 })->name('storePreviewtest');

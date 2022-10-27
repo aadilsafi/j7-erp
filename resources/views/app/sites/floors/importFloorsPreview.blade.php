@@ -43,8 +43,9 @@
 
     <div class="card">
         <div class="card-body">
+            <form action="#" id="teams-table-form" method="get" >
 
-            <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get">
+            {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
                 {{ $dataTable->table() }}
                 <hr>
 
@@ -57,7 +58,7 @@
                         </a>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-12">
-                        <button type="submit" value="save"
+                        <button
                             class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
                             Save
@@ -118,6 +119,7 @@
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
+            required: true,
             allowMultiple: false,
             checkValidity: true,
             credits: {

@@ -507,6 +507,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'batches.clear-all',
+                'show_name' => 'Can clear batches',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
             // Sales Plan
             [

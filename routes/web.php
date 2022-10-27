@@ -553,6 +553,7 @@ Route::group([
         });
 
         Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
+            Route::get('clear-all', [JobBatchController::class, 'clearAllQueues'])->name('clear-all');
             Route::get('/{batch_id}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
         });
 

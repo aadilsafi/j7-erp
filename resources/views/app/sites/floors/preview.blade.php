@@ -43,16 +43,18 @@
     <p class="mb-2">
     </p>
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card" style="border: 2px dashed #7367F0 !important; border-radius: 0;">
+        <div class="card-header">
             <div class="dt-action-buttons text-end">
                 <Button class="btn btn-relief-outline-success" onclick="saveFloors()">
                     <i class=""></i> Save Changes
                 </Button>
             </div>
+        </div>
+        <div class="card-body">
             <div class="accordion accordion-margin" id="accordionMargin">
                 @foreach ($floors as $key => $value)
-                    <div class="accordion-item" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="accordion-item" style="border: 2px dashed #7367F0 !important; border-radius: 0;">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#accordianFloor{{ $value->id }}" aria-expanded="false"
@@ -127,8 +129,9 @@
             $(function() {
                 $.ajax({
                     type: "GET",
-                    url: '{{ route('sites.floors.pending.get', ['site_id' => ':site_id']) }}'.replace(
-                        ':site_id', "{{ $site_id }}"),
+                    url: '{{ route('sites.floors.pending.get', ['site_id' => ':site_id']) }}'
+                        .replace(
+                            ':site_id', "{{ $site_id }}"),
                     success: function(res) {
                         res.forEach(element => {
                             console.log(element.id);

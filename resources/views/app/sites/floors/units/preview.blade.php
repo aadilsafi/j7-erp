@@ -89,7 +89,6 @@
             if (value != '') {
                 showBlockUI('#unit_p_input_div_' + field + id);
                 updateUnitField(id, value, field);
-                {{-- hideBlockUI('#unit_p_input_div_'+field+id); --}}
                 parent = el.parent();
                 parent.empty();
                 parent.append('<span>' + value + '</span>');
@@ -110,7 +109,6 @@
             if (value != '') {
                 showBlockUI('#unit_p_input_div_' + field + id);
                 updateUnitField(id, value, field);
-                {{-- hideBlockUI('#unit_p_input_div_'+field+id); --}}
                 parent = el.parent();
                 if (field == 'facing_id') {
                     boxel = parent.children('.unit-p-checkbox');

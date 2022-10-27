@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.preview', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.preview', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Floors Preview')
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Floors Preview</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.preview', $site_id) }}
+                    {{ Breadcrumbs::render('sites.floors.preview', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
         <div class="card-header">
             <div class="dt-action-buttons text-end">
                 <Button class="btn btn-relief-outline-success" onclick="saveFloors()">
-                    <i class=""></i> Save Changes
+                    <i class="disk"></i> Save Changes
                 </Button>
             </div>
         </div>
@@ -130,12 +130,9 @@
                 $.ajax({
                     type: "GET",
                     url: '{{ route('sites.floors.pending.get', ['site_id' => ':site_id']) }}'
-                        .replace(
-                            ':site_id', "{{ $site_id }}"),
+                        .replace(':site_id', "{{ encryptParams($site_id) }}"),
                     success: function(res) {
                         res.forEach(element => {
-                            console.log(element.id);
-                            console.log(element.site_id);
                             loadFloorPreviewDatatable(element.id, element.site_id);
                         });
                     }
@@ -154,10 +151,7 @@
                             id: id
                         },
                     },
-                    columns: [
-
-
-                        {
+                    columns: [{
                             data: 'name',
                             name: 'name',
                             orderable: true,
@@ -240,7 +234,7 @@
             if (value != '') {
                 showBlockUI('#unit_p_input_div_' + field + id);
                 updateUnitField(id, value, field);
-                {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
+                // {{--  hideBlockUI('#unit_p_input_div_'+field+id);  --}}
                 parent = el.parent();
                 parent.empty();
                 parent.append('<span>' + value + '</span>');
@@ -288,7 +282,7 @@
         });
 
         function updateUnitField(id, value, field, element = null) {
-            var url = "{{ route('ajax-unit.name.update') }}";
+            var url = "{{ route('ajax-unit.get.input', ['site_id' => encryptParams($site_id)]) }}";
             toastr.options = {
                 "closeButton": true,
                 "newestOnTop": true,
@@ -355,7 +349,7 @@
                 inputtype = $(this).data('inputtype');
                 el = $(this);
 
-                var url = "{{ route('ajax-unit.get.input') }}";
+                var url = "{{ route('ajax-unit.get.input', ['site_id' => encryptParams($site_id)]) }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -385,7 +379,7 @@
 
         function saveFloors() {
             location.href = '{{ route('sites.floors.changes.save', ['site_id' => ':site_id']) }}'.replace(':site_id',
-                "{{ encryptParams(decryptParams($site_id)) }}");
+                "{{ encryptParams($site_id) }}");
         }
     </script>
 @endsection

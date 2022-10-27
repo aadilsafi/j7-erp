@@ -214,6 +214,7 @@ class StakeholderService implements StakeholderInterface
         DB::transaction(function () use ($site_id, $id, $inputs) {
             $stakeholder = $this->model()->find($id);
             $nextOfKinId = $stakeholder->parent_id;
+            $cnic = $stakeholder->cnic;
             $data = [
                 'full_name' => $inputs['full_name'],
                 'father_name' => $inputs['father_name'],
@@ -227,9 +228,35 @@ class StakeholderService implements StakeholderInterface
                 'comments' => $inputs['comments'],
                 'relation' => $inputs['relation'],
             ];
-            // if( $nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']){
-            //     $newxtOFkinStakholder = StakeholderType::where('stakeholder_id',$nextOfKinId)->first()->update(['status'=>0]);
-            // }
+
+            if( $nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']){
+                $allNextOfKin = $this->model()->where(['parent_id'=> $stakeholder->parent_id])->get();
+
+
+                if(count($allNextOfKin) == 1){
+                    $specificNextOfKin = $this->model()->where(['parent_id'=> $nextOfKinId , 'cnic'=> $cnic])->first();
+                    $nextOFkinStakholder = StakeholderType::where(['stakeholder_id'=>$nextOfKinId ,'type' => 'K'])->first()->update(['status'=>false]);
+                    if ($inputs['parent_id'] > 0) {
+                        (new StakeholderType())->where([
+                            'stakeholder_id' => $inputs['parent_id'],
+                            'type' => 'K',
+                        ])->update([
+                            'status' => true,
+                        ]);
+                    }
+                }
+            }
+            else{
+                if ($inputs['parent_id'] > 0) {
+                        (new StakeholderType())->where([
+                            'stakeholder_id' => $inputs['parent_id'],
+                            'type' => 'K',
+                        ])->update([
+                            'status' => true,
+                        ]);
+                    }
+            }
+
             $stakeholder->update($data);
 
             $stakeholder->clearMediaCollection('stakeholder_cnic');
@@ -251,14 +278,7 @@ class StakeholderService implements StakeholderInterface
                 }
             }
 
-            if ($inputs['parent_id'] > 0) {
-                (new StakeholderType())->where([
-                    'stakeholder_id' => $inputs['parent_id'],
-                    'type' => 'K',
-                ])->update([
-                    'status' => true,
-                ]);
-            }
+
 
             // dd($inputs);
             $stakeholder->contacts()->delete();
@@ -269,6 +289,9 @@ class StakeholderService implements StakeholderInterface
                 }
                 $stakeholder->contacts()->saveMany($contacts);
             }
+
+
+
             return $stakeholder;
         });
     }

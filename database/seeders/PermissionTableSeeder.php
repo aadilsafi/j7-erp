@@ -1338,21 +1338,30 @@ class PermissionTableSeeder extends Seeder
             //Recovery Accounts
             [
                 'name' => 'sites.accounts.recovery.dashboard',
-                'show_name' => 'Can Can View Accounts Recovery Dashboard',
+                'show_name' => ' Can View Accounts Recovery Dashboard',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.accounts.recovery.calender',
-                'show_name' => 'Can Can View Accounts Recovery Calender',
+                'show_name' => ' Can View Accounts Recovery Calender',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.accounts.recovery.salesPlan',
-                'show_name' => 'Can Can View Accounts Recovery Sales Plan',
+                'show_name' => ' Can View Accounts Recovery Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Chart Of Accounts
+            [
+                'name' => '
+                sites.charts-of-accounts.index',
+                'show_name' => 'Can View Chart Of Accounts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

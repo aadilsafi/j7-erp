@@ -33,6 +33,7 @@ use App\Http\Controllers\{
     FileReleaseController,
     FileCancellationController,
     FileBuyBackController,
+    ChartsOfAccountsController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -180,7 +181,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-                  
+
 
 
 
@@ -532,6 +533,10 @@ Route::group([
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                         });
                     });
+                });
+                // Charts Of accounts
+                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
                 });
             });
         });

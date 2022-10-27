@@ -139,4 +139,8 @@ class Unit extends Model
         return $this->hasMany(FileManagement::class);
     }
 
+    public function modelable()
+    {
+        return $this->morphOne(AccountHead::class,'modelable');
+    }
 }

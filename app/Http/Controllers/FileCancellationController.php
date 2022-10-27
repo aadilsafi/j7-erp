@@ -216,7 +216,7 @@ class FileCancellationController extends Controller
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_cancel->unit_data);
-        $unitType = Type::find($unit_data->id);
+        $unitType = Type::find($unit_data->type_id);
 
         $data = [
             'unit' => $unit_data,

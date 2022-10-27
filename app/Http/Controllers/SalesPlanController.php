@@ -233,11 +233,18 @@ class SalesPlanController extends Controller
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
-        // return $salesPlan;
-
         $user = User::find($salesPlan->user_id);
 
-        makeSalesPlanTransaction($salesPlan->id);
+        $accountCode = makeSalesPlanTransaction($salesPlan->id);
+
+        $unit = Unit::find($salesPlan->unit_id);
+
+        $unit->modelable()->create([
+            'site_id' => decryptParams($site_id),
+            'code' => $accountCode,
+            'name' =>  $unit->floor_unit_number . ' Receviable',
+            'level' => 4,
+        ]);
 
         $currentURL = URL::current();
         $notificaionData = [

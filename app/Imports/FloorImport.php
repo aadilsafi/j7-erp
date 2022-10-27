@@ -11,27 +11,36 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class FloorImport implements ToModel, WithChunkReading, ShouldQueue, WithBatchInserts
+class FloorImport implements ToModel, WithChunkReading, ShouldQueue, WithBatchInserts, WithHeadingRow
 {
+    private $selectedFields;
+
+    public function  __construct($selectedFields)
+    {
+        $this->selectedFields= $selectedFields;
+    }
+
+
     use Importable;
     public function model(array $row)
     {
         return new TempFloor([
-            'name' => $row[0],
-            'floor_area' => $row[1],
-            'short_label' => $row[2],
+            $this->selectedFields[0] => $row['name'],
+            $this->selectedFields[1] => $row['floor_area'],
+            $this->selectedFields[2] => $row['short_label'],
         ]);
     }
 
     public function chunkSize(): int
     {
-        return 5000;
+        return 200;
     }
 
     public function batchSize(): int
     {
-        return 5000;
+        return 200;
     }
 
     // public function rules(): array

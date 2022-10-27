@@ -33,6 +33,7 @@ use App\Http\Controllers\{
     FileReleaseController,
     FileCancellationController,
     FileBuyBackController,
+    ChartsOfAccountsController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -177,8 +178,11 @@ Route::group([
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
-                    Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false])->name('importFloors');
+                    Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
+                    Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
+
+
 
 
                     // //Units Routes
@@ -530,12 +534,18 @@ Route::group([
                         });
                     });
                 });
+                // Charts Of accounts
+                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                });
             });
         });
 
         Route::get('ajax-get-unit-input', [UnitController::class, 'getUnitInput'])->name('ajax-unit.get.input');
         Route::get('ajax-draw-facing-field', [UnitController::class, 'drawFacingField'])->name('ajax-facing.field.draw');
         Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('ajax-unit.name.update');
+
+        Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
@@ -564,20 +574,28 @@ Route::group(['prefix' => 'tests'], function () {
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
 Route::post('/read-single-notification', [NotificationController::class, 'readSingleNotification']);
 
-Route::get('/print-receipts', [ReceiptController::class, 'printReceipt']);
-
 Route::get('/logs', function () {
     return Activity::latest()->get();
 });
 
-Route::get('/fire', function () {
-    $data = [
-        'title' => 'Job Done!',
-        'message' => 'Unit Construction Completed',
-        'description' => 'Unit Construction Completed',
-        'url' => 'asdadasd',
-    ];
-    Notification::sendNow(auth()->user(), new DefaultNotification($data));
+// Route::get('/fire', function () {
+//     $data = [
+//         'title' => 'Job Done!',
+//         'message' => 'Unit Construction Completed',
+//         'description' => 'Unit Construction Completed',
+//         'url' => 'asdadasd',
+//     ];
+//     Notification::sendNow(auth()->user(), new DefaultNotification($data));
 
-    return 'fire';
+//     return 'fire';
+// });
+
+Route::get('/createaccount', function () {
+    makeSalesPlanTransaction(1);
 });
+
+
+
+Route::get('storePreviewtest', function(){
+    dd(request()->all());
+})->name('storePreviewtest');

@@ -14,6 +14,6 @@ class TempFloor extends Model
         'name' ,
         'floor_area' ,
         'short_label',
-        'import-data',
+        // 'import-data',
     ];
 }

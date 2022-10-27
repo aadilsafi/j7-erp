@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\GeneralException;
 use App\Models\{
     AccountLedger,
     AdditionalCost,
@@ -11,7 +12,11 @@ use App\Models\{
     StakeholderType,
     Team,
     Unit,
+    AccountHead,
+    AccountingStartingCode,
+    SalesPlan,
 };
+use App\Utils\Enums\NatureOfAccountsEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\{Collection};
@@ -621,6 +626,17 @@ if (!function_exists('getModelsClasses')) {
     {
         if ($excepts === null) {
             $excepts = [
+                'App\Models\AccountAction',
+                'App\Models\AccountActionBinding',
+                'App\Models\AccountHead',
+                'App\Models\AccountingStartingCode',
+                'App\Models\AccountLedger',
+                'App\Models\AccountPayable',
+                'App\Models\CustomerAccountPayable',
+                'App\Models\DealerAccountPayable',
+                'App\Models\SupplierAccountPayable',
+                'App\Models\Bank',
+                'App\Models\Cash',
                 'App\Models\Upload',
                 'App\Models\CustomField',
                 'App\Models\Media',
@@ -851,7 +867,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column,'',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -866,7 +883,8 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
-                        $customField->bootstrap_column, '',
+                        $customField->bootstrap_column,
+                        '',
                         $customField->required,
                         $customField->disabled,
                         $customField->readonly,
@@ -932,20 +950,127 @@ if (!function_exists('generateSlug')) {
     }
 }
 
-if (!function_exists('makeFinancialTransaction')) {
-    function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
+if (!function_exists('addAccountCodes')) {
+    function addAccountCodes($model)
     {
-        $data = [
-            'site_id' => $site_id,
-            'account_head_code' => $account_code,
-            'balance' => 0,
-            'nature_of_account' => $nature_of_account,
-            'status' => true,
-        ];
 
-        $data[$type] = $amount;
+        $account_starting_code = AccountingStartingCode::where([
+            'level' => 2,
+            'model' => $model,
+        ])->orderBy('starting_code')->first();
 
-        return (new AccountLedger())->create($data);
+        $account_ending_code = AccountingStartingCode::where([
+            'level' => 2,
+            'level_code' => $account_starting_code->level_code,
+        ])->where(
+            'starting_code',
+            '>',
+            $account_starting_code->starting_code
+        )->orderBy('starting_code')->first();
+
+
+        $starting_code = intval($account_starting_code->level_code . $account_starting_code->starting_code);
+        $ending_code =  intval(empty($account_ending_code) ? 999999 : $account_ending_code->level_code . $account_ending_code->starting_code);
+
+        $account_head  = AccountHead::whereHasMorph(
+            'modelable',
+            $model,
+        )->get();
+
+        $account_code = $starting_code;
+
+        if (isset($account_head)) {
+
+            $last_account_head = collect($account_head)->last();
+            $level = $last_account_head->level;
+            $level_code = $last_account_head->level_code;
+
+            $account_code =  $last_account_head->code + 1;
+            if ($account_code >= $ending_code) {
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+            }
+        }
+
+        return $account_code;
     }
 }
 
+// if (!function_exists('makeFinancialTransaction')) {
+//     function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
+//     {
+//         makeFinancialTransaction(decryptParams($site_id), $salesPlan->stakeholder->stakeholderAsCustomer[0]->receivable_account, 'debit', floatval($salesPlan->total_price), NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+//         $data = [
+//             'site_id' => $site_id,
+//             'account_head_code' => $account_code,
+//             'balance' => 0,
+//             'nature_of_account' => $nature_of_account,
+//             'status' => true,
+//         ];
+
+//         $data[$type] = $amount;
+
+//         return (new AccountLedger())->create($data);
+//     }
+// }
+if (!function_exists('makeSalesPlanTransaction')) {
+    function makeSalesPlanTransaction($sales_plan_id)
+    {
+        $salesPlan = (new SalesPlan())->with(['unit', 'unit.type', 'user', 'stakeholder', 'additionalCosts'])->find($sales_plan_id);
+
+        // Get Unit Starting Code
+        $accountingUnitCode = (new AccountingStartingCode())->where([
+            'level' => 4,
+            'model' => 'App\Models\Unit',
+        ])->first();
+
+        // Get Parent ID
+        $ancesstorType = $salesPlan->unit->type;
+        if ($salesPlan->unit->type->parent_id > 0) {
+            $ancesstorType = getTypeAncesstorData($salesPlan->unit->type->parent_id);
+        }
+
+        // Get Account Head Code
+        $accountUnitHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code, 4);
+        return $accountUnitHeadCode;
+    }
+}
+
+if (!function_exists('getTypeAncesstorData')) {
+    function getTypeAncesstorData($type_id)
+    {
+        $type = (new Type())->find($type_id);
+        if ($type->parent_id > 0) {
+            $type = getTypeAncesstorData($type->parent_id);
+        }
+        return $type;
+    }
+}
+
+if (!function_exists('getUnitAccountCode')) {
+    function getUnitAccountCode($AccountNumber, $StartingCode, $level, $EndingCode = 9999)
+    {
+        $startNumber = ($AccountNumber) . '0001';
+        $endNumber = ($AccountNumber + 1) . '0000';
+        $accountHead = (new AccountHead())->where([
+            'level' => $level,
+        ])->whereBetween('code', [$startNumber, $endNumber])
+            ->orderBy('code')
+            ->get();
+        // ->where('code', '<', ($AccountNumber +1) . 0001   )->where('code', '>', ($AccountNumber ) . $StartingCode)->orderBy('code')->get()
+
+        if (isset($accountHead)) {
+            $accountHead = collect($accountHead)->last();
+            $code = $accountHead->code + 1;
+            if ($code >  intval($AccountNumber . 9999)) {
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+                // $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1, $level, $EndingCode);
+            } else {
+                $accountHead = $code;
+            }
+        } else {
+            $accountHead = $AccountNumber . $StartingCode;
+        }
+        return $accountHead;
+    }
+}

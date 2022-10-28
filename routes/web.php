@@ -34,6 +34,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    LedgerController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -533,10 +534,15 @@ Route::group([
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                         });
                     });
-                });
-                // Charts Of accounts
-                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
-                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+
+                    // Charts Of accounts
+                    Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                        Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                    });
+                    // Accounts ledger
+                    Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {
+                        Route::get('/', [LedgerController::class, 'index'])->name('index');
+                    });
                 });
             });
         });
@@ -597,6 +603,6 @@ Route::get('/createaccount', function () {
 
 
 
-Route::get('storePreviewtest', function(){
+Route::get('storePreviewtest', function () {
     dd(request()->all());
 })->name('storePreviewtest');

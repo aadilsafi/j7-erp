@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('account_head_code', 20);
             $table->foreignId('account_action_id')->constrained();
             $table->foreignId('sales_plan_id')->constrained();
+            $table->foreignId('receipt_id')->nullable();
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);

@@ -586,6 +586,16 @@ class AccountHeadSeeder extends Seeder
                 'name' => 'Customer Own Paid Expense',
                 'level' => 5,
             ],
+            // For Title Transfer
+            // Customer B which is Ali Raza
+            [
+                'site_id' => 1,
+                'modelable_id' => 1,
+                'modelable_type' => 'App\Models\StakeholderType',
+                'code' => '10202000011002',
+                'name' => 'Ali Raza Customer A/R',
+                'level' => 5,
+            ],
         ];
 
         foreach ($data as $item) {

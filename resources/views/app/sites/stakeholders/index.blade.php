@@ -15,8 +15,7 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -48,7 +47,8 @@
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.stakeholders.destroy-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
+            <form action="{{ route('sites.stakeholders.destroy-selected', ['site_id' => $site_id]) }}"
+                id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -115,5 +115,8 @@
             location.href = '{{ route('sites.stakeholders.create', ['site_id' => $site_id]) }}';
         }
 
+        function Import() {
+            location.href = '{{ route('sites.stakeholders.importStakeholders', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

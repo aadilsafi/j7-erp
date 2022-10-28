@@ -182,9 +182,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-
-
-
+  Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -282,6 +280,13 @@ Route::group([
                         Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [StakeholderController::class, 'update'])->name('update');
                         Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::post('preview', [StakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                        Route::get('storePreview', [StakeholderController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [StakeholderController::class, 'saveImport'])->name('saveImport');
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
@@ -552,6 +557,7 @@ Route::group([
         Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('ajax-unit.name.update');
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
+        Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
@@ -598,11 +604,7 @@ Route::get('/logs', function () {
 // });
 
 Route::get('/createaccount', function () {
-    makeSalesPlanTransaction(1);
+    return makeSalesPlanTransaction(3);
 });
 
 
-
-Route::get('storePreviewtest', function () {
-    dd(request()->all());
-})->name('storePreviewtest');

@@ -427,6 +427,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // 
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
@@ -628,6 +636,34 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.stakeholders.destroy-selected',
                 'show_name' => 'Can Destroy Selected Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.importStakeholders',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.importStakeholdersPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.saveImport',
+                'show_name' => 'Can Save Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

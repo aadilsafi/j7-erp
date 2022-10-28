@@ -235,16 +235,16 @@ class SalesPlanController extends Controller
 
         $user = User::find($salesPlan->user_id);
 
-        $accountCode = makeSalesPlanTransaction($salesPlan->id);
+        // $accountCode = makeSalesPlanTransaction($salesPlan->id);
 
-        $unit = Unit::find($salesPlan->unit_id);
+        // $unit = Unit::find($salesPlan->unit_id);
 
-        $unit->modelable()->create([
-            'site_id' => decryptParams($site_id),
-            'code' => $accountCode,
-            'name' =>  $unit->floor_unit_number . ' Receviable',
-            'level' => 4,
-        ]);
+        // $unit->modelable()->create([
+        //     'site_id' => decryptParams($site_id),
+        //     'code' => $accountCode,
+        //     'name' =>  $unit->floor_unit_number . ' Receviable',
+        //     'level' => 4,
+        // ]);
 
         $currentURL = URL::current();
         $notificaionData = [

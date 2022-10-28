@@ -23,15 +23,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
                 'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => [
-                    [
-                        'unit_id' => 1,
-                        'unit_account' => '1020200001',
-                        'account_code' => '10202000011001',
-                        'default' => true,
-                        'active' => true,
-                    ],
-                ],
+                'receivable_account' => null,
                 'payable_account' => '20201010000001',
             ],
             [
@@ -73,15 +65,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
                 'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => [
-                    [
-                        'unit_id' => 2,
-                        'unit_account' => '1020200002',
-                        'account_code' => '10202000021001',
-                        'default' => true,
-                        'active' => true,
-                    ],
-                ],
+                'receivable_account' => null,
                 'payable_account' => '20201010000002',
             ],
             [

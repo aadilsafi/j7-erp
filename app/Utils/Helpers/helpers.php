@@ -935,7 +935,7 @@ if (!function_exists('changeImageDirectoryPermission')) {
     {
         $path = public_path() . '/app-assets/server-uploads';
         if (is_dir($path)) {
-            chmod($path, 0755);
+            exec('chmod -R 777 ' . $path);
             return 'true';
         } else {
             return false;

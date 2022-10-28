@@ -20,11 +20,13 @@ class AccountLedger extends Model
         'debit',
         'balance',
         'nature_of_account',
+        'sales_plan_id',
         'status',
     ];
 
     protected $casts = [
         'site_id' => 'integer',
+        'sales_plan_id' => 'integer',
         'account_action_id' => 'integer',
         'credit' => 'double',
         'debit' => 'double',

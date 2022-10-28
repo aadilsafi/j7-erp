@@ -15,6 +15,7 @@ class AccountLedger extends Model
     protected $fillable = [
         'site_id',
         'account_head_code',
+        'account_action_id',
         'credit',
         'debit',
         'balance',
@@ -22,8 +23,9 @@ class AccountLedger extends Model
         'status',
     ];
 
-    protected $cast = [
+    protected $casts = [
         'site_id' => 'integer',
+        'account_action_id' => 'integer',
         'credit' => 'double',
         'debit' => 'double',
         'balance' => 'double',

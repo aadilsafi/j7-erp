@@ -22,7 +22,7 @@ class StakeholderType extends Model
         'payable_account',
     ];
 
-    protected $cast = [
+    protected $casts = [
         'receivable_account' => 'json',
     ];
 

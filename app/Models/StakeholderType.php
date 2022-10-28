@@ -22,6 +22,10 @@ class StakeholderType extends Model
         'payable_account',
     ];
 
+    protected $casts = [
+        'receivable_account' => 'json',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();

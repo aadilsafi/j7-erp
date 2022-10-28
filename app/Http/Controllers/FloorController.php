@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
+use App\DataTables\FloorsPreviewDataTable;
 use App\DataTables\ImportFloorsDataTable;
 use App\Http\Requests\FileBuyBack\store;
 use App\Services\CustomFields\CustomFieldInterface;
@@ -232,87 +233,16 @@ class FloorController extends Controller
         }
     }
 
-    public function preview(Request $request, $site_id)
+    public function preview(Request $request, FloorsPreviewDataTable $dataTable, $site_id)
     {
         if ($request->ajax()) {
-            $id = $request->get('id');
-            $units = Unit::where('floor_id', $id)->where('active', 0)->get();
-            return DataTables::of($units)
-                ->addIndexColumn()
-                ->editColumn('type_id', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
-                    );
-                })
-                ->editColumn('status_id', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'status_id', 'inputtype' => 'select', 'value' => $unit->status->name]
-                    );
-                })
-                ->editColumn('name', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $unit->name]
-                    );
-                })
-                ->editColumn('created_at', function ($unit) {
-                    return editDateColumn($unit->created_at);
-                })
-                ->editColumn('width', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'width', 'inputtype' => 'number', 'value' => $unit->width]
-                    );
-                })
-                ->editColumn('length', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'length', 'inputtype' => 'number', 'value' => $unit->length]
-                    );
-                })
-                ->editColumn('is_corner', function ($unit) {
-                    return view(
-                        'app.components.checkbox',
-                        ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
-                    );
-                })
-                ->editColumn('is_facing', function ($unit) {
-                    return view(
-                        'app.components.checkbox',
-                        ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
-                    );
-                })
-                ->editColumn('net_area', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'net_area', 'inputtype' => 'number', 'value' => $unit->net_area]
-                    );
-                })
-                ->editColumn('gross_area', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'gross_area', 'inputtype' => 'number', 'value' => $unit->gross_area]
-                    );
-                })
-                ->editColumn('price_sqft', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'price_sqft', 'inputtype' => 'number', 'value' => $unit->price_sqft]
-                    );
-                })
-                ->rawColumns([
-                    'name', 'created_at', 'width', 'length', 'is_corner', 'is_facing', 'type_id',
-                    'status_id', 'net_area', 'gross_area', 'price_sqft'
-                ])
-                ->make(true);
+            $data['floor_id'] = $request->get('id');
+
+            return $dataTable->with($data)->ajax();
         }
-        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->get();
-        return view(
-            'app.sites.floors.preview',
-            ['site_id' => encryptParams(decryptParams($site_id)), 'floors' => $floors]
-        );
+        $site_id = decryptParams($site_id);
+        $floors = (new Floor())->where('site_id', $site_id)->where('active', 0)->get();
+        return view('app.sites.floors.preview',['site_id' => $site_id, 'floors' => $floors]);
     }
 
     public function saveChanges(Request $request, $site_id)
@@ -496,11 +426,30 @@ class FloorController extends Controller
 
                     break;
 
-                case 'short_label':
-                    if ($request->get('updateValue') == 'true') {
-                        $validator = \Validator::make($request->all(), [
-                            'value' => 'required|unique:floors,short_label',
+        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+        // return redirect()->back()->with('success', 'All good!');
+        // TempFloor::query()->truncate();
+        // TempFloor::truncate();
+        // dd($request->all());
+        // $import = new FloorImport();
+        // $import->import($request->file('attachment'));
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => 'required|unique:temp_floors,short_label',
                         ]);
+
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
+
+
+        // $reader = new Xlsx();
+
+        // $spreadsheet = $reader->load($file->getrealPath());
 
                         if ($validator->fails()) {
                             return apiErrorResponse($validator->errors()->first('value'));

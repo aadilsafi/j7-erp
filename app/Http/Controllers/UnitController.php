@@ -38,7 +38,6 @@ class UnitController extends Controller
         $this->unitTypeInterface = $unitTypeInterface;
         $this->userBatchInterface = $userBatchInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -434,10 +433,10 @@ class UnitController extends Controller
         }
     }
 
-    public function getUnitInput(Request $request, $site_id)
+    public function getUnitInput(Request $request)
     {
         try {
-
+            $site_id = $request->get('site_id');
             $field = $request->get('field');
             $unit = (new Unit())->find((int)$request->get('id'));
 

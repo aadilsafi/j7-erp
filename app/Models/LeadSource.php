@@ -17,7 +17,7 @@ class LeadSource extends Model
         'name',
     ];
 
-    protected $cast = [
+    protected $casts = [
         'site_id' => 'integer',
         'name' => 'string',
     ];

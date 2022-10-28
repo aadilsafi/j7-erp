@@ -24,7 +24,7 @@ class Type extends Model
         'account_number',
     ];
 
-    protected $cast = [
+    protected $casts = [
         'site_id'=> 'integer',
         'name' => 'string',
         'parent_id' => 'integer',

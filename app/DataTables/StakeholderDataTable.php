@@ -67,7 +67,7 @@ class StakeholderDataTable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        return $this->stakeholderInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id));
+        return $this->stakeholderInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id))->orderBy('id', 'desc');
     }
 
     public function html(): HtmlBuilder

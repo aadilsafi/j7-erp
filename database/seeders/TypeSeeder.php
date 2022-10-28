@@ -30,7 +30,7 @@ class TypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                // 'id' => 3,
+                // 'id' => 2,
                 'site_id' => 1,
                 'name' => 'Hotels Suits',
                 'slug' => Str::slug('Hotels Suits'),
@@ -42,7 +42,7 @@ class TypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                // 'id' => 4,
+                // 'id' => 3,
                 'site_id' => 1,
                 'name' => 'Offices',
                 'slug' => Str::slug('Offices'),
@@ -54,7 +54,7 @@ class TypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                // 'id' => 5,
+                // 'id' => 4,
                 'site_id' => 1,
                 'name' => 'Executive Suits',
                 'slug' => Str::slug('Executive Suits'),
@@ -66,7 +66,7 @@ class TypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                // 'id' => 6,
+                // 'id' => 5,
                 'site_id' => 1,
                 'name' => 'Presidentail Suits',
                 'slug' => Str::slug('Presidentail Suits'),
@@ -78,7 +78,7 @@ class TypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                // 'id' => 7,
+                // 'id' => 6,
                 'site_id' => 1,
                 'name' => 'King Presidentail Suits',
                 'slug' => Str::slug('King Presidentail Suits'),

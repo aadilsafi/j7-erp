@@ -45,7 +45,7 @@ class LeadSourceDataTable extends DataTable
      */
     public function query(LeadSource $model): QueryBuilder
     {
-        return $model->newQuery()->whereSiteId($this->site_id);
+        return $model->newQuery()->whereSiteId($this->site_id)->orderBy('id', 'desc');
     }
 
     public function html(): HtmlBuilder

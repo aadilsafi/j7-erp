@@ -21,7 +21,7 @@ class AccountHead extends Model
         'level',
     ];
 
-    protected $cast = [
+    protected $casts = [
         'level' => 'integer',
     ];
 

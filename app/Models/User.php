@@ -82,4 +82,14 @@ class User extends Authenticatable implements HasMedia
     {
         return 'users';
     }
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
+    }
+
+    public function userBatches()
+    {
+        return $this->hasMany(UserBatch::class);
+    }
 }

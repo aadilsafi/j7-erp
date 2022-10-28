@@ -33,6 +33,7 @@ use App\Http\Controllers\{
     FileReleaseController,
     FileCancellationController,
     FileBuyBackController,
+    ChartsOfAccountsController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -180,7 +181,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-                    Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
+  Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -538,6 +539,10 @@ Route::group([
                         });
                     });
                 });
+                // Charts Of accounts
+                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                });
             });
         });
 
@@ -554,6 +559,7 @@ Route::group([
         });
 
         Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
+            Route::get('clear-all', [JobBatchController::class, 'clearAllQueues'])->name('clear-all');
             Route::get('/{batch_id}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
         });
 
@@ -600,3 +606,4 @@ Route::get('/createaccount', function () {
 Route::post('storePreviewtest', function () {
     dd(request()->all());
 })->name('storePreviewtest');
+

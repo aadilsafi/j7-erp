@@ -38,7 +38,7 @@
 @endsection
 
 @section('content')
-        <form class="form form-vertical" action="{{ route('sites.teams.store', ['site_id' => encryptParams($site_id)]) }}"
+        <form class="form form-vertical" action="{{ route('sites.teams.update', ['site_id' => encryptParams($site_id), 'id' => encryptParams($team->id)]) }}"
         method="POST">
 
 

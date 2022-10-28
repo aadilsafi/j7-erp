@@ -930,6 +930,19 @@ if (!function_exists('generateCustomFields')) {
     }
 }
 
+if (!function_exists('changeImageDirectoryPermission')) {
+    function changeImageDirectoryPermission()
+    {
+        $path = public_path() . '/app-assets/server-uploads';
+        if (is_dir($path)) {
+            chmod($path, 0755);
+            return 'true';
+        } else {
+            return false;
+        }
+    }
+}
+
 if (!function_exists('generateSlug')) {
     function generateSlug($site_id, $name, $model)
     {
@@ -1013,11 +1026,75 @@ if (!function_exists('addAccountCodes')) {
 //         return (new AccountLedger())->create($data);
 //     }
 // }
+
 if (!function_exists('makeSalesPlanTransaction')) {
     function makeSalesPlanTransaction($sales_plan_id)
     {
-        $salesPlan = (new SalesPlan())->with(['unit', 'unit.type', 'user', 'stakeholder', 'additionalCosts'])->find($sales_plan_id);
+        DB::transaction(function () use ($sales_plan_id) {
 
+            $salesPlan = (new SalesPlan())->with([
+                'unit',
+                'unit.type',
+                'user',
+                'stakeholder',
+                'stakeholder.stakeholder_types' => function ($query) {
+                    $query->where('type', 'C');
+                },
+                'additionalCosts'
+            ])->find($sales_plan_id);
+
+            // Get Unit Account Head Code
+            $accountUnitHeadCode = getUnitAccountCode($salesPlan);
+
+            // Get Customer Account Head Code
+            $accountCustomerCode = getCustomerAccountCode($accountUnitHeadCode, $salesPlan);
+
+
+            $stakeholderTypes = $salesPlan->stakeholder->stakeholder_types;
+
+            // Save Unit Code
+            $unit = $salesPlan->unit;
+            $ancesstorType = getTypeAncesstorData($unit->type->id);
+            $unit->unit_account = [
+                [
+                    "type_id" => $ancesstorType->id,
+                    "type_account" => $ancesstorType->account_number,
+                    "account_code" => $accountUnitHeadCode,
+                    "default" => true,
+                    "active" => true
+                ]
+            ];
+            $unit->save();
+
+
+
+            // Save Customer Code
+            $unit = $salesPlan->unit;
+            $ancesstorType = getTypeAncesstorData($unit->type->id);
+            $unit->unit_account = [
+                [
+                    "type_id" => $ancesstorType->id,
+                    "type_account" => $ancesstorType->account_number,
+                    "account_code" => $accountUnitHeadCode,
+                    "default" => true,
+                    "active" => true
+                ]
+            ];
+            $unit->save();
+
+            dd($unit, $accountUnitHeadCode, $stakeholderTypes, $accountCustomerCode);
+
+
+
+
+            // "unit_id":1,"unit_account":"1020200001","account_code":"10202000011001","default":true,"active":true}]"
+        });
+    }
+}
+
+if (!function_exists('getUnitAccountCode')) {
+    function getUnitAccountCode($salesPlan)
+    {
         // Get Unit Starting Code
         $accountingUnitCode = (new AccountingStartingCode())->where([
             'level' => 4,
@@ -1030,9 +1107,71 @@ if (!function_exists('makeSalesPlanTransaction')) {
             $ancesstorType = getTypeAncesstorData($salesPlan->unit->type->parent_id);
         }
 
-        // Get Account Head Code
-        $accountUnitHeadCode = getUnitAccountCode($ancesstorType->account_number, $accountingUnitCode->starting_code, 4);
-        return $accountUnitHeadCode;
+        $AccountNumber = $ancesstorType->account_number;
+        $StartingCode = $accountingUnitCode->starting_code;
+        $level = 4;
+        $EndingCode = 9999;
+
+        $startNumber = ($AccountNumber) . $accountingUnitCode->starting_code;
+        $endNumber = $AccountNumber . $EndingCode;
+
+        $accountHead = (new AccountHead())->where('level', $level)->whereBetween('code', [$startNumber, $endNumber])->orderBy('code')->get();
+        // ->where('code', '<', ($AccountNumber +1) . 0001   )->where('code', '>', ($AccountNumber ) . $StartingCode)->orderBy('code')->get()
+
+        if (count($accountHead) > 0) {
+
+            $accountHead = collect($accountHead)->last();
+            $code = $accountHead->code + 1;
+
+            if ($code > intval($endNumber)) {
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+            } else {
+                $accountHead = $code;
+            }
+            // dd($code, $accountHead, 'Coding Range => ' . $startNumber . ' ~ ' . $endNumber, $ancesstorType, $accountingUnitCode);
+        } else {
+            $accountHead = $AccountNumber . $StartingCode;
+        }
+        return (string)$accountHead;
+    }
+}
+
+if (!function_exists('getCustomerAccountCode')) {
+    function getCustomerAccountCode($accountUnitHeadCode, $salesPlan)
+    {
+        // Get Customer Starting Code
+        $accountingCustomerCode = (new AccountingStartingCode())->where([
+            'level' => 5,
+            'model' => 'App\Models\Stakeholder',
+        ])->first();
+
+
+        $AccountNumber = $accountUnitHeadCode;
+        $StartingCode = $accountingCustomerCode->starting_code;
+        $level = 5;
+        $EndingCode = 9999;
+
+        $startNumber = ($AccountNumber) . $StartingCode;
+        $endNumber = $AccountNumber . $EndingCode;
+
+        $accountHead = (new AccountHead())->where('level', $level)->whereBetween('code', [$startNumber, $endNumber])->orderBy('code')->get();
+        // dd($accountHead, $startNumber, $endNumber, $AccountNumber);
+
+        if (count($accountHead) > 0) {
+
+            $accountHead = collect($accountHead)->last();
+            $code = $accountHead->code + 1;
+
+            if ($code > intval($endNumber)) {
+                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
+            } else {
+                $accountHead = $code;
+            }
+            // dd($code, $accountHead, 'Coding Range => ' . $startNumber . ' ~ ' . $endNumber, $ancesstorType, $accountingUnitCode);
+        } else {
+            $accountHead = $AccountNumber . $StartingCode;
+        }
+        return (string)$accountHead;
     }
 }
 
@@ -1044,33 +1183,5 @@ if (!function_exists('getTypeAncesstorData')) {
             $type = getTypeAncesstorData($type->parent_id);
         }
         return $type;
-    }
-}
-
-if (!function_exists('getUnitAccountCode')) {
-    function getUnitAccountCode($AccountNumber, $StartingCode, $level, $EndingCode = 9999)
-    {
-        $startNumber = ($AccountNumber) . '0001';
-        $endNumber = ($AccountNumber + 1) . '0000';
-        $accountHead = (new AccountHead())->where([
-            'level' => $level,
-        ])->whereBetween('code', [$startNumber, $endNumber])
-            ->orderBy('code')
-            ->get();
-        // ->where('code', '<', ($AccountNumber +1) . 0001   )->where('code', '>', ($AccountNumber ) . $StartingCode)->orderBy('code')->get()
-
-        if (isset($accountHead)) {
-            $accountHead = collect($accountHead)->last();
-            $code = $accountHead->code + 1;
-            if ($code >  intval($AccountNumber . 9999)) {
-                throw new GeneralException('Accounts are conflicting. Please rearrange your coding system.');
-                // $accountHead = getUnitAccountCode($AccountNumber, $accountHead->code + 1, $level, $EndingCode);
-            } else {
-                $accountHead = $code;
-            }
-        } else {
-            $accountHead = $AccountNumber . $StartingCode;
-        }
-        return $accountHead;
     }
 }

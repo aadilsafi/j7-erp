@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserBatch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -18,5 +19,12 @@ class JobBatchController extends Controller
             return apiSuccessResponse($batch->toArray());
         }
         return apiErrorResponse('Batch not found');
+    }
+
+    function clearAllQueues()
+    {
+        (new UserBatch())->where('user_id', auth()->user()->id)->delete();
+
+        return redirect()->back()->withSuccess('All Cleared.');
     }
 }

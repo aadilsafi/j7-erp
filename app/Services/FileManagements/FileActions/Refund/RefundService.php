@@ -88,6 +88,7 @@ class RefundService implements RefundServiceRefundInterface
                     $refund_attachment = (new FileRefundAttachment())->create($refund_attachment_data);
                     $refund_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_refund_attachments');
                 }
+                changeImageDirectoryPermission();
             } else {
                 $specificUsers = collect();
                 foreach ($approvePermission as $role) {

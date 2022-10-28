@@ -92,6 +92,7 @@ class ResaleService implements ResaleInterface
                     $resale_attachment_data = (new FileResaleAttachment())->create($resale_attachment_data);
                     $resale_attachment_data->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_resale_attachments');
                 }
+                changeImageDirectoryPermission();
             } else {
                 $specificUsers = collect();
                 foreach ($approvePermission as $role) {

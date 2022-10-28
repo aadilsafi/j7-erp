@@ -88,6 +88,7 @@ class CancellationService implements CancellationInterface
                     $cancel_attachment = (new FileCancellationAttachment())->create($refund_attachment_data);
                     $cancel_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_cancel_attachments');
                 }
+                changeImageDirectoryPermission();
             } else {
                 $specificUsers = collect();
                 foreach ($approvePermission as $role) {

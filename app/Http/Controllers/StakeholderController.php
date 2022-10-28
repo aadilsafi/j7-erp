@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ImportStakeholdersDataTable;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Http\Request;
@@ -10,8 +11,12 @@ use App\Http\Requests\stakeholders\{
     storeRequest as stakeholderStoreRequest,
     updateRequest as stakeholderUpdateRequest,
 };
+use App\Imports\StakeholdersImport;
+use App\Models\TempStakeholder;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
+use Maatwebsite\Excel\HeadingRowImport;
+use Redirect;
 
 class StakeholderController extends Controller
 {
@@ -21,7 +26,6 @@ class StakeholderController extends Controller
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -196,5 +200,87 @@ class StakeholderController extends Controller
         } else {
             abort(403);
         }
+    }
+
+
+    public function ImportPreview(Request $request, $site_id)
+    {
+        try {
+            $model = new TempStakeholder();
+
+            if ($request->hasfile('attachment')) {
+                $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // dd(array_intersect($model->getFillable(),$headings[0][0]));
+                //validate header row and return with error
+                TempStakeholder::query()->truncate();
+                $import = new StakeholdersImport($model->getFillable());
+                $import->import($request->file('attachment'));
+
+                return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id]);
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+
+            // dd($e->failures());
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+                return Redirect::back()->with(['data' => $e->failures()]);
+            }
+        }
+    }
+
+    public function storePreview(Request $request, $site_id)
+    {
+        $model = new TempStakeholder();
+        if ($model->count() == 0) {
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        } else {
+            $dataTable = new ImportStakeholdersDataTable($site_id);
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+        }
+    }
+
+    public function saveImport(Request $request, $site_id)
+    {
+        // $site_id = decryptParams($site_id);
+        $model = new TempFloor();
+        $tempdata = $model->all()->toArray();
+        $tempCols = $model->getFillable();
+
+        $totalFloors = Floor::max('order');
+        // dd($totalFloors);
+        $floors = [];
+        foreach ($tempdata as $key => $items) {
+            foreach ($request->fields as $k => $field) {
+                if ($field == 'floor_area') {
+                    $data[$key][$field] = (float)$items[$tempCols[$k]];
+                } else {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
+            }
+            // dd($totalFloors, $totalFloors++, ++$totalFloors);
+
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['order'] = ++$totalFloors;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+        }
+        $floors = Floor::insert($data);
+
+        if ($floors) {
+            TempFloor::query()->truncate();
+        }
+        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

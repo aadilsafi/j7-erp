@@ -31,6 +31,7 @@ return new class extends Migration
             $table->foreignId('status_id')->constrained();
             $table->boolean('is_for_rebate')->default(false);
             $table->boolean('active')->default(false);
+            $table->json('unit_account')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

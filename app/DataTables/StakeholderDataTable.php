@@ -84,9 +84,25 @@ class StakeholderDataTable extends DataTable
                 Button::make('excel')->addClass('dropdown-item'),
                 Button::make('pdf')->addClass('dropdown-item'),
             ]),
+
+            // name: 'import-floor',
+            //                 text: '<i data-feather="upload"></i> Import Floor',
+            //                 className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
+            //                 action: function(e, dt, node, config) {
+            //                     location.href =
+            //                         '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
+            //                 }
+            Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Stakeholders')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
+
+
 
         if ($createPermission) {
             $addbutton = Button::raw('delete-selected')
@@ -100,10 +116,10 @@ class StakeholderDataTable extends DataTable
 
         if ($selectedDeletePermission) {
             $buttons[] = Button::raw('delete-selected')
-            ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-            ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                'onclick' => 'deleteSelected()',
-            ]);
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                    'onclick' => 'deleteSelected()',
+                ]);
         }
 
         return $this->builder()

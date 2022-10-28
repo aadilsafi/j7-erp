@@ -427,6 +427,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // 
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
@@ -503,6 +511,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'batches.byid',
                 'show_name' => 'Can Batches By id',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'batches.clear-all',
+                'show_name' => 'Can clear batches',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -621,6 +636,34 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.stakeholders.destroy-selected',
                 'show_name' => 'Can Destroy Selected Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.importStakeholders',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.importStakeholdersPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.saveImport',
+                'show_name' => 'Can Save Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -1359,9 +1402,16 @@ class PermissionTableSeeder extends Seeder
             ],
             // Chart Of Accounts
             [
-                'name' => '
-                sites.charts-of-accounts.index',
+                'name' => 'sites.accounts.charts-of-accounts.index',
                 'show_name' => 'Can View Chart Of Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Ledger
+            [
+                'name' => 'sites.accounts.ledger.index',
+                'show_name' => 'Can View Accounts Ledger',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

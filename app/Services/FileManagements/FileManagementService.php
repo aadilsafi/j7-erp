@@ -58,6 +58,7 @@ class FileManagementService implements FileManagementInterface
 
         if (isset($inputs['application_form']['photo'])) {
             $file->addMedia($inputs['application_form']['photo'])->toMediaCollection('application_form_photo');
+            changeImageDirectoryPermission();
         }
 
         return $file;

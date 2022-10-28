@@ -1,11 +1,13 @@
-<div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100" style="pointer-events: none;">
+<div class="queue-loading-according position-fixed bottom-0 d-flex justify-content-center align-items-center w-100"
+    style="pointer-events: none;">
     <div class="w-50">
         <div class="accordion accordion-margin" id="accordionMargin" style="pointer-events: auto !important;">
-            <div class="accordion-item border-primary" style="border-radius: 10px 10px 0 0 !important; overflow: hidden;">
+            <div class="accordion-item border-primary" style="border-radius: 10px 10px 0 0 !important; overflow: hidden;"
+                id="accordian-queue">
                 <h2 class="accordion-header" id="headingMarginOne">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#accordionMarginOne" aria-expanded="false" aria-controls="accordionMarginOne">
-                        <span>
+                        <span id="cup-svg">
                             <svg class="tea" width="37" height="30" viewbox="0 0 37 48" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
@@ -25,7 +27,7 @@
                             </svg>
                         </span>
                         {{-- &nbsp;&nbsp; --}}
-                        <span class="text-primary">
+                        <span class="text-primary" id="accordian-heading">
                             Some construction going on...
                         </span>
                     </button>
@@ -33,6 +35,15 @@
                 <div id="accordionMarginOne" class="accordion-collapse collapse" aria-labelledby="headingMarginOne"
                     data-bs-parent="#accordionMargin">
                     <div class="accordion-body">
+                        <div class="d-flex justify-content-end align-items-center" id="clear-all-queues-div"
+                            style="display: none !important;">
+                            <a href="{{ route('batches.clear-all') }}"
+                                class="btn btn-sm btn-relief-outline-danger waves-effect waves-float waves-light"
+                                id="clear-all-queues-button">
+                                <i data-feather='x-circle'></i>
+                                Clear all
+                            </a>
+                        </div>
                         <div style="max-height: 285px; overflow-y: auto; padding: 15px;">
                             @forelse ($batches as $key => $batch)
                                 <div class="card mb-1 queueProgressCard border-primary">
@@ -93,7 +104,9 @@
         }
     }
 
-    function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs) {
+    var hasfailedQueue = false;
+
+    function setProgressTo(progressBarID, progress, pendingJobs, processedJobs, totalJobs, data) {
         var progressBar = $('#queueProgressBar_' + progressBarID);
 
         switch (progress) {
@@ -105,7 +118,12 @@
 
             case 100:
                 progressBar.addClass('progress-bar-animated').css('width', '100%');
-                progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                if (data.failedJobs > 0) {
+                    hasfailedQueue = true;
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-danger');
+                } else {
+                    progressBar.parent().removeClass('progress-bar-primary').addClass('progress-bar-success');
+                }
                 $('#queueProgressBarProgress_' + progressBarID).text(processedJobs + ' completed out of ' +
                     totalJobs);
                 break;
@@ -131,22 +149,28 @@
             type: 'GET',
             success: function(response) {
                 if (response.status) {
-                    setProgressTo(progressBarID, response.data.progress, response.data
-                        .pendingJobs, response
-                        .data.processedJobs, response.data.totalJobs);
+                    setProgressTo(progressBarID, (response.data.progress + response.data.failedJobs),
+                        response.data.pendingJobs, response.data.processedJobs, response.data.totalJobs,
+                        response.data);
 
-                    if (response.data.progress == 100) {
+                    if ((response.data.progress + response.data.failedJobs) == 100) {
                         window.clearInterval(interval_id);
-                        QueueCompletedAction(progressBarID);
+                        QueueCompletedAction(progressBarID, response.data);
                     }
                 }
             }
         });
     }
 
-    function QueueCompletedAction(progressBarID) {
-        console.log('progressBarID => ' + progressBarID);
-        $('.queueProgressCard').removeClass('border-primary').addClass('border-success');
+    function QueueCompletedAction(progressBarID, data) {
+        // console.log('progressBarID => ' + progressBarID);
+        let colorClass = "primary";
+        if (hasfailedQueue == true) {
+            colorClass = "danger";
+        } else {
+            colorClass = "success";
+        }
+        $('.queueProgressCard').removeClass('border-' + colorClass).addClass('border-' + colorClass);
         pendingQueueCount--;
 
         if (pendingQueueCount == 0) {
@@ -158,6 +182,17 @@
                     width: 14,
                     height: 14
                 });
+            }
+
+            $('#accordian-queue').removeClass('border-' + colorClass).addClass('border-' + colorClass);
+            $('#clear-all-queues-div').show();
+            $('#accordian-heading').removeClass('text-' + colorClass).addClass('text-' + colorClass).html(
+                'Queues Completed...');
+
+            if (hasfailedQueue == true) {
+                $('#cup-svg path').attr('stroke', '#EA5455');
+            } else {
+                $('#cup-svg path').attr('stroke', '#28C76F');
             }
 
             $('#queueSpinner_' + progressBarID).hide();

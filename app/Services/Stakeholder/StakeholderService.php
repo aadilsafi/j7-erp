@@ -74,6 +74,7 @@ class StakeholderService implements StakeholderInterface
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+                changeImageDirectoryPermission();
             }
 
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
@@ -265,6 +266,7 @@ class StakeholderService implements StakeholderInterface
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+                changeImageDirectoryPermission();
             }
 
             if (isset($inputs['stakeholder_type'])) {

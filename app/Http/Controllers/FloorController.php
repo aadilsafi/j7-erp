@@ -15,6 +15,7 @@ use App\Http\Requests\floors\{
     updateRequest as floorUpdateRequest,
 };
 use App\Imports\FloorImport;
+use App\Imports\FloorImportSimple;
 use App\Models\{
     Floor,
     Unit,
@@ -29,9 +30,9 @@ use App\Utils\Enums\{
     UserBatchActionsEnum,
     UserBatchStatusEnum,
 };
-use Illuminate\Support\Collection;
+use Maatwebsite\Excel\HeadingRowImport;
 use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Facades\Excel;
+use Redirect;
 
 class FloorController extends Controller
 {
@@ -274,7 +275,6 @@ class FloorController extends Controller
     public function getUnitInput(Request $request)
     {
         try {
-
             $field = $request->get('field');
             $tempFloor = (new TempFloor())->find((int)$request->get('id'));
 
@@ -321,6 +321,14 @@ class FloorController extends Controller
 
                 case 'short_label':
                     if ($request->get('updateValue') == 'true') {
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:floors,short_label',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
                         $tempFloor->short_label = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
@@ -353,41 +361,70 @@ class FloorController extends Controller
         }
     }
 
-    public function storePreview(ImportFloorsDataTable $dataTable, $site_id)
+    public function UpdateErrorInput(Request $request)
     {
+        try {
 
-        // $path = $request->file_path;
+            $field = $request->get('field');
+            if ($request->get('updateValue') == 'true') {
+                $tempFloor = (new TempFloor())->find((int)$request->get('id'));
+            }
 
-        // TempFloor::query()->truncate();
-        // Excel::import(new FloorImport(request()->get('fields')), $path,'public');
-        // // Storage::delete($path);
-        $model = new TempFloor();
+            switch ($field) {
+                case 'name':
+                    if ($request->get('updateValue') == 'true') {
+                        $tempFloor->name = $request->get('value');
+                        $tempFloor->save();
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        if ($request->get('CreateErrorValue') == 'true') {
+                            $data = TempFloor::create($request->get('datatoSave'));
+                            $id = $data->id;
+                        } else {
+                            $id = $request->get('id');
+                        }
 
-        $data = [
-            'site_id' => decryptParams($site_id),
-            'final_preview' => true,
-            'preview' => false,
-            'db_fields' =>  $model->getFillable(),
-        ];
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $id, 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'floor_area':
+                    if ($request->get('updateValue') == 'true') {
+                        $tempFloor->floor_area = $request->get('value');
+                        $tempFloor->save();
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        if ($request->get('CreateErrorValue') == 'true') {
+                            $data = TempFloor::create($request->get('datatoSave'));
+                            $id = $data->id;
+                        } else {
+                            $id = $request->get('id');
+                        }
+
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $id, 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
 
 
-        return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
-    }
-
-    public function ImportPreview(ImportFloorsDataTable $dataTable, Request $request, $site_id)
-    {
-        $model = new TempFloor();
-        TempFloor::query()->truncate();
-
-        Excel::Import(new FloorImport($model->getFillable()), $request->file('attachment'));
-
-        return redirect()->route('sites.floors.storePreview', ['site_id' => encryptParams($site_id)]);
-        // $data = [
-        //     'site_id' => decryptParams($site_id),
-        //     'preview' => true,
-        //     'db_fields' =>  $model->getFillable(),
-        // ];
-        // return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+                    break;
 
         // $data = Excel::import(new FloorImport, $request->file('attachment'));
         // return redirect()->back()->with('success', 'All good!');
@@ -397,75 +434,152 @@ class FloorController extends Controller
         // $import = new FloorImport();
         // $import->import($request->file('attachment'));
 
-        // dd($import->errors());
-        // $data = Excel::import(new FloorImport, $request->file('attachment'));
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
 
-        //     if ($request->ajax()) {
-        //         $array = Excel::toArray(new FloorImport, $request->file('attachment'));
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => 'required|unique:temp_floors,short_label',
+                        ]);
 
-        //        $importData = new Collection($array[0]);
-        //        return Datatables::of($importData)->make(true);
-        //    }
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
 
 
         // $reader = new Xlsx();
 
         // $spreadsheet = $reader->load($file->getrealPath());
 
-        // $sheet = $spreadsheet->getActiveSheet();
-        // $maxCell = $sheet->getHighestRowAndColumn();
-        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
 
-        // $headerRow = $floorData[0];
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => 'required|unique:temp_floors,short_label',
+                        ]);
 
-        // $importFloorData = [];
-        // foreach ($floorData as $key => $fd) {
-        //     if ($key > 0) {
-        //         foreach ($fd as $k => $row) {
-        //             $importFloorData[$headerRow[$k]][] = $row;
-        //         }
-        //     }
-        // }
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
 
 
+                        $tempFloor->short_label = $request->get('value');
+                        $tempFloor->save();
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        if ($request->get('CreateErrorValue') == 'true') {
+                            $data = TempFloor::create($request->get('datatoSave'));
+                            $id = $data->id;
+                        } else {
+                            $id = $request->get('id');
+                        }
 
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $id, 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                default:
+                    $response = view('app.components.text-number-field', [
+                        'field' => $field,
+                        'id' => '', 'input_type' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+                    break;
+            }
+            // $tempFloor->save();
+            return apiSuccessResponse($response);
+        } catch (Exception $ex) {
+            return apiErrorResponse($ex->getMessage());
+        }
     }
-    public function test()
+
+    public function ImportPreview(Request $request, $site_id)
     {
-        // dd($data);
-        // dd($request->all());
-        // $file = $request->file('attachment');
+        try {
+            $model = new TempFloor();
 
+            if ($request->hasfile('attachment')) {
+                $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // dd(array_intersect($model->getFillable(),$headings[0][0]));
+                //validate header row and return with error
+                TempFloor::query()->truncate();
+                $import = new FloorImportSimple($model->getFillable());
+                $import->import($request->file('attachment'));
 
-        // $name_gen = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
-        // $file = $file->move("imports/", $name_gen);
+                return redirect()->route('sites.floors.storePreview', ['site_id' => $site_id]);
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+                return Redirect::back()->with(['data' => $e->failures()]);
+            }
+        }
+    }
 
-        // $reader = new Xlsx();
+    public function storePreview(Request $request, $site_id)
+    {
+        $model = new TempFloor();
+        if ($model->count() == 0) {
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        } else {
+            $dataTable = new ImportFloorsDataTable($site_id);
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+        }
+    }
 
-        // $spreadsheet = $reader->load($file->getrealPath());
+    public function saveImport(Request $request, $site_id)
+    {
+        // $site_id = decryptParams($site_id);
+        $model = new TempFloor();
+        $tempdata = $model->all()->toArray();
+        $tempCols = $model->getFillable();
 
-        // $sheet = $spreadsheet->getActiveSheet();
-        // $maxCell = $sheet->getHighestRowAndColumn();
-        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
+        $totalFloors = Floor::max('order');
+        // dd($totalFloors);
+        $floors = [];
+        foreach ($tempdata as $key => $items) {
+            foreach ($request->fields as $k => $field) {
+                if ($field == 'floor_area') {
+                    $data[$key][$field] = (float)$items[$tempCols[$k]];
+                } else {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
+            }
+            // dd($totalFloors, $totalFloors++, ++$totalFloors);
 
-        // $headerRow = $floorData[0];
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['order'] = ++$totalFloors;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+        }
+        $floors = Floor::insert($data);
 
-        // $importFloorData = [];
-        // foreach ($floorData as $key => $fd) {
-        //     if ($key > 0) {
-        //         foreach ($fd as $k => $row) {
-        //             $importFloorData[$headerRow[$k]][] = $row;
-        //         }
-        //     }
-        // }
-
-
-        // $data = [
-        //     'site_id' => decryptParams($site_id),
-        //     'floors' => $importFloorData,
-        //     'preview' => true
-        // ];
-        // return view('app.sites.floors.importFloors', $data);
+        if ($floors) {
+            TempFloor::query()->truncate();
+        }
+        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

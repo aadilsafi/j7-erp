@@ -98,6 +98,10 @@ Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail, $site_
     $trail->parent('sites.floors.index', $site_id);
     $trail->push('Create Floor');
 });
+Breadcrumbs::for('sites.floors.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
+    $trail->push('Import Floor');
+});
 
 Breadcrumbs::for('sites.floors.copy', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.floors.index', $site_id);
@@ -161,7 +165,10 @@ Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.stakeholders.index', encryptParams($site_id));
     $trail->push('Edit Stakeholder');
 });
-
+Breadcrumbs::for('sites.stakeholders.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.stakeholders.index', $site_id);
+    $trail->push('Import Stakeholders');
+});
 //Users Breadcrumbs
 Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

@@ -930,6 +930,7 @@ if (!function_exists('generateCustomFields')) {
     }
 }
 
+    function changeImageDirectoryPermission()
 if (!function_exists('generateSlug')) {
     function generateSlug($site_id, $name, $model)
     {

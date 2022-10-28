@@ -592,7 +592,7 @@ Route::get('/logs', function () {
 // });
 
 Route::get('/createaccount', function () {
-    makeSalesPlanTransaction(1);
+    return makeSalesPlanTransaction(3);
 });
 
 

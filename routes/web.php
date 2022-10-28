@@ -180,9 +180,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-                  
-
-
+                    Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -280,6 +278,13 @@ Route::group([
                         Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [StakeholderController::class, 'update'])->name('update');
                         Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::post('preview', [StakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                        Route::get('storePreview', [StakeholderController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [StakeholderController::class, 'saveImport'])->name('saveImport');
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
@@ -592,6 +597,6 @@ Route::get('/createaccount', function () {
 
 
 
-Route::post('storePreviewtest', function(){
+Route::post('storePreviewtest', function () {
     dd(request()->all());
 })->name('storePreviewtest');

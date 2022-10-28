@@ -16,9 +16,9 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 
-class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation, SkipsOnFailure, SkipsOnError
+class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
 {
-    use Importable, SkipsFailures, SkipsErrors;
+    use Importable;
 
     private $selectedFields;
 
@@ -39,12 +39,12 @@ class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, 
 
     public function chunkSize(): int
     {
-        return 50;
+        return 5000;
     }
 
     public function batchSize(): int
     {
-        return 50;
+        return 5000;
     }
 
 
@@ -54,7 +54,6 @@ class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, 
             'short_label' =>  ['required', 'unique:App\Models\Floor,short_label', 'distinct'],
             'name' =>  ['required'],
             'floor_area' =>  ['required', 'numeric'],
-
         ];
     }
     // public function rules(): array

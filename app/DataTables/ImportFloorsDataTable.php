@@ -12,6 +12,13 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
 class ImportFloorsDataTable extends DataTable
 {
+    public function __construct($site_id)
+    {
+        $model = new TempFloor();
+        if ($model->count() == 0) {
+            return redirect()->route('sites.floors.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+        }
+    }
 
     /**
      * Build DataTable class.
@@ -52,7 +59,6 @@ class ImportFloorsDataTable extends DataTable
      */
     public function query(TempFloor $model): QueryBuilder
     {
-
         return $model->newQuery();
     }
 
@@ -67,7 +73,7 @@ class ImportFloorsDataTable extends DataTable
             ->serverSide()
             ->processing()
             ->deferRender()
-            ->lengthMenu([10, 20, 30, 50, 70, 100]);
+            ->lengthMenu([20, 50, 100, 500, 1000]);
         // ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">');
     }
 

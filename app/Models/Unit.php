@@ -128,12 +128,12 @@ class Unit extends Model
 
     public function salesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource','installments');
+        return $this->hasMany(SalesPlan::class)->where('status', '=', 1)->with('stakeholder', 'leadSource', 'installments');
     }
 
     public function CancelsalesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 3)->with('stakeholder','leadSource','installments');
+        return $this->hasMany(SalesPlan::class)->where('status', '=', 3)->with('stakeholder', 'leadSource', 'installments');
     }
 
     public function file()
@@ -143,6 +143,6 @@ class Unit extends Model
 
     public function modelable()
     {
-        return $this->morphOne(AccountHead::class,'modelable');
+        return $this->morphOne(AccountHead::class, 'modelable');
     }
 }

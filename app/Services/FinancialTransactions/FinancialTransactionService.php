@@ -12,35 +12,35 @@ class FinancialTransactionService implements FinancialTransactionInterface
 {
     public function makeSalesPlanTransaction($sales_plan_id)
     {
-        try {
-            // DB::beginTransaction();
+        // try {
+        // DB::beginTransaction();
 
-            $salesPlan = (new SalesPlan())->with([
-                'unit',
-                'unit.type',
-                'user',
-                'stakeholder',
-                'stakeholder.stakeholder_types' => function ($query) {
-                    $query->where('type', 'C');
-                },
-                'additionalCosts'
-            ])->find($sales_plan_id);
+        $salesPlan = (new SalesPlan())->with([
+            'unit',
+            'unit.type',
+            'user',
+            'stakeholder',
+            'stakeholder.stakeholder_types' => function ($query) {
+                $query->where('type', 'C');
+            },
+            'additionalCosts'
+        ])->find($sales_plan_id);
 
 
-            $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
-            $salesPlan->unit->refresh();
+        $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
+        $salesPlan->unit->refresh();
 
-            $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
+        $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
 
-            dd($accountUnitHeadCode, $salesPlan->unit);
+        dd($accountUnitHeadCode, $accountCustomerHeadCode);
 
-            // DB::commit();
+        // DB::commit();
 
-            dd('done');
-        } catch (GeneralException | Exception $ex) {
-            // DB::rollBack();
-            return $ex;
-        }
+        dd('done');
+        // } catch (GeneralException | Exception $ex) {
+        //     // DB::rollBack();
+        //     return $ex;
+        // }
     }
 
     private function findOrCreateUnitAccount($unit)
@@ -51,7 +51,6 @@ class FinancialTransactionService implements FinancialTransactionInterface
             'model' => 'App\Models\Unit',
         ])->first();
 
-
         $unitType = $unit->type;
         if ($unitType->parent_id > 0) {
             $unitType = getTypeAncesstorData($unitType->parent_id);
@@ -61,6 +60,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             throw new GeneralException('Unit type account not added');
         }
 
+        $oldUnitAccountAgainstType = collect($unit->unit_account)->where('type_id', $unitType->id)->where('type_account', $unitType->account_number)->first();
+        // dd($oldUnitAccountAgainstType);
+        if (!is_null($oldUnitAccountAgainstType)) {
+            return (string)$oldUnitAccountAgainstType['account_code'];
+        }
 
         $AccountNumber = $unitType->account_number;
         $StartingCode = $accountingUnitCode->starting_code;
@@ -100,6 +104,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $unit->unit_account = $arrUnitAccount;
         $unit->save();
 
+        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receviable', (string)$accountHead, 4);
+
         return (string)$accountHead;
     }
 
@@ -110,6 +116,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             'level' => 5,
             'model' => 'App\Models\Stakeholder',
         ])->first();
+
+        $oldCustomerAccountAgainstUnit = collect($stakeholderCustomerType->receivable_account)->where('unit_id', $unit_id)->where('unit_account', $accountUnitHeadCode)->first();
+        // dd($oldCustomerAccountAgainstUnit);
+        if (!is_null($oldCustomerAccountAgainstUnit)) {
+            return (string)$oldCustomerAccountAgainstUnit['account_code'];
+        }
 
         $AccountNumber = $accountUnitHeadCode;
         $StartingCode = $accountingCustomerCode->starting_code;
@@ -147,10 +159,19 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $stakeholderCustomerType->receivable_account = $arrStakeholderAccount;
         $stakeholderCustomerType->save();
 
+        $this->saveAccountHead($stakeholderCustomerType->stakeholder->site->id, $stakeholderCustomerType, $stakeholderCustomerType->stakeholder->full_name . ' Customer A/R', (string)$accountHead, 5);
+
         return (string)$accountHead;
     }
 
-    public function saveAccountHead($model, $accountCode, $level){
-
+    public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level)
+    {
+        $model->modelable()->create([
+            'site_id' => $site_id,
+            'code' => $accountCode,
+            'name' => $accountName,
+            'level' => $level,
+        ]);
+        return true;
     }
 }

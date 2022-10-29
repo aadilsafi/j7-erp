@@ -34,6 +34,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    LedgerController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -181,7 +182,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-  Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
+                    Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -538,10 +539,15 @@ Route::group([
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                         });
                     });
-                });
-                // Charts Of accounts
-                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
-                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+
+                    // Charts Of accounts
+                    Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                        Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                    });
+                    // Accounts ledger
+                    Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {
+                        Route::get('/', [LedgerController::class, 'index'])->name('index');
+                    });
                 });
             });
         });
@@ -598,12 +604,5 @@ Route::get('/logs', function () {
 // });
 
 Route::get('/createaccount', function () {
-    makeSalesPlanTransaction(1);
+    return makeSalesPlanTransaction(3);
 });
-
-
-
-Route::post('storePreviewtest', function () {
-    dd(request()->all());
-})->name('storePreviewtest');
-

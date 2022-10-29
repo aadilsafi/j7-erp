@@ -1402,9 +1402,16 @@ class PermissionTableSeeder extends Seeder
             ],
             // Chart Of Accounts
             [
-                'name' => '
-                sites.charts-of-accounts.index',
+                'name' => 'sites.accounts.charts-of-accounts.index',
                 'show_name' => 'Can View Chart Of Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Ledger
+            [
+                'name' => 'sites.accounts.ledger.index',
+                'show_name' => 'Can View Accounts Ledger',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

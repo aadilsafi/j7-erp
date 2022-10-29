@@ -91,6 +91,7 @@ class BuyBackService implements BuyBackInterface
                     $refund_attachment = (new FileBuyBackLabelsAttachment())->create($refund_attachment_data);
                     $refund_attachment->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_buy_back_attachments');
                 }
+                changeImageDirectoryPermission();
             } else {
                 $specificUsers = collect();
                 foreach ($approvePermission as $role) {

@@ -154,6 +154,7 @@ class TitleTransferService implements TitleTransferInterface
                     $title_transfer_attachment_data_attachment_data = (new FileTitleTransferAttachment())->create($title_transfer_attachment_data);
                     $title_transfer_attachment_data_attachment_data->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_title_transfer_attachments');
                 }
+                changeImageDirectoryPermission();
             } else {
                 $specificUsers = collect();
                 foreach ($approvePermission as $role) {

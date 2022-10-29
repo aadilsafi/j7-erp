@@ -242,7 +242,7 @@ class FloorController extends Controller
         }
         $site_id = decryptParams($site_id);
         $floors = (new Floor())->where('site_id', $site_id)->where('active', 0)->get();
-        return view('app.sites.floors.preview',['site_id' => $site_id, 'floors' => $floors]);
+        return view('app.sites.floors.preview', ['site_id' => $site_id, 'floors' => $floors]);
     }
 
     public function saveChanges(Request $request, $site_id)
@@ -435,37 +435,37 @@ class FloorController extends Controller
                             return apiErrorResponse($validator->errors()->first('value'));
                         }
 
-                        $validator2 = \Validator::make($request->all(), [
-                            'value' => 'required|unique:temp_floors,short_label',
-                        ]);
+                    $validator2 = \Validator::make($request->all(), [
+                        'value' => 'required|unique:temp_floors,short_label',
+                    ]);
 
-                        if ($validator2->fails()) {
-                            return apiErrorResponse($validator2->errors()->first('value'));
-                        }
-
-
-                        $tempFloor->short_label = $request->get('value');
-                        $tempFloor->save();
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        if ($request->get('CreateErrorValue') == 'true') {
-                            $data = TempFloor::create($request->get('datatoSave'));
-                            $id = $data->id;
-                        } else {
-                            $id = $request->get('id');
-                        }
-
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $id, 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
+                    if ($validator2->fails()) {
+                        return apiErrorResponse($validator2->errors()->first('value'));
                     }
+
+
+                    $tempFloor->short_label = $request->get('value');
+                    $tempFloor->save();
+                    $response = view('app.components.unit-preview-cell', [
+                        'id' => $request->get('id'),
+                        'field' => $field,
+                        'inputtype' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+
+                    if ($request->get('CreateErrorValue') == 'true') {
+                        $data = TempFloor::create($request->get('datatoSave'));
+                        $id = $data->id;
+                    } else {
+                        $id = $request->get('id');
+                    }
+
+                    $response = view('app.components.text-number-field', [
+                        'field' => $field,
+                        'id' => $id, 'input_type' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+
 
                     break;
                 default:

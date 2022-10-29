@@ -210,7 +210,7 @@
                                         @for ($i = 1; $i <= $max_installments; $i++)
                                             <th class="align-middle text-nowrap border">Due Date</th>
                                             <th class="align-middle text-nowrap border">Paid Amount</th>
-                                            <th class="align-middle text-nowrap border">Paid At</th>
+                                            <th class="align-middle text-nowrap border">Last Paid At</th>
                                             <th class="align-middle text-nowrap border">Remaining Amount</th>
                                         @endfor
                                     </tr>
@@ -383,8 +383,8 @@
                 });
 
                 dataTableColumns.push({
-                    name: 'installment_' + index + '_updated_at',
-                    data: 'installments.installment_' + index + '_updated_at',
+                    name: 'installment_' + index + '_last_paid_at',
+                    data: 'installments.installment_' + index + '_last_paid_at',
                     className: 'text-center align-middle text-nowrap',
                     orderable: false,
                     render: function(data, type, row) {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\testJob as JobsTestJob;
 use App\Models\Floor;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,14 @@ use Spatie\Activitylog\Models\Activity;
 
 class testController extends Controller
 {
+
+    private $financialTransactionInterface;
+
+    public function __construct(FinancialTransactionInterface $financialTransactionInterface)
+    {
+        $this->financialTransactionInterface = $financialTransactionInterface;
+    }
+
     public function jobs(Request $request)
     {
 
@@ -99,5 +108,9 @@ class testController extends Controller
         $lastLoggedActivity->causer; //returns an instance of your user model
         $lastLoggedActivity->getExtraProperty('customProperty'); //returns 'customValue'
         return $lastLoggedActivity->description; //returns 'Look, I logged something'
+    }
+
+    function createAccount(){
+        return $this->financialTransactionInterface->makeSalesPlanTransaction(3);
     }
 }

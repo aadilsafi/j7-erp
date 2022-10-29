@@ -364,11 +364,10 @@ class FloorController extends Controller
     public function UpdateErrorInput(Request $request)
     {
         try {
-
             $field = $request->get('field');
-            if ($request->get('updateValue') == 'true') {
-                $tempFloor = (new TempFloor())->find((int)$request->get('id'));
-            }
+            $tempFloor = (new TempFloor())->find((int)$request->get('id'));
+
+        // $path = $request->file_path;
 
             switch ($field) {
                 case 'name':
@@ -426,30 +425,11 @@ class FloorController extends Controller
 
                     break;
 
-        // $data = Excel::import(new FloorImport, $request->file('attachment'));
-        // return redirect()->back()->with('success', 'All good!');
-        // TempFloor::query()->truncate();
-        // TempFloor::truncate();
-        // dd($request->all());
-        // $import = new FloorImport();
-        // $import->import($request->file('attachment'));
-
-                        if ($validator->fails()) {
-                            return apiErrorResponse($validator->errors()->first('value'));
-                        }
-
-                        $validator2 = \Validator::make($request->all(), [
-                            'value' => 'required|unique:temp_floors,short_label',
+                case 'short_label':
+                    if ($request->get('updateValue') == 'true') {
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:floors,short_label',
                         ]);
-
-                        if ($validator2->fails()) {
-                            return apiErrorResponse($validator2->errors()->first('value'));
-                        }
-
-
-        // $reader = new Xlsx();
-
-        // $spreadsheet = $reader->load($file->getrealPath());
 
                         if ($validator->fails()) {
                             return apiErrorResponse($validator->errors()->first('value'));

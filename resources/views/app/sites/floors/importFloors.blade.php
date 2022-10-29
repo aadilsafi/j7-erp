@@ -56,10 +56,11 @@
                     <thead>
                         <tr>
                             <th class="text-danger">Line #</th>
+                            <th class="text-danger">Error's</th>
+
                             @foreach ($errorData[0]->values() as $key => $value)
                                 <th class="title">{{ $key }}</th>
                             @endforeach
-                            <th class="text-danger">Error's</th>
 
                         </tr>
                     </thead>
@@ -67,7 +68,11 @@
                         @foreach ($errorData as $key => $row)
                             <tr>
                                 <td class="text-danger">{{ $row->row() }}</td>
-
+                                <td class="text-danger">
+                                    @foreach ($row->errors() as $value)
+                                        {{ $value }}
+                                    @endforeach
+                                </td>
                                 @foreach ($row->values() as $k => $value)
                                     {{-- @if ($row->attribute() == $k)
                                         <td>
@@ -85,11 +90,7 @@
                                     </td>
                                     {{-- @endif --}}
                                 @endforeach
-                                <td class="text-danger">
-                                    @foreach ($row->errors() as $value)
-                                        {{ $value }}
-                                    @endforeach
-                                </td>
+                                
                             </tr>
                         @endforeach
                     </tbody>
@@ -207,6 +208,8 @@
             ordering: false,
             sorting: false,
             searching: false,
+            responsive: false,
+            scrollX: true,
             lengthMenu: [50, 100, 500],
         });
 

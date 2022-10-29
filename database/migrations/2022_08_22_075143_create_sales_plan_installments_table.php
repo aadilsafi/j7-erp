@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('remaining_amount')->default(0);
             $table->string('remarks')->nullable();
             $table->string('status')->nullable();
+            $table->dateTime('last_paid_at')->nullable();
             $table->tinyInteger('installment_order')->default(0);
             $table->timestamps();
             $table->softDeletes();

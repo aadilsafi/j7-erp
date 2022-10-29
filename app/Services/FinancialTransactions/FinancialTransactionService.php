@@ -13,7 +13,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
     public function makeSalesPlanTransaction($sales_plan_id)
     {
         try {
-            DB::beginTransaction();
+            // DB::beginTransaction();
 
             $salesPlan = (new SalesPlan())->with([
                 'unit',
@@ -26,17 +26,19 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 'additionalCosts'
             ])->find($sales_plan_id);
 
-dd($salesPlan->stakeholder->stakeholder_types[0]);
+
             $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
+            $salesPlan->unit->refresh();
 
-            $accountCustomerCode = $this->findOrCreateCustomerAccount($accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
+            $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
 
+            dd($accountUnitHeadCode, $salesPlan->unit);
 
-            DB::commit();
+            // DB::commit();
 
             dd('done');
         } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
+            // DB::rollBack();
             return $ex;
         }
     }
@@ -58,6 +60,7 @@ dd($salesPlan->stakeholder->stakeholder_types[0]);
         if (!$unitType->account_added) {
             throw new GeneralException('Unit type account not added');
         }
+
 
         $AccountNumber = $unitType->account_number;
         $StartingCode = $accountingUnitCode->starting_code;
@@ -100,7 +103,7 @@ dd($salesPlan->stakeholder->stakeholder_types[0]);
         return (string)$accountHead;
     }
 
-    private function findOrCreateCustomerAccount($accountUnitHeadCode, $stakeholderCustomerType)
+    private function findOrCreateCustomerAccount($unit_id, $accountUnitHeadCode, $stakeholderCustomerType)
     {
         // Get Customer Starting Code
         $accountingCustomerCode = (new AccountingStartingCode())->where([
@@ -135,7 +138,7 @@ dd($salesPlan->stakeholder->stakeholder_types[0]);
         // Get and Save Customer Code
         $arrStakeholderAccount = $stakeholderCustomerType->receivable_account;
         $arrStakeholderAccount[] = [
-            "unit_id" => $unit->id,
+            "unit_id" => $unit_id,
             "unit_account" => $accountUnitHeadCode,
             "account_code" => $accountHead,
             "default" => true,
@@ -145,5 +148,9 @@ dd($salesPlan->stakeholder->stakeholder_types[0]);
         $stakeholderCustomerType->save();
 
         return (string)$accountHead;
+    }
+
+    public function saveAccountHead($model, $accountCode, $level){
+
     }
 }

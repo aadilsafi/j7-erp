@@ -1050,45 +1050,40 @@ if (!function_exists('makeSalesPlanTransaction')) {
             $accountCustomerCode = getCustomerAccountCode($accountUnitHeadCode, $salesPlan);
 
 
-            $stakeholderTypes = $salesPlan->stakeholder->stakeholder_types;
-
             // Save Unit Code
             $unit = $salesPlan->unit;
             $ancesstorType = getTypeAncesstorData($unit->type->id);
-            $unit->unit_account = [
-                [
-                    "type_id" => $ancesstorType->id,
-                    "type_account" => $ancesstorType->account_number,
-                    "account_code" => $accountUnitHeadCode,
-                    "default" => true,
-                    "active" => true
-                ]
+            $arrUnitAccount = $unit->unit_account;
+            $arrUnitAccount[] = [
+                "type_id" => $ancesstorType->id,
+                "type_account" => $ancesstorType->account_number,
+                "account_code" => $accountUnitHeadCode,
+                "default" => true,
+                "active" => true
             ];
+            $unit->unit_account = $arrUnitAccount;
             $unit->save();
-
 
 
             // Save Customer Code
-            $unit = $salesPlan->unit;
-            $ancesstorType = getTypeAncesstorData($unit->type->id);
-            $unit->unit_account = [
-                [
-                    "type_id" => $ancesstorType->id,
-                    "type_account" => $ancesstorType->account_number,
-                    "account_code" => $accountUnitHeadCode,
-                    "default" => true,
-                    "active" => true
-                ]
+            $stakeholderTypes = $salesPlan->stakeholder->stakeholder_types[0];
+            $arrStakeholderAccount = $stakeholderTypes->stakeholder_account;
+            $arrStakeholderAccount[] = [
+                "unit_id" => 1,
+                "unit_account" => "1020200001",
+                "account_code" => "10202000011001",
+                "default" => true,
+                "active" => true
             ];
-            $unit->save();
+            $stakeholderTypes->save();
 
-            dd($unit, $accountUnitHeadCode, $stakeholderTypes, $accountCustomerCode);
 
 
 
 
             // "unit_id":1,"unit_account":"1020200001","account_code":"10202000011001","default":true,"active":true}]"
         });
+        dd('done');
     }
 }
 

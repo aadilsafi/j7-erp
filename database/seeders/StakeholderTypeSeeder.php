@@ -23,7 +23,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
                 'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201010000001',
             ],
             [
@@ -31,7 +31,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::VENDOR->value,
                 'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201030000001',
             ],
             [
@@ -39,7 +39,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::DEALER->value,
                 'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201020000001',
             ],
             [
@@ -47,7 +47,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
                 'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
             [
@@ -55,7 +55,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::LEAD->value,
                 'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
 
@@ -65,7 +65,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
                 'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201010000002',
             ],
             [
@@ -73,7 +73,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::VENDOR->value,
                 'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201030000002',
             ],
             [
@@ -81,7 +81,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::DEALER->value,
                 'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => '20201020000002',
             ],
             [
@@ -89,7 +89,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
                 'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
             [
@@ -97,7 +97,7 @@ class StakeholderTypeSeeder extends Seeder
                 'type' => StakeholderTypeEnum::LEAD->value,
                 'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
         ];

@@ -469,7 +469,7 @@
                                 </ul>
                             </li>
                         @endcanany
-                        @can('sites.accounts.charts-of-accounts.index')
+                        {{-- @can('sites.accounts.charts-of-accounts.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
@@ -488,7 +488,7 @@
                                     <span class="menu-title text-truncate" data-i18n="Email">Ledgers</span>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan --}}
                     </ul>
                 </li>
             @endcanany

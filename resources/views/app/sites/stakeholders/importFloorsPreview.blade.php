@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Floor')
+@section('page-title', 'Import Stakeholders')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Floor</h2>
+                <h2 class="content-header-title float-start mb-0">Import Stakeholders</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.stakeholders.import', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.floors.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
@@ -152,7 +152,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                var url = "{{ route('ajax-import-floor.get.input') }}";
+                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -189,7 +189,7 @@
                 el = $(this);
                 console.log(el.parent)
 
-                var url = "{{ route('ajax-import-floor.get.input') }}";
+                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -221,7 +221,50 @@
                 });
             }
         });
+        $(document).on('change', '.unit-p-checkbox', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
+                id = $(this).data('id');
+                field = $(this).data('field');
+                showBlockUI('#unit_p_input_div_' + field + id);
+                value = $(this).data('value');
+                inputtype = $(this).data('inputtype');
+                el = $(this);
+                console.log(el.parent)
 
+                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        value: el.val(),
+                        id: id,
+                        field: field,
+                        inputtype: inputtype,
+                        updateValue: true
+                    },
+                    success: function(response) {
+                        // console.log(response['data']);
+                        if (response['status']) {
+                            console.log('insuccess');
+                            el = el.parent()
+                            el.empty();
+                            el.append(response['data']);
+                            el.addClass('filedrendered');
+                            toastr.success('Updated');
+                            hideBlockUI('#unit_p_input_div_' + field + id);
+
+                        } else {
+                            toastr.error(response['message']['error']);
+                            hideBlockUI('#unit_p_input_div_' + field + id);
+
+                        }
+                    },
+                    error: function(response) {
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                });
+            }
+        });
 
         $('#finalSubmit').on('click', function() {
             Swal.fire({

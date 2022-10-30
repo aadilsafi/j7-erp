@@ -30,6 +30,7 @@ use App\Utils\Enums\{
     UserBatchActionsEnum,
     UserBatchStatusEnum,
 };
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Yajra\DataTables\Facades\DataTables;
 use Redirect;
@@ -328,7 +329,15 @@ class FloorController extends Controller
                         if ($validator->fails()) {
                             return apiErrorResponse($validator->errors()->first('value'));
                         }
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => [
+                                Rule::unique('temp_floors', 'short_label')->ignore($request->get('id'))
+                            ],
+                        ]);
 
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
                         $tempFloor->short_label = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [

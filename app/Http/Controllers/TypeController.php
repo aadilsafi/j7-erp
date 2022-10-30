@@ -75,7 +75,7 @@ class TypeController extends Controller
      */
     public function store(typeStoreRequest $request, $site_id)
     {
-        // try {
+        try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
                 $record = $this->unitTypeInterface->store($site_id, $inputs);
@@ -83,13 +83,13 @@ class TypeController extends Controller
             } else {
                 abort(403);
             }
-        // }
-        // catch (GeneralException $ex){
-        //     return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
-        // }
-        // catch (Exception $ex) {
-        //     return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
-        // }
+        }
+        catch (GeneralException $ex){
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
+        }
+        catch (Exception $ex) {
+            return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
+        }
     }
 
     /**

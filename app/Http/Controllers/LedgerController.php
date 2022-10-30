@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\RolesDataTable;
 use App\DataTables\SalesInvoiceLedgerDatatable;
+use App\DataTables\StakeholderDataTable;
 use App\DataTables\TypesDataTable;
 use App\Models\Site;
 use Exception;
@@ -24,10 +25,7 @@ class LedgerController extends Controller
                 $data = [
                     'site' => $site,
                 ];
-
                 return $dataTable->with($data)->render('app.sites.accounts.ledgers.index', $data);
-
-                // return view('app.sites.accounts.ledgers.index', ['site' => $site, 'salesInvoice' => $SalesInvoiceLedgerDatatable->html()]);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
@@ -35,9 +33,15 @@ class LedgerController extends Controller
         }
     }
 
-    public function refundDatatable(RolesDataTable $dataTable)
+    public function refundDatatable($site_id, StakeholderDataTable $dataTable)
     {
-        return $dataTable->render('app.sites.accounts.ledgers.index');
+        $data = [
+            'site' => Site::find(decryptParams($site_id)),
+            'site_id' => decryptParams($site_id)
+        ];
+        return $dataTable->with($data)->ajax();
+        // return $dataTable->with($data)->render('apapp.sites.accounts.ledgers.index', $data);
+        // return $dataTable->render('app.sites.accounts.ledgers.index', $data);
     }
 
     /**

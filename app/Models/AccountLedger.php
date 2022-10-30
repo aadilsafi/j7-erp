@@ -38,4 +38,9 @@ class AccountLedger extends Model
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
+    public function accountActions()
+    {
+        return $this->belongsTo(AccountAction::class,'account_action_id','id');
+    }
 }

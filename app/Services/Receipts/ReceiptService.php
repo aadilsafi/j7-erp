@@ -12,9 +12,18 @@ use App\Models\SiteConfigration;
 use App\Models\SalesPlanInstallments;
 use App\Models\StakeholderType;
 use App\Services\Receipts\Interface\ReceiptInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 
 class ReceiptService implements ReceiptInterface
 {
+
+    private $financialTransactionInterface;
+
+    public function __construct(
+        FinancialTransactionInterface $financialTransactionInterface
+    ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
+    }
 
     public function model()
     {

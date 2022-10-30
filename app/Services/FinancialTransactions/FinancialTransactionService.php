@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, SalesPlan};
+use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, Receipt, SalesPlan};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
@@ -36,7 +36,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $accountCustomerHeadCode, 1, $salesPlan->id, 'debit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
 
             $revenueSales = (new AccountingStartingCode())->where('site_id', $salesPlan->stakeholder->site->id)
-            ->where('model', 'App\Models\RevenueSales')->where('level', 5)->first();
+                ->where('model', 'App\Models\RevenueSales')->where('level', 5)->first();
 
             if (is_null($revenueSales)) {
                 throw new GeneralException('Revenue Sales Account Head not found');
@@ -185,13 +185,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
         return true;
     }
 
-    public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $balance = 0)
+    public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $receipt_id = null, $balance = 0)
     {
         $data = [
             'site_id' => $site_id,
             'account_head_code' => $account_code,
             'account_action_id' => $account_action,
             'sales_plan_id' => $sales_plan,
+            'receipt_id' => $receipt_id,
             'balance' => $balance,
             'nature_of_account' => $nature_of_account,
             'status' => true,
@@ -200,5 +201,42 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $data[$type] = $amount;
 
         return (new AccountLedger())->create($data);
+    }
+
+    public function makeReceiptTransaction($receipt_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $receipt = (new Receipt())->find($receipt_id);
+
+            // Cash Transaction
+            $cashAccount = (new AccountingStartingCode())->where('site_id', $receipt->site_id)
+                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+
+            if (is_null($cashAccount)) {
+                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+            }
+
+            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            // Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->all()[0]->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->all();
+
+            if (count($customerAccount) < 1) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+            $customerAccount = $customerAccount[0];
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+            // dd($customerAccount, $cashAccount, $receipt);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
     }
 }

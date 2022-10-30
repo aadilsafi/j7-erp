@@ -100,62 +100,61 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->contacts()->saveMany($contacts);
             }
 
-                // customer ar code 1020201001 for customer 1 receivable Customer Code
-                // customer ap code 2020101001 for customer 1 payable Customer Code
+                // // customer ar code 1020201001 for customer 1 receivable Customer Code
+                // // customer ap code 2020101001 for customer 1 payable Customer Code
 
-                $customerStakeholderType = StakeholderType::where('type','C')->get();
-                $lastExistedCustomerCode = collect($customerStakeholderType)->last();
+                // $customerStakeholderType = StakeholderType::where('type','C')->get();
+                // $lastExistedCustomerCode = collect($customerStakeholderType)->last();
 
+                // // set payable customer code
+                // $payableCustomerCode = 0;    // payable customer code
 
-                // set payable customer code
-                $payableCustomerCode = 0;    // payable customer code
+                // if(isset($lastExistedCustomerCode->payable_account)){
+                //     $payableCustomerCode = $lastExistedCustomerCode->payable_account + 1;
+                // }
+                // else{
+                //     $payableCustomerCode = 2020101003;
+                // }
 
-                if(isset($lastExistedCustomerCode->payable_account)){
-                    $payableCustomerCode = $lastExistedCustomerCode->payable_account + 1;
-                }
-                else{
-                    $payableCustomerCode = 2020101003;
-                }
+                // // set receivable customer code
+                // $receivableCustomerCode = 0;    // receivable customer code
 
-                // set receivable customer code
-                $receivableCustomerCode = 0;    // receivable customer code
-
-                if(isset($lastExistedCustomerCode->receivable_account)){
-                    $receivableCustomerCode = $lastExistedCustomerCode->receivable_account + 1;
-                }
-                else{
-                    $receivableCustomerCode = 1020201003;
-                }
-
-
-                // Vendor only payable code
-                // vendor ap code 2020103001 for vendor 1 payable vendor code
-                $vendorStakeholderType = StakeholderType::where('type','V')->get();
-                $lastExistedVendorCode = collect($vendorStakeholderType)->last();
-
-                $payableVendorCode = 0;
-
-                if(isset($lastExistedVendorCode->payable_account)){
-                    $payableVendorCode = $lastExistedVendorCode->payable_account + 1;
-                }
-                else{
-                    $payableVendorCode = 2020103003;
-                }
+                // if(isset($lastExistedCustomerCode->receivable_account)){
+                //     $receivableCustomerCode = $lastExistedCustomerCode->receivable_account + 1;
+                // }
+                // else{
+                //     $receivableCustomerCode = 1020201003;
+                // }
 
 
-                 // Dealer only payable code
-                // dealer ap code 2020103001 for dealer 1 payable vendor code
-                $dealerStakeholderType = StakeholderType::where('type','D')->get();
-                $lastExistedDealerCode = collect($dealerStakeholderType)->last();
+                // // Vendor only payable code
+                // // vendor ap code 2020103001 for vendor 1 payable vendor code
+                // $vendorStakeholderType = StakeholderType::where('type','V')->get();
+                // $lastExistedVendorCode = collect($vendorStakeholderType)->last();
 
-                $payableDealerCode = 0;
+                // $payableVendorCode = 0;
 
-                if(isset($lastExistedDealerCode->payable_account)){
-                    $payableDealerCode = $lastExistedDealerCode->payable_account + 1;
-                }
-                else{
-                    $payableDealerCode = 2020102003;
-                }
+                // if(isset($lastExistedVendorCode->payable_account)){
+                //     $payableVendorCode = $lastExistedVendorCode->payable_account + 1;
+                // }
+                // else{
+                //     $payableVendorCode = 2020103003;
+                // }
+
+
+                //  // Dealer only payable code
+                // // dealer ap code 2020103001 for dealer 1 payable vendor code
+                // $dealerStakeholderType = StakeholderType::where('type','D')->get();
+                // $lastExistedDealerCode = collect($dealerStakeholderType)->last();
+
+                // $payableDealerCode = 0;
+
+                // if(isset($lastExistedDealerCode->payable_account)){
+                //     $payableDealerCode = $lastExistedDealerCode->payable_account + 1;
+                // }
+                // else{
+                //     $payableDealerCode = 2020102003;
+                // }
 
 
 

@@ -2,6 +2,8 @@
 
 namespace App\DataTables;
 
+use App\Models\AccountAction;
+use App\Models\AccountLedger;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -25,26 +27,35 @@ class SalesInvoiceLedgerDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('parent_id', function ($role) {
-                return Str::of(getRoleParentByParentId($role->parent_id))->ucfirst();
-            })
-            ->editColumn('created_at', function ($role) {
-                return editDateColumn($role->created_at);
-            })
-            // ->editColumn('updated_at', function ($role) {
-            //     return editDateColumn($role->updated_at);
-            // })
-            ->editColumn('default', function ($role) {
-                return editBooleanColumn($role->default);
-            })
-            ->editColumn('actions', function ($role) {
-                return view('app.roles.actions', ['id' => $role->id]);
-            })
-            ->editColumn('check', function ($role) {
-                return $role;
+            ->addIndexColumn()
+            ->editColumn('parent_id', function ($ledger) {
+                return Str::of(getRoleParentByParentId($ledger->parent_id))->ucfirst();
             })
             ->setRowId('id')
-            ->rawColumns(array_merge($columns, ['action', 'check']));
+            ->editColumn('debit', function ($ledger) {
+                return number_format($ledger->debit);
+            })
+            ->editColumn('credit', function ($ledger) {
+                return number_format($ledger->credit);
+            })
+            ->editColumn('balance', function ($ledger) {
+                return number_format($ledger->balance);
+            })
+            ->editColumn('account_action_id', function ($ledger) {
+                return $ledger->accountActions->name;
+            })
+            ->editColumn('created_at', function ($ledger) {
+                return $ledger->created_at->format('D, d-M-Y , H:i:s');
+            })
+            ->editColumn('updated_at', function ($ledger) {
+                return editDateColumn($ledger->updated_at);
+            })
+            // ->editColumn('check', function ($ledger) {
+            //     return $ledger;
+            // })
+
+            // ->rawColumns(array_merge($columns, ['action', 'check']))
+        ;
     }
 
     /**
@@ -53,9 +64,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
      * @param \App\Models\Role $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Role $model): QueryBuilder
+    public function query(AccountLedger $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with('accountActions');
     }
 
     public function html(): HtmlBuilder
@@ -83,42 +94,13 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
 
-                ),
             )
-            ->rowGroupDataSrc('parent_id')
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
+            ->rowGroupDataSrc('account_action_id')
+            ->columnDefs([])
             ->orders([
-                [4, 'asc'],
-                [4, 'desc'],
+                // [4, 'asc'],
+                [1, 'asc'],
             ]);
     }
 
@@ -129,29 +111,17 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     protected function getColumns(): array
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('roles.edit');
-        $destroyPermission =  Auth::user()->hasPermissionTo('roles.destroy');
-        $defaultPermission =  Auth::user()->hasPermissionTo('roles.make-default');
         return [
-            (
-                $selectedDeletePermission ?
-                    Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                    Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
-            Column::make('name')->title('Role Name'),
-            Column::make('guard_name')->title('Guard Name'),
-            // Column::make('default')->title('Default')->addClass('text-center'),
-            Column::make('parent_id')->title('Parent'),
-            Column::make('created_at')->addClass('text-nowrap'),
-            // Column::make('updated_at'),
-            (
-                ($editPermission || $defaultPermission ||  $destroyPermission) ?
-                    Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                    Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
+            Column::computed('DT_RowIndex')->title('#'),
+            Column::make('account_action_id')->name('accountActions.name')->title('account action'),
+            Column::make('account_head_code')->title('account code'),
+            Column::make('debit')->title('debit'),
+            Column::make('credit')->title('Credit'),
+            Column::make('balance'),
+            // Column::make('nature_of_account'),
+
+            Column::make('created_at')->addClass('text-nowrap text-center'),
+
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

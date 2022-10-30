@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AccountLedger;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -181,7 +182,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '20201010000001',
-                'account_action_id' => 6,
+                'account_action_id' => 4,
                 'credit' => 0,
                 'debit' => 2500000,
                 'balance' => 2500000,
@@ -192,7 +193,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10209020001001',
-                'account_action_id' => 6,
+                'account_action_id' => 4,
                 'credit' => 2500000,
                 'debit' => 0,
                 'balance' => 0,
@@ -204,7 +205,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '40201010001003',
-                'account_action_id' => 7,
+                'account_action_id' => 6,
                 'credit' => 0,
                 'debit' => 10000000,
                 'balance' => 10000000,
@@ -215,7 +216,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10202000011001',
-                'account_action_id' => 7,
+                'account_action_id' => 6,
                 'credit' => 7500000,
                 'debit' => 0,
                 'balance' => 2500000,
@@ -226,7 +227,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '20201010000001',
-                'account_action_id' => 7,
+                'account_action_id' => 6,
                 'credit' => 2000000,
                 'debit' => 0,
                 'balance' => 500000,
@@ -237,7 +238,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '40101010001002',
-                'account_action_id' => 7,
+                'account_action_id' => 6,
                 'credit' => 500000,
                 'debit' => 0,
                 'balance' => 0,
@@ -249,7 +250,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '20201010000001',
-                'account_action_id' => 8,
+                'account_action_id' => 4,
                 'credit' => 0,
                 'debit' => 2000000,
                 'balance' => 2000000,
@@ -260,7 +261,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10209020001001',
-                'account_action_id' => 8,
+                'account_action_id' => 4,
                 'credit' => 2000000,
                 'debit' => 0,
                 'balance' => 0,
@@ -272,7 +273,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10202000011002',
-                'account_action_id' => 9,
+                'account_action_id' => 7,
                 'credit' => 0,
                 'debit' => 7500000,
                 'balance' => 7500000,
@@ -283,7 +284,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10202000011001',
-                'account_action_id' => 9,
+                'account_action_id' => 7,
                 'credit' => 7500000,
                 'debit' => 0,
                 'balance' => 0,
@@ -294,7 +295,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10202000011001',
-                'account_action_id' => 9,
+                'account_action_id' => 7,
                 'credit' => 0,
                 'debit' => 40000,
                 'balance' => 40000,
@@ -305,7 +306,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '40101010001003',
-                'account_action_id' => 9,
+                'account_action_id' => 7,
                 'credit' => 40000,
                 'debit' => 0,
                 'balance' => 0,
@@ -317,7 +318,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10209020001001',
-                'account_action_id' => 10,
+                'account_action_id' => 2,
                 'credit' => 0,
                 'debit' => 40000,
                 'balance' => 40000,
@@ -328,7 +329,7 @@ class AccountLedgerSeeder extends Seeder
             [
                 'site_id' => 1,
                 'account_head_code' => '10202000011001',
-                'account_action_id' => 10,
+                'account_action_id' => 2,
                 'credit' => 40000,
                 'debit' => 0,
                 'balance' => 0,
@@ -338,5 +339,9 @@ class AccountLedgerSeeder extends Seeder
             ]
 
         ];
+
+        foreach ($data as $item) {
+            (new AccountLedger())->create($item);
+        }
     }
 }

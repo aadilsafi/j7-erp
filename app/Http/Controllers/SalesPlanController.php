@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use App\Notifications\ApprovedSalesPlanNotification;
 use App\Services\AdditionalCosts\AdditionalCostInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
@@ -26,23 +27,22 @@ use Illuminate\Support\Facades\Notification;
 
 class SalesPlanController extends Controller
 {
-    private $salesPlanInterface;
-    private $additionalCostInterface;
-    private $stakeholderInterface;
-    private $leadSourceInterface;
+    private $salesPlanInterface, $additionalCostInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface;
 
     public function __construct(
         SalesPlanInterface $salesPlanInterface,
         AdditionalCostInterface $additionalCostInterface,
         StakeholderInterface $stakeholderInterface,
         LeadSourceInterface $leadSourceInterface,
-        CustomFieldInterface $customFieldInterface
+        CustomFieldInterface $customFieldInterface,
+        FinancialTransactionInterface $financialTransactionInterface
     ) {
         $this->salesPlanInterface = $salesPlanInterface;
         $this->additionalCostInterface = $additionalCostInterface;
         $this->stakeholderInterface = $stakeholderInterface;
         $this->leadSourceInterface = $leadSourceInterface;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
     /**
@@ -235,16 +235,10 @@ class SalesPlanController extends Controller
 
         $user = User::find($salesPlan->user_id);
 
-        // $accountCode = makeSalesPlanTransaction($salesPlan->id);
-
-        // $unit = Unit::find($salesPlan->unit_id);
-
-        // $unit->modelable()->create([
-        //     'site_id' => decryptParams($site_id),
-        //     'code' => $accountCode,
-        //     'name' =>  $unit->floor_unit_number . ' Receviable',
-        //     'level' => 4,
-        // ]);
+        $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
+        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+            return apiErrorResponse('invalid_amout');
+        }
 
         $currentURL = URL::current();
         $notificaionData = [

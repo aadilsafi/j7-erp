@@ -79,6 +79,42 @@ class ImportStakeholdersDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'comments', 'inputtype' => 'text', 'value' => $data->comments]
                 );
             })
+            ->editColumn('is_dealer', function ($data) {
+                return view(
+                    'app.components.checkbox',
+                    ['id' => $data->id, 'data' => $data, 'field' => 'is_dealer', 'is_true' => $data->is_dealer, 'value' => $data->is_dealer]
+                );
+            })
+            ->editColumn('is_vendor', function ($data) {
+                return view(
+                    'app.components.checkbox',
+                    ['id' => $data->id, 'data' => $data, 'field' => 'is_vendor', 'is_true' => $data->is_vendor, 'value' => $data->is_vendor]
+                );
+            })
+            ->editColumn('is_customer', function ($data) {
+                return view(
+                    'app.components.checkbox',
+                    ['id' => $data->id, 'data' => $data, 'field' => 'is_customer', 'is_true' => $data->is_customer, 'value' => $data->is_customer]
+                );
+            })
+            ->editColumn('is_kin', function ($data) {
+                return view(
+                    'app.components.checkbox',
+                    ['id' => $data->id, 'data' => $data, 'field' => 'is_kin', 'is_true' => $data->is_kin, 'value' => $data->is_kin]
+                );
+            })
+            ->editColumn('parent_cnic', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'parent_cnic', 'inputtype' => 'number', 'value' => $data->parent_cnic]
+                );
+            })
+            ->editColumn('relation', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'relation', 'inputtype' => 'text', 'value' => $data->relation]
+                );
+            })
             ->setRowId('id');
     }
 
@@ -89,7 +125,7 @@ class ImportStakeholdersDataTable extends DataTable
      */
     public function query(TempStakeholder $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('id');
     }
 
     public function html(): HtmlBuilder
@@ -103,6 +139,7 @@ class ImportStakeholdersDataTable extends DataTable
             ->serverSide()
             ->processing()
             ->deferRender()
+            ->scrollX(true)
             ->lengthMenu([20, 50, 100, 500, 1000]);
         // ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">');
     }
@@ -133,64 +170,64 @@ class ImportStakeholdersDataTable extends DataTable
             ])->render()),
             Column::computed('designation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 3,
                 'name' => 'designation'
             ])->render()),
             Column::computed('cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 4,
                 'name' => 'cnic'
             ])->render()),
             Column::computed('ntn')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 5,
                 'name' => 'ntn'
             ])->render()),
             Column::computed('contact')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 6,
                 'name' => 'contact'
             ])->render()),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 7,
                 'name' => 'address'
             ])->render()),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'col' => 8,
                 'name' => 'comments'
             ])->render()),
-            // Column::computed('is_dealer')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
-            // Column::computed('is_vendor')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
-            // Column::computed('is_customer')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
-            // Column::computed('is_kin')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
-            // Column::computed('parent_cnic')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
-            // Column::computed('relation')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'col' => 2,
-            //     'name' => 'short_label'
-            // ])->render()),
+            Column::computed('is_dealer')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'is_dealer'
+            ])->render()),
+            Column::computed('is_vendor')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'is_vendor'
+            ])->render()),
+            Column::computed('is_customer')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'is_customer'
+            ])->render()),
+            Column::computed('is_kin')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'is_kin'
+            ])->render()),
+            Column::computed('parent_cnic')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'parent_cnic'
+            ])->render()),
+            Column::computed('relation')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'col' => 2,
+                'name' => 'relation'
+            ])->render()),
         ];
     }
 }

@@ -12,11 +12,15 @@ use App\Http\Requests\stakeholders\{
     updateRequest as stakeholderUpdateRequest,
 };
 use App\Imports\StakeholdersImport;
+use App\Models\Stakeholder;
+use App\Models\StakeholderType;
 use App\Models\TempStakeholder;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Redirect;
+use Illuminate\Support\Facades\DB;
 
 class StakeholderController extends Controller
 {
@@ -202,6 +206,320 @@ class StakeholderController extends Controller
         }
     }
 
+    public function getUnitInput(Request $request)
+    {
+        try {
+            $field = $request->get('field');
+            $tempStakeholder = (new TempStakeholder())->find((int)$request->get('id'));
+
+            $validator = \Validator::make($request->all(), [
+                'value' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return apiErrorResponse($validator->errors()->first('value'));
+            }
+
+            switch ($field) {
+                case 'full_name':
+                    if ($request->get('updateValue') == 'true') {
+                        $tempStakeholder->full_name = $request->get('value');
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'father_name':
+                    if ($request->get('updateValue') == 'true') {
+                        $tempStakeholder->father_name = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'cnic':
+                    if ($request->get('updateValue') == 'true') {
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:stakeholders,cnic',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => [
+                                Rule::unique('stakeholders', 'cnic')->ignore($request->get('id'))
+                            ],
+                        ]);
+
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
+                        $tempStakeholder->cnic = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'ntn':
+                    if ($request->get('updateValue') == 'true') {
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:stakeholders,ntn',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => [
+                                Rule::unique('temp_stakeholders', 'ntn')->ignore($request->get('id'))
+                            ],
+                        ]);
+
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
+                        $tempStakeholder->ntn = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'contact':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->contact = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'address':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->address = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'comments':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->comments = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'parent_cnic':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|exists:App\Models\TempStakeholder,cnic',
+                        ], [
+                            'value.exists' => 'This Value does not Exists.'
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempStakeholder->parent_cnic = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'relation':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->relation = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'is_dealer':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->is_dealer =  !$tempStakeholder->is_dealer;
+
+                        $response =  view('app.components.checkbox', [
+                            'id' => $request->get('id'),
+                            'data' => $tempStakeholder,
+                            'field' => $field,
+                            'is_true' => $tempStakeholder->is_vendor,
+                            'value' => $tempStakeholder->is_vendor
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'is_customer':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->is_customer = !$tempStakeholder->is_customer;
+
+                        $response =  view('app.components.checkbox', [
+                            'id' => $request->get('id'),
+                            'data' => $tempStakeholder,
+                            'field' => $field,
+                            'is_true' => $tempStakeholder->is_vendor,
+                            'value' => $tempStakeholder->is_vendor
+                        ])->render();
+                    }
+
+                    break;
+                case 'is_kin':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->is_kin = !$tempStakeholder->is_kin;
+
+                        $response =  view('app.components.checkbox', [
+                            'id' => $request->get('id'),
+                            'data' => $tempStakeholder,
+                            'field' => $field,
+                            'is_true' => $tempStakeholder->is_vendor,
+                            'value' => $tempStakeholder->is_vendor
+                        ])->render();
+                    }
+
+                    break;
+                case 'is_vendor':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempStakeholder->is_vendor = !$tempStakeholder->is_vendor;
+
+                        $response =  view('app.components.checkbox', [
+                            'id' => $request->get('id'),
+                            'data' => $tempStakeholder,
+                            'field' => $field,
+                            'is_true' => $tempStakeholder->is_vendor,
+                            'value' => $tempStakeholder->is_vendor
+                        ])->render();
+                    }
+                    break;
+
+                default:
+                    $response = view('app.components.text-number-field', [
+                        'field' => $field,
+                        'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+                    break;
+            }
+            $tempStakeholder->save();
+            return apiSuccessResponse($response);
+        } catch (Exception $ex) {
+            return apiErrorResponse($ex->getMessage());
+        }
+    }
 
     public function ImportPreview(Request $request, $site_id)
     {
@@ -234,6 +552,7 @@ class StakeholderController extends Controller
     public function storePreview(Request $request, $site_id)
     {
         $model = new TempStakeholder();
+
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
@@ -244,43 +563,88 @@ class StakeholderController extends Controller
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
             ];
-            return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+            return $dataTable->with($data)->render('app.sites.stakeholders.importFloorsPreview', $data);
         }
     }
 
     public function saveImport(Request $request, $site_id)
     {
-        // $site_id = decryptParams($site_id);
-        $model = new TempFloor();
-        $tempdata = $model->all()->toArray();
-        $tempCols = $model->getFillable();
+        // DB::transaction(function () use ($request, $site_id) {
 
-        $totalFloors = Floor::max('order');
-        // dd($totalFloors);
-        $floors = [];
-        foreach ($tempdata as $key => $items) {
-            foreach ($request->fields as $k => $field) {
-                if ($field == 'floor_area') {
-                    $data[$key][$field] = (float)$items[$tempCols[$k]];
-                } else {
+            $model = new TempStakeholder();
+            $tempdata = $model->all()->toArray();
+            $tempCols = $model->getFillable();
+
+            $stakeholder = [];
+            foreach ($tempdata as $key => $items) {
+                foreach ($tempCols as $k => $field) {
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
+                $data[$key]['site_id'] = decryptParams($site_id);
+
+                if ($data[$key]['parent_cnic'] != null) {
+                    $parent = Stakeholder::where('cnic', $data[$key]['parent_cnic'])->first();
+                    $data[$key]['parent_id'] = $parent->id;
+                } else {
+                    $data[$key]['parent_id'] = 0;
+                }
+
+                unset($data[$key]['parent_cnic']);
+                unset($data[$key]['is_dealer']);
+                unset($data[$key]['is_vendor']);
+                unset($data[$key]['is_kin']);
+                unset($data[$key]['is_customer']);
+
+                $stakeholder = Stakeholder::create($data[$key]);
+
+                $stakeholdertype = [
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => 'C',
+                        'stakeholder_code' => 'C-00' . $stakeholder->id,
+                        'status' => $items['is_customer'] ? 1 : 0,
+                        'created_at'=> now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => 'V',
+                        'stakeholder_code' => 'V-00' . $stakeholder->id,
+                        'status' => $items['is_vendor'] ? 1 : 0,
+                        'created_at'=> now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => 'D',
+                        'stakeholder_code' => 'D-00' . $stakeholder->id,
+                        'status' => $items['is_dealer'] ? 1 : 0,
+                        'created_at'=> now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => 'K',
+                        'stakeholder_code' => 'K-00' . $stakeholder->id,
+                        'status' => $items['is_kin'] ? 1 : 0,
+                        'created_at'=> now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => 'L',
+                        'stakeholder_code' => 'L-00' . $stakeholder->id,
+                        'status' => 0,
+                        'created_at'=> now(),
+                        'updated_at' => now(),
+                    ]
+                ];
+
+                $stakeholder_type = StakeholderType::insert($stakeholdertype);
             }
-            // dd($totalFloors, $totalFloors++, ++$totalFloors);
 
-            $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['order'] = ++$totalFloors;
-            $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
-            $data[$key]['created_at'] = now();
-            $data[$key]['updated_at'] = now();
-        }
-        $floors = Floor::insert($data);
-
-        if ($floors) {
-            TempFloor::query()->truncate();
-        }
-        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+            TempStakeholder::query()->truncate();
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+        // });
     }
 }

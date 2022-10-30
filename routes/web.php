@@ -260,11 +260,19 @@ Route::group([
                     Route::post('store', [TypeController::class, 'store'])->name('store');
 
                     Route::get('delete-selected', [TypeController::class, 'destroySelected'])->name('destroy-selected');
+
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [TypeController::class, 'edit'])->name('edit');
                         Route::put('update', [TypeController::class, 'update'])->name('update');
 
                         Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.types.importTypes')->name('importTypes');
+                        Route::post('preview', [TypeController::class, 'ImportPreview'])->name('importTypesPreview');
+                        Route::get('storePreview', [TypeController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [TypeController::class, 'saveImport'])->name('saveImport');
                     });
                 });
 
@@ -561,6 +569,8 @@ Route::group([
 
         Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
 
+        Route::get('ajax-import-types.get.input', [TypeController::class, 'getTypeInput'])->name('ajax-import-types.get.input');
+
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');
@@ -585,7 +595,6 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
     Route::get('activitylogs', [testController::class, 'activityLog']);
     Route::get('/createaccount', [testController::class, 'createAccount']);
-
 });
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
@@ -606,4 +615,3 @@ Route::get('/logs', function () {
 
 //     return 'fire';
 // });
-

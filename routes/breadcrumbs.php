@@ -71,6 +71,10 @@ Breadcrumbs::for('sites.types.edit', function (BreadcrumbTrail $trail, $site_id)
     $trail->parent('sites.types.index', encryptParams($site_id));
     $trail->push('Edit Type');
 });
+Breadcrumbs::for('sites.types.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.types.index', $site_id);
+    $trail->push('Import Type');
+});
 
 //Additional Costs Breadcrumbs
 Breadcrumbs::for('sites.additional-costs.index', function (BreadcrumbTrail $trail, $site_id) {

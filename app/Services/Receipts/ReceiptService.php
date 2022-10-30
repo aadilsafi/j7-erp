@@ -24,6 +24,7 @@ class ReceiptService implements ReceiptInterface
     // Store
     public function store($site_id, $requested_data)
     {
+
         $data = $requested_data['receipts'];
 
         $amount_received = $requested_data['amount_received'];
@@ -97,13 +98,26 @@ class ReceiptService implements ReceiptInterface
                             'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                             'bank_details' => $draftReceiptData->bank_details,
                         ];
+                        //create receipt from drafts
                         $receipt_Draft = Receipt::create($receiptDraftData);
+
+                        $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                            return apiErrorResponse('invalid_transaction');
+                        }
+
                         $update_installments =  $this->updateInstallments($receipt_Draft);
                     }
                     ReceiptDraftModel::truncate();
                 }
 
+                //here is single without draft
                 $receipt = Receipt::create($receiptData);
+                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                    return apiErrorResponse('invalid_transaction');
+                }
+
 
                 if (isset($requested_data['attachment'])) {
                     $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
@@ -224,7 +238,7 @@ class ReceiptService implements ReceiptInterface
         $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
         $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
 
-        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=',$approved_sales_plan_date)->get();
+        $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=', $approved_sales_plan_date)->get();
         $total_committed_amount = collect($total_committed_amount)->sum('amount');
 
         $total_paid_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->get();
@@ -248,8 +262,11 @@ class ReceiptService implements ReceiptInterface
                 'unit_id' => $unit->id,
                 'stakeholder_id' => $stakeholder->id,
             ];
-            $stakeholderType = StakeholderType::where(['stakeholder_id'=> $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
             $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
+
+            //Here code to disapprove all other sales plan of same unit
+            (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->update(['status' => 2]);
         }
 
         $unit->update();

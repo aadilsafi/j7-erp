@@ -111,6 +111,6 @@ class testController extends Controller
     }
 
     function createAccount(){
-        return $this->financialTransactionInterface->makeSalesPlanTransaction(3);
+        return $this->financialTransactionInterface->makeReceiptTransaction(6);
     }
 }

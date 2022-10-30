@@ -189,13 +189,13 @@
         let url = "{{ route('sites.accounts.ledger.ajax-get-refund-datatable', ['site_id' => encryptParams($site->id)]) }}";
 
         // sites.accounts.charts-of-accounts.index
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-            }
-        });
+        // $.ajax({
+        //     url: url,
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     success: function(data) {
+        //         console.log(data);
+        //     }
+        // });
     </script>
 @endsection

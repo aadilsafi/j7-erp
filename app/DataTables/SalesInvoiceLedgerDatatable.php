@@ -44,8 +44,11 @@ class SalesInvoiceLedgerDatatable extends DataTable
             ->editColumn('account_action_id', function ($ledger) {
                 return $ledger->accountActions->name;
             })
-            ->editColumn('default', function ($ledger) {
-                return editBooleanColumn($ledger->default);
+            ->editColumn('created_at', function ($ledger) {
+                return $ledger->created_at->format('D, d-M-Y , H:i:s');
+            })
+            ->editColumn('updated_at', function ($ledger) {
+                return editDateColumn($ledger->updated_at);
             })
             // ->editColumn('check', function ($ledger) {
             //     return $ledger;
@@ -89,15 +92,15 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     Button::make('excel')->addClass('dropdown-item'),
                     Button::make('pdf')->addClass('dropdown-item'),
                 ]),
-                // Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-                // Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+                Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
+                Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            // ->rowGroupDataSrc('account_action_id')
+            ->rowGroupDataSrc('account_action_id')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
-                // [4, 'desc'],
+                [1, 'asc'],
             ]);
     }
 
@@ -117,7 +120,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::make('balance'),
             // Column::make('nature_of_account'),
 
-            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('created_at')->addClass('text-nowrap text-center'),
 
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];

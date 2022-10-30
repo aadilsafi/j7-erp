@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Utils\Enums\Traits;
+namespace App\Utils\Traits;
 
 trait EnumToArray
 {

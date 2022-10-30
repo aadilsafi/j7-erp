@@ -3,8 +3,9 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountHead, AccountingStartingCode, SalesPlan};
+use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, SalesPlan};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -12,35 +13,45 @@ class FinancialTransactionService implements FinancialTransactionInterface
 {
     public function makeSalesPlanTransaction($sales_plan_id)
     {
-        // try {
-        // DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        $salesPlan = (new SalesPlan())->with([
-            'unit',
-            'unit.type',
-            'user',
-            'stakeholder',
-            'stakeholder.stakeholder_types' => function ($query) {
-                $query->where('type', 'C');
-            },
-            'additionalCosts'
-        ])->find($sales_plan_id);
+            $salesPlan = (new SalesPlan())->with([
+                'unit',
+                'unit.type',
+                'user',
+                'stakeholder',
+                'stakeholder.stakeholder_types' => function ($query) {
+                    $query->where('type', 'C');
+                },
+                'additionalCosts'
+            ])->find($sales_plan_id);
 
 
-        $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
-        $salesPlan->unit->refresh();
+            $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
+            $salesPlan->unit->refresh();
 
-        $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
+            $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
+            // dd($salesPlan->stakeholder->site->id);
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $accountCustomerHeadCode, 1, $salesPlan->id, 'debit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
 
-        dd($accountUnitHeadCode, $accountCustomerHeadCode);
+            $revenueSales = (new AccountingStartingCode())->where('site_id', $salesPlan->stakeholder->site->id)
+            ->where('model', 'App\Models\RevenueSales')->where('level', 5)->first();
 
-        // DB::commit();
+            if (is_null($revenueSales)) {
+                throw new GeneralException('Revenue Sales Account Head not found');
+            }
 
-        dd('done');
-        // } catch (GeneralException | Exception $ex) {
-        //     // DB::rollBack();
-        //     return $ex;
-        // }
+            $revenueSalesAccount = $revenueSales->level_code . $revenueSales->starting_code;
+
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $revenueSalesAccount, 1, $salesPlan->id, 'credit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
     }
 
     private function findOrCreateUnitAccount($unit)
@@ -89,7 +100,6 @@ class FinancialTransactionService implements FinancialTransactionInterface
         } else {
             $accountHead = $AccountNumber . $StartingCode;
         }
-
 
         // Get and Save Unit Code
         $ancesstorType = getTypeAncesstorData($unit->type->id);
@@ -173,5 +183,22 @@ class FinancialTransactionService implements FinancialTransactionInterface
             'level' => $level,
         ]);
         return true;
+    }
+
+    public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $balance = 0)
+    {
+        $data = [
+            'site_id' => $site_id,
+            'account_head_code' => $account_code,
+            'account_action_id' => $account_action,
+            'sales_plan_id' => $sales_plan,
+            'balance' => $balance,
+            'nature_of_account' => $nature_of_account,
+            'status' => true,
+        ];
+
+        $data[$type] = $amount;
+
+        return (new AccountLedger())->create($data);
     }
 }

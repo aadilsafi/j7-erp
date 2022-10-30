@@ -2,7 +2,7 @@
 
 namespace App\Utils\Enums;
 
-use App\Utils\Enums\Traits\EnumToArray;
+use App\Utils\Traits\EnumToArray;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 

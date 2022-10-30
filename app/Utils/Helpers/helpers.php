@@ -1008,25 +1008,6 @@ if (!function_exists('addAccountCodes')) {
     }
 }
 
-// if (!function_exists('makeFinancialTransaction')) {
-//     function makeFinancialTransaction($site_id, $account_code, $type, $amount, $nature_of_account = null)
-//     {
-//         makeFinancialTransaction(decryptParams($site_id), $salesPlan->stakeholder->stakeholderAsCustomer[0]->receivable_account, 'debit', floatval($salesPlan->total_price), NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
-
-//         $data = [
-//             'site_id' => $site_id,
-//             'account_head_code' => $account_code,
-//             'balance' => 0,
-//             'nature_of_account' => $nature_of_account,
-//             'status' => true,
-//         ];
-
-//         $data[$type] = $amount;
-
-//         return (new AccountLedger())->create($data);
-//     }
-// }
-
 if (!function_exists('getTypeAncesstorData')) {
     function getTypeAncesstorData($type_id)
     {

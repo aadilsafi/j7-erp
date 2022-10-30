@@ -240,7 +240,6 @@ class SalesPlanController extends Controller
             return apiErrorResponse('invalid_amout');
         }
 
-
         $currentURL = URL::current();
         $notificaionData = [
             'title' => 'Sales Plan Approved Notification',

@@ -584,6 +584,8 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
     Route::get('activitylogs', [testController::class, 'activityLog']);
+    Route::get('/createaccount', [testController::class, 'createAccount']);
+
 });
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
@@ -605,6 +607,3 @@ Route::get('/logs', function () {
 //     return 'fire';
 // });
 
-Route::get('/createaccount', function () {
-    return makeSalesPlanTransaction(3);
-});

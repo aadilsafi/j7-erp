@@ -35,4 +35,9 @@ class StakeholderType extends Model
     {
         return $this->belongsTo(Stakeholder::class);
     }
+
+    public function modelable()
+    {
+        return $this->morphOne(AccountHead::class, 'modelable');
+    }
 }

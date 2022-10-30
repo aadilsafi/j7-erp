@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.ledger.index', $site_id )}} --}}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.ledger.index', $site_id) }}
 @endsection
 
 @section('page-title', 'Account Ledgers')
@@ -27,7 +27,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Ledgers</h2>
                 <div class="breadcrumb-wrapper">
-                    {{-- {{ Breadcrumbs::render('sites.accounts.ledger.index', encryptParams($site_id)) }} --}}
+                    {{ Breadcrumbs::render('sites.accounts.ledger.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -41,11 +41,10 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 @csrf
-                {!! $salesInvoice->table() !!}
-                {{-- {{ view('app.sites.accounts.ledgers.form-fields', [
-                    // 'site' => $site,alesPlan,
-                    // 'user' => $user,
-                ]) }} --}}
+                {{-- {!! $salesInvoice->table() !!} --}}
+                {{ view('app.sites.accounts.ledgers.form-fields', [
+                    'salesInvoice' => $salesInvoice,
+                ]) }}
             </div>
         </div>
     </form>
@@ -74,8 +73,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.server-side.js"></script>
 @endsection
 
 @section('custom-js')
-{!! $salesInvoice->scripts() !!}
 @endsection

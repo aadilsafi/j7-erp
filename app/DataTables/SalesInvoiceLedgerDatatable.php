@@ -83,20 +83,20 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
+                // ($selectedDeletePermission  ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
 
-                ),
+                // ),
             )
             ->rowGroupDataSrc('parent_id')
             ->columnDefs([

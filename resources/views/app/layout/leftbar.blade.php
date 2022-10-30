@@ -478,8 +478,8 @@
                                     <span class="menu-title text-truncate" data-i18n="Email">Charts of Accounts</span>
                                 </a>
                             </li>
-                        @endcan
-                        @can('sites.accounts.ledger.index')
+                        @endcan --}}
+                        {{-- @can('sites.accounts.ledger.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.accounts.ledger.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"

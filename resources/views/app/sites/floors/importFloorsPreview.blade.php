@@ -43,29 +43,31 @@
 
     <div class="card">
         <div class="card-body">
-
-            <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get">
+            <form action="{{ route('sites.floors.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+                id="teams-table-form" method="post">
+                @csrf
+                {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
                 {{ $dataTable->table() }}
-                <hr>
 
-                <div class="row mt-1">
-                    <div class="col"></div>
-                    <div class="col-lg-2 col-md-2 col-sm-12">
-                        <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                            <i data-feather='x'></i>
-                            {{ __('lang.commons.cancel') }}
-                        </a>
-                    </div>
-                    <div class="col-lg-2 col-md-2 col-sm-12">
-                        <button type="submit" value="save"
-                            class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                            <i data-feather='save'></i>
-                            Save
-                        </button>
-                    </div>
-                </div>
             </form>
+            <hr>
 
+            <div class="row mt-1">
+                <div class="col"></div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                    <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                        <i data-feather='x'></i>
+                        {{ __('lang.commons.cancel') }}
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                    <button id="finalSubmit"
+                        class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                        <i data-feather='save'></i>
+                        Save
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -103,6 +105,14 @@
     {{ $dataTable->scripts() }}
 
     <script>
+        $(document).ready(function() {
+            $(window).keydown(function(event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
         showBlockUI();
 
         $(document).ready(function() {
@@ -118,6 +128,7 @@
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
+            required: true,
             allowMultiple: false,
             checkValidity: true,
             credits: {
@@ -137,7 +148,7 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                showBlockUI('#unit_p_input_div_' + field + id);
+                // showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
@@ -160,10 +171,10 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        hideBlockUI('#unit_p_input_div_' + field + id);
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        hideBlockUI('#unit_p_input_div_' + field + id);
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
@@ -172,7 +183,7 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                showBlockUI('#unit_p_input_div_' + field + id);
+                // showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
@@ -198,17 +209,38 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                             toastr.success('Updated');
+                        } else {
+                            toastr.error(response['message']['error']);
+                            // hideBlockUI('#unit_p_input_div_' + field + id);
+
                         }
-                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        hideBlockUI('#unit_p_input_div_' + field + id);
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
         });
 
 
-        // $("name['field']")
+        $('#finalSubmit').on('click', function() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Confirmation',
+                text: 'Are you sure to Import File',
+                confirmButtonText: 'Yes',
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                showCancelButton: true,
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#teams-table-form').submit();
+                }
+            });
+        });
     </script>
 @endsection

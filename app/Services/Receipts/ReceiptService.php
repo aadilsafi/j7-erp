@@ -10,6 +10,7 @@ use App\Models\Stakeholder;
 use App\Models\UnitStakeholder;
 use App\Models\SiteConfigration;
 use App\Models\SalesPlanInstallments;
+use App\Models\StakeholderType;
 use App\Services\Receipts\Interface\ReceiptInterface;
 
 class ReceiptService implements ReceiptInterface
@@ -106,6 +107,7 @@ class ReceiptService implements ReceiptInterface
 
                 if (isset($requested_data['attachment'])) {
                     $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                    changeImageDirectoryPermission();
                 }
 
                 $update_installments =  $this->updateInstallments($receipt);
@@ -207,6 +209,7 @@ class ReceiptService implements ReceiptInterface
             $instalment_numbers[] =  $installment->details;
             $purpose = $installment->details;
             $total_paid_amount =   $total_paid_amount + $total_calculated_installments[$i]['paid_amount'];
+            $installment->last_paid_at = now();
             $installment->update();
         }
         $update_installment_details = Receipt::find($receipt->id);
@@ -239,12 +242,13 @@ class ReceiptService implements ReceiptInterface
 
             $unit->status_id = 5;
             $unit->is_for_rebate = true;
-            
+
             $unitStakeholderData = [
                 'site_id' => $receipt->site_id,
                 'unit_id' => $unit->id,
                 'stakeholder_id' => $stakeholder->id,
             ];
+            $stakeholderType = StakeholderType::where(['stakeholder_id'=> $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
             $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
         }
 

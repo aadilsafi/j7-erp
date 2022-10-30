@@ -22,6 +22,10 @@ class StakeholderType extends Model
         'payable_account',
     ];
 
+    protected $casts = [
+        'receivable_account' => 'json',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
@@ -30,5 +34,10 @@ class StakeholderType extends Model
     public function stakeholder()
     {
         return $this->belongsTo(Stakeholder::class);
+    }
+
+    public function modelable()
+    {
+        return $this->morphOne(AccountHead::class, 'modelable');
     }
 }

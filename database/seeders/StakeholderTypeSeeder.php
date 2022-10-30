@@ -16,46 +16,46 @@ class StakeholderTypeSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $paddingZero = str_pad(1, 3, "0", STR_PAD_LEFT);
         $stakeholderTypeData  = [
             [
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
-                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => '1020201001',
-                'payable_account' => '2020101001',
+                'receivable_account' => [],
+                'payable_account' => '20201010000001',
             ],
             [
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::VENDOR->value,
-                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
-                'payable_account' => '2020103001',
+                'receivable_account' => [],
+                'payable_account' => '20201030000001',
             ],
             [
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::DEALER->value,
-                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
-                'payable_account' => '2020102001',
+                'receivable_account' => [],
+                'payable_account' => '20201020000001',
             ],
             [
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
             [
                 'stakeholder_id' => 1,
                 'type' => StakeholderTypeEnum::LEAD->value,
-                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
 
@@ -63,44 +63,47 @@ class StakeholderTypeSeeder extends Seeder
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::CUSTOMER->value,
-                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
-                'payable_account' => null,
+                'receivable_account' => [],
+                'payable_account' => '20201010000002',
             ],
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::VENDOR->value,
-                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
-                'payable_account' => null,
+                'receivable_account' => [],
+                'payable_account' => '20201030000002',
             ],
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::DEALER->value,
-                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
-                'payable_account' => null,
+                'receivable_account' => [],
+                'payable_account' => '20201020000002',
             ],
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $paddingZero,
                 'status' => 0,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
             [
                 'stakeholder_id' => 2,
                 'type' => StakeholderTypeEnum::LEAD->value,
-                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . str_pad(1, 3, "0", STR_PAD_LEFT),
+                'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $paddingZero,
                 'status' => 1,
-                'receivable_account' => null,
+                'receivable_account' => [],
                 'payable_account' => null,
             ],
         ];
-        $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
+
+        foreach ($stakeholderTypeData as $key => $value) {
+            (new StakeholderType())->create($value);
+        }
     }
 }

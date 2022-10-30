@@ -22,6 +22,7 @@ class SalesPlanInstallments extends Model
         'remarks',
         'installment_order',
         'status',
+        'last_paid_at',
     ];
 
     protected $casts = [
@@ -35,6 +36,7 @@ class SalesPlanInstallments extends Model
         'remarks' => 'string',
         'installment_order' => 'integer',
         'status' => 'string',
+        'last_paid_at' => 'datetime',
     ];
 
     public function getActivitylogOptions(): LogOptions

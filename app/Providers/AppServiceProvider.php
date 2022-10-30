@@ -16,6 +16,7 @@ use App\Services\FileManagements\FileActions\Cancellation\{CancellationInterface
 use App\Services\FileManagements\FileActions\Refund\{RefundInterface, RefundService};
 use App\Services\FileManagements\FileActions\Resale\{ResaleInterface, ResaleService};
 use App\Services\FileManagements\FileActions\TitleTransfer\{TitleTransferInterface, TitleTransferService};
+use App\Services\FinancialTransactions\{FinancialTransactionInterface, FinancialTransactionService};
 use App\Services\SalesPlan\{SalesPlanService, Interface\SalesPlanInterface};
 use App\Services\Stakeholder\{StakeholderService, Interface\StakeholderInterface};
 use App\Services\User\{UserService, Interface\UserInterface};
@@ -62,6 +63,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CustomFieldInterface::class, CustomFieldService::class);
         $this->app->bind(CustomFieldValueInterface::class, CustomFieldService::class);
         $this->app->bind(AccountRecevoryInterface::class, AccountRecevoryService::class);
+        $this->app->bind(FinancialTransactionInterface::class, FinancialTransactionService::class);
 
         Telescope::ignoreMigrations();
 

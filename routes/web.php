@@ -34,6 +34,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    LedgerController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -181,9 +182,7 @@ Route::group([
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
-
-
-
+                    Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -281,6 +280,13 @@ Route::group([
                         Route::get('edit', [StakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [StakeholderController::class, 'update'])->name('update');
                         Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::post('preview', [StakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                        Route::get('storePreview', [StakeholderController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [StakeholderController::class, 'saveImport'])->name('saveImport');
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
@@ -533,10 +539,15 @@ Route::group([
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                         });
                     });
-                });
-                // Charts Of accounts
-                Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
-                    Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+
+                    // Charts Of accounts
+                    Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
+                        Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                    });
+                    // Accounts ledger
+                    Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {
+                        Route::get('/', [LedgerController::class, 'index'])->name('index');
+                    });
                 });
             });
         });
@@ -546,6 +557,9 @@ Route::group([
         Route::get('ajax-update-unit-name', [UnitController::class, 'updateUnitName'])->name('ajax-unit.name.update');
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
+        Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
+
+        Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
@@ -553,6 +567,7 @@ Route::group([
         });
 
         Route::group(['prefix' => 'batches', 'as' => 'batches.'], function () {
+            Route::get('clear-all', [JobBatchController::class, 'clearAllQueues'])->name('clear-all');
             Route::get('/{batch_id}', [JobBatchController::class, 'getJobBatchByID'])->name('byid');
         });
 
@@ -569,6 +584,8 @@ Route::group(['prefix' => 'tests'], function () {
     Route::get('/session/{batchId}', [testController::class, 'setBatchIDInSession'])->name('sbatch');
     Route::get('/session/{batchId}/remove', [testController::class, 'unsetBatchIDInSession'])->name('ssbatch');
     Route::get('activitylogs', [testController::class, 'activityLog']);
+    Route::get('/createaccount', [testController::class, 'createAccount']);
+
 });
 
 Route::get('/read-all-notifications', [NotificationController::class, 'readAllNotifications']);
@@ -590,12 +607,3 @@ Route::get('/logs', function () {
 //     return 'fire';
 // });
 
-Route::get('/createaccount', function () {
-    makeSalesPlanTransaction(1);
-});
-
-
-
-Route::get('storePreviewtest', function(){
-    dd(request()->all());
-})->name('storePreviewtest');

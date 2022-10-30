@@ -35,6 +35,7 @@ class UnitTableSeeder extends Seeder
                 'is_for_rebate' => true,
                 'parent_id' => 0,
                 'has_sub_units' => false,
+                'unit_account' => [],
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -58,6 +59,7 @@ class UnitTableSeeder extends Seeder
                 'is_for_rebate' => false,
                 'parent_id' => 0,
                 'has_sub_units' => false,
+                'unit_account' => [],
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -75,12 +77,13 @@ class UnitTableSeeder extends Seeder
                 'is_corner' => false,
                 'corner_id' => null,
                 'is_facing' => false,
-                'type_id' => 5,
+                'type_id' => 4,
                 'status_id' => 1,
                 'active' => true,
                 'is_for_rebate' => false,
                 'parent_id' => 0,
                 'has_sub_units' => false,
+                'unit_account' => [],
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -98,12 +101,13 @@ class UnitTableSeeder extends Seeder
                 'is_corner' => false,
                 'corner_id' => null,
                 'is_facing' => false,
-                'type_id' => 5,
+                'type_id' => 4,
                 'status_id' => 1,
                 'active' => true,
                 'is_for_rebate' => false,
                 'parent_id' => 0,
                 'has_sub_units' => false,
+                'unit_account' => [],
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -121,10 +125,11 @@ class UnitTableSeeder extends Seeder
                 'is_corner' => false,
                 'corner_id' => null,
                 'is_facing' => false,
-                'type_id' => 5,
+                'type_id' => 3,
                 'status_id' => 1,
                 'active' => true,
                 'is_for_rebate' => false,
+                'unit_account' => [],
                 'parent_id' => 0,
                 'has_sub_units' => false,
                 'created_at' => now(),
@@ -132,6 +137,8 @@ class UnitTableSeeder extends Seeder
             ],
         ];
 
-        (new Unit())->insert($data);
+        foreach ($data as $key => $value) {
+            (new Unit())->create($value);
+        }
     }
 }

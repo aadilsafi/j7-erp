@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FloorsDataTable;
+use App\DataTables\FloorsPreviewDataTable;
 use App\DataTables\ImportFloorsDataTable;
 use App\Http\Requests\FileBuyBack\store;
 use App\Services\CustomFields\CustomFieldInterface;
@@ -14,6 +15,7 @@ use App\Http\Requests\floors\{
     updateRequest as floorUpdateRequest,
 };
 use App\Imports\FloorImport;
+use App\Imports\FloorImportSimple;
 use App\Models\{
     Floor,
     Unit,
@@ -28,9 +30,10 @@ use App\Utils\Enums\{
     UserBatchActionsEnum,
     UserBatchStatusEnum,
 };
-use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\HeadingRowImport;
 use Yajra\DataTables\Facades\DataTables;
-use Maatwebsite\Excel\Facades\Excel;
+use Redirect;
 
 class FloorController extends Controller
 {
@@ -231,87 +234,16 @@ class FloorController extends Controller
         }
     }
 
-    public function preview(Request $request, $site_id)
+    public function preview(Request $request, FloorsPreviewDataTable $dataTable, $site_id)
     {
         if ($request->ajax()) {
-            $id = $request->get('id');
-            $units = Unit::where('floor_id', $id)->where('active', 0)->get();
-            return DataTables::of($units)
-                ->addIndexColumn()
-                ->editColumn('type_id', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
-                    );
-                })
-                ->editColumn('status_id', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'status_id', 'inputtype' => 'select', 'value' => $unit->status->name]
-                    );
-                })
-                ->editColumn('name', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $unit->name]
-                    );
-                })
-                ->editColumn('created_at', function ($unit) {
-                    return editDateColumn($unit->created_at);
-                })
-                ->editColumn('width', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'width', 'inputtype' => 'number', 'value' => $unit->width]
-                    );
-                })
-                ->editColumn('length', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'length', 'inputtype' => 'number', 'value' => $unit->length]
-                    );
-                })
-                ->editColumn('is_corner', function ($unit) {
-                    return view(
-                        'app.components.checkbox',
-                        ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
-                    );
-                })
-                ->editColumn('is_facing', function ($unit) {
-                    return view(
-                        'app.components.checkbox',
-                        ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
-                    );
-                })
-                ->editColumn('net_area', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'net_area', 'inputtype' => 'number', 'value' => $unit->net_area]
-                    );
-                })
-                ->editColumn('gross_area', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'gross_area', 'inputtype' => 'number', 'value' => $unit->gross_area]
-                    );
-                })
-                ->editColumn('price_sqft', function ($unit) {
-                    return view(
-                        'app.components.unit-preview-cell',
-                        ['id' => $unit->id, 'field' => 'price_sqft', 'inputtype' => 'number', 'value' => $unit->price_sqft]
-                    );
-                })
-                ->rawColumns([
-                    'name', 'created_at', 'width', 'length', 'is_corner', 'is_facing', 'type_id',
-                    'status_id', 'net_area', 'gross_area', 'price_sqft'
-                ])
-                ->make(true);
+            $data['floor_id'] = $request->get('id');
+
+            return $dataTable->with($data)->ajax();
         }
-        $floors = (new Floor())->where('site_id', decryptParams($site_id))->where('active', 0)->get();
-        return view(
-            'app.sites.floors.preview',
-            ['site_id' => encryptParams(decryptParams($site_id)), 'floors' => $floors]
-        );
+        $site_id = decryptParams($site_id);
+        $floors = (new Floor())->where('site_id', $site_id)->where('active', 0)->get();
+        return view('app.sites.floors.preview', ['site_id' => $site_id, 'floors' => $floors]);
     }
 
     public function saveChanges(Request $request, $site_id)
@@ -344,7 +276,6 @@ class FloorController extends Controller
     public function getUnitInput(Request $request)
     {
         try {
-
             $field = $request->get('field');
             $tempFloor = (new TempFloor())->find((int)$request->get('id'));
 
@@ -391,6 +322,22 @@ class FloorController extends Controller
 
                 case 'short_label':
                     if ($request->get('updateValue') == 'true') {
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:floors,short_label',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $validator2 = \Validator::make($request->all(), [
+                            'value' => [
+                                Rule::unique('temp_floors', 'short_label')->ignore($request->get('id'))
+                            ],
+                        ]);
+
+                        if ($validator2->fails()) {
+                            return apiErrorResponse($validator2->errors()->first('value'));
+                        }
                         $tempFloor->short_label = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
@@ -423,119 +370,83 @@ class FloorController extends Controller
         }
     }
 
-    public function storePreview(ImportFloorsDataTable $dataTable, $site_id)
+    public function ImportPreview(Request $request, $site_id)
     {
-    
-        // $path = $request->file_path;
+        try {
+            $model = new TempFloor();
 
-        // TempFloor::query()->truncate();
-        // Excel::import(new FloorImport(request()->get('fields')), $path,'public');
-        // // Storage::delete($path);
-        $model = new TempFloor();
+            if ($request->hasfile('attachment')) {
+                $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // dd(array_intersect($model->getFillable(),$headings[0][0]));
+                //validate header row and return with error
+                TempFloor::query()->truncate();
+                $import = new FloorImportSimple($model->getFillable());
+                $import->import($request->file('attachment'));
 
-        $data = [
-            'site_id' => decryptParams($site_id),
-            'final_preview' => true,
-            'preview' => false,
-            'db_fields' =>  $model->getFillable(),
-        ];
+                return redirect()->route('sites.floors.storePreview', ['site_id' => $site_id]);
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
-
-        return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+                return Redirect::back()->with(['data' => $e->failures()]);
+            }
+        }
     }
 
-    public function ImportPreview(ImportFloorsDataTable $dataTable, Request $request, $site_id)
+    public function storePreview(Request $request, $site_id)
     {
         $model = new TempFloor();
-        TempFloor::query()->truncate();
-
-        Excel::Import(new FloorImport($model->getFillable()), $request->file('attachment'));
-
-        return redirect()->route('sites.floors.storePreview', ['site_id' => encryptParams($site_id)]);
-        // $data = [
-        //     'site_id' => decryptParams($site_id),
-        //     'preview' => true,
-        //     'db_fields' =>  $model->getFillable(),
-        // ];
-        // return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
-
-        // $data = Excel::import(new FloorImport, $request->file('attachment'));
-        // return redirect()->back()->with('success', 'All good!');
-        // TempFloor::query()->truncate();
-        // TempFloor::truncate();
-        // dd($request->all());
-        // $import = new FloorImport();
-        // $import->import($request->file('attachment'));
-
-        // dd($import->errors());
-        // $data = Excel::import(new FloorImport, $request->file('attachment'));
-
-        //     if ($request->ajax()) {
-        //         $array = Excel::toArray(new FloorImport, $request->file('attachment'));
-
-        //        $importData = new Collection($array[0]);
-        //        return Datatables::of($importData)->make(true);
-        //    }
-
-
-        // $reader = new Xlsx();
-
-        // $spreadsheet = $reader->load($file->getrealPath());
-
-        // $sheet = $spreadsheet->getActiveSheet();
-        // $maxCell = $sheet->getHighestRowAndColumn();
-        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
-
-        // $headerRow = $floorData[0];
-
-        // $importFloorData = [];
-        // foreach ($floorData as $key => $fd) {
-        //     if ($key > 0) {
-        //         foreach ($fd as $k => $row) {
-        //             $importFloorData[$headerRow[$k]][] = $row;
-        //         }
-        //     }
-        // }
-
-
-
+        if ($model->count() == 0) {
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        } else {
+            $dataTable = new ImportFloorsDataTable($site_id);
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
+        }
     }
-    public function test()
+
+    public function saveImport(Request $request, $site_id)
     {
-        // dd($data);
-        // dd($request->all());
-        // $file = $request->file('attachment');
+        // $site_id = decryptParams($site_id);
+        $model = new TempFloor();
+        $tempdata = $model->all()->toArray();
+        $tempCols = $model->getFillable();
 
+        $totalFloors = Floor::max('order');
+        // dd($totalFloors);
+        $floors = [];
+        foreach ($tempdata as $key => $items) {
+            foreach ($request->fields as $k => $field) {
+                if ($field == 'floor_area') {
+                    $data[$key][$field] = (float)$items[$tempCols[$k]];
+                } else {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
+            }
+            // dd($totalFloors, $totalFloors++, ++$totalFloors);
 
-        // $name_gen = hexdec(uniqid()) . '.' . $file->getClientOriginalExtension();
-        // $file = $file->move("imports/", $name_gen);
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['order'] = ++$totalFloors;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['active'] = true;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+        }
+        $floors = Floor::insert($data);
 
-
-        // $reader = new Xlsx();
-
-        // $spreadsheet = $reader->load($file->getrealPath());
-
-        // $sheet = $spreadsheet->getActiveSheet();
-        // $maxCell = $sheet->getHighestRowAndColumn();
-        // $floorData = $sheet->rangeToArray('A1:' . $maxCell['column'] . $maxCell['row']);
-
-        // $headerRow = $floorData[0];
-
-        // $importFloorData = [];
-        // foreach ($floorData as $key => $fd) {
-        //     if ($key > 0) {
-        //         foreach ($fd as $k => $row) {
-        //             $importFloorData[$headerRow[$k]][] = $row;
-        //         }
-        //     }
-        // }
-
-
-        // $data = [
-        //     'site_id' => decryptParams($site_id),
-        //     'floors' => $importFloorData,
-        //     'preview' => true
-        // ];
-        // return view('app.sites.floors.importFloors', $data);
+        if ($floors) {
+            TempFloor::query()->truncate();
+        }
+        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

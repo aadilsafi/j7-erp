@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.import', $site_id) }}
 @endsection
 
 @section('page-title', 'Import Floor')
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Floor</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.floors.import', $site_id) }}
                 </div>
             </div>
         </div>
@@ -41,110 +41,114 @@
 
 @section('content')
 
-    @if (!$preview)
-        <form class="form form-vertical"
-            action="{{ route('sites.floors.importFloorsPreview', ['site_id' => encryptParams($site_id)]) }}"
-            enctype="multipart/form-data" method="POST">
-            @csrf
-            <div class="row">
-                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                        <div class="card-body">
-                            <div class="d-block mb-1">
-                                <label class="form-label fs-5" for="type_name">Import </label>
-                                <input id="attachment" type="file" class="filepond" name="attachment" />
-                            </div>
-                            <hr>
-                            <button type="submit" value="save"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                <i data-feather='save'></i>
-                                Preview Import File
-                            </button>
-
-                            <a href="#"
-                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                                <i data-feather='x'></i>
-                                {{ __('lang.commons.cancel') }}
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-9 col-md-9 col-sm-12 position-relative"></div>
-            </div>
-        </form>
-    @else
-        <div class="row">
-            <div class="col">
-                <form class="form form-vertical"
-                    action="{{ route('sites.floors.storePreview', ['site_id' => encryptParams($site_id)]) }}"
-                    method="POST">
-                    @csrf
-                    <table id="kt_table_1" class="table table-striped table-bordered dt-responsive nowrap">
-                        <thead>
-                            <tr>
-                                @foreach ($data[0] as $key => $value)
-                                    <th>
-                                        <select class="form-control text-capitalize text-nowrap required"
-                                            style="width: 230px;" name="fields[{{ $key }}]">
-                                            <option value="">...No match,select a field...</option>
-                                            @foreach ($db_fields as $k => $db_field)
-                                                @if ($db_field == 'name' || $db_field == 'floor_area' || $db_field == 'short_label')
-                                                    <option class="text-danger" value="{{ $db_field }}"
-                                                        @if ($key == $db_field) selected @endif>
-                                                        {{ $db_field }}<span class="text-danger">*</span></option>
-                                                @else
-                                                    <option value="{{ $db_field }}"
-                                                        @if ($key == $db_field) selected @endif>
-                                                        {{ $db_field }}
-                                                    </option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data as $key => $row)
-                                <tr>
-                                    @foreach ($row as $k => $value)
-                                        <td class="text-nowrap">{{ $value }}</td>
-                                    @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <hr>
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col-lg-2 col-md-2 col-sm-12">
-                            <a href="#"
-                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
-                                <i data-feather='x'></i>
-                                {{ __('lang.commons.cancel') }}
-                            </a>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-12">
-                            <button type="submit" value="save"
-                                class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                <i data-feather='save'></i>
-                                Save Import File
-                            </button>
-                        </div>
-
-                    </div>
-                    <input type="hidden" name="file_path" value="{{$file_path}}"> 
-                    @foreach ($data as $key => $row)
-                        @foreach ($row as $k => $value)
-                            <input type="hidden" value="{{ $value }}"
-                                name="values[{{ $key }}][{{ $db_fields[$loop->index] }}]">
-                        @endforeach
-                    @endforeach
-                </form>
-            </div>
-        </div>
-
+    @if (Session::get('data'))
+        @php
+            $errorData = Session::get('data');
+        @endphp
     @endif
+
+    <div class="row">
+        @if (isset($errorData))
+            <div class="col-9 card">
+                <h4 class="text-danger mt-1 p-1"> * Resolve Conflicts and Upload File again</h4>
+
+                <table id="kt_table_1" class="table table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th class="text-danger">Line #</th>
+                            <th class="text-danger">Error's</th>
+
+                            @foreach ($errorData[0]->values() as $key => $value)
+                                <th class="title">{{ $key }}</th>
+                            @endforeach
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($errorData as $key => $row)
+                            <tr>
+                                <td class="text-danger">{{ $row->row() }}</td>
+                                <td class="text-danger">
+                                    @foreach ($row->errors() as $value)
+                                        {{ $value }}
+                                    @endforeach
+                                </td>
+                                @foreach ($row->values() as $k => $value)
+                                    {{-- @if ($row->attribute() == $k)
+                                        <td>
+                                            <div class="unit_p_input_div bg-danger" data-field="{{ $k }}"
+                                                data-value="{{ $value }}"
+                                                data-inputtype="{{ $k == 'floor_area' ? 'number' : 'text' }}">
+                                                {{ $value }}
+                                               
+                                                <input type="hidden" value='{{ json_encode($row->values()) }}'
+                                                    class="dataToSave">
+                                            </div>
+                                        </td>
+                                    @else --}}
+                                    <td @if ($row->attribute() == $k) class="text-danger" @endif>{{ $value }}
+                                    </td>
+                                    {{-- @endif --}}
+                                @endforeach
+                                
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <hr>
+                {{-- <div class="row">
+                    <div class="col"></div>
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                            <i data-feather='x'></i>
+                            {{ __('lang.commons.cancel') }}
+                        </a>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-12">
+                        <button value="save" onclick="PreviewFile()"
+                            class="btn btn-md w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                            <i data-feather='save'></i>
+                            Preview Import File
+                        </button>
+                    </div>
+                </div> --}}
+
+            </div>
+        @endif
+        <div class="col">
+            <form class="form form-vertical"
+                action="{{ route('sites.floors.importFloorsPreview', ['site_id' => $site_id]) }}"
+                enctype="multipart/form-data" method="POST">
+                @csrf
+                <div class="row mt-5">
+                    <div class="col position-relative">
+                        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card-body">
+                                <div class="d-block mb-1">
+                                    <label class="form-label fs-5" for="type_name">Import </label>
+                                    <input id="attachment" type="file" class="filepond" name="attachment" />
+                                </div>
+                                <hr>
+                                <button type="submit" value="save"
+                                    class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                    <i data-feather='save'></i>
+                                    Preview Import File
+                                </button>
+
+                                <a href="#"
+                                    class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                    <i data-feather='x'></i>
+                                    {{ __('lang.commons.cancel') }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-12 position-relative"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @endsection
 
 @section('vendor-js')
@@ -182,7 +186,7 @@
         $(document).ready(function() {
             hideBlockUI();
         });
- 
+
         FilePond.registerPlugin(
             FilePondPluginFileValidateSize,
 
@@ -203,9 +207,127 @@
         $('#kt_table_1').DataTable({
             ordering: false,
             sorting: false,
-
+            searching: false,
+            responsive: false,
+            scrollX: true,
+            lengthMenu: [50, 100, 500],
         });
 
-      
+        $(document).on('click', '.unit_p_input_div', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
+                field = $(this).data('field');
+                value = $(this).data('value');
+                inputtype = $(this).data('inputtype');
+                el = $(this);
+                if (!$(this).data('id')) {
+                    datatoSave = JSON.parse(el.children('.dataToSave').val());
+                    id = 0;
+                    CreateErrorValue = true;
+                } else {
+                    CreateErrorValue = false;
+                    id = $(this).data('id');
+                }
+                // console.log( JSON.parse(tt));
+                var url = "{{ route('ajax-import-floor.error.inputs') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        datatoSave: datatoSave,
+                        id: id,
+                        value: value,
+                        field: field,
+                        inputtype: inputtype,
+                        updateValue: false,
+                        CreateErrorValue: CreateErrorValue
+                    },
+                    success: function(response) {
+                        // console.log(response['data']);
+                        if (response['status']) {
+                            // console.log('insuccess');
+                            el.empty();
+                            el.append(response['data']);
+                            el.addClass('filedrendered');
+                        }
+                    },
+                    error: function(response) {
+
+                    },
+                });
+            }
+        });
+
+
+        $(document.body).on('focusout', '.unit-p-text-input', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
+                id = $(this).data('id');
+                field = $(this).data('field');
+                showBlockUI('#unit_p_input_div_' + field + id);
+                value = $(this).data('value');
+                inputtype = $(this).data('inputtype');
+                el = $(this);
+                console.log(el.parent)
+
+                var url = "{{ route('ajax-import-floor.error.inputs') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        value: el.val(),
+                        id: id,
+                        field: field,
+                        inputtype: inputtype,
+                        updateValue: true,
+                        updateErrorValue: true
+                    },
+                    success: function(response) {
+                        // console.log(response['data']);
+                        if (response['status']) {
+                            console.log('insuccess');
+                            el = el.parent()
+                            el.empty();
+                            el.append(response['data']);
+                            el.addClass('filedrendered');
+                            toastr.success('Updated');
+                            el.removeClass('bg-danger')
+                        } else {
+
+                            toastr.error(response['message']['error']);
+
+                        }
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                    error: function(response) {
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                });
+            }
+        });
+
+
+        function PreviewFile() {
+            if (!$('.unit_p_input_div').hasClass('bg-danger')) {
+                window.location.href = "{{ route('sites.floors.storePreview', ['site_id' => $site_id]) }}"
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Resolve Conflicts to Procede to next step',
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                    confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-warning waves-effect waves-float waves-light me-1',
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                    }
+                });
+
+            }
+
+        }
     </script>
 @endsection

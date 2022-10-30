@@ -98,6 +98,10 @@ Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail, $site_
     $trail->parent('sites.floors.index', $site_id);
     $trail->push('Create Floor');
 });
+Breadcrumbs::for('sites.floors.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
+    $trail->push('Import Floor');
+});
 
 Breadcrumbs::for('sites.floors.copy', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.floors.index', $site_id);
@@ -161,7 +165,10 @@ Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.stakeholders.index', encryptParams($site_id));
     $trail->push('Edit Stakeholder');
 });
-
+Breadcrumbs::for('sites.stakeholders.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.stakeholders.index', $site_id);
+    $trail->push('Import Stakeholders');
+});
 //Users Breadcrumbs
 Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
@@ -410,4 +417,9 @@ Breadcrumbs::for('sites.accounts.recovery.calender', function (BreadcrumbTrail $
     $trail->push('Accounts', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
     $trail->push('Recovery', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
     $trail->push('Calendar', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
+});
+// Accounts Ledgers
+Breadcrumbs::for('sites.accounts.ledger.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Ledgers', route('sites.accounts.ledger.index', ['site_id' => $site_id]));
 });

@@ -32,6 +32,7 @@ class Unit extends Model
         'facing_id',
         'type_id',
         'status_id',
+        'unit_account',
         'is_for_rebate',
         'active',
     ];
@@ -53,7 +54,8 @@ class Unit extends Model
         'type_id' => 'integer',
         'status_id' => 'integer',
         'active' => 'boolean',
-        'is_for_rebate' => 'boolean'
+        'is_for_rebate' => 'boolean',
+        'unit_account' => 'json',
 
     ];
 
@@ -126,12 +128,12 @@ class Unit extends Model
 
     public function salesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 1)->with('stakeholder','leadSource','installments');
+        return $this->hasMany(SalesPlan::class)->where('status', '=', 1)->with('stakeholder', 'leadSource', 'installments');
     }
 
     public function CancelsalesPlan()
     {
-        return $this->hasMany(SalesPlan::class)->where('status','=', 3)->with('stakeholder','leadSource','installments');
+        return $this->hasMany(SalesPlan::class)->where('status', '=', 3)->with('stakeholder', 'leadSource', 'installments');
     }
 
     public function file()
@@ -141,6 +143,6 @@ class Unit extends Model
 
     public function modelable()
     {
-        return $this->morphOne(AccountHead::class,'modelable');
+        return $this->morphOne(AccountHead::class, 'modelable');
     }
 }

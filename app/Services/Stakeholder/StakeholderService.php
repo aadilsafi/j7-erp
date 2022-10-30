@@ -12,6 +12,7 @@ use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class StakeholderService implements StakeholderInterface
@@ -74,6 +75,8 @@ class StakeholderService implements StakeholderInterface
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+                $returnValue = changeImageDirectoryPermission();
+                Log::info("changeImageDirectoryPermission => " . $returnValue);
             }
 
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
@@ -265,6 +268,7 @@ class StakeholderService implements StakeholderInterface
                 foreach ($inputs['attachment'] as $attachment) {
                     $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_cnic');
                 }
+                changeImageDirectoryPermission();
             }
 
             if (isset($inputs['stakeholder_type'])) {

@@ -25,7 +25,7 @@ class AccountingStartingCode extends Model
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
-    protected $cast =  [
+    protected $casts =  [
         'site_id' => 'intiger',
         'model' => 'string',
         'level_code'=> 'string',

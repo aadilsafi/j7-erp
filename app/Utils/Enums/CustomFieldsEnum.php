@@ -2,7 +2,7 @@
 
 namespace App\Utils\Enums;
 
-use App\Utils\Enums\Traits\EnumToArray;
+use App\Utils\Traits\EnumToArray;
 
 enum CustomFieldsEnum: string
 {

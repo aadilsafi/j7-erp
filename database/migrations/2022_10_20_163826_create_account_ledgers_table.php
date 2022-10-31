@@ -20,6 +20,11 @@ return new class extends Migration
             $table->foreignId('account_action_id')->constrained();
             $table->foreignId('sales_plan_id')->constrained();
             $table->foreignId('receipt_id')->nullable();
+            $table->foreignId('file_refund_id')->nullable();
+            $table->foreignId('file_resale_id')->nullable();
+            $table->foreignId('file_buyback_id')->nullable();
+            $table->foreignId('file_cancellation_id')->nullable();
+            $table->foreignId('file_title_transfer_id')->nullable();
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);

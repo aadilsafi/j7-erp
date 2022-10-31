@@ -16,12 +16,16 @@ use App\Models\ReceiptDraftModel;
 use App\Models\FileRefundAttachment;
 use App\DataTables\FileRefundDataTable;
 use App\Http\Requests\FileRefund\store;
+use App\Models\AccountHead;
+use App\Models\AccountLedger;
 use App\Models\ModelTemplate;
+use App\Models\StakeholderType;
 use App\Models\Template;
 use App\Models\Type;
 use App\Services\FileManagements\FileActions\Refund\RefundInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 
 class FileRefundController extends Controller
 {
@@ -35,7 +39,8 @@ class FileRefundController extends Controller
     private $refundInterface;
 
     public function __construct(
-        RefundInterface $refundInterface, CustomFieldInterface $customFieldInterface
+        RefundInterface $refundInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->refundInterface = $refundInterface;
         $this->customFieldInterface = $customFieldInterface;
@@ -79,7 +84,7 @@ class FileRefundController extends Controller
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
-                'salesPlan'=>$salesPlan,
+                'salesPlan' => $salesPlan,
                 'customFields' => $customFields
 
             ];
@@ -139,7 +144,7 @@ class FileRefundController extends Controller
             'images' => $images,
             'labels' => $files_labels,
             'total_paid_amount' => $total_paid_amount,
-            'salesPlan'=>$salesPlan,
+            'salesPlan' => $salesPlan,
         ];
 
         return view('app.sites.file-managements.files.files-actions.file-refund.preview', $data);
@@ -181,34 +186,138 @@ class FileRefundController extends Controller
 
     public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_id)
     {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+            //Refund Account legders
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+            // select receiveable account against unit
+            foreach ($stakeholderType->receivable_account as $receivable_account) {
+                if ($receivable_account['unit_id'] == (int)decryptParams($unit_id)) {
+                    $unit_account_code = $receivable_account['unit_account'];
+                    $customer_receivable_account_code = $receivable_account['account_code'];
+                }
+            }
 
-        $file_refund = FileRefund::where('file_id',decryptParams($file_id))->first();
-        $file_refund->status = 1;
-        $file_refund->update();
+            $customer_payable_account_code = $stakeholderType->payable_account;
+            $refundAccount = AccountHead::where('name', 'Refund Account')->first();
+            $refundAccountCode = $refundAccount->code;
 
-        $unit = Unit::find(decryptParams($unit_id));
-        $unit->status_id = 1;
-        $unit->update();
+            // if payable account code is not set
+            if ($customer_payable_account_code == null) {
+                $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
+                $stakeholderType = collect($stakeholderType)->last();
+                $customer_payable_account_code = $stakeholderType->payable_account + 1;
+                // add payable code to stakeholder type
+                $stakeholderType = StakeholderType::find($stakeholderType->id)->update(['payable_account' => $customer_payable_account_code]);
+            }
 
-        $file = FileManagement::find(decryptParams($file_id));
-        $file->file_action_id = 2;
-        $file->update();
 
-        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $SalesPlan = SalesPlan::find($salesPlan->id);
-            $SalesPlan->status = 3;
-            $SalesPlan->update();
-        }
+            $file_refund = FileRefund::where('file_id', decryptParams($file_id))->first();
+            $file_refund->status = 1;
+            $file_refund->update();
 
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->status = 2;
-            $Receipt->update();
-        }
+            $salesPlan = SalesPlan::find($file_refund->sales_plan_id);
+            // after minus payable amount from sales plan
+            $refunded_amount = str_replace(',', '', $file_refund->amount_to_be_refunded);
+            $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
 
-        return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+            $ledgerData = [
+                // Refund (3 entries in legder)
+                // Refund account entry
+                [
+                    'site_id' => 1,
+                    'account_head_code' => $refundAccountCode,
+                    'account_action_id' => 5,
+                    'credit' => 0,
+                    'debit' => $salesPlan->total_price,
+                    'balance' => $salesPlan->total_price,
+                    'nature_of_account' => 'JRF',
+                    'sales_plan_id' => $file_refund->sales_plan_id,
+                    'file_refund_id' => $file_refund->id,
+                    'status' => true,
+                ],
+                // Cutomer AR entry
+                [
+                    'site_id' => 1,
+                    'account_head_code' => $customer_receivable_account_code,
+                    'account_action_id' => 5,
+                    'credit' => str_replace(',', '', $file_refund->amount_to_be_refunded),
+                    'debit' => 0,
+                    'balance' => $payable_amount,
+                    'nature_of_account' => 'JRF',
+                    'sales_plan_id' => $file_refund->sales_plan_id,
+                    'file_refund_id' => $file_refund->id,
+                    'status' => true,
+                ],
+                // Customer AP entry
+                [
+                    'site_id' => 1,
+                    'account_head_code' => $customer_payable_account_code,
+                    'account_action_id' => 5,
+                    'credit' => 0,
+                    'debit' => $payable_amount,
+                    'balance' => 0,
+                    'nature_of_account' => 'JRF',
+                    'sales_plan_id' => $file_refund->sales_plan_id,
+                    'file_refund_id' => $file_refund->id,
+                    'status' => true,
+                ],
+                // Payment Voucher
+                [
+                    'site_id' => 1,
+                    'account_head_code' => $customer_payable_account_code,
+                    'account_action_id' => 4,
+                    'credit' => 0,
+                    'debit' => $payable_amount,
+                    'balance' => $payable_amount,
+                    'nature_of_account' => 'JRF',
+                    'sales_plan_id' => $file_refund->sales_plan_id,
+                    'file_refund_id' => $file_refund->id,
+                    'status' => true,
+                ],
+                // cash at office 10209020001001
+                [
+                    'site_id' => 1,
+                    'account_head_code' => '10209020001001',
+                    'account_action_id' => 4,
+                    'credit' => $payable_amount,
+                    'debit' => 0,
+                    'balance' => 0,
+                    'nature_of_account' => 'JRF',
+                    'sales_plan_id' => $file_refund->sales_plan_id,
+                    'file_refund_id' => $file_refund->id,
+                    'status' => true,
+                ],
+
+            ];
+            // insert all above entries
+            foreach ($ledgerData as $item) {
+                (new AccountLedger())->create($item);
+            }
+
+            $unit = Unit::find(decryptParams($unit_id));
+            $unit->status_id = 1;
+            $unit->update();
+
+            $file = FileManagement::find(decryptParams($file_id));
+            $file->file_action_id = 2;
+            $file->update();
+
+            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $SalesPlan = SalesPlan::find($salesPlan->id);
+                $SalesPlan->status = 3;
+                $SalesPlan->update();
+            }
+
+            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            foreach ($receipt as $receipt) {
+                $Receipt = Receipt::find($receipt->id);
+                $Receipt->status = 2;
+                $Receipt->update();
+            }
+
+            return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
+        });
     }
 
     public function printPage($site_id, $file_id, $template_id)
@@ -223,14 +332,14 @@ class FileRefundController extends Controller
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_refund->unit_data);
         $unitType = Type::find($unit_data->type_id);
-     
+
         $data = [
             'unit' => $unit_data,
             'unitType' => $unitType->name,
             'customer' => json_decode($file_refund->stakeholder_data),
             'refund_file' => $file_refund,
             'total_paid_amount' => $total_paid_amount,
-            'salesPlan'=>$salesPlan,
+            'salesPlan' => $salesPlan,
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;

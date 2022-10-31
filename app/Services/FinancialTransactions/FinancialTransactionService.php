@@ -222,14 +222,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // Customer AR Transaction
-            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->all();
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->all();
 
             if (count($customerAccount) < 1) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
             }
-
-            dd($customerAccount);
-            $customerAccount = collect($customerAccount[0]->receivable_account)->where('unit_id', $receipt->unit_id)->all();
             $customerAccount = $customerAccount[0];
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);

@@ -111,6 +111,7 @@ class ReceiptService implements ReceiptInterface
                         $receipt_Draft = Receipt::create($receiptDraftData);
 
                         $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+
                         if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
                             return apiErrorResponse('invalid_transaction');
                         }
@@ -123,6 +124,7 @@ class ReceiptService implements ReceiptInterface
                 //here is single without draft
                 $receipt = Receipt::create($receiptData);
                 $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                // dd($transaction);
                 if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
                     return apiErrorResponse('invalid_transaction');
                 }

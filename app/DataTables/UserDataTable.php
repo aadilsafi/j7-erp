@@ -36,8 +36,9 @@ class UserDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->editColumn('phone_no', function ($user) {
-                return Str::substrReplace($user->phone_no,'-',4,0);
+                return Str::substrReplace($user->phone_no, '-', 4, 0);
             })
             ->editColumn('created_at', function ($user) {
                 return editDateColumn($user->created_at);
@@ -157,7 +158,7 @@ class UserDataTable extends DataTable
                 :
                 Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
             ),
-
+            Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
             Column::make('email')->title('Email')->addClass('text-nowrap'),
             Column::make('phone_no')->title('Phone No'),

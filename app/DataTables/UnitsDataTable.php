@@ -27,6 +27,7 @@ class UnitsDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->editColumn('check', function ($unit) {
                 return $unit;
             })
@@ -76,7 +77,7 @@ class UnitsDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                ($createPermission ? 
+                ($createPermission ?
                     Button::raw('add-new')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-plus"></i> Add New')
@@ -91,8 +92,8 @@ class UnitsDataTable extends DataTable
                         'onclick' => 'addNew()',
                     ])
                 ),
-                ($createfabUnitPermission ?  
-                Button::raw('new-sub-unit')
+                ($createfabUnitPermission ?
+                    Button::raw('new-sub-unit')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-plus"></i> Add Bifurcated Unit')
                     ->attr([
@@ -115,40 +116,40 @@ class UnitsDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                ),
+                // ($selectedDeletePermission ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                //     ->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                //     ->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                // ),
 
             )
             ->rowGroupDataSrc('type_id')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 0,
-                    'render' => "function (data, type, full, setting) {
-                        var tableRow = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 0,
+                //     'render' => "function (data, type, full, setting) {
+                //         var tableRow = JSON.parse(data);
+                //         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                //     ]
+                // ],
             ])
             ->orders([
                 [5, 'desc'],
@@ -164,12 +165,13 @@ class UnitsDataTable extends DataTable
     {
         $destroyPermission = Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return [
-            (
-                ($destroyPermission) ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
+            // (
+            //     ($destroyPermission) ?
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)
+            //     :
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            // ),
+            Column::computed('DT_RowIndex')->title('#'),
             Column::make('floor_unit_number')->title('Unit Number'),
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type'),

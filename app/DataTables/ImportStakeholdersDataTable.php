@@ -136,6 +136,8 @@ class ImportStakeholdersDataTable extends DataTable
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->ordering(false)
+            ->searching(false)
             ->serverSide()
             ->processing()
             ->deferRender()

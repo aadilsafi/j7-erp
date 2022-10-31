@@ -113,10 +113,10 @@ class ReceiptService implements ReceiptInterface
 
                         $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
 
-                        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                            Log::info(json_encode($transaction));
-                            // return apiErrorResponse('invalid_transaction');
-                        }
+                        // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                        //     Log::info(json_encode($transaction));
+                        //     // return apiErrorResponse('invalid_transaction');
+                        // }
 
                         $update_installments =  $this->updateInstallments($receipt_Draft);
                     }
@@ -126,11 +126,11 @@ class ReceiptService implements ReceiptInterface
                 //here is single without draft
                 $receipt = Receipt::create($receiptData);
                 $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
-                // dd($transaction);
-                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                    Log::info(json_encode($transaction));
-                    // return apiErrorResponse('invalid_transaction');
-                }
+                // // dd($transaction);
+                // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                //     Log::info(json_encode($transaction));
+                //     // return apiErrorResponse('invalid_transaction');
+                // }
 
 
                 if (isset($requested_data['attachment'])) {

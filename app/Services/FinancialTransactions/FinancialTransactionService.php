@@ -8,6 +8,7 @@ use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FinancialTransactionService implements FinancialTransactionInterface
 {
@@ -236,6 +237,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
+            Log::info(json_encode($ex));
             return $ex->getMessage();
         }
     }

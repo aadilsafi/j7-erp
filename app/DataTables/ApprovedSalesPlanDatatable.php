@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\AccountAction;
 use App\Models\AccountLedger;
+use App\Models\SalesPlan;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -15,7 +16,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class SalesInvoiceLedgerDatatable extends DataTable
+class ApprovedSalesPlanDatatable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -25,51 +26,52 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     public function dataTable(QueryBuilder $query)
     {
+        $data  = [
+            0 => 'Pending',
+            1 => 'Approved',
+            2 => 'Disapproved',
+            3 => 'Cancelled',
+        ];
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('parent_id', function ($ledger) {
-                return Str::of(getRoleParentByParentId($ledger->parent_id))->ucfirst();
+            ->editColumn('check', function ($salesPlan) {
+                return $salesPlan;
             })
-            ->setRowId('id')
-            ->editColumn('debit', function ($ledger) {
-                return number_format($ledger->debit);
+            ->editColumn('user_id', function ($salesPlan) {
+                return $salesPlan->user->name;
             })
-            ->editColumn('credit', function ($ledger) {
-                return number_format($ledger->credit);
-            })
-            ->editColumn('balance', function ($ledger) {
-                return number_format($ledger->balance);
-            })
-            ->editColumn('account_action_id', function ($ledger) {
-                return $ledger->accountActions->name;
-            })
-            ->editColumn('created_at', function ($ledger) {
-                // return $ledger->created_at->format('D, d-M-Y , H:i:s');
-                return editDateColumn($ledger->created_at);
-            })
-            ->editColumn('updated_at', function ($ledger) {
-                return editDateColumn($ledger->updated_at);
-            })
-            ->editColumn('account_head_code_name', function ($ledger) {
-                return $ledger->accountHead->name;
-            })
-            ->editColumn('origin', function ($ledger) {
-                if ($ledger->account_action_id == 1) {
-                    return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
-                                <span class="badge rounded-pill bg-warning">
-                                <i class="bi bi-box-arrow-right" ></i>
-                                </span>
-                            </a>';
-                } else if ($ledger->account_action_id == 2) {
-                    return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
+            ->editColumn('status', function ($salesPlan) {
+                if ($salesPlan->status == 0) {
+                    return '<span class="badge badge-glow bg-warning">Pending</span>';
+                } elseif ($salesPlan->status == 1) {
+                    return '<span class="badge badge-glow bg-success">Approved</span>';
+                } elseif ($salesPlan->status == 3) {
+                    return '<span class="badge badge-glow bg-danger">Cancelled</span>';
                 } else {
-                    return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                    return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
             })
+            ->editColumn('stakeholder_id', function ($salesPlan) {
 
+                // $staleholder = json_decode($salesPlan->stakeholder_data);
+                // return $staleholder->full_name;
+
+                return $salesPlan->stakeholder->full_name;
+            })
+            ->editColumn('created_at', function ($salesPlan) {
+                return editDateColumn($salesPlan->created_at);
+            })
+            ->editColumn('updated_at', function ($salesPlan) {
+                return editDateColumn($salesPlan->updated_at);
+            })
+            ->editColumn('salesplanstatus', function ($salesPlan) use ($data) {
+                return $data[$salesPlan->status];
+            })
+            ->editColumn('actions', function ($salesPlan) {
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
+            })
+            ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
 
@@ -79,9 +81,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
      * @param \App\Models\Role $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(AccountLedger $model): QueryBuilder
+    public function query(SalesPlan $model): QueryBuilder
     {
-        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt');
+        return $model->newQuery()->with('unit', 'stakeholder')->where('status', 1);
     }
 
     public function html(): HtmlBuilder
@@ -110,7 +112,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            ->rowGroupDataSrc('account_action_id')
+            // ->rowGroupDataSrc('account_action_id')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
@@ -127,16 +129,12 @@ class SalesInvoiceLedgerDatatable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::computed('origin')->title('Origin'),
-            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center'),
-            Column::computed('account_head_code_name')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap text-center'),
-            Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
-            Column::make('debit')->title('Debit')->addClass('text-nowrap text-center'),
-            Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
-            // Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
-            // Column::make('nature_of_account'),
-            Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
-            // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+            Column::make('user_id')->title('Sales Person'),
+            Column::computed('stakeholder_id')->title('Stakeholder'),
+            Column::computed('salesplanstatus')->visible(false),
+            Column::make('status')->title('Status')->addClass('text-center'),
+            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            // Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
         ];
     }
 
@@ -147,7 +145,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Sales-Invoice-ledger_' . date('YmdHis');
+        return 'Approved-Sales-Plans_' . date('YmdHis');
     }
 
     /**

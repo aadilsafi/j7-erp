@@ -228,8 +228,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (is_null($customerAccount)) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
             }
-            dd($customerAccount);
-            $customerAccount = $customerAccount[0];
+            // dd($customerAccount);
+            // $customerAccount = $customerAccount[0];
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);
 

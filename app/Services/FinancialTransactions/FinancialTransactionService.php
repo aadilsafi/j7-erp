@@ -236,7 +236,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
-            return $ex;
+            return $ex->getMessage();
         }
     }
 }

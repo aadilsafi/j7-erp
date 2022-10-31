@@ -308,6 +308,11 @@ class TypeController extends Controller
             $model = new TempUnitType();
 
             if ($request->hasfile('attachment')) {
+                $request->validate([
+                    'attachment'=> 'required|mimes:xlsx'
+                 ]);
+                
+                
                 $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
@@ -316,6 +321,9 @@ class TypeController extends Controller
                 $import->import($request->file('attachment'));
 
                 return redirect()->route('sites.types.storePreview', ['site_id' => $site_id]);
+            }else{
+                return Redirect::back()->withDanger('Select File to Import');
+
             }
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 

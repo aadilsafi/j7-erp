@@ -80,7 +80,7 @@ class ReceiptController extends Controller
     public function store(store $request, $site_id)
     {
         //
-        // try {
+        try {
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
@@ -95,9 +95,9 @@ class ReceiptController extends Controller
             } else {
                 abort(403);
             }
-        // } catch (Exception $ex) {
-        //     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
-        // }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

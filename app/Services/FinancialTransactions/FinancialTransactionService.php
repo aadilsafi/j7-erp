@@ -205,8 +205,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeReceiptTransaction($receipt_id)
     {
-        // try {
-            // DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
 
@@ -233,11 +233,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);
 
-            // DB::commit();
+            DB::commit();
             return 'transaction_completed';
-        // } catch (GeneralException | Exception $ex) {
-        //     DB::rollBack();
-        //     return $ex;
-        // }
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
     }
 }

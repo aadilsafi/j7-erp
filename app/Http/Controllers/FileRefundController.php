@@ -208,9 +208,17 @@ class FileRefundController extends Controller
                 $customer_payable_account_code = $stakeholderType->payable_account + 1;
                 // add payable code to stakeholder type
                 $stakeholderType = StakeholderType::find($stakeholderType->id)->update(['payable_account' => $customer_payable_account_code]);
+                $stakeholder = Stakeholder::find(decryptParams($customer_id));
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => $customer_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Customer A/P',
+                    'level' => 5,
+                ];
+                (new AccountHead())->create($accountCodeData);
             }
-
-
             $file_refund = FileRefund::where('file_id', decryptParams($file_id))->first();
             $file_refund->status = 1;
             $file_refund->update();
@@ -315,9 +323,8 @@ class FileRefundController extends Controller
                 $Receipt->status = 2;
                 $Receipt->update();
             }
-
-            return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
         });
+        return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 
     public function printPage($site_id, $file_id, $template_id)

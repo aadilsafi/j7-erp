@@ -45,17 +45,32 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 return $ledger->accountActions->name;
             })
             ->editColumn('created_at', function ($ledger) {
-                return $ledger->created_at->format('D, d-M-Y , H:i:s');
+                // return $ledger->created_at->format('D, d-M-Y , H:i:s');
+                return editDateColumn($ledger->created_at);
             })
             ->editColumn('updated_at', function ($ledger) {
                 return editDateColumn($ledger->updated_at);
             })
-            // ->editColumn('check', function ($ledger) {
-            //     return $ledger;
-            // })
+            ->editColumn('account_head_code_name', function ($ledger) {
+                return $ledger->accountHead->name;
+            })
+            ->editColumn('origin', function ($ledger) {
+                if ($ledger->account_action_id == 1) {
+                    return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
+                                <span class="badge rounded-pill bg-warning">
+                                <i class="bi bi-box-arrow-right" ></i>
+                                </span>
+                            </a>';
+                } else if ($ledger->account_action_id == 2) {
+                    return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                            </a>';
+                } else {
+                    return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                }
+            })
 
-            // ->rawColumns(array_merge($columns, ['action', 'check']))
-        ;
+            ->rawColumns(array_merge($columns, ['action', 'check']));
     }
 
     /**
@@ -66,14 +81,13 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     public function query(AccountLedger $model): QueryBuilder
     {
-        return $model->newQuery()->with('accountActions');
+        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt');
     }
 
     public function html(): HtmlBuilder
     {
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
         return $this->builder()
-            ->setTableId('roles-table')
+            ->setTableId('ledger-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             // ->select()
@@ -100,7 +114,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
-                [1, 'asc'],
+                [2, 'asc'],
             ]);
     }
 
@@ -113,15 +127,15 @@ class SalesInvoiceLedgerDatatable extends DataTable
     {
         return [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('account_action_id')->name('accountActions.name')->title('account action'),
-            Column::make('account_head_code')->title('account code'),
-            Column::make('debit')->title('debit'),
-            Column::make('credit')->title('Credit'),
-            Column::make('balance'),
+            Column::computed('origin')->title('Origin'),
+            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center'),
+            Column::computed('account_head_code_name')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap text-center'),
+            Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
+            Column::make('debit')->title('Debit')->addClass('text-nowrap text-center'),
+            Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
+            Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
             // Column::make('nature_of_account'),
-
-            Column::make('created_at')->addClass('text-nowrap text-center'),
-
+            Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

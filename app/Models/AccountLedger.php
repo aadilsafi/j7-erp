@@ -45,4 +45,19 @@ class AccountLedger extends Model
     {
         return $this->belongsTo(AccountAction::class,'account_action_id','id');
     }
+
+    public function accountHead()
+    {
+        return $this->belongsTo(AccountHead::class,'account_head_code','code');
+    }
+
+    public function salesPlan()
+    {
+        return $this->belongsTo(SalesPlan::class,'sales_plan_id','id')->with('unit','unit.floor');
+    }
+
+    public function receipt()
+    {
+        return $this->belongsTo(Receipt::class,'receipt_id','id');
+    }
 }

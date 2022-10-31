@@ -362,7 +362,7 @@
                     $(`#div-${elementId}`).hide('fast', 'linear', function() {
                         $('div[id^="div-"]:visible input[id^="percentage-"]').trigger('change');
                     });
-                    $(`#status-${elementId}`).val(true);
+                    $(`#status-${elementId}`).val(false);
                 }
             });
 

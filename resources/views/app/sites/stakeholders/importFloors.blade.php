@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.import', $site_id) }}
 @endsection
 
-@section('page-title', 'Import Floor')
+@section('page-title', 'Import Stakeholders')
 
 @section('page-vendor')
 @endsection
@@ -77,7 +77,7 @@
                                     <td @if ($row->attribute() == $k) class="text-danger" @endif>{{ $value }}
                                     </td>
                                 @endforeach
-                               
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -105,7 +105,7 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="#"
+                                <a href="{{ route('sites.stakeholders.index', ['site_id' => $site_id]) }}"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}

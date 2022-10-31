@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.types.import', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Stakeholders')
+@section('page-title', 'Import Unit Types')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Stakeholders</h2>
+                <h2 class="content-header-title float-start mb-0">Import Unit Types</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.stakeholders.import', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.types.import', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                    <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
                     </a>

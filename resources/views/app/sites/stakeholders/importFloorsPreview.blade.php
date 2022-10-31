@@ -55,7 +55,8 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                    <a href="{{ route('sites.stakeholders.index', ['site_id' => $site_id]) }}"
+                        class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
                     </a>

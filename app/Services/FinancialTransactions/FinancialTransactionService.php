@@ -223,9 +223,9 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             // Customer AR Transaction
             $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
-            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first()->toArray();
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
 
-            if (count($customerAccount) < 1) {
+            if (is_null($customerAccount)) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
             }
             dd($customerAccount);

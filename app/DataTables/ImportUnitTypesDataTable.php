@@ -88,18 +88,18 @@ class ImportUnitTypesDataTable extends DataTable
         return [
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 0,
+                'is_disable' => false,
                 'name' => 'name'
             ])->render()),
             Column::computed('unit_type_slug')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 1,
+                'is_disable' => false,
                 'name' => 'unit_type_slug'
 
             ])->render()),
             Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => false,
                 'name' => 'parent_type_name'
             ])->render()),
 

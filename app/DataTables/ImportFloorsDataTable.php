@@ -87,18 +87,18 @@ class ImportFloorsDataTable extends DataTable
         return [
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 0,
+                'is_disable' => false,
                 'name' => 'name'
             ])->render()),
             Column::computed('floor_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 1,
+                'is_disable' => false,
                 'name' => 'floor_area'
 
             ])->render()),
             Column::computed('short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => false,
                 'name' => 'short_label'
             ])->render()),
 

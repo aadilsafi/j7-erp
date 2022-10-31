@@ -377,8 +377,8 @@ class FloorController extends Controller
 
             if ($request->hasfile('attachment')) {
                 $request->validate([
-                    'attachment'=> 'required|mimes:xlsx'
-                 ]);
+                    'attachment' => 'required|mimes:xlsx'
+                ]);
                 $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
@@ -387,9 +387,8 @@ class FloorController extends Controller
                 $import->import($request->file('attachment'));
 
                 return redirect()->route('sites.floors.storePreview', ['site_id' => $site_id]);
-            }else{
+            } else {
                 return Redirect::back()->withDanger('Select File to Import');
-
             }
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
@@ -422,23 +421,31 @@ class FloorController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        // $site_id = decryptParams($site_id);
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required|distinct',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
+        ]);
+
+        $validator->validate();
+
         $model = new TempFloor();
-        $tempdata = $model->all()->toArray();
+        $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
 
+        // dd($tempdata);
         $totalFloors = Floor::max('order');
-        // dd($totalFloors);
-        $floors = [];
+
+        $data = [];
         foreach ($tempdata as $key => $items) {
-            foreach ($request->fields as $k => $field) {
+            foreach ($tempCols as $k => $field) {
                 if ($field == 'floor_area') {
                     $data[$key][$field] = (float)$items[$tempCols[$k]];
                 } else {
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
             }
-            // dd($totalFloors, $totalFloors++, ++$totalFloors);
 
             $data[$key]['site_id'] = decryptParams($site_id);
             $data[$key]['order'] = ++$totalFloors;
@@ -448,6 +455,8 @@ class FloorController extends Controller
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
         }
+
+        // dd($data);
         $floors = Floor::insert($data);
 
         if ($floors) {

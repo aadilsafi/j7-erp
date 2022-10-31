@@ -84,7 +84,10 @@ class ReceiptController extends Controller
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
-                if (isset($record['remaining_amount'])) {
+                if(is_a($record, 'GeneralException')  || is_a($record, 'Exception')) {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess($record->getMessage());
+                }
+                elseif (isset($record['remaining_amount'])) {
                     return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data against ' . $record['unit_name'] . ' saved as draft. Remaining amount is ' . $record['remaining_amount'])->with('remaining_amount', $record['remaining_amount']);
                 } else {
                     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));

@@ -90,11 +90,9 @@ class TypeController extends Controller
             } else {
                 abort(403);
             }
-        }
-        catch (GeneralException $ex){
+        } catch (GeneralException $ex) {
             return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . sqlErrorMessagesByCode($ex->getCode()));
         }
     }
@@ -309,10 +307,10 @@ class TypeController extends Controller
 
             if ($request->hasfile('attachment')) {
                 $request->validate([
-                    'attachment'=> 'required|mimes:xlsx'
-                 ]);
-                
-                
+                    'attachment' => 'required|mimes:xlsx'
+                ]);
+
+
                 $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
@@ -321,9 +319,8 @@ class TypeController extends Controller
                 $import->import($request->file('attachment'));
 
                 return redirect()->route('sites.types.storePreview', ['site_id' => $site_id]);
-            }else{
+            } else {
                 return Redirect::back()->withDanger('Select File to Import');
-
             }
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
@@ -356,38 +353,55 @@ class TypeController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        return redirect()->route('sites.types.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required|distinct',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
 
-        dd($request->all());
+        ]);
+
+        $validator->validate();
+
         // $site_id = decryptParams($site_id);
         $model = new TempUnitType();
-        $tempdata = $model->all()->toArray();
+        $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
 
         // dd($totalFloors);
         $floors = [];
         foreach ($tempdata as $key => $items) {
-            foreach ($request->fields as $k => $field) {
-                if ($field == 'floor_area') {
-                    $data[$key][$field] = (float)$items[$tempCols[$k]];
-                } else {
-                    $data[$key][$field] = $items[$tempCols[$k]];
-                }
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
             }
-            // dd($totalFloors, $totalFloors++, ++$totalFloors);
 
             $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
+            $data[$key]['slug'] = $items->unit_type_slug;
+
+            $data[$key]['status'] = true;
+
+            if ($data[$key]['parent_type_name'] != 'null') {
+                $parent = Type::where('slug', $data[$key]['parent_type_name'])->first();
+                if ($parent) {
+                    $data[$key]['parent_id'] = $parent->id;
+                } else {
+                    $data[$key]['parent_id'] = 0;
+                }
+            } else {
+                $data[$key]['parent_id'] = 0;
+            }
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
-        }
-        $floors = Type::insert($data);
 
-        if ($floors) {
+            unset($data[$key]['unit_type_slug']);
+            unset($data[$key]['parent_type_name']);
+        }
+
+        $types = Type::insert($data);
+
+        if ($types) {
             TempUnitType::query()->truncate();
         }
-        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        return redirect()->route('sites.types.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

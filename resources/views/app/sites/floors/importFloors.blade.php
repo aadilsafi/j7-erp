@@ -197,7 +197,8 @@
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: false,
-            checkValidity: true,
+            checkValidity: false,
+            acceptedFileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
             credits: {
                 label: '',
                 url: ''

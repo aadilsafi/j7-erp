@@ -154,78 +154,78 @@ class ImportStakeholdersDataTable extends DataTable
         return [
             Column::computed('full_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 0,
+                'is_disable' => true,
                 'name' => 'full_name'
             ])->render()),
             Column::computed('father_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 1,
+                'is_disable' => true,
                 'name' => 'father_name'
 
             ])->render()),
             Column::computed('occupation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'occupation'
             ])->render()),
             Column::computed('designation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 3,
+                'is_disable' => true,
                 'name' => 'designation'
             ])->render()),
             Column::computed('cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 4,
+                'is_disable' => true,
                 'name' => 'cnic'
             ])->render()),
             Column::computed('ntn')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 5,
+                'is_disable' => true,
                 'name' => 'ntn'
             ])->render()),
             Column::computed('contact')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 6,
+                'is_disable' => true,
                 'name' => 'contact'
             ])->render()),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 7,
+                'is_disable' => true,
                 'name' => 'address'
             ])->render()),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 8,
+                'is_disable' => true,
                 'name' => 'comments'
             ])->render()),
             Column::computed('is_dealer')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'is_dealer'
             ])->render()),
             Column::computed('is_vendor')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'is_vendor'
             ])->render()),
             Column::computed('is_customer')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'is_customer'
             ])->render()),
             Column::computed('is_kin')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'is_kin'
             ])->render()),
             Column::computed('parent_cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'parent_cnic'
             ])->render()),
             Column::computed('relation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
-                'col' => 2,
+                'is_disable' => true,
                 'name' => 'relation'
             ])->render()),
         ];

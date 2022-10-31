@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\TempFloor;
+use App\Models\TempUnitType;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\EloquentDataTable;
@@ -10,13 +10,13 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class ImportFloorsDataTable extends DataTable
+class ImportUnitTypesDataTable extends DataTable
 {
     public function __construct($site_id)
     {
-        $model = new TempFloor();
+        $model = new TempUnitType();
         if ($model->count() == 0) {
-            return redirect()->route('sites.floors.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+            return redirect()->route('sites.types.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
         }
     }
 
@@ -31,22 +31,22 @@ class ImportFloorsDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('floor_area', function ($floor) {
+            ->editColumn('unit_type_slug', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $floor->id, 'field' => 'floor_area', 'inputtype' => 'number', 'value' => $floor->floor_area]
+                    ['id' => $data->id, 'field' => 'unit_type_slug', 'inputtype' => 'text', 'value' => $data->unit_type_slug]
                 );
             })
-            ->editColumn('name', function ($floor) {
+            ->editColumn('name', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $floor->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $floor->name]
+                    ['id' => $data->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $data->name]
                 );
             })
-            ->editColumn('short_label', function ($floor) {
+            ->editColumn('parent_type_name', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $floor->id, 'field' => 'short_label', 'inputtype' => 'text', 'value' => $floor->short_label]
+                    ['id' => $data->id, 'field' => 'parent_type_name', 'inputtype' => 'text', 'value' => $data->parent_type_name]
                 );
             })
             ->setRowId('id');
@@ -57,7 +57,7 @@ class ImportFloorsDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(TempFloor $model): QueryBuilder
+    public function query(TempUnitType $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -70,6 +70,7 @@ class ImportFloorsDataTable extends DataTable
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->ordering(false)
             ->serverSide()
             ->processing()
             ->deferRender()
@@ -90,16 +91,16 @@ class ImportFloorsDataTable extends DataTable
                 'is_disable' => false,
                 'name' => 'name'
             ])->render()),
-            Column::computed('floor_area')->title(view('app.components.select-fields', [
+            Column::computed('unit_type_slug')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'floor_area'
+                'name' => 'unit_type_slug'
 
             ])->render()),
-            Column::computed('short_label')->title(view('app.components.select-fields', [
+            Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'short_label'
+                'name' => 'parent_type_name'
             ])->render()),
 
         ];

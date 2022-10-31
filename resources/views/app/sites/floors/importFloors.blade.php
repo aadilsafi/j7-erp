@@ -80,7 +80,7 @@
                                                 data-value="{{ $value }}"
                                                 data-inputtype="{{ $k == 'floor_area' ? 'number' : 'text' }}">
                                                 {{ $value }}
-                                               
+
                                                 <input type="hidden" value='{{ json_encode($row->values()) }}'
                                                     class="dataToSave">
                                             </div>
@@ -90,7 +90,7 @@
                                     </td>
                                     {{-- @endif --}}
                                 @endforeach
-                                
+
                             </tr>
                         @endforeach
                     </tbody>
@@ -135,7 +135,7 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="#"
+                                <a href="{{ route('sites.floors.index', ['site_id' => $site_id]) }}"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}
@@ -197,7 +197,8 @@
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: false,
-            checkValidity: true,
+            checkValidity: false,
+            acceptedFileTypes: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
             credits: {
                 label: '',
                 url: ''

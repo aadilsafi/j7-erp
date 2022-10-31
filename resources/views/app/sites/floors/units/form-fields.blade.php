@@ -28,9 +28,10 @@
                     {{ $isSalesplanApproved ? 'disabled' : null }}>
                     @foreach ($statuses as $row)
                         @continue(!isset($unit) && $row->id != 1)
-                        <option value="{{ $row->id }}"
+                        <option @if ($row->name == 'Sold' || $row->name == 'Token' || $row->name == 'Partial Paid') disabled @endif value="{{ $row->id }}"
                             {{ (isset($unit) ? $unit->status_id : old('status_id')) == $row->id ? 'selected' : '' }}>
-                            {{ $loop->index + 1 }} - {{ $row->name }}</option>
+                            {{ $loop->index + 1 }} -
+                            {{ $row->name }}</option>
                     @endforeach
                 </select>
                 @error('status_id')
@@ -192,8 +193,8 @@
                                 <div class="d-flex align-items-center h-100">
                                     <div class="form-check form-check-primary">
                                         <input type="hidden" name="is_corner" value="0">
-                                        <input {{ $isSalesplanApproved ? 'disabled' : null }} type="checkbox" class="form-check-input" name="is_corner"
-                                            id="is_corner" value="1"
+                                        <input {{ $isSalesplanApproved ? 'disabled' : null }} type="checkbox"
+                                            class="form-check-input" name="is_corner" id="is_corner" value="1"
                                             {{ isset($unit) ? ($unit->is_corner == 1 ? 'checked' : 'unchecked') : (is_null(old('is_corner')) ? '' : (old('is_corner') == 1 ? 'checked' : 'unchecked')) }} />
                                         <label class="form-check-label" for="is_corner">Corner</label>
                                     </div>
@@ -217,15 +218,14 @@
                             <div class="col-xl-9 col-lg-9">
                                 <label class="form-label" style="font-size: 15px" for="facing_id">Facing
                                     Charges</label>
-                                <select class="select2-size-lg form-select" id="facing_id" name="facing_id"
-                                    disabled
+                                <select class="select2-size-lg form-select" id="facing_id" name="facing_id" disabled
                                     {{ $isSalesplanApproved ? 'disabled' : null }}>
-                                <option value="" selected>Select Facing Charges</option>
-                                @foreach ($additionalCosts as $row)
-                                    <option value="{{ $row['id'] }}" {{ $row->has_child ? 'disabled' : '' }}
-                                        {{ (isset($unit) ? $unit->facing_id : old('facing_id')) == $row['id'] ? 'selected' : '' }}>
-                                        {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
-                                @endforeach
+                                    <option value="" selected>Select Facing Charges</option>
+                                    @foreach ($additionalCosts as $row)
+                                        <option value="{{ $row['id'] }}" {{ $row->has_child ? 'disabled' : '' }}
+                                            {{ (isset($unit) ? $unit->facing_id : old('facing_id')) == $row['id'] ? 'selected' : '' }}>
+                                            {{ $loop->index + 1 }} - {{ $row['tree'] }}</option>
+                                    @endforeach
                                 </select>
                                 @error('facing_id')
                                     <span class="text-danger">{{ $message }}</span>

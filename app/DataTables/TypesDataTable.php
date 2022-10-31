@@ -76,6 +76,12 @@ class TypesDataTable extends DataTable
         $buttons = [];
 
         $buttons = [
+            Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Types')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]),
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
                 Button::make('copy')->addClass('dropdown-item'),
@@ -164,7 +170,7 @@ class TypesDataTable extends DataTable
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
 
-        if($selectedDeletePermission){
+        if ($selectedDeletePermission) {
             $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
             array_unshift($columns, $newColumn);
         }

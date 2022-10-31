@@ -283,7 +283,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'sites.types.importTypes',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.types.importTypesPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.types.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.types.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Additional Costs Routes
             [
                 'name' => 'sites.additional-costs.index',

@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.import', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.types.import', $site_id) }}
 @endsection
 
-@section('page-title', 'Import Stakeholders')
+@section('page-title', 'Import Types')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Stakeholders</h2>
+                <h2 class="content-header-title float-start mb-0">Import Types</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.stakeholders.import', $site_id) }}
+                    {{ Breadcrumbs::render('sites.types.import', $site_id) }}
                 </div>
             </div>
         </div>
@@ -87,7 +87,7 @@
         @endif
         <div class="col">
             <form class="form form-vertical"
-                action="{{ route('sites.stakeholders.importStakeholdersPreview', ['site_id' => $site_id]) }}"
+                action="{{ route('sites.types.importTypesPreview', ['site_id' => $site_id]) }}"
                 enctype="multipart/form-data" method="POST">
                 @csrf
                 <div class="row mt-1">
@@ -105,7 +105,7 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="{{ route('sites.stakeholders.index', ['site_id' => $site_id]) }}"
+                                <a href="#"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}
@@ -183,7 +183,5 @@
             searching: false,
             lengthMenu: [50, 100, 500],
         });
-
-
     </script>
 @endsection

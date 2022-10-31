@@ -118,5 +118,9 @@
         function addNew() {
             location.href = '{{ route('sites.types.create', ['site_id' => $site_id]) }}';
         }
+
+        function Import() {
+            location.href = '{{ route('sites.types.importTypes', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

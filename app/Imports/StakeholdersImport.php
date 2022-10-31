@@ -63,7 +63,7 @@ class StakeholdersImport implements ToModel, WithChunkReading, WithBatchInserts,
         return [
             'full_name' => ['required'],
             'father_name' => ['required'],
-            'cnic' => ['required', 'unique:App\Models\Stakeholder,cnic', 'distinct'],
+            'cnic' => ['required','digits:13', 'unique:App\Models\Stakeholder,cnic', 'distinct'],
             'ntn' => ['required', 'unique:App\Models\Stakeholder,ntn', 'distinct'],
             'contact' => ['required'],
             'address' => ['required'],

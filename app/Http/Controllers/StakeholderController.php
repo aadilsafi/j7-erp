@@ -263,7 +263,7 @@ class StakeholderController extends Controller
                 case 'cnic':
                     if ($request->get('updateValue') == 'true') {
                         $validator = \Validator::make($request->all(), [
-                            'value' => 'required|unique:stakeholders,cnic',
+                            'value' => 'required|digits:13|unique:stakeholders,cnic',
                         ]);
 
                         if ($validator->fails()) {
@@ -527,6 +527,9 @@ class StakeholderController extends Controller
             $model = new TempStakeholder();
 
             if ($request->hasfile('attachment')) {
+                $request->validate([
+                    'attachment'=> 'required|mimes:xlsx'
+                 ]);
                 $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
@@ -535,6 +538,9 @@ class StakeholderController extends Controller
                 $import->import($request->file('attachment'));
 
                 return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id]);
+            }else{
+                return Redirect::back()->withDanger('Select File to Import');
+
             }
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
@@ -570,9 +576,17 @@ class StakeholderController extends Controller
     public function saveImport(Request $request, $site_id)
     {
         // DB::transaction(function () use ($request, $site_id) {
-
+            $validator = \Validator::make($request->all(), [
+                'fields.*' => 'required|distinct',
+            ],[
+                'fields.*.required' => 'Must Select all Fields',
+                'fields.*.distinct' => 'Field can not be duplicated',
+    
+            ]);
+    
+            $validator->validate();
             $model = new TempStakeholder();
-            $tempdata = $model->all()->toArray();
+            $tempdata = $model->cursor();
             $tempCols = $model->getFillable();
 
             $stakeholder = [];

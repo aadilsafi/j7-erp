@@ -234,10 +234,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             // dd($customerAccount, $cashAccount, $receipt);
 
             DB::commit();
+            Log::info('transaction_completed');
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
-            Log::info(json_encode($ex));
+            Log::error(json_encode($ex));
             return $ex->getMessage();
         }
     }

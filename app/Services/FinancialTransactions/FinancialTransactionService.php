@@ -8,7 +8,6 @@ use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class FinancialTransactionService implements FinancialTransactionInterface
 {
@@ -206,8 +205,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeReceiptTransaction($receipt_id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+            // DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
 
@@ -233,13 +232,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);
 
-            DB::commit();
-            Log::info('transaction_completed');
+            // DB::commit();
             return 'transaction_completed';
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            Log::error(json_encode($ex));
-            return $ex->getMessage();
-        }
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 }

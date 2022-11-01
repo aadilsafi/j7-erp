@@ -191,6 +191,12 @@ Route::group([
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
                     Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
+                    Route::group(['prefix' => 'Unit/import','as' => 'unitsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.importUnits')->name('importUnits');
+                        Route::post('preview', [UnitController::class, 'ImportPreview'])->name('importUnitsPreview');
+                        Route::get('storePreview', [UnitController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [UnitController::class, 'saveImport'])->name('saveImport');
+                    });
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 

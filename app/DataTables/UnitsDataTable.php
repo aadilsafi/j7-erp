@@ -107,6 +107,12 @@ class UnitsDataTable extends DataTable
                         'onclick' => 'fabUnit()',
                     ])
                 ),
+                Button::raw('import')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i data-feather="upload"></i> Import Additional Costs')
+                    ->attr([
+                        'onclick' => 'Import()',
+                    ]),
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),

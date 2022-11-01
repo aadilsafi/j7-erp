@@ -560,7 +560,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'sites.floors.unitsImport.importUnits',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.importUnitsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Batchs Routes
             [
                 'name' => 'batches.byid',

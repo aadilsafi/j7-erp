@@ -67,6 +67,12 @@ class ImportStakeholdersDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'ntn', 'inputtype' => 'number', 'value' => $data->ntn]
                 );
             })
+            ->editColumn('contact', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'ntn', 'inputtype' => 'number', 'value' => $data->ntn]
+                );
+            })
             ->editColumn('address', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',

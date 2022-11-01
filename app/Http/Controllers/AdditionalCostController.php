@@ -448,10 +448,18 @@ class AdditionalCostController extends Controller
         return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 
-    public function downloadSample($site_id, $order){
-        $path = public_path('app-assets/ImportSamples/'. $order . '.xlsx');
+    public function downloadSample($site_id, $order)
+    {
+        $names = [
+            'StakeholdersSample',
+            'FloorsSample',
+            'UnitsTypesSample',
+            'AdditionalCostsSample',
+            'UnitsSample'
+        ];
+
+        $path = public_path('app-assets/ImportSamples/' . $order . '-' . $names[$order - 1] . '.xlsx');
+
         return response()->download($path);
-        // $file = Storage::download('app-assets/ImportSamples/'. $order . '.xlsx');
-        // dd($file);
     }
 }

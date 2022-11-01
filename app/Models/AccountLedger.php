@@ -22,6 +22,11 @@ class AccountLedger extends Model
         'nature_of_account',
         'sales_plan_id',
         'receipt_id',
+        'file_refund_id',
+        'file_resale_id',
+        'file_buyback_id',
+        'file_cancellation_id',
+        'file_title_transfer_id',
         'status',
     ];
 
@@ -43,21 +48,21 @@ class AccountLedger extends Model
 
     public function accountActions()
     {
-        return $this->belongsTo(AccountAction::class,'account_action_id','id');
+        return $this->belongsTo(AccountAction::class, 'account_action_id', 'id');
     }
 
     public function accountHead()
     {
-        return $this->belongsTo(AccountHead::class,'account_head_code','code');
+        return $this->belongsTo(AccountHead::class, 'account_head_code', 'code');
     }
 
     public function salesPlan()
     {
-        return $this->belongsTo(SalesPlan::class,'sales_plan_id','id')->with('unit','unit.floor');
+        return $this->belongsTo(SalesPlan::class, 'sales_plan_id', 'id')->with('unit', 'unit.floor');
     }
 
     public function receipt()
     {
-        return $this->belongsTo(Receipt::class,'receipt_id','id');
+        return $this->belongsTo(Receipt::class, 'receipt_id', 'id');
     }
 }

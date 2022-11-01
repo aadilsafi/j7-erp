@@ -40,8 +40,6 @@ class LedgerController extends Controller
             'site_id' => decryptParams($site_id)
         ];
         return $dataTable->with($data)->ajax();
-        // return $dataTable->with($data)->render('apapp.sites.accounts.ledgers.index', $data);
-        // return $dataTable->render('app.sites.accounts.ledgers.index', $data);
     }
 
     /**

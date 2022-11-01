@@ -35,6 +35,7 @@ class StakeholderDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->editColumn('parent_id', function ($stakeholder) {
                 return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() : '-';
             })
@@ -170,6 +171,7 @@ class StakeholderDataTable extends DataTable
         $selectedDeletePermission = 0;
 
         $columns = [
+            Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
             Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),

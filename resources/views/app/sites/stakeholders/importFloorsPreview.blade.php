@@ -248,8 +248,10 @@
                         if (response['status']) {
                             console.log('insuccess');
                             el = el.parent()
+                            console.log(el)
                             el.empty();
-                            el.append(response['data']);
+                            el.parent().append(response['data']);
+                            el.parent().empty();
                             el.addClass('filedrendered');
                             toastr.success('Updated');
                             hideBlockUI('#unit_p_input_div_' + field + id);

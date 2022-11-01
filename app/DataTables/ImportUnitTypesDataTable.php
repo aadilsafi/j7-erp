@@ -71,6 +71,7 @@ class ImportUnitTypesDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->ordering(false)
+            ->searching(false)
             ->serverSide()
             ->processing()
             ->deferRender()

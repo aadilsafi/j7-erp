@@ -105,7 +105,7 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="#"
+                                <a href="{{ route('sites.stakeholders.index', ['site_id', $site_id]) }}"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}

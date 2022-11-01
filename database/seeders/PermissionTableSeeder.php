@@ -354,7 +354,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'sites.additional-costs.importAdcosts',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.additional-costs.importAdcostsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.additional-costs.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.additional-costs.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Floor Routes
             [
                 'name' => 'sites.floors.index',
@@ -533,7 +560,34 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'sites.floors.unitsImport.importUnits',
+                'show_name' => 'Can Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.importUnitsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.unitsImport.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Batchs Routes
             [
                 'name' => 'batches.byid',
@@ -1439,6 +1493,14 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.accounts.ledger.index',
                 'show_name' => 'Can View Accounts Ledger',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'name' => 'sites.import.sample-download',
+                'show_name' => 'Can Download sample File',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -157,6 +157,13 @@ Route::group([
 
                         Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
                     });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.additional-costs.importAdcosts')->name('importAdcosts');
+                        Route::post('preview', [AdditionalCostController::class, 'ImportPreview'])->name('importAdcostsPreview');
+                        Route::get('storePreview', [AdditionalCostController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [AdditionalCostController::class, 'saveImport'])->name('saveImport');
+                    });
                 });
 
                 //Floors Routes
@@ -558,7 +565,6 @@ Route::group([
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::get('get-refund-datatable', [LedgerController::class, 'refundDatatable'])->name('get-refund-datatable');
                         });
-
                     });
                 });
             });
@@ -574,6 +580,8 @@ Route::group([
         Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
 
         Route::get('ajax-import-types.get.input', [TypeController::class, 'getTypeInput'])->name('ajax-import-types.get.input');
+
+        Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

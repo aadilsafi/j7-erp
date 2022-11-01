@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.import', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Stakeholders')
+@section('page-title', 'Import Additional Costs')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Stakeholders</h2>
+                <h2 class="content-header-title float-start mb-0">Import Additional Costs</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.stakeholders.import', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.additional-costs.import', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.additional-costs.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
@@ -55,7 +55,7 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="{{ route('sites.stakeholders.index', ['site_id' => $site_id]) }}"
+                    <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"
                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
@@ -153,7 +153,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
+                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -190,7 +190,7 @@
                 el = $(this);
                 console.log(el.parent)
 
-                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
+                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -232,7 +232,7 @@
                 el = $(this);
                 console.log(el.parent)
 
-                var url = "{{ route('ajax-import-stakeholders.get.input') }}";
+                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -284,6 +284,9 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
+                    
+                    // var formData = new FormData(document.querySelector('form'))
+                    // console.log($('.selectField').val());
                     $('#teams-table-form').submit();
                 }
             });

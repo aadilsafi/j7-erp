@@ -449,14 +449,18 @@ class StakeholderController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempStakeholder->is_dealer =  !$tempStakeholder->is_dealer;
+                        $tempStakeholder->save();
 
-                        $response =  view('app.components.checkbox', [
-                            'id' => $request->get('id'),
-                            'data' => $tempStakeholder,
-                            'field' => $field,
-                            'is_true' => $tempStakeholder->is_vendor,
-                            'value' => $tempStakeholder->is_vendor
-                        ])->render();
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempStakeholder->is_dealer
+                            ]
+                        )->render();
                     }
 
                     break;
@@ -465,14 +469,18 @@ class StakeholderController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempStakeholder->is_customer = !$tempStakeholder->is_customer;
+                        $tempStakeholder->save();
 
-                        $response =  view('app.components.checkbox', [
-                            'id' => $request->get('id'),
-                            'data' => $tempStakeholder,
-                            'field' => $field,
-                            'is_true' => $tempStakeholder->is_vendor,
-                            'value' => $tempStakeholder->is_vendor
-                        ])->render();
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempStakeholder->is_customer
+                            ]
+                        )->render();
                     }
 
                     break;
@@ -480,14 +488,18 @@ class StakeholderController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempStakeholder->is_kin = !$tempStakeholder->is_kin;
+                        $tempStakeholder->save();
 
-                        $response =  view('app.components.checkbox', [
-                            'id' => $request->get('id'),
-                            'data' => $tempStakeholder,
-                            'field' => $field,
-                            'is_true' => $tempStakeholder->is_vendor,
-                            'value' => $tempStakeholder->is_vendor
-                        ])->render();
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempStakeholder->is_kin
+                            ]
+                        )->render();
                     }
 
                     break;
@@ -495,14 +507,18 @@ class StakeholderController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempStakeholder->is_vendor = !$tempStakeholder->is_vendor;
+                        $tempStakeholder->save();
 
-                        $response =  view('app.components.checkbox', [
-                            'id' => $request->get('id'),
-                            'data' => $tempStakeholder,
-                            'field' => $field,
-                            'is_true' => $tempStakeholder->is_vendor,
-                            'value' => $tempStakeholder->is_vendor
-                        ])->render();
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempStakeholder->is_vendor
+                            ]
+                        )->render();
                     }
                     break;
 
@@ -528,8 +544,8 @@ class StakeholderController extends Controller
 
             if ($request->hasfile('attachment')) {
                 $request->validate([
-                    'attachment'=> 'required|mimes:xlsx'
-                 ]);
+                    'attachment' => 'required|mimes:xlsx'
+                ]);
                 $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
@@ -538,9 +554,8 @@ class StakeholderController extends Controller
                 $import->import($request->file('attachment'));
 
                 return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id]);
-            }else{
+            } else {
                 return Redirect::back()->withDanger('Select File to Import');
-
             }
         } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
 
@@ -576,89 +591,89 @@ class StakeholderController extends Controller
     public function saveImport(Request $request, $site_id)
     {
         // DB::transaction(function () use ($request, $site_id) {
-            $validator = \Validator::make($request->all(), [
-                'fields.*' => 'required|distinct',
-            ],[
-                'fields.*.required' => 'Must Select all Fields',
-                'fields.*.distinct' => 'Field can not be duplicated',
-    
-            ]);
-    
-            $validator->validate();
-            $model = new TempStakeholder();
-            $tempdata = $model->cursor();
-            $tempCols = $model->getFillable();
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required|distinct',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
 
-            $stakeholder = [];
-            foreach ($tempdata as $key => $items) {
-                foreach ($tempCols as $k => $field) {
-                    $data[$key][$field] = $items[$tempCols[$k]];
-                }
-                $data[$key]['site_id'] = decryptParams($site_id);
+        ]);
 
-                if ($data[$key]['parent_cnic'] != null) {
-                    $parent = Stakeholder::where('cnic', $data[$key]['parent_cnic'])->first();
-                    $data[$key]['parent_id'] = $parent->id;
-                } else {
-                    $data[$key]['parent_id'] = 0;
-                }
+        $validator->validate();
+        $model = new TempStakeholder();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
 
-                unset($data[$key]['parent_cnic']);
-                unset($data[$key]['is_dealer']);
-                unset($data[$key]['is_vendor']);
-                unset($data[$key]['is_kin']);
-                unset($data[$key]['is_customer']);
+        $stakeholder = [];
+        foreach ($tempdata as $key => $items) {
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+            $data[$key]['site_id'] = decryptParams($site_id);
 
-                $stakeholder = Stakeholder::create($data[$key]);
-
-                $stakeholdertype = [
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => 'C',
-                        'stakeholder_code' => 'C-00' . $stakeholder->id,
-                        'status' => $items['is_customer'] ? 1 : 0,
-                        'created_at'=> now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => 'V',
-                        'stakeholder_code' => 'V-00' . $stakeholder->id,
-                        'status' => $items['is_vendor'] ? 1 : 0,
-                        'created_at'=> now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => 'D',
-                        'stakeholder_code' => 'D-00' . $stakeholder->id,
-                        'status' => $items['is_dealer'] ? 1 : 0,
-                        'created_at'=> now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => 'K',
-                        'stakeholder_code' => 'K-00' . $stakeholder->id,
-                        'status' => $items['is_kin'] ? 1 : 0,
-                        'created_at'=> now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => 'L',
-                        'stakeholder_code' => 'L-00' . $stakeholder->id,
-                        'status' => 0,
-                        'created_at'=> now(),
-                        'updated_at' => now(),
-                    ]
-                ];
-
-                $stakeholder_type = StakeholderType::insert($stakeholdertype);
+            if ($data[$key]['parent_cnic'] != null) {
+                $parent = Stakeholder::where('cnic', $data[$key]['parent_cnic'])->first();
+                $data[$key]['parent_id'] = $parent->id;
+            } else {
+                $data[$key]['parent_id'] = 0;
             }
 
-            TempStakeholder::query()->truncate();
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            unset($data[$key]['parent_cnic']);
+            unset($data[$key]['is_dealer']);
+            unset($data[$key]['is_vendor']);
+            unset($data[$key]['is_kin']);
+            unset($data[$key]['is_customer']);
+
+            $stakeholder = Stakeholder::create($data[$key]);
+
+            $stakeholdertype = [
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'C',
+                    'stakeholder_code' => 'C-00' . $stakeholder->id,
+                    'status' => $items['is_customer'] ? 1 : 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'V',
+                    'stakeholder_code' => 'V-00' . $stakeholder->id,
+                    'status' => $items['is_vendor'] ? 1 : 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'D',
+                    'stakeholder_code' => 'D-00' . $stakeholder->id,
+                    'status' => $items['is_dealer'] ? 1 : 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'K',
+                    'stakeholder_code' => 'K-00' . $stakeholder->id,
+                    'status' => $items['is_kin'] ? 1 : 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'L',
+                    'stakeholder_code' => 'L-00' . $stakeholder->id,
+                    'status' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ];
+
+            $stakeholder_type = StakeholderType::insert($stakeholdertype);
+        }
+
+        TempStakeholder::query()->truncate();
+        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
         // });
     }
 }

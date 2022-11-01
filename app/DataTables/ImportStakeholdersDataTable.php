@@ -80,27 +80,39 @@ class ImportStakeholdersDataTable extends DataTable
                 );
             })
             ->editColumn('is_dealer', function ($data) {
+                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+
                 return view(
-                    'app.components.checkbox',
-                    ['id' => $data->id, 'data' => $data, 'field' => 'is_dealer', 'is_true' => $data->is_dealer, 'value' => $data->is_dealer]
+                    'app.components.input-select-fields',
+                    ['id' => $data->id, 'field' => 'is_dealer', 'values' => $values, 'selectedValue' => $data->is_dealer]
                 );
+                // return view(
+                //     'app.components.checkbox',
+                //     ['id' => $data->id, 'data' => $data, 'field' => 'is_dealer', 'is_true' => $data->is_dealer, 'value' => $data->is_dealer]
+                // );
             })
             ->editColumn('is_vendor', function ($data) {
+                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+
                 return view(
-                    'app.components.checkbox',
-                    ['id' => $data->id, 'data' => $data, 'field' => 'is_vendor', 'is_true' => $data->is_vendor, 'value' => $data->is_vendor]
+                    'app.components.input-select-fields',
+                    ['id' => $data->id, 'field' => 'is_vendor', 'values' => $values, 'selectedValue' => $data->is_vendor]
                 );
             })
             ->editColumn('is_customer', function ($data) {
+                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+
                 return view(
-                    'app.components.checkbox',
-                    ['id' => $data->id, 'data' => $data, 'field' => 'is_customer', 'is_true' => $data->is_customer, 'value' => $data->is_customer]
+                    'app.components.input-select-fields',
+                    ['id' => $data->id, 'field' => 'is_customer', 'values' => $values, 'selectedValue' => $data->is_customer]
                 );
             })
             ->editColumn('is_kin', function ($data) {
+                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+
                 return view(
-                    'app.components.checkbox',
-                    ['id' => $data->id, 'data' => $data, 'field' => 'is_kin', 'is_true' => $data->is_kin, 'value' => $data->is_kin]
+                    'app.components.input-select-fields',
+                    ['id' => $data->id, 'field' => 'is_kin', 'values' => $values, 'selectedValue' => $data->is_kin]
                 );
             })
             ->editColumn('parent_cnic', function ($data) {

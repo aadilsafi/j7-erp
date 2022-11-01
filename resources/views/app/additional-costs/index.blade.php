@@ -138,5 +138,9 @@
         function addNew() {
             location.href = '{{ route('sites.additional-costs.create', ['site_id' => $site_id]) }}';
         }
+
+        function Import() {
+            location.href = '{{ route('sites.additional-costs.importAdcosts', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

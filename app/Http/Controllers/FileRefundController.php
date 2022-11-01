@@ -186,7 +186,7 @@ class FileRefundController extends Controller
 
     public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_id)
     {
-        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+        // DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
             //Refund Account legders
             $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
             // select receiveable account against unit
@@ -201,13 +201,18 @@ class FileRefundController extends Controller
             $refundAccount = AccountHead::where('name', 'Refund Account')->first();
             $refundAccountCode = $refundAccount->code;
 
+
             // if payable account code is not set
             if ($customer_payable_account_code == null) {
                 $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
                 $stakeholderType = collect($stakeholderType)->last();
                 $customer_payable_account_code = $stakeholderType->payable_account + 1;
+
                 // add payable code to stakeholder type
-                $stakeholderType = StakeholderType::find($stakeholderType->id)->update(['payable_account' => $customer_payable_account_code]);
+                $stakeholderPayable = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+                $stakeholderPayable->payable_account =  (string)$customer_payable_account_code;
+                $stakeholderPayable->update();
+
                 $stakeholder = Stakeholder::find(decryptParams($customer_id));
                 $accountCodeData = [
                     'site_id' => 1,
@@ -217,8 +222,10 @@ class FileRefundController extends Controller
                     'name' =>  $stakeholder->full_name . ' Customer A/P',
                     'level' => 5,
                 ];
+
                 (new AccountHead())->create($accountCodeData);
             }
+
             $file_refund = FileRefund::where('file_id', decryptParams($file_id))->first();
             $file_refund->status = 1;
             $file_refund->update();
@@ -323,7 +330,7 @@ class FileRefundController extends Controller
                 $Receipt->status = 2;
                 $Receipt->update();
             }
-        });
+        // });
         return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 

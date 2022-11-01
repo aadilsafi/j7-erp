@@ -14,6 +14,7 @@ use App\Models\StakeholderType;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 
 class ReceiptService implements ReceiptInterface
 {
@@ -34,113 +35,114 @@ class ReceiptService implements ReceiptInterface
     // Store
     public function store($site_id, $requested_data)
     {
+        DB::transaction(function () use ($site_id, $requested_data) {
+            $data = $requested_data['receipts'];
 
-        $data = $requested_data['receipts'];
+            $amount_received = $requested_data['amount_received'];
 
-        $amount_received = $requested_data['amount_received'];
+            for ($i = 0; $i < count($data); $i++) {
+                $unit = Unit::find($data[$i]['unit_id']);
+                $sales_plan = $unit->salesPlan->toArray();
 
-        for ($i = 0; $i < count($data); $i++) {
-            $unit = Unit::find($data[$i]['unit_id']);
-            $sales_plan = $unit->salesPlan->toArray();
+                $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
 
-            $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
-
-            $receiptData = [
-                'site_id' => decryptParams($site_id),
-                'unit_id'  => $data[$i]['unit_id'],
-                'sales_plan_id'  => $sales_plan[0]['id'],
-                'name'  => $stakeholder->full_name,
-                'cnic'  => $stakeholder->cnic,
-                'phone_no' => $stakeholder->contact,
-                'mode_of_payment' => $data[$i]['mode_of_payment'],
-                'other_value' => $data[$i]['other_value'],
-                'cheque_no' => $data[$i]['cheque_no'],
-                'online_instrument_no' => $data[$i]['online_instrument_no'],
-                'transaction_date' => $data[$i]['transaction_date'],
-                'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                'amount_in_numbers' => $data[$i]['amount_in_numbers'],
-                'purpose' => 'installments',
-                'installment_number' => '1',
-                'amount_received' => $requested_data['amount_received'],
-                'comments' => $data[$i]['comments'],
-                'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
-                'bank_details' => $data[$i]['bank_details']
-            ];
-
-            if ($amount_received > $data[$i]['amount_in_numbers']) {
-                $receipt = ReceiptDraftModel::create($receiptData);
-
-                if (isset($requested_data['attachment'])) {
-                    $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
-                }
-
-                $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
-
-                $data = [
-                    'unit_name'  => $unit->name,
-                    'remaining_amount' =>   $remaining_amount,
+                $receiptData = [
+                    'site_id' => decryptParams($site_id),
+                    'unit_id'  => $data[$i]['unit_id'],
+                    'sales_plan_id'  => $sales_plan[0]['id'],
+                    'name'  => $stakeholder->full_name,
+                    'cnic'  => $stakeholder->cnic,
+                    'phone_no' => $stakeholder->contact,
+                    'mode_of_payment' => $data[$i]['mode_of_payment'],
+                    'other_value' => $data[$i]['other_value'],
+                    'cheque_no' => $data[$i]['cheque_no'],
+                    'online_instrument_no' => $data[$i]['online_instrument_no'],
+                    'transaction_date' => $data[$i]['transaction_date'],
+                    'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
+                    'amount_in_numbers' => $data[$i]['amount_in_numbers'],
+                    'purpose' => 'installments',
+                    'installment_number' => '1',
+                    'amount_received' => $requested_data['amount_received'],
+                    'comments' => $data[$i]['comments'],
+                    'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
+                    'bank_details' => $data[$i]['bank_details']
                 ];
 
-                return $data;
-            } else {
-                $draft_receipt_data = ReceiptDraftModel::all();
+                if ($amount_received > $data[$i]['amount_in_numbers']) {
+                    $receipt = ReceiptDraftModel::create($receiptData);
 
-                if (isset($draft_receipt_data)) {
-                    foreach ($draft_receipt_data as $draftReceiptData) {
-                        $receiptDraftData = [
-                            'site_id' => $draftReceiptData->site_id,
-                            'unit_id'  => $draftReceiptData->unit_id,
-                            'sales_plan_id'  => $draftReceiptData->sales_plan_id,
-                            'name'  => $draftReceiptData->name,
-                            'cnic'  => $draftReceiptData->cnic,
-                            'phone_no' => $draftReceiptData->phone_no,
-                            'mode_of_payment' => $draftReceiptData->mode_of_payment,
-                            'other_value' => $draftReceiptData->other_value,
-                            'cheque_no' => $draftReceiptData->cheque_no,
-                            'online_instrument_no' => $draftReceiptData->online_instrument_no,
-                            'transaction_date' => $draftReceiptData->transaction_date,
-                            'amount_in_words' => numberToWords($draftReceiptData->amount_in_numbers),
-                            'amount_in_numbers' => $draftReceiptData->amount_in_numbers,
-                            'comments' => $draftReceiptData->comments,
-                            'purpose' => 'installments',
-                            'installment_number' => '1',
-                            'amount_received' => $requested_data['amount_received'],
-                            'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
-                            'bank_details' => $draftReceiptData->bank_details,
-                        ];
-                        //create receipt from drafts
-                        $receipt_Draft = Receipt::create($receiptDraftData);
-
-                        $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
-
-                        // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                        //     Log::info(json_encode($transaction));
-                        //     // return apiErrorResponse('invalid_transaction');
-                        // }
-
-                        $update_installments =  $this->updateInstallments($receipt_Draft);
+                    if (isset($requested_data['attachment'])) {
+                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
-                    ReceiptDraftModel::truncate();
+
+                    $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
+
+                    $data = [
+                        'unit_name'  => $unit->name,
+                        'remaining_amount' =>   $remaining_amount,
+                    ];
+
+                    return $data;
+                } else {
+                    $draft_receipt_data = ReceiptDraftModel::all();
+
+                    if (isset($draft_receipt_data)) {
+                        foreach ($draft_receipt_data as $draftReceiptData) {
+                            $receiptDraftData = [
+                                'site_id' => $draftReceiptData->site_id,
+                                'unit_id'  => $draftReceiptData->unit_id,
+                                'sales_plan_id'  => $draftReceiptData->sales_plan_id,
+                                'name'  => $draftReceiptData->name,
+                                'cnic'  => $draftReceiptData->cnic,
+                                'phone_no' => $draftReceiptData->phone_no,
+                                'mode_of_payment' => $draftReceiptData->mode_of_payment,
+                                'other_value' => $draftReceiptData->other_value,
+                                'cheque_no' => $draftReceiptData->cheque_no,
+                                'online_instrument_no' => $draftReceiptData->online_instrument_no,
+                                'transaction_date' => $draftReceiptData->transaction_date,
+                                'amount_in_words' => numberToWords($draftReceiptData->amount_in_numbers),
+                                'amount_in_numbers' => $draftReceiptData->amount_in_numbers,
+                                'comments' => $draftReceiptData->comments,
+                                'purpose' => 'installments',
+                                'installment_number' => '1',
+                                'amount_received' => $requested_data['amount_received'],
+                                'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
+                                'bank_details' => $draftReceiptData->bank_details,
+                            ];
+                            //create receipt from drafts
+                            $receipt_Draft = Receipt::create($receiptDraftData);
+
+                            $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+
+                            // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                            //     Log::info(json_encode($transaction));
+                            //     // return apiErrorResponse('invalid_transaction');
+                            // }
+
+                            $update_installments =  $this->updateInstallments($receipt_Draft);
+                        }
+                        ReceiptDraftModel::truncate();
+                    }
+
+                    //here is single without draft
+                    $receipt = Receipt::create($receiptData);
+                    $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                    // // dd($transaction);
+                    // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                    //     Log::info(json_encode($transaction));
+                    //     // return apiErrorResponse('invalid_transaction');
+                    // }
+
+
+                    if (isset($requested_data['attachment'])) {
+                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                        changeImageDirectoryPermission();
+                    }
+
+                    $update_installments =  $this->updateInstallments($receipt);
                 }
-
-                //here is single without draft
-                $receipt = Receipt::create($receiptData);
-                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
-                // // dd($transaction);
-                // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                //     Log::info(json_encode($transaction));
-                //     // return apiErrorResponse('invalid_transaction');
-                // }
-
-
-                if (isset($requested_data['attachment'])) {
-                    $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
-                    changeImageDirectoryPermission();
-                }
-
-                $update_installments =  $this->updateInstallments($receipt);
             }
-        }
+        });
     }
 
     //update Installments
@@ -279,8 +281,12 @@ class ReceiptService implements ReceiptInterface
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
             $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
 
-            //Here code to disapprove all other sales plan of same unit
-            (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->update(['status' => 2]);
+            //Here code to disapprove all pending sales plan of same unit
+            $pendingSalesPlan =  (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->where('status', 0)->first();
+            if($pendingSalesPlan != null){
+                $pendingSalesPlan->status = 2;
+                $pendingSalesPlan->update();
+            }
         }
 
         $unit->update();

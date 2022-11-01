@@ -567,6 +567,8 @@ Route::group([
                         });
                     });
                 });
+
+                Route::get('import/sample-download/{order}', [AdditionalCostController::class, 'downloadSample'])->name('import.sample-download');
             });
         });
 

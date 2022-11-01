@@ -1470,6 +1470,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            [
+                'name' => 'sites.import.sample-download',
+                'show_name' => 'Can Download sample File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

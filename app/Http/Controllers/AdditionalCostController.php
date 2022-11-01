@@ -15,10 +15,12 @@ use App\Models\AdditionalCost;
 use App\Models\TempAdditionalCost;
 use App\Services\AdditionalCosts\AdditionalCostInterface;
 use Exception;
+use File;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use phpDocumentor\Reflection\PseudoTypes\True_;
 use Redirect;
+use Illuminate\Support\Facades\Storage;
 use Str;
 
 class AdditionalCostController extends Controller
@@ -444,5 +446,12 @@ class AdditionalCostController extends Controller
         TempAdditionalCost::query()->truncate();
 
         return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function downloadSample($site_id, $order){
+        $path = public_path('app-assets/ImportSamples/'. $order . '.xlsx');
+        return response()->download($path);
+        // $file = Storage::download('app-assets/ImportSamples/'. $order . '.xlsx');
+        // dd($file);
     }
 }

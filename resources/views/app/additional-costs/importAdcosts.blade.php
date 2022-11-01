@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.import', $site_id) }}
 @endsection
 
-@section('page-title', 'Import Types')
+@section('page-title', 'Import Additional Costs')
 
 @section('page-vendor')
 @endsection
@@ -105,10 +105,16 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="{{ route('sites.additional-costs.index', ['site_id', $site_id]) }}"
+                                <a href="{{ route('sites.additional-costs.index', ['site_id' => $site_id]) }}"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}
+                                </a>
+
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 4]) }}"
+                                    class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
+                                    <i data-feather='download'></i>
+                                    Download Sample
                                 </a>
                             </div>
                         </div>

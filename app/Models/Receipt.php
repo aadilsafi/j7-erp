@@ -19,6 +19,7 @@ class Receipt extends Model implements HasMedia
         'site_id',
         'unit_id',
         'sales_plan_id',
+        'bank_id',
         'name',
         'cnic',
         'mode_of_payment',
@@ -64,5 +65,10 @@ class Receipt extends Model implements HasMedia
     public function salesPlan()
     {
         return $this->belongsTo(SalesPlan::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
     }
 }

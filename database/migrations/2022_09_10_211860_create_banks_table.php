@@ -15,7 +15,18 @@ return new class extends Migration
     {
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')->constrained();
+            $table->string('name');
+            $table->string('slug');
+            $table->string('account_number');
+            $table->string('branch');
+            $table->string('branch_code');
+            $table->string('address');
+            $table->string('contact_number');
+            $table->boolean('status')->default(true);
+            $table->string('comments');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

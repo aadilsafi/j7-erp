@@ -320,8 +320,105 @@
                             </div>
                         </div>
 
+
                         <div class="row mb-2 g-1" id="chequeValueDiv" style="display: none;">
-                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="bank">Select Bank</label>
+                                <select class="form-select form-select-lg" id="bank" name="bank_id">
+                                    <option value="0">Create new Bank</option>
+                                    @forelse ($banks as $bank)
+                                        <option value="{{ $bank->id }}">{{ $bank->name }} - {{ $bank->branch_code }}</option>
+                                    @empty
+                                    @endforelse
+                                </select>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
+                                <div id="div_new_bank">
+                                    <div class="row mb-1">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="full_name">Bank Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg @error('full_name') is-invalid @enderror"
+                                                id="name" name="bank_name"
+                                                placeholder="Bank Name" />
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="father_name">Account Number</label>
+                                            <input type="number"
+                                                class="form-control form-control-lg @error('account_number') is-invalid @enderror"
+                                                id="account_number" name="bank_account_number"
+                                                placeholder="Account Number"/>
+                                            @error('account_number')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="father_name">Contact Number</label>
+                                            <input type="number"
+                                                class="form-control form-control-lg @error('contact_number') is-invalid @enderror"
+                                                id="contact_number" name="bank_contact_number"
+                                                placeholder="Contact Number"/>
+                                            @error('contact_number')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mb-1">
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label fs-5" for="designation">Branch</label>
+                                            <input type="text"
+                                                class="form-control form-control-lg @error('branch') is-invalid @enderror"
+                                                id="branch" name="bank_branch"
+                                                placeholder="Branch"/>
+                                            @error('branch')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label fs-5" for="contact">Branch Code</label>
+                                            <input type="number"
+                                                class="form-control form-control-lg @error('contact') is-invalid @enderror"
+                                                id="branch_code" name="bank_branch_code" placeholder="Branch Code"/>
+                                            @error('branch_code')
+                                                <div class="invalid-feedback ">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-1">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label fs-5" for="address">Address</label>
+                                            <textarea class="form-control @error('address') is-invalid @enderror" name="bank_address" id="address"
+                                                rows="3" placeholder="Address"></textarea>
+                                            @error('address')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label fs-5" for="comments">Comments</label>
+                                            <textarea class="form-control @error('comments') is-invalid @enderror" name="bank_comments"
+                                                id="comments" rows="3" placeholder="Comments"></textarea>
+                                            @error('comments')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="cheque_no">Cheque No <span
                                         class="text-danger">*</span></label>
                                 <input type="text"
@@ -333,17 +430,9 @@
                                 @enderror
                             </div>
 
-                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="bank_details">Bank
-                                    Name <span class="text-danger">*</span></label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('bank_details') is-invalid @enderror"
-                                    id="bank_details" name="bank_details" placeholder="Bank Name" />
-                                @error('bank_details')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
-                            </div>
+
                         </div>
+
                     </div>
                 </div>
             </div>

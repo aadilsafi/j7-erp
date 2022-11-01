@@ -36,6 +36,12 @@ class store extends FormRequest
             'receipts.*.online_instrument_no' => ' required_if:receipts.*.mode_of_payment,==,Online',
             'attachment' => 'sometimes',
             'comments' => 'sometimes',
+            'receipts.*.bank_name' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
+            'receipts.*.bank_branch' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
+            'receipts.*.bank_account_number' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
+            'receipts.*.bank_contact_number' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
+            'receipts.*.bank_branch_code' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
+            'receipts.*.bank_address' => 'required_if:receipts.*.mode_of_payment,==,Cheque',
         ];
     }
 
@@ -52,6 +58,12 @@ class store extends FormRequest
             'receipts.*.transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
             'receipts.*.online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
             "attachment" => "Attachment is Required if mode of payment is Cheque or Online or Other.",
+            "receipts.*.bank_name" => "Bank Name is Required if mode of payment is Cheque.",
+            "receipts.*.bank_branch" => "Bank Branch is Required if mode of payment is Cheque.",
+            "receipts.*.bank_account_number" => "Bank Account Number is Required if mode of payment is Cheque.",
+            "receipts.*.bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque.",
+            "receipts.*.bank_branch_code" => "Bank Branch Code is Required if mode of payment is Cheque.",
+            "receipts.*.bank_address" => "Bank Address is Required if mode of payment is Cheque.",
         ];
     }
 

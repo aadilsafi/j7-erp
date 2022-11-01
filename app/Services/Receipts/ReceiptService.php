@@ -2,6 +2,8 @@
 
 namespace App\Services\Receipts;
 
+use App\Models\AccountHead;
+use App\Models\Bank;
 use App\Models\Unit;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
@@ -15,6 +17,7 @@ use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
+use Str;
 
 class ReceiptService implements ReceiptInterface
 {
@@ -44,6 +47,36 @@ class ReceiptService implements ReceiptInterface
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
 
+                if ($data[$i]['bank_id'] == 0) {
+                    $bankData = [
+                        'site_id' => decryptParams($site_id),
+                        'name' => $data[$i]['bank_name'],
+                        'slug' => Str::slug($data[$i]['bank_name']),
+                        'account_number' => $data[$i]['bank_account_number'],
+                        'branch' => $data[$i]['bank_branch'],
+                        'branch_code' => $data[$i]['bank_branch_code'],
+                        'address' => $data[$i]['bank_address'],
+                        'contact_number' => $data[$i]['bank_contact_number'],
+                        'status' => true,
+                        'comments' => $data[$i]['bank_comments'],
+                    ];
+                    $bank = Bank::create($bankData);
+                    $data[$i]['bank_id'] = $bank->id;
+                    $data[$i]['bank_name'] = $bank->name;
+
+                    // added in accound heads
+                    $acountHeadData = [
+                        'site_id' => decryptParams($site_id),
+                        'modelable_id' => null,
+                        'modelable_type' => null,
+                        'code' => $bank->account_number,
+                        'name' => $bank->name,
+                        'level' => 5,
+                    ];
+
+                    $accountHead =  AccountHead::create($acountHeadData);
+                }
+
                 $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
 
                 $receiptData = [
@@ -65,7 +98,8 @@ class ReceiptService implements ReceiptInterface
                     'amount_received' => $requested_data['amount_received'],
                     'comments' => $data[$i]['comments'],
                     'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
-                    'bank_details' => $data[$i]['bank_details']
+                    'bank_details' => $data[$i]['bank_name'],
+                    'bank_id' => $data[$i]['bank_id'],
                 ];
 
                 if ($amount_received > $data[$i]['amount_in_numbers']) {
@@ -108,11 +142,17 @@ class ReceiptService implements ReceiptInterface
                                 'amount_received' => $requested_data['amount_received'],
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
+                                'bank_id' => $draftReceiptData->bank_id,
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
+                            if ($receipt_Draft->mode_of_payment == "Cash") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                            }
 
-                            $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                            if ($receipt_Draft->mode_of_payment == "Cheque") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
+                            }
 
                             // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
                             //     Log::info(json_encode($transaction));
@@ -126,13 +166,13 @@ class ReceiptService implements ReceiptInterface
 
                     //here is single without draft
                     $receipt = Receipt::create($receiptData);
-                    $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
-                    // // dd($transaction);
-                    // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                    //     Log::info(json_encode($transaction));
-                    //     // return apiErrorResponse('invalid_transaction');
-                    // }
+                    if ($receipt->mode_of_payment == "Cash") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                    }
 
+                    if ($receipt->mode_of_payment == "Cheque") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                    }
 
                     if (isset($requested_data['attachment'])) {
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
@@ -283,7 +323,7 @@ class ReceiptService implements ReceiptInterface
 
             //Here code to disapprove all pending sales plan of same unit
             $pendingSalesPlan =  (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->where('status', 0)->first();
-            if($pendingSalesPlan != null){
+            if ($pendingSalesPlan != null) {
                 $pendingSalesPlan->status = 2;
                 $pendingSalesPlan->update();
             }

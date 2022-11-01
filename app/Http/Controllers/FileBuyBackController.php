@@ -21,6 +21,8 @@ use App\Models\Type;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use DB;
 
 class FileBuyBackController extends Controller
 {
@@ -30,12 +32,14 @@ class FileBuyBackController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $buyBackInterface;
+    private $buyBackInterface,$financialTransactionInterface;
 
     public function __construct(
+        FinancialTransactionInterface $financialTransactionInterface,
         BuyBackInterface $buyBackInterface,
         CustomFieldInterface $customFieldInterface
     ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
         $this->buyBackInterface = $buyBackInterface;
         $this->customFieldInterface = $customFieldInterface;
     }
@@ -180,33 +184,37 @@ class FileBuyBackController extends Controller
 
     public function ApproveFileBuyBack($site_id, $unit_id, $customer_id, $file_id)
     {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
-        $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
-        $file_buy_back->status = 1;
-        $file_buy_back->update();
+            // Account ledger transaction
+            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
-        $unit = Unit::find(decryptParams($unit_id));
-        $unit->status_id = 1;
-        $unit->update();
+            $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
+            $file_buy_back->status = 1;
+            $file_buy_back->update();
 
-        $file =  FileManagement::find(decryptParams($file_id));
-        $file->file_action_id = 3;
-        $file->update();
+            $unit = Unit::find(decryptParams($unit_id));
+            $unit->status_id = 1;
+            $unit->update();
 
-        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $SalesPlan = SalesPlan::find($salesPlan->id);
-            $SalesPlan->status = 3;
-            $SalesPlan->update();
-        }
+            $file =  FileManagement::find(decryptParams($file_id));
+            $file->file_action_id = 3;
+            $file->update();
 
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->status = 2;
-            $Receipt->update();
-        }
+            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $SalesPlan = SalesPlan::find($salesPlan->id);
+                $SalesPlan->status = 3;
+                $SalesPlan->update();
+            }
 
+            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            foreach ($receipt as $receipt) {
+                $Receipt = Receipt::find($receipt->id);
+                $Receipt->status = 2;
+                $Receipt->update();
+            }
+        });
         return redirect()->route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Buy Back Approved');
     }
 

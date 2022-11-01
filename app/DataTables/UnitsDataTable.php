@@ -68,7 +68,7 @@ class UnitsDataTable extends DataTable
 
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return $this->builder()
-            ->addTableClass(['table-striped', 'table-hover'])
+            ->addTableClass(['table-hover'])
             ->setTableId('floors-units-table')
             ->columns($this->getColumns())
             ->deferRender()

@@ -8,6 +8,7 @@ use App\Models\SalesPlan;
 use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
+use App\Models\Bank;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
 use App\Models\ReceiptTemplate;
@@ -62,8 +63,8 @@ class ReceiptController extends Controller
                 'site_id' => decryptParams($site_id),
                 'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
-                'customFields' => $customFields
-
+                'customFields' => $customFields,
+                'banks' => Bank::all(),
             ];
             return view('app.sites.receipts.create', $data);
         } else {

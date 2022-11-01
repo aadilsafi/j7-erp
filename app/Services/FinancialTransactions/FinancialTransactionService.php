@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, Receipt, SalesPlan};
+use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, FileBuyBack, Receipt, SalesPlan, Stakeholder, StakeholderType};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
@@ -12,6 +12,49 @@ use Illuminate\Support\Facades\DB;
 class FinancialTransactionService implements FinancialTransactionInterface
 {
     public function makeSalesPlanTransaction($sales_plan_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $salesPlan = (new SalesPlan())->with([
+                'unit',
+                'unit.type',
+                'user',
+                'stakeholder',
+                'stakeholder.stakeholder_types' => function ($query) {
+                    $query->where('type', 'C');
+                },
+                'additionalCosts'
+            ])->find($sales_plan_id);
+
+
+            $accountUnitHeadCode = $this->findOrCreateUnitAccount($salesPlan->unit);
+            $salesPlan->unit->refresh();
+
+            $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
+            // dd($salesPlan->stakeholder->site->id);
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $accountCustomerHeadCode, 1, $salesPlan->id, 'debit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+            $revenueSales = (new AccountingStartingCode())->where('site_id', $salesPlan->stakeholder->site->id)
+                ->where('model', 'App\Models\RevenueSales')->where('level', 5)->first();
+
+            if (is_null($revenueSales)) {
+                throw new GeneralException('Revenue Sales Account Head not found');
+            }
+
+            $revenueSalesAccount = $revenueSales->level_code . $revenueSales->starting_code;
+
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $revenueSalesAccount, 1, $salesPlan->id, 'credit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeDisapproveSalesPlanTransaction($sales_plan_id)
     {
         try {
             DB::beginTransaction();
@@ -203,6 +246,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         return (new AccountLedger())->create($data);
     }
 
+    // for cash
     public function makeReceiptTransaction($receipt_id)
     {
         try {
@@ -232,6 +276,74 @@ class FinancialTransactionService implements FinancialTransactionInterface
             // $customerAccount = $customerAccount[0];
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    // for cheque
+    public function makeReceiptChequeTransaction($receipt_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $receipt = (new Receipt())->find($receipt_id);
+            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+            $stakeholder = Stakeholder::where('cnic', $receipt->cnic)->first();
+            $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholder->id)->where('type', 'C')->first();
+
+            // Cheque Transaction
+            $cashAccount = $clearanceAccout;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 10, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            // Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+            // dd($customerAccount);
+            // $customerAccount = $customerAccount[0];
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 10, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+            // dd($customerAccount, $cashAccount, $receipt);
+
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+
+    public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id)
+    {
+        try {
+            DB::beginTransaction();
+            $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
+
+            $ledgerData = [
+                // Buback (5 entries in legder)
+                // Buback account entry
+                // [
+                //     'site_id' => 1,
+                //     'account_head_code' => $refundAccountCode,
+                //     'account_action_id' => 3,
+                //     'credit' => 0,
+                //     'debit' => $salesPlan->total_price,
+                //     'balance' => $salesPlan->total_price,
+                //     'nature_of_account' => 'JBB',
+                //     'sales_plan_id' => $file_refund->sales_plan_id,
+                //     'file_refund_id' => $file_refund->id,
+                //     'status' => true,
+                // ],
+            ];
 
             DB::commit();
             return 'transaction_completed';

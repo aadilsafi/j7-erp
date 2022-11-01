@@ -186,7 +186,7 @@ class FileRefundController extends Controller
 
     public function ApproveFileRefund($site_id, $unit_id, $customer_id, $file_id)
     {
-        // DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
             //Refund Account legders
             $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
             // select receiveable account against unit
@@ -330,7 +330,7 @@ class FileRefundController extends Controller
                 $Receipt->status = 2;
                 $Receipt->update();
             }
-        // });
+        });
         return redirect()->route('sites.file-managements.file-refund.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Refund Approved');
     }
 

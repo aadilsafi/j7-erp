@@ -194,7 +194,7 @@ class AccountHeadSeeder extends Seeder
                 'site_id' => 1,
                 'modelable_id' => null,
                 'modelable_type' => null,
-                'code' => '10209010001004',
+                'code' => '10209010001010',
                 'name' => 'Cheques Clearing Account',
                 'level' => 5,
             ],

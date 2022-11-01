@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             ReceiptsTemplateSeeder::class,
             FileActionSeeder::class,
             FileManagementTableSeeder::class,
+            BankSeeder::class,
             ReceiptsTableSeeder::class,
             UnitStakeholdersTableSeeder::class,
             // RebateIncentiveSeeder::class,

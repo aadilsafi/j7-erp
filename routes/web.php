@@ -4,6 +4,7 @@ use App\Http\Controllers\{
     AccountsRecoveryController,
     AdditionalCostController,
     ArtisanCommandController,
+    BankController,
     DashboardController,
     RoleController,
     PermissionController,
@@ -385,6 +386,19 @@ Route::group([
                         // Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         // Route::put('update', [ReceiptController::class, 'update'])->name('update');
                         // Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                // Banks
+                Route::group(['prefix' => 'banks', 'as' => 'banks.'], function () {
+                    Route::get('/', [BankController::class, 'index'])->name('index');
+
+                    Route::get('create', [BankController::class, 'create'])->name('create');
+                    Route::post('store', [BankController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        // used for bank selection in receipt creation
+                        Route::post('get-by-id', [BankController::class, 'getBank'])->name('get-by-id');
                     });
                 });
 

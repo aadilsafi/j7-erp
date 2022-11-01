@@ -23,8 +23,8 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'Receipt Voucher',
-                'slug' => 'receipt-voucher',
+                'name' => 'Receipt Voucher Cash',
+                'slug' => 'receipt-voucher-cash',
             ],
             [
                 'site_id' => 1,
@@ -50,6 +50,31 @@ class AccountActionSeeder extends Seeder
                 'site_id' => 1,
                 'name' => 'Title Transfer',
                 'slug' => 'title-transfer',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Sales Plan Dis Approval',
+                'slug' => 'sales-plan-dis-approval',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Bank',
+                'slug' => 'receipt-voucher-bank',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Check Clearing',
+                'slug' => 'check-clearing',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Check Bounced',
+                'slug' => 'check-bounced-back',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Online',
+                'slug' => 'receipt-voucher-online',
             ],
         ];
 

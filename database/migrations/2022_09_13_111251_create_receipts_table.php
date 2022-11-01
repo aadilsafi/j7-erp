@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('sales_plan_id')->constrained();
+            $table->foreignId('bank_id')->nullable();
             $table->string('name');
             $table->string('cnic');
             $table->string('phone_no');

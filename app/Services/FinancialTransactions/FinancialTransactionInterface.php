@@ -6,9 +6,15 @@ interface FinancialTransactionInterface
 {
     public function makeSalesPlanTransaction($sales_plan_id);
 
+    public function makeDisapproveSalesPlanTransaction($sales_plan_id);
+
     public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level);
 
     public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $balance = 0);
 
-    public function makeReceiptTransaction($receipt_id);
+    public function makeReceiptTransaction($receipt_id); // for cash
+
+    public function makeReceiptChequeTransaction($receipt_id); // for cheque
+
+    public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 }

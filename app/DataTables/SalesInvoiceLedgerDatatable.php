@@ -65,6 +65,10 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
+                } else if ($ledger->account_action_id == 5) {
+                    return '<a href="' . route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                            </a>';
                 } else {
                     return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
                 }
@@ -133,7 +137,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
             Column::make('debit')->title('Debit')->addClass('text-nowrap text-center'),
             Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
-            // Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
+            Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
             // Column::make('nature_of_account'),
             Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

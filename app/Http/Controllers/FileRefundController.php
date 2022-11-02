@@ -234,7 +234,6 @@ class FileRefundController extends Controller
             // after minus payable amount from sales plan
             $refunded_amount = str_replace(',', '', $file_refund->amount_to_be_refunded);
             $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
-
             $ledgerData = [
                 // Refund (3 entries in legder)
                 // Refund account entry
@@ -255,9 +254,9 @@ class FileRefundController extends Controller
                     'site_id' => 1,
                     'account_head_code' => $customer_receivable_account_code,
                     'account_action_id' => 5,
-                    'credit' => str_replace(',', '', $file_refund->amount_to_be_refunded),
+                    'credit' => $payable_amount,
                     'debit' => 0,
-                    'balance' => $payable_amount,
+                    'balance' => $refunded_amount,
                     'nature_of_account' => 'JRF',
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
@@ -268,9 +267,9 @@ class FileRefundController extends Controller
                     'site_id' => 1,
                     'account_head_code' => $customer_payable_account_code,
                     'account_action_id' => 5,
-                    'credit' => 0,
-                    'debit' => $payable_amount,
-                    'balance' => 0,
+                    'credit' => $refunded_amount,
+                    'debit' => 0,
+                    'balance' => $refunded_amount,
                     'nature_of_account' => 'JRF',
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
@@ -282,8 +281,8 @@ class FileRefundController extends Controller
                     'account_head_code' => $customer_payable_account_code,
                     'account_action_id' => 4,
                     'credit' => 0,
-                    'debit' => $payable_amount,
-                    'balance' => $payable_amount,
+                    'debit' => $refunded_amount,
+                    'balance' => $refunded_amount,
                     'nature_of_account' => 'JRF',
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
@@ -294,7 +293,7 @@ class FileRefundController extends Controller
                     'site_id' => 1,
                     'account_head_code' => '10209020001001',
                     'account_action_id' => 4,
-                    'credit' => $payable_amount,
+                    'credit' => $refunded_amount,
                     'debit' => 0,
                     'balance' => 0,
                     'nature_of_account' => 'JRF',

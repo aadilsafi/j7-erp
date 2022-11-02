@@ -16,5 +16,9 @@ interface FinancialTransactionInterface
 
     public function makeReceiptChequeTransaction($receipt_id); // for cheque
 
+    public function makeReceiptActiveTransaction($receipt_id); // for cheque Active
+
+    public function makeReceiptOnlineTransaction($receipt_id); // for online
+
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 }

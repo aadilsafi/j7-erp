@@ -63,13 +63,13 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'Check Clearing',
-                'slug' => 'check-clearing',
+                'name' => 'Cheque Clearance',
+                'slug' => 'cheque-clearance',
             ],
             [
                 'site_id' => 1,
-                'name' => 'Check Bounced',
-                'slug' => 'check-bounced-back',
+                'name' => 'Cheque Bounced',
+                'slug' => 'cheque-bounced-back',
             ],
             [
                 'site_id' => 1,

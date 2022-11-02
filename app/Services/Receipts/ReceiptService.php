@@ -44,37 +44,40 @@ class ReceiptService implements ReceiptInterface
             $amount_received = $requested_data['amount_received'];
 
             for ($i = 0; $i < count($data); $i++) {
+
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
 
                 if ($data[$i]['bank_id'] == 0) {
-                    $bankData = [
-                        'site_id' => decryptParams($site_id),
-                        'name' => $data[$i]['bank_name'],
-                        'slug' => Str::slug($data[$i]['bank_name']),
-                        'account_number' => $data[$i]['bank_account_number'],
-                        'branch' => $data[$i]['bank_branch'],
-                        'branch_code' => $data[$i]['bank_branch_code'],
-                        'address' => $data[$i]['bank_address'],
-                        'contact_number' => $data[$i]['bank_contact_number'],
-                        'status' => true,
-                        'comments' => $data[$i]['bank_comments'],
-                    ];
-                    $bank = Bank::create($bankData);
-                    $data[$i]['bank_id'] = $bank->id;
-                    $data[$i]['bank_name'] = $bank->name;
-
-                    // added in accound heads
-                    $acountHeadData = [
-                        'site_id' => decryptParams($site_id),
-                        'modelable_id' => null,
-                        'modelable_type' => null,
-                        'code' => $bank->account_number,
-                        'name' => $bank->name,
-                        'level' => 5,
-                    ];
-
-                    $accountHead =  AccountHead::create($acountHeadData);
+                    $data[$i]['bank_id'] =  null;
+                    $data[$i]['bank_name'] = null;
+                    if ($data[$i]['mode_of_payment'] == 'Cheque' || $data[$i]['mode_of_payment'] == 'Online') {
+                        $bankData = [
+                            'site_id' => decryptParams($site_id),
+                            'name' => $data[$i]['bank_name'],
+                            'slug' => Str::slug($data[$i]['bank_name']),
+                            'account_number' => $data[$i]['bank_account_number'],
+                            'branch' => $data[$i]['bank_branch'],
+                            'branch_code' => $data[$i]['bank_branch_code'],
+                            'address' => $data[$i]['bank_address'],
+                            'contact_number' => $data[$i]['bank_contact_number'],
+                            'status' => true,
+                            'comments' => $data[$i]['bank_comments'],
+                        ];
+                        $bank = Bank::create($bankData);
+                        $data[$i]['bank_id'] = $bank->id;
+                        $data[$i]['bank_name'] = $bank->name;
+                        // added in accound heads
+                        $acountHeadData = [
+                            'site_id' => decryptParams($site_id),
+                            'modelable_id' => null,
+                            'modelable_type' => null,
+                            'code' => $bank->account_number,
+                            'name' => $bank->name,
+                            'level' => 5,
+                        ];
+                        $accountHead =  AccountHead::create($acountHeadData);
+                    }
                 }
 
                 $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
@@ -154,6 +157,10 @@ class ReceiptService implements ReceiptInterface
                                 $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
                             }
 
+                            if ($receipt_Draft->mode_of_payment == "Online") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
+                            }
+
                             // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
                             //     Log::info(json_encode($transaction));
                             //     // return apiErrorResponse('invalid_transaction');
@@ -172,6 +179,10 @@ class ReceiptService implements ReceiptInterface
 
                     if ($receipt->mode_of_payment == "Cheque") {
                         $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                    }
+
+                    if ($receipt->mode_of_payment == "Online") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
                     }
 
                     if (isset($requested_data['attachment'])) {
@@ -351,6 +362,9 @@ class ReceiptService implements ReceiptInterface
         ];
 
         for ($i = 0; $i < count($id); $i++) {
+            if ($this->model()->find($id[$i])->status == 0) {
+                $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+            }
             $this->model()->where([
                 'site_id' => $site_id,
                 'id' => $id[$i],

@@ -61,7 +61,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                                 <i class="bi bi-box-arrow-right" ></i>
                                 </span>
                             </a>';
-                } else if ($ledger->account_action_id == 2) {
+                } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11) {
                     return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
@@ -85,7 +85,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     public function query(AccountLedger $model): QueryBuilder
     {
-        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt');
+        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt')->orderBy('id','desc');
     }
 
     public function html(): HtmlBuilder
@@ -114,11 +114,11 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            ->rowGroupDataSrc('account_action_id')
+            // ->rowGroupDataSrc('account_action_id')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
-                [2, 'asc'],
+                // [2, 'asc'],
             ]);
     }
 
@@ -137,7 +137,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
             Column::make('debit')->title('Debit')->addClass('text-nowrap text-center'),
             Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
-            Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
+            // Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
             // Column::make('nature_of_account'),
             Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

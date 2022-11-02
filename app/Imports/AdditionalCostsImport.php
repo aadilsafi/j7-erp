@@ -48,6 +48,7 @@ class AdditionalCostsImport implements ToModel, WithChunkReading, WithBatchInser
 
     public function rules(): array
     {
+        //,NULL,id,deleted_at,NULL
         return [
             'additional_costs_name' =>  ['required', 'unique:App\Models\AdditionalCost,slug', 'distinct'],
             'site_percentage' =>  ['required'],

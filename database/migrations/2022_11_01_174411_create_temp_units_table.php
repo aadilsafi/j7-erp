@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('parent_unit_short_label');
             $table->string('is_corner')->default('no');
             $table->string('is_facing')->default('no');
-            $table->string('additional_costs_name');
+            $table->string('additional_costs_name')->nullable();
             $table->timestamps();
         });
     }

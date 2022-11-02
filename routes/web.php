@@ -605,6 +605,8 @@ Route::group([
 
         Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
 
+        Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');
+
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');

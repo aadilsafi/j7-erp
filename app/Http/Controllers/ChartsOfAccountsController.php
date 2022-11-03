@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\LedgersDataTable;
+use App\Models\Site;
+use Exception;
 use Illuminate\Http\Request;
 
 class ChartsOfAccountsController extends Controller
@@ -11,9 +14,23 @@ class ChartsOfAccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(LedgersDataTable $dataTable, $site_id)
     {
-        //
+
+
+        // dd(Str::length($code),$data,$code);
+        try {
+            $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
+            if ($site && !empty($site)) {
+                $data = [
+                    'site' => $site,
+                ];
+                return $dataTable->with($data)->render('app.sites.accounts.chart_of_accounts.index', $data);
+            }
+            return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
+        } catch (Exception $ex) {
+            return redirect()->route('dashboard')->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

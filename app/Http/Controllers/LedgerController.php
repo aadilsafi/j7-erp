@@ -19,11 +19,8 @@ class LedgerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(LedgersDataTable $dataTable, $site_id)
+    public function index(SalesInvoiceLedgerDatatable $dataTable, $site_id)
     {
-
-
-        // dd(Str::length($code),$data,$code);
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {

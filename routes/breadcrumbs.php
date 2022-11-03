@@ -434,3 +434,8 @@ Breadcrumbs::for('sites.accounts.ledger.index', function (BreadcrumbTrail $trail
     $trail->parent('dashboard');
     $trail->push('Ledgers', route('sites.accounts.ledger.index', ['site_id' => $site_id]));
 });
+// chart of accounts
+Breadcrumbs::for('sites.accounts.charts-of-accounts.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Charts Of Accounts', route('sites.accounts.charts-of-accounts.index', ['site_id' => $site_id]));
+});

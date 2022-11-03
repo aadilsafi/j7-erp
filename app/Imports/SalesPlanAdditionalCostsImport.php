@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\TempSalePlan;
+use App\Models\TempSalesPlanAdditionalCost;
 use App\Models\TempUnit;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -12,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
+class SalesPlanAdditionalCostsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
 {
     use Importable;
 
@@ -27,20 +28,15 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     public function model(array $row)
     {
 
-        return new TempSalePlan([
+        return new TempSalesPlanAdditionalCost([
             'unit_short_label' => $row['unit_short_label'],
             'stakeholder_cnic' => $row['stakeholder_cnic'],
-            'unit_price' => $row['unit_price'],
             'total_price' => $row['total_price'],
-            'discount_percentage' => $row['discount_percentage'],
-            'discount_total' => $row['discount_total'],
-            'down_payment_percentage' => $row['down_payment_percentage'],
             'down_payment_total' => $row['down_payment_total'],
-            'lead_source' => $row['lead_source'],
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
-            'status' => $row['status'],
-            'comment' => $row['comment'],
-            'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d') : null,
+            'additional_costs_name' => $row['additional_costs_name'],
+            'percentage' => $row['percentage'],
+            'total_amount' => $row['total_amount'],
         ]);
     }
 
@@ -59,15 +55,13 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     {
         return [
             'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
-            'stakeholder_cnic' =>  ['required','exists:App\Models\Stakeholder,cnic'],
-            'unit_price' =>  ['required', 'numeric', 'gt:0'],
+            'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
             'total_price' =>  ['required', 'numeric', 'gt:0'],
-            'discount_percentage' =>  ['required', 'numeric'],
-            'down_payment_percentage' =>  ['required'],
-            'lead_source' =>  ['required'],
+            'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
             'validity' =>  ['required'],
-            'status' =>  ['required'],
-            'approved_date' =>  ['sometimes', 'nullable'],
+            'additional_costs_name' =>  ['required', 'exists:App\Models\AdditionalCost,slug'],
+            'percentage' =>  ['required', 'numeric'],
+            'total_amount' =>  ['required', 'numeric'],
         ];
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\{UnitsDataTable, UnitsPreviewDataTable};
-use App\Models\{Floor, Site, Status, TempUnit, Unit};
+use App\DataTables\{ImportUnitsDataTable, UnitsDataTable, UnitsPreviewDataTable};
+use App\Models\{AdditionalCost, Floor, Site, Status, TempUnit, Type, Unit};
 use App\Services\Interfaces\{UnitInterface, UnitTypeInterface, UserBatchInterface};
 use Illuminate\Http\Request;
 use App\Http\Requests\units\{
@@ -19,7 +19,9 @@ use App\Utils\Enums\{UserBatchActionsEnum, UserBatchStatusEnum};
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Redirect;
+use Str;
 
 class UnitController extends Controller
 {
@@ -518,14 +520,67 @@ class UnitController extends Controller
     {
         try {
             $field = $request->get('field');
-            $tempAdcosts = (new TempAdditionalCost())->find((int)$request->get('id'));
+            $tempUnit = (new TempUnit())->find((int)$request->get('id'));
 
             switch ($field) {
-                case 'additional_costs_name':
+                case 'floor_short_label':
                     if ($request->get('updateValue') == 'true') {
 
                         $validator = \Validator::make($request->all(), [
-                            'value' => 'required|unique:additional_costs,slug',
+                            'value' => 'required|exists:App\Models\Floor,short_label',
+                        ], [
+                            'value' => 'Floor Does not Exists.'
+                        ]);
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempUnit->floor_short_label = $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'name':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->name = $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'unit_short_label':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|unique:units,floor_unit_number',
                         ]);
 
                         if ($validator->fails()) {
@@ -533,37 +588,15 @@ class UnitController extends Controller
                         }
                         $validator2 = \Validator::make($request->all(), [
                             'value' => [
-                                Rule::unique('temp_additional_costs', 'additional_costs_name')->ignore($request->get('id'))
+                                Rule::unique('temp_units', 'unit_short_label')->ignore($request->get('id'))
                             ],
                         ]);
 
                         if ($validator2->fails()) {
                             return apiErrorResponse($validator2->errors()->first('value'));
                         }
-
-
-                        $tempAdcosts->additional_costs_name = $request->get('value');
-
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    }
-
-                    break;
-
-                case 'site_percentage':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempAdcosts->site_percentage = $request->get('value');
+                        $tempUnit->unit_short_label = $request->get('value');
+                        $tempUnit->save();
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -581,10 +614,19 @@ class UnitController extends Controller
 
                     break;
 
-                case 'floor_percentage':
+                case 'net_area':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempAdcosts->floor_percentage = $request->get('value');
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|gt:0',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempUnit->net_area = $request->get('value');
+                        $tempUnit->save();
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -602,10 +644,25 @@ class UnitController extends Controller
 
                     break;
 
-                case 'unit_percentage':
+                case 'gross_area':
                     if ($request->get('updateValue') == 'true') {
+                        $request['net_area'] = $tempUnit->net_area;
+                        $validator = \Validator::make($request->all(), [
+                            'net_area' => 'sometimes',
+                            'value' => 'required|gte:net_area',
+                        ], [
+                            'value.gte' =>  'Gross Area Must be greater then Net area'
+                        ]);
 
-                        $tempAdcosts->unit_percentage = $request->get('value');
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $tempUnit->gross_area = $request->get('value');
+                        $tempUnit->save();
+
+                        $total_price = $tempUnit->gross_area * $tempUnit->price_sqft;
+                        $tempUnit->total_price = $total_price;
+                        $tempUnit->save();
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -623,10 +680,24 @@ class UnitController extends Controller
 
                     break;
 
-                case 'parent_type_name':
+
+                case 'price_sqft':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempAdcosts->parent_type_name = $request->get('value');
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|gt:0',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempUnit->price_sqft = $request->get('value');
+                        $tempUnit->save();
+
+                        $total_price = $tempUnit->gross_area * $tempUnit->price_sqft;
+                        $tempUnit->total_price = $total_price;
+                        $tempUnit->save();
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -644,26 +715,248 @@ class UnitController extends Controller
 
                     break;
 
-                case 'is_sub_types':
+                case 'unit_type_slug':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempAdcosts->is_sub_types =  $request->get('value');
-                        $tempAdcosts->save();
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|exists:App\Models\Type,slug',
+                        ], [
+                            'value' => 'Type Does not Exists.'
+                        ]);
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $tempUnit->unit_type_slug =  $request->get('value');
+                        $tempUnit->save();
 
-                        $values = ['no' => 'No', 'yes' => 'Yes'];
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+                    break;
+
+                case 'parent_unit_short_label':
+                    if ($request->get('updateValue') == 'true') {
+
+                        if ($request->get('value') != 'NULL') {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\Unit,floor_unit_number',
+                            ], [
+                                'value' => 'Unit Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                $validator = \Validator::make($request->all(), [
+                                    'value' => 'required|exists:App\Models\TempUnit,unit_short_label',
+                                ], [
+                                    'value' => 'Unit Does not Exists.'
+                                ]);
+
+                                if ($validator->fails()) {
+                                    return apiErrorResponse($validator->errors()->first('value'));
+                                }
+                            }
+                        }
+
+                        $tempUnit->parent_unit_short_label =  $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+                    break;
+
+                case 'width':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->width = $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'length':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->length = $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'total_price':
+                    $total_price = $tempUnit->gross_area * $tempUnit->price_sqft;
+
+                    $tempUnit->total_price = $total_price;
+                    $tempUnit->save();
+                    $response = view('app.components.unit-preview-cell', [
+                        'id' => $request->get('id'),
+                        'field' => $field,
+                        'inputtype' => $request->get('inputtype'),
+                        'value' => $total_price
+                    ])->render();
+
+                    break;
+
+                case 'status':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->status = $request->get('value');
+                        $tempUnit->save();
+
+                        $values = ['open' => 'Open', 'sold' => 'Sold', 'token' => 'Token', 'partial-paid' => 'Partial Paid', 'hold' => 'Hold'];
+
                         $response =  view(
                             'app.components.input-select-fields',
                             [
                                 'id' => $request->get('id'),
                                 'field' => $field,
                                 'values' => $values,
-                                'selectedValue' => $request->get('value')
+                                'selectedValue' => $tempUnit->status
                             ]
                         )->render();
                     }
 
                     break;
 
+                case 'status':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->status = $request->get('value');
+                        $tempUnit->save();
+
+                        $values = ['open' => 'Open', 'sold' => 'Sold', 'token' => 'Token', 'partial-paid' => 'Partial Paid', 'hold' => 'Hold'];
+
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempUnit->status
+                            ]
+                        )->render();
+                    }
+
+                    break;
+
+                case 'is_corner':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->status = $request->get('value');
+                        $tempUnit->save();
+
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempUnit->status
+                            ]
+                        )->render();
+                    }
+
+                    break;
+
+                case 'is_facing':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempUnit->status = $request->get('value');
+                        $tempUnit->save();
+
+                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
+
+                        $response =  view(
+                            'app.components.input-select-fields',
+                            [
+                                'id' => $request->get('id'),
+                                'field' => $field,
+                                'values' => $values,
+                                'selectedValue' => $tempUnit->status
+                            ]
+                        )->render();
+                    }
+
+                    break;
+
+                case 'additional_costs_name':
+                    if ($request->get('updateValue') == 'true') {
+
+                        if ($request->get('value') != "null") {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\AdditionalCost,slug',
+                            ], [
+                                'value' => 'Additional Costs Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                return apiErrorResponse($validator->errors()->first('value'));
+                            }
+                        }
+
+                        $tempUnit->additional_costs_name = $request->get('value');
+                        $tempUnit->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
                 default:
                     $response = view('app.components.text-number-field', [
                         'field' => $field,
@@ -672,7 +965,6 @@ class UnitController extends Controller
                     ])->render();
                     break;
             }
-            $tempAdcosts->save();
             return apiSuccessResponse($response);
         } catch (Exception $ex) {
             return apiErrorResponse($ex->getMessage());
@@ -698,7 +990,7 @@ class UnitController extends Controller
                 $import = new UnitsImport($model->getFillable());
                 $import->import($request->file('attachment'));
 
-                return redirect()->route('sites.additional-costs.storePreview', ['site_id' => $site_id]);
+                return redirect()->route('sites.floors.unitsImport.storePreview', ['site_id' => $site_id]);
             } else {
                 return Redirect::back()->withDanger('Select File to Import');
             }
@@ -716,23 +1008,24 @@ class UnitController extends Controller
 
     public function storePreview(Request $request, $site_id)
     {
-        $model = new TempAdditionalCost();
+        $model = new TempUnit();
         if ($model->count() == 0) {
-            return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
+            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
-            $dataTable = new ImportAdditionalCostsDataTable($site_id);
+            $dataTable = new ImportUnitsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
             ];
-            return $dataTable->with($data)->render('app.additional-costs.importAdcostsPreview', $data);
+            return $dataTable->with($data)->render('app.sites.floors.units.importUnitsPreview', $data);
         }
     }
 
     public function saveImport(Request $request, $site_id)
     {
+
         // $validator = \Validator::make($request->all(), [
         //     'fields.*' => 'required|distinct',
         // ], [
@@ -743,52 +1036,78 @@ class UnitController extends Controller
 
         // $validator->validate();
 
-        $model = new TempAdditionalCost();
+        $model = new TempUnit();
         $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
 
         foreach ($tempdata as $key => $items) {
             foreach ($tempCols as $k => $field) {
-
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
 
-            $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['slug'] = $data[$key]['additional_costs_name'];
-            $data[$key]['name'] = Str::title(str_replace('-', ' ', $data[$key]['additional_costs_name']));
+            // $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['active'] = true;
 
+            $floor = Floor::where('short_label', $data[$key]['floor_short_label'])->first();
+            $data[$key]['floor_id'] = $floor->id;
 
-            if ($data[$key]['is_sub_types'] == 'yes' && $data[$key]['parent_type_name'] != null) {
-                $parent = AdditionalCost::where('slug', $data[$key]['parent_type_name'])->first();
+            if (strtolower($data[$key]['parent_unit_short_label']) != 'null') {
+                $parent = Unit::where('floor_unit_number', $data[$key]['parent_unit_short_label'])->first();
                 if ($parent) {
+                    $data[$key]['has_sub_units'] = true;
                     $data[$key]['parent_id'] = $parent->id;
                 } else {
+                    $data[$key]['has_sub_units'] = false;
                     $data[$key]['parent_id'] = 0;
                 }
             } else {
+                $data[$key]['has_sub_units'] = false;
                 $data[$key]['parent_id'] = 0;
             }
-            if ($data[$key]['site_percentage'] != 0) {
-                $data[$key]['applicable_on_site'] = true;
+
+            $unitNumber = Unit::where('floor_id', $floor->id)->max('unit_number');
+            if (!is_null($unitNumber)) {
+                $data[$key]['unit_number'] = $unitNumber + 1;
+            } else {
+                $data[$key]['unit_number'] = 1;
             }
-            if ($data[$key]['unit_percentage'] != 0) {
-                $data[$key]['applicable_on_unit'] = true;
+
+            $data[$key]['floor_unit_number'] = $data[$key]['unit_short_label'];
+
+            $type = Type::where('slug', $data[$key]['unit_type_slug'])->first();
+            $data[$key]['type_id'] = $type->id;
+
+            $status = Status::where('name', Str::title(str_replace('-', ' ', $data[$key]['status'])))->first();
+            $data[$key]['status_id'] = $status->id;
+
+            if ($status->id == 5) {
+                $data[$key]['is_for_rebate'] = true;
+            } else {
+                $data[$key]['is_for_rebate'] = false;
             }
-            if ($data[$key]['floor_percentage'] != 0) {
-                $data[$key]['applicable_on_floor'] = true;
+
+            if (!is_null($data[$key]['additional_costs_name'])) {
+                $facing = AdditionalCost::where('slug', $data[$key]['additional_costs_name'])->first();
+                if ($facing) {
+                    $data[$key]['facing_id'] = $facing->id;
+                }
             }
+
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
+            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['floor_short_label']);
+            unset($data[$key]['unit_type_slug']);
+            unset($data[$key]['status']);
+            unset($data[$key]['parent_unit_short_label']);
             unset($data[$key]['additional_costs_name']);
-            unset($data[$key]['parent_type_name']);
-            unset($data[$key]['is_sub_types']);
 
-            $cost = AdditionalCost::insert($data[$key]);
+            $unit = Unit::insert($data[$key]);
         }
 
-        TempAdditionalCost::query()->truncate();
+        TempUnit::query()->truncate();
 
-        return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

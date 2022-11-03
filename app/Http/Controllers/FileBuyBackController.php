@@ -187,7 +187,7 @@ class FileBuyBackController extends Controller
         DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
             // Account ledger transaction
-            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
+            $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
             $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
             $file_buy_back->status = 1;

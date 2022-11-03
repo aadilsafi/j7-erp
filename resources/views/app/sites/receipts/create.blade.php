@@ -40,6 +40,10 @@
             display: none;
         }
 
+        .bankDiv {
+            display: none;
+        }
+
         .chequeValueDiv {
             display: none;
         }
@@ -95,6 +99,7 @@
                     'units' => $units,
                     'customFields' => $customFields,
                     'banks' => $banks,
+                    'chequebanks' => $banks,
                 ]) }}
             </div>
             @isset($draft_receipts)
@@ -290,24 +295,28 @@
                 $('#otherValueDiv').show();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
             });
 
             $(".cheque-mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').show();
+                $('.bankDiv').show();
             });
 
             $(".online-mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').show();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').show();
             });
 
             $(".mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
             });
 
             $(".other-purpose").click(function() {
@@ -547,7 +556,7 @@
 
         }
 
-        var e = $("#bank");
+        var e = $(".bank");
         e.wrap('<div class="position-relative"></div>');
         e.select2({
             dropdownAutoWidth: !0,
@@ -556,7 +565,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('#modeOfPaymentDiv');
+            showBlockUI('.bankDiv');
             let bankData = {
                 id: 0,
                 name: '',
@@ -575,21 +584,21 @@
                 },
                 success: function(response) {
                     if (response.success == true && response.bank != null) {
-                        $('#name').val(response.bank.name).attr('readOnly', (
+                        $('.name').val(response.bank.name).attr('readOnly', (
                             response.bank.name.length > 0));
-                        $('#account_number').val(response.bank.account_number).attr('readOnly', (
+                        $('.account_number').val(response.bank.account_number).attr('readOnly', (
                             response.bank.account_number.length > 0));
-                        $('#contact_number').val(response.bank.contact_number).attr('readOnly', (
+                        $('.contact_number').val(response.bank.contact_number).attr('readOnly', (
                             response.bank.contact_number.length > 0));
-                        $('#branch').val(response.bank.branch).attr('readOnly', (response.bank.branch
+                        $('.branch').val(response.bank.branch).attr('readOnly', (response.bank.branch
                             .length > 0));
-                        $('#branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
+                        $('.branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
                             .branch_code.length > 0));
-                        $('#comments').val(response.bank.comments).attr('readOnly', (response.bank
+                        $('.comments').val(response.bank.comments).attr('readOnly', (response.bank
                             .comments.length > 0));
-                        $('#address').val(response.bank.address).attr('readOnly', (response.bank.address
+                        $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('#modeOfPaymentDiv');
+                        hideBlockUI('.bankDiv');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -600,11 +609,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('#modeOfPaymentDiv');
+                    hideBlockUI('.bankDiv');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('#modeOfPaymentDiv');
+                    hideBlockUI('.bankDiv');
                 }
             });
         });

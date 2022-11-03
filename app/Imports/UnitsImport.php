@@ -58,18 +58,28 @@ class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHe
     public function rules(): array
     {
         return [
-            'floor_short_label' =>  ['required',],
+            'floor_short_label' =>  ['required','exists:App\Models\Floor,short_label'],
             'name' =>  ['required'],
             'unit_short_label' =>  ['required', 'unique:App\Models\Unit,floor_unit_number', 'distinct'],
-            'net_area' =>  ['required'],
-            'gross_area' =>  ['required'],
-            'price_sqft' =>  ['required'],
-            'unit_type_slug' =>  ['required'],
+            'net_area' =>  ['required','numeric','gt:0'],
+            'gross_area' =>  ['required','numeric','gte:*.net_area'],
+            'price_sqft' =>  ['required','gt:0'],
+            'unit_type_slug' =>  ['required','exists:App\Models\Type,slug'],
             'status' =>  ['required'],
             'parent_unit_short_label' =>  ['required'],
             'is_corner' =>  ['required'],
             'is_facing' =>  ['required'],
-            'additional_costs_name' =>  ['sometimes','exists:App\Models\AdditionalCost,slug'],
+            'additional_costs_name' =>  ['sometimes','nullable','exists:App\Models\AdditionalCost,slug'],
         ];
     }
+
+    public function customValidationMessages()
+{
+    return [
+        'floor_short_label.exists' => 'Floor dose not Exists.',
+        'additional_costs_name.exists' => 'Additional costs does not Exists.',
+        'gross_area.gte' =>  'Gross Area Must be greater then Net area',
+        'unit_type_slug' => 'Unit Type is not Exists.'
+    ];
+}
 }

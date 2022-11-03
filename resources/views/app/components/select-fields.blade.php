@@ -1,4 +1,4 @@
-<select class="form-control text-capitalize text-nowrap required selectField" style="width: 230px;" name="fields[]" required
+<select class="form-control text-capitalize text-nowrap required selectField removeTolltip" style="width: 230px;" name="fields[]" required
     {{ $is_disable ? 'disabled' : '' }}>
     <option value="">...No match,select a field...</option>
     @foreach ($db_fields as $k => $db_field)

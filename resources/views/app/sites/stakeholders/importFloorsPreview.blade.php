@@ -113,6 +113,9 @@
                     return false;
                 }
             });
+
+            $('.removeTolltip').tooltip('disable');
+
         });
         showBlockUI();
 
@@ -172,8 +175,9 @@
                             el.empty();
                             el.append(response['data']);
                             el.addClass('filedrendered');
-                            el.css("pointer-events", "")
                         }
+                        el.css("pointer-events", "")
+
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {

@@ -91,7 +91,7 @@ class ImportFloorsDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('floor_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,

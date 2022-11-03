@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.additional-costs.import', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Additional Costs')
+@section('page-title', 'Import Units')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Additional Costs</h2>
+                <h2 class="content-header-title float-start mb-0">Import Units</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.additional-costs.import', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.import', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.additional-costs.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.floors.unitsImport.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
@@ -149,11 +149,13 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                // showBlockUI('#unit_p_input_div_' + field + id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
+                el.css("pointer-events", "none")
+
+                var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -172,10 +174,11 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        el.css("pointer-events", "")
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
@@ -188,9 +191,8 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
-
-                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
+                el.css("pointer-events", "none")
+                var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -212,9 +214,11 @@
                             toastr.success('Updated');
                         } else {
                             toastr.error(response['message']['error']);
-                            // hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        el.css("pointer-events", "")
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
+
                     },
                     error: function(response) {
                         // hideBlockUI('#unit_p_input_div_' + field + id);
@@ -232,7 +236,7 @@
                 el = $(this);
                 console.log(el.parent)
 
-                var url = "{{ route('ajax-import-additional-costs.get.input') }}";
+                var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -284,7 +288,7 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                     // var formData = new FormData(document.querySelector('form'))
                     // console.log($('.selectField').val());
                     $('#teams-table-form').submit();

@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Floor')
+@section('page-title', 'Import Units')
 
 @section('page-vendor')
 @endsection
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Floor</h2>
+                <h2 class="content-header-title float-start mb-0">Import Units</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.import', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.floors.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.floors.unitsImport.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
@@ -55,7 +55,7 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="{{ route('sites.floors.index', ['site_id' => $site_id]) }}"
+                    <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"
                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
@@ -113,8 +113,6 @@
                     return false;
                 }
             });
-        $('.removeTolltip').tooltip('disable');
-
         });
         showBlockUI();
 
@@ -151,11 +149,13 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                // showBlockUI('#unit_p_input_div_' + field + id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                var url = "{{ route('ajax-import-floor.get.input') }}";
+                el.css("pointer-events", "none")
+
+                var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -174,10 +174,11 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        el.css("pointer-events", "")
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
@@ -190,9 +191,8 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
-
-                var url = "{{ route('ajax-import-floor.get.input') }}";
+                el.css("pointer-events", "none")
+                var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -214,7 +214,55 @@
                             toastr.success('Updated');
                         } else {
                             toastr.error(response['message']['error']);
-                            // hideBlockUI('#unit_p_input_div_' + field + id);
+
+                        }
+                        el.css("pointer-events", "")
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
+
+                    },
+                    error: function(response) {
+                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                    },
+                });
+            }
+        });
+        $(document).on('change', '.unit-p-select', function(e) {
+            if (!$(this).hasClass('filedrendered')) {
+                id = $(this).data('id');
+                field = $(this).data('field');
+                showBlockUI('#unit_p_input_div_' + field + id);
+                value = $(this).data('value');
+                inputtype = $(this).data('inputtype');
+                el = $(this);
+                console.log(el.parent)
+
+                var url = "{{ route('ajax-import-units.get.input') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        value: el.val(),
+                        id: id,
+                        field: field,
+                        inputtype: inputtype,
+                        updateValue: true
+                    },
+                    success: function(response) {
+                        // console.log(response['data']);
+                        if (response['status']) {
+                            console.log('insuccess');
+                            el = el.parent()
+                            console.log(el)
+                            el.empty();
+                            el.append(response['data']);
+                            // el.parent().empty();
+                            el.addClass('filedrendered');
+                            toastr.success('Updated');
+                            hideBlockUI('#unit_p_input_div_' + field + id);
+
+                        } else {
+                            toastr.error(response['message']['error']);
+                            hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
                     },
@@ -224,7 +272,6 @@
                 });
             }
         });
-
 
         $('#finalSubmit').on('click', function() {
             Swal.fire({
@@ -241,12 +288,12 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
+
+                    // var formData = new FormData(document.querySelector('form'))
+                    // console.log($('.selectField').val());
                     $('#teams-table-form').submit();
                 }
             });
         });
-
-        // $("*").tooltip({ items: ':not(.menu)' });
-        // $(document).tooltip({ content: function () { return $(this).not('#NoTipDiv *[title]').attr('title'); });
     </script>
 @endsection

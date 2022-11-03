@@ -187,17 +187,37 @@ Route::group([
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
+                    //Floor Import routes
+
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
                     Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
 
-                    Route::group(['prefix' => 'Unit/import','as' => 'unitsImport.'], function () {
+                    //Units Import routes
+                    Route::group(['prefix' => 'Unit/import', 'as' => 'unitsImport.'], function () {
                         Route::view('/', 'app.sites.floors.units.importUnits')->name('importUnits');
                         Route::post('preview', [UnitController::class, 'ImportPreview'])->name('importUnitsPreview');
                         Route::get('storePreview', [UnitController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport', [UnitController::class, 'saveImport'])->name('saveImport');
                     });
+
+                    //Sales Plan Import routes
+                    Route::group(['prefix' => 'salesPlan/import', 'as' => 'SalesPlanImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importSalesPlan')->name('importSalesPlan');
+                        Route::post('preview', [SalesPlanController::class, 'ImportPreview'])->name('importSalesPlanPreview');
+                        Route::get('storePreview', [SalesPlanController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    //Sales Plan Installments Import routes
+                    Route::group(['prefix' => 'spInstallments/import', 'as' => 'spInstallmentsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspInstallments')->name('importspInstallments');
+                        Route::post('preview', [UnitController::class, 'ImportPreview'])->name('importUnitsPreview');
+                        Route::get('storePreview', [UnitController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [UnitController::class, 'saveImport'])->name('saveImport');
+                    });
+
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 
@@ -598,14 +618,11 @@ Route::group([
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
         Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
-
         Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
-
         Route::get('ajax-import-types.get.input', [TypeController::class, 'getTypeInput'])->name('ajax-import-types.get.input');
-
         Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
-
         Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');
+        Route::get('ajax-import-sales-plan.get.input', [SalesPlanController::class, 'getInput'])->name('ajax-import-sales-plan.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

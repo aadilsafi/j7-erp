@@ -113,6 +113,9 @@
                     return false;
                 }
             });
+
+            $('.removeTolltip').tooltip('disable');
+
         });
         showBlockUI();
 

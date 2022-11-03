@@ -1067,7 +1067,7 @@ class UnitController extends Controller
 
             $unitNumber = Unit::where('floor_id', $floor->id)->max('unit_number');
             if (!is_null($unitNumber)) {
-                $data[$key]['unit_number'] = $unitNumber;
+                $data[$key]['unit_number'] = $unitNumber + 1;
             } else {
                 $data[$key]['unit_number'] = 1;
             }

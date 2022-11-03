@@ -288,25 +288,51 @@
                                     '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
                             }
                         },
-                        {
-                            name: 'import-floor',
-                            text: '<i data-feather="upload"></i> Import Floors',
-                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-                            action: function(e, dt, node, config) {
-                                location.href =
-                                    '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
-                            }
-                        },
-                        {
-                            name: 'import-unit',
-                            text: '<i data-feather="upload"></i> Import Units',
-                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-                            action: function(e, dt, node, config) {
-                                location.href =
-                                    '{{ route('sites.floors.unitsImport.importUnits', ['site_id' => $site_id]) }}';
-                            }
-                        },
+                       
                     @endcan {
+                        extend: 'collection',
+                        text: '<i class="bi bi-cloud"></i> Imports',
+                        className: 'btn btn-relief-outline-info dropdown-toggle',
+                        buttons: [{
+                                name: 'import-floor',
+                                text: '<i class="bi bi-cloud"></i> Import Floors',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-unit',
+                                text: '<i class="bi bi-cloud"></i> Import Units',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.unitsImport.importUnits', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-sale-plan',
+                                text: '<i class="bi bi-cloud"></i> Import Sales Plan',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-sale-plan-installments',
+                                text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href = '#'
+                                        // '{{ route('sites.floors.spInstallmentsImport.importspInstallments', ['site_id' => $site_id]) }}';
+                                }
+                            },
+
+                        ]
+                    },
+                    {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',
                         className: 'btn btn-relief-outline-secondary dropdown-toggle',

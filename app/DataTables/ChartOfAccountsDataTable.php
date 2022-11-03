@@ -16,7 +16,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class LedgersDataTable extends DataTable
+class ChartOfAccountsDataTable extends DataTable
 {
     /**
      * Build DataTable class.

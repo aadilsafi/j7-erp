@@ -54,6 +54,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
             ->editColumn('account_head_code_name', function ($ledger) {
                 return $ledger->accountHead->name;
             })
+            ->editColumn('account_head_code', function ($ledger) {
+                return account_number_format($ledger->account_head_code);
+            })
             ->editColumn('origin', function ($ledger) {
                 if ($ledger->account_action_id == 1) {
                     return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">

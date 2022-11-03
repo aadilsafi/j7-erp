@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\LedgersDataTable;
+use App\DataTables\ChartOfAccountsDataTable;
 use App\Models\Site;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class ChartsOfAccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(LedgersDataTable $dataTable, $site_id)
+    public function index(ChartOfAccountsDataTable $dataTable, $site_id)
     {
 
 

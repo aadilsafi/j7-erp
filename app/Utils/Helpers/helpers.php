@@ -286,12 +286,12 @@ if (!function_exists('account_number_format')) {
     {
         $first_6_number = substr($account_number,0,6);
         $code = wordwrap($first_6_number , 2 , '-' , true );
-        if(Str::length($code) >6)
+        if(Str::length($account_number) >6)
         {
            $code = $code.'-'.$next_4_number = substr($account_number,6,4);
 
         }
-        if(Str::length($code) >10)
+        if(Str::length($account_number) >10)
         {
             $code = $code.'-'. $after_10_number = substr($account_number,10);
 

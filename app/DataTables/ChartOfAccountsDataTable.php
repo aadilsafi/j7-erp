@@ -29,55 +29,46 @@ class ChartOfAccountsDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('level', function ($chartOfAccount) {
-                return number_format($chartOfAccount->level);
+            ->editColumn('level', function ($ledger) {
+                return number_format($ledger->level);
             })
-            ->editColumn('code', function ($chartOfAccount) {
-                return account_number_format($chartOfAccount->code);
+            ->editColumn('code', function ($ledger) {
+                return account_number_format($ledger->code);
             })
-            ->editColumn('account_name', function ($chartOfAccount) {
-                // dd($chartOfAccount->accountLedgers);
-                if(isset($chartOfAccount->accountLedgers->accountActions))
-                {
-
-                    return ($chartOfAccount->accountLedgers->accountActions->name);
-                }
-                else
-                {
-                    return 'no name';
-                }
-            })
-            ->editColumn('balance', function ($chartOfAccount) {
+            ->editColumn('opening_balance', function ($ledger) {
                 return '0';
             })
-            ->editColumn('level', function ($chartOfAccount) {
-                if($chartOfAccount->level == 1){
+            ->editColumn('close_balance', function ($ledger) {
+                return '0';
+            })
+            ->editColumn('level', function ($ledger) {
+                if($ledger->level == 1){
                     return 'First Level';
                 }
-                if($chartOfAccount->level == 2){
+                if($ledger->level == 2){
                     return 'Second Level';
                 }
-                if($chartOfAccount->level == 3){
+                if($ledger->level == 3){
                     return 'Third Level';
                 }
-                if($chartOfAccount->level == 4){
+                if($ledger->level == 4){
                     return 'Fourth Level';
                 }
-                if($chartOfAccount->level == 5){
+                if($ledger->level == 5){
                     return 'Fifth Level';
                 }
             })
-            // ->editColumn('account_type', function ($chartOfAccount) {
-            //     if($chartOfAccount->level == 1){
+            // ->editColumn('account_type', function ($ledger) {
+            //     if($ledger->level == 1){
             //         return 'First Level';
             //     }else
             //     {
             //         return 'no name';
             //     }
             // })
-            // ->editColumn('created_at', function ($chartOfAccount) {
-            //     // return $chartOfAccount->created_at->format('D, d-M-Y , H:i:s');
-            //     return editDateColumn($chartOfAccount->created_at);
+            // ->editColumn('created_at', function ($ledger) {
+            //     // return $ledger->created_at->format('D, d-M-Y , H:i:s');
+            //     return editDateColumn($ledger->created_at);
             // })
 
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -91,13 +82,13 @@ class ChartOfAccountsDataTable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->newQuery()->with('modelable','accountLedgers.accountActions')->orderBy('level','asc');
+        return $model->newQuery()->with('modelable')->orderBy('level','asc');
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('chartOfAccount-table')
+            ->setTableId('ledger-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             // ->select()
@@ -135,14 +126,19 @@ class ChartOfAccountsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        return [            
+        return [
 
             Column::computed('DT_RowIndex')->title('#'),
             // Column::make('id')->title('id')->addClass('text-nowrap text-center'),
             Column::make('name')->title('Name'),
             Column::make('level')->title('Account Level')->addClass('text-nowrap ')->searchable(false)->orderable(false),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap ')->orderable(false),
-            Column::make('balance')->title('Balance')->addClass('text-nowrap ')->orderable(false)->searchable(false),
+            Column::make('opening_balance')->title('Opening Balance')->addClass('text-nowrap ')->orderable(false),
+            Column::make('close_balance')->title('Closing Balance')->addClass('text-nowrap ')->orderable(false),
+            // Column::make('account_type_id')->title('account_type_id')->addClass('text-nowrap text-center'),
+            // Column::make('description')->title('description')->addClass('text-nowrap text-center'),
+            // Column::make('opening_balance')->title('opening_balance')->addClass('text-nowrap text-center'),
+            // Column::make('sub_account_id')->title('sub_account_id')->addClass('text-nowrap text-center'),
         ];
     }
 

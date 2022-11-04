@@ -44,7 +44,7 @@
 
     </p>
 
-    <div class="card">
+    <div class="card" id="fileBuyBack">
         <div class="card-body">
             {{-- <form action="{{ route('sites.file-managements.destroy-selected', ['site_id' => $site_id]) }}" id="file-managements-table-form" method="get"> --}}
             {{ $dataTable->table() }}
@@ -147,6 +147,7 @@
                 },
             }).then((result) => {
                 if (result.isConfirmed) {
+                    showBlockUI('#fileBuyBack');
                     let url =
                     '{{ route('sites.file-managements.file-buy-back.approve', ['site_id' => ':site_id' , 'customer_id' => ':customer_id' ,'unit_id' => ':unit_id' ,'file_buy_back_id' => ':file_buy_back_id']) }}'.replace(':site_id', site_id).replace(':customer_id', customer_id).replace(':unit_id', unit_id).replace(':file_buy_back_id', file_buy_back_id);
                     location.href = url;

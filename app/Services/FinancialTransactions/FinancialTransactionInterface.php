@@ -21,4 +21,6 @@ interface FinancialTransactionInterface
     public function makeReceiptOnlineTransaction($receipt_id); // for online
 
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
+
+    public function makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
 }

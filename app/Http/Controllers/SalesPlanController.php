@@ -738,7 +738,14 @@ class SalesPlanController extends Controller
 
             // dd($data);
 
-            $unit = SalesPlan::insert($data[$key]);
+            $salePlan = SalesPlan::create($data[$key]);
+
+            if ($data[$key]['status'] == '1') {
+                $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
+                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                    return apiErrorResponse('invalid_amout');
+                }
+            }
         }
 
         TempSalePlan::query()->truncate();

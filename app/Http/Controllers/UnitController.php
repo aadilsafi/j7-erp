@@ -862,27 +862,6 @@ class UnitController extends Controller
 
                     break;
 
-                case 'status':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempUnit->status = $request->get('value');
-                        $tempUnit->save();
-
-                        $values = ['open' => 'Open', 'sold' => 'Sold', 'token' => 'Token', 'partial-paid' => 'Partial Paid', 'hold' => 'Hold'];
-
-                        $response =  view(
-                            'app.components.input-select-fields',
-                            [
-                                'id' => $request->get('id'),
-                                'field' => $field,
-                                'values' => $values,
-                                'selectedValue' => $tempUnit->status
-                            ]
-                        )->render();
-                    }
-
-                    break;
-
                 case 'is_corner':
                     if ($request->get('updateValue') == 'true') {
 

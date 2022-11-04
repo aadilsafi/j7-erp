@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ImportSalesPlanAdCostsDataTable;
-use App\DataTables\ImportSalesPlanDataTable;
+use App\DataTables\ImportSalesPlanInstallmentsDataTable;
 use App\Imports\SalesPlanAdditionalCostsImport;
+use App\Imports\SalesPlanInstallmentsImport;
 use App\Models\AdditionalCost;
 use App\Models\SalesPlan;
 use App\Models\SalesPlanAdditionalCost;
-use App\Models\SalesPlanInstallments;
 use App\Models\Stakeholder;
 use App\Models\TempSalePlanInstallment;
 use App\Models\TempSalesPlanAdditionalCost;
@@ -373,11 +373,11 @@ class SalesPlanImportController extends Controller
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
 
-                TempSalesPlanAdditionalCost::query()->truncate();
-                $import = new SalesPlanAdditionalCostsImport($model->getFillable());
+                TempSalePlanInstallment::query()->truncate();
+                $import = new SalesPlanInstallmentsImport($model->getFillable());
                 $import->import($request->file('attachment'));
 
-                return redirect()->route('sites.floors.spadcostsImport.storePreview', ['site_id' => $site_id]);
+                return redirect()->route('sites.floors.spInstallmentsImport.storePreviewInstallments', ['site_id' => $site_id]);
             } else {
                 return Redirect::back()->withDanger('Select File to Import');
             }
@@ -394,18 +394,18 @@ class SalesPlanImportController extends Controller
     }
     public function storePreviewInstallments(Request $request, $site_id)
     {
-        $model = new TempSalesPlanAdditionalCost();
+        $model = new TempSalePlanInstallment();
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
-            $dataTable = new ImportSalesPlanAdCostsDataTable($site_id);
+            $dataTable = new ImportSalesPlanInstallmentsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
             ];
-            return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.import.importSalesPlanAdcostsPreview', $data);
+            return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.import.importspInstallmentsPreview', $data);
         }
     }
     public function saveImportInstallments(Request $request, $site_id)
@@ -469,7 +469,7 @@ class SalesPlanImportController extends Controller
     {
         try {
             $field = $request->get('field');
-            $tempData = (new TempSalesPlanAdditionalCost())->find((int)$request->get('id'));
+            $tempData = (new TempSalePlanInstallment())->find((int)$request->get('id'));
 
             switch ($field) {
                 case 'unit_short_label':
@@ -606,21 +606,10 @@ class SalesPlanImportController extends Controller
 
                     break;
 
-                case 'additional_costs_name':
+                case 'type':
                     if ($request->get('updateValue') == 'true') {
-
-                        if ($request->get('value') != "null") {
-                            $validator = \Validator::make($request->all(), [
-                                'value' => 'required|exists:App\Models\AdditionalCost,slug',
-                            ], [
-                                'value' => 'Additional Costs Does not Exists.'
-                            ]);
-                            if ($validator->fails()) {
-                                return apiErrorResponse($validator->errors()->first('value'));
-                            }
-                        }
-
-                        $tempData->additional_costs_name = $request->get('value');
+                      
+                        $tempData->type = $request->get('value');
                         $tempData->save();
 
                         $response = view('app.components.unit-preview-cell', [
@@ -638,10 +627,10 @@ class SalesPlanImportController extends Controller
                     }
 
                     break;
-                case 'percentage':
+                case 'installment_no':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempData->percentage = $request->get('value');
+                        $tempData->installment_no = $request->get('value');
                         $tempData->save();
 
                         $response = view('app.components.unit-preview-cell', [
@@ -680,6 +669,65 @@ class SalesPlanImportController extends Controller
                     }
 
                     break;
+                case 'paid_amount':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->paid_amount = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'remaining_amount':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->remaining_amount = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'remarks':
+                    $tempData->remarks = $request->get('value');
+                    $tempData->save();
+
+                    $values = ['paid' => 'Paid', 'unpaid' => 'Un Paid', 'partially-paid' => 'Partially Paid'];
+
+                    $response =  view(
+                        'app.components.input-select-fields',
+                        [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'values' => $values,
+                            'selectedValue' => $tempData->remarks
+                        ]
+                    )->render();
+
+                    break;
                 default:
                     $response = view('app.components.text-number-field', [
                         'field' => $field,
@@ -693,5 +741,4 @@ class SalesPlanImportController extends Controller
             return apiErrorResponse($ex->getMessage());
         }
     }
-
 }

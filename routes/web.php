@@ -37,6 +37,7 @@ use App\Http\Controllers\{
     ChartsOfAccountsController,
     LedgerController,
     SalesPlanImportController,
+    TrialBalanceController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -608,6 +609,10 @@ Route::group([
                     // Charts Of accounts
                     Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
                         Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                    });
+                    //trial-balance
+                    Route::group(['prefix' => 'trial-balance', 'as' => 'trial-balance.'], function () {
+                        Route::get('/', [TrialBalanceController::class, 'index'])->name('index');
                     });
                     // Accounts ledger
                     Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {

@@ -1554,6 +1554,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Accounts trial-balance
+            [
+                'name' => 'sites.accounts.trial-balance.index',
+                'show_name' => 'Can View Accounts Trial Balance',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
             [
                 'name' => 'sites.import.sample-download',

@@ -35,6 +35,10 @@ class AccountHead extends Model
     {
         return $this->HasMany(AccountLedger::class);
     }
+    public function accountLedgersWithCreditAndDebit()
+    {
+        return $this->HasMany(AccountLedger::class)->whereNot('debit',0)->whereNot('credit',0);
+    }
 
     public function modelable()
     {

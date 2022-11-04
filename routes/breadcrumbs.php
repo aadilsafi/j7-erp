@@ -439,3 +439,8 @@ Breadcrumbs::for('sites.accounts.charts-of-accounts.index', function (Breadcrumb
     $trail->parent('dashboard');
     $trail->push('Charts Of Accounts', route('sites.accounts.charts-of-accounts.index', ['site_id' => $site_id]));
 });
+//Trial Balance
+Breadcrumbs::for('sites.accounts.trial-balance.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Trial Balance', route('sites.accounts.trial-balance.index', ['site_id' => $site_id]));
+});

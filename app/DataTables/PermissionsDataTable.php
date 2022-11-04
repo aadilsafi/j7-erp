@@ -139,7 +139,7 @@ class PermissionsDataTable extends DataTable
         $colArray = [
             // Column::computed('#'),
             Column::make('show_name')->title('Permission Name')->ucfirst(),
-            Column::make('guard_name')->title('Guard Name'),
+            // Column::make('guard_name')->title('Guard Name'),
             Column::computed('class')->title('Class')->visible(false),
         ];
 

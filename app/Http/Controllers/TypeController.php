@@ -403,7 +403,18 @@ class TypeController extends Controller
             unset($data[$key]['unit_type_slug']);
             unset($data[$key]['parent_type_name']);
 
-            $types = Type::insert($data[$key]);
+            $types = Type::create($data[$key]);
+
+            if (!is_null($accountCode) && $data[$key]['parent_id'] == 0) {
+
+                $types->modelable()->create([
+                    'site_id' => decryptParams($site_id),
+                    'code' => $accountCode,
+                    'name' => 'Accounts Receviable - ' . $data[$key]['name'],
+                    'level' => 3,
+                ]);
+            }
+           
         }
 
         TempUnitType::query()->truncate();

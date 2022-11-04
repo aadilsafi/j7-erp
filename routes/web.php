@@ -36,6 +36,7 @@ use App\Http\Controllers\{
     FileBuyBackController,
     ChartsOfAccountsController,
     LedgerController,
+    SalesPlanImportController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -210,12 +211,21 @@ Route::group([
                         Route::post('saveImport', [SalesPlanController::class, 'saveImport'])->name('saveImport');
                     });
 
+                    //Sales Plan Additional Costs Import routes
+                    Route::group(['prefix' => 'spadcosts/import', 'as' => 'spadcostsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspadcosts')->name('importspadcosts');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreview'])->name('importspadcostsPreview');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImport'])->name('saveImport');
+                    });
+
+
                     //Sales Plan Installments Import routes
                     Route::group(['prefix' => 'spInstallments/import', 'as' => 'spInstallmentsImport.'], function () {
                         Route::view('/', 'app.sites.floors.units.sales-plan.import.importspInstallments')->name('importspInstallments');
-                        Route::post('preview', [UnitController::class, 'ImportPreview'])->name('importUnitsPreview');
-                        Route::get('storePreview', [UnitController::class, 'storePreview'])->name('storePreview');
-                        Route::post('saveImport', [UnitController::class, 'saveImport'])->name('saveImport');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreview'])->name('importUnitsPreview');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImport'])->name('saveImport');
                     });
 
                     // //Units Routes

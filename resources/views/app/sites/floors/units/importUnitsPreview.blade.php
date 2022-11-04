@@ -55,7 +55,7 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"
+                    <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
@@ -156,7 +156,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                el.css("pointer-events", "none")
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
@@ -177,7 +177,8 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        el.css("pointer-events", "")
+                        $('#teams-table-form').css("pointer-events", "")
+
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
@@ -194,7 +195,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                el.css("pointer-events", "none")
+                $('#teams-table-form').css("pointer-events", "none")
                 var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
                     url: url,
@@ -219,7 +220,7 @@
                             toastr.error(response['message']['error']);
 
                         }
-                        el.css("pointer-events", "")
+                        $('#teams-table-form').css("pointer-events", "")
                         // hideBlockUI('#unit_p_input_div_' + field + id);
 
                     },
@@ -237,7 +238,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-units.get.input') }}";
                 $.ajax({
@@ -268,6 +269,8 @@
                             hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                     error: function(response) {
                         // hideBlockUI('#unit_p_input_div_' + field + id);

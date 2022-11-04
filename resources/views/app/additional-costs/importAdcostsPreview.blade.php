@@ -152,10 +152,12 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                // showBlockUI('#unit_p_input_div_' + field + id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
+                $('#teams-table-form').css("pointer-events", "none")
+
                 var url = "{{ route('ajax-import-additional-costs.get.input') }}";
                 $.ajax({
                     url: url,
@@ -175,10 +177,12 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        $('#teams-table-form').css("pointer-events", "")
+
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
@@ -187,11 +191,12 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                // showBlockUI('#unit_p_input_div_' + field + id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
+                // console.log(el.parent)
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-additional-costs.get.input') }}";
                 $.ajax({
@@ -207,7 +212,7 @@
                     success: function(response) {
                         // console.log(response['data']);
                         if (response['status']) {
-                            console.log('insuccess');
+                            // console.log('insuccess');
                             el = el.parent()
                             el.empty();
                             el.append(response['data']);
@@ -215,12 +220,14 @@
                             toastr.success('Updated');
                         } else {
                             toastr.error(response['message']['error']);
-                            // hideBlockUI('#unit_p_input_div_' + field + id);
+                            hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                     error: function(response) {
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }

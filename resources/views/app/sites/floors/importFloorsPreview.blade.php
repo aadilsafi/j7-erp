@@ -155,6 +155,8 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
+                $('#teams-table-form').css("pointer-events", "none")
+
                 var url = "{{ route('ajax-import-floor.get.input') }}";
                 $.ajax({
                     url: url,
@@ -174,6 +176,8 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                         // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
@@ -190,7 +194,8 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
+                // console.log(el.parent)
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-floor.get.input') }}";
                 $.ajax({
@@ -217,6 +222,8 @@
                             // hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                     error: function(response) {
                         // hideBlockUI('#unit_p_input_div_' + field + id);

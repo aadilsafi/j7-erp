@@ -19,6 +19,8 @@ use App\DataTables\FileCancellationDatatable;
 use App\Models\Type;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use DB;
 
 class FileCancellationController extends Controller
 {
@@ -28,10 +30,15 @@ class FileCancellationController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    private $financialTransactionInterface;
+
     public function __construct(
+        financialTransactionInterface $financialTransactionInterface,
         CancellationInterface $cancellationInterface,
         CustomFieldInterface $customFieldInterface
     ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
         $this->cancellationInterface = $cancellationInterface;
         $this->customFieldInterface = $customFieldInterface;
     }
@@ -175,33 +182,34 @@ class FileCancellationController extends Controller
 
     public function ApproveFileCancellation($site_id, $unit_id, $customer_id, $file_id)
     {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+            $transaction = $this->financialTransactionInterface->makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
+            $file_cancellation = FileCancellation::where('file_id', decryptParams($file_id))->first();;
+            $file_cancellation->status = 1;
+            $file_cancellation->update();
 
-        $file_cancellation = FileCancellation::where('file_id', decryptParams($file_id))->first();;
-        $file_cancellation->status = 1;
-        $file_cancellation->update();
+            $unit = Unit::find(decryptParams($unit_id));
+            $unit->status_id = 4;
+            $unit->update();
 
-        $unit = Unit::find(decryptParams($unit_id));
-        $unit->status_id = 4;
-        $unit->update();
+            $file = FileManagement::find(decryptParams($file_id));
+            $file->file_action_id = 4;
+            $file->update();
 
-        $file = FileManagement::find(decryptParams($file_id));
-        $file->file_action_id = 4;
-        $file->update();
+            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $SalesPlan = SalesPlan::find($salesPlan->id);
+                $SalesPlan->status = 3;
+                $SalesPlan->update();
+            }
 
-        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $SalesPlan = SalesPlan::find($salesPlan->id);
-            $SalesPlan->status = 3;
-            $SalesPlan->update();
-        }
-
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->status = 2;
-            $Receipt->update();
-        }
-
+            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            foreach ($receipt as $receipt) {
+                $Receipt = Receipt::find($receipt->id);
+                $Receipt->status = 2;
+                $Receipt->update();
+            }
+        });
         return redirect()->route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Cancellation Approved');
     }
 

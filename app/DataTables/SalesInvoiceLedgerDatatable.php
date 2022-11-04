@@ -68,8 +68,20 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
+                } else if ($ledger->account_action_id == 3) {
+                    return '<a href="' . route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                            </a>';
                 } else if ($ledger->account_action_id == 5) {
                     return '<a href="' . route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                            <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                        </a>';
+                } else if ($ledger->account_action_id == 6) {
+                    return '<a href="' . route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                            </a>';
+                } else if ($ledger->account_action_id == 7) {
+                    return '<a href="' . route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
                 } else {
@@ -88,7 +100,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
      */
     public function query(AccountLedger $model): QueryBuilder
     {
-        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt')->orderBy('id','desc');
+        return $model->newQuery()->with('accountActions', 'salesPlan', 'receipt')->orderBy('id', 'desc');
     }
 
     public function html(): HtmlBuilder

@@ -222,10 +222,10 @@ Route::group([
 
                     //Sales Plan Installments Import routes
                     Route::group(['prefix' => 'spInstallments/import', 'as' => 'spInstallmentsImport.'], function () {
-                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspInstallments')->name('importspInstallments');
-                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreview'])->name('importUnitsPreview');
-                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreview'])->name('storePreview');
-                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImport'])->name('saveImport');
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspInstallments')->name('ImportInstallments');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreviewinstallments'])->name('ImportPreviewinstallments');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreviewInstallments'])->name('storePreviewInstallments');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImportInstallments'])->name('saveImportInstallments');
                     });
 
                     // //Units Routes
@@ -634,6 +634,7 @@ Route::group([
         Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');
         Route::get('ajax-import-sales-plan.get.input', [SalesPlanController::class, 'getInput'])->name('ajax-import-sales-plan.get.input');
         Route::get('ajax-import-sales-plan.adCosts.get.input', [SalesPlanImportController::class, 'getInputAdcosts'])->name('ajax-import-sales-plan.adCosts.get.input');
+        Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

@@ -489,7 +489,7 @@
                                 </a>
                             </li>
                         @endcan
-                        {{-- @can('sites.accounts.trial-balance.index')
+                        @can('sites.accounts.trial-balance.index')
                         <li
                             class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                             <a class="d-flex align-items-center"
@@ -498,7 +498,7 @@
                                 <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
                             </a>
                         </li>
-                    @endcan --}}
+                    @endcan
                     </ul>
                 </li>
             @endcanany

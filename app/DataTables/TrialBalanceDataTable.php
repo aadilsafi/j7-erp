@@ -36,27 +36,27 @@ class TrialBalanceDataTable extends DataTable
                 return account_number_format($accountHead->code);
             })
             ->editColumn('starting_balance', function ($accountHead) {
-        
-                return '0';
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                }
             })
             ->editColumn('debit', function ($accountHead) {
-                // dd($accountHead->accountLedgersWithCreditAndDebit);
-                if(count($accountHead->accountLedgersWithCreditAndDebit) > 0)
-                {
-                    return $accountHead->accountLedgersWithCreditAndDebit->pluck('debit')->sum();
-
+                // dd($accountHead->accountLedgers);
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('debit')->sum());
                 }
                 // return '0';
             })
             ->editColumn('credit', function ($accountHead) {
-                if(count($accountHead->accountLedgersWithCreditAndDebit) > 0)
-                {
-                    return $accountHead->accountLedgersWithCreditAndDebit->pluck('credit')->sum();
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
                 }
                 // return '0';
             })
             ->editColumn('ending_balance', function ($accountHead) {
-                return '0';
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                }
             })
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
@@ -67,9 +67,11 @@ class TrialBalanceDataTable extends DataTable
      * @param \App\Models\Role $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(AccountLedger $model): QueryBuilder
+    public function query(AccountHead $model): QueryBuilder
     {
-        return $model->where('level',5)->newQuery()->with(['modelable','accountLedgersWithCreditAndDebit.accountActions'])->orderBy('level','asc');
+        return $model->where('level', 5)->whereHas('accountLedgers')->newQuery()->with(['modelable', 'accountLedgers' => function ($q) {
+            $q->whereNot([['debit', 0], ['credit', 0]])->with('accountActions');
+        }])->orderBy('level', 'asc');
     }
 
     public function html(): HtmlBuilder
@@ -120,12 +122,11 @@ class TrialBalanceDataTable extends DataTable
             // Column::make('id')->title('id')->addClass('text-nowrap text-center'),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap'),
             Column::make('name')->title('Account Name')->addClass('text-nowrap'),
-            Column::make('starting_balance')->title('Starting Balance')->addClass('text-nowrap'),
-            Column::make('debit')->title('Debit')->addClass('text-nowrap'),
-            Column::make('credit')->title('Credit')->addClass('text-nowrap'),
-            Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap'),
+            Column::make('starting_balance')->title('Starting Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('debit')->title('Debit')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
-        
     }
 
     /**

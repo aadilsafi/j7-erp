@@ -214,9 +214,9 @@ Route::group([
                     //Sales Plan Additional Costs Import routes
                     Route::group(['prefix' => 'spadcosts/import', 'as' => 'spadcostsImport.'], function () {
                         Route::view('/', 'app.sites.floors.units.sales-plan.import.importspadcosts')->name('importspadcosts');
-                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreview'])->name('importspadcostsPreview');
-                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreview'])->name('storePreview');
-                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImport'])->name('saveImport');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreviewAdcosts'])->name('importspadcostsPreview');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreviewAdcosts'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImportAdcosts'])->name('saveImport');
                     });
 
 
@@ -633,6 +633,7 @@ Route::group([
         Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
         Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');
         Route::get('ajax-import-sales-plan.get.input', [SalesPlanController::class, 'getInput'])->name('ajax-import-sales-plan.get.input');
+        Route::get('ajax-import-sales-plan.adCosts.get.input', [SalesPlanImportController::class, 'getInputAdcosts'])->name('ajax-import-sales-plan.adCosts.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

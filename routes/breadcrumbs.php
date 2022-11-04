@@ -148,7 +148,7 @@ Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $s
 
 Breadcrumbs::for('sites.floors.units.import', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.floors.index', $site_id);
-    $trail->push('Import Units');
+    $trail->push('Import');
 });
 //Unit Sales Plan Breadcrumbs
 Breadcrumbs::for('sites.floors.units.sales-plans.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {

@@ -289,7 +289,9 @@
                             }
                         },
                        
-                    @endcan {
+                    @endcan 
+                    @can('sites.floors.importFloors')
+                    {
                         extend: 'collection',
                         text: '<i class="bi bi-cloud"></i> Imports',
                         className: 'btn btn-relief-outline-info dropdown-toggle',
@@ -325,8 +327,8 @@
                                 text: '<i class="bi bi-cloud"></i> Import Sales Plan Additional Costs',
                                 className: 'dropdown-item',
                                 action: function(e, dt, node, config) {
-                                    location.href = '#'
-                                        // '{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => $site_id]) }}';
+                                    location.href =
+                                        '{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => $site_id]) }}';
                                 }
                             },
                             {
@@ -341,6 +343,7 @@
 
                         ]
                     },
+                    @endcan 
                     {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',

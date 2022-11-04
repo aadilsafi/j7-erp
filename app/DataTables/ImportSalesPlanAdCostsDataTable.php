@@ -3,17 +3,18 @@
 namespace App\DataTables;
 
 use App\Models\TempSalePlan;
+use App\Models\TempSalesPlanAdditionalCost;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class ImportSalesPlanDataTable extends DataTable
+class ImportSalesPlanAdCostsDataTable extends DataTable
 {
     public function __construct($site_id)
     {
-        $model = new TempSalePlan();
+        $model = new TempSalesPlanAdditionalCost();
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
         }
@@ -48,65 +49,35 @@ class ImportSalesPlanDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'total_price', 'inputtype' => 'number', 'value' => $data->total_price]
                 );
             })
-            ->editColumn('unit_price', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'unit_price', 'inputtype' => 'number', 'value' => $data->unit_price]
-                );
-            })
-            ->editColumn('discount_percentage', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'discount_percentage', 'inputtype' => 'number', 'value' => $data->discount_percentage]
-                );
-            })
-            ->editColumn('discount_total', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'discount_total', 'inputtype' => 'number', 'value' => $data->discount_total]
-                );
-            })
-            ->editColumn('down_payment_percentage', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'down_payment_percentage', 'inputtype' => 'number', 'value' => $data->down_payment_percentage]
-                );
-            })
             ->editColumn('down_payment_total', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
                     ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
                 );
             })
-            ->editColumn('lead_source', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'lead_source', 'inputtype' => 'text', 'value' => $data->lead_source]
-                );
-            })
+           
             ->editColumn('validity', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
                     ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
                 );
             })
-            ->editColumn('status', function ($data) {
-                $values = ['pending' => 'Pending', 'approved' => 'Approved', 'disapproved' => 'Disapproved', 'cancelled' => 'Cancelled'];
-                return view(
-                    'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
-                );
-            })
-            ->editColumn('comment', function ($data) {
+            ->editColumn('additional_costs_name', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'comment', 'inputtype' => 'text', 'value' => $data->comment]
+                    ['id' => $data->id, 'field' => 'additional_costs_name', 'inputtype' => 'text', 'value' => $data->additional_costs_name]
                 );
             })
-            ->editColumn('approved_date', function ($data) {
+            ->editColumn('percentage', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'approved_date', 'inputtype' => 'text', 'value' => $data->approved_date]
+                    ['id' => $data->id, 'field' => 'percentage', 'inputtype' => 'number', 'value' => $data->percentage]
+                );
+            })
+            ->editColumn('total_amount', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
                 );
             })
             ->setRowId('id');
@@ -117,7 +88,7 @@ class ImportSalesPlanDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(TempSalePlan $model): QueryBuilder
+    public function query(TempSalesPlanAdditionalCost $model): QueryBuilder
     {
         return $model->newQuery()->orderBy('id');
     }
@@ -163,57 +134,31 @@ class ImportSalesPlanDataTable extends DataTable
                 'is_disable' => false,
                 'name' => 'total_price'
             ])->render())->searchable(true),
-            Column::computed('unit_price')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'unit_price'
-            ])->render())->searchable(true),
-            Column::computed('discount_percentage')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'discount_percentage'
-            ])->render())->searchable(true),
-            Column::computed('discount_total')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'discount_total'
-            ])->render())->searchable(true),
-            Column::computed('down_payment_percentage')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'down_payment_percentage'
-            ])->render()),
             Column::computed('down_payment_total')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'down_payment_total'
             ])->render()),
-
-            Column::computed('lead_source')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'lead_source'
-            ])->render())->searchable(true),
             Column::computed('validity')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'validity'
             ])->render()),
-            Column::computed('status')->title(view('app.components.select-fields', [
+            Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'status'
+                'name' => 'additional_costs_name'
             ])->render())->searchable(true),
-            Column::computed('comment')->title(view('app.components.select-fields', [
+            Column::computed('percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'comment'
+                'name' => 'percentage'
             ])->render()),
 
-            Column::computed('approved_date')->title(view('app.components.select-fields', [
+            Column::computed('total_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'approved_date'
+                'name' => 'total_amount'
             ])->render()),
         ];
     }

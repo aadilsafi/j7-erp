@@ -9,13 +9,16 @@ use App\Imports\SalesPlanInstallmentsImport;
 use App\Models\AdditionalCost;
 use App\Models\SalesPlan;
 use App\Models\SalesPlanAdditionalCost;
+use App\Models\SalesPlanInstallments;
 use App\Models\Stakeholder;
 use App\Models\TempSalePlanInstallment;
 use App\Models\TempSalesPlanAdditionalCost;
 use App\Models\Unit;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 use Redirect;
+use Str;
 
 class SalesPlanImportController extends Controller
 {
@@ -415,53 +418,63 @@ class SalesPlanImportController extends Controller
             'fields.*' => 'required',
         ], [
             'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-
+            // 'fields.*.distinct' => 'Field can not be duplicated',
         ]);
 
         $validator->validate();
 
-        $model = new TempSalesPlanAdditionalCost();
-        $tempdata = $model->cursor();
-        $tempCols = $model->getFillable();
 
-        foreach ($tempdata as $key => $items) {
-            foreach ($tempCols as $k => $field) {
-                $data[$key][$field] = $items[$tempCols[$k]];
+        DB::transaction(function () use ($site_id, $request) {
+            $model = new TempSalePlanInstallment();
+            $tempdata = $model->cursor();
+            $tempCols = $model->getFillable();
+            foreach ($tempdata as $key => $items) {
+                foreach ($tempCols as $k => $field) {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
+
+                // $data[$key]['site_id'] = decryptParams($site_id);
+
+                $stakeholderId = Stakeholder::select('id')->where('cnic', $data[$key]['stakeholder_cnic'])->first();
+                $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+
+                $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
+                    ->where('unit_id', $unitId->id)
+                    ->where('total_price', $data[$key]['total_price'])
+                    ->where('down_payment_total', $data[$key]['down_payment_total'])
+                    ->where('validity', $data[$key]['validity'])
+                    ->first();
+
+                $data[$key]['sales_plan_id'] = $salePlan->id;
+                if ($data[$key]['installment_no'] == 0) {
+                    $data[$key]['details'] = Str::title($data[$key]['type']);
+                } else {
+                    $data[$key]['details'] = (englishCounting($data[$key]['installment_no'])) . ' ' . $data[$key]['type'];
+                }
+                $data[$key]['date'] = $data[$key]['due_date'];
+                $data[$key]['remarks'] = Str::title(Str::title(str_replace('-', ' ', $data[$key]['status'])));
+
+                $data[$key]['amount'] = $data[$key]['total_amount'];
+                $data[$key]['installment_order'] = $data[$key]['installment_no'];
+                $data[$key]['created_at'] = now();
+                $data[$key]['updated_at'] = now();
+
+                unset($data[$key]['unit_short_label']);
+                unset($data[$key]['stakeholder_cnic']);
+                unset($data[$key]['total_price']);
+                unset($data[$key]['total_amount']);
+                unset($data[$key]['down_payment_total']);
+                unset($data[$key]['validity']);
+                unset($data[$key]['due_date']);
+                unset($data[$key]['installment_no']);
+
+
+
+                $spInstallment = SalesPlanInstallments::insert($data[$key]);
             }
 
-            // $data[$key]['site_id'] = decryptParams($site_id);
-
-            $stakeholderId = Stakeholder::select('id')->where('cnic', $data[$key]['stakeholder_cnic'])->first();
-            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-
-            $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
-                ->where('unit_id', $unitId->id)
-                ->where('total_price', $data[$key]['total_price'])
-                ->where('down_payment_total', $data[$key]['down_payment_total'])
-                ->where('validity', $data[$key]['validity'])
-                ->first();
-
-            $adCost = AdditionalCost::where('slug', $data[$key]['additional_costs_name'])->first();
-
-            $data[$key]['sales_plan_id'] = $salePlan->id;
-            $data[$key]['additional_cost_id'] = $adCost->id;
-            $data[$key]['amount'] = $data[$key]['total_amount'];
-            $data[$key]['created_at'] = now();
-            $data[$key]['updated_at'] = now();
-
-            unset($data[$key]['unit_short_label']);
-            unset($data[$key]['stakeholder_cnic']);
-            unset($data[$key]['total_price']);
-            unset($data[$key]['total_amount']);
-            unset($data[$key]['down_payment_total']);
-            unset($data[$key]['validity']);
-            unset($data[$key]['additional_costs_name']);
-
-            $spAdCosts = SalesPlanAdditionalCost::insert($data[$key]);
-        }
-
-        TempSalesPlanAdditionalCost::query()->truncate();
+            TempSalePlanInstallment::query()->truncate();
+        });
 
         return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
@@ -608,7 +621,7 @@ class SalesPlanImportController extends Controller
 
                 case 'type':
                     if ($request->get('updateValue') == 'true') {
-                      
+
                         $tempData->type = $request->get('value');
                         $tempData->save();
 
@@ -694,6 +707,48 @@ class SalesPlanImportController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempData->remaining_amount = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'due_date':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->due_date = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'last_paid_at':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->last_paid_at = $request->get('value');
                         $tempData->save();
 
                         $response = view('app.components.unit-preview-cell', [

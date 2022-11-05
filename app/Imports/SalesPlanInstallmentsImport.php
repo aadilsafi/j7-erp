@@ -4,9 +4,7 @@ namespace App\Imports;
 
 use App\Models\SalesPlan;
 use App\Models\Stakeholder;
-use App\Models\TempSalePlan;
 use App\Models\TempSalePlanInstallment;
-use App\Models\TempUnit;
 use App\Models\Unit;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -55,11 +53,13 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
             'down_payment_total' => $row['down_payment_total'],
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
             'type' => $row['type'],
+            'due_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['due_date']))->format('Y-m-d'),
             'installment_no' => $row['installment_no'],
             'total_amount' => $row['total_amount'],
             'paid_amount' => $row['paid_amount'],
             'remaining_amount' => $row['remaining_amount'],
-            'remarks' => $row['remarks'],
+            'last_paid_at' => (!is_null($row['last_paid_at']) ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['last_paid_at']))->format('Y-m-d') : null),
+            'status' => $row['status'],
         ]);
     }
 
@@ -83,10 +83,12 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
             'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
             'validity' =>  ['required'],
             'type' =>  ['required'],
+            'due_date' => ['required'],
             'installment_no' =>  ['required'],
             'total_amount' =>  ['required', 'numeric', 'gt:0'],
             'paid_amount' =>  ['required', 'numeric'],
             'remaining_amount' =>  ['required', 'numeric'],
+            'status' => ['required']
         ];
     }
 

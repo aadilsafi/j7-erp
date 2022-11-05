@@ -63,6 +63,18 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
             //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
             //     );
             // })
+            ->editColumn('due_date', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'due_date', 'inputtype' => 'text', 'value' => $data->due_date]
+                );
+            })
+            ->editColumn('last_paid_at', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'last_paid_at', 'inputtype' => 'text', 'value' => $data->last_paid_at]
+                );
+            })
             ->editColumn('type', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
@@ -93,11 +105,11 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'remaining_amount', 'inputtype' => 'number', 'value' => $data->remaining_amount]
                 );
             })
-            ->editColumn('remarks', function ($data) {
+            ->editColumn('status', function ($data) {
                 $values = ['paid' => 'Paid', 'unpaid' => 'Un Paid', 'partially-paid' => 'Partially Paid'];
                 return view(
                     'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'remarks', 'values' => $values, 'selectedValue' => $data->remarks]
+                    ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
                 );
             })
             ->setRowId('id');
@@ -139,60 +151,66 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'unit_short_label'
-            ])->render())->searchable(true),
-            Column::computed('stakeholder_cnic')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'stakeholder_cnic'
-            ])->render())->searchable(true),
-            Column::computed('total_price')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'total_price'
-            ])->render())->searchable(true),
-            Column::computed('down_payment_total')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'down_payment_total'
-            ])->render()),
-            Column::computed('validity')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'validity'
-            ])->render()),
+            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
+            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
+            Column::computed('total_price')->title('Price')->searchable(true),
+            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
+            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
             Column::computed('type')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'type'
+            ])->render())->searchable(true),
+            Column::computed('due_date')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'spInstallment' => true,
+
+                'name' => 'due_date'
             ])->render())->searchable(true),
             Column::computed('installment_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'installment_no'
             ])->render()),
             Column::computed('total_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'total_amount'
             ])->render()),
             Column::computed('paid_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'paid_amount'
             ])->render()),
             Column::computed('remaining_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'remaining_amount'
             ])->render()),
-            Column::computed('remarks')->title(view('app.components.select-fields', [
+            Column::computed('last_paid_at')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'remarks'
+                'spInstallment' => true,
+
+                'name' => 'last_paid_at'
+            ])->render())->searchable(true),
+            Column::computed('status')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'spInstallment' => true,
+
+                'name' => 'status'
             ])->render()),
         ];
     }

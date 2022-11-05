@@ -119,45 +119,30 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'unit_short_label'
-            ])->render())->searchable(true),
-            Column::computed('stakeholder_cnic')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'stakeholder_cnic'
-            ])->render())->searchable(true),
-            Column::computed('total_price')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'total_price'
-            ])->render())->searchable(true),
-            Column::computed('down_payment_total')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'down_payment_total'
-            ])->render()),
-            Column::computed('validity')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'validity'
-            ])->render()),
+            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
+            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
+            Column::computed('total_price')->title('Price')->searchable(true),
+            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
+            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
             Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
                 'name' => 'additional_costs_name'
             ])->render())->searchable(true),
             Column::computed('percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'percentage'
             ])->render()),
 
             Column::computed('total_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'spInstallment' => true,
+
                 'name' => 'total_amount'
             ])->render()),
         ];

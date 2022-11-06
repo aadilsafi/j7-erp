@@ -73,8 +73,58 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'Receipt Voucher Online',
-                'slug' => 'receipt-voucher-online',
+                'name' => 'Income',
+                'slug' => 'income',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Expense',
+                'slug' => 'expense',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Non Current Asset',
+                'slug' => 'non-current-asset',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Bank',
+                'slug' => 'bank',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Equity',
+                'slug' => 'equity',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Accounts Receivable',
+                'slug' => 'accounts-receivable',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Current Asset',
+                'slug' => 'current-asset',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Accounts Payable',
+                'slug' => 'accounts-payable',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Current Liability',
+                'slug' => 'current-liability',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Long Term Liability',
+                'slug' => 'long-term-liability',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Direct Cost',
+                'slug' => 'direct-cost',
             ],
             [
                 'site_id' => 1,
@@ -82,7 +132,6 @@ class AccountActionSeeder extends Seeder
                 'slug' => 'resale',
             ],
         ];
-
         foreach ($data as $item) {
             (new AccountAction())->create($item);
         }

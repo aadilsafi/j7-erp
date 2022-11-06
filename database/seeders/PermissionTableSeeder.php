@@ -691,7 +691,7 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            // sales Plan Additional Costs Import
             [
                 'name' => 'sites.floors.spadcostsImport.importspadcosts',
                 'show_name' => 'Can Import file',
@@ -721,29 +721,30 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // sales Plan Installments Import
             [
-                'name' => 'sites.floors.spInstallmentsImport.importspInstallments',
+                'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
                 'show_name' => 'Can Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.spInstallmentsImport.importUnitsPreview',
+                'name' => 'sites.floors.spInstallmentsImport.ImportPreviewinstallments',
                 'show_name' => 'Can View Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.spInstallmentsImport.storePreview',
+                'name' => 'sites.floors.spInstallmentsImport.storePreviewInstallments',
                 'show_name' => 'Can View store Preview',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.floors.spInstallmentsImport.saveImport',
+                'name' => 'sites.floors.spInstallmentsImport.saveImportInstallments',
                 'show_name' => 'Can Save Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -1580,6 +1581,14 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.accounts.ledger.index',
                 'show_name' => 'Can View Accounts Ledger',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts trial-balance
+            [
+                'name' => 'sites.accounts.trial-balance.index',
+                'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

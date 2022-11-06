@@ -16,7 +16,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class ChartOfAccountsDataTable extends DataTable
+class TrialBalanceDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -29,48 +29,35 @@ class ChartOfAccountsDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('level', function ($ledger) {
-                return number_format($ledger->level);
+            ->editColumn('level', function ($accountHead) {
+                return number_format($accountHead->level);
             })
-            ->editColumn('code', function ($ledger) {
-                return account_number_format($ledger->code);
+            ->editColumn('code', function ($accountHead) {
+                return account_number_format($accountHead->code);
             })
-            ->editColumn('opening_balance', function ($ledger) {
-                return '0';
-            })
-            ->editColumn('close_balance', function ($ledger) {
-                return '0';
-            })
-            ->editColumn('level', function ($ledger) {
-                if($ledger->level == 1){
-                    return 'First Level';
-                }
-                if($ledger->level == 2){
-                    return 'Second Level';
-                }
-                if($ledger->level == 3){
-                    return 'Third Level';
-                }
-                if($ledger->level == 4){
-                    return 'Fourth Level';
-                }
-                if($ledger->level == 5){
-                    return 'Fifth Level';
+            ->editColumn('starting_balance', function ($accountHead) {
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
                 }
             })
-            // ->editColumn('account_type', function ($ledger) {
-            //     if($ledger->level == 1){
-            //         return 'First Level';
-            //     }else
-            //     {
-            //         return 'no name';
-            //     }
-            // })
-            // ->editColumn('created_at', function ($ledger) {
-            //     // return $ledger->created_at->format('D, d-M-Y , H:i:s');
-            //     return editDateColumn($ledger->created_at);
-            // })
-
+            ->editColumn('debit', function ($accountHead) {
+                // dd($accountHead->accountLedgers);
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('debit')->sum());
+                }
+                // return '0';
+            })
+            ->editColumn('credit', function ($accountHead) {
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                }
+                // return '0';
+            })
+            ->editColumn('ending_balance', function ($accountHead) {
+                if (count($accountHead->accountLedgers) > 0) {
+                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                }
+            })
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
 
@@ -82,13 +69,15 @@ class ChartOfAccountsDataTable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->newQuery()->with('modelable')->orderBy('level','asc');
+        return $model->where('level', 5)->whereHas('accountLedgers')->newQuery()->with(['modelable', 'accountLedgers' => function ($q) {
+            $q->whereNot([['debit', 0], ['credit', 0]])->with('accountActions');
+        }])->orderBy('level', 'asc');
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('ledger-table')
+            ->setTableId('accountHead-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             // ->select()
@@ -97,7 +86,8 @@ class ChartOfAccountsDataTable extends DataTable
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')
-            ->lengthMenu([100,200,300,500])
+            ->lengthMenu([5000])
+            // $builder->ajax($attributes);
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -111,7 +101,7 @@ class ChartOfAccountsDataTable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            ->rowGroupDataSrc('level')
+            // ->rowGroupDataSrc('level')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
@@ -130,15 +120,12 @@ class ChartOfAccountsDataTable extends DataTable
 
             Column::computed('DT_RowIndex')->title('#'),
             // Column::make('id')->title('id')->addClass('text-nowrap text-center'),
-            Column::make('name')->title('Name'),
-            Column::make('level')->title('Account Level')->addClass('text-nowrap ')->searchable(false)->orderable(false),
-            Column::make('code')->title('Account Codes')->addClass('text-nowrap ')->orderable(false),
-            Column::make('opening_balance')->title('Opening Balance')->addClass('text-nowrap ')->orderable(false),
-            Column::make('close_balance')->title('Closing Balance')->addClass('text-nowrap ')->orderable(false),
-            // Column::make('account_type_id')->title('account_type_id')->addClass('text-nowrap text-center'),
-            // Column::make('description')->title('description')->addClass('text-nowrap text-center'),
-            // Column::make('opening_balance')->title('opening_balance')->addClass('text-nowrap text-center'),
-            // Column::make('sub_account_id')->title('sub_account_id')->addClass('text-nowrap text-center'),
+            Column::make('code')->title('Account Codes')->addClass('text-nowrap'),
+            Column::make('name')->title('Account Name')->addClass('text-nowrap'),
+            Column::make('starting_balance')->title('Starting Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('debit')->title('Debit')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
     }
 

@@ -489,6 +489,16 @@
                                 </a>
                             </li>
                         @endcan
+                        {{-- @can('sites.accounts.trial-balance.index')
+                        <li
+                            class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                            <a class="d-flex align-items-center"
+                                href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
+                               <i data-feather='dollar-sign'></i>
+                                <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
+                            </a>
+                        </li>
+                    @endcan --}}
                     </ul>
                 </li>
             @endcanany

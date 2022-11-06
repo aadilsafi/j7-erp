@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.import', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Sales Plan')
+@section('page-title', 'Import Sales Plan Additional Costs')
 
 @section('page-vendor')
 @endsection
@@ -30,7 +30,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Import Sales Plan Additional Costs</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.floors.units.import', encryptParams($site_id)) }}
                 </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.floors.SalesPlanImport.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.floors.spadcostsImport.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}
@@ -55,7 +55,7 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"
+                    <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
@@ -107,6 +107,8 @@
 
     <script>
         $(document).ready(function() {
+            $('.removeTolltip').tooltip('disable');
+
             $(window).keydown(function(event) {
                 if (event.keyCode == 13) {
                     event.preventDefault();
@@ -158,7 +160,7 @@
                 el = $(this);
                 $('#teams-table-form').css("pointer-events", "none")
 
-                var url = "{{ route('ajax-import-sales-plan.get.input') }}";
+                var url = "{{ route('ajax-import-sales-plan.adCosts.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -181,6 +183,8 @@
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
+                        $('#teams-table-form').css("pointer-events", "")
+
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
@@ -195,7 +199,7 @@
                 inputtype = $(this).data('inputtype');
                 el = $(this);
                 $('#teams-table-form').css("pointer-events", "none")
-                var url = "{{ route('ajax-import-sales-plan.get.input') }}";
+                var url = "{{ route('ajax-import-sales-plan.adCosts.get.input') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -224,56 +228,14 @@
 
                     },
                     error: function(response) {
+                        $('#teams-table-form').css("pointer-events", "")
+
                         // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
         });
-        $(document).on('change', '.unit-p-select', function(e) {
-            if (!$(this).hasClass('filedrendered')) {
-                id = $(this).data('id');
-                field = $(this).data('field');
-                showBlockUI('#unit_p_input_div_' + field + id);
-                value = $(this).data('value');
-                inputtype = $(this).data('inputtype');
-                el = $(this);
-                console.log(el.parent)
 
-                var url = "{{ route('ajax-import-sales-plan.get.input') }}";
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    data: {
-                        value: el.val(),
-                        id: id,
-                        field: field,
-                        inputtype: inputtype,
-                        updateValue: true
-                    },
-                    success: function(response) {
-                        // console.log(response['data']);
-                        if (response['status']) {
-                            console.log('insuccess');
-                            el = el.parent()
-                            console.log(el)
-                            el.empty();
-                            el.append(response['data']);
-                            // el.parent().empty();
-                            el.addClass('filedrendered');
-                            toastr.success('Updated');
-                        } else {
-                            toastr.error(response['message']['error']);
-
-                        }
-                        hideBlockUI('#unit_p_input_div_' + field + id);
-
-                    },
-                    error: function(response) {
-                        hideBlockUI('#unit_p_input_div_' + field + id);
-                    },
-                });
-            }
-        });
 
         $('#finalSubmit').on('click', function() {
             Swal.fire({

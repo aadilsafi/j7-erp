@@ -15,10 +15,8 @@ class ChartsOfAccountsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(ChartOfAccountsDataTable $dataTable, $site_id)
-    {
-
-
-        // dd(Str::length($code),$data,$code);
+    {  
+        
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {

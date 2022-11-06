@@ -23,6 +23,8 @@ use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use DB;
 
 class FileTitleTransferController extends Controller
 {
@@ -34,12 +36,14 @@ class FileTitleTransferController extends Controller
 
     private $stakeholderInterface;
     private $titleTransferInterface;
+    private $financialTransactionInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface,)
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->titleTransferInterface = $titleTransferInterface;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
     public function index(FileTitleTransferDataTable $dataTable, Request $request, $site_id)
@@ -201,34 +205,37 @@ class FileTitleTransferController extends Controller
 
     public function ApproveFileTitleTransfer($site_id, $unit_id, $customer_id, $file_id)
     {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+            // Account ledger transaction
+            $transaction = $this->financialTransactionInterface->makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id);
 
-        $file_title_transfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
-        $file_title_transfer->status = 1;
-        $file_title_transfer->update();
+            $file_title_transfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
+            $file_title_transfer->status = 1;
+            $file_title_transfer->update();
 
-        $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);
+            $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);
 
-        $file =  FileManagement::find(decryptParams($file_id));
-        $file->stakeholder_id = $stakeholder->id;
-        $file->stakeholder_data = json_encode($stakeholder);
-        $file->update();
+            $file =  FileManagement::find(decryptParams($file_id));
+            $file->stakeholder_id = $stakeholder->id;
+            $file->stakeholder_data = json_encode($stakeholder);
+            $file->update();
 
-        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $SalesPlan = SalesPlan::find($salesPlan->id);
-            $SalesPlan->stakeholder_id = $stakeholder->id;
-            $SalesPlan->update();
-        }
+            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $SalesPlan = SalesPlan::find($salesPlan->id);
+                $SalesPlan->stakeholder_id = $stakeholder->id;
+                $SalesPlan->update();
+            }
 
-        // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        // foreach ($receipt as $receipt) {
-        //     $Receipt = Receipt::find($receipt->id);
-        //     $Receipt->name = $stakeholder->full_name;
-        //     $Receipt->cnic = $stakeholder->cnic;
-        //     $Receipt->phone_no = $stakeholder->contact;
-        //     $Receipt->update();
-        // }
-
+            // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            // foreach ($receipt as $receipt) {
+            //     $Receipt = Receipt::find($receipt->id);
+            //     $Receipt->name = $stakeholder->full_name;
+            //     $Receipt->cnic = $stakeholder->cnic;
+            //     $Receipt->phone_no = $stakeholder->contact;
+            //     $Receipt->update();
+            // }
+        });
         return redirect()->route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Title Transfer Approved');
     }
 

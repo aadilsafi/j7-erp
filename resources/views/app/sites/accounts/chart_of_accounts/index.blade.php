@@ -90,104 +90,125 @@
                         <div class="card">
                             <div class="card-body">
                                 {{-- <section> --}}
-                                    <style>
-                                      .custom_bg{
+                                <style>
+                                    .custom_bg {
                                         margin-top: 0.5rem;
                                         /* background: whitesmoke; */
                                         margin-top: 0 !important;
                                         border: 1px solid #80808026;
                                         border-bottom: 0px solid white !important;
-                                      }
-                                      .main_multi_dop_ul{
+                                    }
+
+                                    .main_multi_dop_ul {
                                         padding-bottom: 0 !important;
-                                      }
-                                      .custom_multi_drop_main{
+                                    }
+
+                                    .custom_multi_drop_main {
                                         width: 100%;
                                         position: unset;
-                                      }
-                                      @media(min-width: 768px){
-                                        .custom_multi_drop_main{
-                                            width: 1061px !important;
-                                        }
-                                      }
-                                       .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a, .main-menu.menu-light .navigation>.custom_bg .sidebar-group-active>a {
-                                        color: #565360;
-                                        background: #f5f5f5;
-                                        border-radius: 6px;
-                                        margin: 0 !important;
-                                        border-radius: 0 !important;
                                     }
-                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>a, .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>ul>.Second_li, .main-menu.menu-light .navigation>.Second_li>ul .Second_li:not(.has-sub) {
+
+                                    /* @media(min-width: 768px) { */
+                                        .custom_multi_drop_main {
+                                            width: 100% !important;
+                                            max-width: 100%;
+                                            display: block;
+                                        }
+                                    /* } */
+
+                                    .vertical-overlay-menu .custom_multi_drop_main, .vertical-overlay-menu.menu-hide .custom_multi_drop_main
+
+                                    .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a,
+                                    .main-menu.menu-light .navigation>.custom_bg .sidebar-group-active>a {
+
+                                        opacity: 1 !important;
+                                    }
+
+                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>a,
+                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>ul>.Second_li,
+                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li:not(.has-sub) {
                                         margin: 0 15px;
                                         margin: 0;
                                         border-radius: 0 !important;
                                     }
-                                    .custom_td{
+
+                                    .custom_td {
                                         border-radius: 0 !important;
                                     }
+                                </style>
+                                <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
 
-                                    </style>
-                                    <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
-                                    
-                                        <div class="">
-                                            <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
-                                                @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
-                                                    <li class="custom_bg nav-item Second_li"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
-                                                        <ul class="menu-content">
-                                                            @foreach ($account_of_heads as $key=>$account_of_head_full_array)
-                                                            @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
-                                                                                                                                                                                    <li class="nav-item Second_li">
-                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_full_array->name}}</span></a>
-                                                                        <ul class="menu-content">
-                                                                            <table class="table table-primary table-striped">
-                                                                                <thead>
+                                    <div class="">
+                                        <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation"
+                                            data-menu="menu-navigation">
+                                            @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
+                                                <li class="custom_bg nav-item Second_li"><a
+                                                        class="d-flex align-items-center" href="#"><span
+                                                            class="menu-title text-truncate"
+                                                            data-i18n="eCommerce">{{ $account_of_head->name }}</span></a>
+                                                    <ul class="menu-content">
+                                                        @foreach ($account_of_heads as $key => $account_of_head_full_array)
+                                                            @if (Str::length($account_of_head_full_array->code) == 4 and
+                                                                $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
+                                                                <li class="nav-item Second_li">
+                                                                    <a class="d-flex align-items-center"
+                                                                        href="#"><span
+                                                                            class="menu-title text-truncate"
+                                                                            data-i18n="eCommerce"><i
+                                                                                class="bi bi-arrow-bar-right"></i>{{ $account_of_head_full_array->name }}</span></a>
+                                                                    <ul class="menu-content">
+                                                                        <table class="table table-primary table-striped">
+                                                                            <thead>
                                                                                 <tr>
                                                                                     <th scope="col">Name</th>
                                                                                     <th scope="col">ACCOUNT LEVEl</th>
                                                                                     <th scope="col">ACCOUNT CODES</th>
                                                                                     <th scope="col">Balance</th>
                                                                                 </tr>
-                                                                                </thead>
-                                                                                <tbody>
+                                                                            </thead>
+                                                                            <tbody>
                                                                                 <tr>
-                                                                                    <td class="custom_td">{{$account_of_head_full_array->name}}</td>
-                                                                                    <td>{{$account_of_head_full_array->level}}</td>
-                                                                                    <td>{{$account_of_head_full_array->code}}</td>
+                                                                                    <td class="custom_td">
+                                                                                        {{ $account_of_head_full_array->name }}
+                                                                                    </td>
+                                                                                    <td>{{ $account_of_head_full_array->level }}
+                                                                                    </td>
+                                                                                    <td>{{ $account_of_head_full_array->code }}
+                                                                                    </td>
                                                                                     <td>0</td>
                                                                                 </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </ul>
-                                                            </li>
-                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </ul>
+                                                                </li>
                                                             @endif
-                                                                
-                                                            @endforeach
-                                                            <table class="table table-primary table-striped">
-                                                                <thead>
+                                                        @endforeach
+                                                        <table class="table table-primary table-striped">
+                                                            <thead>
                                                                 <tr>
                                                                     <th scope="col">Name</th>
                                                                     <th scope="col">ACCOUNT LEVEl</th>
                                                                     <th scope="col">ACCOUNT CODES</th>
                                                                     <th scope="col">Balance</th>
                                                                 </tr>
-                                                                </thead>
-                                                                <tbody>
+                                                            </thead>
+                                                            <tbody>
                                                                 <tr>
-                                                                    <td class="custom_td">{{$account_of_head->name}}</td>
-                                                                    <td class="custom_td">{{$account_of_head->level}}</td>
-                                                                    <td class="custom_td">{{$account_of_head->code}}</td>
+                                                                    <td class="custom_td">{{ $account_of_head->name }}</td>
+                                                                    <td class="custom_td">{{ $account_of_head->level }}
+                                                                    </td>
+                                                                    <td class="custom_td">{{ $account_of_head->code }}</td>
                                                                     <td class="custom_td">0</td>
                                                                 </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </ul>
-                                                    </li>
-                                                @endforeach
-                                                
-                                            </ul>
-                                        </div>
+                                                            </tbody>
+                                                        </table>
+                                                    </ul>
+                                                </li>
+                                            @endforeach
+
+                                        </ul>
                                     </div>
+                                </div>
                             </div>
                         </div>
 

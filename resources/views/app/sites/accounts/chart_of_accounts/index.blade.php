@@ -93,8 +93,10 @@
                                     <style>
                                       .custom_bg{
                                         margin-top: 0.5rem;
-                                        background: whitesmoke;
+                                        /* background: whitesmoke; */
                                         margin-top: 0 !important;
+                                        border: 1px solid #80808026;
+                                        border-bottom: 0px solid white !important;
                                       }
                                       .main_multi_dop_ul{
                                         padding-bottom: 0 !important;
@@ -108,20 +110,36 @@
                                             width: 1061px !important;
                                         }
                                       }
+                                       .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a, .main-menu.menu-light .navigation>.custom_bg .sidebar-group-active>a {
+                                        color: #565360;
+                                        background: #f5f5f5;
+                                        border-radius: 6px;
+                                        margin: 0 !important;
+                                        border-radius: 0 !important;
+                                    }
+                                    .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>a, .main-menu.menu-light .navigation>.Second_li>ul .Second_li.has-sub>ul>.Second_li, .main-menu.menu-light .navigation>.Second_li>ul .Second_li:not(.has-sub) {
+                                        margin: 0 15px;
+                                        margin: 0;
+                                        border-radius: 0 !important;
+                                    }
+                                    .custom_td{
+                                        border-radius: 0 !important;
+                                    }
+
                                     </style>
                                     <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                     
                                         <div class="">
                                             <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
                                                 @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
-                                                    <li class="custom_bg nav-item"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
+                                                    <li class="custom_bg nav-item Second_li"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
                                                         <ul class="menu-content">
                                                             @foreach ($account_of_heads as $key=>$account_of_head_full_array)
                                                             @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
-                                                                                                                                                                                    <li class="nav-item">
-                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head_full_array->name}}</span></a>
+                                                                                                                                                                                    <li class="nav-item Second_li">
+                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_full_array->name}}</span></a>
                                                                         <ul class="menu-content">
-                                                                            <table class="table">
+                                                                            <table class="table table-primary table-striped">
                                                                                 <thead>
                                                                                 <tr>
                                                                                     <th scope="col">Name</th>
@@ -132,7 +150,7 @@
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <tr>
-                                                                                    <td>{{$account_of_head_full_array->name}}</td>
+                                                                                    <td class="custom_td">{{$account_of_head_full_array->name}}</td>
                                                                                     <td>{{$account_of_head_full_array->level}}</td>
                                                                                     <td>{{$account_of_head_full_array->code}}</td>
                                                                                     <td>0</td>
@@ -145,65 +163,7 @@
                                                             @endif
                                                                 
                                                             @endforeach
-                                                            
-                                                            {{-- @dd(substr($account_of_head->code, 0, 2)); --}}
-                                                            {{-- @if (($account_of_heads[$key]->code)==)
-                                                                
-                                                            @endif --}}
-                                                            {{-- @if (($account_of_heads[0]->code == substr($account_of_head->code, 0, 2)))
-                                                                 @foreach ( as )
-                                                                    <li class="nav-item">
-                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 2</span></a>
-                                                                        <ul class="menu-content">
-                                                                            <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-3" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 3</span></a>
-                                                                            <ul class="menu-content">
-                                                                                <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 4</span></a>
-                                                                                <ul class="menu-content">
-                                                                                    <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-5" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 5</span></a>
-                                                                                    <ul class="menu-content ps-2">
-                                                                                        <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                    </li>
-                                                                                </ul>
-                                                                                </li>
-                                                                            </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
-                                                                @endforeach  --}}
-                                                            {{-- <li class="nav-item">
-                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 2</span></a>
-                                                                        <ul class="menu-content">
-                                                                            <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-3" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 3</span></a>
-                                                                            <ul class="menu-content">
-                                                                                <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 4</span></a>
-                                                                                <ul class="menu-content">
-                                                                                    <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-5" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 5</span></a>
-                                                                                    <ul class="menu-content ps-2">
-                                                                                        <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
-                                                                                        </li>
-                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
-                                                                                        </li>
-                                                                                    </ul>
-                                                                                    </li>
-                                                                                </ul>
-                                                                                </li>
-                                                                            </ul>
-                                                                            </li>
-                                                                        </ul>
-                                                            </li> --}}
-                                                            <table class="table">
+                                                            <table class="table table-primary table-striped">
                                                                 <thead>
                                                                 <tr>
                                                                     <th scope="col">Name</th>
@@ -214,10 +174,10 @@
                                                                 </thead>
                                                                 <tbody>
                                                                 <tr>
-                                                                    <td>{{$account_of_head->name}}</td>
-                                                                    <td>{{$account_of_head->level}}</td>
-                                                                    <td>{{$account_of_head->code}}</td>
-                                                                    <td>0</td>
+                                                                    <td class="custom_td">{{$account_of_head->name}}</td>
+                                                                    <td class="custom_td">{{$account_of_head->level}}</td>
+                                                                    <td class="custom_td">{{$account_of_head->code}}</td>
+                                                                    <td class="custom_td">0</td>
                                                                 </tr>
                                                                 </tbody>
                                                             </table>

@@ -954,6 +954,34 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            [
+                'name' => 'sites.receipts.importReceipts',
+                'show_name' => 'Can Import Receipts File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.importReceiptsPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.storePreview',
+                'show_name' => 'Can View store Preview of Import File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Customer File Management Routes
             [
                 'name' => 'sites.file-managements.customers',

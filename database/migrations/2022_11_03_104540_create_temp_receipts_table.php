@@ -27,6 +27,7 @@ return new class extends Migration
             $table->date('transaction_date')->nullable(true);
             $table->string('other_payment_mode_value')->nullable(true);
             $table->float('amount');
+            $table->integer('installment_no');
             $table->string('status');
             $table->string('image_url')->nullable(true);
             $table->timestamps();

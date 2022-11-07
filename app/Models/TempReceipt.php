@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TempReceipts extends Model
+class TempReceipt extends Model
 {
     use HasFactory;
 
@@ -23,6 +23,7 @@ class TempReceipts extends Model
         'other_payment_mode_value',
         'amount',
         'status',
-        'image_url'
+        'image_url',
+        'installment_no'
     ];
 }

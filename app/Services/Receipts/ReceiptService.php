@@ -13,8 +13,10 @@ use App\Models\UnitStakeholder;
 use App\Models\SiteConfigration;
 use App\Models\SalesPlanInstallments;
 use App\Models\StakeholderType;
+use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 use Str;
@@ -372,5 +374,89 @@ class ReceiptService implements ReceiptInterface
         }
 
         return true;
+    }
+
+    public function ImportReceipts($site_id)
+    {
+        // dd(Receipt::first());
+        $model = new TempReceipt();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
+
+        foreach ($tempdata as $key => $items) {
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+
+            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
+            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+
+            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
+                ->where('unit_id', $unitId->id)
+                ->where('total_price', $data[$key]['total_price'])
+                ->where('down_payment_total', $data[$key]['down_payment_total'])
+                ->where('validity', $data[$key]['validity'])
+                ->first();
+
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['sales_plan_id'] = $salePlan->id;
+            $data[$key]['unit_id'] = $unitId->id;
+            $data[$key]['name'] = $stakeholder->full_name;
+            $data[$key]['cnic'] = $stakeholder->cnic;
+            $data[$key]['phone_no'] = $stakeholder->contact;
+            $data[$key]['amount_in_numbers'] = $data[$key]['amount'];
+            $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
+            $data[$key]['amount_received'] = $data[$key]['amount'];
+            $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];
+            $data[$key]['online_instrument_no'] = $data[$key]['online_transaction_no'];
+            $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
+
+            if ($data[$key]['installment_no'] == 0) {
+                $data[$key]['purpose'] = 'Downpayment';
+                $data[$key]['installment_no'] = '["Downpayment"]';
+            } else {
+                $data[$key]['purpose'] = (englishCounting($data[$key]['installment_no'])) . ' Installment';
+                $data[$key]['installment_no'] = '["' . (englishCounting($data[$key]["installment_no"])) . ' Installment"]';
+            }
+
+            $data[$key]['installment_number'] = $data[$key]['installment_no'];
+            $data[$key]['status'] = $data[$key]['status'] == 'active' ? 1 : 0;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+
+            if ($data[$key]['mode_of_payment'] == 'cheque') {
+                $url = $data[$key]['image_url'];
+                $info = pathinfo($url);
+                $contents = file_get_contents($url);
+                $file = '/tmp/' . $info['basename'];
+                file_put_contents($file, $contents);
+                $uploaded_file = new UploadedFile($file, $info['basename']);
+                // dd($uploaded_file);
+            }
+            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['stakeholder_cnic']);
+            unset($data[$key]['total_price']);
+            unset($data[$key]['down_payment_total']);
+            unset($data[$key]['validity']);
+            unset($data[$key]['other_payment_mode_value']);
+            unset($data[$key]['online_transaction_no']);
+            unset($data[$key]['installment_no']);
+            unset($data[$key]['amount']);
+            unset($data[$key]['bank_name']);
+            unset($data[$key]['image_url']);
+
+            // dd($data);
+
+
+            $receipt = Receipt::create($data[$key]);
+            if ($data[$key]['mode_of_payment'] == 'cheque') {
+
+                $receipt->addMedia($uploaded_file)->toMediaCollection('receipt_attachments');
+                changeImageDirectoryPermission();
+            }
+        }
+
+        // dd($data);
+        return $receipt;
     }
 }

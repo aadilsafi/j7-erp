@@ -58,6 +58,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'installment_no' => $row['installment_no'],
             'cheque_no' => $row['cheque_no'],
             'bank_name' => $row['bank_name'],
+            'bank_acount_number' => $row['bank_acount_number'],
             'online_transaction_no' => $row['online_transaction_no'],
             'transaction_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['transaction_date']))->format('Y-m-d'),
             'other_payment_mode_value' => $row['other_payment_mode_value'],

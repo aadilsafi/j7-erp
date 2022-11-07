@@ -98,16 +98,16 @@ class ReceiptsDatatable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
-        // if ($importPermission) {
-        //     $addButton =  Button::raw('import')
-        //         ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-        //         ->text('<i data-feather="upload"></i> Import Receipts')
-        //         ->attr([
-        //             'onclick' => 'Import()',
-        //         ]);
+        if ($importPermission) {
+            $addButton =  Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Receipts')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]);
 
-        //     array_unshift($buttons, $addButton);
-        // }
+            array_unshift($buttons, $addButton);
+        }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')

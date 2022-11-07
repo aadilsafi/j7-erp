@@ -21,15 +21,16 @@ return new class extends Migration
             $table->float('down_payment_total');
             $table->date('validity');
             $table->string('mode_of_payment');
-            $table->string('cheque_no')->nullable(true);
-            $table->string('bank_name')->nullable(true);
-            $table->string('online_transaction_no')->nullable(true);
-            $table->date('transaction_date')->nullable(true);
-            $table->string('other_payment_mode_value')->nullable(true);
+            $table->string('cheque_no')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->string('bank_acount_number')->nullable();
+            $table->string('online_transaction_no')->nullable();
+            $table->date('transaction_date')->nullable();
+            $table->string('other_payment_mode_value')->nullable();
             $table->float('amount');
-            $table->integer('installment_no');
+            $table->string('installment_no');
             $table->string('status');
-            $table->string('image_url')->nullable(true);
+            $table->string('image_url')->nullable();
             $table->timestamps();
         });
     }

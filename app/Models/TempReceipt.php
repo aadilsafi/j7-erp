@@ -18,6 +18,7 @@ class TempReceipt extends Model
         'mode_of_payment',
         'cheque_no',
         'bank_name',
+        'bank_acount_number',
         'online_transaction_no',
         'transaction_date',
         'other_payment_mode_value',

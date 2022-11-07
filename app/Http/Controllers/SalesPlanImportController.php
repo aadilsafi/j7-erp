@@ -449,7 +449,11 @@ class SalesPlanImportController extends Controller
                 if ($data[$key]['installment_no'] == 0) {
                     $data[$key]['details'] = Str::title($data[$key]['type']);
                 } else {
-                    $data[$key]['details'] = (englishCounting($data[$key]['installment_no'])) . ' ' . $data[$key]['type'];
+                    if ($data[$key]['type'] == 'additional_expense') {
+                        $data[$key]['details'] = Str::title(str_replace('-', ' ', $data[$key]['label']));
+                    } else {
+                        $data[$key]['details'] = (englishCounting($data[$key]['installment_no'])) . ' ' . Str::title($data[$key]['type']);
+                    }
                 }
                 $data[$key]['date'] = $data[$key]['due_date'];
                 $data[$key]['remarks'] = Str::title(Str::title(str_replace('-', ' ', $data[$key]['status'])));
@@ -467,8 +471,7 @@ class SalesPlanImportController extends Controller
                 unset($data[$key]['validity']);
                 unset($data[$key]['due_date']);
                 unset($data[$key]['installment_no']);
-
-
+                unset($data[$key]['label']);
 
                 $spInstallment = SalesPlanInstallments::insert($data[$key]);
             }
@@ -623,6 +626,27 @@ class SalesPlanImportController extends Controller
                     if ($request->get('updateValue') == 'true') {
 
                         $tempData->type = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'label':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->label = $request->get('value');
                         $tempData->save();
 
                         $response = view('app.components.unit-preview-cell', [

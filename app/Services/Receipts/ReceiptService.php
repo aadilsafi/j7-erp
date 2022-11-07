@@ -409,28 +409,31 @@ class ReceiptService implements ReceiptInterface
             $data[$key]['amount_received'] = $data[$key]['amount'];
             $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];
             $data[$key]['online_instrument_no'] = $data[$key]['online_transaction_no'];
-            $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
 
-            if ($data[$key]['installment_no'] == 0) {
-                $data[$key]['purpose'] = 'Downpayment';
-                $data[$key]['installment_no'] = '["Downpayment"]';
-            } else {
-                $data[$key]['purpose'] = (englishCounting($data[$key]['installment_no'])) . ' Installment';
-                $data[$key]['installment_no'] = '["' . (englishCounting($data[$key]["installment_no"])) . ' Installment"]';
+            $data[$key]['purpose'] = str_replace('-', ' ', $data[$key]['installment_no']);
+            $data[$key]['installment_no'] = json_encode([$data[$key]['purpose']]);
+
+            if ($data[$key]['mode_of_payment'] == 'cheque' || $data[$key]['mode_of_payment'] == 'online') {
+                $bank = Bank::where('account_number', $data[$key]['bank_acount_number'])->first();
+                if ($bank) {
+                    $data[$key]['bank_id'] = $bank->id;
+                }
+                $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
             }
 
             $data[$key]['installment_number'] = $data[$key]['installment_no'];
+            $data[$key]['mode_of_payment'] = Str::title($data[$key]['mode_of_payment']);
             $data[$key]['status'] = $data[$key]['status'] == 'active' ? 1 : 0;
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
             if ($data[$key]['mode_of_payment'] == 'cheque') {
                 $url = $data[$key]['image_url'];
-                $info = pathinfo($url);
-                $contents = file_get_contents($url);
-                $file = '/tmp/' . $info['basename'];
-                file_put_contents($file, $contents);
-                $uploaded_file = new UploadedFile($file, $info['basename']);
+                // $info = pathinfo($url);
+                // $contents = file_get_contents($url);
+                // $file = '/tmp/' . $info['basename'];
+                // file_put_contents($file, $contents);
+                // $uploaded_file = new UploadedFile($file, $info['basename']);
                 // dd($uploaded_file);
             }
             unset($data[$key]['unit_short_label']);
@@ -445,18 +448,33 @@ class ReceiptService implements ReceiptInterface
             unset($data[$key]['bank_name']);
             unset($data[$key]['image_url']);
 
-            // dd($data);
-
 
             $receipt = Receipt::create($data[$key]);
+
+            if ($receipt->mode_of_payment == "Cash") {
+                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+            }
+
+            if ($receipt->mode_of_payment == "Cheque") {
+                if ($receipt->status == 0) {
+                    $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                } else {
+                    $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                }
+            }
+
+            if ($receipt->mode_of_payment == "Online") {
+                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+            }
             if ($data[$key]['mode_of_payment'] == 'cheque') {
 
-                $receipt->addMedia($uploaded_file)->toMediaCollection('receipt_attachments');
+                $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
                 changeImageDirectoryPermission();
             }
         }
 
         // dd($data);
+
         return $receipt;
     }
 }

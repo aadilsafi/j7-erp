@@ -83,6 +83,12 @@ class ImportReceiptsDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'bank_name', 'inputtype' => 'text', 'value' => $data->bank_name]
                 );
             })
+            ->editColumn('bank_acount_number', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'bank_acount_number', 'inputtype' => 'text', 'value' => $data->bank_acount_number]
+                );
+            })
             ->editColumn('online_transaction_no', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
@@ -199,6 +205,12 @@ class ImportReceiptsDataTable extends DataTable
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'bank_name'
+            ])->render()),
+            Column::computed('bank_acount_number')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'spInstallment' => true,
+                'name' => 'bank_acount_number'
             ])->render()),
             Column::computed('online_transaction_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,

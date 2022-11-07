@@ -42,7 +42,7 @@ class ReceiptController extends Controller
      */
     public function index(ReceiptsDatatable $dataTable, $site_id)
     {
-        //
+        // 
         $data = [
             'site_id' => $site_id,
             'receipt_templates' => ReceiptTemplate::all(),
@@ -122,10 +122,8 @@ class ReceiptController extends Controller
         $lastInstallment = array_pop($installmentNumbersArray);
         $unit_data =  $receipt->unit;
 
-        $last_paid_installment_id = SalesPlanInstallments::where([
-            'sales_plan_id' => $receipt->sales_plan_id,
-            'details' => $lastInstallment
-        ])->first()->id;
+        $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
+            ->whereRaw('LOWER(details) = (?)', [strtolower($lastInstallment)])->first()->id;
 
         $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
@@ -646,7 +644,49 @@ class ReceiptController extends Controller
                 case 'bank_name':
                     if ($request->get('updateValue') == 'true') {
 
+                        if ($request->get('value') != "null" || $request->get('value') != "") {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\Bank,slug',
+                            ], [
+                                'value' => 'Bank Name Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                return apiErrorResponse($validator->errors()->first('value'));
+                            }
+                        }
                         $tempData->bank_name = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'bank_acount_number':
+                    if ($request->get('updateValue') == 'true') {
+
+                        if ($request->get('value') != "null" || $request->get('value') != "") {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\Bank,account_number',
+                            ], [
+                                'value' => 'Bank Account Number Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                return apiErrorResponse($validator->errors()->first('value'));
+                            }
+                        }
+
+                        $tempData->bank_acount_number = $request->get('value');
                         $tempData->save();
 
                         $response = view('app.components.unit-preview-cell', [

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->float('down_payment_total');
             $table->date('validity');
             $table->string('type');
+            $table->string('label')->nullable();
             $table->date('due_date');
             $table->integer('installment_no');
             $table->float('total_amount');

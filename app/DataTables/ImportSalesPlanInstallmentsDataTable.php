@@ -81,6 +81,12 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
                     ['id' => $data->id, 'field' => 'type', 'inputtype' => 'text', 'value' => $data->type]
                 );
             })
+            ->editColumn('label', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'label', 'inputtype' => 'text', 'value' => $data->label]
+                );
+            })
             ->editColumn('installment_no', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
@@ -160,8 +166,13 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
-
                 'name' => 'type'
+            ])->render())->searchable(true),
+            Column::computed('label')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'spInstallment' => true,
+                'name' => 'label'
             ])->render())->searchable(true),
             Column::computed('due_date')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,

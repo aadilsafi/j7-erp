@@ -53,6 +53,7 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
             'down_payment_total' => $row['down_payment_total'],
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
             'type' => $row['type'],
+            'label' => $row['label'],
             'due_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['due_date']))->format('Y-m-d'),
             'installment_no' => $row['installment_no'],
             'total_amount' => $row['total_amount'],

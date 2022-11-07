@@ -16,6 +16,7 @@ class TempSalePlanInstallment extends Model
         'down_payment_total',
         'validity',
         'type',
+        'label',
         'due_date',
         'installment_no',
         'total_amount',

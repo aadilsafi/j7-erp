@@ -178,5 +178,9 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
         function Import() {
             location.href = '{{ route('sites.receipts.importReceipts', ['site_id' => $site_id]) }}';
         }
+
+        function ImportBanks() {
+            location.href = '{{ route('sites.receipts.bankImport.importBanks', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

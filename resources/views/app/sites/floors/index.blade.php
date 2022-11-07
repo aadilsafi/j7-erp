@@ -336,8 +336,8 @@
                                 text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
                                 className: 'dropdown-item',
                                 action: function(e, dt, node, config) {
-                                    location.href = '#'
-                                        // '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
+                                    location.href = 
+                                        '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
                                 }
                             },
 

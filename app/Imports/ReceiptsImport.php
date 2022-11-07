@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\SalesPlan;
 use App\Models\Stakeholder;
+use App\Models\TempReceipt;
 use App\Models\TempSalePlanInstallment;
 use App\Models\Unit;
 use Carbon\Carbon;
@@ -16,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 
-class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
+class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
 {
     use Importable, RemembersRowNumber;
 
@@ -46,21 +47,23 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
             throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
         }
 
-        return new TempSalePlanInstallment([
+        return new TempReceipt([
             'unit_short_label' => $row['unit_short_label'],
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'total_price' => $row['total_price'],
             'down_payment_total' => $row['down_payment_total'],
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
-            'type' => $row['type'],
-            'label' => $row['label'],
-            'due_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['due_date']))->format('Y-m-d'),
+            'mode_of_payment' => $row['mode_of_payment'],
+            'amount' => $row['amount'],
             'installment_no' => $row['installment_no'],
-            'total_amount' => $row['total_amount'],
-            'paid_amount' => $row['paid_amount'],
-            'remaining_amount' => $row['remaining_amount'],
-            'last_paid_at' => (!is_null($row['last_paid_at']) ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['last_paid_at']))->format('Y-m-d') : null),
+            'cheque_no' => $row['cheque_no'],
+            'bank_name' => $row['bank_name'],
+            'bank_acount_number' => $row['bank_acount_number'],
+            'online_transaction_no' => $row['online_transaction_no'],
+            'transaction_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['transaction_date']))->format('Y-m-d'),
+            'other_payment_mode_value' => $row['other_payment_mode_value'],
             'status' => $row['status'],
+            'image_url' => $row['image_url'],
         ]);
     }
 
@@ -83,13 +86,10 @@ class SalesPlanInstallmentsImport implements ToModel, WithChunkReading, WithBatc
             'total_price' =>  ['required', 'numeric', 'gt:0'],
             'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
             'validity' =>  ['required'],
-            'type' =>  ['required'],
-            'due_date' => ['required'],
-            'installment_no' =>  ['required'],
-            'total_amount' =>  ['required', 'numeric', 'gt:0'],
-            'paid_amount' =>  ['required', 'numeric'],
-            'remaining_amount' =>  ['required', 'numeric'],
-            'status' => ['required']
+            'mode_of_payment' =>  ['required'],
+            'amount' => ['required'],
+            'status' => ['required'],
+            'installment_no' => ['required']
         ];
     }
 

@@ -134,14 +134,14 @@
 
                             <div class="row mb-1 g-1">
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label" for="filter_generated_at">Generated At</label>
+                                    <label class="form-label" style="font-size: 15px" for="filter_generated_at">Generated At</label>
                                     <input type="text" id="filter_generated_at" name="filter_generated_at"
                                         class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                         placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                 </div>
 
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label" for="filter_approved_at">Approved At</label>
+                                    <label class="form-label" style="font-size: 15px" for="filter_approved_at">Approved At</label>
                                     <input type="text" id="filter_approved_at" name="filter_approved_at"
                                         class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                         placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">

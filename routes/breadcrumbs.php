@@ -429,7 +429,12 @@ Breadcrumbs::for('sites.accounts.recovery.calender', function (BreadcrumbTrail $
     $trail->push('Recovery', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
     $trail->push('Calendar', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
 });
-// Accounts Ledgers
+// journal Entries
+Breadcrumbs::for('sites.accounts.journal-entry.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Journal Entries', route('sites.accounts.journal-entry.index', ['site_id' => $site_id]));
+});
+// ledgers Entries
 Breadcrumbs::for('sites.accounts.ledger.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Ledgers', route('sites.accounts.ledger.index', ['site_id' => $site_id]));

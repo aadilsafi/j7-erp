@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\AccountAction;
 use App\Models\AccountLedger;
+use App\Models\SalesPlan;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -14,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DB;
 
 class SalesInvoiceLedgerDatatable extends DataTable
 {
@@ -34,6 +36,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
             ->setRowId('id')
             ->editColumn('debit', function ($ledger) {
                 return number_format($ledger->debit);
+            })
+            ->editColumn('unit', function ($ledger) {
+                return $ledger->salesPlan->unit->floor_unit_number;
             })
             ->editColumn('credit', function ($ledger) {
                 return number_format($ledger->credit);
@@ -58,32 +63,31 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 return account_number_format($ledger->account_head_code);
             })
             ->editColumn('origin', function ($ledger) {
-                if ($ledger->account_action_id == 1) {
+                if ($ledger->account_action_id == 1 || $ledger->account_action_id == 8) {
                     return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
                                 <span class="badge rounded-pill bg-warning">
                                 <i class="bi bi-box-arrow-right" ></i>
                                 </span>
                             </a>';
-                } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11) {
-                    return '<a href="' . route('sites.receipts.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11 || $ledger->account_action_id == 12) {
+                    $receipt = $file = DB::table('receipts')
+                        ->where('sales_plan_id', $ledger->sales_plan_id)
+                        ->first();
+                    return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
-                } else if ($ledger->account_action_id == 3) {
-                    return '<a href="' . route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
-                } else if ($ledger->account_action_id == 5) {
-                    return '<a href="' . route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
+                    $file = DB::table('file_management')
+                        ->where('sales_plan_id', $ledger->sales_plan_id)
+                        ->first();
+
+                    if (isset($file)) {
+                        return '<a href="' . route('sites.file-managements.customers.units.files.show', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_id' => encryptParams($file->id)]) . '">
                             <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                         </a>';
-                } else if ($ledger->account_action_id == 6) {
-                    return '<a href="' . route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
-                } else if ($ledger->account_action_id == 7) {
-                    return '<a href="' . route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                    }
                 } else {
                     return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
                 }
@@ -129,7 +133,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            // ->rowGroupDataSrc('account_action_id')
+            ->rowGroupDataSrc('unit')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
@@ -148,6 +152,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::computed('origin')->title('Origin'),
             Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center'),
+            Column::computed('unit')->name('salesPlan.unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap text-center'),
             Column::computed('account_head_code_name')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap text-center'),
             Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
             Column::make('debit')->title('Debit')->addClass('text-nowrap text-center'),

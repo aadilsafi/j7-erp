@@ -14,4 +14,6 @@ interface ReceiptInterface
 
     public function updateInstallments($inputs);
 
+    public function ImportReceipts($site_id);
+
 }

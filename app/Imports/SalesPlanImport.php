@@ -75,6 +75,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     {
         return [
             'floor_short_label.exists' => 'Floor dose not Exists.',
+            'unit_short_label.exists' => 'Unit dose not Exists.',
             'additional_costs_name.exists' => 'Additional costs does not Exists.',
             'gross_area.gte' =>  'Gross Area Must be greater then Net area',
             'unit_type_slug' => 'Unit Type is not Exists.'

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('address');
             $table->string('contact_number');
             $table->boolean('status')->default(true);
-            $table->string('comments');
+            $table->string('comments')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

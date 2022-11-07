@@ -23,8 +23,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -56,12 +55,13 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.receipts.make-active-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
+            <form action="{{ route('sites.receipts.make-active-selected', ['site_id' => $site_id]) }}"
+                id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
 
-             {{-- Printing Modal --}}
-             @include('app.sites.receipts.partials.print', [
+            {{-- Printing Modal --}}
+            @include('app.sites.receipts.partials.print', [
                 'receipt_templates' => $receipt_templates,
             ])
 
@@ -175,5 +175,8 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             location.href = '{{ route('sites.receipts.create', ['site_id' => $site_id]) }}';
         }
 
+        function Import() {
+            location.href = '{{ route('sites.receipts.importReceipts', ['site_id' => $site_id]) }}';
+        }
     </script>
 @endsection

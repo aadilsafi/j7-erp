@@ -38,6 +38,7 @@ use App\Http\Controllers\{
     LedgerController,
     SalesPlanImportController,
     TrialBalanceController,
+    JournalEntryController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -411,6 +412,13 @@ Route::group([
                         Route::post('get-unpaid-installments', [ReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
                     });
 
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.receipts.importReceipts', ['preview' => false])->name('importReceipts');
+                        Route::post('preview', [ReceiptController::class, 'ImportPreview'])->name('importReceiptsPreview');
+                        Route::get('storePreview', [ReceiptController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [ReceiptController::class, 'saveImport'])->name('saveImport');
+                    });
+
                     Route::group(['prefix' => '/{receipts_id}'], function () {
 
                         Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
@@ -621,6 +629,13 @@ Route::group([
                             Route::get('get-refund-datatable', [LedgerController::class, 'refundDatatable'])->name('get-refund-datatable');
                         });
                     });
+                    // Journal Entries
+                    Route::group(['prefix' => 'journal-entry', 'as' => 'journal-entry.'], function () {
+                        Route::get('/', [JournalEntryController::class, 'index'])->name('index');
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::get('get-refund-datatable', [JournalEntryController::class, 'refundDatatable'])->name('get-refund-datatable');
+                        });
+                    });
                 });
 
                 Route::get('import/sample-download/{order}', [AdditionalCostController::class, 'downloadSample'])->name('import.sample-download');
@@ -640,6 +655,8 @@ Route::group([
         Route::get('ajax-import-sales-plan.get.input', [SalesPlanController::class, 'getInput'])->name('ajax-import-sales-plan.get.input');
         Route::get('ajax-import-sales-plan.adCosts.get.input', [SalesPlanImportController::class, 'getInputAdcosts'])->name('ajax-import-sales-plan.adCosts.get.input');
         Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
+        Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
+        Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

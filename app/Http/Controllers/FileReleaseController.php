@@ -225,7 +225,7 @@ class FileReleaseController extends Controller
         DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
             // Account ledger transaction
-            $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
+            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
             $file_resale = FileResale::where('file_id', decryptParams($file_id))->first();
             $file_resale->status = 1;
@@ -260,11 +260,17 @@ class FileReleaseController extends Controller
     {
 
         $file_refund = (new FileResale())->find(decryptParams($file_id));
+        // dd($file_refund ,  json_decode($file_refund['stakeholder_data']));
 
         $template = Template::find(decryptParams($template_id));
 
         $data = [
             'site_id' => decryptParams($site_id),
+            'file_refund' => $file_refund,
+            'template' => $template,
+            'stakeholder' => json_decode($file_refund['stakeholder_data']),
+            'unit' => Unit::find($file_refund['unit_id']),
+            'salesPlan' => SalesPlan::where('unit_id', $file_refund['unit_id'])->first(),
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;

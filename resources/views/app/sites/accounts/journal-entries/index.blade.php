@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.ledger.index', encryptParams($site->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.journal-entry.index', encryptParams($site->id)) }}
 @endsection
 
-@section('page-title', 'Ledgers')
+@section('page-title', 'Journal Entries')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -30,9 +30,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Ledgers</h2>
+                <h2 class="content-header-title float-start mb-0">Journal Entries</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.accounts.ledger.index', encryptParams($site->id)) }}
+                    {{ Breadcrumbs::render('sites.accounts.journal-entry.index', encryptParams($site->id)) }}
                 </div>
             </div>
         </div>

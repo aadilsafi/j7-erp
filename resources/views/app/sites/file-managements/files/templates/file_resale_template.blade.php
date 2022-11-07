@@ -63,7 +63,7 @@
             </div>
             <div class="col">
                 <span class="title">RESALE REQUEST</span> <strong class="title"> FORM</strong>
-              
+
                 <div class="row mt-3">
                     <div class="col-2">
                         Date:
@@ -98,7 +98,7 @@
             </div>
             <div class="col-2 text-center">
                 <p style="border-bottom: 1px solid black;">
-                    Gull Raiz
+                    {{ $stakeholder->full_name }}
                 </p>
             </div>
             <div class="col text-nowrap" style="width: fit-content;">
@@ -106,7 +106,7 @@
             </div>
             <div class="col text-center">
                 <p style="border-bottom: 1px solid black;">
-                    GF-001
+                   {{ $unit->floor_short_label }}
                 </p>
             </div>
             <div class="col-4 text-nowrap" style="width: fit-content;">
@@ -123,7 +123,7 @@
             <p>
                 service charges at the time of unit sale. Further details of the unit are as under:
           </p>
-          
+
         </div>
 
         <!-- <div style="border-bottom: 1px solid black" class="my-2"></div> -->
@@ -134,19 +134,19 @@
                 <h4>Owner Name:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                <div style="border-bottom: 1px solid black" class="mt-1">{{ $stakeholder->full_name }}</div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Unit No:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                <div style="border-bottom: 1px solid black" class="mt-1">{{ $unit->floor_short_label }}</div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4> Size Of Unit:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                <div style="border-bottom: 1px solid black" class="mt-1">{{ $unit->gross_area }}</div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Floor:*</h4>
@@ -310,7 +310,7 @@
                         <div style="border-bottom: 1px solid black" class="mt-1"></div>
                     </div>
                 </div>
-             
+
             </div>
         </div>
     </div>

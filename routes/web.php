@@ -38,6 +38,7 @@ use App\Http\Controllers\{
     LedgerController,
     SalesPlanImportController,
     TrialBalanceController,
+    JournalEntryController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -626,6 +627,13 @@ Route::group([
                         Route::get('/', [LedgerController::class, 'index'])->name('index');
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::get('get-refund-datatable', [LedgerController::class, 'refundDatatable'])->name('get-refund-datatable');
+                        });
+                    });
+                    // Journal Entries
+                    Route::group(['prefix' => 'journal-entry', 'as' => 'journal-entry.'], function () {
+                        Route::get('/', [JournalEntryController::class, 'index'])->name('index');
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::get('get-refund-datatable', [JournalEntryController::class, 'refundDatatable'])->name('get-refund-datatable');
                         });
                     });
                 });

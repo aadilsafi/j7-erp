@@ -488,7 +488,7 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // 
+            //
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
@@ -1609,6 +1609,14 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.accounts.ledger.index',
                 'show_name' => 'Can View Accounts Ledger',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Journal Entry
+            [
+                'name' => 'sites.accounts.journal-entry.index',
+                'show_name' => 'Can View Journal Entries',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -49,10 +49,13 @@ class ReceiptService implements ReceiptInterface
 
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
-
-                if ($data[$i]['bank_id'] == 0) {
+                if(!isset($data[$i]['bank_name'])){
                     $data[$i]['bank_id'] =  null;
                     $data[$i]['bank_name'] = null;
+                }
+
+                if ($data[$i]['bank_id'] == 0) {
+
                     if ($data[$i]['mode_of_payment'] == 'Cheque' || $data[$i]['mode_of_payment'] == 'Online') {
                         $bankData = [
                             'site_id' => decryptParams($site_id),

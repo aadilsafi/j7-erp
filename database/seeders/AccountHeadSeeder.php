@@ -425,7 +425,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '40101010001002',
-                'name' => 'Revenue - Cancelation Charges',
+                'name' => 'Revenue - Cancellation Charges',
                 'level' => 5,
             ],
             [
@@ -491,7 +491,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '40201010001003',
-                'name' => 'Cancelation Account',
+                'name' => 'Cancellation Account',
                 'level' => 5,
             ],
             [

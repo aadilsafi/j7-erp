@@ -19,6 +19,7 @@ class Type extends Model
         'name',
         'parent_id',
         'slug',
+        'is_imported',
         'status',
         'account_added',
         'account_number',

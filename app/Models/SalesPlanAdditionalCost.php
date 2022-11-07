@@ -15,6 +15,7 @@ class SalesPlanAdditionalCost extends Model
         'sales_plan_id',
         'additional_cost_id',
         'percentage',
+        'is_imported',
         'amount',
     ];
 

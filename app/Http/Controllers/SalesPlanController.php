@@ -729,6 +729,7 @@ class SalesPlanController extends Controller
                 ]);
                 $data[$key]['lead_source_id'] = $leadSource->id;
             }
+            $data[$key]['is_imported'] = true;
 
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();

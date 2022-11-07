@@ -23,6 +23,7 @@ class Bank extends Model
         'address',
         'contact_number',
         'status',
+        'is_imported',
         'comments',
     ];
 

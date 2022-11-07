@@ -1005,15 +1005,15 @@ class UnitController extends Controller
     public function saveImport(Request $request, $site_id)
     {
 
-        // $validator = \Validator::make($request->all(), [
-        //     'fields.*' => 'required|distinct',
-        // ], [
-        //     'fields.*.required' => 'Must Select all Fields',
-        //     'fields.*.distinct' => 'Field can not be duplicated',
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
 
-        // ]);
+        ]);
 
-        // $validator->validate();
+        $validator->validate();
 
         $model = new TempUnit();
         $tempdata = $model->cursor();
@@ -1071,6 +1071,7 @@ class UnitController extends Controller
                     $data[$key]['facing_id'] = $facing->id;
                 }
             }
+            $data[$key]['is_imported'] = true;
 
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();

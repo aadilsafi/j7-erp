@@ -388,6 +388,9 @@ class TypeController extends Controller
             } else {
                 $data[$key]['parent_id'] = 0;
             }
+
+            $data[$key]['is_imported'] = true;
+
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 

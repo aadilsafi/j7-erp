@@ -450,8 +450,8 @@ class FloorController extends Controller
             $data[$key]['site_id'] = decryptParams($site_id);
             $data[$key]['order'] = ++$totalFloors;
             $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
-            $data[$key]['active'] = true;
+            $data[$key]['is_imported'] = true;
+
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
         }

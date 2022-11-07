@@ -181,6 +181,7 @@ class BankController extends Controller
                 $data[$key]['name'] = Str::title(Str::replace('-', ' ', $data[$key]['name']));
                 $data[$key]['branch'] = $data[$key]['address'];
                 $data[$key]['status'] = true;
+                $data[$key]['is_imported'] = true;
 
                 $bank = Bank::create($data[$key]);
             }

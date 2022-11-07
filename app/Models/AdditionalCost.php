@@ -24,6 +24,7 @@ class AdditionalCost extends Model
         'applicable_on_floor',
         'unit_percentage',
         'applicable_on_unit',
+        'is_imported',
     ];
 
     protected $casts = [

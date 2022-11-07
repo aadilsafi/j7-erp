@@ -73,6 +73,11 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
+                'name' => 'Receipt Voucher Online',
+                'slug' => 'receipt-voucher-online',
+            ],
+            [
+                'site_id' => 1,
                 'name' => 'Income',
                 'slug' => 'income',
             ],

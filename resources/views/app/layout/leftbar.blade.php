@@ -479,13 +479,13 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('sites.accounts.ledger.index')
+                        @can('sites.accounts.journal-entry.index')
                             <li
-                                class="nav-item {{ request()->routeIs('sites.accounts.ledger.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                class="nav-item {{ request()->routeIs('sites.accounts.journal-entry.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
-                                    href="{{ route('sites.accounts.ledger.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    href="{{ route('sites.accounts.journal-entry.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='dollar-sign'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Ledgers</span>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Journal Entries</span>
                                 </a>
                             </li>
                         @endcan

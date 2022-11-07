@@ -179,7 +179,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '10209010001002',
-                'name' => 'Meezan Bank - Expense',
+                'name' => 'Meezan Bank - 6560',
                 'level' => 5,
             ],
             [
@@ -187,7 +187,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '10209010001003',
-                'name' => 'Meezan Bank - Income',
+                'name' => 'Meezan Bank - 1650',
                 'level' => 5,
             ],
             [

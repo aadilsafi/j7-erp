@@ -449,3 +449,8 @@ Breadcrumbs::for('sites.accounts.trial-balance.index', function (BreadcrumbTrail
     $trail->parent('dashboard');
     $trail->push('Trial Balance', route('sites.accounts.trial-balance.index', ['site_id' => $site_id]));
 });
+
+Breadcrumbs::for('sites.banks.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.receipts.index', $site_id);
+    $trail->push('Import Banks');
+});

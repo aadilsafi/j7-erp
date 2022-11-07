@@ -107,6 +107,15 @@ class ReceiptsDatatable extends DataTable
                 ]);
 
             array_unshift($buttons, $addButton);
+
+            // $addButton =  Button::raw('import')
+            //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+            //     ->text('<i data-feather="upload"></i> Import Banks')
+            //     ->attr([
+            //         'onclick' => 'ImportBanks()',
+            //     ]);
+
+            // array_unshift($buttons, $addButton);
         }
 
         if ($createPermission) {

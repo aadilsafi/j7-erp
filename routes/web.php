@@ -419,6 +419,7 @@ Route::group([
                         Route::post('saveImport', [ReceiptController::class, 'saveImport'])->name('saveImport');
                     });
 
+
                     Route::group(['prefix' => '/{receipts_id}'], function () {
 
                         Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
@@ -447,6 +448,13 @@ Route::group([
 
                     Route::get('create', [BankController::class, 'create'])->name('create');
                     Route::post('store', [BankController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.banks.importBanks', ['preview' => false])->name('importBanks');
+                        Route::post('preview', [BankController::class, 'ImportPreview'])->name('importBanksPreview');
+                        Route::get('storePreview', [BankController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [BankController::class, 'saveImport'])->name('saveImport');
+                    });
 
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                         // used for bank selection in receipt creation

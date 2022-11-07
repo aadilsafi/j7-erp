@@ -13,8 +13,9 @@ class TrialBalanceController extends Controller
 
     public function index(TrialBalanceDataTable $dataTable, $site_id)
     {
-        // dd($dataTable);
-        // dd((new TrialBalanceDataTable)->query($site_id));
+    // public function index(Request $request, $site_id)
+    // {
+        // dd($request->all());
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {

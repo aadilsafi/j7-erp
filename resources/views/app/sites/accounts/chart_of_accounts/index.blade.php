@@ -87,14 +87,9 @@
                 </ul> --}}
                 <div class="tab-content">
                     <div class="tab-pane active" id="salesPlanData" aria-labelledby="salesPlanData" role="tabpanel">
-
                         <div class="card">
                             <div class="card-body">
-                                {{-- <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form> --}}
-
-                                <section style="min-height: 40vh">
+                                {{-- <section> --}}
                                     <style>
                                       .custom_bg{
                                         margin-top: 0.5rem;
@@ -105,63 +100,134 @@
                                         padding-bottom: 0 !important;
                                       }
                                       .custom_multi_drop_main{
+                                        width: 100%;
                                         position: unset;
                                       }
+                                      @media(min-width: 768px){
+                                        .custom_multi_drop_main{
+                                            width: 1061px !important;
+                                        }
+                                      }
                                     </style>
-                                      <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
+                                    <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                     
-                                        <div class="main-menu-content">
-                                        <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
-                                    
-                                        <li class="custom_bg nav-item"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce</span></a>
-                                    
-                                          <ul class="menu-content">
-                                            <li class="nav-item">
-                                              <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 2</span></a>
-                                              <ul class="menu-content">
-                                                <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-3" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 3</span></a>
-                                                  <ul class="menu-content">
-                                                    <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 4</span></a>
-                                                      <ul class="menu-content">
-                                                        <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-5" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 5</span></a>
-                                                          <ul class="menu-content ps-2">
-                                                            <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
+                                        <div class="">
+                                            <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
+                                                @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
+                                                    <li class="custom_bg nav-item"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
+                                                        <ul class="menu-content">
+                                                            @foreach ($account_of_heads as $key=>$account_of_head_full_array)
+                                                            @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
+                                                                                                                                                                                    <li class="nav-item">
+                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head_full_array->name}}</span></a>
+                                                                        <ul class="menu-content">
+                                                                            <table class="table">
+                                                                                <thead>
+                                                                                <tr>
+                                                                                    <th scope="col">Name</th>
+                                                                                    <th scope="col">ACCOUNT LEVEl</th>
+                                                                                    <th scope="col">ACCOUNT CODES</th>
+                                                                                    <th scope="col">Balance</th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                <tr>
+                                                                                    <td>{{$account_of_head_full_array->name}}</td>
+                                                                                    <td>{{$account_of_head_full_array->level}}</td>
+                                                                                    <td>{{$account_of_head_full_array->code}}</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </ul>
                                                             </li>
-                                                            <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
-                                                            </li>
-                                                            <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
-                                                            </li>
-                                                            <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
-                                                            </li>
-                                                          </ul>
-                                                        </li>
-                                                        <!-- <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
-                                                        </li>
-                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
-                                                        </li>
-                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
-                                                        </li>
-                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
-                                                        </li> -->
-                                                      </ul>
+                                                                
+                                                            @endif
+                                                                
+                                                            @endforeach
+                                                            
+                                                            {{-- @dd(substr($account_of_head->code, 0, 2)); --}}
+                                                            {{-- @if (($account_of_heads[$key]->code)==)
+                                                                
+                                                            @endif --}}
+                                                            {{-- @if (($account_of_heads[0]->code == substr($account_of_head->code, 0, 2)))
+                                                                 @foreach ( as )
+                                                                    <li class="nav-item">
+                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 2</span></a>
+                                                                        <ul class="menu-content">
+                                                                            <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-3" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 3</span></a>
+                                                                            <ul class="menu-content">
+                                                                                <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 4</span></a>
+                                                                                <ul class="menu-content">
+                                                                                    <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-5" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 5</span></a>
+                                                                                    <ul class="menu-content ps-2">
+                                                                                        <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                </li>
+                                                                            </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </li>
+                                                                @endforeach  --}}
+                                                            {{-- <li class="nav-item">
+                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 2</span></a>
+                                                                        <ul class="menu-content">
+                                                                            <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-3" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 3</span></a>
+                                                                            <ul class="menu-content">
+                                                                                <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 4</span></a>
+                                                                                <ul class="menu-content">
+                                                                                    <li class=" nav-item m-0"><a class="d-flex align-items-center bg-light ps-5" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">eCommerce 5</span></a>
+                                                                                    <ul class="menu-content ps-2">
+                                                                                        <li><a class="d-flex align-items-center " href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Shop">Shop</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Details">Details</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Wish List">Wish List</span></a>
+                                                                                        </li>
+                                                                                        <li><a class="d-flex align-items-center" href=""><i data-feather="circle"></i><span class="menu-item text-truncate" data-i18n="Checkout">Checkout</span></a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                </li>
+                                                                            </ul>
+                                                                            </li>
+                                                                        </ul>
+                                                            </li> --}}
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">ACCOUNT LEVEl</th>
+                                                                    <th scope="col">ACCOUNT CODES</th>
+                                                                    <th scope="col">Balance</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td>{{$account_of_head->name}}</td>
+                                                                    <td>{{$account_of_head->level}}</td>
+                                                                    <td>{{$account_of_head->code}}</td>
+                                                                    <td>0</td>
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </ul>
                                                     </li>
-                                                  </ul>
-                                                </li>
+                                                @endforeach
                                                 
-                                               
-                                                
-                                              </ul>
-                                            </li>
-                                            
-                                          </ul>
-                                        </li>
-                                        </ul>
+                                            </ul>
                                         </div>
                                     </div>
-                                    
-                                    
-                                    
-                                </section>
                             </div>
                         </div>
 

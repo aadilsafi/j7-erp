@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\ChartOfAccountsDataTable;
+use App\Models\AccountHead;
 use App\Models\Site;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,12 +17,16 @@ class ChartsOfAccountsController extends Controller
      */
     public function index(ChartOfAccountsDataTable $dataTable, $site_id)
     {  
+        $account_of_heads = AccountHead::all();
+        $account_of_heads_codes = $account_of_heads->pluck('code')->toArray();
         
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {
                 $data = [
                     'site' => $site,
+                    'account_of_heads' => $account_of_heads,
+                    'account_of_heads_codes' => $account_of_heads_codes
                 ];
                 return $dataTable->with($data)->render('app.sites.accounts.chart_of_accounts.index', $data);
             }

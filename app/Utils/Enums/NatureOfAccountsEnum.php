@@ -9,6 +9,7 @@ enum NatureOfAccountsEnum: string
     use EnumToArray;
 
     case SALES_PLAN_APPROVAL = 'SI';
+    case SALES_PLAN_DISAPPROVAL = 'SDI';
     case RECEIPT_VOUCHER = 'RV';
     case PAYMENT_VOUCHER = 'PV';
     case JOURNAL_BUY_BACK = 'JBB';

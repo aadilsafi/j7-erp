@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\TempSalePlan;
+use App\Models\TempSalePlanInstallment;
 use App\Models\TempSalesPlanAdditionalCost;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\EloquentDataTable;
@@ -10,11 +11,11 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class ImportSalesPlanAdCostsDataTable extends DataTable
+class ImportSalesPlanInstallmentsDataTable extends DataTable
 {
     public function __construct($site_id)
     {
-        $model = new TempSalesPlanAdditionalCost();
+        $model = new TempSalePlanInstallment();
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
         }
@@ -55,29 +56,48 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
             //         ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
             //     );
             // })
-           
+
             // ->editColumn('validity', function ($data) {
             //     return view(
             //         'app.components.unit-preview-cell',
             //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
             //     );
             // })
-            ->editColumn('additional_costs_name', function ($data) {
+            ->editColumn('type', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'additional_costs_name', 'inputtype' => 'text', 'value' => $data->additional_costs_name]
+                    ['id' => $data->id, 'field' => 'type', 'inputtype' => 'text', 'value' => $data->type]
                 );
             })
-            ->editColumn('percentage', function ($data) {
+            ->editColumn('installment_no', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'percentage', 'inputtype' => 'number', 'value' => $data->percentage]
+                    ['id' => $data->id, 'field' => 'installment_no', 'inputtype' => 'number', 'value' => $data->installment_no]
                 );
             })
             ->editColumn('total_amount', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
                     ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
+                );
+            })
+            ->editColumn('paid_amount', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'paid_amount', 'inputtype' => 'number', 'value' => $data->paid_amount]
+                );
+            })
+            ->editColumn('remaining_amount', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'remaining_amount', 'inputtype' => 'number', 'value' => $data->remaining_amount]
+                );
+            })
+            ->editColumn('remarks', function ($data) {
+                $values = ['paid' => 'Paid', 'unpaid' => 'Un Paid', 'partially-paid' => 'Partially Paid'];
+                return view(
+                    'app.components.input-select-fields',
+                    ['id' => $data->id, 'field' => 'remarks', 'values' => $values, 'selectedValue' => $data->remarks]
                 );
             })
             ->setRowId('id');
@@ -88,7 +108,7 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(TempSalesPlanAdditionalCost $model): QueryBuilder
+    public function query(TempSalePlanInstallment $model): QueryBuilder
     {
         return $model->newQuery()->orderBy('id');
     }
@@ -144,21 +164,35 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
                 'is_disable' => false,
                 'name' => 'validity'
             ])->render()),
-            Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
+            Column::computed('type')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'additional_costs_name'
+                'name' => 'type'
             ])->render())->searchable(true),
-            Column::computed('percentage')->title(view('app.components.select-fields', [
+            Column::computed('installment_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
-                'name' => 'percentage'
+                'name' => 'installment_no'
             ])->render()),
-
             Column::computed('total_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'total_amount'
+            ])->render()),
+            Column::computed('paid_amount')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'name' => 'paid_amount'
+            ])->render()),
+            Column::computed('remaining_amount')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'name' => 'remaining_amount'
+            ])->render()),
+            Column::computed('remarks')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'name' => 'remarks'
             ])->render()),
         ];
     }

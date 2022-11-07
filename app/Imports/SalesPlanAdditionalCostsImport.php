@@ -14,7 +14,6 @@ use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
-use Maatwebsite\Excel\Validators\ValidationException;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 
 class SalesPlanAdditionalCostsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
@@ -31,7 +30,6 @@ class SalesPlanAdditionalCostsImport implements ToModel, WithChunkReading, WithB
 
     public function model(array $row)
     {
-
         $stakeholderId = Stakeholder::select('id')->where('cnic', $row['stakeholder_cnic'])->first();
         $unitId = Unit::select('id')->where('floor_unit_number', $row['unit_short_label'])->first();
 

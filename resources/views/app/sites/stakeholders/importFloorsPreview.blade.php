@@ -156,7 +156,8 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                el.css("pointer-events", "none")
+                $('#teams-table-form').css("pointer-events", "none")
+
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
                     url: url,
@@ -176,12 +177,13 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        el.css("pointer-events", "")
-
+                        $('#teams-table-form').css("pointer-events", "")
                         hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
                         hideBlockUI('#unit_p_input_div_' + field + id);
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                 });
             }
@@ -194,7 +196,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
@@ -221,8 +223,12 @@
                             // hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                     error: function(response) {
+                        $('#teams-table-form').css("pointer-events", "")
+
                         // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });

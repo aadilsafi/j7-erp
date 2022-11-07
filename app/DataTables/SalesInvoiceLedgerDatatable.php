@@ -58,7 +58,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 return account_number_format($ledger->account_head_code);
             })
             ->editColumn('origin', function ($ledger) {
-                if ($ledger->account_action_id == 1) {
+                if ($ledger->account_action_id == 1 || $ledger->account_action_id == 8) {
                     return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
                                 <span class="badge rounded-pill bg-warning">
                                 <i class="bi bi-box-arrow-right" ></i>

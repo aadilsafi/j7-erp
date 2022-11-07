@@ -53,7 +53,7 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'Sales Plan Dis Approval',
+                'name' => 'Sales Plan DisApproval',
                 'slug' => 'sales-plan-dis-approval',
             ],
             [
@@ -125,6 +125,11 @@ class AccountActionSeeder extends Seeder
                 'site_id' => 1,
                 'name' => 'Direct Cost',
                 'slug' => 'direct-cost',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Resale',
+                'slug' => 'resale',
             ],
         ];
         foreach ($data as $item) {

@@ -23,4 +23,6 @@ interface FinancialTransactionInterface
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
     public function makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
+
+    public function makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id);
 }

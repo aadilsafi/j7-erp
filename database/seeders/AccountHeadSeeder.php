@@ -494,8 +494,14 @@ class AccountHeadSeeder extends Seeder
                 'name' => 'Cancelation Account',
                 'level' => 5,
             ],
-
-
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
+                'code' => '40201010001004',
+                'name' => 'Sales Plan Disapproval Account',
+                'level' => 5,
+            ],
             [
                 'site_id' => 1,
                 'modelable_id' => null,

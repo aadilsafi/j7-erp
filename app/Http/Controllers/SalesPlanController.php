@@ -266,6 +266,8 @@ class SalesPlanController extends Controller
         $user = User::find($salesPlan->user_id);
 
         if ($salesPlan->status == 1) {
+
+            $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($request->salesPlanID);
             $salesPlan->unit->status_id = 1;
             $salesPlan->unit->save();
 

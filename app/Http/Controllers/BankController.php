@@ -6,9 +6,13 @@ use App\DataTables\ImportBanksDataTable;
 use App\Imports\BanksImport;
 use App\Models\Bank;
 use App\Models\TempBank;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Redirect;
+use Str;
 
 class BankController extends Controller
 {
@@ -152,112 +156,51 @@ class BankController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        // DB::transaction(function () use ($request, $site_id) {
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required|distinct',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
+        DB::transaction(function () use ($request, $site_id) {
+            $validator = \Validator::make($request->all(), [
+                'fields.*' => 'required',
+            ], [
+                'fields.*.required' => 'Must Select all Fields',
+                'fields.*.distinct' => 'Field can not be duplicated',
 
-        ]);
+            ]);
 
-        $validator->validate();
-        $model = new TempStakeholder();
-        $tempdata = $model->cursor();
-        $tempCols = $model->getFillable();
+            $validator->validate();
+            $model = new TempBank();
+            $tempdata = $model->cursor();
+            $tempCols = $model->getFillable();
 
-        $stakeholder = [];
-        foreach ($tempdata as $key => $items) {
-            foreach ($tempCols as $k => $field) {
-                $data[$key][$field] = $items[$tempCols[$k]];
+            $stakeholder = [];
+            foreach ($tempdata as $key => $items) {
+                foreach ($tempCols as $k => $field) {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
+                $data[$key]['site_id'] = decryptParams($site_id);
+
+                $data[$key]['slug'] = $data[$key]['name'];
+                $data[$key]['name'] = Str::title(Str::replace('-', ' ', $data[$key]['name']));
+                $data[$key]['branch'] = $data[$key]['address'];
+                $data[$key]['status'] = true;
+
+                $bank = Bank::create($data[$key]);
             }
-            $data[$key]['site_id'] = decryptParams($site_id);
+        });
 
-            if ($data[$key]['parent_cnic'] != null) {
-                $parent = Stakeholder::where('cnic', $data[$key]['parent_cnic'])->first();
-                $data[$key]['parent_id'] = $parent->id;
-            } else {
-                $data[$key]['parent_id'] = 0;
-            }
-
-            unset($data[$key]['parent_cnic']);
-            unset($data[$key]['is_dealer']);
-            unset($data[$key]['is_vendor']);
-            unset($data[$key]['is_kin']);
-            unset($data[$key]['is_customer']);
-
-            $stakeholder = Stakeholder::create($data[$key]);
-
-            $stakeholdertype = [
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => 'C',
-                    'stakeholder_code' => 'C-00' . $stakeholder->id,
-                    'status' => $items['is_customer'] ? 1 : 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => 'V',
-                    'stakeholder_code' => 'V-00' . $stakeholder->id,
-                    'status' => $items['is_vendor'] ? 1 : 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => 'D',
-                    'stakeholder_code' => 'D-00' . $stakeholder->id,
-                    'status' => $items['is_dealer'] ? 1 : 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => 'K',
-                    'stakeholder_code' => 'K-00' . $stakeholder->id,
-                    'status' => $items['is_kin'] ? 1 : 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'stakeholder_id' => $stakeholder->id,
-                    'type' => 'L',
-                    'stakeholder_code' => 'L-00' . $stakeholder->id,
-                    'status' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            ];
-
-            $stakeholder_type = StakeholderType::insert($stakeholdertype);
-        }
-
-        TempStakeholder::query()->truncate();
-        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
-        // });
+        TempBank::query()->truncate();
+        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
 
 
-    public function getUnitInput(Request $request)
+    public function getInput(Request $request)
     {
         try {
             $field = $request->get('field');
-            $tempStakeholder = (new TempStakeholder())->find((int)$request->get('id'));
-
-            $validator = \Validator::make($request->all(), [
-                'value' => 'required',
-            ]);
-
-            if ($validator->fails()) {
-                return apiErrorResponse($validator->errors()->first('value'));
-            }
+            $tempData = (new TempBank())->find((int)$request->get('id'));
 
             switch ($field) {
-                case 'full_name':
+                case 'name':
                     if ($request->get('updateValue') == 'true') {
-                        $tempStakeholder->full_name = $request->get('value');
+                        $tempData->name = $request->get('value');
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
                             'field' => $field,
@@ -274,30 +217,10 @@ class BankController extends Controller
 
                     break;
 
-                case 'father_name':
-                    if ($request->get('updateValue') == 'true') {
-                        $tempStakeholder->father_name = $request->get('value');
-
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    }
-
-                    break;
-
-                case 'cnic':
+                case 'account_number':
                     if ($request->get('updateValue') == 'true') {
                         $validator = \Validator::make($request->all(), [
-                            'value' => 'required|digits:13|unique:stakeholders,cnic',
+                            'value' => 'required|unique:banks,account_number',
                         ]);
 
                         if ($validator->fails()) {
@@ -305,14 +228,14 @@ class BankController extends Controller
                         }
                         $validator2 = \Validator::make($request->all(), [
                             'value' => [
-                                Rule::unique('stakeholders', 'cnic')->ignore($request->get('id'))
+                                Rule::unique('temp_banks', 'account_number')->ignore($request->get('id'))
                             ],
                         ]);
 
                         if ($validator2->fails()) {
                             return apiErrorResponse($validator2->errors()->first('value'));
                         }
-                        $tempStakeholder->cnic = $request->get('value');
+                        $tempData->account_number = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -330,46 +253,26 @@ class BankController extends Controller
 
                     break;
 
-                case 'ntn':
+                case 'branch_code':
                     if ($request->get('updateValue') == 'true') {
                         $validator = \Validator::make($request->all(), [
-                            'value' => 'required|unique:stakeholders,ntn',
+                            'value' => 'required|unique:banks,branch_code',
                         ]);
 
                         if ($validator->fails()) {
                             return apiErrorResponse($validator->errors()->first('value'));
                         }
+
                         $validator2 = \Validator::make($request->all(), [
                             'value' => [
-                                Rule::unique('temp_stakeholders', 'ntn')->ignore($request->get('id'))
+                                Rule::unique('temp_banks', 'branch_code')->ignore($request->get('id'))
                             ],
                         ]);
 
                         if ($validator2->fails()) {
                             return apiErrorResponse($validator2->errors()->first('value'));
                         }
-                        $tempStakeholder->ntn = $request->get('value');
-
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    }
-
-                    break;
-
-                case 'contact':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->contact = $request->get('value');
+                        $tempData->branch_code = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -390,7 +293,49 @@ class BankController extends Controller
                 case 'address':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempStakeholder->address = $request->get('value');
+                        $tempData->address = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'contact_number':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->contact_number = $request->get('value');
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'address':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->address = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -411,7 +356,7 @@ class BankController extends Controller
                 case 'comments':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempStakeholder->comments = $request->get('value');
+                        $tempData->comments = $request->get('value');
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -427,133 +372,6 @@ class BankController extends Controller
                         ])->render();
                     }
 
-                    break;
-
-                case 'parent_cnic':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $validator = \Validator::make($request->all(), [
-                            'value' => 'required|exists:App\Models\TempStakeholder,cnic',
-                        ], [
-                            'value.exists' => 'This Value does not Exists.'
-                        ]);
-
-                        if ($validator->fails()) {
-                            return apiErrorResponse($validator->errors()->first('value'));
-                        }
-
-                        $tempStakeholder->parent_cnic = $request->get('value');
-
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    }
-
-                    break;
-                case 'relation':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->relation = $request->get('value');
-
-                        $response = view('app.components.unit-preview-cell', [
-                            'id' => $request->get('id'),
-                            'field' => $field,
-                            'inputtype' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    } else {
-                        $response = view('app.components.text-number-field', [
-                            'field' => $field,
-                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
-                            'value' => $request->get('value')
-                        ])->render();
-                    }
-
-                    break;
-                case 'is_dealer':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->is_dealer =  !$tempStakeholder->is_dealer;
-                        $tempStakeholder->save();
-
-                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
-                        $response =  view(
-                            'app.components.input-select-fields',
-                            [
-                                'id' => $request->get('id'),
-                                'field' => $field,
-                                'values' => $values,
-                                'selectedValue' => $tempStakeholder->is_dealer
-                            ]
-                        )->render();
-                    }
-
-                    break;
-
-                case 'is_customer':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->is_customer = !$tempStakeholder->is_customer;
-                        $tempStakeholder->save();
-
-                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
-                        $response =  view(
-                            'app.components.input-select-fields',
-                            [
-                                'id' => $request->get('id'),
-                                'field' => $field,
-                                'values' => $values,
-                                'selectedValue' => $tempStakeholder->is_customer
-                            ]
-                        )->render();
-                    }
-
-                    break;
-                case 'is_kin':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->is_kin = !$tempStakeholder->is_kin;
-                        $tempStakeholder->save();
-
-                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
-                        $response =  view(
-                            'app.components.input-select-fields',
-                            [
-                                'id' => $request->get('id'),
-                                'field' => $field,
-                                'values' => $values,
-                                'selectedValue' => $tempStakeholder->is_kin
-                            ]
-                        )->render();
-                    }
-
-                    break;
-                case 'is_vendor':
-                    if ($request->get('updateValue') == 'true') {
-
-                        $tempStakeholder->is_vendor = !$tempStakeholder->is_vendor;
-                        $tempStakeholder->save();
-
-                        $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
-                        $response =  view(
-                            'app.components.input-select-fields',
-                            [
-                                'id' => $request->get('id'),
-                                'field' => $field,
-                                'values' => $values,
-                                'selectedValue' => $tempStakeholder->is_vendor
-                            ]
-                        )->render();
-                    }
                     break;
 
                 default:
@@ -564,7 +382,7 @@ class BankController extends Controller
                     ])->render();
                     break;
             }
-            $tempStakeholder->save();
+            $tempData->save();
             return apiSuccessResponse($response);
         } catch (Exception $ex) {
             return apiErrorResponse($ex->getMessage());

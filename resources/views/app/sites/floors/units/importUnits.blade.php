@@ -161,14 +161,14 @@
 
         $(document).ready(function() {
             $('#kt_table_1').DataTable({
-            ordering: false,
-            sorting: false,
-            scrollX: true,
-            responsive: false,
-            searching: false,
-            lengthMenu: [50, 100, 500],
-        });
-        hideBlockUI();
+                ordering: false,
+                sorting: false,
+                scrollX: true,
+                responsive: false,
+                searching: false,
+                lengthMenu: [50, 100, 500],
+            });
+            hideBlockUI();
 
         });
 
@@ -189,7 +189,5 @@
                 url: ''
             }
         });
-
-        
     </script>
 @endsection

@@ -14,6 +14,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DB;
 
 class SalesInvoiceLedgerDatatable extends DataTable
 {
@@ -68,20 +69,12 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($ledger->receipt_id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
-                } else if ($ledger->account_action_id == 3) {
-                    return '<a href="' . route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
-                } else if ($ledger->account_action_id == 5) {
-                    return '<a href="' . route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                            <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                        </a>';
-                } else if ($ledger->account_action_id == 6) {
-                    return '<a href="' . route('sites.file-managements.file-cancellation.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                            </a>';
-                } else if ($ledger->account_action_id == 7) {
-                    return '<a href="' . route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
+                    $file = DB::table('file_management')
+                        ->where('sales_plan_id', $ledger->sales_plan_id)
+                        ->first();
+
+                    return '<a href="' . route('sites.file-managements.customers.units.files.show', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_id' => encryptParams($file->id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
                 } else {

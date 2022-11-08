@@ -455,7 +455,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
 
             //1 Cancellation account entry
-            $cancelationAccount = AccountHead::where('name', 'Cancelation Account')->first()->code;
+            $cancelationAccount = AccountHead::where('name', 'Cancellation Account')->first()->code;
             $this->makeFinancialTransaction($file_cancellation->site_id, $cancelationAccount, 6, $sales_plan->id, 'debit', $sales_plan->total_price, NatureOfAccountsEnum::JOURNAL_CANCELLATION, null);
 
             //2 Customer AR Transaction
@@ -499,7 +499,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_CANCELLATION, null);
 
             // 4 Revenue Canceleation Entry
-            $revenueCancellationAccount = AccountHead::where('name', 'Revenue - Cancelation Charges')->first()->code;
+            $revenueCancellationAccount = AccountHead::where('name', 'Revenue - Cancellation Charges')->first()->code;
             $this->makeFinancialTransaction($receipt->site_id, $revenueCancellationAccount, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->cancellation_charges, NatureOfAccountsEnum::JOURNAL_CANCELLATION, null);
 
             // 5 Payment Voucher Customer A/P Entry

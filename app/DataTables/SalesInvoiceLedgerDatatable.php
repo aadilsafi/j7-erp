@@ -71,7 +71,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                             </a>';
                 } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11 || $ledger->account_action_id == 12) {
                     $receipt = $file = DB::table('receipts')
-                        ->where('sales_plan_id', $ledger->sales_plan_id)
+                        ->where('id', $ledger->receipt_id)
                         ->first();
                     return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>

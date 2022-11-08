@@ -39,6 +39,7 @@ use App\Http\Controllers\{
     SalesPlanImportController,
     TrialBalanceController,
     JournalEntryController,
+    FirstLevelAccountController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -143,6 +144,22 @@ Route::group([
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
                             Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                        });
+                    });
+
+                    //Accounts Routes
+                    Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+                        Route::group(['prefix' => 'first-level', 'as' => 'first-level.'], function () {
+                            Route::get('/', [FirstLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FirstLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FirstLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FirstLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FirstLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FirstLevelAccountController::class, 'update'])->name('update');
+                            });
                         });
                     });
                 });

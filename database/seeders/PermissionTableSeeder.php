@@ -1666,6 +1666,88 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Accounts First level
+            [
+                'name' => 'sites.settings.accounts.first-level.index',
+                'show_name' => 'Can View First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.create',
+                'show_name' => 'Can Create First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.store',
+                'show_name' => 'Can Store First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.edit',
+                'show_name' => 'Can Edit First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.update',
+                'show_name' => 'Can Update First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.destroy',
+                'show_name' => 'Can Destroy First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.accounts.second-level.destroy-selected',
+                'show_name' => 'Can Destroy Selected First Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Second level
+            [
+                'name' => 'sites.settings.accounts.second-level.index',
+                'show_name' => 'Can View Second Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Third level
+            [
+                'name' => 'sites.settings.accounts.third-level.index',
+                'show_name' => 'Can View Third Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Fourth level
+            [
+                'name' => 'sites.settings.accounts.fourth-level.index',
+                'show_name' => 'Can View Fourth Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Accounts Fifth level
+            [
+                'name' => 'sites.settings.accounts.fifth-level.index',
+                'show_name' => 'Can View Fifth Level Accounts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

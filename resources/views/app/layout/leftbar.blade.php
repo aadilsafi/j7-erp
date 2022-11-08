@@ -124,7 +124,7 @@
                 </li>
             @endcan
 
-            {{-- Accounts Menu --}}
+            {{-- Setting Menu --}}
             @canany(['sites.settings.custom-fields.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -142,6 +142,28 @@
                                 </a>
                             </li>
                         @endcan
+                        <li class="nav-item ">
+                            <a class="d-flex align-items-center" href="javascript:void(0)">
+                                <i data-feather='list'></i>
+                                <span class="menu-title text-truncate"
+                                    data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                                    Accounts</span>
+                            </a>
+                            <ul class="menu-content">
+
+                                @can('sites.settings.accounts.first-level.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.settings.accounts.first-level.index') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.settings.accounts.first-level.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">1st Level</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
                     </ul>
                 </li>
             @endcanany

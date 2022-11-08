@@ -271,7 +271,7 @@ class SalesPlanController extends Controller
             $salesPlan->unit->status_id = 1;
             $salesPlan->unit->save();
 
-            $salesPlan->status = 3;
+            $salesPlan->status = 2;
             $salesPlan->save();
         } else {
             $salesPlan->status = 2;

@@ -86,6 +86,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'total_price' =>  ['required', 'numeric', 'gt:0'],
             'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
             'validity' =>  ['required'],
+            'bank_acount_number' => ['sometimes', 'nullable', 'exists:banks,account_number'],
             'mode_of_payment' =>  ['required'],
             'amount' => ['required'],
             'status' => ['required'],
@@ -98,6 +99,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
         return [
             'unit_short_label.exists' => 'Unit dose not Exists.',
             'stakeholder_cnic.exists' => 'Stakeholder does not Exists.',
+            'bank_acount_number.exists' => 'Bank Account Doses not Exists.'
         ];
     }
 }

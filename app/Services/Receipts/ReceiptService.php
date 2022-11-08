@@ -49,7 +49,7 @@ class ReceiptService implements ReceiptInterface
 
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
-                if(!isset($data[$i]['bank_name'])){
+                if (!isset($data[$i]['bank_name'])) {
                     $data[$i]['bank_id'] =  null;
                     $data[$i]['bank_name'] = null;
                 }
@@ -415,6 +415,7 @@ class ReceiptService implements ReceiptInterface
 
             $data[$key]['purpose'] = str_replace('-', ' ', $data[$key]['installment_no']);
             $data[$key]['installment_no'] = json_encode([$data[$key]['purpose']]);
+            $data[$key]['is_imported'] = true;
 
             if ($data[$key]['mode_of_payment'] == 'cheque' || $data[$key]['mode_of_payment'] == 'online') {
                 $bank = Bank::where('account_number', $data[$key]['bank_acount_number'])->first();
@@ -430,15 +431,15 @@ class ReceiptService implements ReceiptInterface
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
-            if ($data[$key]['mode_of_payment'] == 'cheque') {
-                $url = $data[$key]['image_url'];
-                // $info = pathinfo($url);
-                // $contents = file_get_contents($url);
-                // $file = '/tmp/' . $info['basename'];
-                // file_put_contents($file, $contents);
-                // $uploaded_file = new UploadedFile($file, $info['basename']);
-                // dd($uploaded_file);
-            }
+            // if ($data[$key]['mode_of_payment'] == 'cheque') {
+            //     $url = $data[$key]['image_url'];
+            //     // $info = pathinfo($url);
+            //     // $contents = file_get_contents($url);
+            //     // $file = '/tmp/' . $info['basename'];
+            //     // file_put_contents($file, $contents);
+            //     // $uploaded_file = new UploadedFile($file, $info['basename']);
+            //     // dd($uploaded_file);
+            // }
             unset($data[$key]['unit_short_label']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
@@ -469,11 +470,11 @@ class ReceiptService implements ReceiptInterface
             if ($receipt->mode_of_payment == "Online") {
                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
             }
-            if ($data[$key]['mode_of_payment'] == 'cheque') {
+            // if ($data[$key]['mode_of_payment'] == 'cheque') {
 
-                $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
-                changeImageDirectoryPermission();
-            }
+            //     $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
+            //     changeImageDirectoryPermission();
+            // }
         }
 
         // dd($data);

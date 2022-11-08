@@ -610,6 +610,7 @@ class StakeholderController extends Controller
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
             $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['is_imported'] = true;
 
             if ($data[$key]['parent_cnic'] != null) {
                 $parent = Stakeholder::where('cnic', $data[$key]['parent_cnic'])->first();

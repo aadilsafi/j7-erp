@@ -113,6 +113,8 @@ class SalesPlanImportController extends Controller
             $data[$key]['sales_plan_id'] = $salePlan->id;
             $data[$key]['additional_cost_id'] = $adCost->id;
             $data[$key]['amount'] = $data[$key]['total_amount'];
+            $data[$key]['is_imported'] = true;
+
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
@@ -460,6 +462,8 @@ class SalesPlanImportController extends Controller
 
                 $data[$key]['amount'] = $data[$key]['total_amount'];
                 $data[$key]['installment_order'] = $data[$key]['installment_no'];
+                $data[$key]['is_imported'] = true;
+
                 $data[$key]['created_at'] = now();
                 $data[$key]['updated_at'] = now();
 

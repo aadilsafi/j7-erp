@@ -181,71 +181,71 @@ class ImportReceiptsDataTable extends DataTable
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'mode_of_payment'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'amount'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('installment_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'installment_no'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('cheque_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'cheque_no'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('bank_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'bank_name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('bank_acount_number')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'bank_acount_number'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('online_transaction_no')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
 
                 'name' => 'online_transaction_no'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('transaction_date')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
 
                 'name' => 'transaction_date'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('other_payment_mode_value')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
 
                 'name' => 'other_payment_mode_value'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
             Column::computed('status')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'status'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('image_url')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'image_url'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
         ];
     }
 }

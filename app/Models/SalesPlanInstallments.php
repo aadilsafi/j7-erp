@@ -19,6 +19,7 @@ class SalesPlanInstallments extends Model
         'type',
         'paid_amount',
         'remaining_amount',
+        'is_imported',
         'remarks',
         'installment_order',
         'status',

@@ -163,7 +163,7 @@
                                                             </table>
                                                             @foreach ($account_of_heads as $key=>$account_of_head_full_array)
                                                             @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
-                                                                <li class="nav-item Second_li">
+                                                                <li class="nav-item Second_li ms-3">
                                                                     <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_full_array->name}}</span></a>
                                                                         <ul class="menu-content">
 
@@ -187,9 +187,9 @@
                                                                             </table>
                                                                             @foreach ($account_of_heads->where('level',3) as $key_second=>$account_of_head_3)
                                                                                 @if ( Str::length($account_of_head_3->code) == 6 AND ($account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4)))
-                                                                                    <li class="nav-item Second_li">
+                                                                                    <li class="nav-item Second_li ms-1">
                                                                                         <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_3->name}}</span></a>
-                                                                                            <ul class="menu-content">
+                                                                                            <ul class="menu-content ms-3">
 
                                                                                                 <table class="table table-primary table-striped">
                                                                                                     <thead>
@@ -212,9 +212,9 @@
                                                                                                 
                                                                                                 @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
                                                                                                     @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_3->code == substr($account_of_head_4->code, 0, 6)))
-                                                                                                        <li class="nav-item Second_li">
+                                                                                                        <li class="nav-item Second_li ">
                                                                                                             <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_4->name}}</span></a>
-                                                                                                                <ul class="menu-content">
+                                                                                                                <ul class="menu-content ms-3">
                                                                                                                     <table class="table table-primary table-striped">
                                                                                                                         <thead>
                                                                                                                         <tr>

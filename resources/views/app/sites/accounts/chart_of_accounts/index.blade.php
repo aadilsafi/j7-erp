@@ -213,58 +213,6 @@
                         </div>
 
                     </div>
-
-                    <div class="tab-pane" id="buybackData" aria-labelledby="buybackData" role="tabpanel">
-
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="tab-pane" id="refundData" aria-labelledby="refund" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="resaleData" aria-labelledby="resale" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="cancellationData" aria-labelledby="cancellation" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane" id="titleTransferData" aria-labelledby="title-transfer" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="#" id="sales-invoice-table-form" method="get">
-                                    {{ $dataTable->table() }}
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>

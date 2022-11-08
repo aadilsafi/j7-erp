@@ -115,7 +115,9 @@
                                             display: block;
                                         }
                                     /* } */
-
+                                    .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a, .main-menu.menu-light .navigation>.custom_bg.sidebar-group-active>a {
+                                        background: none !important;
+                                    }
                                     .vertical-overlay-menu .custom_multi_drop_main, .vertical-overlay-menu.menu-hide .custom_multi_drop_main
 
                                     .main-menu.menu-light .navigation>.custom_bg.open:not(.menu-item-closing)>a,
@@ -135,15 +137,18 @@
                                     .custom_td {
                                         border-radius: 0 !important;
                                     }
+                                    /* .first_drop{
+                                        background: #847af252;
+                                    } */
                                 </style>
                                 <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                     <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                         <div class="">
                                             <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
                                                 @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
-                                                    <li class="custom_bg nav-item Second_li "><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
+                                                    <li class="custom_bg nav-item Second_li first_drop "><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
                                                         <ul class="menu-content">
-                                                            <table class="table table-primary table-striped">
+                                                            <table class="table">
                                                                 <thead>
                                                                     <tr>
                                                                         <th scope="col">Name</th>

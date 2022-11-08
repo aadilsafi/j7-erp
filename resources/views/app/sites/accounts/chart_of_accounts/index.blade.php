@@ -138,27 +138,99 @@
                                 </style>
                                 <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
 
-                                    <div class="">
-                                        <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation"
-                                            data-menu="menu-navigation">
-                                            @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
-                                                <li class="custom_bg nav-item Second_li"><a
-                                                        class="d-flex align-items-center" href="#"><span
-                                                            class="menu-title text-truncate"
-                                                            data-i18n="eCommerce">{{ $account_of_head->name }}</span></a>
-                                                    <ul class="menu-content">
-                                                        @foreach ($account_of_heads as $key => $account_of_head_full_array)
-                                                            @if (Str::length($account_of_head_full_array->code) == 4 and
-                                                                $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
+                                    </style>
+                                    <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
+                                        <div class="">
+                                            <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
+                                                @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
+                                                    <li class="custom_bg nav-item Second_li"><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
+                                                        <ul class="menu-content">
+                                                            @foreach ($account_of_heads as $key=>$account_of_head_full_array)
+                                                            @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
                                                                 <li class="nav-item Second_li">
-                                                                    <a class="d-flex align-items-center"
-                                                                        href="#"><span
-                                                                            class="menu-title text-truncate"
-                                                                            data-i18n="eCommerce"><i
-                                                                                class="bi bi-arrow-bar-right"></i>{{ $account_of_head_full_array->name }}</span></a>
-                                                                    <ul class="menu-content">
-                                                                        <table class="table table-primary table-striped">
-                                                                            <thead>
+                                                                    <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_full_array->name}}</span></a>
+                                                                        <ul class="menu-content">
+                                                                            @foreach ($account_of_heads->where('level',3) as $key_second=>$account_of_head_3)
+                                                                                @if ( Str::length($account_of_head_3->code) == 6 AND ($account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4)))
+                                                                                    <li class="nav-item Second_li">
+                                                                                        <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_3->name}}</span></a>
+                                                                                            <ul class="menu-content">
+                                                                                                @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
+                                                                                                    @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_3->code == substr($account_of_head_4->code, 0, 6)))
+                                                                                                        <li class="nav-item Second_li">
+                                                                                                            <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_4->name}}</span></a>
+                                                                                                                <ul class="menu-content">
+                                                                                                                    <table class="table table-primary table-striped">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th scope="col">Name</th>
+                                                                                                                            <th scope="col">ACCOUNT LEVEl</th>
+                                                                                                                            <th scope="col">ACCOUNT CODES</th>
+                                                                                                                            <th scope="col">Balance</th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                    @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
+                                                                                                                        @if ( Str::length($account_of_head_5->code) > 10 AND ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
+                                                                                                                            <tr>
+                                                                                                                                <td class="custom_td">{{$account_of_head_5->name}}</td>
+                                                                                                                                <td class="custom_td">{{$account_of_head_5->level}}</td>
+                                                                                                                                <td class="custom_td">{{account_number_format($account_of_head_5->code)}}</td>
+                                                                                                                                <td class="custom_td">0</td>
+                                                                                                                            </tr>
+                                                                                                                         @endif
+                                                                                                                    @endforeach 
+                                                                                                                </tbody>
+                                                                                                            </table>
+                                                                                                                    <table class="table table-primary table-striped">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th scope="col">Name</th>
+                                                                                                                            <th scope="col">ACCOUNT LEVEl</th>
+                                                                                                                            <th scope="col">ACCOUNT CODES</th>
+                                                                                                                            <th scope="col">Balance</th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td class="custom_td">{{$account_of_head_4->name}}</td>
+                                                                                                                            <td class="custom_td">{{$account_of_head_4->level}}</td>
+                                                                                                                            <td class="custom_td">{{account_number_format($account_of_head_4->code)}}</td>
+                                                                                                                            <td class="custom_td">0</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                            </ul>
+                                                                                                        </li>
+                                                                                                     @endif
+                                                                                                        
+                                                                                                @endforeach 
+                                                                                                <table class="table table-primary table-striped">
+                                                                                                    <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col">Name</th>
+                                                                                                        <th scope="col">ACCOUNT LEVEl</th>
+                                                                                                        <th scope="col">ACCOUNT CODES</th>
+                                                                                                        <th scope="col">Balance</th>
+                                                                                                    </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
+                                                                                                    <tr>
+                                                                                                        <td class="custom_td">{{$account_of_head_3->name}}</td>
+                                                                                                        <td class="custom_td">{{$account_of_head_3->level}}</td>
+                                                                                                        <td class="custom_td">{{account_number_format($account_of_head_3->code)}}</td>
+                                                                                                        <td class="custom_td">0</td>
+                                                                                                    </tr>
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                        </ul>
+                                                                                    </li>
+                                                                                @endif
+                                                                                    
+                                                                            @endforeach
+
+                                                                            <table class="table table-primary table-striped">
+                                                                                <thead>
                                                                                 <tr>
                                                                                     <th scope="col">Name</th>
                                                                                     <th scope="col">ACCOUNT LEVEl</th>
@@ -168,13 +240,9 @@
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td class="custom_td">
-                                                                                        {{ $account_of_head_full_array->name }}
-                                                                                    </td>
-                                                                                    <td>{{ $account_of_head_full_array->level }}
-                                                                                    </td>
-                                                                                    <td>{{ $account_of_head_full_array->code }}
-                                                                                    </td>
+                                                                                    <td class="custom_td">{{$account_of_head_full_array->name}}</td>
+                                                                                    <td>{{$account_of_head_full_array->level}}</td>
+                                                                                    <td>{{account_number_format($account_of_head_full_array->code)}}</td>
                                                                                     <td>0</td>
                                                                                 </tr>
                                                                             </tbody>
@@ -194,10 +262,9 @@
                                                             </thead>
                                                             <tbody>
                                                                 <tr>
-                                                                    <td class="custom_td">{{ $account_of_head->name }}</td>
-                                                                    <td class="custom_td">{{ $account_of_head->level }}
-                                                                    </td>
-                                                                    <td class="custom_td">{{ $account_of_head->code }}</td>
+                                                                    <td class="custom_td">{{$account_of_head->name}}</td>
+                                                                    <td class="custom_td">{{$account_of_head->level}}</td>
+                                                                    <td class="custom_td">{{account_number_format($account_of_head->code)}}</td>
                                                                     <td class="custom_td">0</td>
                                                                 </tr>
                                                             </tbody>
@@ -245,3 +312,21 @@
 @section('custom-js')
     {{ $dataTable->scripts() }}
 @endsection
+
+
+
+
+<section style="min-height: 40vh">
+    <style>
+      .custom_bg{
+        margin-top: 0.5rem;
+        background: whitesmoke;
+        margin-top: 0 !important;
+      }
+      .main_multi_dop_ul{
+        padding-bottom: 0 !important;
+      }
+      .custom_multi_drop_main{
+        position: unset;
+      }
+    </style>

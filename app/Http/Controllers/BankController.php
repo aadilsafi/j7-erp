@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\ImportBanksDataTable;
 use App\Imports\BanksImport;
+use App\Models\AccountHead;
 use App\Models\Bank;
 use App\Models\TempBank;
 use DB;
@@ -184,6 +185,16 @@ class BankController extends Controller
                 $data[$key]['is_imported'] = true;
 
                 $bank = Bank::create($data[$key]);
+
+                $acountHeadData = [
+                    'site_id' => decryptParams($site_id),
+                    'modelable_id' => null,
+                    'modelable_type' => null,
+                    'code' => $bank->account_number,
+                    'name' => $bank->name,
+                    'level' => 5,
+                ];
+                $accountHead =  AccountHead::create($acountHeadData);
             }
         });
 

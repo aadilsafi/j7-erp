@@ -241,7 +241,7 @@
             storeAsFile: false,
             server: {
                 process: '{{route('ajax-import-image.save-file')}}',
-                revert: '/admin/revert-file',
+                revert: '{{route('ajax-import-image.revert-file')}}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }

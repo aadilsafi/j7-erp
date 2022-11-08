@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use File;
 use Illuminate\Http\Request;
 use Str;
+use Illuminate\Support\Facades\Storage;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 
 class ImageImportController extends Controller
 {
@@ -38,12 +41,23 @@ class ImageImportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $site_id)
     {
         $files = $request->get('attachment');
         foreach ($files as $key => $folder) {
-            dd($folder);
+            $file = Str::before($folder, '<link');
+            $destinationPath = public_path('app-assets/images/ReceiptsImages/');
+                dd(Storage::get($file));
+            // $new_file->move($destinationPath);
+            $newfile = Storage::put($destinationPath, $new_file);
+
+            $test = File::delete($file);
         }
+        $data = [
+            'site_id' => $site_id
+        ];
+
+        return view('app.sites.settings.import.images.index', $data);
     }
 
     /**
@@ -95,12 +109,21 @@ class ImageImportController extends Controller
     public function saveFile(Request $request)
     {
         $files = $request->file('attachment');
-        $name = Str::slug('Receipts-' . $files[0]->getClientOriginalName()) . '.'.$files[0]->getClientOriginalExtension();
+        $name = Str::slug('Receipts-' . $files[0]->getClientOriginalName()) . '.' . $files[0]->getClientOriginalExtension();
         // $new_name = time() . '.' . $name;
         // $folder = uniqid('filepond', true);
-        $destinationPath = public_path('app-assets/images/ReceiptsImages/');
+        $destinationPath = public_path('app-assets/images/temporaryfiles/Receipts');
         $file = $files[0]->move($destinationPath, $name);
 
         return $file;
+    }
+
+    public function revertFile(Request $request)
+    {
+        $folder = $request->getContent();
+        $file = Str::before($folder, '<link');
+
+        $test = File::delete($file);
+        return $test;
     }
 }

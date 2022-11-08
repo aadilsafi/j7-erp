@@ -759,6 +759,7 @@ Route::group([
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
+        Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

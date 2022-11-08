@@ -1,12 +1,13 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.index') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.fourth-level.index', $site_id) }}
 @endsection
 
-@section('page-title', 'Sites List')
+@section('page-title', '4th Level Account')
 
 @section('page-vendor')
+
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
@@ -16,6 +17,7 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+
 @endsection
 
 @section('page-css')
@@ -29,9 +31,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Sites</h2>
+                <h2 class="content-header-title float-start mb-0">4th Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.index') }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.fourth-level.index', $site_id) }}
                 </div>
             </div>
         </div>
@@ -45,8 +47,7 @@
 
     <div class="card">
         <div class="card-body">
-
-            <form action="{{ route('sites.destroy-selected') }}" id="sites-table-form" method="get">
+            <form action="{{ route('sites.settings.accounts.fourth-level.store', ['site_id' => $site_id]) }}" id="fourth-level-accounts" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -97,7 +98,7 @@
                     },
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $('#sites-table-form').submit();
+                        $('#types-table-form').submit();
                     }
                 });
             } else {
@@ -105,24 +106,18 @@
                     icon: 'warning',
                     title: 'Warning',
                     text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
                 });
             }
         }
 
-        function deleteByID(id) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: '{{ __('lang.commons.are_you_sure') }}',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                confirmButtonClass: 'btn-danger',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    location.href = '{{ route('sites.destroy', ['id' => ':id']) }}'.replace(':id', id);
-                }
-            });
+        function addNew() {
+            location.href = '{{ route('sites.settings.accounts.fourth-level.create', ['site_id' => encryptParams($site_id)]) }}';
         }
+
     </script>
 @endsection

@@ -152,69 +152,69 @@ class ImportSalesPlanDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'unit_short_label'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('stakeholder_cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'stakeholder_cnic'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('total_price')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'total_price'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('unit_price')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'unit_price'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('discount_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'discount_percentage'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('discount_total')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'discount_total'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('down_payment_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'down_payment_percentage'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('down_payment_total')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'down_payment_total'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
             Column::computed('lead_source')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'lead_source'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('validity')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'validity'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('status')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'status'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('comment')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'comment'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
             Column::computed('approved_date')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'approved_date'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
         ];
     }
 }

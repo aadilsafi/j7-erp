@@ -23,6 +23,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation',
         'designation',
         'cnic',
+        'is_imported',
         'ntn',
         'contact',
         'address',

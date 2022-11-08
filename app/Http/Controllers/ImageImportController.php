@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\FirstLevelAccountsDatatable;
 use Illuminate\Http\Request;
+use Str;
 
-class FirstLevelAccountController extends Controller
+class ImageImportController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FirstLevelAccountsDatatable $dataTable, $site_id)
+    public function index($site_id)
+
     {
         $data = [
-            'site_id' => decryptParams($site_id)
+            'site_id' => $site_id
         ];
 
-        return $dataTable->with($data)->render('app.sites.accounts.account-creation.first-level.index', $data);
+        return view('app.sites.settings.import.images.index', $data);
     }
 
     /**
@@ -39,7 +40,10 @@ class FirstLevelAccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $files = $request->get('attachment');
+        foreach ($files as $key => $folder) {
+            dd($folder);
+        }
     }
 
     /**
@@ -85,5 +89,18 @@ class FirstLevelAccountController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function saveFile(Request $request)
+    {
+        $files = $request->file('attachment');
+        $name = Str::slug('Receipts-' . $files[0]->getClientOriginalName()) . '.'.$files[0]->getClientOriginalExtension();
+        // $new_name = time() . '.' . $name;
+        // $folder = uniqid('filepond', true);
+        $destinationPath = public_path('app-assets/images/ReceiptsImages/');
+        $file = $files[0]->move($destinationPath, $name);
+
+        return $file;
     }
 }

@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                        width: calc(20% - 0.5em);
-                                                                    } */
+                                                                            width: calc(20% - 0.5em);
+                                                                        } */
     </style>
 @endsection
 
@@ -594,8 +594,7 @@
                             .length > 0));
                         $('.branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
                             .branch_code.length > 0));
-                        $('.comments').val(response.bank.comments).attr('readOnly', (response.bank
-                            .comments.length > 0));
+                        $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
                         hideBlockUI('.bankDiv');

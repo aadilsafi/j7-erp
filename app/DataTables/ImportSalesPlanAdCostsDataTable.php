@@ -55,7 +55,7 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
             //         ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
             //     );
             // })
-           
+
             // ->editColumn('validity', function ($data) {
             //     return view(
             //         'app.components.unit-preview-cell',
@@ -129,14 +129,14 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
                 'is_disable' => false,
                 'spInstallment' => true,
                 'name' => 'additional_costs_name'
-            ])->render())->searchable(true),
+            ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'spInstallment' => true,
 
                 'name' => 'percentage'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
             Column::computed('total_amount')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
@@ -144,7 +144,7 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
                 'spInstallment' => true,
 
                 'name' => 'total_amount'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
         ];
     }
 }

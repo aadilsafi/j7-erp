@@ -111,33 +111,32 @@ class ImportBanksDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('account_number')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'account_number'
-
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('branch_code')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'branch_code'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'address'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('contact_number')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'contact_number'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'comments'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
         ];
     }

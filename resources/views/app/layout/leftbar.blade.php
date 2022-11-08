@@ -162,9 +162,77 @@
                                     </li>
                                 @endcan
 
+                                @can('sites.settings.accounts.second-level.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.settings.accounts.second-level.index') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.settings.accounts.second-level.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">2nd Level</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('sites.settings.accounts.third-level.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.settings.accounts.third-level.index') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.settings.accounts.third-level.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">3rd Level</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('sites.settings.accounts.fourth-level.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.settings.accounts.fourth-level.index') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.settings.accounts.fourth-level.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">4th Level</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('sites.settings.accounts.fifth-level.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.settings.accounts.fifth-level.index') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.settings.accounts.fifth-level.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">5th Level</span>
+                                        </a>
+                                    </li>
+                                @endcan
+
                             </ul>
                         </li>
                     </ul>
+                    {{-- <ul class="menu-content">
+                        @can('sites.settings.import')
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
+                                    <i data-feather='cloud'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                                        Import</span>
+                                </a>
+                                <ul class="menu-content">
+
+                                    @can('sites.settings.import.images.index')
+                                        <li class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Images</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                    </ul> --}}
                 </li>
             @endcanany
 
@@ -496,7 +564,7 @@
                                 class="nav-item {{ request()->routeIs('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
                                     href="{{ route('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) }}">
-                                   <i data-feather='dollar-sign'></i>
+                                    <i data-feather='dollar-sign'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">Charts of Accounts</span>
                                 </a>
                             </li>

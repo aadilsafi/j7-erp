@@ -35,11 +35,16 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    ImageImportController,
     LedgerController,
     SalesPlanImportController,
     TrialBalanceController,
     JournalEntryController,
     FirstLevelAccountController,
+    SecondLevelAccountController,
+    ThirdLevelAccountController,
+    FourthLevelAccountController,
+    FifthLevelAccountController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -149,6 +154,7 @@ Route::group([
 
                     //Accounts Routes
                     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+                        // first level
                         Route::group(['prefix' => 'first-level', 'as' => 'first-level.'], function () {
                             Route::get('/', [FirstLevelAccountController::class, 'index'])->name('index');
 
@@ -159,6 +165,75 @@ Route::group([
                             Route::group(['prefix' => '/{id}'], function () {
                                 Route::get('edit', [FirstLevelAccountController::class, 'edit'])->name('edit');
                                 Route::put('update', [FirstLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // second level
+                        Route::group(['prefix' => 'second-level', 'as' => 'second-level.'], function () {
+                            Route::get('/', [SecondLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [SecondLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [SecondLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [SecondLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [SecondLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [SecondLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // third level
+                        Route::group(['prefix' => 'third-level', 'as' => 'third-level.'], function () {
+                            Route::get('/', [ThirdLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [ThirdLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [ThirdLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [ThirdLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [ThirdLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [ThirdLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // fourth level
+                        Route::group(['prefix' => 'fourth-level', 'as' => 'fourth-level.'], function () {
+                            Route::get('/', [FourthLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FourthLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FourthLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FourthLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FourthLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FourthLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // fifth level
+                        Route::group(['prefix' => 'fifth-level', 'as' => 'fifth-level.'], function () {
+                            Route::get('/', [FifthLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FifthLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FifthLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FifthLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FifthLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                    });
+
+                    // Import Routes
+                    Route::group(['prefix' => 'import', 'as' => 'import.'], function () {
+                        Route::group(['prefix' => 'images', 'as' => 'images.'], function () {
+
+                            Route::get('/', [ImageImportController::class, 'index'])->name('index');
+
+                            Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                            Route::post('store', [ImageImportController::class, 'store'])->name('store');
+
+                            Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
+                                Route::put('update', [CustomFieldController::class, 'update'])->name('update');
                             });
                         });
                     });
@@ -682,6 +757,8 @@ Route::group([
         Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
         Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
+
+        Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

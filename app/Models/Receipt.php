@@ -36,6 +36,7 @@ class Receipt extends Model implements HasMedia
         'pay_order',
         'amount_received',
         'attachment',
+        'is_imported',
         'comments',
         'status',
         'bank_details',

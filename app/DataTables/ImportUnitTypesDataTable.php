@@ -91,18 +91,18 @@ class ImportUnitTypesDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('unit_type_slug')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'unit_type_slug'
 
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'parent_type_name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
         ];
     }

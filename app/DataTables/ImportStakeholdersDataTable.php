@@ -176,78 +176,78 @@ class ImportStakeholdersDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'full_name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('father_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'father_name'
 
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('occupation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'occupation'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('designation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'designation'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'cnic'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('ntn')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'ntn'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('contact')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'contact'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'address'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'comments'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('is_dealer')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'is_dealer'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('is_vendor')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'is_vendor'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('is_customer')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'is_customer'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('is_kin')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'is_kin'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('parent_cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'parent_cnic'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('relation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'relation'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
         ];
     }
 }

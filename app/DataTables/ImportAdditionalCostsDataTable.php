@@ -111,33 +111,32 @@ class ImportAdditionalCostsDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'additional_costs_name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('site_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'site_percentage'
-
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('floor_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'floor_percentage'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('unit_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'unit_percentage'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('is_sub_types')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'is_sub_types'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'parent_type_name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
         ];
     }

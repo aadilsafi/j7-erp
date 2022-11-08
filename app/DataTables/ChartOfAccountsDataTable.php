@@ -58,18 +58,6 @@ class ChartOfAccountsDataTable extends DataTable
                     return 'Fifth Level';
                 }
             })
-            // ->editColumn('account_type', function ($ledger) {
-            //     if($ledger->level == 1){
-            //         return 'First Level';
-            //     }else
-            //     {
-            //         return 'no name';
-            //     }
-            // })
-            // ->editColumn('created_at', function ($ledger) {
-            //     // return $ledger->created_at->format('D, d-M-Y , H:i:s');
-            //     return editDateColumn($ledger->created_at);
-            // })
 
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }

@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.first-level.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.fourth-level.index', $site_id) }}
 @endsection
 
-@section('page-title', '1st Level Account')
+@section('page-title', '4th Level Account')
 
 @section('page-vendor')
 
@@ -31,9 +31,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">1st Level Account</h2>
+                <h2 class="content-header-title float-start mb-0">4th Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.accounts.first-level.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.fourth-level.index', $site_id) }}
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.settings.accounts.first-level.store', ['site_id' => $site_id]) }}" id="first-level-accounts" method="get">
+            <form action="{{ route('sites.settings.accounts.fourth-level.store', ['site_id' => $site_id]) }}" id="fourth-level-accounts" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -116,7 +116,7 @@
         }
 
         function addNew() {
-            location.href = '{{ route('sites.settings.accounts.first-level.create', ['site_id' => encryptParams($site_id)]) }}';
+            location.href = '{{ route('sites.settings.accounts.fourth-level.create', ['site_id' => encryptParams($site_id)]) }}';
         }
 
     </script>

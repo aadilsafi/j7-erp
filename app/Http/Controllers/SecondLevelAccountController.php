@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\FirstLevelAccountsDatatable;
+use App\DataTables\SecondLevelAccountsDatatable;
 use Illuminate\Http\Request;
 
-class FirstLevelAccountController extends Controller
+class SecondLevelAccountController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(FirstLevelAccountsDatatable $dataTable, $site_id)
+    public function index(SecondLevelAccountsDatatable $dataTable, $site_id)
     {
         $data = [
             'site_id' => decryptParams($site_id)
         ];
 
-        return $dataTable->with($data)->render('app.sites.accounts.account-creation.first-level.index', $data);
+        return $dataTable->with($data)->render('app.sites.accounts.account-creation.second-level.index', $data);
     }
 
     /**

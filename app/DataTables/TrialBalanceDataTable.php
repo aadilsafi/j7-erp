@@ -37,7 +37,10 @@ class TrialBalanceDataTable extends DataTable
             })
             ->editColumn('starting_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
-                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                    $credits = $accountHead->accountLedgers->where('account_ledgers.created_at', '<', date('Y-m-d 00:00:00'))->pluck('credit')->sum();
+                    $debits = $accountHead->accountLedgers->where('account_ledgers.created_at', '<', date('Y-m-d 00:00:00'))->pluck('debits')->sum();
+                    return number_format($credits - $debits);
+                    // return number_format($accountHead->accountLedgers->where('created_at', '>', '2022-11-08')->pluck('credit')->sum());
                 }
             })
             ->editColumn('debit', function ($accountHead) {
@@ -55,6 +58,7 @@ class TrialBalanceDataTable extends DataTable
             })
             ->editColumn('ending_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
+
                     return number_format($accountHead->accountLedgers->pluck('credit')->sum());
                 }
             })
@@ -69,9 +73,7 @@ class TrialBalanceDataTable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->where('level', 5)->whereHas('accountLedgers')->newQuery()->with(['modelable', 'accountLedgers' => function ($q) {
-            $q->whereNot([['debit', 0], ['credit', 0]])->with('accountActions');
-        }])->orderBy('level', 'asc');
+        return $model->where('level', 5)->whereHas('accountLedgers')->orderBy('code', 'asc');
     }
 
     public function html(): HtmlBuilder

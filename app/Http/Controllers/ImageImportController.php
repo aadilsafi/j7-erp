@@ -47,7 +47,7 @@ class ImageImportController extends Controller
         foreach ($files as $key => $folder) {
             $file = Str::before($folder, '<link');
             $destinationPath = public_path('app-assets/images/ReceiptsImages/');
-                dd(Storage::get($file));
+                dd(File::getRealPath($file));
             // $new_file->move($destinationPath);
             $newfile = Storage::put($destinationPath, $new_file);
 

@@ -215,7 +215,26 @@
                                                                                                         <li class="nav-item Second_li ">
                                                                                                             <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_4->name}}</span></a>
                                                                                                                 <ul class="menu-content ms-3">
-                                                                                                                    <table class="table table-primary table-striped">
+                                                                                                                <table class="table table-primary table-striped">
+                                                                                                                        <thead>
+                                                                                                                        <tr>
+                                                                                                                            <th scope="col">Name</th>
+                                                                                                                            <th scope="col">ACCOUNT LEVEl</th>
+                                                                                                                            <th scope="col">ACCOUNT CODES</th>
+                                                                                                                            <th scope="col">Balance</th>
+                                                                                                                        </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                        <tr>
+                                                                                                                            <td class="custom_td">{{$account_of_head_4->name}}</td>
+                                                                                                                            <td class="custom_td">{{$account_of_head_4->level}}</td>
+                                                                                                                            <td class="custom_td">{{account_number_format($account_of_head_4->code)}}</td>
+                                                                                                                            <td class="custom_td">0</td>
+                                                                                                                        </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+
+                                                                                                                    <table class="table table-primary table-striped ms-4">
                                                                                                                         <thead>
                                                                                                                         <tr>
                                                                                                                             <th scope="col">Name</th>
@@ -237,7 +256,7 @@
                                                                                                                     @endforeach 
                                                                                                                 </tbody>
                                                                                                             </table>
-                                                                                                                    <table class="table table-primary table-striped">
+                                                                                                                    <!-- <table class="table table-primary table-striped">
                                                                                                                         <thead>
                                                                                                                         <tr>
                                                                                                                             <th scope="col">Name</th>
@@ -254,7 +273,7 @@
                                                                                                                             <td class="custom_td">0</td>
                                                                                                                         </tr>
                                                                                                                         </tbody>
-                                                                                                                    </table>
+                                                                                                                    </table> -->
                                                                                                             </ul>
                                                                                                         </li>
                                                                                                      @endif

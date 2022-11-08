@@ -35,6 +35,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+   
+
     @yield('page-vendor')
 
     <!-- END: Vendor CSS-->
@@ -66,6 +68,7 @@
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
+    
     <!-- END: Custom CSS-->
     <meta name="user_id" content="{{ auth()->user()->id }}" />
     <style>
@@ -75,6 +78,7 @@
     </style>
     <script src="{{ asset('app-assets') }}/vendors/js/vendors.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
+    
     @yield('custom-css')
 
 </head>

@@ -143,6 +143,30 @@
                             </li>
                         @endcan
                     </ul>
+                    <ul class="menu-content">
+                        @can('sites.settings.import')
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
+                                    <i data-feather='cloud'></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
+                                        Import</span>
+                                </a>
+                                <ul class="menu-content">
+
+                                    @can('sites.settings.import.images.index')
+                                        <li class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Images</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                    </ul>
                 </li>
             @endcanany
 
@@ -474,7 +498,7 @@
                                 class="nav-item {{ request()->routeIs('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
                                     href="{{ route('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) }}">
-                                   <i data-feather='dollar-sign'></i>
+                                    <i data-feather='dollar-sign'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">Charts of Accounts</span>
                                 </a>
                             </li>

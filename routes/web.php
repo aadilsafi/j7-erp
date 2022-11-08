@@ -35,6 +35,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    ImageImportController,
     LedgerController,
     SalesPlanImportController,
     TrialBalanceController,
@@ -143,6 +144,22 @@ Route::group([
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
                             Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                        });
+                    });
+
+                    Route::group(['prefix' => 'import', 'as' => 'import.'], function () {
+                        Route::group(['prefix' => 'images', 'as' => 'images.'], function () {
+
+                            Route::get('/', [ImageImportController::class, 'index'])->name('index');
+
+                            Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                            Route::post('store', [ImageImportController::class, 'store'])->name('store');
+
+                            Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
+                                Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                            });
                         });
                     });
                 });
@@ -665,6 +682,8 @@ Route::group([
         Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
         Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
+
+        Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

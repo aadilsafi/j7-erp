@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\FirstLevelAccountsDatatable;
+use App\Http\Requests\AccountCreations\FirstLevelStore;
+use App\Services\AccountCreations\FirstLevel\FirstLevelAccountinterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class FirstLevelAccountController extends Controller
@@ -12,6 +15,14 @@ class FirstLevelAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private $FirstAccountInterface;
+
+    public function __construct(FirstLevelAccountinterface $firstLevelAccountinterface)
+    {
+        $this->FirstAccountInterface = $firstLevelAccountinterface;
+    }
+
     public function index(FirstLevelAccountsDatatable $dataTable, $site_id)
     {
         $data = [
@@ -26,9 +37,17 @@ class FirstLevelAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
-        //
+        abort_if(request()->ajax(), 403);
+
+        $site_id = decryptParams($site_id);
+
+        $data = [
+            'site_id' => $site_id,
+        ];
+
+        return view('app.sites.accounts.account-creation.first-level.create', $data);
     }
 
     /**
@@ -37,9 +56,20 @@ class FirstLevelAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FirstLevelStore $request, $site_id)
     {
         //
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->FirstAccountInterface->store($site_id, $data);
+                return redirect()->route('sites.settings.accounts.first-level.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.settings.accounts.first-level.create', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

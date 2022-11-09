@@ -44,20 +44,26 @@ class ImageImportController extends Controller
     public function store(Request $request, $site_id)
     {
         $files = $request->get('attachment');
-        foreach ($files as $key => $folder) {
-            $file = Str::before($folder, '<link');
-            $destinationPath = public_path('app-assets/images/ReceiptsImages/');
-                dd(File::getRealPath($file));
-            // $new_file->move($destinationPath);
-            $newfile = Storage::put($destinationPath, $new_file);
 
-            $test = File::delete($file);
+        // $files = File::glob(public_path('app-assets/images/ReceiptsImages/*'));
+        // dd($files);
+        foreach ($files as $key => $file) {
+            $file = Str::before($file, '<link');
+
+            if ($file) {
+                $file_name = str_replace(public_path('app-assets/images/temporaryfiles/Receipts/'), '', $file);
+                $destinationPath = public_path('app-assets/images/Import/');
+
+                $newfile = File::move($file, $destinationPath . $file_name);
+
+                $test = File::delete($file);
+            }
         }
         $data = [
             'site_id' => $site_id
         ];
 
-        return view('app.sites.settings.import.images.index', $data);
+        return redirect()->route('sites.settings.import.images.index', ['site_id' => $site_id]);
     }
 
     /**
@@ -109,9 +115,9 @@ class ImageImportController extends Controller
     public function saveFile(Request $request)
     {
         $files = $request->file('attachment');
-        $name = Str::slug('Receipts-' . $files[0]->getClientOriginalName()) . '.' . $files[0]->getClientOriginalExtension();
-        // $new_name = time() . '.' . $name;
-        // $folder = uniqid('filepond', true);
+        $ext = $files[0]->getClientOriginalExtension();
+        $name = str_replace($ext, '', Str::slug('Receipts-' . $files[0]->getClientOriginalName()));
+        $name = $name . '.' . $ext;
         $destinationPath = public_path('app-assets/images/temporaryfiles/Receipts');
         $file = $files[0]->move($destinationPath, $name);
 

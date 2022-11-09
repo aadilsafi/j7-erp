@@ -209,7 +209,7 @@
                             </ul>
                         </li>
                     </ul>
-                    {{-- <ul class="menu-content">
+                    <ul class="menu-content">
                         @can('sites.settings.import')
                             <li class="nav-item ">
                                 <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -232,7 +232,7 @@
                                 </ul>
                             </li>
                         @endcan
-                    </ul> --}}
+                    </ul>
                 </li>
             @endcanany
 

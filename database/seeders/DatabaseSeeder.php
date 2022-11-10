@@ -50,7 +50,7 @@ class DatabaseSeeder extends Seeder
             AccountActionSeeder::class,
             AccountHeadSeeder::class,
             AccountingStartingCodeSeeder::class,
-            // AccountLedgerSeeder::class,
+            AccountLedgerSeeder::class,
         ]);
     }
 }

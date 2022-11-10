@@ -73,9 +73,13 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     $receipt = $file = DB::table('receipts')
                         ->where('id', $ledger->receipt_id)
                         ->first();
-                    return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
+                    if (isset($receipt)) {
+                        return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                    }
                 } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
 
                     if ($ledger->account_action_id == 3) {

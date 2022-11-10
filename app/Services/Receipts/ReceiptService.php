@@ -475,7 +475,7 @@ class ReceiptService implements ReceiptInterface
             //     $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
             //     changeImageDirectoryPermission();
             // }
-            // $update_installments =  $this->updateInstallments($receipt);
+            $update_installments =  $this->updateInstallments($receipt);
         }
 
         // dd($data);

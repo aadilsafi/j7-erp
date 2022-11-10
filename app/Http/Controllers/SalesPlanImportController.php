@@ -462,6 +462,10 @@ class SalesPlanImportController extends Controller
 
                 $data[$key]['amount'] = $data[$key]['total_amount'];
                 $data[$key]['installment_order'] = $data[$key]['installment_no'];
+                $data[$key]['paid_amount'] = 0;
+                $data[$key]['remaining_amount'] = $data[$key]['total_amount'];
+                $data[$key]['status'] = 'unpaid';
+
                 $data[$key]['is_imported'] = true;
 
                 $data[$key]['created_at'] = now();

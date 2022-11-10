@@ -461,12 +461,24 @@ Breadcrumbs::for('sites.settings.accounts.first-level.index', function (Breadcru
     $trail->push('Accounts', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
     $trail->push('1st Level Account', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
 });
+Breadcrumbs::for('sites.settings.accounts.first-level.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+    $trail->push('Create 1st Level Account', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+});
 // accounts second level
 Breadcrumbs::for('sites.settings.accounts.second-level.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Settings', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
     $trail->push('Accounts', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
     $trail->push('2nd Level Account', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
+});
+Breadcrumbs::for('sites.settings.accounts.second-level.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Create 1st Level Account', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
 });
 // accounts third level
 Breadcrumbs::for('sites.settings.accounts.third-level.index', function (BreadcrumbTrail $trail, $site_id) {
@@ -488,4 +500,14 @@ Breadcrumbs::for('sites.settings.accounts.fifth-level.index', function (Breadcru
     $trail->push('Settings', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
     $trail->push('Accounts', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
     $trail->push('5th Level Account', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+});
+//Images Import
+Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import', route('sites.index'));
+});
+// BlackListed Stakeholders
+Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
 });

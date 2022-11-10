@@ -77,16 +77,65 @@ class SalesInvoiceLedgerDatatable extends DataTable
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
                             </a>';
                 } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
-                    $file = DB::table('file_management')
-                        ->where('sales_plan_id', $ledger->sales_plan_id)
-                        ->first();
 
-                    if (isset($file)) {
-                        return '<a href="' . route('sites.file-managements.customers.units.files.show', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_id' => encryptParams($file->id)]) . '">
-                            <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                        </a>';
-                    } else {
-                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                    if ($ledger->account_action_id == 3) {
+                        $file = DB::table('file_buy_backs')->where('id', $ledger->file_buyback_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-buy-back.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_buy_back_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 5) {
+                        $file = DB::table('file_refunds')->where('id', $ledger->file_refund_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-refund.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_refund_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 6) {
+                        $file = DB::table('file_cancellations')->where('id', $ledger->file_cancellation_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_cancellation_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 7) {
+                        $file = DB::table('file_title_transfers')->where('id', $ledger->file_title_transfer_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-title-transfer.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_title_transfer_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 24) {
+                        $file = DB::table('file_resales')->where('id', $ledger->file_resale_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_resale_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        }
                     }
                 } else {
                     return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';

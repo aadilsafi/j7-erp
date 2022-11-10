@@ -31,6 +31,10 @@ class SalesPlan extends Model
         'cancel',
     ];
 
+    protected $casts = [
+        'stakeholder_data' => 'array',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();

@@ -19,8 +19,8 @@ use App\Http\Controllers\{
     SalesPlanController,
     testController,
     UnitController,
-    PrintSalesPlanController,
     StakeholderController,
+    BacklistedStakeholderController,
     NotificationController,
     ReceiptController,
     UserController,
@@ -227,8 +227,9 @@ Route::group([
 
                             Route::get('/', [ImageImportController::class, 'index'])->name('index');
 
-                            Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                            Route::get('create', [ImageImportController::class, 'create'])->name('create');
                             Route::post('store', [ImageImportController::class, 'store'])->name('store');
+                            Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
 
                             Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
                             Route::group(['prefix' => '/{id}'], function () {
@@ -437,6 +438,32 @@ Route::group([
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
                         Route::get('/', [StakeholderController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
+                // Blacklisted Stakeholders
+                Route::group(['prefix' => 'blacklisted-stakeholders', 'as' => 'blacklisted-stakeholders.'], function () {
+                    Route::get('/', [BacklistedStakeholderController::class, 'index'])->name('index');
+
+                    Route::get('create', [BacklistedStakeholderController::class, 'create'])->name('create');
+                    Route::post('store', [BacklistedStakeholderController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [BacklistedStakeholderController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [BacklistedStakeholderController::class, 'edit'])->name('edit');
+                        Route::put('update', [BacklistedStakeholderController::class, 'update'])->name('update');
+                        Route::get('delete', [BacklistedStakeholderController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::post('preview', [BacklistedStakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                        Route::get('storePreview', [BacklistedStakeholderController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [BacklistedStakeholderController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [BacklistedStakeholderController::class, 'ajaxGetById'])->name('get-by-id');
                     });
                 });
 
@@ -759,6 +786,7 @@ Route::group([
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
+        Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

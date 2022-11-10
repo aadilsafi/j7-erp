@@ -120,6 +120,7 @@ class StakeholderDataTable extends DataTable
             ->setTableId('stakeholder-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX(true)
             ->minifiedAjax()
             ->serverSide()
             ->processing()

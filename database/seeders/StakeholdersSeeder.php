@@ -19,6 +19,9 @@ class StakeholdersSeeder extends Seeder
         (new Stakeholder())->insert([
             [
                 'site_id' => 1,
+                'country_id' => 1,
+                'city_id' =>1,
+                'state_id' => 1,
                 'full_name' => 'Zain Ali',
                 'father_name' => 'Hassan Raza',
                 'occupation' => 'Web Developer',
@@ -34,6 +37,9 @@ class StakeholdersSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
+                'country_id' => 1,
+                'city_id' =>4,
+                'state_id' => 2,
                 'full_name' => 'Ali Raza',
                 'father_name' => 'Raza',
                 'occupation' => 'Web Developer',

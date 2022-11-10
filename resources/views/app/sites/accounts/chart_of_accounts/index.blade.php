@@ -179,7 +179,7 @@
                                                                             @endforeach
                                                                          @endif
                                                                     @endforeach 
-                                                                        <td class="custom_td">{{$value_55}}</td>
+                                                                        <td class="custom_td">{{number_format($value_55)}}</td>
 
                                                                         {{-- <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td> --}}
                                                                     </tr>
@@ -219,7 +219,7 @@
                                                                                             @endforeach
                                                                                          @endif
                                                                                     @endforeach 
-                                                                                        <td class="custom_td">{{$value_44}}</td>
+                                                                                        <td class="custom_td">{{number_format($value_44)}}</td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -269,12 +269,12 @@
                                                                                                             @endforeach
                                                                                                          @endif
                                                                                                     @endforeach 
-                                                                                                        <td class="custom_td">{{$value_33}}</td>
+                                                                                                        <td class="custom_td">{{number_format($value_33)}}</td>
 
                                                                                                     </tr>
                                                                                                     </tbody>
                                                                                                 </table>
-                                                                                                
+
                                                                                                 @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
                                                                                                     @php
                                                                                                         $value_5=0;
@@ -304,7 +304,7 @@
                                                                                                                                 @endphp
                                                                                                                              @endif
                                                                                                                              @endforeach 
-                                                                                                                             <td class="custom_td">{{$value_5??0}}</td>
+                                                                                                                             <td class="custom_td">{{number_format($value_5)}}</td>
                                                                                                                             </tr>
                                                                                                                         </tbody>
                                                                                                                     </table>
@@ -326,24 +326,22 @@
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->name}}</td>
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->level}}</td>
                                                                                                                                 <td class="custom_td">{{account_number_format($account_of_head_5->code)}}</td>
-                                                                                                                                <td class="custom_td">{{(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'))}}</td>
-                                                                                                                                {{-- @php
-                                                                                                                                    $value += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
-                                                                                                                                @endphp --}}
+                                                                                                                                <td class="custom_td">{{number_format(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'))}}</td>
+
                                                                                                                             </tr>
                                                                                                                          @endif
-                                                                                                                    @endforeach 
+                                                                                                                    @endforeach
                                                                                                                 </tbody>
                                                                                                             </table>
                                                                                                             </ul>
                                                                                                         </li>
                                                                                                      @endif
-                                                                                                        
-                                                                                                @endforeach 
+
+                                                                                                @endforeach
                                                                                         </ul>
                                                                                     </li>
                                                                                 @endif
-                                                                                    
+
                                                                             @endforeach
                                                                     </ul>
                                                                 </li>
@@ -386,7 +384,6 @@
 @endsection
 
 @section('custom-js')
-    {{ $dataTable->scripts() }}
 @endsection
 
 

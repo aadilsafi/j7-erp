@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             FloorTableSeeder::class,
             UnitTableSeeder::class,
             StakeholdersSeeder::class,
+            BacklistedStakeholderSeeder::class,
             LeadSourceTableSeeder::class,
             SalesPlanSeeder::class,
             SalesPlanAdditionalCostSeeder::class,
@@ -49,7 +50,7 @@ class DatabaseSeeder extends Seeder
             AccountActionSeeder::class,
             AccountHeadSeeder::class,
             AccountingStartingCodeSeeder::class,
-            AccountLedgerSeeder::class,
+            // AccountLedgerSeeder::class,
         ]);
     }
 }

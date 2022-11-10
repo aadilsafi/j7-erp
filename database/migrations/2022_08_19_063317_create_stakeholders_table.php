@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('stakeholders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
+            $table->foreignId('country_id')->constrained('countries')->default(1)->nullable();
+            $table->foreignId('state_id')->constrained('states')->default(2)->nullable();
+            $table->foreignId('city_id')->constrained('cities')->default(4)->nullable();
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();
             $table->string('occupation', 50)->nullable();
@@ -27,6 +30,7 @@ return new class extends Migration
             $table->string('comments')->nullable();
             $table->integer('parent_id')->default(0);
             $table->string('relation')->nullable();
+            $table->string('optional_contact_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

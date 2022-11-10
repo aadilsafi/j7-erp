@@ -374,8 +374,8 @@ class ReceiptService implements ReceiptInterface
                 'site_id' => $site_id,
                 'id' => $id[$i],
             ])->update($data);
-        }
 
+        }
         return true;
     }
 

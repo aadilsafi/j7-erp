@@ -209,7 +209,7 @@
                             </ul>
                         </li>
                     </ul>
-                    {{-- <ul class="menu-content">
+                    <ul class="menu-content">
                         @can('sites.settings.import')
                             <li class="nav-item ">
                                 <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -232,7 +232,7 @@
                                 </ul>
                             </li>
                         @endcan
-                    </ul> --}}
+                    </ul>
                 </li>
             @endcanany
 
@@ -252,6 +252,16 @@
                             Stakeholders</span>
                     </a>
                     <ul class="menu-content">
+                        @can('sites.blacklisted-stakeholders.index')
+                            <li class="nav-item {{ request()->routeIs('sites.blacklisted-stakeholders.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Blacklisted Stakeholders</span>
+                                </a>
+                            </li>
+                        @endcan
+
                         @can('sites.stakeholders.index')
                             <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
@@ -580,15 +590,15 @@
                             </li>
                         @endcan
                         @can('sites.accounts.trial-balance.index')
-                        <li
-                            class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                            <a class="d-flex align-items-center"
-                                href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
-                               <i data-feather='dollar-sign'></i>
-                                <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
-                            </a>
-                        </li>
-                    @endcan
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='dollar-sign'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcanany

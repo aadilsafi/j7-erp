@@ -1933,11 +1933,25 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.settings.import.images.store',
-                'show_name' => 'Can View Images Import',
+                'show_name' => 'Can Save Images Import',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
+            ],
+            [
+                'name' => 'sites.settings.import.images.create',
+                'show_name' => 'Can Images Import',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.import.images.cancel',
+                'show_name' => 'Cancel Images Import',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

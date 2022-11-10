@@ -227,8 +227,9 @@ Route::group([
 
                             Route::get('/', [ImageImportController::class, 'index'])->name('index');
 
-                            Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                            Route::get('create', [ImageImportController::class, 'create'])->name('create');
                             Route::post('store', [ImageImportController::class, 'store'])->name('store');
+                            Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
 
                             Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
                             Route::group(['prefix' => '/{id}'], function () {
@@ -759,6 +760,7 @@ Route::group([
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
+        Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

@@ -195,34 +195,34 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
 
                 'name' => 'total_amount'
             ])->render())->addClass('removeTolltip'),
-            Column::computed('paid_amount')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
+            // Column::computed('paid_amount')->title(view('app.components.select-fields', [
+            //     'db_fields' => $this->db_fields,
+            //     'is_disable' => false,
+            //     'spInstallment' => true,
 
-                'name' => 'paid_amount'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('remaining_amount')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
+            //     'name' => 'paid_amount'
+            // ])->render())->addClass('removeTolltip'),
+            // Column::computed('remaining_amount')->title(view('app.components.select-fields', [
+            //     'db_fields' => $this->db_fields,
+            //     'is_disable' => false,
+            //     'spInstallment' => true,
 
-                'name' => 'remaining_amount'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('last_paid_at')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
+            //     'name' => 'remaining_amount'
+            // ])->render())->addClass('removeTolltip'),
+            // Column::computed('last_paid_at')->title(view('app.components.select-fields', [
+            //     'db_fields' => $this->db_fields,
+            //     'is_disable' => false,
+            //     'spInstallment' => true,
 
-                'name' => 'last_paid_at'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('status')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
+            //     'name' => 'last_paid_at'
+            // ])->render())->searchable(true)->addClass('removeTolltip'),
+            // Column::computed('status')->title(view('app.components.select-fields', [
+            //     'db_fields' => $this->db_fields,
+            //     'is_disable' => false,
+            //     'spInstallment' => true,
 
-                'name' => 'status'
-            ])->render())->addClass('removeTolltip'),
+            //     'name' => 'status'
+            // ])->render())->addClass('removeTolltip'),
         ];
     }
 }

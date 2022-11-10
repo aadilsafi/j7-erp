@@ -20,9 +20,5 @@ class TempSalePlanInstallment extends Model
         'due_date',
         'installment_no',
         'total_amount',
-        'paid_amount',
-        'remaining_amount',
-        'last_paid_at',
-        'status',
     ];
 }

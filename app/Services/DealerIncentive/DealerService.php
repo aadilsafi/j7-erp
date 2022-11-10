@@ -34,8 +34,8 @@ class DealerService implements DealerInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
 
-            $ids = $inputs['unit_ids'];
-            $uids = array_column($ids,'uid');
+            $uids = $inputs['unit_ids'];
+            // $uids = array_column($ids,'uid');
             
             $dealerIncentive = [
                 'site_id' => decryptParams($site_id) ,

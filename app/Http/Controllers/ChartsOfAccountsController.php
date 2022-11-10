@@ -35,6 +35,7 @@ class ChartsOfAccountsController extends Controller
                 }
             }
         }
+        // dd(collect($account_balances)->pluck('debit','debit_10'));
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {
@@ -42,7 +43,8 @@ class ChartsOfAccountsController extends Controller
                     'site' => $site,
                     'account_of_heads' => $account_of_heads,
                     'account_of_heads_codes' => $account_of_heads_codes,
-                    'account_balances' => $account_balances
+                    'account_balances' => $account_balances,
+                    'accountLedgers_all' => $accountLedgers_all
                 ];
                 return view('app.sites.accounts.chart_of_accounts.index', $data);
             }

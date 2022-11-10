@@ -18,6 +18,9 @@ class Stakeholder extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'country_id',
+        'city_id',
+        'state_id',
         'full_name',
         'father_name',
         'occupation',
@@ -30,6 +33,7 @@ class Stakeholder extends Model implements HasMedia
         'parent_id',
         'comments',
         'relation',
+        'optional_contact_number',
     ];
 
     public $rules = [

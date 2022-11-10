@@ -838,6 +838,87 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // Blacklisted Stakeholders
+            // Stakeholders
+            [
+                'name' => 'sites.blacklisted-stakeholders.index',
+                'show_name' => 'Can View Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.create',
+                'show_name' => 'Can Create Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.store',
+                'show_name' => 'Can Store Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.edit',
+                'show_name' => 'Can Edit Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.update',
+                'show_name' => 'Can Update Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.destroy',
+                'show_name' => 'Can Destroy Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.destroy-selected',
+                'show_name' => 'Can Destroy Selected Blacklisted Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.importStakeholders',
+                'show_name' => 'Can Import Blacklisted Stakeholder file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.importStakeholdersPreview',
+                'show_name' => 'Can View Blacklisted Stakeholder Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.storePreview',
+                'show_name' => 'Can View Blacklisted Stakeholder store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.saveImport',
+                'show_name' => 'Can Save Blacklisted Stakeholder Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
             // Lead Sources Routes
             [
                 'name' => 'sites.lead-sources.index',

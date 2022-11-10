@@ -30,9 +30,13 @@ class ImageImportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($site_id)
     {
-        //
+        $data = [
+            'site_id' => $site_id
+        ];
+
+        return view('app.sites.settings.import.images.create', $data);
     }
 
     /**
@@ -116,7 +120,7 @@ class ImageImportController extends Controller
     {
         $files = $request->file('attachment');
         $ext = $files[0]->getClientOriginalExtension();
-        $name = str_replace($ext, '', Str::slug('Receipts-' . $files[0]->getClientOriginalName()));
+        $name = str_replace($ext, '', Str::slug('Receipts-'.time().'-' . $files[0]->getClientOriginalName()));
         $name = $name . '.' . $ext;
         $destinationPath = public_path('app-assets/images/temporaryfiles/Receipts');
         $file = $files[0]->move($destinationPath, $name);
@@ -131,5 +135,17 @@ class ImageImportController extends Controller
 
         $test = File::delete($file);
         return $test;
+    }
+
+    public function cancel($site_id)
+    {
+        foreach (File::glob(public_path('app-assets') . '/images/temporaryfiles/Receipts/*') as $key => $path) {
+            $test = File::delete($path);
+        }
+        $data = [
+            'site_id' => $site_id
+        ];
+
+        return redirect()->route('sites.settings.import.images.index', ['site_id' => $site_id]);
     }
 }

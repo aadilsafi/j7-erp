@@ -227,8 +227,9 @@ Route::group([
 
                             Route::get('/', [ImageImportController::class, 'index'])->name('index');
 
-                            Route::get('create', [CustomFieldController::class, 'create'])->name('create');
+                            Route::get('create', [ImageImportController::class, 'create'])->name('create');
                             Route::post('store', [ImageImportController::class, 'store'])->name('store');
+                            Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
 
                             Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
                             Route::group(['prefix' => '/{id}'], function () {

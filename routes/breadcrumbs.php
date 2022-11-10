@@ -489,3 +489,9 @@ Breadcrumbs::for('sites.settings.accounts.fifth-level.index', function (Breadcru
     $trail->push('Accounts', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
     $trail->push('5th Level Account', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
 });
+
+//Images Import
+Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import', route('sites.index'));
+});

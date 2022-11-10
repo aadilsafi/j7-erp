@@ -34,42 +34,44 @@
 
 @section('content')
 
-    <div class="">
-        <a href="{{ route('sites.settings.import.images.create', ['site_id' => $site_id]) }}"
-            class="btn btn-primary waves-effect">
-            <span>Upload Images</span>
-        </a>
-    </div>
+    <form class="form form-vertical" action="{{ route('sites.settings.import.images.store', ['site_id' => $site_id]) }}"
+        enctype="multipart/form-data" method="POST">
+        @csrf
+        <div class="row py-1">
 
-
-    <div class="row mt-2">
-        <div class="py-2">
-            <h3>Receipts Images</h3>
-        </div>
-        @foreach (File::glob(public_path('app-assets') . '/images/Import/*') as $key => $path)
-            <div class="col-3 col-md-3 col-lg-3 col-12">
-                <div class="card ecommerce-card text-center">
-                    <div class="card-body">
-                        <img src="{{ str_replace(public_path(), '', $path) }}" height="200px" width="200px">
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-xl-6 col-md-6 col-sm-6 col-12 pe-sm-0">
-                                <div class="mb-1">
-                                    <input type="text" class="form-control" readonly
-                                        id="copy-to-clipboard-input-{{ $key }}"
-                                        value={{ str_replace(public_path('app-assets/images/Import/'), '', $path) }} />
-                                </div>
-                            </div>
-                            <div class="col-sm-2 col-12">
-                                <button class="btn btn-outline-primary btn-copy" id="{{ $key }}">Copy!</button>
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="position-relative">
+                        <div class="card-body">
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name"> </label>
+                                <input id="attachment" type="file" class="filepond" name="attachment[]" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @endforeach
-    </div>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: 10 !important;">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <button type="submit" value="save"
+                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                <i data-feather='save'></i>
+                                Save Images
+                            </button>
+
+                            <a href="{{ route('sites.settings.import.images.cancel', ['site_id' => $site_id]) }}"
+                                class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                                <i data-feather='x'></i>
+                                {{ __('lang.commons.cancel') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
 
 @endsection

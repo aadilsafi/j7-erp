@@ -24,10 +24,15 @@ class SalesPlan extends Model
         'down_payment_total',
         'lead_source_id',
         'validity',
+        'is_imported',
         'comments',
         'status',
         'approved_date',
         'cancel',
+    ];
+
+    protected $casts = [
+        'stakeholder_data' => 'array',
     ];
 
     public function getActivitylogOptions(): LogOptions

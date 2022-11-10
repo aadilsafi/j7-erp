@@ -2,6 +2,8 @@
 
 namespace App\Services\Receipts;
 
+use App\Models\AccountHead;
+use App\Models\Bank;
 use App\Models\Unit;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
@@ -11,8 +13,13 @@ use App\Models\UnitStakeholder;
 use App\Models\SiteConfigration;
 use App\Models\SalesPlanInstallments;
 use App\Models\StakeholderType;
+use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
+use Str;
 
 class ReceiptService implements ReceiptInterface
 {
@@ -33,111 +40,165 @@ class ReceiptService implements ReceiptInterface
     // Store
     public function store($site_id, $requested_data)
     {
+        DB::transaction(function () use ($site_id, $requested_data) {
+            $data = $requested_data['receipts'];
 
-        $data = $requested_data['receipts'];
+            $amount_received = $requested_data['amount_received'];
 
-        $amount_received = $requested_data['amount_received'];
+            for ($i = 0; $i < count($data); $i++) {
 
-        for ($i = 0; $i < count($data); $i++) {
-            $unit = Unit::find($data[$i]['unit_id']);
-            $sales_plan = $unit->salesPlan->toArray();
-
-            $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
-
-            $receiptData = [
-                'site_id' => decryptParams($site_id),
-                'unit_id'  => $data[$i]['unit_id'],
-                'sales_plan_id'  => $sales_plan[0]['id'],
-                'name'  => $stakeholder->full_name,
-                'cnic'  => $stakeholder->cnic,
-                'phone_no' => $stakeholder->contact,
-                'mode_of_payment' => $data[$i]['mode_of_payment'],
-                'other_value' => $data[$i]['other_value'],
-                'cheque_no' => $data[$i]['cheque_no'],
-                'online_instrument_no' => $data[$i]['online_instrument_no'],
-                'transaction_date' => $data[$i]['transaction_date'],
-                'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                'amount_in_numbers' => $data[$i]['amount_in_numbers'],
-                'purpose' => 'installments',
-                'installment_number' => '1',
-                'amount_received' => $requested_data['amount_received'],
-                'comments' => $data[$i]['comments'],
-                'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
-                'bank_details' => $data[$i]['bank_details']
-            ];
-
-            if ($amount_received > $data[$i]['amount_in_numbers']) {
-                $receipt = ReceiptDraftModel::create($receiptData);
-
-                if (isset($requested_data['attachment'])) {
-                    $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                $unit = Unit::find($data[$i]['unit_id']);
+                $sales_plan = $unit->salesPlan->toArray();
+                if (!isset($data[$i]['bank_name'])) {
+                    $data[$i]['bank_id'] =  null;
+                    $data[$i]['bank_name'] = null;
                 }
 
-                $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
+                if ($data[$i]['bank_id'] == 0) {
 
-                $data = [
-                    'unit_name'  => $unit->name,
-                    'remaining_amount' =>   $remaining_amount,
+                    if ($data[$i]['mode_of_payment'] == 'Cheque' || $data[$i]['mode_of_payment'] == 'Online') {
+                        $bankData = [
+                            'site_id' => decryptParams($site_id),
+                            'name' => $data[$i]['bank_name'],
+                            'slug' => Str::slug($data[$i]['bank_name']),
+                            'account_number' => $data[$i]['bank_account_number'],
+                            'branch' => $data[$i]['bank_branch'],
+                            'branch_code' => $data[$i]['bank_branch_code'],
+                            'address' => $data[$i]['bank_address'],
+                            'contact_number' => $data[$i]['bank_contact_number'],
+                            'status' => true,
+                            'comments' => $data[$i]['bank_comments'],
+                        ];
+                        $bank = Bank::create($bankData);
+                        $data[$i]['bank_id'] = $bank->id;
+                        $data[$i]['bank_name'] = $bank->name;
+                        // added in accound heads
+                        $acountHeadData = [
+                            'site_id' => decryptParams($site_id),
+                            'modelable_id' => null,
+                            'modelable_type' => null,
+                            'code' => $bank->account_number,
+                            'name' => $bank->name,
+                            'level' => 5,
+                        ];
+                        $accountHead =  AccountHead::create($acountHeadData);
+                    }
+                }
+
+                $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
+
+                $receiptData = [
+                    'site_id' => decryptParams($site_id),
+                    'unit_id'  => $data[$i]['unit_id'],
+                    'sales_plan_id'  => $sales_plan[0]['id'],
+                    'name'  => $stakeholder->full_name,
+                    'cnic'  => $stakeholder->cnic,
+                    'phone_no' => $stakeholder->contact,
+                    'mode_of_payment' => $data[$i]['mode_of_payment'],
+                    'other_value' => $data[$i]['other_value'],
+                    'cheque_no' => $data[$i]['cheque_no'],
+                    'online_instrument_no' => $data[$i]['online_instrument_no'],
+                    'transaction_date' => $data[$i]['transaction_date'],
+                    'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
+                    'amount_in_numbers' => $data[$i]['amount_in_numbers'],
+                    'purpose' => 'installments',
+                    'installment_number' => '1',
+                    'amount_received' => $requested_data['amount_received'],
+                    'comments' => $data[$i]['comments'],
+                    'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
+                    'bank_details' => $data[$i]['bank_name'],
+                    'bank_id' => $data[$i]['bank_id'],
                 ];
 
-                return $data;
-            } else {
-                $draft_receipt_data = ReceiptDraftModel::all();
+                if ($amount_received > $data[$i]['amount_in_numbers']) {
+                    $receipt = ReceiptDraftModel::create($receiptData);
 
-                if (isset($draft_receipt_data)) {
-                    foreach ($draft_receipt_data as $draftReceiptData) {
-                        $receiptDraftData = [
-                            'site_id' => $draftReceiptData->site_id,
-                            'unit_id'  => $draftReceiptData->unit_id,
-                            'sales_plan_id'  => $draftReceiptData->sales_plan_id,
-                            'name'  => $draftReceiptData->name,
-                            'cnic'  => $draftReceiptData->cnic,
-                            'phone_no' => $draftReceiptData->phone_no,
-                            'mode_of_payment' => $draftReceiptData->mode_of_payment,
-                            'other_value' => $draftReceiptData->other_value,
-                            'cheque_no' => $draftReceiptData->cheque_no,
-                            'online_instrument_no' => $draftReceiptData->online_instrument_no,
-                            'transaction_date' => $draftReceiptData->transaction_date,
-                            'amount_in_words' => numberToWords($draftReceiptData->amount_in_numbers),
-                            'amount_in_numbers' => $draftReceiptData->amount_in_numbers,
-                            'comments' => $draftReceiptData->comments,
-                            'purpose' => 'installments',
-                            'installment_number' => '1',
-                            'amount_received' => $requested_data['amount_received'],
-                            'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
-                            'bank_details' => $draftReceiptData->bank_details,
-                        ];
-                        //create receipt from drafts
-                        $receipt_Draft = Receipt::create($receiptDraftData);
-
-                        $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
-
-                        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                            return apiErrorResponse('invalid_transaction');
-                        }
-
-                        $update_installments =  $this->updateInstallments($receipt_Draft);
+                    if (isset($requested_data['attachment'])) {
+                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
-                    ReceiptDraftModel::truncate();
+
+                    $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
+
+                    $data = [
+                        'unit_name'  => $unit->name,
+                        'remaining_amount' =>   $remaining_amount,
+                    ];
+
+                    return $data;
+                } else {
+                    $draft_receipt_data = ReceiptDraftModel::all();
+
+                    if (isset($draft_receipt_data)) {
+                        foreach ($draft_receipt_data as $draftReceiptData) {
+                            $receiptDraftData = [
+                                'site_id' => $draftReceiptData->site_id,
+                                'unit_id'  => $draftReceiptData->unit_id,
+                                'sales_plan_id'  => $draftReceiptData->sales_plan_id,
+                                'name'  => $draftReceiptData->name,
+                                'cnic'  => $draftReceiptData->cnic,
+                                'phone_no' => $draftReceiptData->phone_no,
+                                'mode_of_payment' => $draftReceiptData->mode_of_payment,
+                                'other_value' => $draftReceiptData->other_value,
+                                'cheque_no' => $draftReceiptData->cheque_no,
+                                'online_instrument_no' => $draftReceiptData->online_instrument_no,
+                                'transaction_date' => $draftReceiptData->transaction_date,
+                                'amount_in_words' => numberToWords($draftReceiptData->amount_in_numbers),
+                                'amount_in_numbers' => $draftReceiptData->amount_in_numbers,
+                                'comments' => $draftReceiptData->comments,
+                                'purpose' => 'installments',
+                                'installment_number' => '1',
+                                'amount_received' => $requested_data['amount_received'],
+                                'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
+                                'bank_details' => $draftReceiptData->bank_details,
+                                'bank_id' => $draftReceiptData->bank_id,
+                            ];
+                            //create receipt from drafts
+                            $receipt_Draft = Receipt::create($receiptDraftData);
+                            if ($receipt_Draft->mode_of_payment == "Cash") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                            }
+
+                            if ($receipt_Draft->mode_of_payment == "Cheque") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
+                            }
+
+                            if ($receipt_Draft->mode_of_payment == "Online") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
+                            }
+
+                            // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                            //     Log::info(json_encode($transaction));
+                            //     // return apiErrorResponse('invalid_transaction');
+                            // }
+
+                            $update_installments =  $this->updateInstallments($receipt_Draft);
+                        }
+                        ReceiptDraftModel::truncate();
+                    }
+
+                    //here is single without draft
+                    $receipt = Receipt::create($receiptData);
+                    if ($receipt->mode_of_payment == "Cash") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                    }
+
+                    if ($receipt->mode_of_payment == "Cheque") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                    }
+
+                    if ($receipt->mode_of_payment == "Online") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+                    }
+
+                    if (isset($requested_data['attachment'])) {
+                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                        changeImageDirectoryPermission();
+                    }
+
+                    $update_installments =  $this->updateInstallments($receipt);
                 }
-
-                //here is single without draft
-                $receipt = Receipt::create($receiptData);
-                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
-                // dd($transaction);
-                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                    return apiErrorResponse('invalid_transaction');
-                }
-
-
-                if (isset($requested_data['attachment'])) {
-                    $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
-                    changeImageDirectoryPermission();
-                }
-
-                $update_installments =  $this->updateInstallments($receipt);
             }
-        }
+        });
     }
 
     //update Installments
@@ -276,8 +337,12 @@ class ReceiptService implements ReceiptInterface
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder->id, 'type' => 'C'])->first()->update(['status' => true]);
             $unitStakeholder = UnitStakeholder::create($unitStakeholderData);
 
-            //Here code to disapprove all other sales plan of same unit
-            (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->update(['status' => 2]);
+            //Here code to disapprove all pending sales plan of same unit
+            $pendingSalesPlan =  (new SalesPlan())->where('unit_id', $unit->id)->where('id', '!=', $sales_plan->id)->where('status', 0)->first();
+            if ($pendingSalesPlan != null) {
+                $pendingSalesPlan->status = 2;
+                $pendingSalesPlan->update();
+            }
         }
 
         $unit->update();
@@ -302,12 +367,119 @@ class ReceiptService implements ReceiptInterface
         ];
 
         for ($i = 0; $i < count($id); $i++) {
+            if ($this->model()->find($id[$i])->status == 0) {
+                $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+            }
             $this->model()->where([
                 'site_id' => $site_id,
                 'id' => $id[$i],
             ])->update($data);
+
+        }
+        return true;
+    }
+
+    public function ImportReceipts($site_id)
+    {
+        // dd(Receipt::first());
+        $model = new TempReceipt();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
+
+        foreach ($tempdata as $key => $items) {
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+
+            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
+            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+
+            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
+                ->where('unit_id', $unitId->id)
+                ->where('total_price', $data[$key]['total_price'])
+                ->where('down_payment_total', $data[$key]['down_payment_total'])
+                ->where('validity', $data[$key]['validity'])
+                ->first();
+
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['sales_plan_id'] = $salePlan->id;
+            $data[$key]['unit_id'] = $unitId->id;
+            $data[$key]['name'] = $stakeholder->full_name;
+            $data[$key]['cnic'] = $stakeholder->cnic;
+            $data[$key]['phone_no'] = $stakeholder->contact;
+            $data[$key]['amount_in_numbers'] = $data[$key]['amount'];
+            $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
+            $data[$key]['amount_received'] = $data[$key]['amount'];
+            $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];
+            $data[$key]['online_instrument_no'] = $data[$key]['online_transaction_no'];
+
+            $data[$key]['purpose'] = str_replace('-', ' ', $data[$key]['installment_no']);
+            $data[$key]['installment_no'] = json_encode([$data[$key]['purpose']]);
+            $data[$key]['is_imported'] = true;
+
+            if ($data[$key]['mode_of_payment'] == 'cheque' || $data[$key]['mode_of_payment'] == 'online') {
+                $bank = Bank::where('account_number', $data[$key]['bank_acount_number'])->first();
+                if ($bank) {
+                    $data[$key]['bank_id'] = $bank->id;
+                }
+                $data[$key]['bank_details'] = Str::title(str_replace('-', ' ', $data[$key]['bank_name']));
+            }
+
+            $data[$key]['installment_number'] = $data[$key]['installment_no'];
+            $data[$key]['mode_of_payment'] = Str::title($data[$key]['mode_of_payment']);
+            $data[$key]['status'] = $data[$key]['status'] == 'active' ? 1 : 0;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+
+            // if ($data[$key]['mode_of_payment'] == 'cheque') {
+            //     $url = $data[$key]['image_url'];
+            //     // $info = pathinfo($url);
+            //     // $contents = file_get_contents($url);
+            //     // $file = '/tmp/' . $info['basename'];
+            //     // file_put_contents($file, $contents);
+            //     // $uploaded_file = new UploadedFile($file, $info['basename']);
+            //     // dd($uploaded_file);
+            // }
+            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['stakeholder_cnic']);
+            unset($data[$key]['total_price']);
+            unset($data[$key]['down_payment_total']);
+            unset($data[$key]['validity']);
+            unset($data[$key]['other_payment_mode_value']);
+            unset($data[$key]['online_transaction_no']);
+            unset($data[$key]['installment_no']);
+            unset($data[$key]['amount']);
+            unset($data[$key]['bank_name']);
+            unset($data[$key]['image_url']);
+
+
+            $receipt = Receipt::create($data[$key]);
+
+            if ($receipt->mode_of_payment == "Cash") {
+                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+            }
+
+            if ($receipt->mode_of_payment == "Cheque") {
+                if ($receipt->status == 0) {
+                    $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                } else {
+                    $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                }
+            }
+
+            if ($receipt->mode_of_payment == "Online") {
+                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+            }
+            // if ($data[$key]['mode_of_payment'] == 'cheque') {
+
+            //     $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
+            //     changeImageDirectoryPermission();
+            // }
+            $update_installments =  $this->updateInstallments($receipt);
         }
 
-        return true;
+        // dd($data);
+
+        return $receipt;
     }
 }

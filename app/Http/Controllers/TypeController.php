@@ -363,15 +363,13 @@ class TypeController extends Controller
 
         $validator->validate();
 
-        // $site_id = decryptParams($site_id);
         $model = new TempUnitType();
         $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
+        $accountCode = addAccountCodes(get_class(new Type()));
 
-        // dd($totalFloors);
-        $floors = [];
         foreach ($tempdata as $key => $items) {
-            foreach ($tempCols as $k => $field) {
+            foreach ($request->fields as $k => $field) {
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
 
@@ -390,18 +388,40 @@ class TypeController extends Controller
             } else {
                 $data[$key]['parent_id'] = 0;
             }
+
+            $data[$key]['is_imported'] = true;
+
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
+
+            if (!is_null($accountCode) && $data[$key]['parent_id'] == 0) {
+
+                $data[$key]['account_added'] = true;
+                $data[$key]['account_number'] = $accountCode++;
+            } else {
+                $data[$key]['account_added'] = false;
+                $data[$key]['account_number'] = null;
+            }
             unset($data[$key]['unit_type_slug']);
             unset($data[$key]['parent_type_name']);
+
+            $types = Type::create($data[$key]);
+
+            if (!is_null($accountCode) && $data[$key]['parent_id'] == 0) {
+
+                $types->modelable()->create([
+                    'site_id' => decryptParams($site_id),
+                    'code' => $accountCode,
+                    'name' => 'Accounts Receviable - ' . $data[$key]['name'],
+                    'level' => 3,
+                ]);
+            }
+           
         }
 
-        $types = Type::insert($data);
+        TempUnitType::query()->truncate();
 
-        if ($types) {
-            TempUnitType::query()->truncate();
-        }
         return redirect()->route('sites.types.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
 }

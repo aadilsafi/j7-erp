@@ -179,7 +179,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '10209010001002',
-                'name' => 'Meezan Bank - Expense',
+                'name' => 'Meezan Bank - 6560',
                 'level' => 5,
             ],
             [
@@ -187,14 +187,14 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '10209010001003',
-                'name' => 'Meezan Bank - Income',
+                'name' => 'Meezan Bank - 1650',
                 'level' => 5,
             ],
             [
                 'site_id' => 1,
                 'modelable_id' => null,
                 'modelable_type' => null,
-                'code' => '10209010001004',
+                'code' => '10209010001010',
                 'name' => 'Cheques Clearing Account',
                 'level' => 5,
             ],
@@ -425,7 +425,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '40101010001002',
-                'name' => 'Revenue - Cancelation Charges',
+                'name' => 'Revenue - Cancellation Charges',
                 'level' => 5,
             ],
             [
@@ -491,11 +491,17 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '40201010001003',
-                'name' => 'Cancelation Account',
+                'name' => 'Cancellation Account',
                 'level' => 5,
             ],
-
-
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
+                'code' => '40201010001004',
+                'name' => 'Sales Plan Disapproval Account',
+                'level' => 5,
+            ],
             [
                 'site_id' => 1,
                 'modelable_id' => null,

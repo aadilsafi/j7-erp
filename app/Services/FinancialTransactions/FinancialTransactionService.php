@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, Receipt, SalesPlan};
+use App\Models\{AccountHead, AccountingStartingCode, AccountLedger, FileBuyBack, FileCancellation, FileManagement, FileTitleTransfer, Receipt, SalesPlan, Stakeholder, StakeholderType};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
@@ -45,6 +45,36 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $revenueSalesAccount = $revenueSales->level_code . $revenueSales->starting_code;
 
             $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $revenueSalesAccount, 1, $salesPlan->id, 'credit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeDisapproveSalesPlanTransaction($sales_plan_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $sales_plan = SalesPlan::find($sales_plan_id);
+
+            // 1 disapproval sales plan entry
+            $disapprovalAccount = AccountHead::where('name', 'Sales Plan Disapproval Account')->first()->code;
+            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $disapprovalAccount, 8, $sales_plan->id, 'debit', $sales_plan->total_price, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL);
+
+            // 2
+            $customerAccount = collect($sales_plan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $sales_plan->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $customerAccount['account_code'], 8, $sales_plan->id, 'credit', $sales_plan->total_price, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL, null);
+
 
             DB::commit();
             return 'transaction_completed';
@@ -185,24 +215,54 @@ class FinancialTransactionService implements FinancialTransactionInterface
         return true;
     }
 
-    public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $receipt_id = null, $balance = 0)
+    public function makeFinancialTransaction($site_id, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $action_id = null, $balance = 0)
     {
         $data = [
             'site_id' => $site_id,
             'account_head_code' => $account_code,
             'account_action_id' => $account_action,
             'sales_plan_id' => $sales_plan,
-            'receipt_id' => $receipt_id,
+            // 'receipt_id' => $action_id,
             'balance' => $balance,
             'nature_of_account' => $nature_of_account,
             'status' => true,
         ];
-
         $data[$type] = $amount;
+
+        if($account_action == 2 || $account_action == 9 || $account_action == 10 || $account_action == 11 || $account_action == 12)
+        {
+            $data['receipt_id'] = $action_id;
+        }
+
+        if($account_action == 3)
+        {
+            $data['file_buyback_id'] = $action_id;
+        }
+
+        if($account_action == 5)
+        {
+            $data['file_refund_id'] = $action_id;
+        }
+
+        if($account_action == 6)
+        {
+            $data['file_cancellation_id'] = $action_id;
+        }
+
+        if($account_action == 7)
+        {
+            $data['file_title_transfer_id'] = $action_id;
+        }
+
+        if($account_action == 24)
+        {
+            $data['file_resale_id'] = $action_id;
+        }
 
         return (new AccountLedger())->create($data);
     }
 
+    // for cash
     public function makeReceiptTransaction($receipt_id)
     {
         try {
@@ -222,15 +282,321 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // Customer AR Transaction
-            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->all()[0]->receivable_account;
-            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->all();
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
 
-            if (count($customerAccount) < 1) {
+            if (is_null($customerAccount)) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
             }
-            $customerAccount = $customerAccount[0];
+            // dd($customerAccount);
+            // $customerAccount = $customerAccount[0];
             $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             // dd($customerAccount, $cashAccount, $receipt);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    // for cheque
+    public function makeReceiptChequeTransaction($receipt_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $receipt = (new Receipt())->find($receipt_id);
+            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+            $stakeholder = Stakeholder::where('cnic', $receipt->cnic)->first();
+            $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholder->id)->where('type', 'C')->first();
+
+            // Cheque Transaction
+            $cashAccount = $clearanceAccout;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 9, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            // Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 9, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    // in case of cheque active
+    public function makeReceiptActiveTransaction($receipt_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $receipt = (new Receipt())->find($receipt_id);
+            $bankAccount = $receipt->bank->account_number;
+
+            // bank Transaction
+            $this->makeFinancialTransaction($receipt->site_id, $bankAccount, 9, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            // Clearing account transaction
+            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+
+            $this->makeFinancialTransaction($receipt->site_id, $clearanceAccout, 9, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    // in case of online
+    public function makeReceiptOnlineTransaction($receipt_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $receipt = (new Receipt())->find($receipt_id);
+            $bankAccount = $receipt->bank->account_number;
+
+            // bank Transaction
+            $this->makeFinancialTransaction($receipt->site_id, $bankAccount, 12, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            // Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 12, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+
+    public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
+            $sales_plan = SalesPlan::find($file_buy_back->sales_plan_id);
+            $receipt = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->first();
+            $refunded_amount = (int)$file_buy_back->amount_to_be_refunded - (int)$file_buy_back->amount_profit;
+            $payable_amount = (int)$sales_plan->total_price - (int)$refunded_amount;
+            $refundWithProfit = (int)$file_buy_back->amount_to_be_refunded;
+            $onlyProfitAmount = $file_buy_back->amount_profit;
+
+            //1 Buyback account entry
+            $buybackAccount = AccountHead::where('name', 'Buyback Account')->first()->code;
+            $this->makeFinancialTransaction($file_buy_back->site_id, $buybackAccount, 3, $sales_plan->id, 'debit', $sales_plan->total_price, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //2 Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 3, $receipt->sales_plan_id, 'credit', $payable_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //3 customer payable transaction
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+            $customer_payable_account_code = $stakeholderType->payable_account;
+
+            //if payable account code is not set
+            if ($customer_payable_account_code == null) {
+                $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
+                $stakeholderType = collect($stakeholderType)->last();
+                $customer_payable_account_code = $stakeholderType->payable_account + 1;
+
+                // add payable code to stakeholder type
+                $stakeholderPayable = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+                $stakeholderPayable->payable_account =  (string)$customer_payable_account_code;
+                $stakeholderPayable->update();
+
+                $stakeholder = Stakeholder::find(decryptParams($customer_id));
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => $customer_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Customer A/P',
+                    'level' => 5,
+                ];
+
+                (new AccountHead())->create($accountCodeData);
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //4 Own profit entry
+            $profitAccount = AccountHead::where('name', 'Customer Own Paid Expense')->first()->code;
+            $this->makeFinancialTransaction($file_buy_back->site_id, $profitAccount, 3, $sales_plan->id, 'debit', $file_buy_back->amount_profit, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //5 again customer ap entry for profit
+            $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_profit, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //6 Payment Voucher  entry in customer ap ledger
+            $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            //7 Payment Voucher  cash entry
+            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $file_cancellation = FileCancellation::where('file_id', decryptParams($file_id))->first();
+            $sales_plan = SalesPlan::find($file_cancellation->sales_plan_id);
+            $receipt = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->first();
+            $refunded_amount = (int)$file_cancellation->amount_to_be_refunded + (int)$file_cancellation->cancellation_charges;
+            $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
+
+            //1 Cancellation account entry
+            $cancelationAccount = AccountHead::where('name', 'Cancellation Account')->first()->code;
+            $this->makeFinancialTransaction($file_cancellation->site_id, $cancelationAccount, 6, $sales_plan->id, 'debit', $sales_plan->total_price, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            //2 Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 6, $receipt->sales_plan_id, 'credit', $salesPlanRemainingAmount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            //3 customer payable transaction
+            $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+            $customer_payable_account_code = $stakeholderType->payable_account;
+
+            //if payable account code is not set
+            if ($customer_payable_account_code == null) {
+                $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
+                $stakeholderType = collect($stakeholderType)->last();
+                $customer_payable_account_code = $stakeholderType->payable_account + 1;
+
+                // add payable code to stakeholder type
+                $stakeholderPayable = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+                $stakeholderPayable->payable_account =  (string)$customer_payable_account_code;
+                $stakeholderPayable->update();
+
+                $stakeholder = Stakeholder::find(decryptParams($customer_id));
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => $customer_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Customer A/P',
+                    'level' => 5,
+                ];
+
+                (new AccountHead())->create($accountCodeData);
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            // 4 Revenue Canceleation Entry
+            $revenueCancellationAccount = AccountHead::where('name', 'Revenue - Cancellation Charges')->first()->code;
+            $this->makeFinancialTransaction($receipt->site_id, $revenueCancellationAccount, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->cancellation_charges, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            // 5 Payment Voucher Customer A/P Entry
+            $this->makeFinancialTransaction($receipt->site_id, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            // 6 Payment Voucher Cash Entry
+            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+
+            DB::commit();
+            return 'transaction_completed';
+        } catch (GeneralException | Exception $ex) {
+            DB::rollBack();
+            return $ex;
+        }
+    }
+
+    public function makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            $fileTitleTransfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
+            $sales_plan = SalesPlan::find($fileTitleTransfer->sales_plan_id);
+            $receipt = Receipt::where('sales_plan_id', $fileTitleTransfer->sales_plan_id)->first();
+            //
+            $stakeholderTypeB = StakeholderType::where(['stakeholder_id' => $fileTitleTransfer->transfer_person_id, 'type' => 'C'])->first();
+            //
+            $stakeholderTypeA = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
+
+            $accountUnitHeadCode = $this->findOrCreateUnitAccount($sales_plan->unit);
+
+            $customerBAccountRecievable = $this->findOrCreateCustomerAccount($unit_id, $accountUnitHeadCode, $stakeholderTypeB);
+
+            $customerAAccountRecievable =  $this->findOrCreateCustomerAccount($unit_id, $accountUnitHeadCode, $stakeholderTypeA);
+
+            $file = FileManagement::where('id', $fileTitleTransfer->file_id)->first();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $total_paid_amount = $receipts->sum('amount_in_numbers');
+            $remainingSalesPlanAmount = (int)$sales_plan->total_price -  (int)$total_paid_amount;
+
+            // 1 Customer B AR entry
+            $this->makeFinancialTransaction($receipt->site_id, $customerBAccountRecievable, 7, $receipt->sales_plan_id, 'debit', $remainingSalesPlanAmount, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+            // 2 Customer A AR entry
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 7, $receipt->sales_plan_id, 'credit', $remainingSalesPlanAmount, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+            // 3 Customer A AR  Transfer charges entry
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 7, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+            // 4 Revenue transfer fee entry
+            $transferAccount = AccountHead::where('name', 'Revenue - Transfer Fees')->first()->code;
+            $this->makeFinancialTransaction($receipt->site_id, $transferAccount, 7, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+            // 5 receipt voucher cash
+            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+            // 6 customer a AR transfer fee entry
+            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+
+
 
             DB::commit();
             return 'transaction_completed';

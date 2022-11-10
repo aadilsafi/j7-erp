@@ -42,7 +42,7 @@
     <p class="mb-2">
     </p>
 
-    <div class="card">
+    <div class="card" id="salesPlan">
         <div class="card-body">
             <form
                 action="{{ route('sites.floors.units.sales-plans.destroy-selected', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}"
@@ -142,6 +142,7 @@
         }
 
         function approveSalesPlan(id) {
+            showBlockUI('#salesPlan');
             var _token = '{{ csrf_token() }}';
             let url = "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
             $.ajax({
@@ -153,7 +154,6 @@
                     '_token': _token
                 },
                 success: function(response) {
-                    console.log(response);
                     if (response.success) {
                         toastr.success(response.message,
                             "Success!", {
@@ -171,15 +171,18 @@
                             title: 'Error',
                             text: 'Something Went Wrong!!',
                         });
+                        hideBlockUI('#salesPlan');
                     }
                 },
                 error: function(error) {
                     console.log(error);
+                    hideBlockUI('#salesPlan');
                 }
             });
         }
 
         function disapproveSalesPlan(id) {
+            showBlockUI('#salesPlan');
             var _token = '{{ csrf_token() }}';
             let url = "{{ route('sites.floors.units.sales-plans.disapprove-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
             $.ajax({
@@ -191,7 +194,6 @@
                     '_token': _token
                 },
                 success: function(response) {
-                    console.log(response);
                     if (response.success) {
                         toastr.success(response.message,
                             "Success!", {
@@ -209,10 +211,12 @@
                             title: 'Error',
                             text: 'Something Went Wrong!!',
                         });
+                        hideBlockUI('#salesPlan');
                     }
                 },
                 error: function(error) {
                     console.log(error);
+                    hideBlockUI('#salesPlan');
                 }
             });
         }

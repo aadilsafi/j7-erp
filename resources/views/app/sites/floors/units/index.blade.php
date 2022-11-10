@@ -122,5 +122,7 @@
             location.href =
                 "{{ route('sites.floors.units.fab.create', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}";
         }
+
+        
     </script>
 @endsection

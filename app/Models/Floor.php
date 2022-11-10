@@ -18,6 +18,7 @@ class Floor extends Model
         'floor_area',
         'site_id',
         'order',
+        'is_imported',
         'short_label',
         'active',
     ];

@@ -53,19 +53,21 @@ class DealerIncentiveController extends Controller
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
 
+            $dealers = RebateIncentiveModel::select('dealer_id as stakeholder_id')->distinct()->whereHas('dealer')->with('stakeholder')->get();
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'units' => Unit::where('status_id', 5)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('id')->toArray(),
                 'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
-                'stakeholders' => Stakeholder::where('site_id', decryptParams($site_id))->with('dealer_stakeholder', 'stakeholder_types')->get(),
+                'stakeholders' => $dealers,
                 'incentives' => DealerIncentiveModel::pluck('dealer_id')->toArray(),
                 'customFields' => $customFields
 
             ];
 
             return view('app.sites.file-managements.files.dealer-incentive.create', $data);
-        } else { 
+        } else {
             abort(403);
         }
     }
@@ -85,7 +87,6 @@ class DealerIncentiveController extends Controller
                 $inputs = $request->all();
                 $record = $this->dealerIncentiveInterface->store($site_id, $inputs);
                 return redirect()->route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
-
             } else {
                 abort(403);
             }
@@ -142,28 +143,25 @@ class DealerIncentiveController extends Controller
     public function getData(Request $request)
     {
         $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)->get();
-        $dealer_incentives =DealerIncentiveModel::where('dealer_id',$request->dealer_id)->get();
-        $units= [];
-        $already_incentive_paid_to_units = [];
-        foreach($dealer_incentives as $dealer_incentives)
-        {
-            foreach(json_decode($dealer_incentives->unit_IDs) as $uids){
-                $already_incentive_paid_to_units[] = $uids;
 
+        $dealer_incentives = DealerIncentiveModel::where('dealer_id', $request->dealer_id)->get();
+        $units = [];
+        $already_incentive_paid_to_units = [];
+        foreach ($dealer_incentives as $dealer_incentives) {
+            foreach (json_decode($dealer_incentives->unit_IDs) as $uids) {
+                $already_incentive_paid_to_units[] = $uids;
             }
         }
-    
+
         foreach ($rebate_incentives as $Units) {
 
             if (in_array($Units->unit_id, $already_incentive_paid_to_units)) {
-                
+
                 continue;
-            }
-            else{
-               
+            } else {
+
                 $units[] = Unit::find($Units->unit_id);
-                
-            }     
+            }
         }
 
         return response()->json([
@@ -172,7 +170,8 @@ class DealerIncentiveController extends Controller
         ], 200);
     }
 
-    public function approve($site_id, $dealer_incentive_id){
+    public function approve($site_id, $dealer_incentive_id)
+    {
 
 
         $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
@@ -180,6 +179,5 @@ class DealerIncentiveController extends Controller
         $dealer_incentive->update();
 
         return redirect()->route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
-
     }
 }

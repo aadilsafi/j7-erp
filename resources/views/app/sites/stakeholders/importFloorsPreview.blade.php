@@ -55,7 +55,8 @@
             <div class="row mt-1">
                 <div class="col"></div>
                 <div class="col-lg-2 col-md-2 col-sm-12">
-                    <a href="#" class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
+                    <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
+                        class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}
                     </a>
@@ -112,6 +113,9 @@
                     return false;
                 }
             });
+
+            $('.removeTolltip').tooltip('disable');
+
         });
         showBlockUI();
 
@@ -148,10 +152,12 @@
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
-                // showBlockUI('#unit_p_input_div_' + field + id);
+                showBlockUI('#unit_p_input_div_' + field + id);
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
+                $('#teams-table-form').css("pointer-events", "none")
+
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
                     url: url,
@@ -171,10 +177,13 @@
                             el.append(response['data']);
                             el.addClass('filedrendered');
                         }
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        $('#teams-table-form').css("pointer-events", "")
+                        hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                     error: function(response) {
-                        // hideBlockUI('#unit_p_input_div_' + field + id);
+                        hideBlockUI('#unit_p_input_div_' + field + id);
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                 });
             }
@@ -187,7 +196,7 @@
                 value = $(this).data('value');
                 inputtype = $(this).data('inputtype');
                 el = $(this);
-                console.log(el.parent)
+                $('#teams-table-form').css("pointer-events", "none")
 
                 var url = "{{ route('ajax-import-stakeholders.get.input') }}";
                 $.ajax({
@@ -214,14 +223,18 @@
                             // hideBlockUI('#unit_p_input_div_' + field + id);
 
                         }
+                        $('#teams-table-form').css("pointer-events", "")
+
                     },
                     error: function(response) {
+                        $('#teams-table-form').css("pointer-events", "")
+
                         // hideBlockUI('#unit_p_input_div_' + field + id);
                     },
                 });
             }
         });
-        $(document).on('change', '.unit-p-checkbox', function(e) {
+        $(document).on('change', '.unit-p-select', function(e) {
             if (!$(this).hasClass('filedrendered')) {
                 id = $(this).data('id');
                 field = $(this).data('field');
@@ -247,8 +260,10 @@
                         if (response['status']) {
                             console.log('insuccess');
                             el = el.parent()
+                            console.log(el)
                             el.empty();
                             el.append(response['data']);
+                            // el.parent().empty();
                             el.addClass('filedrendered');
                             toastr.success('Updated');
                             hideBlockUI('#unit_p_input_div_' + field + id);

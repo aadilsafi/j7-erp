@@ -23,8 +23,8 @@ class AccountActionSeeder extends Seeder
             ],
             [
                 'site_id' => 1,
-                'name' => 'Receipt Voucher',
-                'slug' => 'receipt-voucher',
+                'name' => 'Receipt Voucher Cash',
+                'slug' => 'receipt-voucher-cash',
             ],
             [
                 'site_id' => 1,
@@ -51,8 +51,92 @@ class AccountActionSeeder extends Seeder
                 'name' => 'Title Transfer',
                 'slug' => 'title-transfer',
             ],
+            [
+                'site_id' => 1,
+                'name' => 'Sales Plan DisApproval',
+                'slug' => 'sales-plan-dis-approval',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Bank',
+                'slug' => 'receipt-voucher-bank',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Cheque Clearance',
+                'slug' => 'cheque-clearance',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Cheque Bounced',
+                'slug' => 'cheque-bounced-back',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Online',
+                'slug' => 'receipt-voucher-online',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Income',
+                'slug' => 'income',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Expense',
+                'slug' => 'expense',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Non Current Asset',
+                'slug' => 'non-current-asset',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Bank',
+                'slug' => 'bank',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Equity',
+                'slug' => 'equity',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Accounts Receivable',
+                'slug' => 'accounts-receivable',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Current Asset',
+                'slug' => 'current-asset',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Accounts Payable',
+                'slug' => 'accounts-payable',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Current Liability',
+                'slug' => 'current-liability',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Long Term Liability',
+                'slug' => 'long-term-liability',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Direct Cost',
+                'slug' => 'direct-cost',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Resale',
+                'slug' => 'resale',
+            ],
         ];
-
         foreach ($data as $item) {
             (new AccountAction())->create($item);
         }

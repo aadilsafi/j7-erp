@@ -105,10 +105,16 @@
                                     Preview Import File
                                 </button>
 
-                                <a href="#"
+                                <a href="{{ route('sites.types.index', ['site_id' => $site_id]) }}"
                                     class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                     <i data-feather='x'></i>
                                     {{ __('lang.commons.cancel') }}
+                                </a>
+
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 3]) }}"
+                                    class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
+                                    <i data-feather='download'></i>
+                                    Download Sample
                                 </a>
                             </div>
                         </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\{
     AccountsRecoveryController,
     AdditionalCostController,
     ArtisanCommandController,
+    BankController,
     DashboardController,
     RoleController,
     PermissionController,
@@ -18,8 +19,8 @@ use App\Http\Controllers\{
     SalesPlanController,
     testController,
     UnitController,
-    PrintSalesPlanController,
     StakeholderController,
+    BacklistedStakeholderController,
     NotificationController,
     ReceiptController,
     UserController,
@@ -34,7 +35,16 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    ImageImportController,
     LedgerController,
+    SalesPlanImportController,
+    TrialBalanceController,
+    JournalEntryController,
+    FirstLevelAccountController,
+    SecondLevelAccountController,
+    ThirdLevelAccountController,
+    FourthLevelAccountController,
+    FifthLevelAccountController,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -141,6 +151,93 @@ Route::group([
                             Route::put('update', [CustomFieldController::class, 'update'])->name('update');
                         });
                     });
+
+                    //Accounts Routes
+                    Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+                        // first level
+                        Route::group(['prefix' => 'first-level', 'as' => 'first-level.'], function () {
+                            Route::get('/', [FirstLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FirstLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FirstLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FirstLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FirstLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FirstLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // second level
+                        Route::group(['prefix' => 'second-level', 'as' => 'second-level.'], function () {
+                            Route::get('/', [SecondLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [SecondLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [SecondLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [SecondLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [SecondLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [SecondLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // third level
+                        Route::group(['prefix' => 'third-level', 'as' => 'third-level.'], function () {
+                            Route::get('/', [ThirdLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [ThirdLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [ThirdLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [ThirdLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [ThirdLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [ThirdLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // fourth level
+                        Route::group(['prefix' => 'fourth-level', 'as' => 'fourth-level.'], function () {
+                            Route::get('/', [FourthLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FourthLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FourthLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FourthLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FourthLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FourthLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                        // fifth level
+                        Route::group(['prefix' => 'fifth-level', 'as' => 'fifth-level.'], function () {
+                            Route::get('/', [FifthLevelAccountController::class, 'index'])->name('index');
+
+                            Route::get('create', [FifthLevelAccountController::class, 'create'])->name('create');
+                            Route::post('store', [FifthLevelAccountController::class, 'store'])->name('store');
+
+                            Route::get('delete', [FifthLevelAccountController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [FifthLevelAccountController::class, 'edit'])->name('edit');
+                                Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
+                            });
+                        });
+                    });
+
+                    // Import Routes
+                    Route::group(['prefix' => 'import', 'as' => 'import.'], function () {
+                        Route::group(['prefix' => 'images', 'as' => 'images.'], function () {
+
+                            Route::get('/', [ImageImportController::class, 'index'])->name('index');
+
+                            Route::get('create', [ImageImportController::class, 'create'])->name('create');
+                            Route::post('store', [ImageImportController::class, 'store'])->name('store');
+                            Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
+
+                            Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
+                                Route::put('update', [CustomFieldController::class, 'update'])->name('update');
+                            });
+                        });
+                    });
                 });
 
                 //Additional Costs Routes
@@ -156,6 +253,13 @@ Route::group([
                         Route::put('update', [AdditionalCostController::class, 'update'])->name('update');
 
                         Route::get('delete', [AdditionalCostController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.additional-costs.importAdcosts')->name('importAdcosts');
+                        Route::post('preview', [AdditionalCostController::class, 'ImportPreview'])->name('importAdcostsPreview');
+                        Route::get('storePreview', [AdditionalCostController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [AdditionalCostController::class, 'saveImport'])->name('saveImport');
                     });
                 });
 
@@ -179,10 +283,45 @@ Route::group([
                     Route::get('copy', [FloorController::class, 'copyView'])->name('copyView');
                     Route::post('copy/store', [FloorController::class, 'copyStore'])->name('copyStore');
 
+                    //Floor Import routes
+
                     Route::view('importFloor', 'app.sites.floors.importFloors', ['preview' => false, 'final_preview' => false])->name('importFloors');
                     Route::post('importFloor', [FloorController::class, 'ImportPreview'])->name('importFloorsPreview');
                     Route::get('storePreview', [FloorController::class, 'storePreview'])->name('storePreview');
                     Route::post('saveImport', [FloorController::class, 'saveImport'])->name('saveImport');
+
+                    //Units Import routes
+                    Route::group(['prefix' => 'Unit/import', 'as' => 'unitsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.importUnits')->name('importUnits');
+                        Route::post('preview', [UnitController::class, 'ImportPreview'])->name('importUnitsPreview');
+                        Route::get('storePreview', [UnitController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [UnitController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    //Sales Plan Import routes
+                    Route::group(['prefix' => 'salesPlan/import', 'as' => 'SalesPlanImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importSalesPlan')->name('importSalesPlan');
+                        Route::post('preview', [SalesPlanController::class, 'ImportPreview'])->name('importSalesPlanPreview');
+                        Route::get('storePreview', [SalesPlanController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    //Sales Plan Additional Costs Import routes
+                    Route::group(['prefix' => 'spadcosts/import', 'as' => 'spadcostsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspadcosts')->name('importspadcosts');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreviewAdcosts'])->name('importspadcostsPreview');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreviewAdcosts'])->name('storePreview');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImportAdcosts'])->name('saveImport');
+                    });
+
+
+                    //Sales Plan Installments Import routes
+                    Route::group(['prefix' => 'spInstallments/import', 'as' => 'spInstallmentsImport.'], function () {
+                        Route::view('/', 'app.sites.floors.units.sales-plan.import.importspInstallments')->name('ImportInstallments');
+                        Route::post('preview', [SalesPlanImportController::class, 'ImportPreviewinstallments'])->name('ImportPreviewinstallments');
+                        Route::get('storePreview', [SalesPlanImportController::class, 'storePreviewInstallments'])->name('storePreviewInstallments');
+                        Route::post('saveImport', [SalesPlanImportController::class, 'saveImportInstallments'])->name('saveImportInstallments');
+                    });
 
                     // //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
@@ -302,6 +441,32 @@ Route::group([
                     });
                 });
 
+                // Blacklisted Stakeholders
+                Route::group(['prefix' => 'blacklisted-stakeholders', 'as' => 'blacklisted-stakeholders.'], function () {
+                    Route::get('/', [BacklistedStakeholderController::class, 'index'])->name('index');
+
+                    Route::get('create', [BacklistedStakeholderController::class, 'create'])->name('create');
+                    Route::post('store', [BacklistedStakeholderController::class, 'store'])->name('store');
+
+                    Route::get('delete-selected', [BacklistedStakeholderController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [BacklistedStakeholderController::class, 'edit'])->name('edit');
+                        Route::put('update', [BacklistedStakeholderController::class, 'update'])->name('update');
+                        Route::get('delete', [BacklistedStakeholderController::class, 'destroy'])->name('destroy');
+                    });
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::post('preview', [BacklistedStakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                        Route::get('storePreview', [BacklistedStakeholderController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [BacklistedStakeholderController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('/', [BacklistedStakeholderController::class, 'ajaxGetById'])->name('get-by-id');
+                    });
+                });
+
                 //Users Routes
                 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
                     Route::get('/', [UserController::class, 'index'])->name('index');
@@ -366,6 +531,14 @@ Route::group([
                         Route::post('get-unpaid-installments', [ReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
                     });
 
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.receipts.importReceipts', ['preview' => false])->name('importReceipts');
+                        Route::post('preview', [ReceiptController::class, 'ImportPreview'])->name('importReceiptsPreview');
+                        Route::get('storePreview', [ReceiptController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [ReceiptController::class, 'saveImport'])->name('saveImport');
+                    });
+
+
                     Route::group(['prefix' => '/{receipts_id}'], function () {
 
                         Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
@@ -385,6 +558,26 @@ Route::group([
                         // Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         // Route::put('update', [ReceiptController::class, 'update'])->name('update');
                         // Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                // Banks
+                Route::group(['prefix' => 'banks', 'as' => 'banks.'], function () {
+                    Route::get('/', [BankController::class, 'index'])->name('index');
+
+                    Route::get('create', [BankController::class, 'create'])->name('create');
+                    Route::post('store', [BankController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.banks.importBanks', ['preview' => false])->name('importBanks');
+                        Route::post('preview', [BankController::class, 'ImportPreview'])->name('importBanksPreview');
+                        Route::get('storePreview', [BankController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [BankController::class, 'saveImport'])->name('saveImport');
+                    });
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        // used for bank selection in receipt creation
+                        Route::post('get-by-id', [BankController::class, 'getBank'])->name('get-by-id');
                     });
                 });
 
@@ -552,15 +745,27 @@ Route::group([
                     Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
                         Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
                     });
+                    //trial-balance
+                    Route::group(['prefix' => 'trial-balance', 'as' => 'trial-balance.'], function () {
+                        Route::get('/', [TrialBalanceController::class, 'index'])->name('index');
+                    });
                     // Accounts ledger
                     Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {
                         Route::get('/', [LedgerController::class, 'index'])->name('index');
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::get('get-refund-datatable', [LedgerController::class, 'refundDatatable'])->name('get-refund-datatable');
                         });
-
+                    });
+                    // Journal Entries
+                    Route::group(['prefix' => 'journal-entry', 'as' => 'journal-entry.'], function () {
+                        Route::get('/', [JournalEntryController::class, 'index'])->name('index');
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::get('get-refund-datatable', [JournalEntryController::class, 'refundDatatable'])->name('get-refund-datatable');
+                        });
                     });
                 });
+
+                Route::get('import/sample-download/{order}', [AdditionalCostController::class, 'downloadSample'])->name('import.sample-download');
             });
         });
 
@@ -570,10 +775,19 @@ Route::group([
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
         Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
-
         Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
-
         Route::get('ajax-import-types.get.input', [TypeController::class, 'getTypeInput'])->name('ajax-import-types.get.input');
+        Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
+        Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');
+        Route::get('ajax-import-sales-plan.get.input', [SalesPlanController::class, 'getInput'])->name('ajax-import-sales-plan.get.input');
+        Route::get('ajax-import-sales-plan.adCosts.get.input', [SalesPlanImportController::class, 'getInputAdcosts'])->name('ajax-import-sales-plan.adCosts.get.input');
+        Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
+        Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
+        Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
+
+        Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
+        Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
+        Route::post('ajax-import-image/delete-file', [ImageImportController::class, 'deleteFile'])->name('ajax-import-image.delete-file');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

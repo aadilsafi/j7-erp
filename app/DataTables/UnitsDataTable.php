@@ -68,7 +68,7 @@ class UnitsDataTable extends DataTable
 
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.floors.units.destroy-selected');
         return $this->builder()
-            ->addTableClass(['table-striped', 'table-hover'])
+            ->addTableClass(['table-hover'])
             ->setTableId('floors-units-table')
             ->columns($this->getColumns())
             ->deferRender()
@@ -107,6 +107,7 @@ class UnitsDataTable extends DataTable
                         'onclick' => 'fabUnit()',
                     ])
                 ),
+
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
                     Button::make('copy')->addClass('dropdown-item'),

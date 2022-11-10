@@ -86,13 +86,6 @@ class StakeholderDataTable extends DataTable
                 Button::make('pdf')->addClass('dropdown-item'),
             ]),
 
-            // name: 'import-floor',
-            //                 text: '<i data-feather="upload"></i> Import Floor',
-            //                 className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-            //                 action: function(e, dt, node, config) {
-            //                     location.href =
-            //                         '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
-            //                 }
             Button::raw('import')
                 ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                 ->text('<i data-feather="upload"></i> Import Stakeholders')
@@ -127,6 +120,7 @@ class StakeholderDataTable extends DataTable
             ->setTableId('stakeholder-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX(true)
             ->minifiedAjax()
             ->serverSide()
             ->processing()

@@ -24,6 +24,8 @@ use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
+use DB;
 
 class FileReleaseController extends Controller
 {
@@ -35,12 +37,14 @@ class FileReleaseController extends Controller
 
     private $stakeholderInterface;
     private $resaleInterface;
+    private $buyBackInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface, CustomFieldInterface $customFieldInterface)
+    public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface, CustomFieldInterface $customFieldInterface, BuyBackInterface $buyBackInterface)
     {
         $this->stakeholderInterface = $stakeholderInterface;
         $this->resaleInterface = $resaleInterface;
         $this->customFieldInterface = $customFieldInterface;
+        $this->buyBackInterface = $buyBackInterface;
     }
 
     public function index(FileResaleDataTable $dataTable, Request $request, $site_id)
@@ -176,7 +180,7 @@ class FileReleaseController extends Controller
             'paid_instalments' => $paid_instalments,
             'un_paid_instalments' => $un_paid_instalments,
             'partially_paid_instalments' => $partially_paid_instalments,
-            'salesPlan'=>$salesPlan,
+            'salesPlan' => $salesPlan,
         ];
         // dd($data['unit']['salesPlan']);
         return view('app.sites.file-managements.files.files-actions.file-resale.preview', $data);
@@ -218,33 +222,37 @@ class FileReleaseController extends Controller
 
     public function ApproveFileResale($site_id, $unit_id, $customer_id, $file_id)
     {
+        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
-        $file_resale = FileResale::where('file_id',decryptParams($file_id))->first();
-        $file_resale->status = 1;
-        $file_resale->update();
+            // Account ledger transaction
+            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
-        $unit = Unit::find(decryptParams($unit_id));
-        $unit->status_id = 1;
-        $unit->update();
+            $file_resale = FileResale::where('file_id', decryptParams($file_id))->first();
+            $file_resale->status = 1;
+            $file_resale->update();
 
-        $file =  FileManagement::find(decryptParams($file_id));
-        $file->file_action_id = 5;
-        $file->update();
+            $unit = Unit::find(decryptParams($unit_id));
+            $unit->status_id = 1;
+            $unit->update();
 
-        $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $SalesPlan = SalesPlan::find($salesPlan->id);
-            $SalesPlan->status = 3;
-            $SalesPlan->update();
-        }
+            $file =  FileManagement::find(decryptParams($file_id));
+            $file->file_action_id = 5;
+            $file->update();
 
-        $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-        foreach ($receipt as $receipt) {
-            $Receipt = Receipt::find($receipt->id);
-            $Receipt->status = 2;
-            $Receipt->update();
-        }
+            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $SalesPlan = SalesPlan::find($salesPlan->id);
+                $SalesPlan->status = 3;
+                $SalesPlan->update();
+            }
 
+            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            foreach ($receipt as $receipt) {
+                $Receipt = Receipt::find($receipt->id);
+                $Receipt->status = 2;
+                $Receipt->update();
+            }
+        });
         return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Resale Approved');
     }
 
@@ -252,11 +260,17 @@ class FileReleaseController extends Controller
     {
 
         $file_refund = (new FileResale())->find(decryptParams($file_id));
+        // dd($file_refund ,  json_decode($file_refund['stakeholder_data']));
 
         $template = Template::find(decryptParams($template_id));
 
         $data = [
             'site_id' => decryptParams($site_id),
+            'file_refund' => $file_refund,
+            'template' => $template,
+            'stakeholder' => json_decode($file_refund['stakeholder_data']),
+            'unit' => Unit::find($file_refund['unit_id']),
+            'salesPlan' => SalesPlan::where('unit_id', $file_refund['unit_id'])->first(),
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;

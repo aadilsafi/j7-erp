@@ -281,6 +281,24 @@ if (!function_exists('base64ToImage')) {
         return $filename;
     }
 }
+if (!function_exists('account_number_format')) {
+    function account_number_format($account_number): string
+    {
+        $first_6_number = substr($account_number,0,6);
+        $code = wordwrap($first_6_number , 2 , '-' , true );
+        if(Str::length($account_number) >6)
+        {
+           $code = $code.'-'.$next_4_number = substr($account_number,6,4);
+
+        }
+        if(Str::length($account_number) >10)
+        {
+            $code = $code.'-'. $after_10_number = substr($account_number,10);
+
+        }
+        return $code;
+    }
+}
 
 // if (!function_exists('makeImageThumbs')) {
 //     function makeImageThumbs($request, $key = ""): string

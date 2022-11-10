@@ -91,7 +91,10 @@ Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail
     $trail->parent('sites.additional-costs.index', $site_id);
     $trail->push('Edit Additional Cost');
 });
-
+Breadcrumbs::for('sites.additional-costs.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.additional-costs.index', $site_id);
+    $trail->push('Import Additional Costs');
+});
 //Floor Breadcrumbs
 Breadcrumbs::for('sites.floors.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
@@ -143,6 +146,10 @@ Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $s
     $trail->push('Edit Unit');
 });
 
+Breadcrumbs::for('sites.floors.units.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
+    $trail->push('Import');
+});
 //Unit Sales Plan Breadcrumbs
 Breadcrumbs::for('sites.floors.units.sales-plans.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
@@ -422,8 +429,85 @@ Breadcrumbs::for('sites.accounts.recovery.calender', function (BreadcrumbTrail $
     $trail->push('Recovery', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
     $trail->push('Calendar', route('sites.accounts.recovery.calender', ['site_id' => $site_id]));
 });
-// Accounts Ledgers
+// journal Entries
+Breadcrumbs::for('sites.accounts.journal-entry.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Journal Entries', route('sites.accounts.journal-entry.index', ['site_id' => $site_id]));
+});
+// ledgers Entries
 Breadcrumbs::for('sites.accounts.ledger.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Ledgers', route('sites.accounts.ledger.index', ['site_id' => $site_id]));
+});
+// chart of accounts
+Breadcrumbs::for('sites.accounts.charts-of-accounts.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Charts Of Accounts', route('sites.accounts.charts-of-accounts.index', ['site_id' => $site_id]));
+});
+//Trial Balance
+Breadcrumbs::for('sites.accounts.trial-balance.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Trial Balance', route('sites.accounts.trial-balance.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.banks.import', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.receipts.index', $site_id);
+    $trail->push('Import Banks');
+});
+// accounts first level
+Breadcrumbs::for('sites.settings.accounts.first-level.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
+    $trail->push('1st Level Account', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
+});
+Breadcrumbs::for('sites.settings.accounts.first-level.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+    $trail->push('Create 1st Level Account', route('sites.settings.accounts.first-level.create', ['site_id' => $site_id]));
+});
+// accounts second level
+Breadcrumbs::for('sites.settings.accounts.second-level.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
+    $trail->push('2nd Level Account', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
+});
+Breadcrumbs::for('sites.settings.accounts.second-level.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Create 1st Level Account', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+});
+// accounts third level
+Breadcrumbs::for('sites.settings.accounts.third-level.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.third-level.index', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.third-level.index', ['site_id' => $site_id]));
+    $trail->push('3rd Level Account', route('sites.settings.accounts.third-level.index', ['site_id' => $site_id]));
+});
+// accounts fourth level
+Breadcrumbs::for('sites.settings.accounts.fourth-level.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.fourth-level.index', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.fourth-level.index', ['site_id' => $site_id]));
+    $trail->push('4th Level Account', route('sites.settings.accounts.fourth-level.index', ['site_id' => $site_id]));
+});
+// accounts fifth level
+Breadcrumbs::for('sites.settings.accounts.fifth-level.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+    $trail->push('5th Level Account', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+});
+//Images Import
+Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import', route('sites.index'));
+});
+// BlackListed Stakeholders
+Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
 });

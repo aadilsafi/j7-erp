@@ -70,6 +70,8 @@ class ImportFloorsDataTable extends DataTable
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->ordering(false)
+            ->searching(false)
             ->serverSide()
             ->processing()
             ->deferRender()
@@ -89,18 +91,18 @@ class ImportFloorsDataTable extends DataTable
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'name'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('floor_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'floor_area'
 
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
             Column::computed('short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'name' => 'short_label'
-            ])->render()),
+            ])->render())->addClass('removeTolltip'),
 
         ];
     }

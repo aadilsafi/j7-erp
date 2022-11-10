@@ -40,6 +40,10 @@
             display: none;
         }
 
+        .bankDiv {
+            display: none;
+        }
+
         .chequeValueDiv {
             display: none;
         }
@@ -65,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                            width: calc(20% - 0.5em);
-                                                        } */
+                                                                            width: calc(20% - 0.5em);
+                                                                        } */
     </style>
 @endsection
 
@@ -94,6 +98,8 @@
                     'site_id' => $site_id,
                     'units' => $units,
                     'customFields' => $customFields,
+                    'banks' => $banks,
+                    'chequebanks' => $banks,
                 ]) }}
             </div>
             @isset($draft_receipts)
@@ -289,24 +295,28 @@
                 $('#otherValueDiv').show();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
             });
 
             $(".cheque-mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').show();
+                $('.bankDiv').show();
             });
 
             $(".online-mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').show();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').show();
             });
 
             $(".mode-of-payment").click(function() {
                 $('#otherValueDiv').hide();
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
             });
 
             $(".other-purpose").click(function() {
@@ -545,5 +555,66 @@
             });
 
         }
+
+        var e = $(".bank");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).on("change", function(e) {
+            let bank = parseInt($(this).val());
+            showBlockUI('.bankDiv');
+            let bankData = {
+                id: 0,
+                name: '',
+                account_number: '',
+                branch: '',
+                branch_code: '',
+                comments: '',
+                contact_number: '',
+                address: '',
+            };
+            $.ajax({
+                url: "{{ route('sites.banks.ajax-get-by-id', ['site_id' => encryptParams($site_id)]) }}",
+                type: 'POST',
+                data: {
+                    'id': bank
+                },
+                success: function(response) {
+                    if (response.success == true && response.bank != null) {
+                        $('.name').val(response.bank.name).attr('readOnly', (
+                            response.bank.name.length > 0));
+                        $('.account_number').val(response.bank.account_number).attr('readOnly', (
+                            response.bank.account_number.length > 0));
+                        $('.contact_number').val(response.bank.contact_number).attr('readOnly', (
+                            response.bank.contact_number.length > 0));
+                        $('.branch').val(response.bank.branch).attr('readOnly', (response.bank.branch
+                            .length > 0));
+                        $('.branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
+                            .branch_code.length > 0));
+                        $('.comments').val(response.bank.comments).attr('readOnly', true);
+                        $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
+                            .length > 0));
+                        hideBlockUI('.bankDiv');
+                    } else {
+
+                        $('#name').val('').removeAttr('readOnly');
+                        $('#account_number').val('').removeAttr('readOnly');
+                        $('#contact_number').val('').removeAttr('readOnly');
+                        $('#branch').val('').removeAttr('readOnly');
+                        $('#branch_code').val('').removeAttr('readOnly');
+                        $('#comments').val('').removeAttr('readOnly');
+                        $('#address').val('').removeAttr('readOnly');
+                    }
+                    hideBlockUI('.bankDiv');
+                },
+                error: function(errors) {
+                    console.error(errors);
+                    hideBlockUI('.bankDiv');
+                }
+            });
+        });
     </script>
 @endsection

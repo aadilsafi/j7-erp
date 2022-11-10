@@ -14,6 +14,9 @@ class StakeholderContact extends Model
 
     protected $fillable = [
         'stakeholder_id',
+        'country_id',
+        'city_id',
+        'state_id',
         'full_name',
         'father_name',
         'occupation',

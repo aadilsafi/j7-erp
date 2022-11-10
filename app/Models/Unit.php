@@ -26,6 +26,7 @@ class Unit extends Model
         'has_sub_units',
         'gross_area',
         'price_sqft',
+        'is_imported',
         'total_price',
         'is_corner',
         'is_facing',

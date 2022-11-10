@@ -77,14 +77,14 @@ class ReceiptsDatatable extends DataTable
      */
     public function query(Receipt $model): QueryBuilder
     {
-        return $model->newQuery()->where('site_id', decryptParams($this->site_id))->where('status','!=', 2);
+        return $model->newQuery()->where('site_id', decryptParams($this->site_id))->where('status', '!=', 2);
     }
 
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-
+        $importPermission =  Auth::user()->hasPermissionTo('sites.receipts.importReceipts');
 
         $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -97,6 +97,26 @@ class ReceiptsDatatable extends DataTable
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
+
+        if ($importPermission) {
+            $addButton =  Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Receipts')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]);
+
+            array_unshift($buttons, $addButton);
+
+            $addButton =  Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Banks')
+                ->attr([
+                    'onclick' => 'ImportBanks()',
+                ]);
+
+            array_unshift($buttons, $addButton);
+        }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')

@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ImportReceiptsDataTable;
+use App\DataTables\ImportSalesPlanInstallmentsDataTable;
 use Exception;
 use App\Models\Unit;
 use App\Models\SalesPlan;
 use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
+use App\Imports\ReceiptsImport;
+use App\Models\Bank;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
 use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Site;
 use App\Models\Stakeholder;
+use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\CustomFields\CustomFieldInterface;
+use Redirect;
 
 class ReceiptController extends Controller
 {
@@ -23,11 +29,11 @@ class ReceiptController extends Controller
     private $receiptInterface;
 
     public function __construct(
-        ReceiptInterface $receiptInterface, CustomFieldInterface $customFieldInterface
+        ReceiptInterface $receiptInterface,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->receiptInterface = $receiptInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
     /**
      * Display a listing of the resource.
@@ -36,7 +42,7 @@ class ReceiptController extends Controller
      */
     public function index(ReceiptsDatatable $dataTable, $site_id)
     {
-        //
+        // 
         $data = [
             'site_id' => $site_id,
             'receipt_templates' => ReceiptTemplate::all(),
@@ -62,8 +68,8 @@ class ReceiptController extends Controller
                 'site_id' => decryptParams($site_id),
                 'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
-                'customFields' => $customFields
-
+                'customFields' => $customFields,
+                'banks' => Bank::all(),
             ];
             return view('app.sites.receipts.create', $data);
         } else {
@@ -84,7 +90,9 @@ class ReceiptController extends Controller
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
-                if (isset($record['remaining_amount'])) {
+                if (is_a($record, 'GeneralException')  || is_a($record, 'Exception')) {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess($record->getMessage());
+                } elseif (isset($record['remaining_amount'])) {
                     return redirect()->route('sites.receipts.create', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data against ' . $record['unit_name'] . ' saved as draft. Remaining amount is ' . $record['remaining_amount'])->with('remaining_amount', $record['remaining_amount']);
                 } else {
                     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
@@ -114,10 +122,8 @@ class ReceiptController extends Controller
         $lastInstallment = array_pop($installmentNumbersArray);
         $unit_data =  $receipt->unit;
 
-        $last_paid_installment_id = SalesPlanInstallments::where([
-            'sales_plan_id' => $receipt->sales_plan_id,
-            'details' => $lastInstallment
-        ])->first()->id;
+        $last_paid_installment_id = SalesPlanInstallments::where('sales_plan_id', $receipt->sales_plan_id)
+            ->whereRaw('LOWER(details) = (?)', [strtolower($lastInstallment)])->first()->id;
 
         $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
@@ -137,7 +143,7 @@ class ReceiptController extends Controller
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,
             'stakeholder_data' => $stakeholder_data,
-            'sales_plan'=>$sales_plan,
+            'sales_plan' => $sales_plan,
         ]);
     }
 
@@ -385,5 +391,472 @@ class ReceiptController extends Controller
             'online_instrument_no' => $receipt_data->online_instrument_no,
         ];
         return view('app.sites.receipts.templates.' . $template->slug, compact('preview_data'));
+    }
+
+
+    public function ImportPreview(Request $request, $site_id)
+    {
+        try {
+            $model = new TempReceipt();
+
+            if ($request->hasfile('attachment')) {
+                $request->validate([
+                    'attachment' => 'required|mimes:xlsx'
+                ]);
+
+                // $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // dd(array_intersect($model->getFillable(),$headings[0][0]));
+                //validate header row and return with error
+
+                TempReceipt::query()->truncate();
+                $import = new ReceiptsImport($model->getFillable());
+                $import->import($request->file('attachment'));
+
+                return redirect()->route('sites.receipts.storePreview', ['site_id' => $site_id]);
+            } else {
+                return Redirect::back()->withDanger('Select File to Import');
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+                return Redirect::back()->with(['data' => $e->failures()]);
+            }
+        }
+    }
+    public function storePreview(Request $request, $site_id)
+    {
+        $model = new TempReceipt();
+        if ($model->count() == 0) {
+            return redirect()->route('sites.receipts.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
+        } else {
+            $dataTable = new ImportReceiptsDataTable($site_id);
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.receipts.importReceiptsPreview', $data);
+        }
+    }
+
+    public function saveImport(Request $request, $site_id)
+    {
+
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
+
+        ]);
+
+        $validator->validate();
+
+        $this->receiptInterface->ImportReceipts($site_id);
+
+        TempReceipt::query()->truncate();
+
+        return redirect()->route('sites.receipts.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+    }
+    public function getInput(Request $request)
+    {
+        try {
+            $field = $request->get('field');
+            $tempData = (new TempReceipt())->find((int)$request->get('id'));
+
+            switch ($field) {
+                case 'unit_short_label':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|exists:App\Models\Unit,floor_unit_number',
+                        ], [
+                            'value' => 'Unit Does not Exists.'
+                        ]);
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempData->unit_short_label = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'stakeholder_cnic':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|exists:App\Models\Stakeholder,cnic',
+                        ], [
+                            'value' => 'Stakeholder Does not Exists.'
+                        ]);
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+                        $tempData->stakeholder_cnic = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'total_price':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $validator = \Validator::make($request->all(), [
+                            'value' => 'required|gt:0',
+                        ]);
+
+                        if ($validator->fails()) {
+                            return apiErrorResponse($validator->errors()->first('value'));
+                        }
+
+                        $tempData->total_price = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'down_payment_total':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->down_payment_total =  $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+                    break;
+
+                case 'validity':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->validity = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'mode_of_payment':
+                    $tempData->mode_of_payment = $request->get('value');
+                    $tempData->save();
+
+                    $values = ['cash' => 'Cash', 'cheque' => 'Cheque', 'online' => 'Online', 'other' => 'Other'];
+
+                    $response =  view(
+                        'app.components.input-select-fields',
+                        [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'values' => $values,
+                            'selectedValue' => $tempData->mode_of_payment
+                        ]
+                    )->render();
+                    break;
+                case 'cheque_no':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->cheque_no = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'bank_name':
+                    if ($request->get('updateValue') == 'true') {
+
+                        if ($request->get('value') != "null" || $request->get('value') != "") {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\Bank,slug',
+                            ], [
+                                'value' => 'Bank Name Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                return apiErrorResponse($validator->errors()->first('value'));
+                            }
+                        }
+                        $tempData->bank_name = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'bank_acount_number':
+                    if ($request->get('updateValue') == 'true') {
+
+                        if ($request->get('value') != "null" || $request->get('value') != "") {
+                            $validator = \Validator::make($request->all(), [
+                                'value' => 'required|exists:App\Models\Bank,account_number',
+                            ], [
+                                'value' => 'Bank Account Number Does not Exists.'
+                            ]);
+                            if ($validator->fails()) {
+                                return apiErrorResponse($validator->errors()->first('value'));
+                            }
+                        }
+
+                        $tempData->bank_acount_number = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'online_transaction_no':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->online_transaction_no = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'transaction_date':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->transaction_date = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'other_payment_mode_value':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->other_payment_mode_value = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'amount':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->amount = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+
+                case 'installment_no':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->installment_no = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'image_url':
+                    if ($request->get('updateValue') == 'true') {
+
+                        $tempData->image_url = $request->get('value');
+                        $tempData->save();
+
+                        $response = view('app.components.unit-preview-cell', [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'inputtype' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    } else {
+                        $response = view('app.components.text-number-field', [
+                            'field' => $field,
+                            'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                            'value' => $request->get('value')
+                        ])->render();
+                    }
+
+                    break;
+                case 'status':
+                    $tempData->status = $request->get('value');
+                    $tempData->save();
+                    $values = ['active' => 'Active', 'inactive' => 'In Active', 'cancel' => 'Cancel'];
+
+                    $response =  view(
+                        'app.components.input-select-fields',
+                        [
+                            'id' => $request->get('id'),
+                            'field' => $field,
+                            'values' => $values,
+                            'selectedValue' => $tempData->status
+                        ]
+                    )->render();
+                    break;
+                default:
+                    $response = view('app.components.text-number-field', [
+                        'field' => $field,
+                        'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                        'value' => $request->get('value')
+                    ])->render();
+                    break;
+            }
+            return apiSuccessResponse($response);
+        } catch (Exception $ex) {
+            return apiErrorResponse($ex->getMessage());
+        }
     }
 }

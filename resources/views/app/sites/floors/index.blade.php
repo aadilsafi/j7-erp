@@ -160,55 +160,74 @@
                         data: 'order',
                         name: 'order',
                         className: 'text-center',
+                        searchable: true,
                     },
                     {
                         data: 'floor_area',
                         name: 'floor_area',
+                        searchable: true,
                     },
                     {
                         data: 'short_label',
                         name: 'short_label',
                         className: 'text-center',
+                        searchable: true,
                     },
                     {
                         data: 'units_count',
                         name: 'units_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'units_open_count',
                         name: 'units_open_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'units_sold_count',
                         name: 'units_sold_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'units_token_count',
                         name: 'units_token_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'units_hold_count',
                         name: 'units_hold_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'units_dp_count',
                         name: 'units_dp_count',
                         className: 'text-center',
+                        searchable: false,
+                        orderable: false,
                     },
                     {
                         data: 'created_at',
                         name: 'created_at',
                         className: 'text-nowrap',
+                        searchable: false,
+                        orderable: true,
                     },
                     {
                         data: 'updated_at',
                         name: 'updated_at',
                         className: 'text-nowrap',
+                        searchable: false,
+                        orderable: true,
                     },
                     {
                         data: 'actions',
@@ -269,16 +288,63 @@
                                     '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
                             }
                         },
-                        {
-                            name: 'import-floor',
-                            text: '<i data-feather="upload"></i> Import Floor',
-                            className: 'btn btn-relief-outline-primary waves-effect waves-float waves-light',
-                            action: function(e, dt, node, config) {
-                                location.href =
-                                    '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
-                            }
-                        },
-                    @endcan {
+                       
+                    @endcan 
+                    @can('sites.floors.importFloors')
+                    {
+                        extend: 'collection',
+                        text: '<i class="bi bi-cloud"></i> Imports',
+                        className: 'btn btn-relief-outline-info dropdown-toggle',
+                        buttons: [{
+                                name: 'import-floor',
+                                text: '<i class="bi bi-cloud"></i> Import Floors',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.importFloors', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-unit',
+                                text: '<i class="bi bi-cloud"></i> Import Units',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.unitsImport.importUnits', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-sale-plan',
+                                text: '<i class="bi bi-cloud"></i> Import Sales Plan',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-sale-plan-adCosts',
+                                text: '<i class="bi bi-cloud"></i> Import Sales Plan Additional Costs',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href =
+                                        '{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => $site_id]) }}';
+                                }
+                            },
+                            {
+                                name: 'import-sale-plan-installments',
+                                text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
+                                className: 'dropdown-item',
+                                action: function(e, dt, node, config) {
+                                    location.href = 
+                                        '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
+                                }
+                            },
+
+                        ]
+                    },
+                    @endcan 
+                    {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',
                         className: 'btn btn-relief-outline-secondary dropdown-toggle',

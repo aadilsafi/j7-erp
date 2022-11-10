@@ -43,6 +43,7 @@
     <section class="app-user-view-connections">
         <div class="row removeInvalidMessages">
             <div class="col-xl-12 col-lg-12">
+                {{-- @dd($account_of_heads[67]->accountLedgers) --}}
                 {{-- <ul class="nav nav-pills mb-2">
                     <li class="nav-item">
                         <a class="nav-link active" id="salesPlanTab" data-bs-toggle="tab" href="#salesPlanData"
@@ -141,6 +142,7 @@
                                         <div class="">
                                             <ul class="navigation navigation-main main_multi_dop_ul" id="main-menu-navigation" data-menu="menu-navigation">
                                                 @foreach ($account_of_heads->where('level',1) as $key_first=>$account_of_head)
+                                                {{-- @dd($account_of_head->code); --}}
                                                     <li class="custom_bg nav-item Second_li "><a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce">{{$account_of_head->name}}</span></a>
                                                         <ul class="menu-content">
                                                             <table class="table table-primary table-striped">
@@ -157,7 +159,7 @@
                                                                         <td class="custom_td">{{$account_of_head->name}}</td>
                                                                         <td class="custom_td">{{$account_of_head->level}}</td>
                                                                         <td class="custom_td">{{account_number_format($account_of_head->code)}}</td>
-                                                                        <td class="custom_td">0</td>
+                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -181,7 +183,7 @@
                                                                                         <td class="custom_td">{{$account_of_head_full_array->name}}</td>
                                                                                         <td>{{$account_of_head_full_array->level}}</td>
                                                                                         <td>{{account_number_format($account_of_head_full_array->code)}}</td>
-                                                                                        <td>0</td>
+                                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -205,11 +207,11 @@
                                                                                                         <td class="custom_td">{{$account_of_head_3->name}}</td>
                                                                                                         <td class="custom_td">{{$account_of_head_3->level}}</td>
                                                                                                         <td class="custom_td">{{account_number_format($account_of_head_3->code)}}</td>
-                                                                                                        <td class="custom_td">0</td>
+                                                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                     </tr>
                                                                                                     </tbody>
                                                                                                 </table>
-                                                                                                
+
                                                                                                 @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
                                                                                                     @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_3->code == substr($account_of_head_4->code, 0, 6)))
                                                                                                         <li class="nav-item Second_li ">
@@ -229,7 +231,7 @@
                                                                                                                             <td class="custom_td">{{$account_of_head_4->name}}</td>
                                                                                                                             <td class="custom_td">{{$account_of_head_4->level}}</td>
                                                                                                                             <td class="custom_td">{{account_number_format($account_of_head_4->code)}}</td>
-                                                                                                                            <td class="custom_td">0</td>
+                                                                                                                            <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                                         </tr>
                                                                                                                         </tbody>
                                                                                                                     </table>
@@ -250,99 +252,26 @@
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->name}}</td>
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->level}}</td>
                                                                                                                                 <td class="custom_td">{{account_number_format($account_of_head_5->code)}}</td>
-                                                                                                                                <td class="custom_td">0</td>
+                                                                                                                                <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                                             </tr>
                                                                                                                          @endif
-                                                                                                                    @endforeach 
+                                                                                                                    @endforeach
                                                                                                                 </tbody>
                                                                                                             </table>
-                                                                                                                    <!-- <table class="table table-primary table-striped">
-                                                                                                                        <thead>
-                                                                                                                        <tr>
-                                                                                                                            <th scope="col">Name</th>
-                                                                                                                            <th scope="col">ACCOUNT LEVEl</th>
-                                                                                                                            <th scope="col">ACCOUNT CODES</th>
-                                                                                                                            <th scope="col">Balance</th>
-                                                                                                                        </tr>
-                                                                                                                        </thead>
-                                                                                                                        <tbody>
-                                                                                                                        <tr>
-                                                                                                                            <td class="custom_td">{{$account_of_head_4->name}}</td>
-                                                                                                                            <td class="custom_td">{{$account_of_head_4->level}}</td>
-                                                                                                                            <td class="custom_td">{{account_number_format($account_of_head_4->code)}}</td>
-                                                                                                                            <td class="custom_td">0</td>
-                                                                                                                        </tr>
-                                                                                                                        </tbody>
-                                                                                                                    </table> -->
                                                                                                             </ul>
                                                                                                         </li>
                                                                                                      @endif
-                                                                                                        
-                                                                                                @endforeach 
-                                                                                                {{-- <table class="table table-primary table-striped">
-                                                                                                    <thead>
-                                                                                                    <tr>
-                                                                                                        <th scope="col">Name</th>
-                                                                                                        <th scope="col">ACCOUNT LEVEl</th>
-                                                                                                        <th scope="col">ACCOUNT CODES</th>
-                                                                                                        <th scope="col">Balance</th>
-                                                                                                    </tr>
-                                                                                                    </thead>
-                                                                                                    <tbody>
-                                                                                                    <tr>
-                                                                                                        <td class="custom_td">{{$account_of_head_3->name}}</td>
-                                                                                                        <td class="custom_td">{{$account_of_head_3->level}}</td>
-                                                                                                        <td class="custom_td">{{account_number_format($account_of_head_3->code)}}</td>
-                                                                                                        <td class="custom_td">0</td>
-                                                                                                    </tr>
-                                                                                                    </tbody>
-                                                                                                </table> --}}
+
+                                                                                                @endforeach
                                                                                         </ul>
                                                                                     </li>
                                                                                 @endif
-                                                                                    
-                                                                            @endforeach
 
-                                                                            {{-- <table class="table table-primary table-striped">
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th scope="col">Name</th>
-                                                                                        <th scope="col">ACCOUNT LEVEl</th>
-                                                                                        <th scope="col">ACCOUNT CODES</th>
-                                                                                        <th scope="col">Balance</th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td class="custom_td">{{$account_of_head_full_array->name}}</td>
-                                                                                        <td>{{$account_of_head_full_array->level}}</td>
-                                                                                        <td>{{account_number_format($account_of_head_full_array->code)}}</td>
-                                                                                        <td>0</td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table> --}}
+                                                                            @endforeach
                                                                     </ul>
                                                                 </li>
                                                             @endif
                                                         @endforeach
-                                                        {{-- <table class="table table-primary table-striped">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th scope="col">Name</th>
-                                                                    <th scope="col">ACCOUNT LEVEl</th>
-                                                                    <th scope="col">ACCOUNT CODES</th>
-                                                                    <th scope="col">Balance</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td class="custom_td">{{$account_of_head->name}}</td>
-                                                                    <td class="custom_td">{{$account_of_head->level}}</td>
-                                                                    <td class="custom_td">{{account_number_format($account_of_head->code)}}</td>
-                                                                    <td class="custom_td">0</td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table> --}}
                                                     </ul>
                                                 </li>
                                             @endforeach
@@ -380,7 +309,6 @@
 @endsection
 
 @section('custom-js')
-    {{ $dataTable->scripts() }}
 @endsection
 
 

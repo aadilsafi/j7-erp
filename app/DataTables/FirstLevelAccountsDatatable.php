@@ -119,38 +119,38 @@ class FirstLevelAccountsDatatable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
+                // ($selectedDeletePermission  ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
 
-                ),
+                // ),
             )
             // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 3,
+                //     'render' => "function (data, type, full, setting) {
+                //         var role = JSON.parse(data);
+                //         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                //     ]
+                // ],
             ])
             ->orders([
                 [4, 'asc'],
@@ -169,12 +169,12 @@ class FirstLevelAccountsDatatable extends DataTable
         $editPermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.first-level.edit');
         $destroyPermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.first-level.destroy');
         return [
-            ($selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
-            // Column::computed('DT_RowIndex')->title('#'),
+            // ($selectedDeletePermission ?
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)
+            //     :
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            // ),
+            Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
             Column::make('level')->title('Account Level')->addClass('text-nowrap ')->searchable(false)->orderable(false),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap ')->orderable(false),

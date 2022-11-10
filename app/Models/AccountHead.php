@@ -24,6 +24,7 @@ class AccountHead extends Model
 
     protected $casts = [
         'level' => 'integer',
+        'code'=> 'string',
     ];
 
     public function getActivitylogOptions(): LogOptions

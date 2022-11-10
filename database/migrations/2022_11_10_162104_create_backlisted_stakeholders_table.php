@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('backlisted_stakeholders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained()->default(1);
             $table->string('name');
             $table->string('fatherName');
             $table->string('cnic');

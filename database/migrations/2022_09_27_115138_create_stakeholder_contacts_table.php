@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('stakeholder_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
-            $table->foreignId('country_id')->constrained()->default(1)->nulable();
-            $table->foreignId('state_id')->constrained()->default(2)->nulable();
-            $table->foreignId('city_id')->constrained()->default(4)->nulable();
+            $table->foreignId('country_id')->constrained('countries')->default(1)->nullable();
+            $table->foreignId('state_id')->constrained('states')->default(2)->nullable();
+            $table->foreignId('city_id')->constrained('cities')->default(4)->nullable();
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();
             $table->string('occupation', 50)->nullable();

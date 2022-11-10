@@ -49,10 +49,13 @@
         @foreach (File::glob(public_path('app-assets') . '/images/Import/*') as $key => $path)
             <div class="col-3 col-md-3 col-lg-3 col-12">
                 <div class="card ecommerce-card text-center">
-                    <div class="card-body">
-                        <img src="{{ str_replace(public_path(), '', $path) }}" height="200px" width="200px">
+                    <div class="modal-header bg-transparent">
+                        <button type="button" class="btn-close"
+                            onclick="deleteImg('{{ str_replace(public_path('app-assets/images/Import/'), '', $path) }}')"></button>
                     </div>
                     <div class="card-body">
+                        <img src="{{ str_replace(public_path(), '', $path) }}" height="200px" width="200px">
+
                         <div class="row">
                             <div class="col-xl-6 col-md-6 col-sm-6 col-12 pe-sm-0">
                                 <div class="mb-1">
@@ -144,5 +147,53 @@
         $('#attachment').on('FilePond:processfiles', (function(file) {
             $('#saveImages').attr('disabled', false);
         }));
+
+
+        function deleteImg(file) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: '{{ __('lang.commons.are_you_sure_you_want_to_delete_the_selected_items') }}',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showBlockUI('#loader');
+                    $.ajax({
+                        url: "{{ route('ajax-import-image.delete-file') }}",
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'file': file,
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                toastr.success("", "Image Delete!");
+                                hideBlockUI('#loader');
+                                location.reload();
+                            } else {
+                                hideBlockUI('#loader');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            hideBlockUI('#loader');
+                        }
+                    });
+                }
+            });
+        }
     </script>
 @endsection

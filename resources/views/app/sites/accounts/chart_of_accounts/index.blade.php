@@ -159,7 +159,7 @@
                                                                         <td class="custom_td">{{$account_of_head->name}}</td>
                                                                         <td class="custom_td">{{$account_of_head->level}}</td>
                                                                         <td class="custom_td">{{account_number_format($account_of_head->code)}}</td>
-                                                                        <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td>
+                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -183,7 +183,7 @@
                                                                                         <td class="custom_td">{{$account_of_head_full_array->name}}</td>
                                                                                         <td>{{$account_of_head_full_array->level}}</td>
                                                                                         <td>{{account_number_format($account_of_head_full_array->code)}}</td>
-                                                                                        <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td>
+                                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -207,11 +207,11 @@
                                                                                                         <td class="custom_td">{{$account_of_head_3->name}}</td>
                                                                                                         <td class="custom_td">{{$account_of_head_3->level}}</td>
                                                                                                         <td class="custom_td">{{account_number_format($account_of_head_3->code)}}</td>
-                                                                                                        <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td>
+                                                                                                        <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                     </tr>
                                                                                                     </tbody>
                                                                                                 </table>
-                                                                                                
+
                                                                                                 @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
                                                                                                     @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_3->code == substr($account_of_head_4->code, 0, 6)))
                                                                                                         <li class="nav-item Second_li ">
@@ -231,7 +231,7 @@
                                                                                                                             <td class="custom_td">{{$account_of_head_4->name}}</td>
                                                                                                                             <td class="custom_td">{{$account_of_head_4->level}}</td>
                                                                                                                             <td class="custom_td">{{account_number_format($account_of_head_4->code)}}</td>
-                                                                                                                            <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td>
+                                                                                                                            <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                                         </tr>
                                                                                                                         </tbody>
                                                                                                                     </table>
@@ -252,21 +252,21 @@
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->name}}</td>
                                                                                                                                 <td class="custom_td">{{$account_of_head_5->level}}</td>
                                                                                                                                 <td class="custom_td">{{account_number_format($account_of_head_5->code)}}</td>
-                                                                                                                                <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td>
+                                                                                                                                <td class="custom_td">{{number_format(trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-'))}}</td>
                                                                                                                             </tr>
                                                                                                                          @endif
-                                                                                                                    @endforeach 
+                                                                                                                    @endforeach
                                                                                                                 </tbody>
                                                                                                             </table>
                                                                                                             </ul>
                                                                                                         </li>
                                                                                                      @endif
-                                                                                                        
-                                                                                                @endforeach 
+
+                                                                                                @endforeach
                                                                                         </ul>
                                                                                     </li>
                                                                                 @endif
-                                                                                    
+
                                                                             @endforeach
                                                                     </ul>
                                                                 </li>
@@ -309,7 +309,6 @@
 @endsection
 
 @section('custom-js')
-    {{ $dataTable->scripts() }}
 @endsection
 
 

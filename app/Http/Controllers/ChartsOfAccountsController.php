@@ -16,10 +16,10 @@ class ChartsOfAccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ChartOfAccountsDataTable $dataTable, $site_id)
-    {  
-        $account_of_heads = AccountHead::with('accountLedgers')->get();
-        $accountLedgers = AccountHead::whereHas('accountLedgers')->with('accountLedgers')->get();
+    public function index( $site_id)
+    {
+        $account_of_heads = AccountHead::get();
+        $accountLedgers = AccountHead::whereHas('accountLedgers')->get();
         $accountLedgers_all = AccountLedger::all();
         $account_of_heads_codes = $account_of_heads->where('level',1)->pluck('code')->toArray();
         $account_balances = [];
@@ -44,7 +44,7 @@ class ChartsOfAccountsController extends Controller
                     'account_of_heads_codes' => $account_of_heads_codes,
                     'account_balances' => $account_balances
                 ];
-                return $dataTable->with($data)->render('app.sites.accounts.chart_of_accounts.index', $data);
+                return view('app.sites.accounts.chart_of_accounts.index', $data);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {

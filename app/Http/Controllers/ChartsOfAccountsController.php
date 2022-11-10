@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\ChartOfAccountsDataTable;
 use App\Models\AccountHead;
+use App\Models\AccountLedger;
 use App\Models\Site;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,16 +18,31 @@ class ChartsOfAccountsController extends Controller
      */
     public function index(ChartOfAccountsDataTable $dataTable, $site_id)
     {  
-        $account_of_heads = AccountHead::all();
-        $account_of_heads_codes = $account_of_heads->pluck('code')->toArray();
-        
+        $account_of_heads = AccountHead::with('accountLedgers')->get();
+        $accountLedgers = AccountHead::whereHas('accountLedgers')->with('accountLedgers')->get();
+        $accountLedgers_all = AccountLedger::all();
+        $account_of_heads_codes = $account_of_heads->where('level',1)->pluck('code')->toArray();
+        $account_balances = [];
+        foreach($account_of_heads_codes as $account_of_heads_code)
+        {
+            foreach($accountLedgers_all as $accountLedger)
+            {
+                if(substr($accountLedger->account_head_code, 0, 2) == $account_of_heads_code)
+                {
+                    array_push($account_balances,
+                        ['credit'.'_'.$account_of_heads_code=>$accountLedger->credit,'debit'.'_'.$account_of_heads_code=>$accountLedger->debit],
+                    );
+                }
+            }
+        }
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {
                 $data = [
                     'site' => $site,
                     'account_of_heads' => $account_of_heads,
-                    'account_of_heads_codes' => $account_of_heads_codes
+                    'account_of_heads_codes' => $account_of_heads_codes,
+                    'account_balances' => $account_balances
                 ];
                 return $dataTable->with($data)->render('app.sites.accounts.chart_of_accounts.index', $data);
             }

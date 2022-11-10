@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Stakeholder;
+use App\Models\BacklistedStakeholder;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class StakeholderDataTable extends DataTable
+class BlacklistedStakeholderDataTable extends DataTable
 {
 
     private $stakeholderInterface;
@@ -36,15 +36,9 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('parent_id', function ($stakeholder) {
-                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() : '-';
-            })
             ->editColumn('cnic', function ($stakeholder) {
                 return cnicFormat($stakeholder->cnic);
             })
-            // ->editColumn('relation', function ($stakeholder) {
-            //         return  $stakeholder->relation  ? $stakeholder->relation  : '-';
-            // })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
             })
@@ -66,15 +60,15 @@ class StakeholderDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(): QueryBuilder
+    public function query(BacklistedStakeholder $model): QueryBuilder
     {
-        return $this->stakeholderInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id))->orderBy('id', 'desc');
+        return $model->newQuery()->orderBy('id','asc');
     }
 
     public function html(): HtmlBuilder
     {
-        $createPermission = Auth::user()->hasPermissionTo('sites.stakeholders.create');
-        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $createPermission = Auth::user()->hasPermissionTo('sites.blacklisted-stakeholders.create');
+        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.blacklisted-stakeholders.destroy-selected');
         $selectedDeletePermission = 0;
 
         $buttons = [
@@ -86,27 +80,27 @@ class StakeholderDataTable extends DataTable
                 Button::make('pdf')->addClass('dropdown-item'),
             ]),
 
-            Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i data-feather="upload"></i> Import Stakeholders')
-                ->attr([
-                    'onclick' => 'Import()',
-                ]),
+            // Button::raw('import')
+            //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+            //     ->text('<i data-feather="upload"></i> Import Stakeholders')
+            //     ->attr([
+            //         'onclick' => 'Import()',
+            //     ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
 
 
-        if ($createPermission) {
-            $addbutton = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                    'onclick' => 'addNew()',
-                ]);
+        // if ($createPermission) {
+        //     $addbutton = Button::raw('delete-selected')
+        //         ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+        //         ->text('<i class="bi bi-plus"></i> Add New')->attr([
+        //             'onclick' => 'addNew()',
+        //         ]);
 
-            array_unshift($buttons, $addbutton);
-        }
+        //     array_unshift($buttons, $addbutton);
+        // }
 
         if ($selectedDeletePermission) {
             $buttons[] = Button::raw('delete-selected')
@@ -160,30 +154,28 @@ class StakeholderDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $editPermission = Auth::user()->hasPermissionTo('sites.stakeholders.edit');
-        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $editPermission = Auth::user()->hasPermissionTo('sites.blacklisted-stakeholders.edit');
+        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.blacklisted-stakeholders.destroy-selected');
         $selectedDeletePermission = 0;
-
         $columns = [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('full_name')->title('Name'),
-            Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC'),
-            Column::make('contact')->title('Contact'),
-            // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
-            // Column::make('relation')->title('Relation'),
+            Column::make('name')->title('Name')->addClass('text-nowrap'),
+            Column::make('fatherName')->title('Father Name')->addClass('text-nowrap'),
+            Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::make('province')->title('Province')->addClass('text-nowrap'),
+            Column::make('district')->title('District')->addClass('text-nowrap'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
         ];
 
-        if ($selectedDeletePermission) {
-            $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');
-            array_unshift($columns, $checkColumn);
-        }
+        // if ($selectedDeletePermission) {
+        //     $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        //     array_unshift($columns, $checkColumn);
+        // }
 
-        if ($editPermission) {
-            $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
-        }
+        // if ($editPermission) {
+        //     $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        // }
 
         return $columns;
     }
@@ -195,7 +187,7 @@ class StakeholderDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Stakeholders_' . date('YmdHis');
+        return 'Blacklisted_Stakeholders_' . date('YmdHis');
     }
 
     /**

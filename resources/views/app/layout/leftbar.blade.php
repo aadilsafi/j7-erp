@@ -252,6 +252,16 @@
                             Stakeholders</span>
                     </a>
                     <ul class="menu-content">
+                        @can('sites.blacklisted-stakeholders.index')
+                            <li class="nav-item {{ request()->routeIs('sites.blacklisted-stakeholders.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Blacklisted Stakeholders</span>
+                                </a>
+                            </li>
+                        @endcan
+
                         @can('sites.stakeholders.index')
                             <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"

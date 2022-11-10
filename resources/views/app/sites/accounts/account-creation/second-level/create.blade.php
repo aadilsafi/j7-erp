@@ -100,6 +100,9 @@
                 },
                 'name': {
                     required: true,
+                },
+                'first_level': {
+                    required: true,
                 }
             },
             errorClass: 'is-invalid text-danger',

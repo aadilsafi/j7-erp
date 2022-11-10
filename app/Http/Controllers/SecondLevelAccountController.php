@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\SecondLevelAccountsDatatable;
+use App\Http\Requests\AccountCreations\FirstLevelStore;
+use App\Models\AccountHead;
+use App\Services\AccountCreations\SecondLevel\SecondLevelAccountinterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class SecondLevelAccountController extends Controller
@@ -12,6 +16,14 @@ class SecondLevelAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private $SecondAccountInterface;
+
+    public function __construct(SecondLevelAccountinterface $SecondAccountInterface)
+    {
+        $this->SecondAccountInterface = $SecondAccountInterface;
+    }
+
     public function index(SecondLevelAccountsDatatable $dataTable, $site_id)
     {
         $data = [
@@ -26,9 +38,15 @@ class SecondLevelAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request, $site_id)
     {
-        //
+        abort_if(request()->ajax(), 403);
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'firstLevelAccount' => AccountHead::where('level', 1)->get(),
+        ];
+
+        return view('app.sites.accounts.account-creation.second-level.create', $data);
     }
 
     /**
@@ -37,9 +55,20 @@ class SecondLevelAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(FirstLevelStore $request, $site_id)
     {
         //
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->SecondAccountInterface->store($site_id, $data);
+                return redirect()->route('sites.settings.accounts.second-level.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.settings.accounts.first-second.create', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
     }
 
     /**

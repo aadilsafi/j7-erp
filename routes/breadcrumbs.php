@@ -474,6 +474,12 @@ Breadcrumbs::for('sites.settings.accounts.second-level.index', function (Breadcr
     $trail->push('Accounts', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
     $trail->push('2nd Level Account', route('sites.settings.accounts.second-level.index', ['site_id' => $site_id]));
 });
+Breadcrumbs::for('sites.settings.accounts.second-level.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Accounts', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+    $trail->push('Create 1st Level Account', route('sites.settings.accounts.second-level.create', ['site_id' => $site_id]));
+});
 // accounts third level
 Breadcrumbs::for('sites.settings.accounts.third-level.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

@@ -32,7 +32,7 @@ class TrialBalanceController extends Controller
                 $account_ledgers = AccountLedger::where('account_head_code',decryptParams($account_head_code_id))->get();
 
                 $data = [
-                    'site' => $site_id,
+                    'site_id' => $site_id,
                     'account_ledgers' => $account_ledgers,
                 ];
                 return view('app.sites.accounts.trial_balance.filter_trial_blance', $data);

@@ -44,19 +44,19 @@
                                         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                                             <div class="card-body">
                                                 <div class="row mb-1 g-1">
-                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
-                                                        <label class="form-label" style="font-size: 15px" for="to_date">To Date</label>
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                        <label class="form-label" style="font-size: 15px" for="to_date">Form Date And To Date</label>
                                                         <input type="text" id="to_date" name="to_date"
                                                             class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                                             placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                                     </div>
                     
-                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
+                                                    {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
                                                         <label class="form-label" style="font-size: 15px" for="form_date">Form Date</label>
                                                         <input type="text" id="form_date" name="form_date"
                                                             class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                                             placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <table id="example" class="table table-striped" style="width:100%">
+                                <table id="example" class="table table-striped dt-complex-header table" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-nowrap">#</th>
@@ -106,19 +106,26 @@
                                     <tbody>
                                         @php
                                             $i=1;
+                                            $ending_balance=0;
                                         @endphp
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
+                                                @php
+                                                    $ending_balance =($account_ledger->debit)-($account_ledger->credit);
+                                                @endphp
                                                 <td>{{$i}}</td>
                                                 <td>{{account_number_format($account_ledger->account_head_code)}}</td>
-                                                <td>Starting Balance</td>
+                                                @if ($i > 1)
+                                                    <td>{{$ending_balance}}</td>
+                                                @else
+                                                    <td>0</td>
+                                                @endif
                                                 <td>{{number_format($account_ledger->debit)}}</td>
                                                 <td>{{number_format($account_ledger->credit)}}</td>
-                                                <td>Ending Balance</td>
+                                                <td>{{$ending_balance}}</td>
                                                 <td>{{$account_ledger->created_at}}</td>
                                             </tr>
                                             @php
-                                                
                                                 $i++;
                                             @endphp
                                         @endforeach
@@ -128,8 +135,8 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th>{{$account_ledgers->pluck('debit')->sum()}}</th>
-                                            <th>{{$account_ledgers->pluck('credit')->sum()}}</th>
+                                            <th>{{number_format($account_ledgers->pluck('debit')->sum())}}</th>
+                                            <th>{{number_format($account_ledgers->pluck('credit')->sum())}}</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -189,6 +196,30 @@ $(document).ready(function() {
         altInput: !0,
         altFormat: "F j, Y",
         dateFormat: "Y-m-d",
+    });
+
+    var salesPlanDataTable = $(".dt-complex-header").DataTable({
+        processing: true,
+
+        select: true,
+        serverSide: true,
+        scrollX: true,
+        debug: true,
+        dom: 'lrtipC',
+        ajax: {
+            url: '{{ route('sites.accounts.trial-balance.filter-trial-blance', ['site_id' => ':site_id','account_head_code_id' => ':account_ledgers[0]->account_head_code']) }}'
+                .replace(':site_id', "{{ encryptParams($site_id) }}"),
+
+        },
+        "language": {
+            "processing": '<div class="spinner-grow text-primary" role="status">' +
+                '<span class="visually-hidden">Loading...</span>' +
+                '</div>'
+        },
+        columns: dataTableColumns,
+        buttons: buttons,
+        displayLength: 2,
+        lengthMenu: [2,4,100],
     });
 
     $('#apply_filter').on('click', function(e) {

@@ -72,7 +72,7 @@
                                             <th>Unit Name</th>
                                             <th>Unit Number</th>
                                             <th>Unit Area</th>
-                                            <th>Unit Price</th>
+                                            {{-- <th>Unit Price</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody id="dynamic_unit_rows">

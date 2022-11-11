@@ -52,7 +52,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="full_name">Full Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg @error('full_name') is-invalid @enderror"
+                <input type="text" class="form-control form-control-md @error('full_name') is-invalid @enderror"
                     id="full_name" name="full_name" placeholder="Stakeholder Name"
                     value="{{ isset($stakeholder) ? $stakeholder->full_name : old('full_name') }}" />
                 @error('full_name')
@@ -62,7 +62,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="father_name">Father Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg @error('father_name') is-invalid @enderror"
+                <input type="text" class="form-control form-control-md @error('father_name') is-invalid @enderror"
                     id="father_name" name="father_name" placeholder="Father Name"
                     value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                 @error('father_name')
@@ -72,7 +72,7 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="occupation">Occupation <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
                     id="occupation" name="occupation" placeholder="Occupation"
                     value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
                 @error('occupation')
@@ -84,9 +84,66 @@
 
         <div class="row mb-1">
 
-            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="designation">Designation <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-lg @error('designation') is-invalid @enderror"
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label" style="font-size: 15px" for="parent_id">Select Country</label>
+                <select class="select2" id="country_id" name="country_id">
+                    <option value="0" selected>Select Country</option>
+                    @foreach ($country as $countryRow)
+                        <option @if (isset($stakeholder) && $stakeholder->country_id == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                            {{ $countryRow->name }}</option>
+                    @endforeach
+                </select>
+                @error('country_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
+                <select class="select2 " id="state_id" name="state_id">
+                    <option value="0" selected>Select City</option>
+                    @foreach ($state as $stateRow)
+                        <option @if (isset($stakeholder) && $stakeholder->state_id == $stateRow->id) selected @endif value="{{ $stateRow->id }}">
+                            {{ $stateRow->name }}</option>
+                    @endforeach
+                </select>
+                @error('state_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
+                <select class="select2 " id="city_id" name="city_id">
+                    <option value="0" selected>Select City</option>
+                    @foreach ($city as $cityRow)
+                        <option @if (isset($stakeholder) && $stakeholder->city_id == $cityRow->id) selected @endif value="{{ $cityRow->id }}">
+                            {{ $cityRow->name }}</option>
+                    @endforeach
+                </select>
+                @error('city_id')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+        </div>
+
+        <div class="row mb-1">
+
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label fs-5" for="occupation">Nationality <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
+                    id="nationality" name="nationality" placeholder="Nationality"
+                    value="{{ isset($stakeholder) ? $stakeholder->nationality : old('nationality') }}" />
+                @error('nationality')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label fs-5" for="designation">Designation <span
+                        class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-md @error('designation') is-invalid @enderror"
                     id="designation" name="designation" placeholder="Designation"
                     value="{{ isset($stakeholder) ? $stakeholder->designation : old('designation') }}" />
                 @error('designation')
@@ -94,9 +151,9 @@
                 @enderror
             </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="contact">Contact <span class="text-danger">*</span></label>
-                <input type="number" class="form-control form-control-lg @error('contact') is-invalid @enderror"
+                <input type="number" class="form-control form-control-md @error('contact') is-invalid @enderror"
                     id="contact" name="contact" placeholder="Contact Number"
                     value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" />
                 @error('contact')
@@ -109,7 +166,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC <span class="text-danger">*</span></label>
-                <input type="number" class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
+                <input type="number" class="cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
                     id="cnic" name="cnic" placeholder="CNIC Without Dashes" minlength="13"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
                 @error('cnic')
@@ -119,7 +176,7 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="ntn">NTN <span class="text-danger">*</span></label>
-                <input type="number" class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                <input type="number" class="form-control form-control-md @error('ntn') is-invalid @enderror"
                     id="ntn" name="ntn" placeholder="NTN Number"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
                 @error('ntn')
@@ -140,15 +197,15 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="comments">Comments</label>
-                <textarea class="form-control @error('comments') is-invalid @enderror" name="comments" id="comments" rows="3"
-                    placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
+                <textarea class="form-control @error('comments') is-invalid @enderror" name="comments" id="comments"
+                    rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
                 @error('comments')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
         </div>
 
-        <div class="row mb-1" id="div-next-of-kin"
+        {{-- <div class="row mb-1" id="div-next-of-kin"
             style="{{ isset($stakeholder) && $stakeholder->stakeholder_types->where('type', 'C')->first()->status ? null : 'display: none;' }}">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label" style="font-size: 15px" for="parent_id">Select Kin</label>
@@ -169,7 +226,7 @@
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="relation">Relation</label>
-                <input type="text" class="form-control form-control-lg @error('relation') is-invalid @enderror"
+                <input type="text" class="form-control form-control-md @error('relation') is-invalid @enderror"
                     id="stakeholder_name" name="relation" placeholder="Relation"
                     {{ isset($stakeholder) && strlen($stakeholder->relation) > 0 ? '' : 'readonly' }}
                     value="{{ isset($stakeholder) ? $stakeholder->relation : old('stakeholder_name') }}" />
@@ -177,7 +234,7 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-        </div>
+        </div> --}}
 
         @if (isset($customFields) && count($customFields) > 0)
             <hr>
@@ -190,7 +247,82 @@
         @endif
     </div>
 </div>
+{{-- next-of-kin-list --}}
+<div class="card" id="div-next-of-kin" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Next Of Kins</h3>
+    </div>
+    <div class="card-body">
+        <div class="next-of-kin-list">
+            <div data-repeater-list="next-of-kins">
+                @forelse ((isset($stakeholder) && count($stakeholder->contacts) > 0 ? $stakeholder->contacts : old('contact-persons')) ?? $emptyRecord as $key => $oldContactPersons)
+                    <div data-repeater-item>
+                        <div class="card m-0">
+                            <div class="card-header pt-0">
+                                <h3>Next Of Kins</h3>
 
+                                <button
+                                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                    data-repeater-delete id="delete-next-of-kin" type="button">
+                                    <i data-feather="x" class="me-25"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="full_name_{{ $key }}">Full
+                                                Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('full_name') is-invalid @enderror"
+                                                id="full_name_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][full_name]"
+                                                placeholder="Stakeholder Name"
+                                                value="{{ $oldContactPersons['full_name'] }}" />
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="father_name">Father Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('father_name') is-invalid @enderror"
+                                                id="father_name_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][father_name]"
+                                                placeholder="Father Name"
+                                                value="{{ $oldContactPersons['father_name'] }}" />
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="occupation">Occupation</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('occupation') is-invalid @enderror"
+                                                id="occupation_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][occupation]"
+                                                placeholder="Occupation"
+                                                value="{{ $oldContactPersons['occupation'] }}" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="first-contact-person" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- contacts --}}
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
         <h3>Contact Persons</h3>
@@ -219,7 +351,7 @@
                                             <label class="form-label fs-5" for="full_name_{{ $key }}">Full
                                                 Name</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('full_name') is-invalid @enderror"
+                                                class="form-control form-control-md @error('full_name') is-invalid @enderror"
                                                 id="full_name_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][full_name]"
                                                 placeholder="Stakeholder Name"
@@ -229,7 +361,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="father_name">Father Name</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('father_name') is-invalid @enderror"
+                                                class="form-control form-control-md @error('father_name') is-invalid @enderror"
                                                 id="father_name_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][father_name]"
                                                 placeholder="Father Name"
@@ -239,7 +371,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="occupation">Occupation</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                                                class="form-control form-control-md @error('occupation') is-invalid @enderror"
                                                 id="occupation_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][occupation]"
                                                 placeholder="Occupation"
@@ -253,7 +385,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="designation">Designation</label>
                                             <input type="text"
-                                                class="form-control form-control-lg @error('designation') is-invalid @enderror"
+                                                class="form-control form-control-md @error('designation') is-invalid @enderror"
                                                 id="designation_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][designation]"
                                                 placeholder="Designation"
@@ -263,7 +395,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="contact">Contact</label>
                                             <input type="number"
-                                                class="form-control form-control-lg @error('contact') is-invalid @enderror"
+                                                class="form-control form-control-md @error('contact') is-invalid @enderror"
                                                 id="contact_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][contact]"
                                                 placeholder="Contact Number"
@@ -276,7 +408,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="cnic">CNIC</label>
                                             <input type="number"
-                                                class="unique cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
+                                                class="unique cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
                                                 id="cnic_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][cnic]"
                                                 placeholder="CNIC Without Dashes"
@@ -289,7 +421,7 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                             <label class="form-label fs-5" for="ntn">NTN</label>
                                             <input type="number"
-                                                class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                                class="form-control form-control-md @error('ntn') is-invalid @enderror"
                                                 id="ntn_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][ntn]"
                                                 placeholder="NTN Number" value="{{ $oldContactPersons['ntn'] }}" />

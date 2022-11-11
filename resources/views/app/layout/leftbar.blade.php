@@ -221,11 +221,22 @@
                                 <ul class="menu-content">
 
                                     @can('sites.settings.import.images.index')
-                                        <li class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='users'></i>
+                                                <i data-feather='file'></i>
                                                 <span class="menu-title text-truncate" data-i18n="Users">Images</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.stakeholders.importStakeholders')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.stakeholders.importStakeholders') || request()->routeIs('sites.stakeholders.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.stakeholders.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Stakeholders</span>
                                             </a>
                                         </li>
                                     @endcan
@@ -253,11 +264,13 @@
                     </a>
                     <ul class="menu-content">
                         @can('sites.blacklisted-stakeholders.index')
-                            <li class="nav-item {{ request()->routeIs('sites.blacklisted-stakeholders.index') ? 'active' : null }}">
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.blacklisted-stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
                                     href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Blacklisted Stakeholders</span>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Blacklisted
+                                        Stakeholders</span>
                                 </a>
                             </li>
                         @endcan

@@ -23,6 +23,11 @@ class TempStakeholder extends Model
         'is_customer',
         'is_kin',
         'parent_cnic',
-        'relation'
+        'relation',
+        'country',
+        'state',
+        'city',
+        'optional_contact_number',
+        'nationality'
     ];
 }

@@ -96,7 +96,7 @@ class TrialBalanceDataTable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->orderBy('code', 'asc');
+        return $model->where('level', 5)->whereHas('accountLedgers')->orderBy('code', 'asc');
     }
 
     public function html(): HtmlBuilder

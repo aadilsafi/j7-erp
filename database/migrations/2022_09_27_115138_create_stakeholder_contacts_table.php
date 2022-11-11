@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('country_id')->default(1)->nullable();
             $table->foreignId('state_id')->default(2)->nullable();
             $table->foreignId('city_id')->default(4)->nullable();
+            $table->string('nationality', 50)->default('pakistani');
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();
             $table->string('occupation', 50)->nullable();
@@ -27,7 +28,7 @@ return new class extends Migration
             $table->string('ntn')->nullable();
             $table->string('contact', 20)->nullable();
             $table->string('address')->nullable();
-            $table->string('optional_contact_number')->nullable();
+            $table->jsonb('optional_contact_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

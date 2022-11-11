@@ -147,9 +147,9 @@
                                         '<td class="text-nowrap text-center">' + response
                                         .units[i]['gross_area'].toLocaleString('en') +
                                         '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .units[i]['price_sqft'].toLocaleString('en') +
-                                        '</td>',
+                                        // '<td class="text-nowrap text-center">' + response
+                                        // .units[i]['price_sqft'].toLocaleString('en') +
+                                        // '</td>',
                                         '</tr>', );
                                 }
 

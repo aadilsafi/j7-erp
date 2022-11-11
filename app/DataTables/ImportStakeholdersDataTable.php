@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Country;
 use App\Models\TempFloor;
 use App\Models\TempStakeholder;
 use Yajra\DataTables\Html\Column;
@@ -86,7 +87,7 @@ class ImportStakeholdersDataTable extends DataTable
                 );
             })
             ->editColumn('is_dealer', function ($data) {
-                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+                $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
 
                 return view(
                     'app.components.input-select-fields',
@@ -97,8 +98,38 @@ class ImportStakeholdersDataTable extends DataTable
                 //     ['id' => $data->id, 'data' => $data, 'field' => 'is_dealer', 'is_true' => $data->is_dealer, 'value' => $data->is_dealer]
                 // );
             })
+            ->editColumn('country', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'country', 'inputtype' => 'text', 'value' => $data->country]
+                );
+            })
+            ->editColumn('state', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'state', 'inputtype' => 'text', 'value' => $data->state]
+                );
+            })
+            ->editColumn('city', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'city', 'inputtype' => 'text', 'value' => $data->city]
+                );
+            })
+            ->editColumn('nationality', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'nationality', 'inputtype' => 'text', 'value' => $data->nationality]
+                );
+            })
+            ->editColumn('optional_contact_number', function ($data) {
+                return view(
+                    'app.components.unit-preview-cell',
+                    ['id' => $data->id, 'field' => 'optional_contact_number', 'inputtype' => 'text', 'value' => json_decode($data->optional_contact_number)]
+                );
+            })
             ->editColumn('is_vendor', function ($data) {
-                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+                $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
 
                 return view(
                     'app.components.input-select-fields',
@@ -106,7 +137,7 @@ class ImportStakeholdersDataTable extends DataTable
                 );
             })
             ->editColumn('is_customer', function ($data) {
-                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+                $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
 
                 return view(
                     'app.components.input-select-fields',
@@ -114,7 +145,7 @@ class ImportStakeholdersDataTable extends DataTable
                 );
             })
             ->editColumn('is_kin', function ($data) {
-                $values = ['FALSE' => 'No','TRUE' => 'Yes'];
+                $values = ['FALSE' => 'No', 'TRUE' => 'Yes'];
 
                 return view(
                     'app.components.input-select-fields',
@@ -124,7 +155,7 @@ class ImportStakeholdersDataTable extends DataTable
             ->editColumn('parent_cnic', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'parent_cnic', 'inputtype' => 'number', 'value' => $data->parent_cnic]
+                    ['id' => $data->id, 'field' => 'parent_cnic', 'inputtype' => 'text', 'value' => json_decode($data->parent_cnic)]
                 );
             })
             ->editColumn('relation', function ($data) {
@@ -208,10 +239,35 @@ class ImportStakeholdersDataTable extends DataTable
                 'is_disable' => true,
                 'name' => 'contact'
             ])->render())->addClass('removeTolltip'),
+            Column::computed('state')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => true,
+                'name' => 'state'
+            ])->render())->addClass('removeTolltip'),
+            Column::computed('city')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => true,
+                'name' => 'city'
+            ])->render())->addClass('removeTolltip'),
+            Column::computed('country')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => true,
+                'name' => 'country'
+            ])->render())->addClass('removeTolltip'),
+            Column::computed('nationality')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => true,
+                'name' => 'nationality'
+            ])->render())->addClass('removeTolltip'),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => true,
                 'name' => 'address'
+            ])->render())->addClass('removeTolltip'),
+            Column::computed('optional_contact_number')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => true,
+                'name' => 'optional_contact_number'
             ])->render())->addClass('removeTolltip'),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
@@ -248,6 +304,7 @@ class ImportStakeholdersDataTable extends DataTable
                 'is_disable' => true,
                 'name' => 'relation'
             ])->render())->addClass('removeTolltip'),
+
         ];
     }
 }

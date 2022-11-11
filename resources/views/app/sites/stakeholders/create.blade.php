@@ -28,9 +28,10 @@
             background-color: #e3e0fd;
         }
 
-        /* .filepond--item {
-                width: calc(20% - 0.5em);
-            } */
+        #div-next-of-kin{
+            display: none;
+        }
+
     </style>
 @endsection
 
@@ -62,6 +63,7 @@
                     'country' => $country,
                     'city' => $city,
                     'state' => $state,
+                    'emtyNextOfKin' => $emtyNextOfKin,
                 ]) }}
 
             </div>

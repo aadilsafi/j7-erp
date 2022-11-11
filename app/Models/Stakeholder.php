@@ -44,7 +44,7 @@ class Stakeholder extends Model implements HasMedia
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
         'cnic' => 'required|numeric|unique:stakeholders,cnic',
-        'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
+        // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
         'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
@@ -54,6 +54,7 @@ class Stakeholder extends Model implements HasMedia
         'attachment' => 'sometimes|min:2',
         'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
+        'next-of-kins' => 'nullable|array',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
@@ -95,6 +96,11 @@ class Stakeholder extends Model implements HasMedia
 
     public function multiValues() {
         return $this->morphMany(MultiValue::class, 'multivalueable');
+    }
+
+    public function nextOfKin()
+    {
+        return $this->hasMany(StakeholderNextOfKin::class);
     }
 
     public function contacts()

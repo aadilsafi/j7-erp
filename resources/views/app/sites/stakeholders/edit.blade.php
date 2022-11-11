@@ -65,6 +65,7 @@
                     'country' => $country,
                     'city' => $city,
                     'state' => $state,
+                    'emtyNextOfKin' => $emtyNextOfKin,
                 ]) }}
             </div>
 

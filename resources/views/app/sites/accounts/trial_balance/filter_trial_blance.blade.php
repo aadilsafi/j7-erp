@@ -96,10 +96,10 @@
                                         <tr>
                                             <th class="text-nowrap">#</th>
                                             <th class="text-nowrap">Account Codes</th>
-                                            <th class="text-nowrap">Starting Balance</th>
+                                            <th class="text-nowrap">Opening Balance</th>
                                             <th class="text-nowrap">Debit</th>
                                             <th class="text-nowrap">Credit</th>
-                                            <th class="text-nowrap">Ending Balance</th>
+                                            <th class="text-nowrap">Closing Balance</th>
                                             <th class="text-nowrap">Transactions At</th>
                                         </tr>
                                     </thead>
@@ -111,12 +111,12 @@
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
                                                 @php
-                                                    $ending_balance =($account_ledger->debit)-($account_ledger->credit);
+                                                    $ending_balance =($account_ledger->credit)-($account_ledger->debit);
                                                 @endphp
                                                 <td>{{$i}}</td>
                                                 <td>{{account_number_format($account_ledger->account_head_code)}}</td>
                                                 @if ($i > 1)
-                                                    <td>{{$ending_balance}}</td>
+                                                    <td>{{trim($ending_balance,'-')}}</td>
                                                 @else
                                                     <td>0</td>
                                                 @endif

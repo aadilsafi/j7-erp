@@ -1710,6 +1710,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.accounts.trial-balance.filter-trial-blance',
+                'show_name' => 'Can View Accounts Trial Balance',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
 
             [
                 'name' => 'sites.import.sample-download',

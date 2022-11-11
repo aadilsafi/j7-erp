@@ -27,7 +27,6 @@ class TrialBalanceDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query)
     {
-        // dd($query);
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
@@ -60,17 +59,14 @@ class TrialBalanceDataTable extends DataTable
                 }
             })
             ->editColumn('debit', function ($accountHead) {
-                // dd($accountHead->accountLedgers);
                 if (count($accountHead->accountLedgers) > 0) {
                     return number_format($accountHead->accountLedgers->pluck('debit')->sum());
                 }
-                // return '0';
             })
             ->editColumn('credit', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
                     return number_format($accountHead->accountLedgers->pluck('credit')->sum());
                 }
-                // return '0';
             })
             ->editColumn('ending_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
@@ -82,6 +78,11 @@ class TrialBalanceDataTable extends DataTable
                     }else{
                         return number_format($debits - $credits);
                     }
+                }
+            })
+            ->editColumn('fitter_trial_balance', function ($accountHead) {
+                if (count($accountHead->accountLedgers) > 0) {
+                    return view('app.sites.accounts.trial_balance.action', ['site_id' => ($this->site_id), 'account_head_code' => $accountHead->code]);
                 }
             })
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -104,14 +105,11 @@ class TrialBalanceDataTable extends DataTable
             ->setTableId('accountHead-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            // ->select()
-            // ->selectClassName('bg-primary')
             ->serverSide()
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([5000])
-            // $builder->ajax($attributes);
             ->scrollX(true)
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
@@ -126,10 +124,8 @@ class TrialBalanceDataTable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            // ->rowGroupDataSrc('level')
             ->columnDefs([])
             ->orders([
-                // [4, 'asc'],
                 [2, 'asc'],
             ]);
     }
@@ -144,7 +140,6 @@ class TrialBalanceDataTable extends DataTable
         return [
 
             Column::computed('DT_RowIndex')->title('#'),
-            // Column::make('id')->title('id')->addClass('text-nowrap text-center'),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap'),
             Column::make('name')->title('Account Name')->addClass('text-nowrap'),
             Column::make('starting_balance')->title('Starting Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
@@ -152,6 +147,7 @@ class TrialBalanceDataTable extends DataTable
             Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('fitter_trial_balance')->title('Filter Trial Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
     }
 

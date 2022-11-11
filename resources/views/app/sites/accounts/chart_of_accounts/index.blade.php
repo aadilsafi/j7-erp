@@ -167,7 +167,7 @@
 
 
 
-                                                                        
+
                                                                         @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
                                                                         @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head->code == substr($account_of_head_4->code, 0, 2)))
                                                                             @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
@@ -178,7 +178,7 @@
                                                                                 @endif
                                                                             @endforeach
                                                                          @endif
-                                                                    @endforeach 
+                                                                    @endforeach
                                                                         <td class="custom_td">{{number_format($value_55)}}</td>
 
                                                                         {{-- <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td> --}}
@@ -218,7 +218,7 @@
                                                                                                 @endif
                                                                                             @endforeach
                                                                                          @endif
-                                                                                    @endforeach 
+                                                                                    @endforeach
                                                                                         <td class="custom_td">{{number_format($value_44)}}</td>
                                                                                     </tr>
                                                                                 </tbody>
@@ -268,7 +268,7 @@
                                                                                                                 @endif
                                                                                                             @endforeach
                                                                                                          @endif
-                                                                                                    @endforeach 
+                                                                                                    @endforeach
                                                                                                         <td class="custom_td">{{number_format($value_33)}}</td>
 
                                                                                                     </tr>
@@ -303,7 +303,7 @@
                                                                                                                                     $value_5 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
                                                                                                                                 @endphp
                                                                                                                              @endif
-                                                                                                                             @endforeach 
+                                                                                                                             @endforeach
                                                                                                                              <td class="custom_td">{{number_format($value_5)}}</td>
                                                                                                                             </tr>
                                                                                                                         </tbody>

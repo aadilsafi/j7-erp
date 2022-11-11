@@ -126,8 +126,10 @@
     {{-- File title transfer --}}
     @if (Route::current()->getName() == 'sites.file-managements.file-title-transfer.index')
         @php
+            $file = DB::table('file_management')->where('id',$file_id)->first();
             $checkFileTitleTransfer = DB::table('file_title_transfers')
             ->where('file_id', $file_id)
+                // ->where('stakholder_id', $file->)
                 ->where('status', 0)
                 ->first();
         @endphp

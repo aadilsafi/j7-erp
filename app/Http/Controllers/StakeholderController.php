@@ -71,6 +71,9 @@ class StakeholderController extends Controller
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'customFields' => $customFields,
+                'country' => Country::all(),
+                'city' => City::all(),
+                'state' => State::all(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             // dd($data);
@@ -139,6 +142,9 @@ class StakeholderController extends Controller
                     'stakeholders' => $this->stakeholderInterface->getByAll($site_id),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
+                    'country' => Country::all(),
+                    'city' => City::all(),
+                    'state' => State::all(),
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
@@ -690,7 +696,7 @@ class StakeholderController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        // DB::transaction(function () use ($request, $site_id) {
+        DB::transaction(function () use ($request, $site_id) {
             $validator = \Validator::make($request->all(), [
                 'fields.*' => 'required',
             ], [
@@ -800,9 +806,12 @@ class StakeholderController extends Controller
                 ];
 
                 $stakeholder_type = StakeholderType::insert($stakeholdertype);
-                if($is_kins){
+                if ($is_kins) {
                     foreach ($parentsCnics[$key] as $c => $cnics) {
                         $parent = Stakeholder::where('cnic', $cnics)->first();
+                        if ($parent == null) {
+                            return redirect()->route('sites.stakeholders.storePreview', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder With requested parent ' . $cnics . ' cnic does not exist. Please Add it First as a Parent Stakeholder.');
+                        }
                         $kins[$key]['site_id'] = decryptParams($site_id);
                         $kins[$key]['stakeholder_id'] = $parent->id;
                         $kins[$key]['kin_id'] = $stakeholder->id;
@@ -810,9 +819,8 @@ class StakeholderController extends Controller
                     }
                     $stakeholder_kins = StakeholderNextOfKin::create($kins[$key]);
                 }
-               
             }
-        // });
+        });
         TempStakeholder::query()->truncate();
 
         return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));

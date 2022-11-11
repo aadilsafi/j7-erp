@@ -62,6 +62,9 @@
                     'stakeholder' => $stakeholder,
                     'stakeholderTypes' => $stakeholderTypes,
                     'emptyRecord' => $emptyRecord,
+                    'country' => $country,
+                    'city' => $city,
+                    'state' => $state,
                 ]) }}
             </div>
 

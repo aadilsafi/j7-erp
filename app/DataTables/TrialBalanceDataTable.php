@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class TrialBalanceDataTable extends DataTable
 {
@@ -26,6 +27,7 @@ class TrialBalanceDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query)
     {
+        // dd($query);
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
@@ -35,12 +37,26 @@ class TrialBalanceDataTable extends DataTable
             ->editColumn('code', function ($accountHead) {
                 return account_number_format($accountHead->code);
             })
+            ->editColumn('created_at', function ($accountHead) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $accountHead->created_at)
+                ->format('m/d/Y');
+            })
             ->editColumn('starting_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
-                    $credits = $accountHead->accountLedgers->where('account_ledgers.created_at', '<', date('Y-m-d 00:00:00'))->pluck('credit')->sum();
-                    $debits = $accountHead->accountLedgers->where('account_ledgers.created_at', '<', date('Y-m-d 00:00:00'))->pluck('debits')->sum();
-                    return number_format($credits - $debits);
-                    // return number_format($accountHead->accountLedgers->where('created_at', '>', '2022-11-08')->pluck('credit')->sum());
+                    if($accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays()))
+                    {
+                        $credits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('credit')->sum();
+                        $debits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('debit')->sum();
+                        if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 12)
+                        {
+                            return number_format($credits - $debits);
+                        }else{
+                            return number_format($debits - $credits);
+                        }
+
+                    }else{
+                        return 0;
+                    }
                 }
             })
             ->editColumn('debit', function ($accountHead) {
@@ -58,8 +74,14 @@ class TrialBalanceDataTable extends DataTable
             })
             ->editColumn('ending_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
-
-                    return number_format($accountHead->accountLedgers->pluck('credit')->sum());
+                    $credits = $accountHead->accountLedgers->pluck('credit')->sum();
+                    $debits = $accountHead->accountLedgers->pluck('debit')->sum();
+                    if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 12)
+                    {
+                        return number_format($credits - $debits);
+                    }else{
+                        return number_format($debits - $credits);
+                    }
                 }
             })
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -73,7 +95,7 @@ class TrialBalanceDataTable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->where('level', 5)->whereHas('accountLedgers')->orderBy('code', 'asc');
+        return $model->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->orderBy('code', 'asc');
     }
 
     public function html(): HtmlBuilder
@@ -90,6 +112,7 @@ class TrialBalanceDataTable extends DataTable
             ->dom('BlfrtipC')
             ->lengthMenu([5000])
             // $builder->ajax($attributes);
+            ->scrollX(true)
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -128,6 +151,7 @@ class TrialBalanceDataTable extends DataTable
             Column::make('debit')->title('Debit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
     }
 

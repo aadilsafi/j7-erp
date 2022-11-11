@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.trial-balance.index', encryptParams($site->id)) }}
 @endsection
 
-@section('page-title', 'Charts Of Accounts')
+@section('page-title', 'Trial Balance')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"

@@ -1,5 +1,9 @@
 @extends('app.layout.layout')
 
+@section('seo-breadcrumb')
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.trial-balance.index', encryptParams($site_id)) }}
+@endsection
+
 @section('page-title', 'Trial Balance Filter')
 
 @section('page-css')
@@ -27,7 +31,17 @@
 @endsection
 
 
-@section('custom-css')
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Trial Balance ({{ $account_head->name }})</h2>
+                <div class="breadcrumb-wrapper">
+                    {{ Breadcrumbs::render('sites.accounts.trial-balance.index', encryptParams($site_id)) }}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -37,51 +51,52 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="tab-content">
                     <div class="tab-pane active" id="salesPlanData" aria-labelledby="salesPlanData" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
-                                        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                                            <div class="card-body">
-                                                <div class="row mb-1 g-1">
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 position-relative">
-                                                        <label class="form-label" style="font-size: 15px" for="to_date">Form Date And To Date</label>
-                                                        <input type="text" id="to_date" name="to_date"
-                                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
-                                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
-                                                    </div>
-                    
-                                                    {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
+
+                        <div class="row">
+                            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+                                <div class="card"
+                                    style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                                    <div class="card-body">
+                                        <div class="row mb-1 g-1">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                <label class="form-label" style="font-size: 15px" for="to_date">Select Date
+                                                    Range</label>
+                                                <input type="text" id="to_date" name="to_date"
+                                                    class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
+                                                    placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
+                                            </div>
+
+                                            {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
                                                         <label class="form-label" style="font-size: 15px" for="form_date">Form Date</label>
                                                         <input type="text" id="form_date" name="form_date"
                                                             class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                                             placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                                     </div> --}}
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
-                    
-                    
-                                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                        <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
-                                            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                                                <div class="card-body">
-                                                    <div class="row g-1">
-                                                        <div class="col-md-12">
-                                                            <button type="button" value="asd" name="apply_filter" id="apply_filter"
-                                                                class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                                                <i data-feather='save'></i>
-                                                                Apply Filter
-                                                            </button>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button onclick="resetFilter()"
-                                                                class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
-                                                                type="button">
-                                                                <i data-feather='x'></i>Reset</button>
-                                                        </div>
-                                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
+                                    <div class="card"
+                                        style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                                        <div class="card-body">
+                                            <div class="row g-1">
+                                                <div class="col-md-12">
+                                                    <button type="button" value="asd" name="apply_filter"
+                                                        id="apply_filter"
+                                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                                        <i data-feather='save'></i>
+                                                        Apply Filter
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <button onclick="resetFilter()"
+                                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light"
+                                                        type="button">
+                                                        <i data-feather='x'></i>Reset</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -89,9 +104,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card">
+
+                        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
-                                <table id="example" class="table table-striped dt-complex-header table" style="width:100%">
+                                <table id="example" class="table table-striped dt-complex-header table"
+                                    style="width:100%">
                                     <thead>
                                         <tr>
                                             <th class="text-nowrap">#</th>
@@ -105,25 +122,29 @@
                                     </thead>
                                     <tbody>
                                         @php
-                                            $i=1;
-                                            $ending_balance=0;
+                                            $i = 1;
+                                            $ending_balance = 0;
                                         @endphp
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
                                                 @php
-                                                    $ending_balance =($account_ledger->credit)-($account_ledger->debit);
+                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                                                 @endphp
-                                                <td>{{$i}}</td>
-                                                <td>{{account_number_format($account_ledger->account_head_code)}}</td>
+                                                <td>{{ $i }}</td>
+                                                <td>{{ account_number_format($account_ledger->account_head_code) }}</td>
                                                 @if ($i > 1)
-                                                    <td>{{trim($ending_balance,'-')}}</td>
+                                                    <td>{{ number_format(trim($ending_balance, '-')) }}</td>
                                                 @else
                                                     <td>0</td>
                                                 @endif
-                                                <td>{{number_format($account_ledger->debit)}}</td>
-                                                <td>{{number_format($account_ledger->credit)}}</td>
-                                                <td>{{$ending_balance}}</td>
-                                                <td>{{$account_ledger->created_at}}</td>
+                                                <td>{{ number_format($account_ledger->debit) }}</td>
+                                                <td>{{ number_format($account_ledger->credit) }}</td>
+                                                <td>{{ number_format($ending_balance) }}</td>
+                                                <td>
+                                                    <span>{{ date_format(new DateTime($account_ledger->created_at), 'h:i:s') }}
+                                                    </span> <br> <span class='text-primary fw-bold'>
+                                                        {{ date_format(new DateTime($account_ledger->created_at), 'Y-m-d') }}</span>
+                                                </td>
                                             </tr>
                                             @php
                                                 $i++;
@@ -134,10 +155,10 @@
                                         <tr>
                                             <th></th>
                                             <th></th>
-                                            <th></th>
-                                            <th>{{number_format($account_ledgers->pluck('debit')->sum())}}</th>
-                                            <th>{{number_format($account_ledgers->pluck('credit')->sum())}}</th>
-                                            <th></th>
+                                            <th>-</th>
+                                            <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
+                                            <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
+                                            <th>-</th>
                                             <th></th>
                                         </tr>
                                     </tfoot>
@@ -171,110 +192,109 @@
 
 @section('custom-js')
     <script>
-        
         $(document).ready(function() {
-        var table = $('#example').DataTable( {
-        responsive: true
-    } );
- 
-    new $.fn.dataTable.FixedHeader( table );
-} );
+            var table = $('#example').DataTable({
+                responsive: true
+            });
 
-var flatpicker_form_date = null,
-    flatpicker_to_date = null;
-$(document).ready(function() {
+            new $.fn.dataTable.FixedHeader(table);
+        });
 
-    flatpicker_to_date = $("#to_date").flatpickr({
-        mode: "range",
-        altInput: !0,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-    });
+        var flatpicker_form_date = null,
+            flatpicker_to_date = null;
+        $(document).ready(function() {
 
-    flatpicker_form_date = $("#form_date").flatpickr({
-        mode: "range",
-        altInput: !0,
-        altFormat: "F j, Y",
-        dateFormat: "Y-m-d",
-    });
+            flatpicker_to_date = $("#to_date").flatpickr({
+                mode: "range",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
 
-    var salesPlanDataTable = $(".dt-complex-header").DataTable({
-        processing: true,
+            flatpicker_form_date = $("#form_date").flatpickr({
+                mode: "range",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
 
-        select: true,
-        serverSide: true,
-        scrollX: true,
-        debug: true,
-        dom: 'lrtipC',
-        ajax: {
-            url: '{{ route('sites.accounts.trial-balance.filter-trial-blance', ['site_id' => ':site_id','account_head_code_id' => ':account_ledgers[0]->account_head_code']) }}'
-                .replace(':site_id', "{{ encryptParams($site_id) }}"),
+            var salesPlanDataTable = $(".dt-complex-header").DataTable({
+                processing: true,
 
-        },
-        "language": {
-            "processing": '<div class="spinner-grow text-primary" role="status">' +
-                '<span class="visually-hidden">Loading...</span>' +
-                '</div>'
-        },
-        columns: dataTableColumns,
-        buttons: buttons,
-        displayLength: 2,
-        lengthMenu: [2,4,100],
-    });
+                select: true,
+                serverSide: true,
+                scrollX: true,
+                debug: true,
+                dom: 'lrtipC',
+                ajax: {
+                    url: '{{ route('sites.accounts.trial-balance.filter-trial-blance', ['site_id' => ':site_id', 'account_head_code_id' => ':account_ledgers[0]->account_head_code']) }}'
+                        .replace(':site_id', "{{ encryptParams($site_id) }}"),
 
-    $('#apply_filter').on('click', function(e) {
-        e.preventDefault();
-        hideBlockUI();
-        let filter_date_from = '',
-            filter_date_to = '';
-        let form_date = $('#form_date').val();
-        let to_date = $('#to_date').val();
+                },
+                "language": {
+                    "processing": '<div class="spinner-grow text-primary" role="status">' +
+                        '<span class="visually-hidden">Loading...</span>' +
+                        '</div>'
+                },
+                columns: dataTableColumns,
+                buttons: buttons,
+                displayLength: 2,
+                lengthMenu: [2, 4, 100],
+            });
 
-        let data = '?';
-        if (to_date) {
-            let generated_at_date_range = to_date.split(' ');
+            $('#apply_filter').on('click', function(e) {
+                e.preventDefault();
+                hideBlockUI();
+                let filter_date_from = '',
+                    filter_date_to = '';
+                let form_date = $('#form_date').val();
+                let to_date = $('#to_date').val();
 
-            if (generated_at_date_range[0]) {
-                filter_date_from = generated_at_date_range[0];
-                filter_date_to = generated_at_date_range[0];
-            }
+                let data = '?';
+                if (to_date) {
+                    let generated_at_date_range = to_date.split(' ');
 
-            if (generated_at_date_range[2]) {
-                filter_date_to = generated_at_date_range[2];
-            }
+                    if (generated_at_date_range[0]) {
+                        filter_date_from = generated_at_date_range[0];
+                        filter_date_to = generated_at_date_range[0];
+                    }
 
-            data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
-                filter_date_to;
+                    if (generated_at_date_range[2]) {
+                        filter_date_to = generated_at_date_range[2];
+                    }
+
+                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
+                        filter_date_to;
+                }
+                if (form_date) {
+                    var approved_date_range = form_date.split(' ');
+
+                    if (approved_date_range[0]) {
+                        filter_date_from = approved_date_range[0];
+                        filter_date_to = approved_date_range[0];
+                    }
+
+                    if (approved_date_range[2]) {
+                        filter_date_to = approved_date_range[2];
+                    }
+
+                    data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' +
+                        filter_date_to;
+                }
+
+                salesPlanDataTable.ajax.url(data).load();
+            });
+        });
+
+        function resetFilter() {
+
+            $('#form_date').val('');
+            $('#to_date').val('');
+            flatpicker_to_date.clear();
+            flatpicker_form_date.clear();
+
+            $('#apply_filter').trigger('click');
+
         }
-        if (form_date) {
-            var approved_date_range = form_date.split(' ');
-
-            if (approved_date_range[0]) {
-                filter_date_from = approved_date_range[0];
-                filter_date_to = approved_date_range[0];
-            }
-
-            if (approved_date_range[2]) {
-                filter_date_to = approved_date_range[2];
-            }
-
-            data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' +
-                filter_date_to;
-        }
-
-        salesPlanDataTable.ajax.url(data).load();
-    });
-});
-
-function resetFilter() {
-
-$('#form_date').val('');
-$('#to_date').val('');
-flatpicker_to_date.clear();
-flatpicker_form_date.clear();
-
-$('#apply_filter').trigger('click');
-
-}
     </script>
 @endsection

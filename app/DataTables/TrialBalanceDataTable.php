@@ -37,8 +37,7 @@ class TrialBalanceDataTable extends DataTable
                 return account_number_format($accountHead->code);
             })
             ->editColumn('created_at', function ($accountHead) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $accountHead->created_at)
-                ->format('m/d/Y');
+                return editDateColumn($accountHead->created_at);
             })
             ->editColumn('starting_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
@@ -46,7 +45,7 @@ class TrialBalanceDataTable extends DataTable
                     {
                         $credits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('credit')->sum();
                         $debits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('debit')->sum();
-                        if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 12)
+                        if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 60)
                         {
                             return number_format($credits - $debits);
                         }else{
@@ -72,7 +71,7 @@ class TrialBalanceDataTable extends DataTable
                 if (count($accountHead->accountLedgers) > 0) {
                     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
                     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
-                    if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 12)
+                    if((substr($accountHead->code, 0, 2) == 10) || substr($accountHead->code, 0, 2) == 12)
                     {
                         return number_format($credits - $debits);
                     }else{
@@ -147,7 +146,7 @@ class TrialBalanceDataTable extends DataTable
             Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(false),
-            Column::make('fitter_trial_balance')->title('Filter Trial Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('fitter_trial_balance')->title('Action')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
     }
 

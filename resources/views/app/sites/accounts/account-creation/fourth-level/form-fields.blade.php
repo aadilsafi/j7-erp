@@ -14,18 +14,18 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="second_level">Second Level Code <span
+                <label class="form-label fs-5" for="second_level">Third Level Code <span
                         class="text-danger">*</span></label>
-                <select class="select2" name="second_level" id="second_level">
-                    @foreach ($secondLevelAccount as $secondLevel)
-                        <option value="{{ $secondLevel->code }}">{{ $secondLevel->name }}({{ $secondLevel->code }})
+                <select class="select2" name="third_level" id="third_level">
+                    @foreach ($thirdLevelAccount as $thirdLevel)
+                        <option value="{{ $thirdLevel->code }}">{{ $thirdLevel->name }} ({{ $thirdLevel->code }})
                         </option>
                     @endforeach
                 </select>
-                @error('second_level')
+                @error('third_level')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <p class="m-0"><small class="text-muted">Select Second Level Account Code.</small></p>
+                    <p class="m-0"><small class="text-muted">Select Third Level Account Code.</small></p>
                 @enderror
             </div>
 
@@ -39,7 +39,7 @@
                 @error('account_code')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <p class="m-0"><small class="text-muted">Enter four Digit Code.</small></p>
+                    <p class="m-0"><small class="text-muted">Enter Four Digit Code.</small></p>
                 @enderror
             </div>
         </div>

@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.first-level.create', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.first-level.create', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', 'Create 1st Level Account')
@@ -30,7 +30,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create 1st Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.accounts.first-level.create', $site_id) }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.first-level.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

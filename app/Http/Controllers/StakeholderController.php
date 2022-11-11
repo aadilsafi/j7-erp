@@ -64,7 +64,11 @@ class StakeholderController extends Controller
             $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
-
+            $emtyNextOfKin = [
+                // 'stakeholder_id' => 0,
+                // 'kin_id' => 0,
+                // 'relation '=>'',
+            ];
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
@@ -74,9 +78,9 @@ class StakeholderController extends Controller
                 'country' => Country::all(),
                 'city' => City::all(),
                 'state' => State::all(),
+                'emtyNextOfKin' => $emtyNextOfKin,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
-            // dd($data);
             return view('app.sites.stakeholders.create', $data);
         } else {
             abort(403);
@@ -130,11 +134,15 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types']);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types','nextOfKin']);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
-
+                $emtyNextOfKin = [
+                    'stakeholder_id' => 0,
+                    'kin_id' => 0,
+                    'relation '=>'',
+                ];
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
@@ -145,7 +153,8 @@ class StakeholderController extends Controller
                     'country' => Country::all(),
                     'city' => City::all(),
                     'state' => State::all(),
-                    'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()]
+                    'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
+                    'emtyNextOfKin' =>$emtyNextOfKin,
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
                 // dd($data);

@@ -176,8 +176,8 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('user_id')->title('Sales Person'),
-            // Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
-            Column::computed('stakeholder_id')->title('Stakeholder'),
+            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            // Column::computed('stakeholder_id')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

@@ -247,7 +247,82 @@
         @endif
     </div>
 </div>
+{{-- next-of-kin-list --}}
+<div class="card" id="div-next-of-kin" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Next Of Kins</h3>
+    </div>
+    <div class="card-body">
+        <div class="next-of-kin-list">
+            <div data-repeater-list="next-of-kins">
+                @forelse ((isset($stakeholder) && count($stakeholder->contacts) > 0 ? $stakeholder->contacts : old('contact-persons')) ?? $emptyRecord as $key => $oldContactPersons)
+                    <div data-repeater-item>
+                        <div class="card m-0">
+                            <div class="card-header pt-0">
+                                <h3>Next Of Kins</h3>
 
+                                <button
+                                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                    data-repeater-delete id="delete-next-of-kin" type="button">
+                                    <i data-feather="x" class="me-25"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="full_name_{{ $key }}">Full
+                                                Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('full_name') is-invalid @enderror"
+                                                id="full_name_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][full_name]"
+                                                placeholder="Stakeholder Name"
+                                                value="{{ $oldContactPersons['full_name'] }}" />
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="father_name">Father Name</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('father_name') is-invalid @enderror"
+                                                id="father_name_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][father_name]"
+                                                placeholder="Father Name"
+                                                value="{{ $oldContactPersons['father_name'] }}" />
+                                        </div>
+
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="occupation">Occupation</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('occupation') is-invalid @enderror"
+                                                id="occupation_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][occupation]"
+                                                placeholder="Occupation"
+                                                value="{{ $oldContactPersons['occupation'] }}" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="first-contact-person" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{-- contacts --}}
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
         <h3>Contact Persons</h3>

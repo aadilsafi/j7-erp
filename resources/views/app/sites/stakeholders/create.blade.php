@@ -173,12 +173,23 @@
                 containerCssClass: "select-lg",
             }).on('select2:select', function(e) {
                 var data = e.params.data;
-                console.log(data.id);
-
                 if (data.id == 'C') {
                     $('#div-next-of-kin').show();
                 } else {
                     $('#div-next-of-kin').hide();
+                }
+            });
+
+            $(".next-of-kin-list").repeater({
+                // initEmpty: true,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
                 }
             });
 
@@ -224,6 +235,9 @@
             @endphp
             @if (!isset($data['contact-persons']))
                 $('#delete-contact-person').trigger('click');
+            @endif
+            @if (!isset($data['next-of-kin']))
+                $('#delete-next-of-kin').trigger('click');
             @endif
         });
     </script>

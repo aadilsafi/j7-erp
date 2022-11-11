@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                width: calc(20% - 0.5em);
-                                                            } */
+                                                                    width: calc(20% - 0.5em);
+                                                                } */
     </style>
 @endsection
 
@@ -178,6 +178,20 @@
             });
 
             var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
+
+            $(".next-of-kin-list").repeater({
+
+                initEmpty: areStakeholderContactsExist,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            })
 
             $(".contact-persons-list").repeater({
 

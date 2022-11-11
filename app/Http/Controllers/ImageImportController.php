@@ -144,7 +144,7 @@ class ImageImportController extends Controller
         $test = File::delete(public_path('app-assets/images/Import/' . $file));
         if ($test) {
             return apiSuccessResponse();
-        }else{
+        } else {
             return apiErrorResponse();
         }
     }

@@ -2,20 +2,22 @@
 
 namespace App\Imports;
 
+use App\Models\BacklistedStakeholder;
+use App\Models\BlacklistedStakeholder;
 use App\Models\TempFloor;
 use App\Models\TempStakeholder;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\RemembersRowNumber;
+use Maatwebsite\Excel\Validators\Failure;
 
 class StakeholdersImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
 {
-    use Importable;
+    use Importable, RemembersRowNumber;
 
     private $selectedFields;
 
@@ -26,6 +28,15 @@ class StakeholdersImport implements ToModel, WithChunkReading, WithBatchInserts,
 
     public function model(array $row)
     {
+
+        $blacklisted = BacklistedStakeholder::where('cnic', $row['cnic'])
+            ->first();
+        if ($blacklisted) {
+            $error = ['This CNIC is Blacklisted'];
+            $failures[] = new Failure($this->getRowNumber(), 'cnic', $error, $row);
+
+            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+        }
         return new TempStakeholder(
             [
                 'full_name' => $row['full_name'],
@@ -41,8 +52,13 @@ class StakeholdersImport implements ToModel, WithChunkReading, WithBatchInserts,
                 'is_vendor' => $row['is_vendor'],
                 'is_customer' => $row['is_customer'],
                 'is_kin' => $row['is_kin'],
-                'parent_cnic' => $row['parent_cnic'],
-                'relation' => $row['relation'],
+                'parent_cnic' => json_encode($row['parent_cnic']),
+                'relation' => json_encode($row['relation']),
+                'country' => $row['country'],
+                'state' => $row['state'],
+                'city' => $row['city'],
+                'optional_contact_number' => json_encode($row['optional_contact_number']),
+                'nationality' => $row['nationality'],
             ]
         );
     }
@@ -73,6 +89,7 @@ class StakeholdersImport implements ToModel, WithChunkReading, WithBatchInserts,
             'is_kin' => ['required', 'in:yes,no'],
             'parent_cnic' => ['sometimes'],
             'relation' => ['sometimes'],
+            'country' => ['required'],
         ];
     }
     // public function rules(): array

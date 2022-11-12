@@ -827,6 +827,7 @@ class StakeholderController extends Controller
                         $kins[$key]['relation'] = $parentsRelations[$key][$c];
                     }
                     $stakeholder_kins = StakeholderNextOfKin::create($kins[$key]);
+                    $is_kins = false;
                 }
             }
         });

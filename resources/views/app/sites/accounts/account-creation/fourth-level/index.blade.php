@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.fourth-level.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.fourth-level.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', '4th Level Account')

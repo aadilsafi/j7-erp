@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.third-level.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.third-level.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', '3rd Level Account')
@@ -33,7 +33,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">3rd Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.accounts.third-level.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.third-level.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

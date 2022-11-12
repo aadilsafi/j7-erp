@@ -74,7 +74,7 @@ class FourthLevelAccountsDatatable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->newQuery()->with('modelable')->where('level', 4)->orderBy('level', 'asc');
+        return $model->newQuery()->with('modelable')->where('level', 4)->orderBy('code', 'asc');
     }
 
     public function html(): HtmlBuilder
@@ -153,8 +153,8 @@ class FourthLevelAccountsDatatable extends DataTable
                 // ],
             ])
             ->orders([
-                [4, 'asc'],
-                [4, 'desc'],
+                // [4, 'asc'],
+                // [4, 'desc'],
             ]);
     }
 

@@ -42,9 +42,9 @@ class StakeholderDataTable extends DataTable
             ->editColumn('cnic', function ($stakeholder) {
                 return cnicFormat($stakeholder->cnic);
             })
-            // ->editColumn('relation', function ($stakeholder) {
-            //         return  $stakeholder->relation  ? $stakeholder->relation  : '-';
-            // })
+            ->editColumn('nationality', function ($stakeholder) {
+                    return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
+            })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
             })
@@ -169,6 +169,7 @@ class StakeholderDataTable extends DataTable
             Column::make('full_name')->title('Name'),
             Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
+            Column::make('nationality')->title('Nationality'),
             Column::make('contact')->title('Contact'),
             // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
             // Column::make('relation')->title('Relation'),

@@ -748,6 +748,7 @@ Route::group([
                     //trial-balance
                     Route::group(['prefix' => 'trial-balance', 'as' => 'trial-balance.'], function () {
                         Route::get('/', [TrialBalanceController::class, 'index'])->name('index');
+                        Route::get('/filter-trial-blance/{account_head_code_id}', [TrialBalanceController::class, 'filter'])->name('filter-trial-blance');
                     });
                     // Accounts ledger
                     Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {
@@ -775,7 +776,7 @@ Route::group([
 
         Route::get('ajax-import-floor.get.input', [FloorController::class, 'getUnitInput'])->name('ajax-import-floor.get.input');
         Route::get('ajax-import-floor.error.inputs', [FloorController::class, 'UpdateErrorInput'])->name('ajax-import-floor.error.inputs');
-        Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getUnitInput'])->name('ajax-import-stakeholders.get.input');
+        Route::get('ajax-import-stakeholders.get.input', [StakeholderController::class, 'getInput'])->name('ajax-import-stakeholders.get.input');
         Route::get('ajax-import-types.get.input', [TypeController::class, 'getTypeInput'])->name('ajax-import-types.get.input');
         Route::get('ajax-import-additional-costs.get.input', [AdditionalCostController::class, 'getInput'])->name('ajax-import-additional-costs.get.input');
         Route::get('ajax-import-units.get.input', [UnitController::class, 'getInput'])->name('ajax-import-units.get.input');

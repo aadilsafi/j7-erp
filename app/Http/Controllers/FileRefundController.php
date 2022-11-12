@@ -206,7 +206,12 @@ class FileRefundController extends Controller
             if ($customer_payable_account_code == null) {
                 $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
                 $stakeholderType = collect($stakeholderType)->last();
-                $customer_payable_account_code = $stakeholderType->payable_account + 1;
+                if($stakeholderType == null){
+                    $customer_payable_account_code = '20201010001003';
+                }
+                else{
+                    $customer_payable_account_code = $stakeholderType->payable_account + 1;
+                }
 
                 // add payable code to stakeholder type
                 $stakeholderPayable = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();

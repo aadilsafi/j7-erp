@@ -204,7 +204,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
         return [
             Column::computed('DT_RowIndex')->title('#'),
             Column::computed('origin')->title('Origin'),
-            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center'),
+            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center')->orderable(false),
             Column::computed('unit')->name('salesPlan.unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap text-center'),
             Column::computed('account_head_code_name')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap text-center'),
             Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),

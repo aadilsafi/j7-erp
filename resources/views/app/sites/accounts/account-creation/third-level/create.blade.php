@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.first-level.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.accounts.third-level.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create 1st Level Account')
+@section('page-title', 'Create 3rd Level Account')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -28,9 +28,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create 1st Level Account</h2>
+                <h2 class="content-header-title float-start mb-0">Create 3rd Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.accounts.first-level.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.third-level.create', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -39,15 +39,17 @@
 
 @section('content')
     <form class="form form-vertical"
-        action="{{ route('sites.settings.accounts.first-level.store', ['site_id' => encryptParams($site_id)]) }}"
-        method="POST" id="firstLevelAccount">
+        action="{{ route('sites.settings.accounts.third-level.store', ['site_id' => encryptParams($site_id)]) }}"
+        method="POST" id="thirdLevelAccount">
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
 
-                {{ view('app.sites.accounts.account-creation.first-level.form-fields') }}
+                {{ view('app.sites.accounts.account-creation.third-level.form-fields', [
+                    'secondLevelAccount' => $secondLevelAccount,
+                ]) }}
 
             </div>
 
@@ -64,7 +66,7 @@
                                     </button>
                                 </div>
                                 <div class="col-md-12">
-                                    <a href="{{ route('sites.settings.accounts.first-level.index', ['site_id' => encryptParams($site_id)]) }}"
+                                    <a href="{{ route('sites.settings.accounts.third-level.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
                                         {{ __('lang.commons.cancel') }}
@@ -88,7 +90,7 @@
 
 @section('custom-js')
     <script>
-        var validator = $("#firstLevelAccount").validate({
+        var validator = $("#thirdLevelAccount").validate({
             rules: {
                 'account_code': {
                     required: true,
@@ -96,7 +98,10 @@
                     maxlength: 2,
                     minlength: 2,
                 },
-                'name' :{
+                'name': {
+                    required: true,
+                },
+                'second_level': {
                     required: true,
                 }
             },

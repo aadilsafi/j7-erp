@@ -31,6 +31,7 @@ class AccountLedger extends Model
     ];
 
     protected $casts = [
+        'account_head_code'=> 'string',
         'site_id' => 'integer',
         'sales_plan_id' => 'integer',
         'receipt_id' => 'integer',
@@ -58,7 +59,7 @@ class AccountLedger extends Model
 
     public function salesPlan()
     {
-        return $this->belongsTo(SalesPlan::class, 'sales_plan_id', 'id')->with('unit', 'unit.floor');
+        return $this->belongsTo(SalesPlan::class, 'sales_plan_id', 'id')->with('unit', 'unit.floor' ,'stakeholder');
     }
 
     public function receipt()

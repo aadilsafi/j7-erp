@@ -74,7 +74,7 @@ class SecondLevelAccountsDatatable extends DataTable
      */
     public function query(AccountHead $model): QueryBuilder
     {
-        return $model->newQuery()->with('modelable')->where('level', 2)->orderBy('level', 'asc');
+        return $model->newQuery()->with('modelable')->where('level', 2)->orderBy('code', 'asc');
     }
 
     public function html(): HtmlBuilder
@@ -153,8 +153,8 @@ class SecondLevelAccountsDatatable extends DataTable
                 // ],
             ])
             ->orders([
-                [4, 'asc'],
-                [4, 'desc'],
+                // [4, 'asc'],
+                // [4, 'desc'],
             ]);
     }
 

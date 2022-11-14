@@ -46,6 +46,6 @@ class TrialBalanceController extends Controller
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
 
-        return jo
+        
     }
 }

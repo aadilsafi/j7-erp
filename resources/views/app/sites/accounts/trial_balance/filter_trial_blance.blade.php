@@ -226,7 +226,7 @@
                     filter_date_to = '';
                 let to_date = $('#to_date').val();
 
-                let data = '?';
+                let data_data = '';
                 if (to_date) {
                     let generated_at_date_range = to_date.split(' ');
 
@@ -239,10 +239,25 @@
                         filter_date_to = generated_at_date_range[2];
                     }
 
-                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
+                    data_data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
                         filter_date_to;
                 }
+                console.log(data_data);
+        let url = "{{ route('sites.accounts.trial-balance.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
+        var _token = '{{ csrf_token() }}';
+        $.ajax({
+            url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'date_filter': data_data,
+                    'to_date': to_date,
+                    '_token': _token
+                },
+            success: function(data) {
                 console.log(data);
+            }
+        });
                 
             });
         });

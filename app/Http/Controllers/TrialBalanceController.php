@@ -30,11 +30,6 @@ class TrialBalanceController extends Controller
     }
     public function filter(Request $request, $site_id, $account_head_code_id)
     {
-        // if($request->ajax())
-        // {
-        //     dd($site_id, $account_head_code_id);
-
-        // }
         $account_ledgers = AccountLedger::where('account_head_code', decryptParams($account_head_code_id))->get();
         $account_head = AccountHead::where('code', decryptParams($account_head_code_id))->first();
         $data = [
@@ -48,6 +43,9 @@ class TrialBalanceController extends Controller
 
     public function filterTrialBalance(Request $request)
     {
-        dd($request->all());
+        $start_date = substr($request->to_date, 0, 10);
+        $end_date =  substr($request->to_date, 14, 10);
+
+        return jo
     }
 }

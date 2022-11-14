@@ -750,7 +750,7 @@ Route::group([
                         Route::get('/', [TrialBalanceController::class, 'index'])->name('index');
                         Route::get('/filter-trial-blance/{account_head_code_id}', [TrialBalanceController::class, 'filter'])->name('filter-trial-blance');
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                            Route::get('filter-data-trial-balance', [TrialBalanceController::class, 'filterTrialBalance'])->name('filter-data-trial-balance');
+                            Route::Post('filter-data-trial-balance', [TrialBalanceController::class, 'filterTrialBalance'])->name('filter-data-trial-balance');
                         });
                     });
                     // Accounts ledger

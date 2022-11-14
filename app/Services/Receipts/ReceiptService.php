@@ -374,7 +374,6 @@ class ReceiptService implements ReceiptInterface
                 'site_id' => $site_id,
                 'id' => $id[$i],
             ])->update($data);
-
         }
         return true;
     }
@@ -385,6 +384,8 @@ class ReceiptService implements ReceiptInterface
         $model = new TempReceipt();
         $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
+
+        $url = [];
 
         foreach ($tempdata as $key => $items) {
             foreach ($tempCols as $k => $field) {
@@ -431,15 +432,8 @@ class ReceiptService implements ReceiptInterface
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
-            // if ($data[$key]['mode_of_payment'] == 'cheque') {
-            //     $url = $data[$key]['image_url'];
-            //     // $info = pathinfo($url);
-            //     // $contents = file_get_contents($url);
-            //     // $file = '/tmp/' . $info['basename'];
-            //     // file_put_contents($file, $contents);
-            //     // $uploaded_file = new UploadedFile($file, $info['basename']);
-            //     // dd($uploaded_file);
-            // }
+            $url = $data[$key]['image_url'];
+
             unset($data[$key]['unit_short_label']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
@@ -451,7 +445,6 @@ class ReceiptService implements ReceiptInterface
             unset($data[$key]['amount']);
             unset($data[$key]['bank_name']);
             unset($data[$key]['image_url']);
-
 
             $receipt = Receipt::create($data[$key]);
 
@@ -470,15 +463,12 @@ class ReceiptService implements ReceiptInterface
             if ($receipt->mode_of_payment == "Online") {
                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
             }
-            // if ($data[$key]['mode_of_payment'] == 'cheque') {
-
-            //     $receipt->addMedia('https://1drv.ms/u/s!ApRb6T4BrwvhalwSjRL-VVgxTBg?e=Fzx32t')->toMediaCollection('receipt_attachments');
-            //     changeImageDirectoryPermission();
-            // }
+            if ($receipt->mode_of_payment == "Cheque") {
+                $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
+                changeImageDirectoryPermission();
+            }
             $update_installments =  $this->updateInstallments($receipt);
         }
-
-        // dd($data);
 
         return $receipt;
     }

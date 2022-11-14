@@ -448,6 +448,7 @@ class SalesPlanImportController extends Controller
                     ->first();
 
                 $data[$key]['sales_plan_id'] = $salePlan->id;
+
                 if ($data[$key]['installment_no'] == 0) {
                     $data[$key]['details'] = Str::title($data[$key]['type']);
                 } else {
@@ -458,7 +459,6 @@ class SalesPlanImportController extends Controller
                     }
                 }
                 $data[$key]['date'] = $data[$key]['due_date'];
-                $data[$key]['remarks'] = Str::title(Str::title(str_replace('-', ' ', $data[$key]['status'])));
 
                 $data[$key]['amount'] = $data[$key]['total_amount'];
                 $data[$key]['installment_order'] = $data[$key]['installment_no'];

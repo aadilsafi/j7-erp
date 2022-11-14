@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('floor_short_label');
             $table->string('name');
-            $table->float('width');
-            $table->float('length');
+            $table->float('width')->default(0)->nullable();
+            $table->float('length')->default(0)->nullable();
             $table->string('unit_short_label');
             $table->float('net_area');
             $table->float('gross_area');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->float('total_price');
             $table->string('unit_type_slug');
             $table->string('status');
-            $table->string('parent_unit_short_label');
+            $table->string('parent_unit_short_label')->nullable();
             $table->string('is_corner')->default('no');
             $table->string('is_facing')->default('no');
             $table->string('additional_costs_name')->nullable();

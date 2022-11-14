@@ -8,15 +8,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\Importable;
-use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-
-class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     use Importable;
 
@@ -33,7 +29,7 @@ class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, 
         return new TempFloor([
             $this->selectedFields[0] => $row['name'],
             $this->selectedFields[1] => $row['floor_area'],
-            $this->selectedFields[2] => $row['short_label'],
+            $this->selectedFields[2] => $row['floor_short_label'],
         ]);
     }
 
@@ -51,7 +47,7 @@ class FloorImportSimple implements ToModel, WithChunkReading, WithBatchInserts, 
     public function rules(): array
     {
         return [
-            'short_label' =>  ['required', 'unique:App\Models\Floor,short_label', 'distinct'],
+            'floor_short_label' =>  ['required', 'unique:App\Models\Floor,short_label', 'distinct'],
             'name' =>  ['required'],
             'floor_area' =>  ['required', 'numeric'],
         ];

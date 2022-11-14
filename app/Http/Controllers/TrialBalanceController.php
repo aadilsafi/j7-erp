@@ -40,4 +40,12 @@ class TrialBalanceController extends Controller
 
         return view('app.sites.accounts.trial_balance.filter_trial_blance', $data);
     }
+
+    public function filterTrialBalance(Request $request)
+    {
+        $start_date = substr($request->to_date, 0, 10);
+        $end_date =  substr($request->to_date, 14, 10);
+
+        
+    }
 }

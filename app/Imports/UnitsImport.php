@@ -13,8 +13,9 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
 use Maatwebsite\Excel\Validators\Failure;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
-class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
+class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation, WithCalculatedFormulas
 {
     use Importable, RemembersRowNumber;
 
@@ -28,7 +29,7 @@ class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHe
 
     public function model(array $row)
     {
-        if (strtolower($row['additional_costs_name']) != 'null' && strtolower($row['additional_costs_name']) != '' ) {
+        if (strtolower($row['additional_costs_name']) != 'null' && strtolower($row['additional_costs_name']) != '') {
             $adCosts = AdditionalCost::where('slug', $row['additional_costs_name'])
                 ->first();
             if (!$adCosts) {
@@ -43,13 +44,13 @@ class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHe
         return new TempUnit([
             'floor_short_label' => $row['floor_short_label'],
             'name' => $row['name'],
-            'width' => $row['width'],
-            'length' => $row['length'],
+            'width' => $row['width'] ?? 0,
+            'length' => $row['length'] ?? 0,
             'unit_short_label' => $row['unit_short_label'],
             'net_area' => $row['net_area'],
             'gross_area' => $row['gross_area'],
             'price_sqft' => $row['price_sqft'],
-            'total_price' => $row['total_price'],
+            'total_price' => $row['gross_area'] * $row['price_sqft'],
             'unit_type_slug' => $row['unit_type_slug'],
             'status' => 'Open',
             'parent_unit_short_label' => $row['parent_unit_short_label'],
@@ -61,12 +62,12 @@ class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHe
 
     public function chunkSize(): int
     {
-        return 5000;
+        return 50;
     }
 
     public function batchSize(): int
     {
-        return 5000;
+        return 50;
     }
 
 
@@ -80,7 +81,7 @@ class UnitsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHe
             'gross_area' =>  ['required', 'numeric', 'gte:*.net_area'],
             'price_sqft' =>  ['required', 'gt:0'],
             'unit_type_slug' =>  ['required', 'exists:App\Models\Type,slug'],
-            'parent_unit_short_label' =>  ['required'],
+            // 'parent_unit_short_label' =>  ['required'],
             'is_corner' =>  ['required'],
             'is_facing' =>  ['required'],
             // 'additional_costs_name' =>  ['sometimes','nullable','exists:App\Models\AdditionalCost,slug'],

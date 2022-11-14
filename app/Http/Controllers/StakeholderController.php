@@ -836,7 +836,7 @@ class StakeholderController extends Controller
                     $kins[$c]['site_id'] = decryptParams($site_id);
                     $kins[$c]['stakeholder_id'] = $parent->id;
                     $kins[$c]['kin_id'] = $stakeholder->id;
-                    $kins[$c]['relation'] = Str::replace('"','',trim($parentsRelations[$key][$c]));
+                    $kins[$c]['relation'] = Str::replace('"', '', trim($parentsRelations[$key][$c]));
 
                     StakeholderNextOfKin::create($kins[$c]);
                 }
@@ -844,7 +844,7 @@ class StakeholderController extends Controller
                 $is_kins[$key] = false;
             }
         }
-   
+
         // });
         TempStakeholder::query()->truncate();
 

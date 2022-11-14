@@ -285,7 +285,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.types.importTypes',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Unit Types',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -356,7 +356,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.additional-costs.importAdcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Additional Costs',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

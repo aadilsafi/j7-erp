@@ -240,6 +240,36 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.floors.importFloors')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.importFloors', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='layers'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.types.importTypes')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.types.importTypes') || request()->routeIs('sites.types.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.types.importTypes', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='menu'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Types</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.additional-costs.importAdcosts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.additional-costs.importAdcosts') || request()->routeIs('sites.additional-costs.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.additional-costs.importAdcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='dollar-sign'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Additional Costs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </li>
                         @endcan

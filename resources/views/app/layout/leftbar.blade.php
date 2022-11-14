@@ -1,6 +1,5 @@
 <!-- BEGIN: Main Menu-->
-<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true"
-    style="width: fit-content;">
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item me-auto">
@@ -304,8 +303,8 @@
                                                     <a class="d-flex align-items-center"
                                                         href="{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => encryptParams($site_id)]) }}">
                                                         <i class="bi bi-calculator"></i>
-                                                        <span class="menu-title text-truncate" data-i18n="Types">Sales Plan
-                                                            Additional Costs</span>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Additional
+                                                            Costs</span>
                                                     </a>
                                                 </li>
                                             @endcan

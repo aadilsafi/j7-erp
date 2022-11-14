@@ -201,7 +201,7 @@
 
                         if (response.status) {
                             if (response.data) {
-                                stakeholderData = response.data;
+                                stakeholderData = response.data[0];
                             }
 
                             $('#stackholder_full_name').val(stakeholderData.full_name).attr(

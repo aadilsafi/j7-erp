@@ -228,8 +228,13 @@ class StakeholderController extends Controller
     public function ajaxGetById(Request $request, $site_id, $stakeholder_id)
     {
         if ($request->ajax()) {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id, ['stakeholder_types']);
-            return apiSuccessResponse($stakeholder);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id, ['stakeholder_types','nextOfKin']);
+            $nextOfKinId = StakeholderNextOfKin::where('stakeholder_id', $stakeholder_id)->get();
+            $nextOfKin = [];
+            foreach ($nextOfKinId as $key => $value) {
+                $nextOfKin[] = $this->stakeholderInterface->getById($site_id, $value->kin_id, ['stakeholder_types']);
+            }
+            return apiSuccessResponse([$stakeholder, $nextOfKin]);
         } else {
             abort(403);
         }

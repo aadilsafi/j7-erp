@@ -173,7 +173,7 @@
                                                                             @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
                                                                                 @if (($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
                                                                                     @php
-                                                                                        $value_55 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
+                                                                                        $value_55 += intval(trim(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum(),'-') - trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'),'-'));
                                                                                     @endphp
                                                                                 @endif
                                                                             @endforeach
@@ -213,7 +213,7 @@
                                                                                             @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
                                                                                                 @if (($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
                                                                                                     @php
-                                                                                                        $value_44 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
+                                                                                                        $value_44 += intval(trim(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum(),'-') - trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'),'-'));
                                                                                                     @endphp
                                                                                                 @endif
                                                                                             @endforeach

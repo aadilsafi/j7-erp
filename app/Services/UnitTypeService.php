@@ -58,7 +58,7 @@ class UnitTypeService implements UnitTypeInterface
             $type->modelable()->create([
                 'site_id' => decryptParams($site_id),
                 'code' => $accountCode,
-                'name' => 'Accounts Receviable - ' . $inputs['type_name'],
+                'name' => 'Accounts Receivable - ' . $inputs['type_name'],
                 'level' => 3,
             ]);
         }

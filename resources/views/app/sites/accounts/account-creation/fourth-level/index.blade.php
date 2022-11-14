@@ -33,7 +33,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">4th Level Account</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.accounts.fourth-level.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.settings.accounts.fourth-level.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

@@ -47,7 +47,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 1,
                 'modelable_type' => 'App\Models\Type',
                 'code' => '102020',
-                'name' => 'Accounts Receviable - Shops',
+                'name' => 'Accounts Receivable - Shops',
                 'level' => 3,
             ],
 
@@ -57,7 +57,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 1,
                 'modelable_type' => 'App\Models\Unit',
                 'code' => '1020200001',
-                'name' => 'GF-01 Receviable',
+                'name' => 'GF-01 Receivable',
                 'level' => 4,
             ],
             [
@@ -74,7 +74,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 2,
                 'modelable_type' => 'App\Models\Unit',
                 'code' => '1020200002',
-                'name' => 'GF-02 Receviable',
+                'name' => 'GF-02 Receivable',
                 'level' => 4,
             ],
             [
@@ -92,7 +92,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 3,
                 'modelable_type' => 'App\Models\Unit',
                 'code' => '1020200003',
-                'name' => 'GF-03 Receviable',
+                'name' => 'GF-03 Receivable',
                 'level' => 4,
             ],
             [
@@ -100,7 +100,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 4,
                 'modelable_type' => 'App\Models\Unit',
                 'code' => '1020200004',
-                'name' => 'GF-04 Receviable',
+                'name' => 'GF-04 Receivable',
                 'level' => 4,
             ],
 
@@ -109,7 +109,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 5,
                 'modelable_type' => 'App\Models\Unit',
                 'code' => '1020200005',
-                'name' => 'GF-05 Receviable',
+                'name' => 'GF-05 Receivable',
                 'level' => 4,
             ],
 
@@ -119,7 +119,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 2,
                 'modelable_type' => 'App\Models\Type',
                 'code' => '102021',
-                'name' => 'Accounts Receviable - Hotel Suites',
+                'name' => 'Accounts Receivable - Hotel Suites',
                 'level' => 3,
             ],
             [
@@ -127,7 +127,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '1020210001',
-                'name' => '3F-01 Receviable',
+                'name' => '3F-01 Receivable',
                 'level' => 4,
             ],
             [
@@ -145,7 +145,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => 3,
                 'modelable_type' => 'App\Models\Type',
                 'code' => '102022',
-                'name' => 'Accounts Receviable - Offices',
+                'name' => 'Accounts Receivable - Offices',
                 'level' => 3,
             ],
 

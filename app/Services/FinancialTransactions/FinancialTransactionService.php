@@ -558,7 +558,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         try {
             DB::beginTransaction();
 
-            $fileTitleTransfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
+            $fileTitleTransfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $sales_plan = SalesPlan::find($fileTitleTransfer->sales_plan_id);
             $receipt = Receipt::where('sales_plan_id', $fileTitleTransfer->sales_plan_id)->first();
             //

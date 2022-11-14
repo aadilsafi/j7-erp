@@ -33,6 +33,9 @@
             font-size: 15px !important;
             color: #7367f0 !important;
         }
+        #stakeholderNextOfKin{
+            display: none;
+        }
     </style>
 @endsection
 
@@ -67,8 +70,7 @@
                     'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
 
             </div>
@@ -218,11 +220,11 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
-
                         if (response.status) {
                             if (response.data) {
-                                stakeholderData = response.data;
+                                stakeholderData = response.data[0];
                             }
+
                             // $('#stackholder_id').val(stakeholderData.id);
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
@@ -233,6 +235,24 @@
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
                             $('#stackholder_comments').text(stakeholderData.comments);
+
+                            $('#stackholder_next_of_kin').empty();
+                            if (response.data[1].length > 0) {
+                                $('#stakeholderNextOfKin').show();
+                                $.each(response.data[1], function(i, item) {
+
+                                    $('#stackholder_next_of_kin').append($('<option>', {
+                                        value: item.id,
+                                        text: item.full_name + ' s/o ' +
+                                            item.father_name + ' ,' + item
+                                            .cnic,
+                                    }));
+
+                                });
+                            }
+                            else{
+                                $('#stakeholderNextOfKin').hide();
+                            }
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
@@ -652,8 +672,8 @@
                     required: true
                 },
                 'stackholder[cnic]': {
-                    minlength:13,
-                    maxlength:13,
+                    minlength: 13,
+                    maxlength: 13,
                 },
 
                 // 4. SALES SOURCE

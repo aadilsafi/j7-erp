@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('stakeholder_id')->constrained();
+            $table->foreignId('kin_id')->nullable();
             $table->text('stakeholder_data')->nullable();
             $table->double('unit_price')->default(0);
             $table->double('total_price')->default(0);

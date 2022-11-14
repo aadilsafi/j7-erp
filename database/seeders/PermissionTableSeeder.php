@@ -665,7 +665,7 @@ class PermissionTableSeeder extends Seeder
             //sales Plan Import
             [
                 'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -694,7 +694,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Additional Costs Import
             [
                 'name' => 'sites.floors.spadcostsImport.importspadcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Additional Costs file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -1,5 +1,6 @@
 <!-- BEGIN: Main Menu-->
-<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
+<div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true"
+    style="width: fit-content;">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
             <li class="nav-item me-auto">
@@ -280,6 +281,36 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.floors.SalesPlanImport.importSalesPlan')
+                                        <li class="nav-item ">
+                                            <a class="d-flex align-items-center" href="javascript:void(0)">
+                                                <i class="bi bi-calculator"></i>
+                                                <span class="menu-title text-truncate">
+                                                    Sales Plan</span>
+                                            </a>
+                                            <ul class="menu-content">
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.SalesPlanImport.importSalesPlan') || request()->routeIs('sites.floors.SalesPlanImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calculator"></i>
+                                                        <span class="menu-title text-truncate" data-i18n="Types">Sales Plan</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            @can('sites.floors.spadcostsImport.importspadcosts')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calculator"></i>
+                                                        <span class="menu-title text-truncate" data-i18n="Types">Sales Plan
+                                                            Additional Costs</span>
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
                                 </ul>
                             </li>
                         @endcan

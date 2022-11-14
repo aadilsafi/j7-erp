@@ -208,7 +208,7 @@ class FileTitleTransferController extends Controller
         DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
             // Account ledger transaction
             $transaction = $this->financialTransactionInterface->makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id);
-            dd($transaction);
+            // dd($transaction);
             $file_title_transfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $file_title_transfer->status = 1;
             $file_title_transfer->update();

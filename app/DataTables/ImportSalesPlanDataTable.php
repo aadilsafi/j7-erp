@@ -199,11 +199,7 @@ class ImportSalesPlanDataTable extends DataTable
                 'is_disable' => false,
                 'name' => 'validity'
             ])->render())->addClass('removeTolltip'),
-            Column::computed('status')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'status'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
+            Column::computed('status')->title('Status')->searchable(true)->addClass('removeTolltip'),
             Column::computed('comment')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,

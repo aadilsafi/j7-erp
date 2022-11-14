@@ -66,7 +66,6 @@ class SalesPlanService implements SalesPlanInterface
     public function store($site_id, $floor_id, $unit_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
-
             LogBatch::startBatch();
 
             $site = (new Site())->find($site_id);
@@ -184,6 +183,10 @@ class SalesPlanService implements SalesPlanInterface
                 'comments' => $inputs['comments']['custom'],
                 'status' => false,
             ];
+
+            if(isset($stakeholderInput['next_of_kin'])){
+                $sales_plan_data['kin_id'] = $stakeholderInput['next_of_kin'];
+            }
 
             $salesPlan = $this->model()->create($sales_plan_data);
 

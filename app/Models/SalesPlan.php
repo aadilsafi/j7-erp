@@ -15,6 +15,7 @@ class SalesPlan extends Model
         'unit_id',
         'user_id',
         'stakeholder_id',
+        'kin_id',
         'stakeholder_data',
         'unit_price',
         'total_price',

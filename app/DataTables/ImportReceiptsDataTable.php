@@ -122,7 +122,7 @@ class ImportReceiptsDataTable extends DataTable
             ->editColumn('image_url', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'image_url', 'inputtype' => 'number', 'value' => $data->image_url]
+                    ['id' => $data->id, 'field' => 'image_url', 'inputtype' => 'text', 'value' => $data->image_url]
                 );
             })
             ->editColumn('status', function ($data) {

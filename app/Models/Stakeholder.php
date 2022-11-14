@@ -55,6 +55,9 @@ class Stakeholder extends Model implements HasMedia
         'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
         'next-of-kins' => 'nullable|array',
+        'city_id' => 'nullable|numeric',
+        'state_id' => 'nullable|numeric',
+        'country_id' => 'nullable|numeric',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 

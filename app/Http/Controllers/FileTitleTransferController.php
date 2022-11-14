@@ -205,7 +205,7 @@ class FileTitleTransferController extends Controller
 
     public function ApproveFileTitleTransfer($site_id, $unit_id, $customer_id, $file_id)
     {
-        DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
+        // DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
             // Account ledger transaction
             $transaction = $this->financialTransactionInterface->makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id);
             // dd($transaction);
@@ -235,7 +235,7 @@ class FileTitleTransferController extends Controller
             //     $Receipt->phone_no = $stakeholder->contact;
             //     $Receipt->update();
             // }
-        });
+        // });
         return redirect()->route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Title Transfer Approved');
     }
 

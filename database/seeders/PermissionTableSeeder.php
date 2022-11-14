@@ -562,7 +562,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.unitsImport.importUnits',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Units file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -225,7 +225,7 @@
                                             class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='file'></i>
+                                                <i class="bi bi-images"></i>
                                                 <span class="menu-title text-truncate" data-i18n="Users">Images</span>
                                             </a>
                                         </li>
@@ -267,6 +267,16 @@
                                                 href="{{ route('sites.additional-costs.importAdcosts', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i data-feather='dollar-sign'></i>
                                                 <span class="menu-title text-truncate" data-i18n="Types">Additional Costs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.floors.unitsImport.importUnits')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.unitsImport.importUnits') || request()->routeIs('sites.floors.unitsImport.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.unitsImport.importUnits', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-shop-window"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Units</span>
                                             </a>
                                         </li>
                                     @endcan

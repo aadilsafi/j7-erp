@@ -724,7 +724,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Installments Import
             [
                 'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Installments file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

@@ -283,7 +283,7 @@
                                     @can('sites.floors.SalesPlanImport.importSalesPlan')
                                         <li class="nav-item ">
                                             <a class="d-flex align-items-center" href="javascript:void(0)">
-                                                <i class="bi bi-calculator"></i>
+                                                {{-- <i class="bi bi-calculator"></i> --}}
                                                 <span class="menu-title text-truncate">
                                                     Sales Plan</span>
                                             </a>
@@ -302,14 +302,47 @@
                                                     class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
                                                     <a class="d-flex align-items-center"
                                                         href="{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => encryptParams($site_id)]) }}">
-                                                        <i class="bi bi-calculator"></i>
+                                                        <i class="bi bi-currency-dollar"></i>
                                                         <span class="menu-title" data-i18n="Types">Sales Plan Additional
                                                             Costs</span>
                                                     </a>
                                                 </li>
                                             @endcan
+                                            @can('sites.floors.spInstallmentsImport.ImportInstallments')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spInstallmentsImport.ImportInstallments') || request()->routeIs('sites.floors.spInstallmentsImport.storePreviewInstallments') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calendar-date"></i>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Installments
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            @endcan
                                         </ul>
                                     </li>
+                                    @can('sites.banks.importBanks')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.banks.importBanks') || request()->routeIs('sites.banks.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.banks.importBanks', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-bank2"></i>
+                                                <span class="menu-title" data-i18n="Types">Bank
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.receipts.importReceipts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.receipts.importReceipts') || request()->routeIs('sites.receipts.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.receipts.importReceipts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-wallet2"></i>
+                                                <span class="menu-title" data-i18n="Types">Receipts
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </li>
                         @endcan

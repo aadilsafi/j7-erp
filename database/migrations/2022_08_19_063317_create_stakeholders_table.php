@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->foreignId('country_id')->default(1)->nullable();
-            $table->foreignId('state_id')->default(2)->nullable();
-            $table->foreignId('city_id')->default(4)->nullable();
+            $table->foreignId('state_id')->default(0)->nullable();
+            $table->foreignId('city_id')->default(0)->nullable();
             $table->string('nationality', 50)->default('pakistani');
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();

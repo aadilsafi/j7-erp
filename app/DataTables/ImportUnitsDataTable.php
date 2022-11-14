@@ -218,13 +218,6 @@ class ImportUnitsDataTable extends DataTable
                 'is_disable' => false,
                 'name' => 'total_price'
             ])->render())->addClass('removeTolltip'),
-
-            Column::computed('status')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'status'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-
             Column::computed('is_corner')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,

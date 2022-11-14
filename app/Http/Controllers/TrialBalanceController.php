@@ -30,6 +30,11 @@ class TrialBalanceController extends Controller
     }
     public function filter(Request $request, $site_id, $account_head_code_id)
     {
+        // if($request->ajax())
+        // {
+        //     dd($site_id, $account_head_code_id);
+
+        // }
         $account_ledgers = AccountLedger::where('account_head_code', decryptParams($account_head_code_id))->get();
         $account_head = AccountHead::where('code', decryptParams($account_head_code_id))->first();
         $data = [
@@ -39,5 +44,10 @@ class TrialBalanceController extends Controller
         ];
 
         return view('app.sites.accounts.trial_balance.filter_trial_blance', $data);
+    }
+
+    public function filterTrialBalance(Request $request)
+    {
+        dd($request->all());
     }
 }

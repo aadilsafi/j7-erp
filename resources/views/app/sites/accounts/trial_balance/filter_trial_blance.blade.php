@@ -123,17 +123,22 @@
                                     <tbody>
                                         @php
                                             $i = 1;
+                                            $starting_balance_index = 0;
+                                            $starting_balance = [];
                                             $ending_balance = 0;
                                         @endphp
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
                                                 @php
                                                     $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                                                    array_push($starting_balance,$ending_balance);
                                                 @endphp
                                                 <td>{{ $i }}</td>
                                                 <td>{{ account_number_format($account_ledger->account_head_code) }}</td>
                                                 @if ($i > 1)
-                                                    <td>{{ number_format(trim($ending_balance, '-')) }}</td>
+                                                    {{-- @dd($starting_balance_index); --}}
+                                                    <td>{{number_format($starting_balance[$starting_balance_index - 1])}}</td>
+
                                                 @else
                                                     <td>0</td>
                                                 @endif
@@ -148,6 +153,7 @@
                                             </tr>
                                             @php
                                                 $i++;
+                                                $starting_balance_index++;
                                             @endphp
                                         @endforeach
                                     </tbody>

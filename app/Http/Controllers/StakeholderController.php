@@ -101,6 +101,11 @@ class StakeholderController extends Controller
             if (!request()->ajax()) {
                 $inputs = $request->validated();
                 // dd($inputs);
+                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                //
+                if (isset($blackListedData)) {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
+                }
                 $record = $this->stakeholderInterface->store($site_id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -134,14 +139,14 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types','nextOfKin']);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin']);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
                 $emtyNextOfKin = [
                     'stakeholder_id' => 0,
                     'kin_id' => 0,
-                    'relation '=>'',
+                    'relation ' => '',
                 ];
                 $data = [
                     'site_id' => $site_id,
@@ -154,7 +159,7 @@ class StakeholderController extends Controller
                     'city' => City::all(),
                     'state' => State::all(),
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
-                    'emtyNextOfKin' =>$emtyNextOfKin,
+                    'emtyNextOfKin' => $emtyNextOfKin,
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
                 // dd($data);
@@ -182,7 +187,10 @@ class StakeholderController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-
+                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                if (isset($blackListedData)) {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
+                }
                 $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {

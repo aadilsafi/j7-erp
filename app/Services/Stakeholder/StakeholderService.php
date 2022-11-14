@@ -2,7 +2,9 @@
 
 namespace App\Services\Stakeholder;
 
+use App\DataTables\BlacklistedStakeholderDataTable;
 use App\Models\{
+    BacklistedStakeholder,
     Stakeholder,
     StakeholderContact,
     StakeholderNextOfKin,
@@ -53,7 +55,6 @@ class StakeholderService implements StakeholderInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
-
             $data = [
                 'site_id' => decryptParams($site_id),
                 'full_name' => $inputs['full_name'],
@@ -66,6 +67,9 @@ class StakeholderService implements StakeholderInterface
                 'address' => $inputs['address'],
                 'parent_id' => $inputs['parent_id'],
                 'comments' => $inputs['comments'],
+                'city_id' => $inputs['city_id'],
+                'country_id' => $inputs['country_id'],
+                'state_id' => $inputs['state_id'],
                 // 'relation' => $inputs['relation'],
             ];
             // dd($inputs);
@@ -242,6 +246,9 @@ class StakeholderService implements StakeholderInterface
                 'address' => $inputs['address'],
                 'parent_id' => $inputs['parent_id'],
                 'comments' => $inputs['comments'],
+                'city_id' => $inputs['city_id'],
+                'country_id' => $inputs['country_id'],
+                'state_id' => $inputs['state_id'],
                 // 'relation' => $inputs['relation'],
             ];
 

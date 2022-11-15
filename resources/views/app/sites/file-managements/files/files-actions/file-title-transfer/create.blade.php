@@ -355,9 +355,9 @@
                     },
                     'stackholder[cnic]': {
                         required: true,
-                        digits: true,
-                        maxlength: 13,
-                        minlength: 13
+                        // digits: true,
+                        // maxlength: 13,
+                        // minlength: 13
                     },
                     'stackholder[contact]': {
                         required: true
@@ -366,12 +366,12 @@
                         required: true
                     },
                 },
-                messages: {
-                    'stackholder[cnic]': {
-                        maxlength: "Cnic can't be greater then {0} digits without dashes",
-                        minlength: "Cnic can't be less then {0} digits without dashes",
-                    }
-                },
+                // messages: {
+                //     'stackholder[cnic]': {
+                //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+                //         minlength: "Cnic can't be less then {0} digits without dashes",
+                //     }
+                // },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",

@@ -317,9 +317,9 @@
                 },
                 'dealer[cnic]': {
                     required: true,
-                    digits: true,
-                    maxlength: 13,
-                    minlength: 13
+                    // digits: true,
+                    // maxlength: 13,
+                    // minlength: 13
                 },
                 'dealer[ntn]': {
                     required: true,

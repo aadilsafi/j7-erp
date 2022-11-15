@@ -388,7 +388,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $receipt = (new Receipt())->find($receipt_id);
             $bankAccount = $receipt->bank->account_number;
             $origin_number = AccountLedger::where('account_action_id',9)->get();
-            if(isset($origin_number->origin_number)){
+            if(isset($origin_number)){
                 $origin_number = collect($origin_number)->last();
                 $origin_number = (int)$origin_number->origin_number + 1;
             }

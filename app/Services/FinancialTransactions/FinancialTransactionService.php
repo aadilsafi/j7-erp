@@ -28,7 +28,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             ])->find($sales_plan_id);
 
 
-                $origin_number = AccountLedger::where('account_action_id',1)->get();
+                $origin_number = AccountLedger::get();
                 if(isset($origin_number)){
                     $origin_number = collect($origin_number)->last();
                     $origin_number = $origin_number->origin_number + 1;
@@ -73,13 +73,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $origin_number = AccountLedger::where('account_action_id',8)->get();
 
-            if(isset($origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = $origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
 
             // 1 disapproval sales plan entry
             $disapprovalAccount = AccountHead::where('name', 'Sales Plan Disapproval Account')->first()->code;
@@ -293,14 +294,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $receipt = (new Receipt())->find($receipt_id);
 
-            $origin_number = AccountLedger::where('account_action_id',2)->get();
-            if(isset($origin_number->origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = $origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
 
             // Cash Transaction
             $cashAccount = (new AccountingStartingCode())->where('site_id', $receipt->site_id)
@@ -343,14 +344,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
             $stakeholder = Stakeholder::where('cnic', $receipt->cnic)->first();
             $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholder->id)->where('type', 'C')->first();
-            $origin_number = AccountLedger::where('account_action_id',9)->get();
-            if(isset($origin_number->origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
 
             // Cheque Transaction
             $cashAccount = $clearanceAccout;
@@ -416,14 +417,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $receipt = (new Receipt())->find($receipt_id);
             $bankAccount = $receipt->bank->account_number;
-            $origin_number = AccountLedger::where('account_action_id',12)->get();
-            if(isset($origin_number->origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
             // bank Transaction
             $this->makeFinancialTransaction($receipt->site_id,$origin_number, $bankAccount, 12, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
@@ -459,14 +460,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $refundWithProfit = (int)$file_buy_back->amount_to_be_refunded;
             $onlyProfitAmount = $file_buy_back->amount_profit;
 
-            $origin_number = AccountLedger::where('account_action_id',3)->get();
-            if(isset($origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
 
             //1 Buyback account entry
             $buybackAccount = AccountHead::where('name', 'Buyback Account')->first()->code;
@@ -549,14 +550,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $refunded_amount = (int)$file_cancellation->amount_to_be_refunded + (int)$file_cancellation->cancellation_charges;
             $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
 
-            $origin_number = AccountLedger::where('account_action_id',6)->get();
-            if(isset($origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
 
             //1 Cancellation account entry
             $cancelationAccount = AccountHead::where('name', 'Cancellation Account')->first()->code;
@@ -633,14 +634,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $fileTitleTransfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $sales_plan = SalesPlan::find($fileTitleTransfer->sales_plan_id);
             $receipt = Receipt::where('sales_plan_id', $fileTitleTransfer->sales_plan_id)->first();
-            $origin_number = AccountLedger::where('account_action_id',7)->get();
-            if(isset($origin_number)){
-                $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
-            }
-            else{
-                $origin_number = '001';
-            }
+            $origin_number = AccountLedger::get();
+                if(isset($origin_number)){
+                    $origin_number = collect($origin_number)->last();
+                    $origin_number = $origin_number->origin_number + 1;
+                }
+                else{
+                    $origin_number = '001';
+                }
             //
             $stakeholderTypeB = StakeholderType::where(['stakeholder_id' => $fileTitleTransfer->transfer_person_id, 'type' => 'C'])->first();
             //

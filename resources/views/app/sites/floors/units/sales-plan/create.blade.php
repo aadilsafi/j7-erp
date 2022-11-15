@@ -33,7 +33,8 @@
             font-size: 15px !important;
             color: #7367f0 !important;
         }
-        #stakeholderNextOfKin{
+
+        #stakeholderNextOfKin {
             display: none;
         }
     </style>
@@ -117,6 +118,12 @@
                             <div class="row g-1">
                                 <div class="col-md-12">
                                     <div class="d-block mb-1">
+                                        <label class="form-label fs-5" for="created_date">Creation Date</label>
+                                        <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
+                                            class="form-control form-control-lg" />
+                                    </div>
+                                    <hr>
+                                    <div class="d-block mb-1">
                                         <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
                                         <input type="text" id="sales_plan_validity" name="sales_plan_validity"
                                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
@@ -176,6 +183,13 @@
 
 @section('custom-js')
     <script>
+        $("#created_date").flatpickr({
+            defaultDate: "today",
+            // minDate: "today",
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
         window['moment-range'].extendMoment(moment);
 
         var t = setTimeout(calculateInstallments, 1000),
@@ -249,8 +263,7 @@
                                     }));
 
                                 });
-                            }
-                            else{
+                            } else {
                                 $('#stakeholderNextOfKin').hide();
                             }
 
@@ -672,8 +685,9 @@
                     required: true
                 },
                 'stackholder[cnic]': {
-                    minlength: 13,
-                    maxlength: 13,
+                    // minlength: 13,
+                    // maxlength: 13,
+                    required: true,
                 },
 
                 // 4. SALES SOURCE

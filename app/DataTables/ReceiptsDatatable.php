@@ -55,7 +55,7 @@ class ReceiptsDatatable extends DataTable
                 return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
             ->editColumn('created_at', function ($receipt) {
-                return editDateColumn($receipt->created_at);
+                return editDateColumn($receipt->created_date);
             })
             ->editColumn('updated_at', function ($receipt) {
                 return editDateColumn($receipt->updated_at);

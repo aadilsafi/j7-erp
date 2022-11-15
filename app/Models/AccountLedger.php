@@ -16,6 +16,8 @@ class AccountLedger extends Model
         'site_id',
         'account_head_code',
         'account_action_id',
+        'origin_name',
+        'origin_number',
         'credit',
         'debit',
         'balance',
@@ -33,6 +35,8 @@ class AccountLedger extends Model
     protected $casts = [
         'account_head_code'=> 'string',
         'site_id' => 'integer',
+        'origin_name'=> 'string',
+        'origin_number'=> 'string',
         'sales_plan_id' => 'integer',
         'receipt_id' => 'integer',
         'account_action_id' => 'integer',

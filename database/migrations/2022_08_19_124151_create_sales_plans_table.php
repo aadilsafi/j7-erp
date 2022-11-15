@@ -31,6 +31,7 @@ return new class extends Migration
             $table->double('status')->default(0);
             $table->text('comments')->nullable();
             $table->dateTime('approved_date')->nullable();
+            $table->dateTime('created_date')->nullable();
             $table->boolean('cancel')->default(0);
             $table->timestamps();
             $table->softDeletes();

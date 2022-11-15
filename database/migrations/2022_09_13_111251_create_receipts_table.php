@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('comments')->nullable();
             $table->double('status')->default(0);
             $table->string('bank_details')->nullable();
+            $table->dateTime('created_date')->nullable();
             $table->timestamps();
         });
     }

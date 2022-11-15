@@ -13,16 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stakeholder_next_of_kin', function (Blueprint $table) {
+        Schema::create('temp_kins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
-            $table->foreignId('kin_id')->constrained('stakeholders');
+            $table->string('stakeholder_cnic');
+            $table->string('kin_cnic');
             $table->string('relation');
-            $table->boolean('is_imported')->default(false);
-            $table->string('comments')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stakeholder_next_of_kin');
+        Schema::dropIfExists('temp_kins');
     }
 };

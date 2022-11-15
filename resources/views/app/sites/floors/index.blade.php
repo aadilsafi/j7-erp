@@ -313,33 +313,33 @@
                                         '{{ route('sites.floors.unitsImport.importUnits', ['site_id' => $site_id]) }}';
                                 }
                             },
-                            {
-                                name: 'import-sale-plan',
-                                text: '<i class="bi bi-cloud"></i> Import Sales Plan',
-                                className: 'dropdown-item',
-                                action: function(e, dt, node, config) {
-                                    location.href =
-                                        '{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => $site_id]) }}';
-                                }
-                            },
-                            {
-                                name: 'import-sale-plan-adCosts',
-                                text: '<i class="bi bi-cloud"></i> Import Sales Plan Additional Costs',
-                                className: 'dropdown-item',
-                                action: function(e, dt, node, config) {
-                                    location.href =
-                                        '{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => $site_id]) }}';
-                                }
-                            },
-                            {
-                                name: 'import-sale-plan-installments',
-                                text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
-                                className: 'dropdown-item',
-                                action: function(e, dt, node, config) {
-                                    location.href = 
-                                        '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
-                                }
-                            },
+                            // {
+                            //     name: 'import-sale-plan',
+                            //     text: '<i class="bi bi-cloud"></i> Import Sales Plan',
+                            //     className: 'dropdown-item',
+                            //     action: function(e, dt, node, config) {
+                            //         location.href =
+                            //             '{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => $site_id]) }}';
+                            //     }
+                            // },
+                            // {
+                            //     name: 'import-sale-plan-adCosts',
+                            //     text: '<i class="bi bi-cloud"></i> Import Sales Plan Additional Costs',
+                            //     className: 'dropdown-item',
+                            //     action: function(e, dt, node, config) {
+                            //         location.href =
+                            //             '{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => $site_id]) }}';
+                            //     }
+                            // },
+                            // {
+                            //     name: 'import-sale-plan-installments',
+                            //     text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
+                            //     className: 'dropdown-item',
+                            //     action: function(e, dt, node, config) {
+                            //         location.href = 
+                            //             '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
+                            //     }
+                            // },
 
                         ]
                     },

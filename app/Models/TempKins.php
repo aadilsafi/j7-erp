@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TempFloor extends Model
+class TempKins extends Model
 {
     use HasFactory;
 
-
     protected $fillable= [
-        'name' ,
-        'floor_area' ,
-        'short_label',
+        'relation' ,
+        'stakeholder_cnic' ,
+        'kin_cnic',
     ];
 }

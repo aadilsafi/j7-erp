@@ -454,6 +454,7 @@ class AdditionalCostController extends Controller
     {
         $names = [
             'StakeholdersSample',
+            'StakeholdersKinsImport',
             'FloorsSample',
             'UnitsTypesSample',
             'AdditionalCostsSample',

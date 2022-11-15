@@ -252,10 +252,21 @@
                 data: {
                     'date_filter': data_data,
                     'to_date': to_date,
-                    '_token': _token
+                    '_token': _token,
+                    'account_head_code': '{{$account_ledgers[0]->account_head_code}}',
                 },
             success: function(data) {
-                console.log(data);
+                
+                console.log((data))
+                if(data.status==true){
+                    $('#example').html(data.data);
+                }else{
+                    console.log(data.data);
+                }
+
+            },
+            error: function(error) {
+                    console.log(error);
             }
         });
                 

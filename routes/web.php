@@ -45,6 +45,7 @@ use App\Http\Controllers\{
     ThirdLevelAccountController,
     FourthLevelAccountController,
     FifthLevelAccountController,
+    StakeholdersImportControler,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -430,10 +431,17 @@ Route::group([
                     });
 
                     Route::group(['prefix' => 'import'], function () {
-                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::view('/', 'app.sites.stakeholders.importFloors')->name('importStakeholders');
                         Route::post('preview', [StakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
                         Route::get('storePreview', [StakeholderController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport', [StakeholderController::class, 'saveImport'])->name('saveImport');
+
+                        Route::group(['prefix' => 'kins', 'as' => 'kins'], function () {
+                            Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                            Route::post('preview', [StakeholdersImportControler::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                            Route::get('storePreview', [StakeholdersImportControler::class, 'storePreview'])->name('storePreview');
+                            Route::post('saveImport', [StakeholdersImportControler::class, 'saveImport'])->name('saveImport');
+                        });
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {

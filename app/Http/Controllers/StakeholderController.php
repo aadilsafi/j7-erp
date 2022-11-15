@@ -767,13 +767,13 @@ class StakeholderController extends Controller
             if ($data[$key]['city'] != "null") {
                 $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['city']))->first();
                 if ($city) {
-                    $data[$key]['city_id'] = $country->id;
+                    $data[$key]['city_id'] = $city->id;
                 }
             }
             if ($data[$key]['state'] != "null") {
                 $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['state']))->first();
                 if ($state) {
-                    $data[$key]['state_id'] = $country->id;
+                    $data[$key]['state_id'] = $state->id;
                 }
             }
             unset($data[$key]['parent_cnic']);
@@ -849,7 +849,7 @@ class StakeholderController extends Controller
                 $is_kins[$key] = false;
             }
         }
-
+      
         // });
         TempStakeholder::query()->truncate();
 

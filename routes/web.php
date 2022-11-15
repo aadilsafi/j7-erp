@@ -45,6 +45,7 @@ use App\Http\Controllers\{
     ThirdLevelAccountController,
     FourthLevelAccountController,
     FifthLevelAccountController,
+    StakeholdersImportControler,
 };
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -430,10 +431,17 @@ Route::group([
                     });
 
                     Route::group(['prefix' => 'import'], function () {
-                        Route::view('/', 'app.sites.stakeholders.importFloors', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                        Route::view('/', 'app.sites.stakeholders.importStakeholders')->name('importStakeholders');
                         Route::post('preview', [StakeholderController::class, 'ImportPreview'])->name('importStakeholdersPreview');
                         Route::get('storePreview', [StakeholderController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport', [StakeholderController::class, 'saveImport'])->name('saveImport');
+
+                        Route::group(['prefix' => 'kins', 'as' => 'kins.'], function () {
+                            Route::view('/', 'app.sites.stakeholders.importKins', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                            Route::post('preview', [StakeholdersImportControler::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                            Route::get('storePreview', [StakeholdersImportControler::class, 'storePreview'])->name('storePreview');
+                            Route::post('saveImport', [StakeholdersImportControler::class, 'saveImport'])->name('saveImport');
+                        });
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
@@ -788,6 +796,7 @@ Route::group([
         Route::get('ajax-import-sales-plan.installments.get.input', [SalesPlanImportController::class, 'getInputInstallments'])->name('ajax-import-sales-plan.installments.get.input');
         Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
+        Route::get('ajax-import-stakeholders.kins.get.input', [StakeholdersImportControler::class, 'getInput'])->name('ajax-import-stakeholders.kins.get.input');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
         Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');

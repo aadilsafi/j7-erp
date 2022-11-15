@@ -289,22 +289,7 @@ class ImportStakeholdersDataTable extends DataTable
                 'is_disable' => true,
                 'name' => 'is_customer'
             ])->render())->addClass('removeTolltip'),
-            Column::computed('is_kin')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => true,
-                'name' => 'is_kin'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('parent_cnic')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => true,
-                'name' => 'parent_cnic'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('relation')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => true,
-                'name' => 'relation'
-            ])->render())->addClass('removeTolltip'),
-
+           
         ];
     }
 }

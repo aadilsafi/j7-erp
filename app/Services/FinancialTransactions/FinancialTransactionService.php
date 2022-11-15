@@ -558,7 +558,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         try {
             DB::beginTransaction();
 
-            $fileTitleTransfer = FileTitleTransfer::where('file_id', decryptParams($file_id))->first();
+            $fileTitleTransfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $sales_plan = SalesPlan::find($fileTitleTransfer->sales_plan_id);
             $receipt = Receipt::where('sales_plan_id', $fileTitleTransfer->sales_plan_id)->first();
             //
@@ -581,17 +581,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $customerBAccountRecievable, 7, $receipt->sales_plan_id, 'debit', $remainingSalesPlanAmount, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             // 2 Customer A AR entry
-            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
-            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
 
-            if (is_null($customerAccount)) {
-                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
-            }
-
-            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 7, $receipt->sales_plan_id, 'credit', $remainingSalesPlanAmount, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            $this->makeFinancialTransaction($receipt->site_id, $customerAAccountRecievable, 7, $receipt->sales_plan_id, 'credit', $remainingSalesPlanAmount, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             // 3 Customer A AR  Transfer charges entry
-            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 7, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            $this->makeFinancialTransaction($receipt->site_id, $customerAAccountRecievable, 7, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             // 4 Revenue transfer fee entry
             $transferAccount = AccountHead::where('name', 'Revenue - Transfer Fees')->first()->code;
@@ -602,9 +596,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             // 6 customer a AR transfer fee entry
-            $this->makeFinancialTransaction($receipt->site_id, $customerAccount['account_code'], 2, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
-
-
+            $this->makeFinancialTransaction($receipt->site_id, $customerAAccountRecievable, 2, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             DB::commit();
             return 'transaction_completed';

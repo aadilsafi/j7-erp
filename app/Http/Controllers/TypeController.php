@@ -398,7 +398,7 @@ class TypeController extends Controller
             if (!is_null($accountCode) && $data[$key]['parent_id'] == 0) {
 
                 $data[$key]['account_added'] = true;
-                $data[$key]['account_number'] = $accountCode++;
+                $data[$key]['account_number'] = $accountCode;
             } else {
                 $data[$key]['account_added'] = false;
                 $data[$key]['account_number'] = null;
@@ -417,7 +417,7 @@ class TypeController extends Controller
                     'level' => 3,
                 ]);
             }
-           
+           $accountCode++;
         }
 
         TempUnitType::query()->truncate();

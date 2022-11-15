@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                            width: calc(20% - 0.5em);
-                                                                        } */
+                                                                                width: calc(20% - 0.5em);
+                                                                            } */
     </style>
 @endsection
 
@@ -133,6 +133,12 @@
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        </div>
+
+                        <div class="d-block mb-1">
+                            <label class="form-label fs-5" for="created_date">Creation Date</label>
+                            <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
+                                class="form-control form-control-lg" />
                         </div>
 
                         @if ($amount_received > 0)
@@ -221,6 +227,15 @@
 @endsection
 
 @section('custom-js')
+    <script>
+        $("#created_date").flatpickr({
+            defaultDate: "today",
+            // minDate: "today",
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
+    </script>
 
     <script>
         FilePond.registerPlugin(

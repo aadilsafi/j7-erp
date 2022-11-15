@@ -83,7 +83,7 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
 
-            if($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+            if ($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
                 throw new GeneralException('Stakeholder CNIC already exists');
             }
 
@@ -182,9 +182,10 @@ class SalesPlanService implements SalesPlanInterface
                 'validity' => $inputs['sales_plan_validity'],
                 'comments' => $inputs['comments']['custom'],
                 'status' => false,
+                'created_date' => $inputs['created_date'],
             ];
 
-            if(isset($stakeholderInput['next_of_kin'])){
+            if (isset($stakeholderInput['next_of_kin'])) {
                 $sales_plan_data['kin_id'] = $stakeholderInput['next_of_kin'];
             }
 

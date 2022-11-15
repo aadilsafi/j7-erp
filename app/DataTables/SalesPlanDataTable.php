@@ -60,7 +60,7 @@ class SalesPlanDataTable extends DataTable
                 // return $salesPlan->stakeholder->full_name;
             })
             ->editColumn('created_at', function ($salesPlan) {
-                return editDateColumn($salesPlan->created_at);
+                return editDateColumn($salesPlan->created_date);
             })
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);

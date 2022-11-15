@@ -46,6 +46,12 @@ class StatusTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Request For Resale',
+                'default' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         (new Status())->insert($data);

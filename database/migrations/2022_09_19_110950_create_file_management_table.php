@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('deal_type');
             $table->boolean('status')->default(0);
             $table->string('comments')->nullable();
+            $table->dateTime('created_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

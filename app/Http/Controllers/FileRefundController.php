@@ -16,6 +16,7 @@ use App\Models\ReceiptDraftModel;
 use App\Models\FileRefundAttachment;
 use App\DataTables\FileRefundDataTable;
 use App\Http\Requests\FileRefund\store;
+use App\Models\AccountAction;
 use App\Models\AccountHead;
 use App\Models\AccountLedger;
 use App\Models\ModelTemplate;
@@ -196,6 +197,14 @@ class FileRefundController extends Controller
                     $customer_receivable_account_code = $receivable_account['account_code'];
                 }
             }
+            $origin_number = AccountLedger::where('account_action_id',5)->get();
+            if(isset($origin_number)){
+                $origin_number = '001';
+            }
+            else{
+                $origin_number = collect($origin_number)->last();
+                $origin_number = (int)$origin_number->origin_number + 1;
+            }
 
             $customer_payable_account_code = $stakeholderType->payable_account;
             $refundAccount = AccountHead::where('name', 'Refund Account')->first();
@@ -239,6 +248,7 @@ class FileRefundController extends Controller
             // after minus payable amount from sales plan
             $refunded_amount = str_replace(',', '', $file_refund->amount_to_be_refunded);
             $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
+            $accountActionName = AccountAction::find(5)->name;
             $ledgerData = [
                 // Refund (3 entries in legder)
                 // Refund account entry
@@ -253,6 +263,8 @@ class FileRefundController extends Controller
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
+                    'origin_number' => $origin_number,
+                    'origin_name' =>$accountActionName .'-'.$origin_number,
                 ],
                 // Cutomer AR entry
                 [
@@ -266,6 +278,8 @@ class FileRefundController extends Controller
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
+                    'origin_number' => $origin_number,
+                    'origin_name' =>$accountActionName .'-'.$origin_number,
                 ],
                 // Customer AP entry
                 [
@@ -279,6 +293,8 @@ class FileRefundController extends Controller
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
+                    'origin_number' => $origin_number,
+                    'origin_name' =>$accountActionName .'-'.$origin_number,
                 ],
                 // Payment Voucher
                 [
@@ -292,6 +308,8 @@ class FileRefundController extends Controller
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
+                    'origin_number' => $origin_number,
+                    'origin_name' =>$accountActionName .'-'.$origin_number,
                 ],
                 // cash at office 10209020001001
                 [
@@ -305,6 +323,8 @@ class FileRefundController extends Controller
                     'sales_plan_id' => $file_refund->sales_plan_id,
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
+                    'origin_number' => $origin_number,
+                    'origin_name' =>$accountActionName .'-'.$origin_number,
                 ],
 
             ];

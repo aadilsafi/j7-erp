@@ -198,7 +198,7 @@ class ReceiptService implements ReceiptInterface
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                         changeImageDirectoryPermission();
                     }
-
+                    // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);
                 }
             }

@@ -302,7 +302,6 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 else{
                     $origin_number = '001';
                 }
-
             // Cash Transaction
             $cashAccount = (new AccountingStartingCode())->where('site_id', $receipt->site_id)
                 ->where('model', 'App\Models\Cash')->where('level', 5)->first();

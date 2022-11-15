@@ -225,11 +225,11 @@
     <div class="card-body">
         <div class="next-of-kin-list">
             <div data-repeater-list="next-of-kins">
-                @forelse ((isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $stakeholder->nextOfKin : old('next_of_kin')) ?? $emtyNextOfKin as $key => $KinData)
+                @foreach ((isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $stakeholder->nextOfKin : old('next_of_kin')) ?? $emptyRecord as $key => $KinData)
                     <div data-repeater-item>
                         <div class="card m-0">
                             <div class="card-header pt-0">
-                                <h3>Next Of Kins </h3>
+                                <h3>Next Of Kin</h3>
 
                                 <button
                                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
@@ -250,7 +250,7 @@
                                                 {{-- <option value="0" selected>Select Next Of Kin</option> --}}
                                                 @foreach ($stakeholders as $stakeholderssss)
                                                     <option value="{{ $stakeholderssss->id }}"
-                                                        {{ $stakeholderssss->id == $KinData->kin_id ? 'selected' : '' }}>
+                                                        {{ (isset($stakeholder) && count($stakeholder->nextOfKin) > 0) ?? ($stakeholderssss->id == $KinData->kin_id ? 'selected' : '') }}>
                                                         {{ $stakeholderssss->full_name }}</option>
                                                 @endforeach
                                             </select>
@@ -261,7 +261,7 @@
                                                 for="father_name">Relation</label>
                                             <input type="text"
                                                 class="form-control form-control-md @error('relation') is-invalid @enderror"
-                                                id="relation_{{ $key }}" value="{{ $KinData->relation }}"
+                                                id="relation_{{ $key }}" value="{{ (isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ) ?? $KinData->relation }}"
                                                 name="next_of_kin[{{ $key }}][relation]"
                                                 placeholder="Relation" value="" />
                                         </div>
@@ -270,8 +270,8 @@
                             </div>
                         </div>
                     </div>
-                @empty
-                @endforelse
+                
+                @endforeach
             </div>
             <div class="row">
                 <div class="col-12">

@@ -144,7 +144,12 @@ class StakeholderController extends Controller
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
-                $emtyNextOfKin = [];
+                $emtyNextOfKin = [
+                    [
+                    'kin_id' => 0,
+                    'relation ' => '',
+                    ]
+                ];
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,

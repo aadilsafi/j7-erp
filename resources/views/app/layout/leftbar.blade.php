@@ -240,6 +240,16 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.stakeholders.kins.importStakeholders')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.stakeholders.kins.importStakeholders') || request()->routeIs('sites.stakeholders.kins.storePreview') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.stakeholders.kins.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i data-feather='user'></i>
+                                            <span class="menu-title text-truncate" data-i18n="Users">Stakeholders Kins</span>
+                                        </a>
+                                    </li>
+                                @endcan
                                     @can('sites.floors.importFloors')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">

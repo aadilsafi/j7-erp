@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
             $table->foreignId('kin_id')->constrained('stakeholders');
             $table->string('relation');
+            $table->boolean('is_imported')->default(false);
             $table->string('comments')->nullable();
             $table->timestamps();
             $table->softDeletes();

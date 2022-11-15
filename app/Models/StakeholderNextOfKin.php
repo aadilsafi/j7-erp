@@ -25,6 +25,7 @@ class StakeholderNextOfKin extends Model implements HasMedia
         'kin_id',
         'comments',
         'relation',
+        'is_imported',
     ];
 
 }

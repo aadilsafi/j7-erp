@@ -294,7 +294,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $receipt = (new Receipt())->find($receipt_id);
 
             $origin_number = AccountLedger::where('account_action_id',2)->get();
-            if(isset($origin_number)){
+            if(isset($origin_number->origin_number)){
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
             }
@@ -344,7 +344,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $stakeholder = Stakeholder::where('cnic', $receipt->cnic)->first();
             $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholder->id)->where('type', 'C')->first();
             $origin_number = AccountLedger::where('account_action_id',9)->get();
-            if(isset($origin_number)){
+            if(isset($origin_number->origin_number)){
                 $origin_number = collect($origin_number)->last();
                 $origin_number = (int)$origin_number->origin_number + 1;
             }
@@ -417,7 +417,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $receipt = (new Receipt())->find($receipt_id);
             $bankAccount = $receipt->bank->account_number;
             $origin_number = AccountLedger::where('account_action_id',12)->get();
-            if(isset($origin_number)){
+            if(isset($origin_number->origin_number)){
                 $origin_number = collect($origin_number)->last();
                 $origin_number = (int)$origin_number->origin_number + 1;
             }

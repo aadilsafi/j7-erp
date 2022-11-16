@@ -45,7 +45,7 @@ class TrialBalanceDataTable extends DataTable
                     {
                         $credits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('credit')->sum();
                         $debits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('debit')->sum();
-                        if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 60)
+                        if((substr($accountHead->account_head_code, 0, 2) == 10) || (substr($accountHead->account_head_code, 0, 2) == 60))
                         {
                             return number_format($credits - $debits);
                         }else{
@@ -71,8 +71,7 @@ class TrialBalanceDataTable extends DataTable
                 if (count($accountHead->accountLedgers) > 0) {
                     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
                     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
-                    if((substr($accountHead->code, 0, 2) == 10) || substr($accountHead->code, 0, 2) == 12)
-                    {
+                    if((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)){
                         return number_format($credits - $debits);
                     }else{
                         return number_format($debits - $credits);

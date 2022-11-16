@@ -187,8 +187,8 @@ class ReceiptsDatatable extends DataTable
             Column::make('cnic')->title('CNIC'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
             Column::computed('status')->title('Status'),
-            Column::make('created_date')->addClass('text-nowrap'),
-            Column::make('updated_at')->addClass('text-nowrap'),
+            Column::make('created_date')->title('Created At')->addClass('text-nowrap'),
+            // Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
         ];
 

@@ -120,7 +120,7 @@
                                     <div class="d-block mb-1">
                                         <label class="form-label fs-5" for="created_date">Creation Date</label>
                                         <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
-                                            class="form-control form-control-lg" />
+                                            class="form-control form-control-md" />
                                     </div>
                                     <hr>
                                     <div class="d-block mb-1">

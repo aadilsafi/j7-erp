@@ -54,7 +54,7 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('status', function ($receipt) {
                 return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
-            ->editColumn('created_at', function ($receipt) {
+            ->editColumn('created_date', function ($receipt) {
                 return editDateColumn($receipt->created_date);
             })
             ->editColumn('updated_at', function ($receipt) {
@@ -187,7 +187,7 @@ class ReceiptsDatatable extends DataTable
             Column::make('cnic')->title('CNIC'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
             Column::computed('status')->title('Status'),
-            Column::make('created_at')->addClass('text-nowrap'),
+            Column::make('created_date')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
         ];

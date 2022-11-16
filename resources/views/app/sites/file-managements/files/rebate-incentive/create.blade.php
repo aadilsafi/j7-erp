@@ -118,16 +118,16 @@
                             $('#td_unit_facing_charges_value').css("display", "block");
                         }
 
-                        if (response[0].additionalCosts.length > 0) {
-                            for (let i = 0; i < response[0].additionalCosts.length; i++) {
-                                $('#faceCharges').before('<th class="text-nowrap newAddition">' + response[0]
+                        if (response.additionalCosts.length > 0) {
+                            for (let i = 0; i < response.additionalCosts.length; i++) {
+                                $('#faceCharges').before('<th class="text-nowrap newAddition">' + response
                                     .additionalCosts[i].name + '</th>');
                                 $('#faceChargesPercentage').before(
                                 '<th class="text-nowrap newAddition">%</th>');
                                 $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
-                                    response[0].additionalCosts[i].unit_percentage + '%</td>');
-                                let facing_value = (response[0].additionalCosts[i].unit_percentage / 100) *
-                                    (response[0].salesPlan.unit_price * response[0].unit.gross_area);
+                                    response.additionalCosts[i].unit_percentage + '%</td>');
+                                let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
+                                    (response.salesPlan.unit_price * response.unit.gross_area);
                                 $('#td_unit_facing_charges_value').before(
                                     '<td class="text-nowrap newAddition">' + facing_value.toLocaleString() +
                                     '</td>');
@@ -138,48 +138,48 @@
                             $('#td_unit_facing_charges_value').css("display", "none");
                         }
 
-                        $('#sales_source_lead_source').val(response[0].leadSource.name);
-                        $('#stakeholder_id').val(response[0].stakeholder.id);
-                        $('#customer_name').val(response[0].stakeholder.full_name);
-                        $('#customer_father_name').val(response[0].stakeholder.father_name);
-                        $('#customer_cnic').val(response[0].cnic);
-                        $('#customer_ntn').val(response[0].stakeholder.ntn);
-                        $('#customer_comments').val(response[0].stakeholder.comments);
-                        $('#customer_address').val(response[0].stakeholder.address);
-                        $('#customer_phone').val(response[0].stakeholder.contact);
-                        $('#customer_occupation').val(response[0].stakeholder.occupation);
+                        $('#sales_source_lead_source').val(response.leadSource.name);
+                        $('#stakeholder_id').val(response.stakeholder.id);
+                        $('#customer_name').val(response.stakeholder.full_name);
+                        $('#customer_father_name').val(response.stakeholder.father_name);
+                        $('#customer_cnic').val(response.cnic);
+                        $('#customer_ntn').val(response.stakeholder.ntn);
+                        $('#customer_comments').val(response.stakeholder.comments);
+                        $('#customer_address').val(response.stakeholder.address);
+                        $('#customer_phone').val(response.stakeholder.contact);
+                        $('#customer_occupation').val(response.stakeholder.occupation);
 
-                        $('#td_unit_id').html(response[0].unit.unit_number);
-                        $('#td_unit_area').html(response[0].unit.gross_area);
-                        $('#td_unit_rate').html(response[0].salesPlan.unit_price.toLocaleString());
-                        $('#td_unit_floor').html(response[0].floor);
+                        $('#td_unit_id').html(response.unit.unit_number);
+                        $('#td_unit_area').html(response.unit.gross_area);
+                        $('#td_unit_rate').html(response.salesPlan.unit_price.toLocaleString());
+                        $('#td_unit_floor').html(response.floor);
 
-                        if (response[0].facing != null) {
-                            $('#td_unit_facing_charges').html(response[0].facing.unit_percentage + '%');
+                        if (response.facing != null) {
+                            $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
                         } else {
                             $('#td_unit_facing_charges').html(0 + '%');
                         }
 
-                        let unit_total = response[0].unit.price_sqft * response[0].unit.gross_area;
+                        let unit_total = response.unit.price_sqft * response.unit.gross_area;
                         $('#unit_total').val(unit_total)
 
-                        $('#td_unit_discount').html(response[0].salesPlan.discount_percentage + '%');
+                        $('#td_unit_discount').html(response.salesPlan.discount_percentage + '%');
                         $('#td_unit_total').html(unit_total.toLocaleString());
-                        $('#td_unit_downpayment').html(response[0].salesPlan.down_payment_percentage + '%');
+                        $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
 
-                        if (response[0].facing != null) {
-                            let facing_value = response[0].salesPlan.discount_percentage * response[0].salesPlan
+                        if (response.facing != null) {
+                            let facing_value = response.salesPlan.discount_percentage * response.salesPlan
                                 .total_price;
                             $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
                         } else {
                             $('#td_unit_facing_charges_value').html(0);
                         }
 
-                        $('#td_unit_discount_value').html(parseFloat(response[0].salesPlan.discount_total)
+                        $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total)
                             .toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response[0].salesPlan.total_price)
+                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
                             .toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response[0].salesPlan.down_payment_total)
+                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
                             .toLocaleString());
 
                     } else {
@@ -250,11 +250,11 @@
                     .replace(':id', dealer),
                 type: 'GET',
                 data: {},
-                success: function(response[0]) {
+                success: function(response) {
 
-                    if (response[0].status) {
-                        if (response[0].data) {
-                            stakeholderData = response[0].data;
+                    if (response.status) {
+                        if (response.data) {
+                            stakeholderData = response.data;
                         }
                         // $('#stackholder_id').val(stakeholderData.id);
                         $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (

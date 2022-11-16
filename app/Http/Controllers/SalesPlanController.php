@@ -240,7 +240,7 @@ class SalesPlanController extends Controller
         $user = User::find($salesPlan->user_id);
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
-        // dd($transaction);
+
         if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');
         }

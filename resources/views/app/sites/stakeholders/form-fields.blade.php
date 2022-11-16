@@ -167,8 +167,8 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC <span class="text-danger">*</span></label>
-                <input type="number" class="cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
-                    id="cnic" name="cnic" placeholder="CNIC Without Dashes" minlength="13"
+                <input type="text" class="cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
+                    id="cnic" name="cnic" placeholder="CNIC Without Dashes"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
                 @error('cnic')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -220,12 +220,13 @@
 {{-- next-of-kin-list --}}
 <div class="card" id="div-next-of-kin" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
-        <h3>Next Of Kins</h3>
+        <h3>Next Of Kins </h3>
     </div>
     <div class="card-body">
         <div class="next-of-kin-list">
             <div data-repeater-list="next-of-kins">
-                @foreach ((isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $stakeholder->nextOfKin : old('next_of_kin')) ?? $emptyRecord as $key => $KinData)
+                @forelse ((isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $stakeholder->nextOfKin : old('next_of_kin')) ?? $emtyNextOfKin as $key => $KinData)
+               
                     <div data-repeater-item>
                         <div class="card m-0">
                             <div class="card-header pt-0">
@@ -245,12 +246,12 @@
                                             <label class="form-label" style="font-size: 15px"
                                                 id="kin_{{ $key }}" for="stakeholder_type">Select Next Of
                                                 Kin <span class="text-danger">*</span></label>
-                                            <select class="form-control" id="kin_{{ $key }}"
+                                            <select class="form-control kinId uniqueKinId" id="kin_{{ $key }}"
                                                 name="next_of_kin[{{ $key }}][stakeholder_id]">
-                                                {{-- <option value="0" selected>Select Next Of Kin</option> --}}
+                                                <option value="0" selected>Select Next Of Kin</option>
                                                 @foreach ($stakeholders as $stakeholderssss)
                                                     <option value="{{ $stakeholderssss->id }}"
-                                                        {{ (isset($stakeholder) && count($stakeholder->nextOfKin) > 0) ?? ($stakeholderssss->id == $KinData->kin_id ? 'selected' : '') }}>
+                                                        {{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $stakeholderssss->id == $KinData->kin_id ? 'selected' : '' : '' }}>
                                                         {{ $stakeholderssss->full_name }}</option>
                                                 @endforeach
                                             </select>
@@ -261,7 +262,7 @@
                                                 for="father_name">Relation</label>
                                             <input type="text"
                                                 class="form-control form-control-md @error('relation') is-invalid @enderror"
-                                                id="relation_{{ $key }}" value="{{ (isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ) ?? $KinData->relation }}"
+                                                id="relation_{{ $key }}" value="{{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $KinData->relation  : ''}}"
                                                 name="next_of_kin[{{ $key }}][relation]"
                                                 placeholder="Relation" value="" />
                                         </div>
@@ -270,8 +271,8 @@
                             </div>
                         </div>
                     </div>
-                
-                @endforeach
+                    @empty
+                    @endforelse
             </div>
             <div class="row">
                 <div class="col-12">

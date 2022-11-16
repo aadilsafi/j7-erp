@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                    width: calc(20% - 0.5em);
-                                                                } */
+                                                                                width: calc(20% - 0.5em);
+                                                                            } */
     </style>
 @endsection
 
@@ -179,10 +179,11 @@
             });
 
             var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
+            var areStakeholderKinsExist = {{ count($stakeholder->nextOfKin) > 0 ? 'false' : 'true' }};
 
             $(".next-of-kin-list").repeater({
 
-                initEmpty: areStakeholderContactsExist,
+                initEmpty: areStakeholderKinsExist,
                 show: function() {
                     $(this).slideDown(), feather && feather.replace({
                         width: 14,
@@ -222,6 +223,19 @@
 
             }, "Contact Person CNIC can't be duplicated");
 
+            $.validator.addMethod("uniqueKinId", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var cnicRepeated = 0;
+                if (value != '') {
+                    $(parentForm.find('.kinId')).each(function() {
+                        if ($(this).val() === value) {
+                            cnicRepeated++;
+                        }
+                    });
+                }
+                return cnicRepeated === 1 || cnicRepeated === 0;
+
+            }, "Kins can't be duplicated");
             var validator = $("#stakeholderForm").validate({
 
                 errorClass: 'is-invalid text-danger',

@@ -300,9 +300,6 @@ class StakeholderService implements StakeholderInterface
                     ]);
                 }
             }
-
-
-
             // dd($inputs);
             $stakeholder->contacts()->delete();
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
@@ -312,8 +309,20 @@ class StakeholderService implements StakeholderInterface
                 }
                 $stakeholder->contacts()->saveMany($contacts);
             }
+            $stakeholder->nextOfKin()->delete();
 
+            if (isset($inputs['next-of-kins']) && count($inputs['next-of-kins']) > 0) {
+                $nextOfKins = [];
 
+                foreach ($inputs['next-of-kins'] as $nok) {
+                   $nextOfKins[] = StakeholderNextOfKin::create([
+                        'stakeholder_id' => $stakeholder->id,
+                        'kin_id' => $nok['stakeholder_id'],
+                        'site_id' => $site_id,
+                        'relation' => $nok['relation'],
+                    ]);
+                }
+            }
 
             return $stakeholder;
         });

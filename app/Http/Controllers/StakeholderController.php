@@ -65,11 +65,11 @@ class StakeholderController extends Controller
             $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
-            $emtyNextOfKin = [
-                // 'stakeholder_id' => 0,
-                // 'kin_id' => 0,
-                // 'relation '=>'',
-            ];
+
+            $emtyNextOfKin[0]['id'] = 0;
+            $emtyNextOfKin[0]['kin_id'] = 0;
+            $emtyNextOfKin[0]['relation'] = '';
+           
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
@@ -82,6 +82,7 @@ class StakeholderController extends Controller
                 'emtyNextOfKin' => $emtyNextOfKin,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
+            
             return view('app.sites.stakeholders.create', $data);
         } else {
             abort(403);
@@ -97,7 +98,6 @@ class StakeholderController extends Controller
     public function store(stakeholderStoreRequest $request, $site_id)
     // public function store(Request $request, $site_id)
     {
-        // dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
@@ -144,17 +144,14 @@ class StakeholderController extends Controller
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
-                $emtyNextOfKin = [
-                    [
-                    'kin_id' => 0,
-                    'relation ' => '',
-                    ]
-                ];
+                $emtyNextOfKin[0]['id'] = 0;
+                $emtyNextOfKin[0]['kin_id'] = 0;
+                $emtyNextOfKin[0]['relation'] = '';
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
                     'stakeholderTypes' => StakeholderTypeEnum::array(),
-                    'stakeholders' => $this->stakeholderInterface->getByAll($site_id),
+                    'stakeholders' => Stakeholder::where('id', '!=', $stakeholder->id)->get(),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
                     'country' => Country::all(),
@@ -181,7 +178,7 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(stakeholderUpdateRequest  $request, $site_id, $id)
+    public function update(stakeholderUpdateRequest $request, $site_id, $id)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);

@@ -28,10 +28,9 @@
             background-color: #e3e0fd;
         }
 
-        #div-next-of-kin{
+        #div-next-of-kin {
             display: none;
         }
-
     </style>
 @endsection
 
@@ -183,7 +182,7 @@
             });
 
             $(".next-of-kin-list").repeater({
-                // initEmpty: true,
+                initEmpty: true,
                 show: function() {
                     $(this).slideDown(), feather && feather.replace({
                         width: 14,
@@ -208,6 +207,19 @@
                 }
             });
 
+            $.validator.addMethod("uniqueKinId", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var cnicRepeated = 0;
+                if (value != '') {
+                    $(parentForm.find('.kinId')).each(function() {
+                        if ($(this).val() === value) {
+                            cnicRepeated++;
+                        }
+                    });
+                }
+                return cnicRepeated === 1 || cnicRepeated === 0;
+
+            }, "Kins can't be duplicated");
             $.validator.addMethod("unique", function(value, element) {
                 var parentForm = $(element).closest('form');
                 var cnicRepeated = 0;

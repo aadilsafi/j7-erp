@@ -836,10 +836,10 @@ Route::get('/logs', function () {
     return Activity::latest()->get();
 });
 
-Route::get('/recoverTypes', function(){
-    $types = Type::withTrashed()->forceDelete();
-    return $types;
-});
+// Route::get('/recoverTypes', function(){
+//     $types = Type::withTrashed()->forceDelete();
+//     return $types;
+// });
 // Route::get('/fire', function () {
 //     $data = [
 //         'title' => 'Job Done!',

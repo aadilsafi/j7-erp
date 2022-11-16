@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             // FloorTableSeeder::class,
             // UnitTableSeeder::class,
             // StakeholdersSeeder::class,
-            BacklistedStakeholderSeeder::class,
+            // BacklistedStakeholderSeeder::class,
             LeadSourceTableSeeder::class,
             // SalesPlanSeeder::class,
             // SalesPlanAdditionalCostSeeder::class,

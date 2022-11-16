@@ -197,13 +197,15 @@ class FileRefundController extends Controller
                     $customer_receivable_account_code = $receivable_account['account_code'];
                 }
             }
-            $origin_number = AccountLedger::where('account_action_id',5)->get();
-            if(isset($origin_number)){
-                $origin_number = '001';
-            }
-            else{
+
+            $origin_number = AccountLedger::get();
+
+            if (isset($origin_number)) {
+
                 $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number = $origin_number->origin_number + 1;
+            } else {
+                $origin_number = '001';
             }
 
             $customer_payable_account_code = $stakeholderType->payable_account;
@@ -215,10 +217,9 @@ class FileRefundController extends Controller
             if ($customer_payable_account_code == null) {
                 $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
                 $stakeholderType = collect($stakeholderType)->last();
-                if($stakeholderType == null){
+                if ($stakeholderType == null) {
                     $customer_payable_account_code = '20201010001003';
-                }
-                else{
+                } else {
                     $customer_payable_account_code = $stakeholderType->payable_account + 1;
                 }
 
@@ -264,7 +265,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' =>$accountActionName .'-'.$origin_number,
+                    'origin_name' => $accountActionName . '-' . $origin_number,
                 ],
                 // Cutomer AR entry
                 [
@@ -279,7 +280,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' =>$accountActionName .'-'.$origin_number,
+                    'origin_name' => $accountActionName . '-' . $origin_number,
                 ],
                 // Customer AP entry
                 [
@@ -294,7 +295,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' =>$accountActionName .'-'.$origin_number,
+                    'origin_name' => $accountActionName . '-' . $origin_number,
                 ],
                 // Payment Voucher
                 [
@@ -309,7 +310,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' =>$accountActionName .'-'.$origin_number,
+                    'origin_name' => $accountActionName . '-' . $origin_number,
                 ],
                 // cash at office 10209020001001
                 [
@@ -324,7 +325,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' =>$accountActionName .'-'.$origin_number,
+                    'origin_name' => $accountActionName . '-' . $origin_number,
                 ],
 
             ];

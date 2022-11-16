@@ -69,7 +69,7 @@ class StakeholderController extends Controller
             $emtyNextOfKin[0]['id'] = 0;
             $emtyNextOfKin[0]['kin_id'] = 0;
             $emtyNextOfKin[0]['relation'] = '';
-           
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
@@ -82,7 +82,7 @@ class StakeholderController extends Controller
                 'emtyNextOfKin' => $emtyNextOfKin,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
-            
+
             return view('app.sites.stakeholders.create', $data);
         } else {
             abort(403);
@@ -705,11 +705,23 @@ class StakeholderController extends Controller
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
             $dataTable = new ImportStakeholdersDataTable($site_id);
+
+            $required = [
+                'full_name',
+                'father_name',
+                'cnic',
+                'contact',
+                'address',
+                'is_dealer',
+                'is_vendor',
+                'is_customer'
+            ];
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.sites.stakeholders.importFloorsPreview', $data);
         }

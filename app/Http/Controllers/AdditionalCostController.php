@@ -376,12 +376,18 @@ class AdditionalCostController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
+            $required = [
+                'additional_costs_name',
+                'is_sub_types',
+                'parent_type_name'
+            ];
             $dataTable = new ImportAdditionalCostsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.additional-costs.importAdcostsPreview', $data);
         }

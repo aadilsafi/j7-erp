@@ -90,17 +90,20 @@ class ImportUnitTypesDataTable extends DataTable
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'name'
             ])->render())->addClass('removeTolltip'),
             Column::computed('unit_type_slug')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'unit_type_slug'
 
             ])->render())->addClass('removeTolltip'),
             Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'parent_type_name'
             ])->render())->addClass('removeTolltip'),
 

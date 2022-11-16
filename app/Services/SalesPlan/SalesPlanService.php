@@ -185,9 +185,11 @@ class SalesPlanService implements SalesPlanInterface
                 'status' => false,
                 'created_date' => $inputs['created_date'],
             ];
-            // dd($stakeholderInput['next_of_kin']);
+            // dd(json_encode($stakeholderInput['next_of_kin']));
+
             if (isset($stakeholderInput['next_of_kin'])) {
-                $sales_plan_data['kin_id'] = $stakeholderInput['next_of_kin'];
+
+                $sales_plan_data['kin_data'] = json_encode($stakeholderInput['next_of_kin']);
             }
 
             $salesPlan = $this->model()->create($sales_plan_data);

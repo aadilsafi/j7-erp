@@ -50,7 +50,7 @@ class TrialBalanceController extends Controller
 
 
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date,$end_date) {
-            $query->whereBetween('created_at', [$start_date, $end_date]);
+            $query->whereDate('created_at','>=', $start_date)->whereDate('created_at','<=', $end_date);
             return $query;
         })->where('account_head_code',$account_head_code)->get();
 

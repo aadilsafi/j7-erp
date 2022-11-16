@@ -66,7 +66,7 @@ class SalesPlanService implements SalesPlanInterface
     public function store($site_id, $floor_id, $unit_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
-            dd($inputs);
+            // dd($inputs);
             LogBatch::startBatch();
 
             $site = (new Site())->find($site_id);
@@ -185,7 +185,7 @@ class SalesPlanService implements SalesPlanInterface
                 'status' => false,
                 'created_date' => $inputs['created_date'],
             ];
-            dd($stakeholderInput['next_of_kin']);
+            // dd($stakeholderInput['next_of_kin']);
             if (isset($stakeholderInput['next_of_kin'])) {
                 $sales_plan_data['kin_id'] = $stakeholderInput['next_of_kin'];
             }

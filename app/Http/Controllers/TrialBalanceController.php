@@ -6,6 +6,7 @@ use App\DataTables\TrialBalanceDataTable;
 use App\Models\AccountHead;
 use App\Models\AccountLedger;
 use App\Models\Site;
+use Carbon\Carbon;
 use DateTime;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,8 +20,10 @@ class TrialBalanceController extends Controller
         try {
             $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
             if ($site && !empty($site)) {
+                $account_head = AccountHead::where('level', 5)->whereHas('accountLedgers')->orderBy('code', 'asc')->get();
                 $data = [
                     'site' => $site,
+                    'account_head' => $account_head,
                 ];
                 return $dataTable->with($data)->render('app.sites.accounts.trial_balance.index', $data);
             }
@@ -176,5 +179,108 @@ class TrialBalanceController extends Controller
             'data' => $table
         ];
         }
+    }
+
+    public function filterByDate(Request $request )
+    {
+        // return $request->all();
+        $account_head_code = $request->type_name;
+        $start_date = substr($request->to_date, 0, 10);
+        $end_date =  substr($request->to_date, 14, 10);
+
+        $account_head = AccountHead::when(($start_date && $end_date), function ($query) use ($start_date,$end_date) {
+            $query->whereDate('created_at','>=', $start_date)->whereDate('created_at','<=', $end_date);
+            return $query;
+        })->when(($request->months_id=='months12'),function ($query)
+        {
+            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(12));
+            return $query;
+        })
+        ->when(($request->months_id=='months6'),function ($query)
+        {
+            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
+            return $query;
+        })
+        ->when(($request->months_id=='months3'),function ($query)
+        {
+            $query->whereMonth('created_at','>=', Carbon::now()->subMonth(3));
+            return $query;
+        })
+        ->when(($account_head_code > 0),function ($query) use ($account_head_code)
+        {
+            $query->where('code',$account_head_code);
+            return $query;
+        })
+        ->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->get();
+        // dd($account_head[0]->accountLedgers);
+
+      $table = '<thead>'.
+        '<tr>'.
+            '<th title="#">#</th>'.
+            '<th title="Account Codes">Account Codes</th>'.
+            '<th title="Account Name">Account Name</th>'.
+            '<th title="Opening Balance">Opening Balance</th>'.
+            '<th title="Debit">Debit</th>'.
+            '<th title="Credit">Credit</th>'.
+            '<th title="Closing Balance">Closing Balance</th>'.
+            '<th title="Transactions At">Transactions At</th>'.
+            '<th title="Action">Action</th>'.
+        '</tr>'.
+    '</thead>'.
+    '<tbody>';
+    $i= 1;
+    foreach($account_head as $account)
+    {
+
+
+        $credits = $account->accountLedgers->pluck('credit')->sum();
+        $debits = $account->accountLedgers->pluck('debit')->sum();
+        $ending=0;
+        if((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12))
+        {
+            $ending = number_format($credits - $debits);
+        }else{
+            $ending = number_format($debits - $credits);
+        }
+
+        $table.= '<tr>'.
+            '<td class="text-nowrap">'.$i.'</td>'.
+            '<td class="text-nowrap">'.account_number_format($account->code).'</td>'.
+            '<td class="text-nowrap">'.$account->name.'</td>'.
+            '<td class="text-nowrap">'.$ending.'</td>'.
+            '<td class="text-nowrap">'.number_format($credits).'</td>'.
+            '<td class="text-nowrap">'.number_format($debits).'</td>'.
+            '<td class="text-nowrap">'.$ending.'</td>'.
+            '<td class="text-nowrap">'.
+            '<span>'. date_format(new DateTime($account->created_at), 'h:i:s')
+             .'</span>'. '<br> <span class="text-primary fw-bold">'.
+               date_format(new DateTime($account->created_at), 'Y-m-d').
+               '</span>'.
+            
+            '</td>'.
+            '<td>'.view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]).'</td>'.
+        '</tr>';
+        $i++;
+    }
+    $table .= '</tbody>'.
+    '<tfoot>'.
+        '<tr>'.
+            '<th></th>'.
+            '<th></th>'.
+            '<th>-</th>'.
+            '<th>-</th>'.
+            '<th>-</th>'.
+            '<th>-</th>'.
+            '<th></th>'.
+            '<th></th>'.
+            '<th></th>'.
+        '</tr>'.
+    '</tfoot>';
+
+    return [
+        'status' => true,
+        'message' => ' filter by date mouth or year',
+        'data' => $table
+    ];
     }
 }

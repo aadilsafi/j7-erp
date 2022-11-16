@@ -760,6 +760,9 @@ Route::group([
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::Post('filter-data-trial-balance', [TrialBalanceController::class, 'filterTrialBalance'])->name('filter-data-trial-balance');
                         });
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::Post('filter-by-user-data-trial-balance', [TrialBalanceController::class, 'filterByDate'])->name('filter-by-user-data-trial-balance');
+                        });
                     });
                     // Accounts ledger
                     Route::group(['prefix' => 'ledger', 'as' => 'ledger.'], function () {

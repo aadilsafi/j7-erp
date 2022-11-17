@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\FloorsDataTable;
 use App\DataTables\FloorsPreviewDataTable;
 use App\DataTables\ImportFloorsDataTable;
+use App\Exceptions\GeneralException;
 use App\Http\Requests\FileBuyBack\store;
 use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
@@ -32,6 +33,7 @@ use App\Utils\Enums\{
 };
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
+use PDO;
 use Yajra\DataTables\Facades\DataTables;
 use Redirect;
 
@@ -463,5 +465,47 @@ class FloorController extends Controller
             TempFloor::query()->truncate();
         }
         return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function floorPlan(Request $request, $site_id, $id)
+    {
+        $id = decryptParams($id);
+        $site_id = decryptParams($site_id);
+
+        $floor = Floor::find($id);
+        $floor_plan = $floor->floor_plan;
+
+        return view('app.sites.floors.floor-plan', [
+            'site_id' => $site_id,
+            'id' => $id,
+            'floor_plan' => $floor_plan,
+        ]);
+    }
+
+    public function floorPlanUpload(Request $request, $site_id, $id)
+    {
+        $id = decryptParams($id);
+        $site_id = decryptParams($site_id);
+        $validator = \Validator::make(
+            $request->all(),
+            [
+                'floorplan_file' => 'required|file',
+            ],
+        );
+
+        $validator->validate();
+
+        $json = file_get_contents($request->file('floorplan_file'));
+
+        if(!$json){
+        return back()->with('error', 'Invalid file format');
+        }
+
+        $floor = (new Floor())->find($id);
+        $floor->floor_plan = $json;
+        $floor->saveOrFail();
+        
+        return back()->with('success', 'Floorplan uploaded successfully');
+
     }
 }

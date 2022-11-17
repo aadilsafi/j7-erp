@@ -274,6 +274,8 @@ Route::group([
                     Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
+                        Route::get('floor-plan', [FloorController::class, 'floorPlan'])->name('floor-plan');
+                        Route::post('floor-plan/upload', [FloorController::class, 'floorPlanUpload'])->name('floor-plan.upload');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
                     });
 

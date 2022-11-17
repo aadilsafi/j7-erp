@@ -120,6 +120,12 @@ Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail, $site_id
     $trail->push('Edit Floor');
 });
 
+Breadcrumbs::for('sites.floors.floor-plan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
+    $trail->push('Floor Plan');
+});
+
+
 Breadcrumbs::for('sites.floors.preview', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.floors.index', $site_id);
     $trail->push('Floors Preview');

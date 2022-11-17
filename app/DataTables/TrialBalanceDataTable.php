@@ -40,6 +40,15 @@ class TrialBalanceDataTable extends DataTable
                 return editDateColumn($accountHead->created_at);
             })
             ->editColumn('starting_balance', function ($accountHead) {
+                // if (count($accountHead->accountLedgers) > 0) {
+                //     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
+                //     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
+                //     if((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)){
+                //         return number_format($credits - $debits);
+                //     }else{
+                //         return number_format($debits - $credits);
+                //     }
+                // }
                 if (count($accountHead->accountLedgers) > 0) {
                     if($accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays()))
                     {

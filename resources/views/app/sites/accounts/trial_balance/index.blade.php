@@ -53,7 +53,7 @@
                                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                                     <div class="card-body">
                                         <div class="row mb-1 g-1">
-                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
+                                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
                                                 <label class="form-label fs-5" for="type_name">Search For User Name</label>
                                                 <select class="select2-size-lg form-select col-filter" id="type_name"
                                                 name="type_name">
@@ -63,15 +63,18 @@
                                                 @endforeach
                                             </select>
                                             </div>
-                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
-                                                <label class="form-label" style="font-size: 15px" for="to_date">Select Date
-                                                    Range</label>
-                                                <input type="text" id="to_date" name="to_date"
-                                                    class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
-                                                    placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
+                                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 position-relative">
+                                                <label class="form-label fs-5" for="month_value">Select Month</label>
+                                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                    <input type="hidden" name="month_value" id="month_value">
+                                                    <button type="button" name="months" id="months1" value="1" onclick="$('#month_value').val('months1')" class="btn btn-outline-primary">1 Months</button>
+                                                    <button type="button" name="months" id="months3" value="3" onclick="$('#month_value').val('months3')" class="btn btn-outline-primary">3 Months</button>
+                                                    <button type="button" name="months" id="months6" value="6" onclick="$('#month_value').val('months6')" class="btn btn-outline-primary">6 Months</button>
+                                                    <button type="button" name="months" id="months12" value="12" onclick="$('#month_value').val('months12')" class="btn btn-outline-primary">12 Months</button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row mb-1 g-1">
+                                        {{-- <div class="row mb-1 g-1">
                                             <div class="demo-inline-spacing">
                                                 <div class="form-check form-check-inline">
                                                   <input
@@ -104,7 +107,7 @@
                                                   <label class="form-check-label" for="months">12 Months</label>
                                                 </div>
                                               </div>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -247,8 +250,8 @@ $(document).ready(function() {
                 let filter_date_from = '',
                     filter_date_to = '';
                 let to_date = $('#to_date').val();
+                let month_value = $('#month_value').val();
                 let type_name = $('#type_name').val();
-                let months_id = $('input[type=radio][name=months]:checked').attr('id');
 
                 let data_data = '';
                 if (to_date) {
@@ -277,7 +280,7 @@ $(document).ready(function() {
                     'date_filter': data_data,
                     'to_date': to_date,
                     'type_name': type_name,
-                    'months_id': months_id,
+                    'months_id': month_value,
                     'site_id': "{{$site->id}}",
                     '_token': _token,
                 },
@@ -304,9 +307,8 @@ $(document).ready(function() {
 
 function resetFilter() {
 
-    $('#account_holder_name').val('');
-
-    $('#apply_filter').trigger('click');
+    $("#type_name").select2("val", "0");
+    $('#month_value').val('');
 }
     </script>
 @endsection

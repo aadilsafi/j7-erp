@@ -52,235 +52,226 @@ class TrialBalanceController extends Controller
         $account_head_code = $request->account_head_code;
 
 
-        $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date,$end_date) {
-            $query->whereDate('created_at','>=', $start_date)->whereDate('created_at','<=', $end_date);
+        $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
+            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
             return $query;
-        })->where('account_head_code',$account_head_code)->get();
+        })->where('account_head_code', $account_head_code)->get();
 
-        if(count($account_ledgers) > 0)
-        {
-            
-            $table =  '<thead>'.
-            '<tr>'.
-                '<th class="text-nowrap">#</th>'.
-                '<th class="text-nowrap">Account Codes</th>'.
-                '<th class="text-nowrap">Opening Balance</th>'.
-                '<th class="text-nowrap">Debit</th>'.
-                '<th class="text-nowrap">Credit</th>'.
-                '<th class="text-nowrap">Closing Balance</th>'.
-                '<th class="text-nowrap">Transactions At</th>'.
-            '</tr>'.
-        '</thead>'.
-        '<tbody>';
-             $i = 1;
-             $starting_balance_index = 0;
+        if (count($account_ledgers) > 0) {
+
+            $table =  '<thead>' .
+                '<tr>' .
+                '<th class="text-nowrap">#</th>' .
+                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Opening Balance</th>' .
+                '<th class="text-nowrap">Debit</th>' .
+                '<th class="text-nowrap">Credit</th>' .
+                '<th class="text-nowrap">Closing Balance</th>' .
+                '<th class="text-nowrap">Transactions At</th>' .
+                '</tr>' .
+                '</thead>' .
+                '<tbody>';
+            $i = 1;
+            $starting_balance_index = 0;
             $starting_balance = [];
             $ending_balance = 0;
-             foreach($account_ledgers as $account_ledger)
-             {
-                if(substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12 )
-                {
-                   
+            foreach ($account_ledgers as $account_ledger) {
+                if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
+
                     $ending_balance = $account_ledger->credit - $account_ledger->debit;
-                    array_push($starting_balance,$ending_balance); 
-                }else {
+                    array_push($starting_balance, $ending_balance);
+                } else {
                     $ending_balance = $account_ledger->debit - $account_ledger->credit;
-                    array_push($starting_balance,$ending_balance);
+                    array_push($starting_balance, $ending_balance);
                 }
 
-                if ($i > 1)
-                {
+                if ($i > 1) {
                     $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
-                    $starting_balance[$starting_balance_index]= $new_starting_balance;
-
+                    $starting_balance[$starting_balance_index] = $new_starting_balance;
                 }
-               $table .='<tr>'.                      
-               '<td>'.$i.'</td>'.                     
-               '<td>'.account_number_format($account_ledger->account_head_code).'</td>'.                      
-               '<td>'.number_format(($i > 1)?$starting_balance[$starting_balance_index - 1]:0).'</td>'.                      
-               '<td>'.number_format($account_ledger->debit).'</td>'.                     
-               '<td>'.number_format($account_ledger->credit).'</td>'.
-               '<td>'.number_format(($i > 1)?$new_starting_balance:$ending_balance).'</td>'.                     
-                                    
-               '<td>'.
-               '<span>'. date_format(new DateTime($account_ledger->created_at), 'h:i:s')
-                .'</span>'. '<br> <span class="text-primary fw-bold">'.
-                  date_format(new DateTime($account_ledger->created_at), 'Y-m-d').
-                  '</span>'.
-               
-               '</td>'.
-               '</tr>';
-               $i++;
-               $starting_balance_index++;
-             }
-             $balance_add_starting = array_pop($starting_balance);
-            
-        $table .= '</tbody>'.
-        '<tfoot>'.
-            '<tr>'.
-                '<th></th>'.
-                '<th></th>'.
-                '<th>'.collect($starting_balance)->sum().'</th>'.
-                '<th>'.number_format($account_ledgers->pluck('debit')->sum()).'</th>'.
-                '<th>'.number_format($account_ledgers->pluck('credit')->sum()).'</th>'.
-                '<th>'.collect($starting_balance)->sum()+$balance_add_starting.'</th>'.
-                '<th></th>'.
-            '</tr>'.
-        '</tfoot>';
-        return [
-            'status' => true,
-            'message' => 'Table',
-            'data' => $table
-        ];
+                $table .= '<tr>' .
+                    '<td>' . $i . '</td>' .
+                    '<td>' . account_number_format($account_ledger->account_head_code) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : 0) . '</td>' .
+                    '<td>' . number_format($account_ledger->debit) . '</td>' .
+                    '<td>' . number_format($account_ledger->credit) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
 
-        }else
-        {
-                        
-            $table =  '<thead>'.
-            '<tr>'.
-                '<th class="text-nowrap">#</th>'.
-                '<th class="text-nowrap">Account Codes</th>'.
-                '<th class="text-nowrap">Opening Balance</th>'.
-                '<th class="text-nowrap">Debit</th>'.
-                '<th class="text-nowrap">Credit</th>'.
-                '<th class="text-nowrap">Closing Balance</th>'.
-                '<th class="text-nowrap">Transactions At</th>'.
-            '</tr>'.
-        '</thead>'.
-        '<tbody>'.
-            '<tr>'.                      
-               '<td></td>'.                     
-               '<td></td>'.                     
-               //    '<td class="text-nowrap">'.$start_date
-               //    .' and '.$end_date.' Date'.'</td>'.                     
-               '<td class="text-nowrap">No Record Found Of </td>'.                                  
-               '<td></td>'.                     
-               '<td></td>'.                     
-               '<td></td>'.                     
-               '<td></td>'.                     
-            '</tr>'.
-               
-        '</tbody>'.
-        '<tfoot>'.
-            '<tr>'.
-                '<th></th>'.
-                '<th></th>'.
-                '<th>0</th>'.
-                '<th>0</th>'.
-                '<th>0</th>'.
-                '<th>0</th>'.
-                '<th></th>'.
-            '</tr>'.
-        '</tfoot>';
+                    '<td>' .
+                    '<span>' . date_format(new DateTime($account_ledger->created_at), 'h:i:s')
+                    . '</span>' . '<br> <span class="text-primary fw-bold">' .
+                    date_format(new DateTime($account_ledger->created_at), 'Y-m-d') .
+                    '</span>' .
 
-        return [
-            'status' => true,
-            'message' => 'no data ',
-            'data' => $table
-        ];
+                    '</td>' .
+                    '</tr>';
+                $i++;
+                $starting_balance_index++;
+            }
+            $balance_add_starting = array_pop($starting_balance);
+
+            $table .= '</tbody>' .
+                '<tfoot>' .
+                '<tr>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th>' . collect($starting_balance)->sum() . '</th>' .
+                '<th>' . number_format($account_ledgers->pluck('debit')->sum()) . '</th>' .
+                '<th>' . number_format($account_ledgers->pluck('credit')->sum()) . '</th>' .
+                '<th>' . collect($starting_balance)->sum() + $balance_add_starting . '</th>' .
+                '<th></th>' .
+                '</tr>' .
+                '</tfoot>';
+            return [
+                'status' => true,
+                'message' => 'Table',
+                'data' => $table
+            ];
+        } else {
+
+            $table =  '<thead>' .
+                '<tr>' .
+                '<th class="text-nowrap">#</th>' .
+                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Opening Balance</th>' .
+                '<th class="text-nowrap">Debit</th>' .
+                '<th class="text-nowrap">Credit</th>' .
+                '<th class="text-nowrap">Closing Balance</th>' .
+                '<th class="text-nowrap">Transactions At</th>' .
+                '</tr>' .
+                '</thead>' .
+                '<tbody>' .
+                '<tr>' .
+                '<td></td>' .
+                '<td></td>' .
+                //    '<td class="text-nowrap">'.$start_date
+                //    .' and '.$end_date.' Date'.'</td>'.                     
+                '<td class="text-nowrap">No Record Found Of </td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '</tr>' .
+
+                '</tbody>' .
+                '<tfoot>' .
+                '<tr>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th>0</th>' .
+                '<th>0</th>' .
+                '<th>0</th>' .
+                '<th>0</th>' .
+                '<th></th>' .
+                '</tr>' .
+                '</tfoot>';
+
+            return [
+                'status' => true,
+                'message' => 'no data ',
+                'data' => $table
+            ];
         }
     }
 
-    public function filterByDate(Request $request )
+    public function filterByDate(Request $request)
     {
         // return $request->all();
         $account_head_code = $request->type_name;
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
 
-        $account_head = AccountHead::when(($start_date && $end_date), function ($query) use ($start_date,$end_date) {
-            $query->whereDate('created_at','>=', $start_date)->whereDate('created_at','<=', $end_date);
+        $account_head = AccountHead::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
+            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
             return $query;
-        })->when(($request->months_id=='months12'),function ($query)
-        {
+        })->when(($request->months_id == 'months12'), function ($query) {
             $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(12));
             return $query;
         })
-        ->when(($request->months_id=='months6'),function ($query)
-        {
-            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
-            return $query;
-        })
-        ->when(($request->months_id=='months3'),function ($query)
-        {
-            $query->whereMonth('created_at','>=', Carbon::now()->subMonth(3));
-            return $query;
-        })
-        ->when(($account_head_code > 0),function ($query) use ($account_head_code)
-        {
-            $query->where('code',$account_head_code);
-            return $query;
-        })
-        ->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->get();
+            ->when(($request->months_id == 'months6'), function ($query) {
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
+                return $query;
+            })
+            ->when(($request->months_id == 'months1'), function ($query) {
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth());
+                return $query;
+            })
+            ->when(($request->months_id == 'months3'), function ($query) {
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(3));
+                return $query;
+            })
+            ->when(($account_head_code > 0), function ($query) use ($account_head_code) {
+                $query->where('code', $account_head_code);
+                return $query;
+            })
+            ->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->get();
         // dd($account_head[0]->accountLedgers);
 
-      $table = '<thead>'.
-        '<tr>'.
-            '<th title="#">#</th>'.
-            '<th title="Account Codes">Account Codes</th>'.
-            '<th title="Account Name">Account Name</th>'.
-            '<th title="Opening Balance">Opening Balance</th>'.
-            '<th title="Debit">Debit</th>'.
-            '<th title="Credit">Credit</th>'.
-            '<th title="Closing Balance">Closing Balance</th>'.
-            '<th title="Transactions At">Transactions At</th>'.
-            '<th title="Action">Action</th>'.
-        '</tr>'.
-    '</thead>'.
-    '<tbody>';
-    $i= 1;
-    foreach($account_head as $account)
-    {
+        $table = '<thead>' .
+            '<tr>' .
+            '<th title="#">#</th>' .
+            '<th title="Account Codes">Account Codes</th>' .
+            '<th title="Account Name">Account Name</th>' .
+            '<th title="Opening Balance">Opening Balance</th>' .
+            '<th title="Debit">Debit</th>' .
+            '<th title="Credit">Credit</th>' .
+            '<th title="Closing Balance">Closing Balance</th>' .
+            '<th title="Transactions At">Transactions At</th>' .
+            '<th title="Action">Action</th>' .
+            '</tr>' .
+            '</thead>' .
+            '<tbody>';
+        $i = 1;
+        foreach ($account_head as $account) {
 
 
-        $credits = $account->accountLedgers->pluck('credit')->sum();
-        $debits = $account->accountLedgers->pluck('debit')->sum();
-        $ending=0;
-        if((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12))
-        {
-            $ending = number_format($credits - $debits);
-        }else{
-            $ending = number_format($debits - $credits);
+            $credits = $account->accountLedgers->pluck('credit')->sum();
+            $debits = $account->accountLedgers->pluck('debit')->sum();
+            $ending = 0;
+            if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
+                $ending = number_format($credits - $debits);
+            } else {
+                $ending = number_format($debits - $credits);
+            }
+
+            $table .= '<tr>' .
+                '<td class="text-nowrap">' . $i . '</td>' .
+                '<td class="text-nowrap">' . account_number_format($account->code) . '</td>' .
+                '<td class="text-nowrap">' . $account->name . '</td>' .
+                '<td class="text-nowrap">' . $ending . '</td>' .
+                '<td class="text-nowrap">' . number_format($credits) . '</td>' .
+                '<td class="text-nowrap">' . number_format($debits) . '</td>' .
+                '<td class="text-nowrap">' . $ending . '</td>' .
+                '<td class="text-nowrap">' .
+                '<span>' . date_format(new DateTime($account->created_at), 'h:i:s')
+                . '</span>' . '<br> <span class="text-primary fw-bold">' .
+                date_format(new DateTime($account->created_at), 'Y-m-d') .
+                '</span>' .
+
+                '</td>' .
+                '<td>' . view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]) . '</td>' .
+                '</tr>';
+            $i++;
         }
+        $table .= '</tbody>' .
+            '<tfoot>' .
+            '<tr>' .
+            '<th></th>' .
+            '<th></th>' .
+            '<th>-</th>' .
+            '<th>-</th>' .
+            '<th>-</th>' .
+            '<th>-</th>' .
+            '<th></th>' .
+            '<th></th>' .
+            '<th></th>' .
+            '</tr>' .
+            '</tfoot>';
 
-        $table.= '<tr>'.
-            '<td class="text-nowrap">'.$i.'</td>'.
-            '<td class="text-nowrap">'.account_number_format($account->code).'</td>'.
-            '<td class="text-nowrap">'.$account->name.'</td>'.
-            '<td class="text-nowrap">'.$ending.'</td>'.
-            '<td class="text-nowrap">'.number_format($credits).'</td>'.
-            '<td class="text-nowrap">'.number_format($debits).'</td>'.
-            '<td class="text-nowrap">'.$ending.'</td>'.
-            '<td class="text-nowrap">'.
-            '<span>'. date_format(new DateTime($account->created_at), 'h:i:s')
-             .'</span>'. '<br> <span class="text-primary fw-bold">'.
-               date_format(new DateTime($account->created_at), 'Y-m-d').
-               '</span>'.
-            
-            '</td>'.
-            '<td>'.view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]).'</td>'.
-        '</tr>';
-        $i++;
-    }
-    $table .= '</tbody>'.
-    '<tfoot>'.
-        '<tr>'.
-            '<th></th>'.
-            '<th></th>'.
-            '<th>-</th>'.
-            '<th>-</th>'.
-            '<th>-</th>'.
-            '<th>-</th>'.
-            '<th></th>'.
-            '<th></th>'.
-            '<th></th>'.
-        '</tr>'.
-    '</tfoot>';
-
-    return [
-        'status' => true,
-        'message' => ' filter by date mouth or year',
-        'data' => $table
-    ];
+        return [
+            'status' => true,
+            'message' => ' filter by date mouth or year',
+            'data' => $table
+        ];
     }
 }

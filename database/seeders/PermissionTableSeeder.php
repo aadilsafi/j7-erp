@@ -285,7 +285,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.types.importTypes',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Unit Types',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -356,7 +356,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.additional-costs.importAdcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Additional Costs',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -562,7 +562,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.unitsImport.importUnits',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Units file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -665,7 +665,7 @@ class PermissionTableSeeder extends Seeder
             //sales Plan Import
             [
                 'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -694,7 +694,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Additional Costs Import
             [
                 'name' => 'sites.floors.spadcostsImport.importspadcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Additional Costs file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -724,7 +724,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Installments Import
             [
                 'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Installments file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -809,6 +809,8 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            //Stakeholders Import
             [
                 'name' => 'sites.stakeholders.importStakeholders',
                 'show_name' => 'Can Import file',
@@ -838,6 +840,36 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            //Stakeholders Kins Import
+
+            [
+                'name' => 'sites.stakeholders.kins.importStakeholders',
+                'show_name' => 'Can Import Stakeholders Kin',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.importStakeholdersPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Blacklisted Stakeholders
             // Stakeholders
             [

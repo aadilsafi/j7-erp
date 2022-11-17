@@ -98,7 +98,7 @@
             </div>
             <div class="col-2 text-center">
                 <p style="border-bottom: 1px solid black;">
-                    {{ $stakeholder->full_name }}
+                    Ali
                 </p>
             </div>
             <div class="col text-nowrap" style="width: fit-content;">
@@ -106,7 +106,7 @@
             </div>
             <div class="col text-center">
                 <p style="border-bottom: 1px solid black;">
-                   {{ $unit->floor_short_label }}
+                   {{--  --}}
                 </p>
             </div>
             <div class="col-4 text-nowrap" style="width: fit-content;">
@@ -134,19 +134,19 @@
                 <h4>Owner Name:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1">{{ $stakeholder->full_name }}</div>
+                <div style="border-bottom: 1px solid black" class="mt-1"></div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Unit No:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1">{{ $unit->floor_short_label }}</div>
+                <div style="border-bottom: 1px solid black" class="mt-1"></div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4> Size Of Unit:*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1">{{ $unit->gross_area }}</div>
+                <div style="border-bottom: 1px solid black" class="mt-1"></div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Floor:*</h4>

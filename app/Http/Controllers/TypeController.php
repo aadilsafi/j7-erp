@@ -340,12 +340,18 @@ class TypeController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
+            $required = [
+                'unit_type_slug',
+                'name',
+            ];
+
             $dataTable = new ImportUnitTypesDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.sites.types.importTypesPreview', $data);
         }
@@ -398,7 +404,7 @@ class TypeController extends Controller
             if (!is_null($accountCode) && $data[$key]['parent_id'] == 0) {
 
                 $data[$key]['account_added'] = true;
-                $data[$key]['account_number'] = $accountCode++;
+                $data[$key]['account_number'] = $accountCode;
             } else {
                 $data[$key]['account_added'] = false;
                 $data[$key]['account_number'] = null;
@@ -417,7 +423,7 @@ class TypeController extends Controller
                     'level' => 3,
                 ]);
             }
-           
+           $accountCode++;
         }
 
         TempUnitType::query()->truncate();

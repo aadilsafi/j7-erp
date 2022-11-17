@@ -43,7 +43,7 @@ class Stakeholder extends Model implements HasMedia
         'father_name' => 'required|string|min:1|max:50',
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
-        'cnic' => 'required|numeric|unique:stakeholders,cnic',
+        'cnic' => 'required|unique:stakeholders,cnic',
         // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
         'ntn' => 'required|numeric',
         'contact' => 'required|string|min:1|max:20',
@@ -55,6 +55,9 @@ class Stakeholder extends Model implements HasMedia
         'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
         'next-of-kins' => 'nullable|array',
+        'city_id' => 'nullable|numeric',
+        'state_id' => 'nullable|numeric',
+        'country_id' => 'nullable|numeric',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 

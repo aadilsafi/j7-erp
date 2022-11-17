@@ -33,6 +33,10 @@
             font-size: 15px !important;
             color: #7367f0 !important;
         }
+
+        #stakeholderNextOfKin {
+            display: none;
+        }
     </style>
 @endsection
 
@@ -67,8 +71,7 @@
                     'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
 
             </div>
@@ -114,6 +117,12 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
+                                    <div class="d-block mb-1">
+                                        <label class="form-label fs-5" for="created_date">Creation Date</label>
+                                        <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
+                                            name="created_date" class="form-control form-control-md" />
+                                    </div>
+                                    <hr>
                                     <div class="d-block mb-1">
                                         <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
                                         <input type="text" id="sales_plan_validity" name="sales_plan_validity"
@@ -218,11 +227,11 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
-
                         if (response.status) {
                             if (response.data) {
-                                stakeholderData = response.data;
+                                stakeholderData = response.data[0];
                             }
+
                             // $('#stackholder_id').val(stakeholderData.id);
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
@@ -233,6 +242,23 @@
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
                             $('#stackholder_comments').text(stakeholderData.comments);
+
+                            $('#stackholder_next_of_kin').empty();
+                            if (response.data[1].length > 0) {
+                                $('#stakeholderNextOfKin').show();
+                                $.each(response.data[1], function(i, item) {
+
+                                    $('#stackholder_next_of_kin').append($('<option>', {
+                                        value: item.id,
+                                        text: item.full_name + ' s/o ' +
+                                            item.father_name + ' ,' + item
+                                            .cnic,
+                                    }));
+
+                                });
+                            } else {
+                                $('#stakeholderNextOfKin').hide();
+                            }
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
@@ -315,7 +341,27 @@
                 updateTable();
             });
 
-            $("#sales_plan_validity").flatpickr({
+            $("#created_date").flatpickr({
+                defaultDate: "today",
+                // minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    installmentDate.set("minDate", dateStr);
+                    installmentDate.setDate(dateStr);
+
+                    validityDate.set('minDate', new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+
+                    validityDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+
+                    dataArrays.ArrDueDates = [];
+                    mergeArrays();
+                    updateTable();
+                },
+            });
+
+            var validityDate = $("#sales_plan_validity").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
                 minDate: "today",
                 altInput: !0,
@@ -323,7 +369,7 @@
                 dateFormat: "Y-m-d",
             });
 
-            $("#installments_start_date").flatpickr({
+            var installmentDate = $("#installments_start_date").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
                 minDate: "today",
                 altInput: !0,
@@ -652,8 +698,9 @@
                     required: true
                 },
                 'stackholder[cnic]': {
-                    minlength:13,
-                    maxlength:13,
+                    // minlength: 13,
+                    // maxlength: 13,
+                    required: true,
                 },
 
                 // 4. SALES SOURCE

@@ -32,47 +32,10 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            // ->editColumn('unit_short_label', function ($data) {
-            //     return view(
-            //         'app.components.unit-preview-cell',
-            //         ['id' => $data->id, 'field' => 'unit_short_label', 'inputtype' => 'text', 'value' => $data->unit_short_label]
-            //     );
-            // })
-            // ->editColumn('stakeholder_cnic', function ($data) {
-            //     return view(
-            //         'app.components.unit-preview-cell',
-            //         ['id' => $data->id, 'field' => 'stakeholder_cnic', 'inputtype' => 'number', 'value' => $data->stakeholder_cnic]
-            //     );
-            // })
-            // ->editColumn('total_price', function ($data) {
-            //     return view(
-            //         'app.components.unit-preview-cell',
-            //         ['id' => $data->id, 'field' => 'total_price', 'inputtype' => 'number', 'value' => $data->total_price]
-            //     );
-            // })
-            // ->editColumn('down_payment_total', function ($data) {
-            //     return view(
-            //         'app.components.unit-preview-cell',
-            //         ['id' => $data->id, 'field' => 'down_payment_total', 'inputtype' => 'number', 'value' => $data->down_payment_total]
-            //     );
-            // })
-
-            // ->editColumn('validity', function ($data) {
-            //     return view(
-            //         'app.components.unit-preview-cell',
-            //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
-            //     );
-            // })
             ->editColumn('due_date', function ($data) {
                 return view(
                     'app.components.unit-preview-cell',
                     ['id' => $data->id, 'field' => 'due_date', 'inputtype' => 'text', 'value' => $data->due_date]
-                );
-            })
-            ->editColumn('last_paid_at', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'last_paid_at', 'inputtype' => 'text', 'value' => $data->last_paid_at]
                 );
             })
             ->editColumn('type', function ($data) {
@@ -97,25 +60,6 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
                 return view(
                     'app.components.unit-preview-cell',
                     ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
-                );
-            })
-            ->editColumn('paid_amount', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'paid_amount', 'inputtype' => 'number', 'value' => $data->paid_amount]
-                );
-            })
-            ->editColumn('remaining_amount', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'remaining_amount', 'inputtype' => 'number', 'value' => $data->remaining_amount]
-                );
-            })
-            ->editColumn('status', function ($data) {
-                $values = ['paid' => 'Paid', 'unpaid' => 'Un Paid', 'partially-paid' => 'Partially Paid'];
-                return view(
-                    'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
                 );
             })
             ->setRowId('id');
@@ -195,34 +139,13 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
 
                 'name' => 'total_amount'
             ])->render())->addClass('removeTolltip'),
-            // Column::computed('paid_amount')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'is_disable' => false,
-            //     'spInstallment' => true,
+            Column::computed('due_date')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'spInstallment' => true,
+                'name' => 'due_date'
+            ])->render())->searchable(true)->addClass('removeTolltip'),
 
-            //     'name' => 'paid_amount'
-            // ])->render())->addClass('removeTolltip'),
-            // Column::computed('remaining_amount')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'is_disable' => false,
-            //     'spInstallment' => true,
-
-            //     'name' => 'remaining_amount'
-            // ])->render())->addClass('removeTolltip'),
-            // Column::computed('last_paid_at')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'is_disable' => false,
-            //     'spInstallment' => true,
-
-            //     'name' => 'last_paid_at'
-            // ])->render())->searchable(true)->addClass('removeTolltip'),
-            // Column::computed('status')->title(view('app.components.select-fields', [
-            //     'db_fields' => $this->db_fields,
-            //     'is_disable' => false,
-            //     'spInstallment' => true,
-
-            //     'name' => 'status'
-            // ])->render())->addClass('removeTolltip'),
         ];
     }
 }

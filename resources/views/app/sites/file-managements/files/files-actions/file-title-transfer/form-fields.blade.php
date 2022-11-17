@@ -249,7 +249,7 @@
                         <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
-                            type="number" class="form-control form-control-lg" id="stackholder_cnic"
+                            type="text" class="form-control form-control-lg" id="stackholder_cnic"
                             name="stackholder[cnic]" placeholder="CNIC"
                             value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}" />
                     </div>

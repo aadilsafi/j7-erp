@@ -51,7 +51,6 @@
             <div class="col-xl-12 col-lg-12">
                 <div class="tab-content">
                     <div class="tab-pane active" id="salesPlanData" aria-labelledby="salesPlanData" role="tabpanel">
-
                         <div class="row">
                             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
                                 <div class="card"
@@ -65,18 +64,10 @@
                                                     class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                                     placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                             </div>
-
-                                            {{-- <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
-                                                        <label class="form-label" style="font-size: 15px" for="form_date">Form Date</label>
-                                                        <input type="text" id="form_date" name="form_date"
-                                                            class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
-                                                            placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
-                                                    </div> --}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
@@ -123,24 +114,45 @@
                                     <tbody>
                                         @php
                                             $i = 1;
+                                            $starting_balance_index = 0;
+                                            $starting_balance = [];
                                             $ending_balance = 0;
                                         @endphp
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
                                                 @php
+                                                if(substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12 )
+                                                {
+                                                   
                                                     $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                                                    array_push($starting_balance,$ending_balance); 
+                                                }else {
+                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                                                    array_push($starting_balance,$ending_balance);
+                                                }
                                                 @endphp
                                                 <td>{{ $i }}</td>
-                                                <td>{{ account_number_format($account_ledger->account_head_code) }}</td>
+                                                <td class="text-nowrap">{{ account_number_format($account_ledger->account_head_code) }}</td>
                                                 @if ($i > 1)
-                                                    <td>{{ number_format(trim($ending_balance, '-')) }}</td>
+                                                    <td>{{number_format($starting_balance[$starting_balance_index - 1])}}</td>
+
                                                 @else
                                                     <td>0</td>
                                                 @endif
-                                                <td>{{ number_format($account_ledger->debit) }}</td>
-                                                <td>{{ number_format($account_ledger->credit) }}</td>
-                                                <td>{{ number_format($ending_balance) }}</td>
-                                                <td>
+                                                <td class="text-nowrap">{{ number_format($account_ledger->debit) }}</td>
+                                                <td class="text-nowrap">{{ number_format($account_ledger->credit) }}</td>
+                                                @if ($i > 1)
+                                                @php
+                                                    $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
+                                                    $starting_balance[$starting_balance_index]= $new_starting_balance;
+                                                @endphp
+                                                <td class="text-nowrap">{{ number_format($new_starting_balance)}}</td>
+                                                
+                                                @else
+                                                <td class="text-nowrap">{{ number_format($ending_balance)}}</td>
+                                                    
+                                                @endif
+                                                <td class="text-nowrap">
                                                     <span>{{ date_format(new DateTime($account_ledger->created_at), 'h:i:s') }}
                                                     </span> <br> <span class='text-primary fw-bold'>
                                                         {{ date_format(new DateTime($account_ledger->created_at), 'Y-m-d') }}</span>
@@ -148,6 +160,7 @@
                                             </tr>
                                             @php
                                                 $i++;
+                                                $starting_balance_index++;
                                             @endphp
                                         @endforeach
                                     </tbody>
@@ -171,8 +184,6 @@
         </div>
     </section>
 @endsection
-
-
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
@@ -196,12 +207,9 @@
             var table = $('#example').DataTable({
                 responsive: true
             });
-
-            new $.fn.dataTable.FixedHeader(table);
         });
 
-        var flatpicker_form_date = null,
-            flatpicker_to_date = null;
+        var flatpicker_to_date = null;
         $(document).ready(function() {
 
             flatpicker_to_date = $("#to_date").flatpickr({
@@ -211,46 +219,14 @@
                 dateFormat: "Y-m-d",
             });
 
-            flatpicker_form_date = $("#form_date").flatpickr({
-                mode: "range",
-                altInput: !0,
-                altFormat: "F j, Y",
-                dateFormat: "Y-m-d",
-            });
-
-            var salesPlanDataTable = $(".dt-complex-header").DataTable({
-                processing: true,
-
-                select: true,
-                serverSide: true,
-                scrollX: true,
-                debug: true,
-                dom: 'lrtipC',
-                ajax: {
-                    url: '{{ route('sites.accounts.trial-balance.filter-trial-blance', ['site_id' => ':site_id', 'account_head_code_id' => ':account_ledgers[0]->account_head_code']) }}'
-                        .replace(':site_id', "{{ encryptParams($site_id) }}"),
-
-                },
-                "language": {
-                    "processing": '<div class="spinner-grow text-primary" role="status">' +
-                        '<span class="visually-hidden">Loading...</span>' +
-                        '</div>'
-                },
-                columns: dataTableColumns,
-                buttons: buttons,
-                displayLength: 2,
-                lengthMenu: [2, 4, 100],
-            });
-
             $('#apply_filter').on('click', function(e) {
                 e.preventDefault();
                 hideBlockUI();
                 let filter_date_from = '',
                     filter_date_to = '';
-                let form_date = $('#form_date').val();
                 let to_date = $('#to_date').val();
 
-                let data = '?';
+                let data_data = '';
                 if (to_date) {
                     let generated_at_date_range = to_date.split(' ');
 
@@ -263,26 +239,37 @@
                         filter_date_to = generated_at_date_range[2];
                     }
 
-                    data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
+                    data_data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
                         filter_date_to;
                 }
-                if (form_date) {
-                    var approved_date_range = form_date.split(' ');
-
-                    if (approved_date_range[0]) {
-                        filter_date_from = approved_date_range[0];
-                        filter_date_to = approved_date_range[0];
-                    }
-
-                    if (approved_date_range[2]) {
-                        filter_date_to = approved_date_range[2];
-                    }
-
-                    data += '&filter_approved_from=' + filter_date_from + '&filter_approved_to=' +
-                        filter_date_to;
+                console.log(data_data);
+        let url = "{{ route('sites.accounts.trial-balance.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
+        var _token = '{{ csrf_token() }}';
+        $.ajax({
+            url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'date_filter': data_data,
+                    'to_date': to_date,
+                    '_token': _token,
+                    'account_head_code': '{{$account_ledgers[0]->account_head_code}}',
+                },
+            success: function(data) {
+                
+                console.log((data))
+                if(data.status==true){
+                    $('#example').html(data.data);
+                }else{
+                    console.log(data.data);
                 }
 
-                salesPlanDataTable.ajax.url(data).load();
+            },
+            error: function(error) {
+                    console.log(error);
+            }
+        });
+                
             });
         });
 
@@ -291,7 +278,6 @@
             $('#form_date').val('');
             $('#to_date').val('');
             flatpicker_to_date.clear();
-            flatpicker_form_date.clear();
 
             $('#apply_filter').trigger('click');
 

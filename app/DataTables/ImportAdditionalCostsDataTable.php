@@ -110,31 +110,37 @@ class ImportAdditionalCostsDataTable extends DataTable
             Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'additional_costs_name'
             ])->render())->addClass('removeTolltip'),
             Column::computed('site_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'site_percentage'
             ])->render())->addClass('removeTolltip'),
             Column::computed('floor_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'floor_percentage'
             ])->render())->addClass('removeTolltip'),
             Column::computed('unit_percentage')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'unit_percentage'
             ])->render())->addClass('removeTolltip'),
             Column::computed('is_sub_types')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'is_sub_types'
             ])->render())->addClass('removeTolltip'),
             Column::computed('parent_type_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'parent_type_name'
             ])->render())->addClass('removeTolltip'),
 

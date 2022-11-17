@@ -26,6 +26,7 @@ use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Redirect;
 use Illuminate\Support\Facades\DB;
+use Str;
 
 class StakeholderController extends Controller
 {
@@ -64,11 +65,11 @@ class StakeholderController extends Controller
             $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
-            $emtyNextOfKin = [
-                // 'stakeholder_id' => 0,
-                // 'kin_id' => 0,
-                // 'relation '=>'',
-            ];
+
+            $emtyNextOfKin[0]['id'] = 0;
+            $emtyNextOfKin[0]['kin_id'] = 0;
+            $emtyNextOfKin[0]['relation'] = '';
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
@@ -81,6 +82,7 @@ class StakeholderController extends Controller
                 'emtyNextOfKin' => $emtyNextOfKin,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
+
             return view('app.sites.stakeholders.create', $data);
         } else {
             abort(403);
@@ -96,11 +98,15 @@ class StakeholderController extends Controller
     public function store(stakeholderStoreRequest $request, $site_id)
     // public function store(Request $request, $site_id)
     {
-        // dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();
                 // dd($inputs);
+                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                //
+                if (isset($blackListedData)) {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
+                }
                 $record = $this->stakeholderInterface->store($site_id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -134,27 +140,25 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
         try {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types','nextOfKin']);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin']);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
-                $emtyNextOfKin = [
-                    'stakeholder_id' => 0,
-                    'kin_id' => 0,
-                    'relation '=>'',
-                ];
+                $emtyNextOfKin[0]['id'] = 0;
+                $emtyNextOfKin[0]['kin_id'] = 0;
+                $emtyNextOfKin[0]['relation'] = '';
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
                     'stakeholderTypes' => StakeholderTypeEnum::array(),
-                    'stakeholders' => $this->stakeholderInterface->getByAll($site_id),
+                    'stakeholders' => Stakeholder::where('id', '!=', $stakeholder->id)->get(),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
                     'country' => Country::all(),
                     'city' => City::all(),
                     'state' => State::all(),
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
-                    'emtyNextOfKin' =>$emtyNextOfKin,
+                    'emtyNextOfKin' => $emtyNextOfKin,
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
                 // dd($data);
@@ -174,7 +178,7 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(stakeholderUpdateRequest  $request, $site_id, $id)
+    public function update(stakeholderUpdateRequest $request, $site_id, $id)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
@@ -182,7 +186,10 @@ class StakeholderController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-
+                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                if (isset($blackListedData)) {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
+                }
                 $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
@@ -219,8 +226,13 @@ class StakeholderController extends Controller
     public function ajaxGetById(Request $request, $site_id, $stakeholder_id)
     {
         if ($request->ajax()) {
-            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id, ['stakeholder_types']);
-            return apiSuccessResponse($stakeholder);
+            $stakeholder = $this->stakeholderInterface->getById($site_id, $stakeholder_id, ['stakeholder_types', 'nextOfKin']);
+            $nextOfKinId = StakeholderNextOfKin::where('stakeholder_id', $stakeholder_id)->get();
+            $nextOfKin = [];
+            foreach ($nextOfKinId as $key => $value) {
+                $nextOfKin[] = $this->stakeholderInterface->getById($site_id, $value->kin_id, ['stakeholder_types']);
+            }
+            return apiSuccessResponse([$stakeholder, $nextOfKin]);
         } else {
             abort(403);
         }
@@ -464,7 +476,7 @@ class StakeholderController extends Controller
                 case 'relation':
                     if ($request->get('updateValue') == 'true') {
 
-                        $tempStakeholder->relation = $request->get('value');
+                        $tempStakeholder->relation = json_encode($request->get('value'));
 
                         $response = view('app.components.unit-preview-cell', [
                             'id' => $request->get('id'),
@@ -693,11 +705,23 @@ class StakeholderController extends Controller
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
             $dataTable = new ImportStakeholdersDataTable($site_id);
+
+            $required = [
+                'full_name',
+                'father_name',
+                'cnic',
+                'contact',
+                'address',
+                'is_dealer',
+                'is_vendor',
+                'is_customer'
+            ];
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.sites.stakeholders.importFloorsPreview', $data);
         }
@@ -720,7 +744,6 @@ class StakeholderController extends Controller
             $tempCols = $model->getFillable();
 
             $stakeholder = [];
-            $is_kins = false;
             $parentsCnics = [];
             $parentsRelations = [];
 
@@ -731,13 +754,15 @@ class StakeholderController extends Controller
                 $data[$key]['site_id'] = decryptParams($site_id);
                 $data[$key]['is_imported'] = true;
 
-                if ($data[$key]['parent_cnic'] != null && $data[$key]['parent_cnic'] != "null") {
-                    $is_kins = true;
-                    $parentsCnics[$key] = explode(',', json_decode($data[$key]['parent_cnic']));
-                    $parentsRelations[$key] = explode(',', $data[$key]['relation']);
-                }
-                $data[$key]['parent_id'] = 0;
-                $data[$key]['relation'] = null;
+                // if ($data[$key]['parent_cnic'] != null && $data[$key]['parent_cnic'] != "null") {
+                //     $is_kins[$key] = true;
+                //     $parentsCnics[$key] = explode(',', json_decode($data[$key]['parent_cnic']));
+                //     $parentsRelations[$key] = explode(',', $data[$key]['relation']);
+                // } else {
+                //     $is_kins[$key] = false;
+                // }
+                // $data[$key]['parent_id'] = 0;
+                // $data[$key]['relation'] = null;
 
                 if ($data[$key]['country'] != "null") {
                     $country = Country::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['country']))->first();
@@ -751,19 +776,19 @@ class StakeholderController extends Controller
                 if ($data[$key]['city'] != "null") {
                     $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['city']))->first();
                     if ($city) {
-                        $data[$key]['city_id'] = $country->id;
+                        $data[$key]['city_id'] = $city->id;
                     }
                 }
                 if ($data[$key]['state'] != "null") {
                     $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['state']))->first();
                     if ($state) {
-                        $data[$key]['state_id'] = $country->id;
+                        $data[$key]['state_id'] = $state->id;
                     }
                 }
                 unset($data[$key]['parent_cnic']);
                 unset($data[$key]['is_dealer']);
                 unset($data[$key]['is_vendor']);
-                unset($data[$key]['is_kin']);
+                // unset($data[$key]['is_kin']);
                 unset($data[$key]['is_customer']);
                 unset($data[$key]['country']);
                 unset($data[$key]['state']);
@@ -815,20 +840,23 @@ class StakeholderController extends Controller
                 ];
 
                 $stakeholder_type = StakeholderType::insert($stakeholdertype);
-                if ($is_kins) {
-                    foreach ($parentsCnics[$key] as $c => $cnics) {
-                        $parent = Stakeholder::where('cnic', $cnics)->first();
-                        if ($parent == null) {
-                            return redirect()->route('sites.stakeholders.storePreview', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder With requested parent ' . $cnics . ' cnic does not exist. Please Add it First as a Parent Stakeholder.');
-                        }
-                        $kins[$key]['site_id'] = decryptParams($site_id);
-                        $kins[$key]['stakeholder_id'] = $parent->id;
-                        $kins[$key]['kin_id'] = $stakeholder->id;
-                        $kins[$key]['relation'] = $parentsRelations[$key][$c];
-                    }
-                    $stakeholder_kins = StakeholderNextOfKin::create($kins[$key]);
-                    $is_kins = false;
-                }
+                // if ($is_kins[$key]) {
+                //     foreach ($parentsCnics[$key] as $c => $cnics) {
+                //         $parent = Stakeholder::where('cnic', trim($cnics))->first();
+
+                //         if ($parent == null) {
+                //             return redirect()->route('sites.stakeholders.storePreview', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder With requested parent ' . $cnics . ' cnic does not exist. Please Add it First as a Parent Stakeholder.');
+                //         }
+                //         $kins[$c]['site_id'] = decryptParams($site_id);
+                //         $kins[$c]['stakeholder_id'] = $parent->id;
+                //         $kins[$c]['kin_id'] = $stakeholder->id;
+                //         $kins[$c]['relation'] = Str::replace('"', '', trim($parentsRelations[$key][$c]));
+
+                //         StakeholderNextOfKin::create($kins[$c]);
+                //     }
+
+                //     $is_kins[$key] = false;
+                // }
             }
         });
         TempStakeholder::query()->truncate();

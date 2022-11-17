@@ -220,16 +220,6 @@
                                 </a>
                                 <ul class="menu-content">
 
-                                    @can('sites.settings.import.images.index')
-                                        <li
-                                            class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
-                                            <a class="d-flex align-items-center"
-                                                href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='file'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Users">Images</span>
-                                            </a>
-                                        </li>
-                                    @endcan
                                     @can('sites.stakeholders.importStakeholders')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.stakeholders.importStakeholders') || request()->routeIs('sites.stakeholders.storePreview') ? 'active' : null }}">
@@ -240,6 +230,129 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.stakeholders.kins.importStakeholders')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.stakeholders.kins.importStakeholders') || request()->routeIs('sites.stakeholders.kins.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.stakeholders.kins.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='user'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Stakeholders Kins</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.floors.importFloors')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.importFloors', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='layers'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.types.importTypes')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.types.importTypes') || request()->routeIs('sites.types.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.types.importTypes', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='menu'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Types</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.additional-costs.importAdcosts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.additional-costs.importAdcosts') || request()->routeIs('sites.additional-costs.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.additional-costs.importAdcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='dollar-sign'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Additional Costs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.floors.unitsImport.importUnits')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.unitsImport.importUnits') || request()->routeIs('sites.floors.unitsImport.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.unitsImport.importUnits', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-shop-window"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Units</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    {{-- @can('sites.floors.SalesPlanImport.importSalesPlan')
+                                        <li class="nav-item ">
+                                            <a class="d-flex align-items-center" href="javascript:void(0)">
+                                                
+                                                <span class="menu-title text-truncate">
+                                                    Sales Plan</span>
+                                            </a>
+                                            <ul class="menu-content">
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.SalesPlanImport.importSalesPlan') || request()->routeIs('sites.floors.SalesPlanImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calculator"></i>
+                                                        <span class="menu-title text-truncate" data-i18n="Types">Sales Plan</span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                    @can('sites.floors.spadcostsImport.importspadcosts')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-currency-dollar"></i>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Additional
+                                                            Costs</span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                    @can('sites.floors.spInstallmentsImport.ImportInstallments')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spInstallmentsImport.ImportInstallments') || request()->routeIs('sites.floors.spInstallmentsImport.storePreviewInstallments') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calendar-date"></i>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Installments
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                            </ul>
+                                        </li> --}}
+                                    @can('sites.banks.importBanks')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.banks.importBanks') || request()->routeIs('sites.banks.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.banks.importBanks', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-bank2"></i>
+                                                <span class="menu-title" data-i18n="Types">Bank
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.settings.import.images.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-images"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Images</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    {{-- @can('sites.receipts.importReceipts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.receipts.importReceipts') || request()->routeIs('sites.receipts.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.receipts.importReceipts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-wallet2"></i>
+                                                <span class="menu-title" data-i18n="Types">Receipts
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan --}}
                                 </ul>
                             </li>
                         @endcan

@@ -40,12 +40,21 @@ class TrialBalanceDataTable extends DataTable
                 return editDateColumn($accountHead->created_at);
             })
             ->editColumn('starting_balance', function ($accountHead) {
+                // if (count($accountHead->accountLedgers) > 0) {
+                //     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
+                //     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
+                //     if((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)){
+                //         return number_format($credits - $debits);
+                //     }else{
+                //         return number_format($debits - $credits);
+                //     }
+                // }
                 if (count($accountHead->accountLedgers) > 0) {
                     if($accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays()))
                     {
                         $credits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('credit')->sum();
                         $debits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('debit')->sum();
-                        if((substr($accountHead->account_head_code, 0, 2) == 10) || substr($accountHead->account_head_code, 0, 2) == 60)
+                        if((substr($accountHead->account_head_code, 0, 2) == 10) || (substr($accountHead->account_head_code, 0, 2) == 60))
                         {
                             return number_format($credits - $debits);
                         }else{
@@ -71,8 +80,7 @@ class TrialBalanceDataTable extends DataTable
                 if (count($accountHead->accountLedgers) > 0) {
                     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
                     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
-                    if((substr($accountHead->code, 0, 2) == 10) || substr($accountHead->code, 0, 2) == 12)
-                    {
+                    if((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)){
                         return number_format($credits - $debits);
                     }else{
                         return number_format($debits - $credits);
@@ -141,10 +149,10 @@ class TrialBalanceDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap'),
             Column::make('name')->title('Account Name')->addClass('text-nowrap'),
-            Column::make('starting_balance')->title('Starting Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('starting_balance')->title('Opening Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('debit')->title('Debit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
-            Column::make('ending_balance')->title('Ending Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('ending_balance')->title('Closing Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('fitter_trial_balance')->title('Action')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];

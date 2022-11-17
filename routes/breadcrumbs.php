@@ -180,6 +180,10 @@ Breadcrumbs::for('sites.stakeholders.import', function (BreadcrumbTrail $trail, 
     $trail->parent('sites.stakeholders.index', $site_id);
     $trail->push('Import Stakeholders');
 });
+Breadcrumbs::for('sites.stakeholders.import.kins', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.stakeholders.index', $site_id);
+    $trail->push('Import Stakeholders Kins');
+});
 //Users Breadcrumbs
 Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

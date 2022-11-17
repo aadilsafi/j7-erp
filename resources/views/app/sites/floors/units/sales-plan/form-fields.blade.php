@@ -45,14 +45,15 @@
                         <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_price">Unit Price (Rs)</label>
-                                <input type="number" min="0" class="form-control form-control-lg" id="unit_price"
-                                    name="unit[price][unit]" placeholder="Unit Price" value="{{ $unit->price_sqft }}" />
+                                <input type="number" min="0" class="form-control form-control-lg"
+                                    id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
+                                    value="{{ $unit->price_sqft }}" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="total-price-unit">Amount (Rs)</label>
-                                <input type="text" class="form-control form-control-lg" readonly id="total-price-unit"
-                                    name="unit[price][total]" placeholder="Amount"
+                                <input type="text" class="form-control form-control-lg" readonly
+                                    id="total-price-unit" name="unit[price][total]" placeholder="Amount"
                                     value="{{ number_format($unit->total_price, 2) }}" />
                             </div>
                         </div>
@@ -61,48 +62,49 @@
                             {{-- Additional Cost Rows --}}
 
                             @foreach ($additionalCosts as $key => $additionalCost)
-                            @continue($additionalCost->has_child)
+                                @continue($additionalCost->has_child)
 
-                            @php
-                            $additionalCostPercentage = ($additionalCost->applicable_on_unit) ?
-                            $additionalCost->unit_percentage : 0;
+                                @php
+                                    $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
 
-                            $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
-                            @endphp
+                                    $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
+                                @endphp
 
-                            <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
-                                style="display: none;">
+                                <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
+                                    style="display: none;">
 
-                                <input type="hidden" name="unit[additional_cost][{{ $additionalCost->slug }}][status]"
-                                    id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
+                                    <input type="hidden"
+                                        name="unit[additional_cost][{{ $additionalCost->slug }}][status]"
+                                        id="status-{{ $additionalCost->slug }}-{{ $key }}" value="false">
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="price-{{ $additionalCost->slug }}-{{ $key }}">{{
-                                        $additionalCost->name }}
-                                        (%)
-                                    </label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5"
+                                            for="price-{{ $additionalCost->slug }}-{{ $key }}">{{ $additionalCost->name }}
+                                            (%)
+                                        </label>
 
-                                    <input type="number" min="0" max="100" step="0.1"
-                                        class="form-control form-control-lg additional-cost-percentage"
-                                        id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
-                                        name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
-                                        placeholder="{{ $additionalCost->name }}"
-                                        value="{{ $additionalCostPercentage }}" />
+                                        <input type="number" min="0" max="100" step="0.1"
+                                            class="form-control form-control-lg additional-cost-percentage"
+                                            id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
+                                            name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
+                                            placeholder="{{ $additionalCost->name }}"
+                                            value="{{ $additionalCostPercentage }}" />
 
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5"
+                                            for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount
+                                            (Rs)</label>
+
+                                        <input type="text"
+                                            class="form-control form-control-lg additional-cost-total-price"
+                                            id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
+                                            name="unit[additional_cost][{{ $additionalCost->slug }}][total]" readonly
+                                            placeholder="Amount"
+                                            value="{{ number_format($additionalCostTotalAmount, 2) }}" />
+                                    </div>
                                 </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5"
-                                        for="total-price-{{ $additionalCost->slug }}-{{ $key }}">Amount
-                                        (Rs)</label>
-
-                                    <input type="text" class="form-control form-control-lg additional-cost-total-price"
-                                        id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
-                                        name="unit[additional_cost][{{ $additionalCost->slug }}][total]" readonly
-                                        placeholder="Amount"
-                                        value="{{ number_format($additionalCostTotalAmount, 2) }}" />
-                                </div>
-                            </div>
                             @endforeach
 
                         </div>
@@ -111,9 +113,9 @@
                         <div class="row mb-1" id="div-discount">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="percentage-discount">Discount (%)</label>
-                                <input type="number" min="0" max="100" step="0.1" class="form-control form-control-lg"
-                                    id="percentage-discount" name="unit[discount][percentage]" placeholder="Discount %"
-                                    value="0" />
+                                <input type="number" min="0" max="100" step="0.1"
+                                    class="form-control form-control-lg" id="percentage-discount"
+                                    name="unit[discount][percentage]" placeholder="Discount %" value="0" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -147,13 +149,15 @@
                                 <input type="number" class="form-control form-control-lg"
                                     id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
                                     placeholder="Down Payment %" min="0" max="100"
-                                    value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0" step="0.1" />
+                                    value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
+                                    step="0.1" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_downpayment_total">Amount (Rs)</label>
                                 <input type="text" class="form-control form-control-lg" readonly
-                                    id="unit_downpayment_total" name="unit[downpayment][total]" placeholder="Amount" />
+                                    id="unit_downpayment_total" name="unit[downpayment][total]"
+                                    placeholder="Amount" />
                             </div>
                         </div>
                     </div>
@@ -163,7 +167,8 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" id="installments_acard">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+    id="installments_acard">
     <div class="card-header">
         <h3>2. INSTALLMENT DETAILS</h3>
     </div>
@@ -202,8 +207,8 @@
                         <p class="m-0 fw-bolder d-block mb-1">How Many (<span id="how_many">Quarters</span>)?</p>
                         <div class="d-flex justify-content-center align-items-center">
                             <div class="input-group input-group-lg ">
-                                <input type="number" min="0" class="touchspin-icon" name="installments[types][value]"
-                                    value="1" />
+                                <input type="number" min="0" class="touchspin-icon"
+                                    name="installments[types][value]" value="1" />
                             </div>
                         </div>
                     </div>
@@ -268,18 +273,21 @@
                             <div>
                                 <div class="row mb-1">
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_label_{{ $key }}">Expense
+                                        <label class="form-label fs-5"
+                                            for="expense_label_{{ $key }}">Expense
                                             label</label>
                                         <input type="text"
                                             class="form-control form-control-lg @error('expense_label') is-invalid @enderror"
-                                            id="expense_label_{{ $key }}" name="expenses[{{ $key }}][expense_label]"
+                                            id="expense_label_{{ $key }}"
+                                            name="expenses[{{ $key }}][expense_label]"
                                             placeholder="Expense Label" />
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_due_date">Expense Due Date</label>
-                                        <input type="text" id="expense_due_date" name="expenses[{{ $key }}][due_date]"
-                                            readonly class="form-control form-control-lg expense_due_date"
+                                        <input type="text" id="expense_due_date"
+                                            name="expenses[{{ $key }}][due_date]" readonly
+                                            class="form-control form-control-lg expense_due_date"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
 
@@ -292,8 +300,9 @@
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_remarks">Remarks</label>
-                                        <input type="text" class="form-control form-control-lg" id="expense_remarks"
-                                            name="expenses[{{ $key }}][remarks]" placeholder="Remarks">
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="expense_remarks" name="expenses[{{ $key }}][remarks]"
+                                            placeholder="Remarks">
                                     </div>
                                 </div>
 
@@ -329,12 +338,13 @@
     </div>
 </div>
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" id="stakeholders_card">
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+    id="stakeholders_card">
     <div class="card-header justify-content-between">
         <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
         <div id="div_stakeholder_type">
             @forelse ($stakeholderTypes as $stakeholderType)
-            <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
+                <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
             @empty
             @endforelse
         </div>
@@ -348,9 +358,9 @@
                 <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                     <option value="0">Create new Stakeholder...</option>
                     @forelse ($stakeholders as $stakeholder)
-                    <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
-                        {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}
-                    </option>
+                        <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
+                            {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}
+                        </option>
                     @empty
                     @endforelse
                 </select>
@@ -388,14 +398,14 @@
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                <input type="number" class="form-control form-control-lg" id="stackholder_ntn" name="stackholder[ntn]"
-                    placeholder="NTN" />
+                <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
+                    name="stackholder[ntn]" placeholder="NTN" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                <input type="number" class="form-control form-control-lg" id="stackholder_cnic" name="stackholder[cnic]"
-                    placeholder="CNIC" />
+                <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
+                    name="stackholder[cnic]" placeholder="CNIC" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -417,6 +427,15 @@
                     placeholder="Comments" rows="5"></textarea>
             </div>
         </div>
+
+        <div class="row mb-1" id="stakeholderNextOfKin">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
+                <select class="select2" multiple name="stackholder[next_of_kin][]" id="stackholder_next_of_kin">
+
+                </select>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -430,14 +449,15 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_full_name">Sales Person</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_full_name"
-                    name="sales_source[full_name]" placeholder="Sales Person" value="{{ $user->name }}" disabled />
+                    name="sales_source[full_name]" placeholder="Sales Person" value="{{ $user->name }}"
+                    disabled />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
 
                 @php
-                $roles = $user->roles->pluck('name')->toArray();
-                $roles = implode(', ', $roles);
+                    $roles = $user->roles->pluck('name')->toArray();
+                    $roles = implode(', ', $roles);
                 @endphp
 
                 <label class="form-label fs-5" for="sales_source_status">Status</label>
@@ -448,52 +468,55 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
                 <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
-                    name="sales_source[contact_no]" placeholder="Contact No" value="{{ $user->phone_no }}" disabled />
+                    name="sales_source[contact_no]" placeholder="Contact No" value="{{ $user->phone_no }}"
+                    disabled />
                 {{-- invalid-tooltip">{{ $message }}
             </div> --}}
-        </div>
-    </div>
-
-    <div class="row mb-1 g-1">
-        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-            <label class="form-label" style="font-size: 15px" for="sales_source_lead_source">Lead Source</label>
-            <select class="form-select form-select-lg" id="sales_source_lead_source" name="sales_source[lead_source]">
-                <option value="0">Create new Lead Source</option>
-                @forelse ($leadSources as $leadSource)
-                <option value="{{ $leadSource->id }}">{{ $leadSource->name }}</option>
-                @empty
-                @endforelse
-            </select>
-        </div>
-
-        <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
-            <div id="div_sales_source_lead_source">
-                <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
-                <input type="text" class="form-control form-control-lg" id="sales_source_new" name="sales_source[new]"
-                    placeholder="New Sale Source" value="{{ old('sales_source.new') }}" />
             </div>
         </div>
-    </div>
 
-</div>
+        <div class="row mb-1 g-1">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <label class="form-label" style="font-size: 15px" for="sales_source_lead_source">Lead Source</label>
+                <select class="form-select form-select-lg" id="sales_source_lead_source"
+                    name="sales_source[lead_source]">
+                    <option value="0">Create new Lead Source</option>
+                    @forelse ($leadSources as $leadSource)
+                        <option value="{{ $leadSource->id }}">{{ $leadSource->name }}</option>
+                    @empty
+                    @endforelse
+                </select>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
+                <div id="div_sales_source_lead_source">
+                    <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
+                    <input type="text" class="form-control form-control-lg" id="sales_source_new"
+                        name="sales_source[new]" placeholder="New Sale Source"
+                        value="{{ old('sales_source.new') }}" />
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 
 
 @if (isset($customFields) && count($customFields) > 0)
 
-<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
 
-    <div class="card-body">
+        <div class="card-body">
 
-        <div class="row mb-1 g-1">
-            @forelse ($customFields as $field)
-            {!! $field !!}
-            @empty
-            @endforelse
+            <div class="row mb-1 g-1">
+                @forelse ($customFields as $field)
+                    {!! $field !!}
+                @empty
+                @endforelse
+            </div>
         </div>
     </div>
-</div>
 @endif
 
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
@@ -511,8 +534,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="comments">Comments</label>
-                <textarea class="form-control form-control-lg" id="custom_comments" name="comments[custom]"
-                    placeholder="Comments" rows="5"></textarea>
+                <textarea class="form-control form-control-lg" id="custom_comments" name="comments[custom]" placeholder="Comments"
+                    rows="5"></textarea>
             </div>
         </div>
     </div>

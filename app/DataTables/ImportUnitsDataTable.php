@@ -165,79 +165,86 @@ class ImportUnitsDataTable extends DataTable
             Column::computed('floor_short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'floor_short_label'
             ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'name'
             ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('unit_short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'unit_short_label'
             ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('unit_type_slug')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'unit_type_slug'
             ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('parent_unit_short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'parent_unit_short_label'
             ])->render())->searchable(true)->addClass('removeTolltip'),
             Column::computed('width')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'width'
             ])->render())->addClass('removeTolltip'),
             Column::computed('length')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'length'
             ])->render())->addClass('removeTolltip'),
 
             Column::computed('net_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'net_area'
             ])->render())->addClass('removeTolltip'),
             Column::computed('gross_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'gross_area'
             ])->render())->addClass('removeTolltip'),
             Column::computed('price_sqft')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'price_sqft'
             ])->render())->addClass('removeTolltip'),
             Column::computed('total_price')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'total_price'
             ])->render())->addClass('removeTolltip'),
-
-            Column::computed('status')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'name' => 'status'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-
             Column::computed('is_corner')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'is_corner'
             ])->render())->addClass('removeTolltip'),
             Column::computed('is_facing')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'is_facing'
             ])->render())->addClass('removeTolltip'),
             Column::computed('additional_costs_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'additional_costs_name'
             ])->render())->searchable(true)->addClass('removeTolltip'),
         ];

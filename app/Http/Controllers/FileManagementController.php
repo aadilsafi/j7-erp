@@ -19,6 +19,7 @@ use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Http\Requests\File\store;
 use App\Models\FileManagement;
 use App\Models\ModelTemplate;
+use App\Models\StakeholderNextOfKin;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class FileManagementController extends Controller
@@ -109,6 +110,15 @@ class FileManagementController extends Controller
         // if (isset($data['customer_file'])) {
         //     return view('app.sites.file-managements.files.viewFile', $data);
         // }
+        $kinsIds = json_decode($data['salesPlan']->kin_data);
+            foreach($kinsIds as $key => $id){
+                $kin = Stakeholder::find($id);
+                $data['nextOfKin'][$key] = $kin;
+                $relation = StakeholderNextOfKin::where('stakeholder_id', decryptParams($customer_id))->where('kin_id', $kin->id)->first();
+                $data['nextOfKin'][$key]['relation'] = $relation->relation;
+
+            }
+        
         return view('app.sites.file-managements.files.create', $data);
     }
 

@@ -141,7 +141,7 @@
             //     .replace(':id', template_id)
         }
 
-        function approveSalesPlan(id) {
+        function approveSalesPlan(id, created_date) {
             showBlockUI('#salesPlan');
 
             swal.fire({
@@ -157,6 +157,7 @@
                 didOpen: function() {
                     $("#approve_date").flatpickr({
                         defaultDate: "today",
+                        minDate: created_date,
                         altInput: !0,
                         altFormat: "F j, Y",
                         dateFormat: "Y-m-d",

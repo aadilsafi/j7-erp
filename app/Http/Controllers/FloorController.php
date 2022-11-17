@@ -66,7 +66,9 @@ class FloorController extends Controller
             return $dataTable->with(['site_id' => decryptParams($site_id)])->ajax();
         }
 
-        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
+        $totalFloors = Floor::count();
+        
+        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id)), 'totalFloors' => $totalFloors]);
     }
 
     /**

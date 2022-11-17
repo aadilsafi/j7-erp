@@ -249,31 +249,31 @@
                             <div class="card-header">
                                 <h3>Next Of KIN</h3>
                             </div>
-                            @forelse ($customer->nextOfKin as $kins)
+                            @forelse ($nextOfKin as $kin)
                                 <div class="card-body">
                                     <div class="row g-1 mb-1">
                                         <input type="hidden" name="application_form[stakeholder_id]"
-                                            value="{{ $kins->stakeholder->id }}">
+                                            value="{{ $kin->id }}">
 
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_name">Name</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_name" placeholder="Name"
-                                                value="{{ $kins->stakeholder->full_name }}" disabled />
+                                                value="{{ $kin->full_name }}" disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_father_name">Father/Husband
                                                 Name</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_father_name"
-                                                value="{{ $kins->stakeholder->father_name }}"
+                                                value="{{ $kin->father_name }}"
                                                 placeholder="Father/Husband Name" disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5"
                                                 for="customer_relationship">Relationship</label>
                                             <input type="text" class="form-control form-control-lg"
-                                                id="customer_relationship" value="{{ $kins->relation }}"
+                                                id="customer_relationship" value="{{ $kin->relation }}"
                                                 placeholder="Relationship" disabled />
                                         </div>
                                     </div>
@@ -283,20 +283,20 @@
                                             <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_cnic" placeholder="CNIC/Passport"
-                                                value="{{ cnicFormat($kins->stakeholder->cnic) }}" disabled />
+                                                value="{{ cnicFormat($kin->cnic) }}" disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_phone">Cell</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_phone" placeholder="Cell"
-                                                value="{{ $kins->stakeholder->contact }}" disabled />
+                                                value="{{ $kin->contact }}" disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5"
                                                 for="customer_occupation">Occupation</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_occupation" placeholder="Occupation"
-                                                value="{{ $kins->stakeholder->occupation }}" disabled />
+                                                value="{{ $kin->occupation }}" disabled />
                                         </div>
                                     </div>
 
@@ -305,7 +305,7 @@
                                             <label class="form-label fs-5" for="customer_address">Address</label>
                                             <input type="text" class="form-control form-control-lg"
                                                 id="customer_address" placeholder="Address"
-                                                value="{{ $kins->stakeholder->address }}" disabled />
+                                                value="{{ $kin->address }}" disabled />
                                         </div>
                                     </div>
                                 </div>

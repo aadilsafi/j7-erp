@@ -453,7 +453,7 @@
                 }
             }, {
                 name: 'sales_plan_created_at',
-                data: 'sales_plan.created_at',
+                data: 'sales_plan.created_date',
                 className: 'text-center align-middle text-nowrap',
                 orderable: false,
                 render: function(data, type, row) {

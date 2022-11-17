@@ -183,7 +183,7 @@ class SalesPlanService implements SalesPlanInterface
                 'validity' => $inputs['sales_plan_validity'],
                 'comments' => $inputs['comments']['custom'],
                 'status' => false,
-                'created_date' => $inputs['created_date'],
+                'created_date' => $inputs['created_date'] . date(' H:i:s'),
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 

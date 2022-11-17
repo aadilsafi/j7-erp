@@ -30,6 +30,6 @@ class StakeholderNextOfKin extends Model implements HasMedia
     ];
 
     public function stakeholder(){
-        return $this->belongsTo(Stakeholder::class);
+        return $this->belongsTo(Stakeholder::class,'kin_id','id');
     }
 }

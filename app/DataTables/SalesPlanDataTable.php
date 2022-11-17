@@ -69,7 +69,7 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date,'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

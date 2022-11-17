@@ -363,7 +363,7 @@
 
             var validityDate = $("#sales_plan_validity").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
-                minDate: "today",
+                // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -371,7 +371,7 @@
 
             var installmentDate = $("#installments_start_date").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
-                minDate: "today",
+                // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

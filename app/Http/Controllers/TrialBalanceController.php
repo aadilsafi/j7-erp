@@ -204,7 +204,7 @@ class TrialBalanceController extends Controller
                 $query->where('code', $account_head_code);
                 return $query;
             })
-            ->where('level', 5)->whereHas('accountLedgers')->with('accountLedgers')->get();
+            ->where('level', 5)->whereHas('accountLedgers')->get();
         // dd($account_head[0]->accountLedgers);
 
         $table = '<thead>' .

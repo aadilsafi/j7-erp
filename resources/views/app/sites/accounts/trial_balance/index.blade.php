@@ -64,13 +64,17 @@
                                             </select>
                                             </div>
                                             <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 position-relative">
-                                                <label class="form-label fs-5" for="month_value">Select Month</label>
-                                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                <div>
+
+                                                    <label class="form-label fs-5" for="month_value">Select Month</label>
+                                                </div>
+
+                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                     <input type="hidden" name="month_value" id="month_value">
-                                                    <button type="button" name="months" id="months1" value="1" onclick="$('#month_value').val('months1')" class="btn btn-outline-primary">1 Months</button>
-                                                    <button type="button" name="months" id="months3" value="3" onclick="$('#month_value').val('months3')" class="btn btn-outline-primary">3 Months</button>
-                                                    <button type="button" name="months" id="months6" value="6" onclick="$('#month_value').val('months6')" class="btn btn-outline-primary">6 Months</button>
-                                                    <button type="button" name="months" id="months12" value="12" onclick="$('#month_value').val('months12')" class="btn btn-outline-primary">12 Months</button>
+                                                    <button type="button" name="months" id="months1" value="1" onclick="$('#month_value').val('months1'); $('#months1').css('background-color','#e8e7f380'); $('#months3, #months6, #months12').css('background-color','#ffffff')" class="btn btn-outline-primary">1 Months</button>
+                                                    <button type="button" name="months" id="months3" value="3" onclick="$('#month_value').val('months3'); $('#months3').css('background-color','#e8e7f380'); $('#months1, #months6, #months12').css('background-color','#ffffff')" class="btn btn-outline-primary">3 Months</button>
+                                                    <button type="button" name="months" id="months6" value="6" onclick="$('#month_value').val('months6'); $('#months6').css('background-color','#e8e7f380'); $('#months1, #months3, #months12').css('background-color','#ffffff') " class="btn btn-outline-primary">6 Months</button>
+                                                    <button type="button" name="months" id="months12" value="12" onclick="$('#month_value').val('months12'); $('#months12').css('background-color','#e8e7f380'); $('#months1, #months6, #months3').css('background-color','#ffffff')" class="btn btn-outline-primary">12 Months</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -309,6 +313,10 @@ function resetFilter() {
 
     $("#type_name").select2("val", "0");
     $('#month_value').val('');
+    $('#months3,#months1, #months6, #months12').css('background-color','#ffffff');
+    
+    $('.real_table_Data').addClass('d-block').removeClass('d-none');
+    $('.filter_table_data').removeClass('d-block').addClass('d-none');
 }
     </script>
 @endsection

@@ -53,6 +53,7 @@ class FileManagementService implements FileManagementInterface
             'status' => 1,
             'file_action_id' => 1,
             'sales_plan_id'=> $sales_plan->id,
+            // 'created_date' => $sales_plan->created_date,
         ];
         $file = $this->model()->create($data);
 

@@ -134,7 +134,7 @@
 
     <script>
         $(document).ready(function() {
-            $(".dt-complex-header").DataTable({
+           $(".dt-complex-header").DataTable({
                 processing: true,
                 // select: true,
                 serverSide: true,
@@ -286,7 +286,8 @@
                             action: function(e, dt, node, config) {
                                 location.href =
                                     '{{ route('sites.floors.copyView', ['site_id' => $site_id]) }}';
-                            }
+                            },
+                            enabled: {{$totalFloors == 0 ? 'false' : 'true'}},
                         },
                        
                     @endcan 

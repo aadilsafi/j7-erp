@@ -144,8 +144,6 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<td></td>' .
                 '<td></td>' .
-                //    '<td class="text-nowrap">'.$start_date
-                //    .' and '.$end_date.' Date'.'</td>'.                     
                 '<td class="text-nowrap">No Record Found Of </td>' .
                 '<td></td>' .
                 '<td></td>' .
@@ -176,7 +174,6 @@ class TrialBalanceController extends Controller
 
     public function filterByDate(Request $request)
     {
-        // return $request->all();
         $account_head_code = $request->type_name;
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
@@ -205,73 +202,90 @@ class TrialBalanceController extends Controller
                 return $query;
             })
             ->where('level', 5)->whereHas('accountLedgers')->get();
-        // dd($account_head[0]->accountLedgers);
+        if (count($account_head) > 0) {
+            $table = '<thead>' .
+                '<tr>' .
+                '<th title="#">#</th>' .
+                '<th title="Account Codes">Account Codes</th>' .
+                '<th title="Account Name">Account Name</th>' .
+                '<th title="Opening Balance">Opening Balance</th>' .
+                '<th title="Debit">Debit</th>' .
+                '<th title="Credit">Credit</th>' .
+                '<th title="Closing Balance">Closing Balance</th>' .
+                '<th title="Transactions At">Transactions At</th>' .
+                '<th title="Action">Action</th>' .
+                '</tr>' .
+                '</thead>' .
+                '<tbody>';
+            $i = 1;
+            foreach ($account_head as $account) {
 
-        $table = '<thead>' .
-            '<tr>' .
-            '<th title="#">#</th>' .
-            '<th title="Account Codes">Account Codes</th>' .
-            '<th title="Account Name">Account Name</th>' .
-            '<th title="Opening Balance">Opening Balance</th>' .
-            '<th title="Debit">Debit</th>' .
-            '<th title="Credit">Credit</th>' .
-            '<th title="Closing Balance">Closing Balance</th>' .
-            '<th title="Transactions At">Transactions At</th>' .
-            '<th title="Action">Action</th>' .
-            '</tr>' .
-            '</thead>' .
-            '<tbody>';
-        $i = 1;
-        foreach ($account_head as $account) {
 
+                $credits = $account->accountLedgers->pluck('credit')->sum();
+                $debits = $account->accountLedgers->pluck('debit')->sum();
+                $ending = 0;
+                if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
+                    $ending = number_format($credits - $debits);
+                } else {
+                    $ending = number_format($debits - $credits);
+                }
 
-            $credits = $account->accountLedgers->pluck('credit')->sum();
-            $debits = $account->accountLedgers->pluck('debit')->sum();
-            $ending = 0;
-            if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
-                $ending = number_format($credits - $debits);
-            } else {
-                $ending = number_format($debits - $credits);
+                $table .= '<tr>' .
+                    '<td class="text-nowrap">' . $i . '</td>' .
+                    '<td class="text-nowrap">' . account_number_format($account->code) . '</td>' .
+                    '<td class="text-nowrap">' . $account->name . '</td>' .
+                    '<td class="text-nowrap">' . $ending . '</td>' .
+                    '<td class="text-nowrap">' . number_format($credits) . '</td>' .
+                    '<td class="text-nowrap">' . number_format($debits) . '</td>' .
+                    '<td class="text-nowrap">' . $ending . '</td>' .
+                    '<td class="text-nowrap">' .
+                    '<span>' . date_format(new DateTime($account->created_at), 'h:i:s')
+                    . '</span>' . '<br> <span class="text-primary fw-bold">' .
+                    date_format(new DateTime($account->created_at), 'Y-m-d') .
+                    '</span>' .
+
+                    '</td>' .
+                    '<td>' . view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]) . '</td>' .
+                    '</tr>';
+                $i++;
             }
 
-            $table .= '<tr>' .
-                '<td class="text-nowrap">' . $i . '</td>' .
-                '<td class="text-nowrap">' . account_number_format($account->code) . '</td>' .
-                '<td class="text-nowrap">' . $account->name . '</td>' .
-                '<td class="text-nowrap">' . $ending . '</td>' .
-                '<td class="text-nowrap">' . number_format($credits) . '</td>' .
-                '<td class="text-nowrap">' . number_format($debits) . '</td>' .
-                '<td class="text-nowrap">' . $ending . '</td>' .
-                '<td class="text-nowrap">' .
-                '<span>' . date_format(new DateTime($account->created_at), 'h:i:s')
-                . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                date_format(new DateTime($account->created_at), 'Y-m-d') .
-                '</span>' .
+            return [
+                'status' => true,
+                'message' => ' filter by date mouth or year',
+                'data' => $table
+            ];
+        } else {
 
-                '</td>' .
-                '<td>' . view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]) . '</td>' .
-                '</tr>';
-            $i++;
+            $table =  '<thead>' .
+                '<tr>' .
+                '<th class="text-nowrap">#</th>' .
+                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Opening Balance</th>' .
+                '<th class="text-nowrap">Debit</th>' .
+                '<th class="text-nowrap">Credit</th>' .
+                '<th class="text-nowrap">Closing Balance</th>' .
+                '<th class="text-nowrap">Transactions At</th>' .
+                '</tr>' .
+                '</thead>' .
+                '<tbody>' .
+                '<tr>' .
+                '<td></td>' .
+                '<td></td>' .
+                '<td class="text-nowrap">No Record Found Of </td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '<td></td>' .
+                '</tr>' .
+
+                '</tbody>';
+
+            return [
+                'status' => true,
+                'message' => 'no data ',
+                'data' => $table
+            ];
         }
-        $table .= '</tbody>' .
-            '<tfoot>' .
-            '<tr>' .
-            '<th></th>' .
-            '<th></th>' .
-            '<th>-</th>' .
-            '<th>-</th>' .
-            '<th>-</th>' .
-            '<th>-</th>' .
-            '<th></th>' .
-            '<th></th>' .
-            '<th></th>' .
-            '</tr>' .
-            '</tfoot>';
-
-        return [
-            'status' => true,
-            'message' => ' filter by date mouth or year',
-            'data' => $table
-        ];
     }
 }

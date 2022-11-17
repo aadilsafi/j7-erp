@@ -431,7 +431,7 @@
         <div class="row mb-1" id="stakeholderNextOfKin">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
-                <select class="select2 " name="stackholder[next_of_kin]" id="stackholder_next_of_kin">
+                <select class="select2" multiple name="stackholder[next_of_kin][]" id="stackholder_next_of_kin">
 
                 </select>
             </div>

@@ -66,7 +66,9 @@ class FloorController extends Controller
             return $dataTable->with(['site_id' => decryptParams($site_id)])->ajax();
         }
 
-        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]);
+        $totalFloors = Floor::count();
+        
+        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id)), 'totalFloors' => $totalFloors]);
     }
 
     /**
@@ -408,12 +410,20 @@ class FloorController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
+            $required = [
+                'name',
+                'floor_area',
+                'short_label'
+            ];
+
             $dataTable = new ImportFloorsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
+
             ];
             return $dataTable->with($data)->render('app.sites.floors.importFloorsPreview', $data);
         }

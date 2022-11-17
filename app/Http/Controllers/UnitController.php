@@ -991,12 +991,23 @@ class UnitController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
+            $required = [
+                'floor_short_label',
+                'name',
+                'unit_short_label',
+                'gross_area',
+                'price_sqft',
+                'unit_type_slug',
+                'parent_unit_short_label'
+            ];
+
             $dataTable = new ImportUnitsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.sites.floors.units.importUnitsPreview', $data);
         }

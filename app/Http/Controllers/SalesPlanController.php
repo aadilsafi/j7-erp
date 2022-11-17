@@ -227,12 +227,12 @@ class SalesPlanController extends Controller
 
         $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->update([
             'status' => 2,
-            'approved_date' => now(),
+            'approved_date' => $request->approve_date . date(' H:i:s'),
         ]);
 
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
-            'approved_date' => now(),
+            'approved_date' => $request->approve_date . date(' H:i:s'),
         ]);
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
@@ -667,12 +667,20 @@ class SalesPlanController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
+            $required = [
+                'unit_short_label',
+                'stakeholder_cnic',
+                'unit_price',
+                'total_price',
+            ];
             $dataTable = new ImportSalesPlanDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
+
             ];
             return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.import.importSalesPlanPreview', $data);
         }

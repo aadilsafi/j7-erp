@@ -30,7 +30,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $origin_number = AccountLedger::get();
 
-            if (isset($origin_number)) {
+            if (isset($origin_number) && count($origin_number) > 0) {
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;

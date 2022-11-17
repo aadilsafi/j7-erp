@@ -93,16 +93,19 @@ class ImportStakeholdersKinsDataTable extends DataTable
             Column::computed('stakeholder_cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'stakeholder_cnic'
             ])->render())->addClass('removeTolltip'),
             Column::computed('kin_cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'kin_cnic'
             ])->render())->addClass('removeTolltip'),
             Column::computed('relation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'relation'
             ])->render())->addClass('removeTolltip'),
         ];

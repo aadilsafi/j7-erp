@@ -119,8 +119,8 @@
                                 <div class="col-md-12">
                                     <div class="d-block mb-1">
                                         <label class="form-label fs-5" for="created_date">Creation Date</label>
-                                        <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
-                                            class="form-control form-control-lg" />
+                                        <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
+                                            name="created_date" class="form-control form-control-md" />
                                     </div>
                                     <hr>
                                     <div class="d-block mb-1">
@@ -183,13 +183,6 @@
 
 @section('custom-js')
     <script>
-        $("#created_date").flatpickr({
-            defaultDate: "today",
-            // minDate: "today",
-            altInput: !0,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
         window['moment-range'].extendMoment(moment);
 
         var t = setTimeout(calculateInstallments, 1000),
@@ -348,7 +341,27 @@
                 updateTable();
             });
 
-            $("#sales_plan_validity").flatpickr({
+            $("#created_date").flatpickr({
+                defaultDate: "today",
+                // minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                onChange: function(selectedDates, dateStr, instance) {
+                    installmentDate.set("minDate", dateStr);
+                    installmentDate.setDate(dateStr);
+
+                    validityDate.set('minDate', new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+
+                    validityDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+
+                    dataArrays.ArrDueDates = [];
+                    mergeArrays();
+                    updateTable();
+                },
+            });
+
+            var validityDate = $("#sales_plan_validity").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
                 minDate: "today",
                 altInput: !0,
@@ -356,7 +369,7 @@
                 dateFormat: "Y-m-d",
             });
 
-            $("#installments_start_date").flatpickr({
+            var installmentDate = $("#installments_start_date").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
                 minDate: "today",
                 altInput: !0,

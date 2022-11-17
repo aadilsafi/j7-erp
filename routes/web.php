@@ -47,6 +47,7 @@ use App\Http\Controllers\{
     FifthLevelAccountController,
     StakeholdersImportControler,
 };
+use App\Models\Type;
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
@@ -838,6 +839,10 @@ Route::get('/logs', function () {
     return Activity::latest()->get();
 });
 
+// Route::get('/recoverTypes', function(){
+//     $types = Type::withTrashed()->forceDelete();
+//     return $types;
+// });
 // Route::get('/fire', function () {
 //     $data = [
 //         'title' => 'Job Done!',

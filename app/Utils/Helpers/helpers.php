@@ -1009,10 +1009,10 @@ if (!function_exists('addAccountCodes')) {
         )->get();
 
         $account_code = $starting_code;
-
-        if (isset($account_head)) {
-
+     
+        if (isset($account_head) && count($account_head) > 0) {
             $last_account_head = collect($account_head)->last();
+            // dd($last_account_head);
             $level = $last_account_head->level;
             $level_code = $last_account_head->level_code;
 

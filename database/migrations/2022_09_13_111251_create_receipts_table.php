@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('bank_id')->nullable();
             $table->string('name');
             $table->string('cnic');
-            $table->string('phone_no');
+            $table->string('phone_no')->nullable();
             $table->string('mode_of_payment');
             $table->string('other_value')->nullable();
             $table->string('pay_order')->nullable();

@@ -61,7 +61,7 @@ class StakeholderKinsImport implements ToModel, WithChunkReading, WithBatchInser
     {
         return [
             'stakeholder_cnic.exists' => 'Parent Stakeholder CNIC not Exists.',
-            'kin_cnic.exists' => 'Parent Stakeholder CNIC not Exists.',
+            'kin_cnic.exists' => 'Kin CNIC not Exists.',
         ];
     }
 }

@@ -70,7 +70,7 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                // 'relation' => $inputs['relation'],
+                'nationality' => $inputs['nationality'],
             ];
             // dd($inputs);
 
@@ -257,7 +257,7 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                // 'relation' => $inputs['relation'],
+                'nationality' => $inputs['nationality'],
             ];
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {

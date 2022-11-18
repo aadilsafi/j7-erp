@@ -35,6 +35,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    CityController,
     ImageImportController,
     LedgerController,
     SalesPlanImportController,
@@ -46,6 +47,7 @@ use App\Http\Controllers\{
     FourthLevelAccountController,
     FifthLevelAccountController,
     StakeholdersImportControler,
+    StateController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -232,12 +234,51 @@ Route::group([
                             Route::get('create', [ImageImportController::class, 'create'])->name('create');
                             Route::post('store', [ImageImportController::class, 'store'])->name('store');
                             Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
+                        });
+                    });
 
-                            Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
-                            Route::group(['prefix' => '/{id}'], function () {
-                                Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
-                                Route::put('update', [CustomFieldController::class, 'update'])->name('update');
-                            });
+                    //Countries Route
+                    Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
+
+                        Route::get('/', [CountryController::class, 'index'])->name('index');
+
+                        Route::get('create', [CountryController::class, 'create'])->name('create');
+                        Route::post('store', [CountryController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CountryController::class, 'edit'])->name('edit');
+                            Route::put('update', [CountryController::class, 'update'])->name('update');
+                            Route::get('delete', [CountryController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    //States Route
+                    Route::group(['prefix' => 'states', 'as' => 'states.'], function () {
+
+                        Route::get('/', [StateController::class, 'index'])->name('index');
+
+                        Route::get('create', [StateController::class, 'create'])->name('create');
+                        Route::post('store', [StateController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [StateController::class, 'edit'])->name('edit');
+                            Route::put('update', [StateController::class, 'update'])->name('update');
+                            Route::get('delete', [StateController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    //Cities Route
+                    Route::group(['prefix' => 'cities', 'as' => 'cities.'], function () {
+
+                        Route::get('/', [CityController::class, 'index'])->name('index');
+
+                        Route::get('create', [CityController::class, 'create'])->name('create');
+                        Route::post('store', [CityController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CityController::class, 'edit'])->name('edit');
+                            Route::put('update', [CityController::class, 'update'])->name('update');
+                            Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
                         });
                     });
                 });

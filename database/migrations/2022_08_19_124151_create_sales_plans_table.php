@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('stakeholder_id')->constrained();
-            $table->foreignId('kin_id')->nullable();
+            $table->json('kin_data')->nullable();
             $table->text('stakeholder_data')->nullable();
             $table->double('unit_price')->default(0);
             $table->double('total_price')->default(0);
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->double('status')->default(0);
             $table->text('comments')->nullable();
             $table->dateTime('approved_date')->nullable();
+            $table->dateTime('created_date')->nullable();
             $table->boolean('cancel')->default(0);
             $table->timestamps();
             $table->softDeletes();

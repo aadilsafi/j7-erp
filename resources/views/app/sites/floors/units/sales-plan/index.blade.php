@@ -141,42 +141,71 @@
             //     .replace(':id', template_id)
         }
 
-        function approveSalesPlan(id) {
+        function approveSalesPlan(id, created_date) {
             showBlockUI('#salesPlan');
-            var _token = '{{ csrf_token() }}';
-            let url = "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'salesPlanID': id,
-                    '_token': _token
+
+            swal.fire({
+                title: "Select Sale Plan Approval Date",
+                html: '<input id="approve_date" type="date" required placeholder="YYYY-MM-DD" name="approve_date" class="form-control form-control-md" />',
+                icon: 'question',
+                confirmButtonText: 'Approve',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
                 },
-                success: function(response) {
-                    if (response.success) {
-                        toastr.success(response.message,
-                            "Success!", {
-                                showMethod: "slideDown",
-                                hideMethod: "slideUp",
-                                timeOut: 2e3,
-                                closeButton: !0,
-                                tapToDismiss: !1,
-                            });
-                            $('#sales-plan-table').DataTable().ajax.reload();
-                            location.reload(true);
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something Went Wrong!!',
-                        });
-                        hideBlockUI('#salesPlan');
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                    hideBlockUI('#salesPlan');
+                showLoaderOnConfirm: true,
+                didOpen: function() {
+                    $("#approve_date").flatpickr({
+                        defaultDate: "today",
+                        minDate: created_date,
+                        altInput: !0,
+                        altFormat: "F j, Y",
+                        dateFormat: "Y-m-d",
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#teams-table-form').submit();
+
+                    var _token = '{{ csrf_token() }}';
+                    var approve_date = $('#approve_date').val();
+                    let url =
+                        "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'salesPlanID': id,
+                            '_token': _token,
+                            'approve_date': approve_date
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message,
+                                    "Success!", {
+                                        showMethod: "slideDown",
+                                        hideMethod: "slideUp",
+                                        timeOut: 2e3,
+                                        closeButton: !0,
+                                        tapToDismiss: !1,
+                                    });
+                                $('#sales-plan-table').DataTable().ajax.reload();
+                                location.reload(true);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Something Went Wrong!!',
+                                });
+                                hideBlockUI('#salesPlan');
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            hideBlockUI('#salesPlan');
+                        }
+                    });
                 }
             });
         }
@@ -184,7 +213,8 @@
         function disapproveSalesPlan(id) {
             showBlockUI('#salesPlan');
             var _token = '{{ csrf_token() }}';
-            let url = "{{ route('sites.floors.units.sales-plans.disapprove-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+            let url =
+                "{{ route('sites.floors.units.sales-plans.disapprove-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
             $.ajax({
                 url: url,
                 type: 'post',
@@ -203,8 +233,8 @@
                                 closeButton: !0,
                                 tapToDismiss: !1,
                             });
-                            $('#sales-plan-table').DataTable().ajax.reload();
-                            location.reload(true);
+                        $('#sales-plan-table').DataTable().ajax.reload();
+                        location.reload(true);
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -220,6 +250,5 @@
                 }
             });
         }
-
     </script>
 @endsection

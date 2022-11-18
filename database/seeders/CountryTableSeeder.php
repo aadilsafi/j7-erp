@@ -17,5 +17,8 @@ class CountryTableSeeder extends Seeder
         (new Country())->create([
             'name' => 'Pakistan'
         ]);
+        (new Country())->create([
+            'name' => 'Afghanistan'
+        ]);
     }
 }

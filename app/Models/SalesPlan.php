@@ -15,7 +15,7 @@ class SalesPlan extends Model
         'unit_id',
         'user_id',
         'stakeholder_id',
-        'kin_id',
+        'kin_data',
         'stakeholder_data',
         'unit_price',
         'total_price',
@@ -30,6 +30,7 @@ class SalesPlan extends Model
         'status',
         'approved_date',
         'cancel',
+        'created_date',
     ];
 
     protected $casts = [

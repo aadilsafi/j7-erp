@@ -111,7 +111,7 @@
                                     {{ __('lang.commons.cancel') }}
                                 </a>
 
-                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 10]) }}"
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 11]) }}"
                                     class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
                                     <i data-feather='download'></i>
                                     Download Sample

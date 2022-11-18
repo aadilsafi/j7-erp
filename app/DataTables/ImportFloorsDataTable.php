@@ -90,17 +90,20 @@ class ImportFloorsDataTable extends DataTable
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'name'
             ])->render())->addClass('removeTolltip'),
             Column::computed('floor_area')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'floor_area'
 
             ])->render())->addClass('removeTolltip'),
             Column::computed('short_label')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'short_label'
             ])->render())->addClass('removeTolltip'),
 

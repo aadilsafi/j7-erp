@@ -132,27 +132,27 @@
                                                 }
                                                 @endphp
                                                 <td>{{ $i }}</td>
-                                                <td>{{ account_number_format($account_ledger->account_head_code) }}</td>
+                                                <td class="text-nowrap">{{ account_number_format($account_ledger->account_head_code) }}</td>
                                                 @if ($i > 1)
                                                     <td>{{number_format($starting_balance[$starting_balance_index - 1])}}</td>
 
                                                 @else
                                                     <td>0</td>
                                                 @endif
-                                                <td>{{ number_format($account_ledger->debit) }}</td>
-                                                <td>{{ number_format($account_ledger->credit) }}</td>
+                                                <td class="text-nowrap">{{ number_format($account_ledger->debit) }}</td>
+                                                <td class="text-nowrap">{{ number_format($account_ledger->credit) }}</td>
                                                 @if ($i > 1)
                                                 @php
                                                     $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
                                                     $starting_balance[$starting_balance_index]= $new_starting_balance;
                                                 @endphp
-                                                <td>{{ number_format($new_starting_balance)}}</td>
+                                                <td class="text-nowrap">{{ number_format($new_starting_balance)}}</td>
                                                 
                                                 @else
-                                                <td>{{ number_format($ending_balance)}}</td>
+                                                <td class="text-nowrap">{{ number_format($ending_balance)}}</td>
                                                     
                                                 @endif
-                                                <td>
+                                                <td class="text-nowrap">
                                                     <span>{{ date_format(new DateTime($account_ledger->created_at), 'h:i:s') }}
                                                     </span> <br> <span class='text-primary fw-bold'>
                                                         {{ date_format(new DateTime($account_ledger->created_at), 'Y-m-d') }}</span>
@@ -252,10 +252,21 @@
                 data: {
                     'date_filter': data_data,
                     'to_date': to_date,
-                    '_token': _token
+                    '_token': _token,
+                    'account_head_code': '{{$account_ledgers[0]->account_head_code}}',
                 },
             success: function(data) {
-                console.log(data);
+                
+                console.log((data))
+                if(data.status==true){
+                    $('#example').html(data.data);
+                }else{
+                    console.log(data.data);
+                }
+
+            },
+            error: function(error) {
+                    console.log(error);
             }
         });
                 

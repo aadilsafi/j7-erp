@@ -42,14 +42,14 @@ class AccountHeadSeeder extends Seeder
                 'name' => 'Current Asset',
                 'level' => 2,
             ],
-            [
-                'site_id' => 1,
-                'modelable_id' => 1,
-                'modelable_type' => 'App\Models\Type',
-                'code' => '102020',
-                'name' => 'Accounts Receivable - Shops',
-                'level' => 3,
-            ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 1,
+            //     'modelable_type' => 'App\Models\Type',
+            //     'code' => '102020',
+            //     'name' => 'Accounts Receivable - Shops',
+            //     'level' => 3,
+            // ],
 
 
             [
@@ -114,14 +114,14 @@ class AccountHeadSeeder extends Seeder
             ],
 
 
-            [
-                'site_id' => 1,
-                'modelable_id' => 2,
-                'modelable_type' => 'App\Models\Type',
-                'code' => '102021',
-                'name' => 'Accounts Receivable - Hotel Suites',
-                'level' => 3,
-            ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 2,
+            //     'modelable_type' => 'App\Models\Type',
+            //     'code' => '102021',
+            //     'name' => 'Accounts Receivable - Hotel Suites',
+            //     'level' => 3,
+            // ],
             [
                 'site_id' => 1,
                 'modelable_id' => null,
@@ -140,14 +140,14 @@ class AccountHeadSeeder extends Seeder
             ],
 
 
-            [
-                'site_id' => 1,
-                'modelable_id' => 3,
-                'modelable_type' => 'App\Models\Type',
-                'code' => '102022',
-                'name' => 'Accounts Receivable - Offices',
-                'level' => 3,
-            ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 3,
+            //     'modelable_type' => 'App\Models\Type',
+            //     'code' => '102022',
+            //     'name' => 'Accounts Receivable - Offices',
+            //     'level' => 3,
+            // ],
 
 
             [

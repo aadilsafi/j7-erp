@@ -108,6 +108,7 @@ class ReceiptService implements ReceiptInterface
                     'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                     'bank_details' => $data[$i]['bank_name'],
                     'bank_id' => $data[$i]['bank_id'],
+                    'created_date' => $requested_data['created_date'],
                 ];
 
                 if ($amount_received > $data[$i]['amount_in_numbers']) {
@@ -151,6 +152,7 @@ class ReceiptService implements ReceiptInterface
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
                                 'bank_id' => $draftReceiptData->bank_id,
+                                'created_date' => $draftReceiptData->created_date,
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
@@ -165,6 +167,8 @@ class ReceiptService implements ReceiptInterface
                             if ($receipt_Draft->mode_of_payment == "Online") {
                                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
                             }
+
+
 
                             // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
                             //     Log::info(json_encode($transaction));
@@ -194,7 +198,7 @@ class ReceiptService implements ReceiptInterface
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                         changeImageDirectoryPermission();
                     }
-
+                    // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);
                 }
             }

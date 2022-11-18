@@ -193,26 +193,26 @@ class SalesPlanService implements SalesPlanInterface
             }
 
             $salesPlan = $this->model()->create($sales_plan_data);
+            if (isset($inputs['unit']['additional_cost'])) {
+                $additionalCosts = $inputs['unit']['additional_cost'];
 
-            $additionalCosts = $inputs['unit']['additional_cost'];
+                foreach ($additionalCosts as $key => $value) {
+                    if ($value['status'] == 'true') {
+                        $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
 
-            foreach ($additionalCosts as $key => $value) {
-                if ($value['status'] == 'true') {
-                    $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
+                        $additionalCostData = [
+                            'sales_plan_id' => $salesPlan->id,
+                            'additional_cost_id' => $additonalCost->id,
+                            'percentage' => $value['percentage'],
+                            'amount' => str_replace(',', '', $value['total']),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
 
-                    $additionalCostData = [
-                        'sales_plan_id' => $salesPlan->id,
-                        'additional_cost_id' => $additonalCost->id,
-                        'percentage' => $value['percentage'],
-                        'amount' => str_replace(',', '', $value['total']),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-
-                    (new SalesPlanAdditionalCost())->create($additionalCostData);
+                        (new SalesPlanAdditionalCost())->create($additionalCostData);
+                    }
                 }
             }
-
             $downpaymentTotal = $inputs['unit']['downpayment']['total'];
             $installments = $inputs['installments']['table'];
             $installmentsData = [];

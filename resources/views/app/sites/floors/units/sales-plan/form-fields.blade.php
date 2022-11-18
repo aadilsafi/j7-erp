@@ -274,19 +274,19 @@
                                 <div class="row mb-1">
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5"
-                                            for="expense_label_{{ $key }}">Expense
+                                            for="expense_label_{{ isset($key) ? $key : 0}}">Expense
                                             label</label>
                                         <input type="text"
                                             class="form-control form-control-lg @error('expense_label') is-invalid @enderror"
-                                            id="expense_label_{{ $key }}"
-                                            name="expenses[{{ $key }}][expense_label]"
+                                            id="expense_label_{{ isset($key) ? $key : 0 }}"
+                                            name="expenses[{{ isset($key) ? $key : 0}}][expense_label]"
                                             placeholder="Expense Label" />
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_due_date">Expense Due Date</label>
                                         <input type="text" id="expense_due_date"
-                                            name="expenses[{{ $key }}][due_date]" readonly
+                                            name="expenses[{{ isset($key) ? $key : 0 }}][due_date]" readonly
                                             class="form-control form-control-lg expense_due_date"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
@@ -294,14 +294,14 @@
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_amount">Amount</label>
                                         <input type="number" min="0" class="form-control form-control-lg"
-                                            id="expense_amount" name="expenses[{{ $key }}][amount]"
+                                            id="expense_amount" name="expenses[{{ isset($key) ? $key : 0}}][amount]"
                                             placeholder="Amount">
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_remarks">Remarks</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="expense_remarks" name="expenses[{{ $key }}][remarks]"
+                                            id="expense_remarks" name="expenses[{{ isset($key) ? $key : 0 }}][remarks]"
                                             placeholder="Remarks">
                                     </div>
                                 </div>

@@ -187,9 +187,13 @@
           name: "Sold",
           color: "red"
         },
-        "PartialDP": {
-          name: "Partial DP",
+        "Partial Paid": {
+          name: "Partial Paid",
           color: "pink"
+        },
+        "Request For Resale": {
+          name: "Request For Resale",
+          color: 'purple'
         },
       };
 
@@ -215,22 +219,17 @@
 
       displayLegend();
 
-      let faltu = `<Form.Check
-                  defaultChecked={true}
-                  onChange={(e) => {
-                    const index = visibleStatuses.indexOf(status.name);
-                    if(index >= 0){
-                      let tmp = visibleStatuses.filter((item) => item != status.name);
-                      setVisibleStatuses(tmp);
-                    } else {
-                      setVisibleStatuses([...visibleStatuses, status.name]) ;
-                    }
-                  }}
-                />`;
-
 
       const changeVisibleStatus = (object, status) => {
-        console.log(object, status);
+
+        const index = visibleStatuses.indexOf(status);
+        if (index >= 0) {
+          let tmp = visibleStatuses.filter((item) => item != status);
+          visibleStatuses = tmp;
+        } else {
+          visibleStatuses = [...visibleStatuses, status];
+        }
+        updateFloorStyle();
       }
 
       const floorStyle = (feature) => {
@@ -251,8 +250,9 @@
         };
       };
 
-      const map = L.map('map').setView([center[1], center[0]], 17);
+      const map = L.map('map').setView([center[1], center[0]], 18);
 
+      // Use this to show the map layer
       // L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       //   maxZoom: 30,
       //   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -266,10 +266,12 @@
       floorLayer.eachLayer((layer) => {
         layer.bindTooltip(`Unit: ${layer.feature.properties.unit_no} <br/> 
                           Status: ${layer.feature.properties.status}
-                          `);
+                          `, {
+                            // permanent: true     // ON this to display tooltip permanently
+                          });
 
         layer.on("click", function(e) {
-          const unit_no =  layer.feature.properties.unit_no;
+          const unit_no = layer.feature.properties.unit_no;
           getUnitDetails(unit_no);
         });
       });
@@ -295,8 +297,8 @@
             '_token': _token
           },
           success: function(response) {
-            if (response.data) {
-              console.log(response.data);
+            if (response) {
+              console.log(response);
 
             } else {
               Swal.fire({

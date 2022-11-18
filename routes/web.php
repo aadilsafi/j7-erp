@@ -327,7 +327,7 @@ Route::group([
                         Route::post('saveImport', [SalesPlanImportController::class, 'saveImportInstallments'])->name('saveImportInstallments');
                     });
 
-                    // //Units Routes
+                    //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {

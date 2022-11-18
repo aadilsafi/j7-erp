@@ -349,7 +349,7 @@
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
                     installmentDate.set("minDate", dateStr);
-                    installmentDate.setDate(dateStr);
+                    installmentDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_installment_days }}));
 
                     validityDate.set('minDate', new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
 

@@ -605,7 +605,7 @@
                                         <tbody>
                                             @php
                                                 $receipts = collect($salesPlan->receipts)
-                                                    ->sortBy('transaction_date')
+                                                    ->sortBy('created_date')
                                                     ->values()
                                                     ->all();
                                             @endphp
@@ -619,7 +619,7 @@
                                                     @endphp
                                                     <td>{{ $installmentsInfo }}</td>
 
-                                                    <td>{{ $receipt->created_at }}</td>
+                                                    <td>{!! editDateColumn($receipt->created_date) !!}</td>
                                                     <td>{{ number_format($receipt->amount_in_numbers, 2) }}</td>
                                                     <td>{{ $receipt->mode_of_payment }}</td>
                                                 </tr>

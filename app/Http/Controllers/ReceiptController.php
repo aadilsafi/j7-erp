@@ -85,7 +85,11 @@ class ReceiptController extends Controller
      */
     public function store(store $request, $site_id)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'created_date' => 'required',
+        ]);
+
+        $validator->validate();
         try {
             if (!request()->ajax()) {
                 $data = $request->all();

@@ -58,6 +58,8 @@ class Stakeholder extends Model implements HasMedia
         'city_id' => 'nullable|numeric',
         'state_id' => 'nullable|numeric',
         'country_id' => 'nullable|numeric',
+        'next-of-kins.*.relation' => 'required',
+
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
@@ -66,6 +68,7 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons.*.cnic.numeric' => 'CNIC must be numeric.',
         'contact-persons.*.cnic.min' => 'CNIC must be at least 1 digit.',
         'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
+        'next-of-kins.*.relation' => 'Kin Relation Field is Required.'
     ];
 
     protected $casts = [

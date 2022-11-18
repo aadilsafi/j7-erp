@@ -112,12 +112,11 @@ class FileManagementController extends Controller
         // }
         $kinsIds = json_decode($data['salesPlan']->kin_data);
         if ($kinsIds > 0) {
-
             foreach ($kinsIds as $key => $id) {
                 $kin = Stakeholder::find($id);
                 $data['nextOfKin'][$key] = $kin;
                 $relation = StakeholderNextOfKin::where('stakeholder_id', decryptParams($customer_id))->where('kin_id', $kin->id)->first();
-                $data['nextOfKin'][$key]['relation'] = $relation->relation;
+                $data['nextOfKin'][$key]['relation'] = $relation->relation != null ? $relation->relation : '';
             }
         }
         return view('app.sites.file-managements.files.create', $data);

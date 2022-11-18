@@ -264,12 +264,13 @@
 
       const floorLayer = L.geoJSON(jsonData);
       floorLayer.eachLayer((layer) => {
-        layer.bindTooltip(`Room: ${layer.feature.properties.room_no} <br/> 
+        layer.bindTooltip(`Unit: ${layer.feature.properties.unit_no} <br/> 
                           Status: ${layer.feature.properties.status}
                           `);
 
         layer.on("click", function(e) {
-          console.log("clicked", layer.feature.properties.id);
+          const unit_no =  layer.feature.properties.unit_no;
+          getUnitDetails(unit_no);
         });
       });
 
@@ -280,6 +281,36 @@
       }
 
       updateFloorStyle();
+
+      function getUnitDetails(unit_no) {
+        var _token = '{{ csrf_token() }}';
+        let url =
+          "{{ route('sites.floors.units.details', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams($id)]) }}";
+        $.ajax({
+          url: url,
+          type: 'get',
+          dataType: 'json',
+          data: {
+            'unit_no': unit_no,
+            '_token': _token
+          },
+          success: function(response) {
+            if (response.data) {
+              console.log(response.data);
+
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something Went Wrong!!',
+              });
+            }
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      }
     @endif
   </script>
 @endsection

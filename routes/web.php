@@ -331,6 +331,9 @@ Route::group([
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
                             Route::get('/', [UnitController::class, 'index'])->name('index');
 
+                            // Unit details by unit_no through AJAX
+                            Route::get('/details', [UnitController::class, 'details'])->name('details');
+
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 

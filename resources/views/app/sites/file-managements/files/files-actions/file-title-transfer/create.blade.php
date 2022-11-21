@@ -362,15 +362,7 @@
                     'stackholder[father_name]': {
                         required: true
                     },
-                    'stackholder[occupation]': {
-                        required: true
-                    },
-                    'stackholder[designation]': {
-                        required: true
-                    },
-                    'stackholder[ntn]': {
-                        required: true
-                    },
+                   
                     'stackholder[cnic]': {
                         required: true,
                         // digits: true,

@@ -216,8 +216,7 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Occupation <span
-                                class="text-danger">*</span></label>
+                        <label class="form-label fs-5" for="stackholder_occupation">Occupation </label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
                             class="form-control form-control-lg" id="stackholder_occupation"
                             name="stackholder[occupation]" placeholder="Occupation"
@@ -225,8 +224,7 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation <span
-                                class="text-danger">*</span></label>
+                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
                             class="form-control form-control-lg" id="stackholder_designation"
                             name="stackholder[designation]" placeholder="Designation"
@@ -237,8 +235,7 @@
                 <div class="row mb-1">
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="stackholder_ntn">NTN <span
-                                class="text-danger">*</span></label>
+                        <label class="form-label fs-5" for="stackholder_ntn">NTN </label>
                         <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
                             name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
                             placeholder="NTN"

@@ -98,6 +98,19 @@
 
                         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
+                                <div class="col-sm-12 d-flex justify-content-end align-items-center">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-relief-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-upload"></i> Export</button>
+                                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard"></i> Copy</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf"></i> PDF</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i>Excel</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                                    </ul>
+                                    <button type="reset" class="btn btn-relief-outline-danger ml-3" style="margin-right: 8px;margin-left: 8px;"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                                    <button type="reset" class="btn btn-relief-outline-primary ml-3" style="margin-right: 7px;"><i class="bi bi-arrow-clockwise"></i> Reload</button>
+
+                                </div>
                                 <table id="example" class="table table-striped dt-complex-header table"
                                     style="width:100%">
                                     <thead>

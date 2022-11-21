@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('commision_percentage')->nullable();
             $table->string('commision_total')->nullable();
             $table->boolean('status')->default(0);
-            $table->boolean('is_for_dealer_incentive')->default(true);
             $table->longText('comments')->nullable();
             $table->foreignId('dealer_id')->constrained('stakeholders');
             $table->timestamps();

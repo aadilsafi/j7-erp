@@ -254,31 +254,27 @@
 
                     if (response.status) {
                         if (response.data) {
-                            stakeholderData = response.data;
-                        }
+                            stakeholderData = response.data[0];
+                            isDisable = dealer == 0 ? false : true;
+
+                            console.log(isDisable);
                         // $('#stackholder_id').val(stakeholderData.id);
-                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', (
-                            stakeholderData.full_name.length > 0));
-                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',
-                            (stakeholderData.father_name.length > 0));
-                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', (
-                            stakeholderData.occupation.length > 0));
-                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',
-                            (stakeholderData.designation.length > 0));
+                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', isDisable);
+                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',isDisable);
+                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', isDisable);
+                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',isDisable);
 
                         $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
-                            .attr('disabled', (stakeholderData.cnic.length > 0));
-                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', (
-                            stakeholderData.contact.length > 0));
-                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', (stakeholderData
-                            .ntn.length > 0));
+                            .attr('disabled', isDisable);
+                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', isDisable);
+                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', isDisable);
                         if ((stakeholderData.comments != null)) {
-                            $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', (
-                                stakeholderData.comments.length >= 0));
+                            $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', isDisable);
                         }
-                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', (
-                            stakeholderData.address.length > 0));
+                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', isDisable);
                     }
+                }
+
                     hideBlockUI('#stakeholders_card');
                 },
                 error: function(errors) {

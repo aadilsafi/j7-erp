@@ -80,7 +80,6 @@ class DealerIncentiveController extends Controller
      */
     public function store(Request $request, $site_id)
     {
-
         try {
 
             if (!request()->ajax()) {
@@ -142,23 +141,22 @@ class DealerIncentiveController extends Controller
 
     public function getData(Request $request)
     {
-        $rebate_incentives = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)->get();
 
-        $dealer_incentives = DealerIncentiveModel::where('dealer_id', $request->dealer_id)->get();
+        // $dealer_incentives = DealerIncentiveModel::where('dealer_id', $request->dealer_id)->get();
+        // $already_incentive_paid_to_units = [];
+        // foreach ($dealer_incentives as $dealer_incentives) {
+        //     foreach (json_decode($dealer_incentives->unit_IDs) as $uids) {
+        //         $already_incentive_paid_to_units[] = $uids;
+        //     }
+        // }
+
+        $rebate_units = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)
+            ->where('is_for_dealer_incentive', true)->distinct()->get();
+
         $units = [];
-        $already_incentive_paid_to_units = [];
-        foreach ($dealer_incentives as $dealer_incentives) {
-            foreach (json_decode($dealer_incentives->unit_IDs) as $uids) {
-                $already_incentive_paid_to_units[] = $uids;
-            }
-        }
 
-        foreach ($rebate_incentives as $Units) {
-
-            if (in_array($Units->unit_id, $already_incentive_paid_to_units)) {
-
-                continue;
-            } else {
+        if ($rebate_units) {
+            foreach ($rebate_units as $Units) {
 
                 $units[] = Unit::find($Units->unit_id);
             }
@@ -167,6 +165,7 @@ class DealerIncentiveController extends Controller
         return response()->json([
             'success' => true,
             'units' => $units,
+            // 'rebate_id' => $
         ], 200);
     }
 

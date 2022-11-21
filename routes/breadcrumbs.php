@@ -533,3 +533,21 @@ Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTra
     $trail->parent('dashboard');
     $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
 });
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.countries.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Countries', route('sites.settings.countries.index', ['site_id' => $site_id]));
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.states.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('States', route('sites.settings.states.index', ['site_id' => $site_id]));
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Cities', route('sites.settings.cities.index', ['site_id' => $site_id]));
+});

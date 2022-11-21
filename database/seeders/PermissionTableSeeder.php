@@ -16,12 +16,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-
-        DB::table('permissions')->truncate();
-
-         // Reset cached roles and permissions
-         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
-        (new Permission())->insert([
+         (new Permission())->insert([
 
             // Roles Routes
             [

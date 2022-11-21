@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\User;
@@ -18,7 +19,7 @@ use App\Services\User\Interface\UserInterface;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Collection;
 
-class StateDataTable extends DataTable
+class CityDataTable extends DataTable
 {
 
     private $userInterface;
@@ -39,8 +40,11 @@ class StateDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('country_id', function ($user) {
-                return $user->country->name;
+            ->editColumn('state_id', function ($user) {
+                return $user->state->name;
+            })
+            ->editColumn('country', function ($user) {
+                return $user->state->country->name;
             })
             ->editColumn('actions', function ($user) {
                 return view('app.sites.countries.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
@@ -63,9 +67,9 @@ class StateDataTable extends DataTable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(State $states): QueryBuilder
+    public function query(City $cities): QueryBuilder
     {
-        return $states->newQuery();
+        return $cities->newQuery()->orderBy('name');
     }
 
     public function html(): HtmlBuilder
@@ -165,7 +169,8 @@ class StateDataTable extends DataTable
             // ),
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
-            Column::make('country_id')->title('Country'),
+            Column::make('state_id')->title('State'),
+            Column::computed('country'),
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),
 

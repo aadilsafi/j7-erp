@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.users.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.states.index', $site_id) }}
 @endsection
 
-@section('page-title', __('Countries'))
+@section('page-title', __('States'))
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -31,9 +31,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">{{ __('Countries') }}</h2>
+                <h2 class="content-header-title float-start mb-0">{{ __('States') }}</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.users.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.states.index', $site_id) }}
                 </div>
             </div>
         </div>

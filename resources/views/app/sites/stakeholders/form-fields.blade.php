@@ -25,6 +25,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <div class="d-flex justify-content-between">
                         @forelse ($stakeholder->stakeholder_types as $type)
+                            
                             <div class="d-flex flex-column justify-content-center align-items-center">
                                 <span
                                     class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
@@ -41,6 +42,7 @@
                                     </label>
                                 </div>
                             </div>
+                        
                         @empty
                         @endforelse
                     </div>

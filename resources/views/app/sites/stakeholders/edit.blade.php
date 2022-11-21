@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                                width: calc(20% - 0.5em);
-                                                                            } */
+                                                                                            width: calc(20% - 0.5em);
+                                                                                        } */
     </style>
 @endsection
 
@@ -163,6 +163,7 @@
         });
 
         $(document).ready(function() {
+            $('#div-next-of-kin').hide();
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -246,12 +247,23 @@
                 }
             });
 
+            @forelse ($stakeholder->stakeholder_types as $type)
+                @if ($type->type == 'C' && $type->status)
+                    $('#div-next-of-kin').show();   
+                @else
+                @endif
+            @empty
+            @endforelse
+
 
         });
 
         function performAction(action) {
             if (action == 'C') {
-                $('#div-next-of-kin').toggle('fast', 'linear');
+                // $('#div-next-of-kin').toggle('fast', 'linear');
+                $('#div-next-of-kin').show();
+            } else {
+                $('#div-next-of-kin').hide();
             }
         }
     </script>

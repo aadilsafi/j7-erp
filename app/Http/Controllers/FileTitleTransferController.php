@@ -224,6 +224,7 @@ class FileTitleTransferController extends Controller
             foreach ($salesPlan as $salesPlan) {
                 $SalesPlan = SalesPlan::find($salesPlan->id);
                 $SalesPlan->stakeholder_id = $stakeholder->id;
+                $salesPlan->kin_data = json_encode([]);
                 $SalesPlan->update();
             }
 

@@ -386,10 +386,7 @@
 @section('custom-js')
 @endsection
 
-
-
-
-<section style="min-height: 40vh">
+{{-- <section style="min-height: 40vh"> --}}
     <style>
       .custom_bg{
         margin-top: 0.5rem;

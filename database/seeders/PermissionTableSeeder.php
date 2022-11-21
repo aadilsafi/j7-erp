@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\{Role, Permission};
@@ -15,6 +16,11 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+
+        DB::table('permissions')->truncate();
+
+         // Reset cached roles and permissions
+         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
         (new Permission())->insert([
 
             // Roles Routes

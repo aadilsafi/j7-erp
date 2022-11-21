@@ -649,7 +649,6 @@
                 },
                 'unit[size]': {
                     required: true,
-                    digits: true
                 },
                 'unit[price][unit]': {
                     required: true,

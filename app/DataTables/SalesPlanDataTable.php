@@ -69,7 +69,7 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date,'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -110,15 +110,16 @@ class SalesPlanDataTable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
-        if ($createPermission && $unitStatus == 1) {
-
-            $addNewButton = Button::raw('add-new')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')
-                ->attr([
-                    'onclick' => 'addNew()',
-                ]);
-            array_unshift($buttons, $addNewButton);
+        if ($createPermission) {
+            if ($unitStatus == 1 || $unitStatus == 6) {
+                $addNewButton = Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')
+                    ->attr([
+                        'onclick' => 'addNew()',
+                    ]);
+                array_unshift($buttons, $addNewButton);
+            }
         }
 
         if ($selectedDeletePermission) {

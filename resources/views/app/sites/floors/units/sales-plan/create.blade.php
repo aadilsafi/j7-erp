@@ -697,6 +697,15 @@
                 'stackholder[full_name]': {
                     required: true
                 },
+                'stackholder[father_name]': {
+                    required: true
+                },
+                'stackholder[contact]': {
+                    required: true
+                },
+                'stackholder[address]': {
+                    required: true
+                },
                 'stackholder[cnic]': {
                     // minlength: 13,
                     // maxlength: 13,

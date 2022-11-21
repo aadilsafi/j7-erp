@@ -219,7 +219,7 @@ class SalesPlanService implements SalesPlanInterface
 
             $installmentsData[] = [
                 'sales_plan_id' => $salesPlan->id,
-                'date' => now(),
+                'date' => $inputs['created_date'] . date(' H:i:s'),
                 'details' => 'Downpayment',
                 'type' => 'downpayment',
                 'amount' => floatval(str_replace(',', '', $downpaymentTotal)),

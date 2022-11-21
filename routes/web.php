@@ -784,6 +784,7 @@ Route::group([
                     Route::group(['prefix' => 'recovery', 'as' => 'recovery.'], function () {
                         Route::get('/dashboard', [AccountsRecoveryController::class, 'dashboard'])->name('dashboard');
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
+                        Route::get('/inventory-aging', [AccountsRecoveryController::class, 'inventoryAging'])->name('inventory-aging');
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {

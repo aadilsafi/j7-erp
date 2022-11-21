@@ -117,6 +117,7 @@
                                             $starting_balance_index = 0;
                                             $starting_balance = [];
                                             $ending_balance = 0;
+                                            $ending_balance_new_array = [];
                                         @endphp
                                         @foreach ($account_ledgers as $account_ledger)
                                             <tr>
@@ -147,9 +148,15 @@
                                                     $starting_balance[$starting_balance_index]= $new_starting_balance;
                                                 @endphp
                                                 <td class="text-nowrap">{{ number_format($new_starting_balance)}}</td>
+                                                @php
+                                                    array_push($ending_balance_new_array,$new_starting_balance);
+                                                @endphp
                                                 
                                                 @else
                                                 <td class="text-nowrap">{{ number_format($ending_balance)}}</td>
+                                                @php
+                                                    array_push($ending_balance_new_array,$ending_balance);
+                                                @endphp
                                                     
                                                 @endif
                                                 <td class="text-nowrap">
@@ -168,10 +175,10 @@
                                         <tr>
                                             <th></th>
                                             <th></th>
-                                            <th>-</th>
+                                            <th>{{number_format(collect($starting_balance)->sum())}}</th>
                                             <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
                                             <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
-                                            <th>-</th>
+                                            <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th>
                                             <th></th>
                                         </tr>
                                     </tfoot>

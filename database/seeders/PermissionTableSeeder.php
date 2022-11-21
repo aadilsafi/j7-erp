@@ -1704,6 +1704,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.accounts.recovery.inventory-aging',
+                'show_name' => ' Can View Accounts Recovery Inventory Aging',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.accounts.recovery.salesPlan',
                 'show_name' => ' Can View Accounts Recovery Sales Plan',
                 'guard_name' => 'web',

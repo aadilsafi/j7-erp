@@ -43,9 +43,9 @@ class Stakeholder extends Model implements HasMedia
         'father_name' => 'required|string|min:1|max:50',
         'occupation' => 'required|string|min:1|max:50',
         'designation' => 'required|string|min:1|max:50',
-        'cnic' => 'required|unique:stakeholders,cnic',
+        'cnic' => 'required|exists:backlisted_stakeholders,cnic|unique:stakeholders,cnic',
         // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
-        'ntn' => 'required|numeric',
+        // 'ntn' => 'numeric',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'nullable|numeric',
@@ -68,7 +68,8 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons.*.cnic.numeric' => 'CNIC must be numeric.',
         'contact-persons.*.cnic.min' => 'CNIC must be at least 1 digit.',
         'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
-        'next-of-kins.*.relation' => 'Kin Relation Field is Required.'
+        'next-of-kins.*.relation' => 'Kin Relation Field is Required.',
+        'cnic.exists' => 'Cnic is Blacklisted.'
     ];
 
     protected $casts = [

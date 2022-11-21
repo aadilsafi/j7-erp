@@ -13,6 +13,8 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
 use App\Models\SalesPlan;
+use Redirect;
+use Validator;
 
 class RebateIncentiveController extends Controller
 {
@@ -78,10 +80,9 @@ class RebateIncentiveController extends Controller
      */
     public function store(storeRequest $request, $site_id)
     {
-       // dd($request->all());
         try {
             $inputs = $request->input();
-
+            
             $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {

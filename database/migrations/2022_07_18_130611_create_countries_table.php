@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->string('short_label')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

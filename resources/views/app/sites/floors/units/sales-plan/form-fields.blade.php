@@ -274,19 +274,19 @@
                                 <div class="row mb-1">
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5"
-                                            for="expense_label_{{ $key }}">Expense
+                                            for="expense_label_{{ isset($key) ? $key : 0}}">Expense
                                             label</label>
                                         <input type="text"
                                             class="form-control form-control-lg @error('expense_label') is-invalid @enderror"
-                                            id="expense_label_{{ $key }}"
-                                            name="expenses[{{ $key }}][expense_label]"
+                                            id="expense_label_{{ isset($key) ? $key : 0 }}"
+                                            name="expenses[{{ isset($key) ? $key : 0}}][expense_label]"
                                             placeholder="Expense Label" />
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_due_date">Expense Due Date</label>
                                         <input type="text" id="expense_due_date"
-                                            name="expenses[{{ $key }}][due_date]" readonly
+                                            name="expenses[{{ isset($key) ? $key : 0 }}][due_date]" readonly
                                             class="form-control form-control-lg expense_due_date"
                                             placeholder="YYYY-MM-DD" />
                                     </div>
@@ -294,14 +294,14 @@
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_amount">Amount</label>
                                         <input type="number" min="0" class="form-control form-control-lg"
-                                            id="expense_amount" name="expenses[{{ $key }}][amount]"
+                                            id="expense_amount" name="expenses[{{ isset($key) ? $key : 0}}][amount]"
                                             placeholder="Amount">
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="expense_remarks">Remarks</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="expense_remarks" name="expenses[{{ $key }}][remarks]"
+                                            id="expense_remarks" name="expenses[{{ isset($key) ? $key : 0 }}][remarks]"
                                             placeholder="Remarks">
                                     </div>
                                 </div>
@@ -372,25 +372,25 @@
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
-                    name="stackholder[full_name]" placeholder="Full Name" />
+                    name="stackholder[full_name]" placeholder="Full Name" value="{{old('stackholder.full_name')}}"/>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
-                    name="stackholder[father_name]" placeholder="Father Name" />
+                    name="stackholder[father_name]" placeholder="Father Name" value="{{old('stackholder.father_name')}}"/>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
-                    name="stackholder[occupation]" placeholder="Occupation" />
+                    name="stackholder[occupation]" placeholder="Occupation" value="{{old('stackholder.occupation')}}"/>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_designation">Designation</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_designation"
-                    name="stackholder[designation]" placeholder="Designation" />
+                    name="stackholder[designation]" placeholder="Designation" value="{{old('stackholder.designation')}}"/>
             </div>
         </div>
 
@@ -399,19 +399,19 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
-                    name="stackholder[ntn]" placeholder="NTN" />
+                    name="stackholder[ntn]" placeholder="NTN" value="{{old('stackholder.ntn')}}"/>
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
-                    name="stackholder[cnic]" placeholder="CNIC" />
+                    name="stackholder[cnic]" placeholder="CNIC" value="{{old('stackholder.cnic')}}"/>
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_contact">Contact</label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_contact"
-                    name="stackholder[contact]" placeholder="Contact" />
+                    name="stackholder[contact]" placeholder="Contact" value="{{old('stackholder.contact')}}"/>
             </div>
         </div>
 

@@ -70,7 +70,7 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                // 'relation' => $inputs['relation'],
+                'nationality' => $inputs['nationality'],
             ];
             // dd($inputs);
 
@@ -87,13 +87,21 @@ class StakeholderService implements StakeholderInterface
             if (isset($inputs['next-of-kins']) && count($inputs['next-of-kins']) > 0) {
                 $nextOfKins = [];
                 foreach ($inputs['next-of-kins'] as $nok) {
-                    $data = [
-                        'stakeholder_id' => $stakeholder->id,
-                        'kin_id' => $nok['stakeholder_id'],
-                        'relation' => $nok['relation'],
-                        'site_id' => decryptParams($site_id),
-                    ];
-                    $nextOfKins[] =  StakeholderNextOfKin::create($data);
+                    if ($nok['stakeholder_id'] != 0) {
+                        $data = [
+                            'stakeholder_id' => $stakeholder->id,
+                            'kin_id' => $nok['stakeholder_id'],
+                            'relation' => $nok['relation'],
+                            'site_id' => decryptParams($site_id),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                        $nextOfKins[] =  StakeholderNextOfKin::create($data);
+
+                        StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
+                            'status' => true,
+                        ]);
+                    }
                 }
             }
 
@@ -249,7 +257,7 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                // 'relation' => $inputs['relation'],
+                'nationality' => $inputs['nationality'],
             ];
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
@@ -315,11 +323,14 @@ class StakeholderService implements StakeholderInterface
                 $nextOfKins = [];
 
                 foreach ($inputs['next-of-kins'] as $nok) {
-                   $nextOfKins[] = StakeholderNextOfKin::create([
+                    $nextOfKins[] = StakeholderNextOfKin::create([
                         'stakeholder_id' => $stakeholder->id,
                         'kin_id' => $nok['stakeholder_id'],
                         'site_id' => $site_id,
                         'relation' => $nok['relation'],
+                    ]);
+                    StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
+                        'status' => true,
                     ]);
                 }
             }

@@ -35,6 +35,7 @@ use App\Http\Controllers\{
     FileCancellationController,
     FileBuyBackController,
     ChartsOfAccountsController,
+    CityController,
     ImageImportController,
     LedgerController,
     SalesPlanImportController,
@@ -46,6 +47,7 @@ use App\Http\Controllers\{
     FourthLevelAccountController,
     FifthLevelAccountController,
     StakeholdersImportControler,
+    StateController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -232,12 +234,51 @@ Route::group([
                             Route::get('create', [ImageImportController::class, 'create'])->name('create');
                             Route::post('store', [ImageImportController::class, 'store'])->name('store');
                             Route::get('cancel', [ImageImportController::class, 'cancel'])->name('cancel');
+                        });
+                    });
 
-                            Route::get('delete', [CustomFieldController::class, 'destroy'])->name('destroy');
-                            Route::group(['prefix' => '/{id}'], function () {
-                                Route::get('edit', [CustomFieldController::class, 'edit'])->name('edit');
-                                Route::put('update', [CustomFieldController::class, 'update'])->name('update');
-                            });
+                    //Countries Route
+                    Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
+
+                        Route::get('/', [CountryController::class, 'index'])->name('index');
+
+                        Route::get('create', [CountryController::class, 'create'])->name('create');
+                        Route::post('store', [CountryController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CountryController::class, 'edit'])->name('edit');
+                            Route::put('update', [CountryController::class, 'update'])->name('update');
+                            Route::get('delete', [CountryController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    //States Route
+                    Route::group(['prefix' => 'states', 'as' => 'states.'], function () {
+
+                        Route::get('/', [StateController::class, 'index'])->name('index');
+
+                        Route::get('create', [StateController::class, 'create'])->name('create');
+                        Route::post('store', [StateController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [StateController::class, 'edit'])->name('edit');
+                            Route::put('update', [StateController::class, 'update'])->name('update');
+                            Route::get('delete', [StateController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    //Cities Route
+                    Route::group(['prefix' => 'cities', 'as' => 'cities.'], function () {
+
+                        Route::get('/', [CityController::class, 'index'])->name('index');
+
+                        Route::get('create', [CityController::class, 'create'])->name('create');
+                        Route::post('store', [CityController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CityController::class, 'edit'])->name('edit');
+                            Route::put('update', [CityController::class, 'update'])->name('update');
+                            Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
                         });
                     });
                 });
@@ -276,6 +317,8 @@ Route::group([
                     Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
+                        Route::get('floor-plan', [FloorController::class, 'floorPlan'])->name('floor-plan');
+                        Route::post('floor-plan/upload', [FloorController::class, 'floorPlanUpload'])->name('floor-plan.upload');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
                     });
 
@@ -325,11 +368,14 @@ Route::group([
                         Route::post('saveImport', [SalesPlanImportController::class, 'saveImportInstallments'])->name('saveImportInstallments');
                     });
 
-                    // //Units Routes
+                    //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
                             Route::get('/', [UnitController::class, 'index'])->name('index');
+
+                            // Unit details by unit_no through AJAX
+                            Route::get('/details', [UnitController::class, 'details'])->name('details');
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
@@ -743,6 +789,7 @@ Route::group([
                     Route::group(['prefix' => 'recovery', 'as' => 'recovery.'], function () {
                         Route::get('/dashboard', [AccountsRecoveryController::class, 'dashboard'])->name('dashboard');
                         Route::get('/calender', [AccountsRecoveryController::class, 'calender'])->name('calender');
+                        Route::get('/inventory-aging', [AccountsRecoveryController::class, 'inventoryAging'])->name('inventory-aging');
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {

@@ -50,18 +50,15 @@ class TrialBalanceDataTable extends DataTable
                 //     }
                 // }
                 if (count($accountHead->accountLedgers) > 0) {
-                    if($accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays()))
-                    {
-                        $credits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('credit')->sum();
-                        $debits = $accountHead->accountLedgers->where('created_at','<',Carbon::today()->subDays())->pluck('debit')->sum();
-                        if((substr($accountHead->account_head_code, 0, 2) == 10) || (substr($accountHead->account_head_code, 0, 2) == 60))
-                        {
-                            return number_format($credits - $debits);
-                        }else{
-                            return number_format($debits - $credits);
+                    if ($accountHead->accountLedgers->where('created_at', '<', Carbon::today()->subDays())) {
+                        $credits = $accountHead->accountLedgers->where('created_at', '<', Carbon::today()->subDays())->pluck('credit')->sum();
+                        $debits = $accountHead->accountLedgers->where('created_at', '<', Carbon::today()->subDays())->pluck('debit')->sum();
+                        if ((substr($accountHead->account_head_code, 0, 2) == 10) || (substr($accountHead->account_head_code, 0, 2) == 60)) {
+                            return number_format(0);
+                        } else {
+                            return number_format(0);
                         }
-
-                    }else{
+                    } else {
                         return 0;
                     }
                 }
@@ -80,9 +77,9 @@ class TrialBalanceDataTable extends DataTable
                 if (count($accountHead->accountLedgers) > 0) {
                     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
                     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
-                    if((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)){
+                    if ((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)) {
                         return number_format($credits - $debits);
-                    }else{
+                    } else {
                         return number_format($debits - $credits);
                     }
                 }

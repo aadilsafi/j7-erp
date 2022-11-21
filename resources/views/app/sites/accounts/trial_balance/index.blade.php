@@ -53,7 +53,7 @@
                                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                                     <div class="card-body">
                                         <div class="row mb-1 g-1">
-                                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
                                                 <label class="form-label fs-5" for="type_name">Search For User Name</label>
                                                 <select class="select2-size-lg form-select col-filter" id="type_name"
                                                 name="type_name">
@@ -63,19 +63,25 @@
                                                 @endforeach
                                             </select>
                                             </div>
-                                            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 position-relative">
-                                                <div>
+                                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 position-relative">
 
-                                                    <label class="form-label fs-5" for="month_value">Select Month</label>
-                                                </div>
-
-                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                {{-- <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                     <input type="hidden" name="month_value" id="month_value">
                                                     <button type="button" name="months" id="months1" value="1" onclick="$('#month_value').val('months1'); $('#months1').css('background-color','#e8e7f380'); $('#months3, #months6, #months12').css('background-color','#ffffff')" class="btn btn-outline-primary">1 Months</button>
                                                     <button type="button" name="months" id="months3" value="3" onclick="$('#month_value').val('months3'); $('#months3').css('background-color','#e8e7f380'); $('#months1, #months6, #months12').css('background-color','#ffffff')" class="btn btn-outline-primary">3 Months</button>
                                                     <button type="button" name="months" id="months6" value="6" onclick="$('#month_value').val('months6'); $('#months6').css('background-color','#e8e7f380'); $('#months1, #months3, #months12').css('background-color','#ffffff') " class="btn btn-outline-primary">6 Months</button>
                                                     <button type="button" name="months" id="months12" value="12" onclick="$('#month_value').val('months12'); $('#months12').css('background-color','#e8e7f380'); $('#months1, #months6, #months3').css('background-color','#ffffff')" class="btn btn-outline-primary">12 Months</button>
-                                                </div>
+                                                </div> --}}
+
+                                                <label class="form-label fs-5" for="type_name">Select Month</label>
+                                                <select class="select2-size-lg form-select col-filter" id="month_value"
+                                                name="month_value">
+                                                    <option value="0" selected>Select Month</option>
+                                                    <option value="months1">Months 1</option>
+                                                    <option value="months3">Months 3</option>
+                                                    <option value="months6">Months 6</option>
+                                                    <option value="months12">Months 12</option>
+                                            </select>
                                             </div>
                                         </div>
                                         {{-- <div class="row mb-1 g-1">
@@ -156,6 +162,19 @@
 
                         <div class="card filter_table_data d-none" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
+                                <div class="col-sm-12 d-flex justify-content-end align-items-center">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-relief-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-upload"></i> Export</button>
+                                    <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard"></i> Copy</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf"></i> PDF</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i>Excel</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                                    </ul>
+                                    <button type="reset" class="btn btn-relief-outline-danger ml-3" style="margin-right: 8px;margin-left: 8px;"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                                    <button type="reset" class="btn btn-relief-outline-primary ml-3" style="margin-right: 7px;"><i class="bi bi-arrow-clockwise"></i> Reload</button>
+
+                                </div>
                                 <table id="example" class=" table-responsive table table-striped dt-complex-header table"
                                     style="width:100%">
                                     <thead>

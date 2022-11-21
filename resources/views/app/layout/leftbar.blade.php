@@ -731,6 +731,16 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.accounts.recovery.inventory-aging')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='calendar'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Calender">Inventory Aging</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </li>
                         @endcanany

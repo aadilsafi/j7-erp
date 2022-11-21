@@ -94,6 +94,11 @@ class AccountsRecoveryController extends Controller
         );
     }
 
+    public function inventoryAging(Request $request)
+    {
+        return view('app.sites.accounts.recovery.inventory-aging');
+    }
+
     public function salesPlan(Request $request, $site_id)
     {
         if (request()->ajax()) {

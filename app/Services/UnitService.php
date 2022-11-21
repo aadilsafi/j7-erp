@@ -191,10 +191,13 @@ class UnitService implements UnitInterface
             'status_id' => filter_strip_tags($inputs['status_id']),
         ];
 
-        $unit = $this->model()->where([
+        $unit = (new Unit())->where([
             'floor_id' => $floor_id,
             'id' => $id,
-        ])->update($data);
+        ])->first();
+        
+        $unit->update($data);
+
 
         return $unit;
     }

@@ -489,11 +489,32 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.floor-plan',
+                'show_name' => 'Can View Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.floor-plan.upload',
+                'show_name' => 'Can Upload Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
                 'show_name' => 'Can View Sites Floors Units',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.details',
+                'show_name' => 'Can View Unit Details',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

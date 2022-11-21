@@ -220,13 +220,10 @@ class FileTitleTransferController extends Controller
             $file->stakeholder_data = json_encode($stakeholder);
             $file->update();
 
-            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-            foreach ($salesPlan as $salesPlan) {
-                $SalesPlan = SalesPlan::find($salesPlan->id);
-                $SalesPlan->stakeholder_id = $stakeholder->id;
-                $salesPlan->kin_data = json_encode([]);
-                $SalesPlan->update();
-            }
+            $salesPlan = SalesPlan::find($file->sales_plan_id);
+            $salesPlan->stakeholder_id = $stakeholder->id;
+            $salesPlan->kin_data = $file_title_transfer->kin_data;
+            $salesPlan->save();
 
             // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
             // foreach ($receipt as $receipt) {

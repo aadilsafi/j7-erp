@@ -27,10 +27,9 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+        #stakeholderNextOfKin {
+            display: none;
+        }
     </style>
 @endsection
 
@@ -204,6 +203,23 @@
                                 stakeholderData = response.data[0];
                             }
 
+                            $('#stackholder_next_of_kin').empty();
+                            if (response.data[1].length > 0) {
+                                $('#stakeholderNextOfKin').show();
+                                $.each(response.data[1], function(i, item) {
+
+                                    $('#stackholder_next_of_kin').append($('<option>', {
+                                        value: item.id,
+                                        text: item.full_name + ' s/o ' +
+                                            item.father_name + ' ,' + item
+                                            .cnic,
+                                    }));
+
+                                });
+                            } else {
+                                $('#stakeholderNextOfKin').hide();
+                            }
+
                             $('#stackholder_full_name').val(stakeholderData.full_name).attr(
                                 'readonly', (stakeholderData.full_name.length > 0));
                             $('#stackholder_father_name').val(stakeholderData.father_name).attr(
@@ -223,6 +239,8 @@
                             hideBlockUI('#stakeholders_card');
                             $('#stackholder_comments').text(stakeholderData.comments).attr(
                                 'readonly', (stakeholderData.comments.length > 0));
+
+
 
 
                             let stakeholderType = '';

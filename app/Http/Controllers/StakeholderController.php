@@ -100,7 +100,7 @@ class StakeholderController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
                 // dd($inputs);
                 // $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
                 // //

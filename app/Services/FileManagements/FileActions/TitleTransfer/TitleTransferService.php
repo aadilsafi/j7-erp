@@ -57,8 +57,9 @@ class TitleTransferService implements TitleTransferInterface
                     'contact' => $inputs['stackholder']['contact'],
                     'address' => $inputs['stackholder']['address'],
                     'comments' => $inputs['stackholder']['comments'],
-
                 ];
+
+
 
                 $transfer_person = Stakeholder::create($transfer_owner_data);
                 $transfer_person_id = $transfer_person->id;
@@ -120,6 +121,10 @@ class TitleTransferService implements TitleTransferInterface
                 'status' => 0,
                 'comments' => $inputs['comments'],
             ];
+
+            if (isset($inputs['stackholder']['next_of_kin'])) {
+                $data['kin_data'] = json_encode($inputs['stackholder']['next_of_kin']);
+            }
 
             $unit_data = Unit::find($inputs['unit_id']);
             $stakeholder_data = Stakeholder::find($inputs['customer_id']);

@@ -42,7 +42,7 @@ class ReceiptController extends Controller
      */
     public function index(ReceiptsDatatable $dataTable, $site_id)
     {
-        // 
+        //
         $data = [
             'site_id' => $site_id,
             'receipt_templates' => ReceiptTemplate::all(),
@@ -66,7 +66,7 @@ class ReceiptController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
+                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments','salesPlan.PaidorPartiallyPaidInstallments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),

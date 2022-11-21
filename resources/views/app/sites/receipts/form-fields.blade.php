@@ -18,8 +18,14 @@
                                         <option selected>Select Unit No</option>
                                         @foreach ($units as $row)
                                             @if (!$row->salesPlan->isEmpty())
+                                                @php
+                                                    $paidAmount = $row->salesPlan[0]['PaidorPartiallyPaidInstallments'];
+                                                    $paidAmount = collect($paidAmount)->sum('amount');
+                                                @endphp
                                                 @continue(isset($unit) && $unit->id == $row['id'])
-                                                <option value="{{ $row->id }}"
+                                                @continue(isset($paidAmount) && $paidAmount  == $row->salesPlan[0]['total_price'])
+
+                                                <option  value="{{ $row->id }}"
                                                     {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
                                                     {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
                                                     {{ $row->salesPlan[0]['stakeholder']['full_name'] }},

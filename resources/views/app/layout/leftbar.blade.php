@@ -359,15 +359,15 @@
                         @if (Auth::user()->can('sites.settings.countries.index') || Auth::user()->can('roles.index'))
                             <li class="nav-item ">
                                 <a class="d-flex align-items-center" href="javascript:void(0)">
-                                    <i data-feather='country'></i>
+                                    <i class="bi bi-geo-alt-fill"></i>
                                     <span class="menu-title text-truncate"
-                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">Countries</span>
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">Locations</span>
                                 </a>
                                 <ul class="menu-content">
                                     @can('sites.settings.countries.index')
                                         <li class="nav-item {{ request()->routeIs('sites.settings.countries.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center" href="{{ route('sites.settings.countries.index', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='shield'></i>
+                                                <i data-feather='flag'></i>
                                                 <span class="menu-title text-truncate"
                                                     data-i18n="Email">Countries</span>
                                             </a>
@@ -377,7 +377,7 @@
                                     @can('sites.settings.states.index')
                                         <li class="nav-item {{ request()->routeIs('sites.settings.states.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center" href="{{ route('sites.settings.states.index', ['site_id' => encryptParams($site_id)])}}">
-                                                <i data-feather='shield'></i>
+                                                <i class="bi bi-geo"></i>
                                                 <span class="menu-title text-truncate"
                                                     data-i18n="Email">States</span>
                                             </a>
@@ -386,7 +386,7 @@
                                     @can('sites.settings.cities.index')
                                         <li class="nav-item {{ request()->routeIs('sites.settings.cities.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center" href="{{ route('sites.settings.cities.index', ['site_id' => encryptParams($site_id)])}}">
-                                                <i data-feather='shield'></i>
+                                                <i class="bi bi-map-fill"></i>
                                                 <span class="menu-title text-truncate"
                                                     data-i18n="Email">Cities</span>
                                             </a>

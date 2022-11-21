@@ -42,9 +42,15 @@ class CountryDataTable extends DataTable
             ->editColumn('actions', function ($user) {
                 return view('app.sites.countries.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })
-            ->editColumn('check', function ($user) {
-                return $user;
+            ->editColumn('created_at', function ($fileManagement) {
+                return editDateColumn($fileManagement->created_at);
             })
+            ->editColumn('updated_at', function ($fileManagement) {
+                return editDateColumn($fileManagement->updated_at);
+            })
+            // ->editColumn('check', function ($user) {
+            //     return $user;
+            // })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
@@ -77,20 +83,20 @@ class CountryDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                ($createPermission  ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                        'onclick' => 'addNew()',
-                    ])
+                // ($createPermission  ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                //         'onclick' => 'addNew()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                //         'onclick' => 'addNew()',
+                //     ])
 
-                ),
+                // ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -102,19 +108,19 @@ class CountryDataTable extends DataTable
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
-                ($selectedDeletePermission ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                ),
+                // ($selectedDeletePermission ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                // ),
             )
             // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
@@ -125,13 +131,13 @@ class CountryDataTable extends DataTable
                     'orderable' => false,
                     'searchable' => false,
                     'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkUsers[]\" id=\"chkUsers_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkUsers_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
+                    // 'render' => "function (data, type, full, setting) {
+                    //     var role = JSON.parse(data);
+                    //     return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkUsers[]\" id=\"chkUsers_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkUsers_' + role.id + '\"></label></div>';
+                    // }",
+                    // 'checkboxes' => [
+                    //     'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    // ]
                 ],
             ])
             ->orders([
@@ -149,18 +155,22 @@ class CountryDataTable extends DataTable
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('sites.users.edit');
         return [
-            ($selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
+            // ($selectedDeletePermission ?
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)
+            //     :
+            //     Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
+            // ),
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
-            ($editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
+            Column::make('short_label')->title('Short Label'),
+            Column::make('created_at')->title('Created At'),
+            Column::make('updated_at')->title('Updated At'),
+
+            // ($editPermission ?
+            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+            //     :
+            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            // )
 
         ];
     }

@@ -234,7 +234,7 @@ class TrialBalanceController extends Controller
                     '<td class="text-nowrap">' . $i . '</td>' .
                     '<td class="text-nowrap">' . account_number_format($account->code) . '</td>' .
                     '<td class="text-nowrap">' . $account->name . '</td>' .
-                    '<td class="text-nowrap">' . $ending . '</td>' .
+                    '<td class="text-nowrap">' . '0' . '</td>' .
                     '<td class="text-nowrap">' . number_format($credits) . '</td>' .
                     '<td class="text-nowrap">' . number_format($debits) . '</td>' .
                     '<td class="text-nowrap">' . $ending . '</td>' .

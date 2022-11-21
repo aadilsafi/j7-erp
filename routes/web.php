@@ -317,6 +317,8 @@ Route::group([
                     Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [FloorController::class, 'edit'])->name('edit');
+                        Route::get('floor-plan', [FloorController::class, 'floorPlan'])->name('floor-plan');
+                        Route::post('floor-plan/upload', [FloorController::class, 'floorPlanUpload'])->name('floor-plan.upload');
                         Route::put('update', [FloorController::class, 'update'])->name('update');
                     });
 
@@ -366,11 +368,14 @@ Route::group([
                         Route::post('saveImport', [SalesPlanImportController::class, 'saveImportInstallments'])->name('saveImportInstallments');
                     });
 
-                    // //Units Routes
+                    //Units Routes
                     Route::group(['prefix' => '/{floor_id}'], function () {
 
                         Route::group(['prefix' => 'units', 'as' => 'units.'], function () {
                             Route::get('/', [UnitController::class, 'index'])->name('index');
+
+                            // Unit details by unit_no through AJAX
+                            Route::get('/details', [UnitController::class, 'details'])->name('details');
 
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');

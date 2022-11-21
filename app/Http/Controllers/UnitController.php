@@ -1101,4 +1101,24 @@ class UnitController extends Controller
 
         return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
+
+    /**
+     * Get unit details based on Unit Number (e.g 1F-01)
+     */
+    public function details(Request $request, $site_id, $floor_id)
+    {
+        $floor_id = decryptParams($floor_id);
+        $site_id = decryptParams($site_id);
+        $validator = \Validator::make($request->all(), [
+            'unit_no' => 'required|string',
+        ],
+        );
+
+        $validator->validate();
+
+        $unit_details = Unit::where('floor_id', $floor_id)->where('floor_unit_number', $request->unit_no)->first();
+
+        return response()->json($unit_details);
+
+    }
 }

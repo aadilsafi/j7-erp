@@ -242,14 +242,14 @@
                 </div>
 
                 {{-- Next Of KIN Data --}}
-                <div class="row mb-1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <div class="card m-0"
-                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                            <div class="card-header">
-                                <h3>Next Of KIN</h3>
-                            </div>
-                            @forelse ($nextOfKin as $kin)
+                @forelse ($nextOfKin as $kin)
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="card m-0"
+                                style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                                <div class="card-header">
+                                    <h3>Next Of KIN</h3>
+                                </div>
                                 <div class="card-body">
                                     <div class="row g-1 mb-1">
                                         <input type="hidden" name="application_form[stakeholder_id]"
@@ -258,15 +258,14 @@
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_name">Name</label>
                                             <input type="text" class="form-control form-control-lg"
-                                                id="customer_name" placeholder="Name"
-                                                value="{{ $kin->full_name }}" disabled />
+                                                id="customer_name" placeholder="Name" value="{{ $kin->full_name }}"
+                                                disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_father_name">Father/Husband
                                                 Name</label>
                                             <input type="text" class="form-control form-control-lg"
-                                                id="customer_father_name"
-                                                value="{{ $kin->father_name }}"
+                                                id="customer_father_name" value="{{ $kin->father_name }}"
                                                 placeholder="Father/Husband Name" disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -288,8 +287,8 @@
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="customer_phone">Cell</label>
                                             <input type="text" class="form-control form-control-lg"
-                                                id="customer_phone" placeholder="Cell"
-                                                value="{{ $kin->contact }}" disabled />
+                                                id="customer_phone" placeholder="Cell" value="{{ $kin->contact }}"
+                                                disabled />
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5"
@@ -309,13 +308,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            @empty
-                            @endforelse
-
+                            </div>
                         </div>
                     </div>
-                </div>
-
+                @empty
+                @endforelse
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-end">

@@ -683,6 +683,7 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Status',
                 'App\Models\StakeholderContact',
                 'App\Models\StakeholderType',
+                'App\Models\SalesPlan',
                 'App\Models\SalesPlanAdditionalCost',
                 'App\Models\SalesPlanInstallments',
                 'App\Models\ReceiptDraftModel',
@@ -690,6 +691,8 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Notification',
                 'App\Models\MultiValue',
                 'App\Models\SiteOwner',
+                'TempStakeholder',
+                'StakeholderNextOfKin',
             ];
         }
         $customFieldModels = array();

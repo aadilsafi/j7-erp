@@ -151,7 +151,7 @@
 
                         $('#td_unit_id').html(response.unit.unit_number);
                         $('#td_unit_area').html(response.unit.gross_area);
-                        $('#td_unit_rate').html(response.salesPlan.unit_price.toLocaleString());
+                        $('#td_unit_rate').html(parseFloat(response.salesPlan.unit_price).toLocaleString());
                         $('#td_unit_floor').html(response.floor);
 
                         if (response.facing != null) {

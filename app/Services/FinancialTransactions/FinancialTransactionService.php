@@ -257,7 +257,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
         if($account_action == 1 || $account_action == 8){
             $sales_plan = SalesPlan::find($sales_plan);
-            $data['created_date'] = $sales_plan->created_date;
+            $data['created_date'] = $sales_plan->approved_date;
         }
 
 

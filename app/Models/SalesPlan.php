@@ -70,12 +70,12 @@ class SalesPlan extends Model
 
     public function PaidorPartiallyPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','paid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status', 'paid')->orWhere('status', 'partially_paid')->orderBy('installment_order', 'asc');
     }
 
     public function unPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status', 'unpaid')->orWhere('status', 'partially_paid')->orderBy('installment_order', 'asc');
     }
 
     public function leadSource()
@@ -86,5 +86,9 @@ class SalesPlan extends Model
     public function receipts()
     {
         return $this->hasMany(Receipt::class);
+    }
+    public function accountLedgers()
+    {
+        return $this->hasMany(AccountLedger::class);
     }
 }

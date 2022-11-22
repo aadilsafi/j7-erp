@@ -283,7 +283,7 @@
                                     {{-- @can('sites.floors.SalesPlanImport.importSalesPlan')
                                         <li class="nav-item ">
                                             <a class="d-flex align-items-center" href="javascript:void(0)">
-                                                
+
                                                 <span class="menu-title text-truncate">
                                                     Sales Plan</span>
                                             </a>
@@ -737,7 +737,7 @@
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i data-feather='calendar'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Calender">Inventory Aging</span>
+                                                <span class="menu-title text-truncate" data-i18n="Calender"> Aging Report</span>
                                             </a>
                                         </li>
                                     @endcan

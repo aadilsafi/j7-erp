@@ -3,7 +3,7 @@
 
 
 
-@section('page-title', 'Inventory Aging')
+@section('page-title', 'Aging Report')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -39,7 +39,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0"> Inventory Aging</h2>
+                <h2 class="content-header-title float-start mb-0"> Aging Report</h2>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@
                                                 @endphp
                                                 @foreach ($salesPlans as $salesPlan)
                                                 @php
-                                                 
+
                                                     array_push($installment_large_number,$salesPlan->installments->pluck('details')->count());
                                                 @endphp
                                                         <option value="{{ $salesPlan->stakeholder->id }}">{{ $salesPlan->stakeholder->full_name }}</option>
@@ -102,9 +102,9 @@
                                                 name="installment_value">
                                                 <option value="0" selected>Select Installment</option>
                                                 @for ($i = 1; $i <= collect($installment_large_number)->max(); $i++)
-                                                
+
                                                 <option value="{{ englishCounting($i) }} Installment" >{{ englishCounting($i) }} Installment</option>
-                                                
+
                                                 @endfor
                                             </select>
                                             </div>
@@ -313,12 +313,12 @@
                                                         <td class="text-nowrap" >{{ number_format($installment->remaining_amount) }}</td>
                                                         <td class="text-nowrap" >{{ number_format($installment->paid_amount) }}</td>
                                                     </tr>
-                                                    
-                                                
+
+
                                                 @php
                                                     $i++;
-                                                @endphp  
-                                        @endforeach                                
+                                                @endphp
+                                        @endforeach
                                     @endforeach
                                     @php
                                     $amount_sum_array = [];
@@ -339,7 +339,7 @@
 
                                 </tbody>
                             </table>
-                        </div>  
+                        </div>
                    </div>
 
                 </div>
@@ -378,7 +378,7 @@
 @endsection
 
 @section('custom-js')
-    <script>        
+    <script>
         $(document).ready(function() {
             var table = $('#example').DataTable({
                 responsive: true
@@ -437,7 +437,7 @@
                     '_token': _token,
                 },
             success: function(data) {
-                
+
                 console.log((data))
                 if(data.status==true){
                     $('#example').html(data.data);
@@ -450,7 +450,7 @@
                     console.log(error);
             }
         });
-                
+
             });
         });
 
@@ -566,7 +566,7 @@ if (chPie) {
 
 /* 3 donut charts */
 var donutOptions = {
-  cutoutPercentage: 85, 
+  cutoutPercentage: 85,
   legend: {position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
 };
 

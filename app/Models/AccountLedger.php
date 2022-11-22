@@ -30,6 +30,7 @@ class AccountLedger extends Model
         'file_cancellation_id',
         'file_title_transfer_id',
         'status',
+        'created_date',
     ];
 
     protected $casts = [

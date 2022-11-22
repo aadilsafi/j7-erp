@@ -150,6 +150,61 @@
         $(document).ready(function() {
 
             $("#city_id").empty()
+            $('#state_id').empty();
+
+            var e = $("#country_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).change(function() {
+                showBlockUI('#stakeholderForm');
+
+                $("#city_id").empty()
+                $('#state_id').empty();
+
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
+                    .replace(':countryId', $(this).val());
+                if ($(this).val() > 0) {
+                    showBlockUI('#stakeholderForm');
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'stateId': $(this).val(),
+                            '_token': _token
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#state_id').html('<option value=0>Select State</option>');
+                                $('#city_id').html('<option value=0>Select City</option>');
+                                $.each(response.states, function(key, value) {
+                                    $("#state_id").append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+                                hideBlockUI('#stakeholderForm');
+                            } else {
+                                hideBlockUI('#stakeholderForm');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            hideBlockUI('#stakeholderForm');
+                        }
+                    });
+                }
+            });
+
 
             var e = $("#state_id");
             e.wrap('<div class="position-relative"></div>');
@@ -161,12 +216,14 @@
             }).change(function() {
                 $("#city_id").empty()
                 // alert($(this).val());
+                showBlockUI('#stakeholderForm');
+
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
                     .replace(':stateId', $(this).val());
                 if ($(this).val() > 0) {
-                    showBlockUI('#loader');
+                    showBlockUI('#stakeholderForm');
                     $.ajax({
                         url: url,
                         type: 'post',
@@ -177,16 +234,14 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('#city_id-dd').html('<option value="">Select City</option>');
+                                $('#city_id').html('<option value=0>Select City</option>');
                                 $.each(response.cities, function(key, value) {
                                     $("#city_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
-
-                                hideBlockUI('#loader');
-
+                                hideBlockUI('#stakeholderForm');
                             } else {
-                                hideBlockUI('#loader');
+                                hideBlockUI('#stakeholderForm');
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Error',
@@ -196,7 +251,7 @@
                         },
                         error: function(error) {
                             console.log(error);
-                            hideBlockUI('#loader');
+                            hideBlockUI('#stakeholderForm');
                         }
                     });
                 }

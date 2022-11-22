@@ -19,9 +19,9 @@ class CityController extends Controller
         return $dataTable->with($data)->render('app.sites.cities.index', $data);
     }
 
-    public function getCities($stateId){
-        sleep(5);
-        $cities = City::select('name','id')->where('state_id',$stateId)->get();
+    public function getCities($stateId)
+    {
+        $cities = City::select('name', 'id')->where('state_id', $stateId)->get();
 
         return response()->json([
             'success' => true,

@@ -185,7 +185,7 @@
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
-                                                            @foreach ($account_of_heads as $key=>$account_of_head_full_array)
+                                                            @foreach ($account_of_heads->where('level',2) as $key=>$account_of_head_full_array)
                                                             @if ( Str::length($account_of_head_full_array->code) == 4 AND ($account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2)))
                                                                 <li class="nav-item Second_li ms-3">
                                                                     <a class="d-flex align-items-center" href="#"><span class="menu-title text-truncate" data-i18n="eCommerce"><i class="bi bi-arrow-bar-right"></i>{{$account_of_head_full_array->name}}</span></a>
@@ -206,19 +206,47 @@
                                                                                         <td>{{$account_of_head_full_array->level}}</td>
                                                                                         <td>{{account_number_format($account_of_head_full_array->code)}}</td>
 
+                                                                        {{-- @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
+                                                                            @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_full_array->code == substr($account_of_head_4->code, 0, 4)))
+                                                                                @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
+                                                                                    @if (($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
+                                                                                        @php
+                                                                                            $value_44 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
+                                                                                        @endphp
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                        @endforeach --}}
+
+                                                                            @foreach ($account_of_heads->where('level',3) as $key_second=>$account_of_head_3)
+                                                                                @if ( Str::length($account_of_head_3->code) == 6 AND ($account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4)))
+                                                                                                @php
+                                                                                                    $value_4=0;
+                                                                                                    $value_5=0;
+                                                                                                    $value_44=0;
+                                                                                                @endphp
+                                                                                                    @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
+                                                                                                        @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_3->code == substr($account_of_head_4->code, 0, 6)))
+                                                                                                            @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
+                                                                                                                @if (($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
+                                                                                                                {{-- @dd($account_of_head_5->code); --}}
+                                                                                                                    @php
+                                                                                                                        $value_44 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
+                                                                                                                    @endphp
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                         @endif
+                                                                                                    @endforeach
+                                                                                @endif
+
+                                                                            @endforeach
 
 
-                                                                                        @foreach ($account_of_heads->where('level',4) as $key_forth=>$account_of_head_4)
-                                                                                        @if ( Str::length($account_of_head_4->code) == 10 AND ($account_of_head_full_array->code == substr($account_of_head_4->code, 0, 4)))
-                                                                                            @foreach ($account_of_heads->where('level',5) as $key_fiveth=>$account_of_head_5)
-                                                                                                @if (($account_of_head_4->code == substr($account_of_head_5->code, 0, 10)))
-                                                                                                    @php
-                                                                                                        $value_44 += intval(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum(),'-'));
-                                                                                                    @endphp
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                         @endif
-                                                                                    @endforeach
+
+
+
+
+                                                                        {{--  --}}
                                                                                         <td class="custom_td">{{number_format($value_44)}}</td>
                                                                                     </tr>
                                                                                 </tbody>

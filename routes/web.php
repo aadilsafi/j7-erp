@@ -748,6 +748,7 @@ Route::group([
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
+                            Route::post('filter-inventory-aging', [AccountsRecoveryController::class, 'filterInventoryAging'])->name('filter-inventory-aging');
                         });
                     });
 

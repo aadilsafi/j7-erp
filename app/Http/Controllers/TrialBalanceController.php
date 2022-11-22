@@ -53,7 +53,7 @@ class TrialBalanceController extends Controller
 
 
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
+            $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
             return $query;
         })->where('account_head_code', $account_head_code)->get();
 
@@ -98,9 +98,9 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
 
                     '<td>' .
-                    '<span>' . date_format(new DateTime($account_ledger->created_at), 'h:i:s')
+                    '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')
                     . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                    date_format(new DateTime($account_ledger->created_at), 'Y-m-d') .
+                    date_format(new DateTime($account_ledger->created_date), 'Y-m-d') .
                     '</span>' .
 
                     '</td>' .
@@ -179,22 +179,22 @@ class TrialBalanceController extends Controller
         $end_date =  substr($request->to_date, 14, 10);
 
         $account_head = AccountHead::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
+            $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
             return $query;
         })->when(($request->months_id == 'months12'), function ($query) {
-            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(12));
+            $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(12));
             return $query;
         })
             ->when(($request->months_id == 'months6'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
+                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(6));
                 return $query;
             })
             ->when(($request->months_id == 'months1'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth());
+                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth());
                 return $query;
             })
             ->when(($request->months_id == 'months3'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(3));
+                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(3));
                 return $query;
             })
             ->when(($account_head_code > 0), function ($query) use ($account_head_code) {
@@ -239,9 +239,9 @@ class TrialBalanceController extends Controller
                     '<td class="text-nowrap">' . number_format($debits) . '</td>' .
                     '<td class="text-nowrap">' . $ending . '</td>' .
                     '<td class="text-nowrap">' .
-                    '<span>' . date_format(new DateTime($account->created_at), 'h:i:s')
+                    '<span>' . date_format(new DateTime($account->created_date), 'h:i:s')
                     . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                    date_format(new DateTime($account->created_at), 'Y-m-d') .
+                    date_format(new DateTime($account->created_date), 'Y-m-d') .
                     '</span>' .
 
                     '</td>' .

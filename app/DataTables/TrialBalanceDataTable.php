@@ -37,7 +37,7 @@ class TrialBalanceDataTable extends DataTable
                 return account_number_format($accountHead->code);
             })
             ->editColumn('created_at', function ($accountHead) {
-                return editDateColumn($accountHead->created_at);
+                return editDateColumn($accountHead->created_date);
             })
             ->editColumn('starting_balance', function ($accountHead) {
                 // if (count($accountHead->accountLedgers) > 0) {

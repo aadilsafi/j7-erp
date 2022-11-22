@@ -97,7 +97,8 @@ class Stakeholder extends Model implements HasMedia
         return $this->hasMany(StakeholderType::class);
     }
 
-    public function multiValues() {
+    public function multiValues()
+    {
         return $this->morphMany(MultiValue::class, 'multivalueable');
     }
 
@@ -113,11 +114,15 @@ class Stakeholder extends Model implements HasMedia
 
     public function dealer_stakeholder()
     {
-        return $this->hasMany(StakeholderType::class)->where('type','D')->where('status',1);
+        return $this->hasMany(StakeholderType::class)->where('type', 'D')->where('status', 1);
     }
 
     public function stakeholderAsCustomer()
     {
-        return $this->hasMany(StakeholderType::class)->where('type','C');
+        return $this->hasMany(StakeholderType::class)->where('type', 'C');
+    }
+    public function salesPlans()
+    {
+        return $this->hasMany(SalesPlan::class);
     }
 }

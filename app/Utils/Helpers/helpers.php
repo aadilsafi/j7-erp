@@ -691,6 +691,8 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Notification',
                 'App\Models\MultiValue',
                 'App\Models\SiteOwner',
+                'TempStakeholder',
+                'StakeholderNextOfKin',
             ];
         }
         $customFieldModels = array();

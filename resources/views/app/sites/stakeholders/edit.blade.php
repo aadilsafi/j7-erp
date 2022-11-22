@@ -298,7 +298,11 @@
 
                             if (firstLoad) {
                                 state_id.val('{{ $stakeholder->state_id }}');
+                                if(state_id.val() > 0){
                                 state_id.trigger('change');
+                                }else{
+                                    firstLoad = false;
+                                }
                             }
                         } else {
                             hideBlockUI('#stakeholderForm');

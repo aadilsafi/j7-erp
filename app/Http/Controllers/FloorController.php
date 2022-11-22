@@ -69,7 +69,7 @@ class FloorController extends Controller
         }
 
         $totalFloors = Floor::count();
-        
+
         return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id)), 'totalFloors' => $totalFloors]);
     }
 
@@ -514,7 +514,7 @@ class FloorController extends Controller
         $floor = (new Floor())->find($id);
         $floor->floor_plan = $json;
         $floor->saveOrFail();
-        
+
         return back()->with('success', 'Floorplan uploaded successfully');
 
     }

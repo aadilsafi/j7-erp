@@ -78,6 +78,13 @@ class FloorsDataTable extends DataTable
                 }
                 return '-';
             })
+            ->editColumn('units_resale_count', function ($floor) {
+                $count = $floor->units->where('has_sub_units', false)->where('status_id', 6)->count();
+                if (!is_null($count)) {
+                    return $count > 0 ? $count : '-';
+                }
+                return '-';
+            })
             ->editColumn('created_at', function ($floor) {
                 return editDateColumn($floor->created_at);
             })
@@ -119,7 +126,7 @@ class FloorsDataTable extends DataTable
             $buttons[] = Button::raw('copy-floor')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                 ->text('<i class="bi bi-clipboard-check"></i> Copy Floor')->attr(['onclick' => 'copyFloor()']);
         }
-      
+
         $buttons = array_merge($buttons, [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),

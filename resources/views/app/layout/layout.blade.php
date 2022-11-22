@@ -68,6 +68,8 @@
         href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
+    {{-- font-awsom --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
 
     <!-- END: Custom CSS-->
     <meta name="user_id" content="{{ auth()->user()->id }}" />

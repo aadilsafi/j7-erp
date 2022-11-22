@@ -213,7 +213,7 @@
                                     <label class="form-label fs-5" for="unit_type">Created At</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_type"
                                         name="unit[type]" placeholder="Unit Type"
-                                        value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}"
+                                        value="{{ \Carbon\Carbon::parse($receipt->created_date)->format('F j, Y') }}"
                                         readonly />
                                 </div>
                                 @if ($receipt->mode_of_payment == 'Cheque')

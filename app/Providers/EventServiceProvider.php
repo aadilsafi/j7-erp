@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\{Stakeholder};
-use App\Observers\{StakeholderObserver};
+use App\Models\{Stakeholder, Unit};
+use App\Observers\{StakeholderObserver, UnitObserver};
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -13,6 +13,7 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $observers = [
         Stakeholder::class => [StakeholderObserver::class],
+        Unit::class => [UnitObserver::class],
     ];
 
     /**
@@ -33,7 +34,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 
     /**

@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                                width: calc(20% - 0.5em);
-                                                                            } */
+                                                                                                                width: calc(20% - 0.5em);
+                                                                                                            } */
     </style>
 @endsection
 
@@ -120,49 +120,8 @@
 @section('custom-js')
 
     <script type="text/javascript">
-        var editImage = "";
-        var id = <?php echo $stakeholder->id; ?>;
-
-        FilePond.registerPlugin(
-            FilePondPluginImagePreview,
-            FilePondPluginFileValidateType,
-            FilePondPluginFileValidateSize,
-            FilePondPluginImageValidateSize,
-            FilePondPluginImageCrop,
-        );
-
-        var files = [];
-
-        @forelse($images as $image)
-            files.push({
-                source: '{{ $image->getUrl() }}',
-            });
-        @empty
-        @endforelse
-
-        FilePond.create(document.getElementById('attachment'), {
-
-            files: files,
-            styleButtonRemoveItemPosition: 'right',
-            // imageValidateSizeMinWidth: 1000,
-            // imageValidateSizeMinHeight: 1000,
-            imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
-            maxFileSize: '1536KB',
-            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
-            storeAsFile: true,
-            allowMultiple: true,
-            maxFiles: 2,
-            minFiles: 2,
-            // required: true,
-            checkValidity: true,
-            credits: {
-                label: '',
-                url: ''
-            }
-        });
-
         $(document).ready(function() {
+            $('#div-next-of-kin').hide();
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -246,13 +205,191 @@
                 }
             });
 
+            @forelse ($stakeholder->stakeholder_types as $type)
+                @if ($type->type == 'C' && $type->status)
+                    $('#div-next-of-kin').show();
+                @else
+                @endif
+            @empty
+            @endforelse
 
+
+        });
+
+        var editImage = "";
+        var id = <?php echo $stakeholder->id; ?>;
+
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+        );
+
+        var files = [];
+
+        @forelse($images as $image)
+            files.push({
+                source: '{{ $image->getUrl() }}',
+            });
+        @empty
+        @endforelse
+
+        FilePond.create(document.getElementById('attachment'), {
+
+            files: files,
+            styleButtonRemoveItemPosition: 'right',
+            // imageValidateSizeMinWidth: 1000,
+            // imageValidateSizeMinHeight: 1000,
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
+            maxFiles: 2,
+            minFiles: 2,
+            // required: true,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+        var firstLoad = true;
+
+        var country_id = $("#country_id");
+        country_id.wrap('<div class="position-relative"></div>');
+        country_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: country_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            showBlockUI('#stakeholderForm');
+
+            $("#city_id").empty()
+            $('#state_id').empty();
+
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
+                .replace(':countryId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#stakeholderForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#state_id').html('<option value=0>Select State</option>');
+                            $('#city_id').html('<option value=0>Select City</option>');
+                            $.each(response.states, function(key, value) {
+                                $("#state_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            hideBlockUI('#stakeholderForm');
+
+                            if (firstLoad) {
+                                state_id.val('{{ $stakeholder->state_id }}');
+                                state_id.trigger('change');
+                            }
+                        } else {
+                            hideBlockUI('#stakeholderForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            }
+        });
+        var city_id = $("#city_id");
+        city_id.wrap('<div class="position-relative"></div>');
+        city_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: city_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        });
+
+        var state_id = $("#state_id");
+        state_id.wrap('<div class="position-relative"></div>');
+        state_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: state_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            $("#city_id").empty()
+            // alert($(this).val());
+            showBlockUI('#stakeholderForm');
+
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
+                .replace(':stateId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#stakeholderForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#city_id').html('<option value=0>Select City</option>');
+                            $.each(response.cities, function(key, value) {
+                                $("#city_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            hideBlockUI('#stakeholderForm');
+                            if (firstLoad) {
+                                city_id.val('{{ $stakeholder->city_id }}');
+                                firstLoad = false;
+                            }
+                        } else {
+                            hideBlockUI('#stakeholderForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            }
         });
 
         function performAction(action) {
             if (action == 'C') {
-                $('#div-next-of-kin').toggle('fast', 'linear');
+                // $('#div-next-of-kin').toggle('fast', 'linear');
+                $('#div-next-of-kin').show();
+            } else {
+                $('#div-next-of-kin').hide();
             }
         }
+
+        country_id.val('{{ $stakeholder->country_id }}');
+        country_id.trigger('change');
     </script>
 @endsection

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\{Role, Permission};
@@ -15,7 +16,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Permission())->insert([
+         (new Permission())->insert([
 
             // Roles Routes
             [
@@ -488,11 +489,32 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.floor-plan',
+                'show_name' => 'Can View Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.floor-plan.upload',
+                'show_name' => 'Can Upload Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
                 'show_name' => 'Can View Sites Floors Units',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.details',
+                'show_name' => 'Can View Unit Details',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -2079,6 +2101,137 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            //Countries Permissions
+            [
+                'name' => 'sites.settings.countries.index',
+                'show_name' => 'Can View Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.create',
+                'show_name' => 'Can Create Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.store',
+                'show_name' => 'Can save Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.edit',
+                'show_name' => 'Can Edit Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.update',
+                'show_name' => 'Can Update Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.destroy',
+                'show_name' => 'Can Delete Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //States Permissions
+            [
+                'name' => 'sites.settings.states.index',
+                'show_name' => 'Can View States',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.create',
+                'show_name' => 'Can Create State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.store',
+                'show_name' => 'Can save State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.edit',
+                'show_name' => 'Can Edit State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.update',
+                'show_name' => 'Can Update State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.destroy',
+                'show_name' => 'Can Delete States',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //City Permissions
+            [
+                'name' => 'sites.settings.cities.index',
+                'show_name' => 'Can View Cities',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.create',
+                'show_name' => 'Can Create City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.store',
+                'show_name' => 'Can save City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.edit',
+                'show_name' => 'Can Edit City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.update',
+                'show_name' => 'Can Update City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.destroy',
+                'show_name' => 'Can Delete City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ]);
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));

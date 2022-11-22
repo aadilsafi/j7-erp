@@ -28,9 +28,9 @@
             background-color: #e3e0fd;
         }
 
-        /* .filepond--item {
-                    width: calc(20% - 0.5em);
-                } */
+        #stakeholderNextOfKin {
+            display: none;
+        }
     </style>
 @endsection
 

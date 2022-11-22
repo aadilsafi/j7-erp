@@ -3,6 +3,7 @@
 namespace App\Services\DealerIncentive;
 
 use App\Models\DealerIncentiveModel;
+use App\Models\RebateIncentiveModel;
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
 use App\Models\Unit;
@@ -36,9 +37,9 @@ class DealerService implements DealerInterface
 
             $uids = $inputs['unit_ids'];
             // $uids = array_column($ids,'uid');
-            
+
             $dealerIncentive = [
-                'site_id' => decryptParams($site_id) ,
+                'site_id' => decryptParams($site_id),
                 'dealer_id' => $inputs['dealer_id'],
                 'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),
                 'dealer_incentive' => $inputs['dealer_incentive'],
@@ -50,6 +51,15 @@ class DealerService implements DealerInterface
             ];
 
             $dealer_incentive = $this->model()->create($dealerIncentive);
+
+
+            foreach ($uids as $ids) {
+                $rebates = RebateIncentiveModel::where('dealer_id', $inputs['dealer_id'])->where('unit_id', $ids)->get();
+                foreach ($rebates as $rebate) {
+                    $rebate->is_for_dealer_incentive = false;
+                    $rebate->save();
+                }
+            }
 
             return $dealer_incentive;
         });

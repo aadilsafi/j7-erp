@@ -79,6 +79,7 @@ class AdditionalCostsDataTable extends DataTable
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.additional-costs.create');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
+        $importPermission = Auth::user()->hasPermissionTo('sites.additional-costs.importAdcosts');
         return $this->builder()
             ->setTableId('additional-costs-table')
             ->columns($this->getColumns())
@@ -107,12 +108,22 @@ class AdditionalCostsDataTable extends DataTable
                     ])
 
                 ),
-                Button::raw('import')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+
+                ($importPermission ? 
+                    Button::raw('import')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light ')
                     ->text('<i data-feather="upload"></i> Import Additional Costs')
                     ->attr([
                         'onclick' => 'Import()',
-                    ]),
+                    ])
+                    :
+                    Button::raw('import')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i data-feather="upload"></i> Import Additional Costs')
+                    ->attr([
+                        'onclick' => 'Import()',
+                    ])
+                    ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),

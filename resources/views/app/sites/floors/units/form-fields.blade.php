@@ -28,7 +28,7 @@
                     {{ $isSalesplanApproved ? 'disabled' : null }}>
                     @foreach ($statuses as $row)
                         @continue(!isset($unit) && $row->id != 1)
-                        <option @if ($row->name == 'Sold' || $row->name == 'Token' || $row->name == 'Partial Paid') disabled @endif value="{{ $row->id }}"
+                        <option @if ($row->name == 'Sold' || $row->name == 'Token' || $row->name == 'Partial Paid' || $row->name == 'Request For Resale') disabled @endif value="{{ $row->id }}"
                             {{ (isset($unit) ? $unit->status_id : old('status_id')) == $row->id ? 'selected' : '' }}>
                             {{ $loop->index + 1 }} -
                             {{ $row->name }}</option>

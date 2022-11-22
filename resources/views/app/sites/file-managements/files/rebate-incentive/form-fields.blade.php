@@ -150,11 +150,11 @@
                                 </div>
 
                                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="father_name">Father Name</label>
+                                    <label class="form-label fs-5" for="father_name">Father / Husband Name</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('father_name') is-invalid @enderror"
                                         id="stackholder_father_name" name="dealer[father_name]"
-                                        placeholder="Father Name"
+                                        placeholder="Father / Husband Name"
                                         value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                                     @error('father_name')
                                         <div class="invalid-feedback">{{ $message }}</div>

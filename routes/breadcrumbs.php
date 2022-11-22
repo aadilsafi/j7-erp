@@ -120,6 +120,12 @@ Breadcrumbs::for('sites.floors.edit', function (BreadcrumbTrail $trail, $site_id
     $trail->push('Edit Floor');
 });
 
+Breadcrumbs::for('sites.floors.floor-plan', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.floors.index', $site_id);
+    $trail->push('Floor Plan');
+});
+
+
 Breadcrumbs::for('sites.floors.preview', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.floors.index', $site_id);
     $trail->push('Floors Preview');
@@ -532,4 +538,22 @@ Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.countries.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Countries', route('sites.settings.countries.index', ['site_id' => $site_id]));
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.states.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('States', route('sites.settings.states.index', ['site_id' => $site_id]));
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Cities', route('sites.settings.cities.index', ['site_id' => $site_id]));
 });

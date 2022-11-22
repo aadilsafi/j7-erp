@@ -108,7 +108,7 @@ class ReceiptService implements ReceiptInterface
                     'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                     'bank_details' => $data[$i]['bank_name'],
                     'bank_id' => $data[$i]['bank_id'],
-                    'created_date' => $requested_data['created_date'],
+                    'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 ];
 
                 if ($amount_received > $data[$i]['amount_in_numbers']) {
@@ -152,7 +152,7 @@ class ReceiptService implements ReceiptInterface
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
                                 'bank_id' => $draftReceiptData->bank_id,
-                                'created_date' => $draftReceiptData->created_date,
+                                'created_date' => $draftReceiptData->created_date . date(' H:i:s'),
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);

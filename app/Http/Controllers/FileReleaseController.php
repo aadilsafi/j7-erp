@@ -232,19 +232,19 @@ class FileReleaseController extends Controller
             $file_resale->update();
 
             $unit = Unit::find(decryptParams($unit_id));
-            $unit->status_id = 1;
+            $unit->status_id = 6;
             $unit->update();
 
             $file =  FileManagement::find(decryptParams($file_id));
             $file->file_action_id = 5;
             $file->update();
 
-            $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
-            foreach ($salesPlan as $salesPlan) {
-                $SalesPlan = SalesPlan::find($salesPlan->id);
-                $SalesPlan->status = 3;
-                $SalesPlan->update();
-            }
+            // $salesPlan = SalesPlan::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->where('status', 1)->get();
+            // foreach ($salesPlan as $salesPlan) {
+            //     $SalesPlan = SalesPlan::find($salesPlan->id);
+            //     $SalesPlan->status = 3;
+            //     $SalesPlan->update();
+            // }
 
             $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
             foreach ($receipt as $receipt) {

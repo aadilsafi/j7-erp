@@ -266,6 +266,7 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => $accountActionName . '-' . $origin_number,
+                    'created_date' => $file_refund->updated_at,
                 ],
                 // Cutomer AR entry
                 [
@@ -281,6 +282,7 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => $accountActionName . '-' . $origin_number,
+                    'created_date' => $file_refund->updated_at,
                 ],
                 // Customer AP entry
                 [
@@ -296,6 +298,7 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => $accountActionName . '-' . $origin_number,
+                    'created_date' => $file_refund->updated_at,
                 ],
                 // Payment Voucher
                 [
@@ -311,6 +314,7 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => $accountActionName . '-' . $origin_number,
+                    'created_date' => $file_refund->updated_at,
                 ],
                 // cash at office 10209020001001
                 [
@@ -326,6 +330,7 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => $accountActionName . '-' . $origin_number,
+                    'created_date' => $file_refund->updated_at,
                 ],
 
             ];

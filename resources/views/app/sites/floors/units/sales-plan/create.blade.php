@@ -349,7 +349,7 @@
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
                     installmentDate.set("minDate", dateStr);
-                    installmentDate.setDate(dateStr);
+                    installmentDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_installment_days }}));
 
                     validityDate.set('minDate', new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
 
@@ -363,7 +363,7 @@
 
             var validityDate = $("#sales_plan_validity").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_validity_days) }}",
-                minDate: "today",
+                // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -371,7 +371,7 @@
 
             var installmentDate = $("#installments_start_date").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
-                minDate: "today",
+                // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -649,7 +649,6 @@
                 },
                 'unit[size]': {
                     required: true,
-                    digits: true
                 },
                 'unit[price][unit]': {
                     required: true,
@@ -695,6 +694,15 @@
                     required: true
                 },
                 'stackholder[full_name]': {
+                    required: true
+                },
+                'stackholder[father_name]': {
+                    required: true
+                },
+                'stackholder[contact]': {
+                    required: true
+                },
+                'stackholder[address]': {
                     required: true
                 },
                 'stackholder[cnic]': {

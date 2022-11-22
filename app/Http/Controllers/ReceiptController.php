@@ -42,7 +42,7 @@ class ReceiptController extends Controller
      */
     public function index(ReceiptsDatatable $dataTable, $site_id)
     {
-        // 
+        //
         $data = [
             'site_id' => $site_id,
             'receipt_templates' => ReceiptTemplate::all(),
@@ -66,7 +66,7 @@ class ReceiptController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments')->get(),
+                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments','salesPlan.PaidorPartiallyPaidInstallments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
@@ -85,7 +85,11 @@ class ReceiptController extends Controller
      */
     public function store(store $request, $site_id)
     {
-        //
+        $validator = \Validator::make($request->all(), [
+            'created_date' => 'required',
+        ]);
+
+        $validator->validate();
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
@@ -382,7 +386,7 @@ class ReceiptController extends Controller
             'cheque_no' => $receipt_data->cheque_no,
             'online_instrument_no' => $receipt_data->online_instrument_no,
             'drawn_on_bank' => $receipt_data->drawn_on_bank,
-            'transaction_date' => $receipt_data->transaction_date,
+            'transaction_date' => $receipt_data->created_date,
             'amount_in_numbers' => $receipt_data->amount_in_numbers,
             'amount_in_words' =>  numberToWords($receipt_data->amount_in_numbers),
             'purpose' => $receipt_data->purpose,

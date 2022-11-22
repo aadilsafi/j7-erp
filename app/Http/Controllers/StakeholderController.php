@@ -100,13 +100,13 @@ class StakeholderController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
                 // dd($inputs);
-                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
-                //
-                if (isset($blackListedData)) {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
-                }
+                // $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                // //
+                // if (isset($blackListedData)) {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
+                // }
                 $record = $this->stakeholderInterface->store($site_id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -186,10 +186,10 @@ class StakeholderController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-                $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
-                if (isset($blackListedData)) {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger('Stakeholder is blacklisted');
-                }
+                // $blackListedData = BacklistedStakeholder::where('cnic', $inputs['cnic'])->first();
+                // if (isset($blackListedData)) {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger('Stakeholder is blacklisted');
+                // }
                 $record = $this->stakeholderInterface->update($site_id, $id, $inputs);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {

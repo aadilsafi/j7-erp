@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Redirect;
 use Str;
+use Validator;
 
 class SalesPlanController extends Controller
 {
@@ -109,6 +110,15 @@ class SalesPlanController extends Controller
     {
         // dd($request->all());
         try {
+            $validator = Validator::make($request->all(),[
+                'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
+            ],[
+                'stackholder.cnic' => 'This CNIC is BlackListed.'
+            ]);
+
+            if($validator->fails()) {
+                return Redirect::back()->withErrors($validator);
+            }
             $inputs = $request->input();
 
             $record = $this->salesPlanInterface->store(decryptParams($site_id), decryptParams($floor_id), decryptParams($unit_id), $inputs);

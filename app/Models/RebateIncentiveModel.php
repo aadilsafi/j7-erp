@@ -20,6 +20,7 @@ class RebateIncentiveModel extends Model
         'deal_type',
         'commision_percentage',
         'commision_total',
+        'is_for_dealer_incentive',
         'status',
         'comments',
         'dealer_id',

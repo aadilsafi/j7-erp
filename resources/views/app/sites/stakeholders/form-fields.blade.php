@@ -25,6 +25,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <div class="d-flex justify-content-between">
                         @forelse ($stakeholder->stakeholder_types as $type)
+                            
                             <div class="d-flex flex-column justify-content-center align-items-center">
                                 <span
                                     class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
@@ -41,6 +42,7 @@
                                     </label>
                                 </div>
                             </div>
+                        
                         @empty
                         @endforelse
                     </div>
@@ -71,7 +73,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="occupation">Occupation </label>
                 <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
                     id="occupation" name="occupation" placeholder="Occupation"
                     value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
@@ -142,8 +144,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="designation">Designation <span
-                        class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="designation">Designation </label>
                 <input type="text" class="form-control form-control-md @error('designation') is-invalid @enderror"
                     id="designation" name="designation" placeholder="Designation"
                     value="{{ isset($stakeholder) ? $stakeholder->designation : old('designation') }}" />
@@ -176,7 +177,7 @@
             </div>
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="ntn">NTN <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="ntn">NTN </label>
                 <input type="number" class="form-control form-control-md @error('ntn') is-invalid @enderror"
                     id="ntn" name="ntn" placeholder="NTN Number"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />

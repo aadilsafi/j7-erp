@@ -27,6 +27,7 @@ class FileTitleTransfer extends Model
         'amount_remarks',
         'status',
         'comments',
+        'kin_data',
     ];
 
     public function getActivitylogOptions(): LogOptions

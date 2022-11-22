@@ -227,15 +227,6 @@
 @endsection
 
 @section('custom-js')
-    <script>
-        $("#created_date").flatpickr({
-            defaultDate: "today",
-            // minDate: "today",
-            altInput: !0,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
-    </script>
 
     <script>
         FilePond.registerPlugin(
@@ -360,6 +351,14 @@
             let elements = document.getElementsByName(a.name);
         }
 
+        var created_date = $("#created_date").flatpickr({
+            defaultDate: "today",
+            minDate: '',
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
+
         $('.amountToBePaid').on('focusout', function() {
 
             var amount = $(this).val();
@@ -418,6 +417,7 @@
                             $('#stackholder_contact').val(response.stakeholders['contact']);
                             $('#stackholder_address').val(response.stakeholders['address']);
 
+                            created_date.set('minDate', new Date(response.sales_plan['created_date']));
 
                             var total_installments = 1;
                             var order = null;

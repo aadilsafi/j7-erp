@@ -20,4 +20,8 @@ class State extends Model
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Rebateincentive;
 
+use App\Models\BacklistedStakeholder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -27,6 +28,25 @@ class storeRequest extends FormRequest
 
         $rules['dealer.cnic'] = ['sometimes','required', 'numeric', Rule::unique('stakeholders','cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;
+    }
+
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        // if (!$validator->fails()) {
+        $validator->after(function ($validator) {
+
+            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('dealer.cnic'))->first();
+            if ($blacklisted) {
+                $validator->errors()->add('cnic', 'CNIC is BlackListed.');
+            }
+        });
+        // }
     }
 
     public function messages()

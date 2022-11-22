@@ -115,10 +115,10 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>' . collect($starting_balance)->sum() . '</th>' .
+                '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('debit')->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('credit')->sum()) . '</th>' .
-                '<th>' . collect($starting_balance)->sum() + $balance_add_starting . '</th>' .
+                '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';
@@ -234,7 +234,7 @@ class TrialBalanceController extends Controller
                     '<td class="text-nowrap">' . $i . '</td>' .
                     '<td class="text-nowrap">' . account_number_format($account->code) . '</td>' .
                     '<td class="text-nowrap">' . $account->name . '</td>' .
-                    '<td class="text-nowrap">' . $ending . '</td>' .
+                    '<td class="text-nowrap">' . '0' . '</td>' .
                     '<td class="text-nowrap">' . number_format($credits) . '</td>' .
                     '<td class="text-nowrap">' . number_format($debits) . '</td>' .
                     '<td class="text-nowrap">' . $ending . '</td>' .

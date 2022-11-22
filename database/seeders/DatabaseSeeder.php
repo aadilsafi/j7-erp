@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             // SalesPlanSeeder::class,
             // SalesPlanAdditionalCostSeeder::class,
             // SalesPlanInstallmentsSeeder::class,
-            SalesPlanTemplatesSeeder::class,
+            // SalesPlanTemplatesSeeder::class,
             // StakeholderTypeSeeder::class,
             ReceiptsTemplateSeeder::class,
             FileActionSeeder::class,

@@ -55,9 +55,9 @@
                             <table class="dt-complex-header table table-striped table-hover">
                                 <thead>
                                     <tr class="text-center">
-                                        @can('sites.floors.destroy-selected')
+                                        {{-- @can('sites.floors.destroy-selected')
                                             <th rowspan="2">CHECK</th>
-                                        @endcan
+                                        @endcan --}}
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
@@ -79,9 +79,9 @@
                                 </thead>
                                 <tfoot>
                                     <tr class="text-center">
-                                        @can('sites.floors.destroy-selected')
+                                        {{-- @can('sites.floors.destroy-selected')
                                             <th rowspan="2">CHECK</th>
-                                        @endcan
+                                        @endcan --}}
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
@@ -147,12 +147,13 @@
                 },
                 scrollX: true,
                 columns: [
-                    @can('sites.floors.destroy-selected')
-                        {
-                            data: 'check',
-                            name: 'check',
-                        },
-                    @endcan {
+                    // @can('sites.floors.destroy-selected')
+                    //     {
+                    //         data: 'check',
+                    //         name: 'check',
+                    //     },
+                    // @endcan 
+                    {
                         data: 'name',
                         name: 'name',
                         className: 'text-center',
@@ -247,29 +248,29 @@
                     },
 
                 ],
-                columnDefs: [
-                    @can('sites.floors.destroy-selected')
-                        {
-                            targets: 0,
-                            className: 'text-center text-primary',
-                            orderable: false,
-                            searchable: false,
-                            responsivePriority: 3,
-                            render: function(data, type, full, setting) {
-                                var tableRow = JSON.parse(data);
-                                return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' +
-                                    tableRow.id +
-                                    '\" name=\"chkTableRow[]\" onchange="changeTableRowColor(this)" id=\"chkTableRow_' +
-                                    tableRow.id +
-                                    '\" /><label class=\"form-check-label\" for=\"chkTableRow_' +
-                                    tableRow.id + '\"></label></div>';
-                            },
-                            checkboxes: {
-                                'selectAllRender': '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                            }
-                        }
-                    @endcan
-                ],
+                // columnDefs: [
+                    // @can('sites.floors.destroy-selected')
+                    //     {
+                    //         targets: 0,
+                    //         className: 'text-center text-primary',
+                    //         orderable: false,
+                    //         searchable: false,
+                    //         responsivePriority: 3,
+                    //         render: function(data, type, full, setting) {
+                    //             var tableRow = JSON.parse(data);
+                    //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" type=\"checkbox\" value=\"' +
+                    //                 tableRow.id +
+                    //                 '\" name=\"chkTableRow[]\" onchange="changeTableRowColor(this)" id=\"chkTableRow_' +
+                    //                 tableRow.id +
+                    //                 '\" /><label class=\"form-check-label\" for=\"chkTableRow_' +
+                    //                 tableRow.id + '\"></label></div>';
+                    //         },
+                    //         checkboxes: {
+                    //             'selectAllRender': '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    //         }
+                    //     }
+                    // @endcan
+                // ],
                 order: [
                     [12, 'desc']
                 ],

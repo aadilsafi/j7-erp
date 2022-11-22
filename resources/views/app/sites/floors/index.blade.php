@@ -61,19 +61,20 @@
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
-                                        <th rowspan="2">SHORT LABEL</th>
+                                        <th rowspan="2" class="text-nowrap">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
-                                        <th colspan="5">STATUSES</th>
-                                        <th rowspan="2">CREATED AT</th>
-                                        <th rowspan="2">UPDATED AT</th>
+                                        <th colspan="6">STATUSES</th>
+                                        <th rowspan="2" class="text-nowrap">CREATED AT</th>
+                                        <th rowspan="2" class="text-nowrap">UPDATED AT</th>
                                         <th rowspan="2" id="action">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
                                         <th>OPEN</th>
+                                        <th class="text-nowrap">Resale Request</th>
                                         <th>SOLD</th>
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
-                                        <th>Partial Paid</th>
+                                        <th class="text-nowrap">Partial Paid</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -84,19 +85,20 @@
                                         <th rowspan="2">FLOORS</th>
                                         <th rowspan="2">ORDER</th>
                                         <th rowspan="2">AREA</th>
-                                        <th rowspan="2">SHORT LABEL</th>
+                                        <th rowspan="2" class="text-nowrap">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
                                         <th>OPEN</th>
+                                        <th class="text-nowrap">Resale Request</th>
                                         <th>SOLD</th>
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
-                                        <th>Partial Paid</th>
-                                        <th rowspan="2">CREATED AT</th>
-                                        <th rowspan="2">UPDATED AT</th>
+                                        <th class="text-nowrap">Partial Paid</th>
+                                        <th rowspan="2" class="text-nowrap">CREATED AT</th>
+                                        <th rowspan="2" class="text-nowrap">UPDATED AT</th>
                                         <th rowspan="2">ACTIONS</th>
                                     </tr>
                                     <tr class="text-center">
-                                        <th colspan="5">STATUSES</th>
+                                        <th colspan="6">STATUSES</th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -183,6 +185,13 @@
                     {
                         data: 'units_open_count',
                         name: 'units_open_count',
+                        className: 'text-center',
+                        searchable: false,
+                        orderable: false,
+                    },
+                    {
+                        data: 'units_resale_count',
+                        name: 'units_resale_count',
                         className: 'text-center',
                         searchable: false,
                         orderable: false,
@@ -289,8 +298,8 @@
                             },
                             enabled: {{$totalFloors == 0 ? 'false' : 'true'}},
                         },
-                       
-                    @endcan 
+
+                    @endcan
                     @can('sites.floors.importFloors')
                     {
                         extend: 'collection',
@@ -337,14 +346,14 @@
                             //     text: '<i class="bi bi-cloud"></i> Import Sales Plan Installment',
                             //     className: 'dropdown-item',
                             //     action: function(e, dt, node, config) {
-                            //         location.href = 
+                            //         location.href =
                             //             '{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => $site_id]) }}';
                             //     }
                             // },
 
                         ]
                     },
-                    @endcan 
+                    @endcan
                     {
                         extend: 'collection',
                         text: '<i class="bi bi-upload"></i> Export',

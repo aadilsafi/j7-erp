@@ -136,7 +136,13 @@
                                     .custom_td {
                                         border-radius: 0 !important;
                                     }
+                                    /* .custom_drob_tab:after{
+                                        content: "\2b" !important;
+                                     background: none !important;
+                                    } */
+
                                 </style>
+
                                 <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                     <div class="main-menu menu-light menu-accordion custom_multi_drop_main">
                                         <div class="">
@@ -150,7 +156,7 @@
                                                     @endphp
                                                     {{-- @dd($account_of_head->code); --}}
                                                     <li class="custom_bg nav-item Second_li "><a
-                                                            class="d-flex align-items-center" href="#"><span
+                                                            class="d-flex align-items-center custom_drob_tab" href="#"><span
                                                                 class="menu-title text-truncate"
                                                                 data-i18n="eCommerce">{{ $account_of_head->name }}</span></a>
                                                         <ul class="menu-content">

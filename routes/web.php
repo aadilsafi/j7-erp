@@ -853,6 +853,8 @@ Route::group([
         Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
         Route::post('ajax-import-image/delete-file', [ImageImportController::class, 'deleteFile'])->name('ajax-import-image.delete-file');
 
+        Route::post('ajax-get-cities/{stateId}', [CityController::class, 'getCities'])->name('ajax-get-cities');
+
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');

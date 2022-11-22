@@ -63,9 +63,9 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="father_name">Father Name <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="father_name">Father / Husband Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('father_name') is-invalid @enderror"
-                    id="father_name" name="father_name" placeholder="Father Name"
+                    id="father_name" name="father_name" placeholder="Father / Husband Name"
                     value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                 @error('father_name')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -324,12 +324,12 @@
                                         </div>
 
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="father_name">Father Name</label>
+                                            <label class="form-label fs-5" for="father_name">Father / Husband Name</label>
                                             <input type="text"
                                                 class="form-control form-control-md @error('father_name') is-invalid @enderror"
                                                 id="father_name_{{ $key }}"
                                                 name="contact-persons[{{ $key }}][father_name]"
-                                                placeholder="Father Name"
+                                                placeholder="Father / Husband Name"
                                                 value="{{ $oldContactPersons['father_name'] }}" />
                                         </div>
 

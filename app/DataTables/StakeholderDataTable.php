@@ -167,7 +167,7 @@ class StakeholderDataTable extends DataTable
         $columns = [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
-            Column::make('father_name')->title('Father Name')->addClass('text-nowrap'),
+            Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
             Column::make('nationality')->title('Nationality'),
             Column::make('contact')->title('Contact'),

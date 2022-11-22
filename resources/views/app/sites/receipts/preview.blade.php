@@ -69,10 +69,10 @@
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                             <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
                                 class="form-control form-control-lg" id="stackholder_father_name"
-                                placeholder="Father Name" />
+                                placeholder="Father / Husband Name" />
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-3 position-relative">

@@ -376,9 +376,9 @@
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
-                    name="stackholder[father_name]" placeholder="Father Name" value="{{old('stackholder.father_name')}}"/>
+                    name="stackholder[father_name]" placeholder="Father / Husband Name" value="{{old('stackholder.father_name')}}"/>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">

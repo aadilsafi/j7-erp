@@ -53,6 +53,10 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 // return $ledger->created_at->format('D, d-M-Y , H:i:s');
                 return editDateColumn($ledger->created_at);
             })
+            ->editColumn('created_date', function ($ledger) {
+                // return $ledger->created_at->format('D, d-M-Y , H:i:s');
+                return editDateColumn($ledger->created_date);
+            })
             ->editColumn('updated_at', function ($ledger) {
                 return editDateColumn($ledger->updated_at);
             })
@@ -213,7 +217,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
             // Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
             // Column::make('nature_of_account'),
-            Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
+            Column::make('created_date')->title('Transaction At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

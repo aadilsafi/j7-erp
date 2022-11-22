@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('file_title_transfers', function (Blueprint $table) {
-            $table->json('kin_data')->nullable();
+        Schema::table('account_ledgers', function (Blueprint $table) {
+            $table->timestamp('created_date')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::table('title_transfer', function (Blueprint $table) {
+        // Schema::table('account_ledgers', function (Blueprint $table) {
         //     //
         // });
     }

@@ -44,7 +44,8 @@
                         {{-- Unit Rate Row --}}
                         <div class="row mb-1" id="div-unit">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="unit_price">Unit Price (Rs)</label>
+                                <label class="form-label fs-5" for="unit_price">Unit Price (Rs)<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" min="0" class="form-control form-control-lg"
                                     id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
                                     value="{{ $unit->price_sqft }}" />
@@ -112,7 +113,8 @@
                         {{-- Discount Row --}}
                         <div class="row mb-1" id="div-discount">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                <label class="form-label fs-5" for="percentage-discount">Discount (%)</label>
+                                <label class="form-label fs-5" for="percentage-discount">Discount (%)<span
+                                        class="text-danger">*</span></label>
                                 <input type="number" min="0" max="100" step="0.1"
                                     class="form-control form-control-lg" id="percentage-discount"
                                     name="unit[discount][percentage]" placeholder="Discount %" value="0" />
@@ -145,7 +147,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="unit_downpayment_percentage">Down Payment
-                                    (%)</label>
+                                    (%)<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control form-control-lg"
                                     id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
                                     placeholder="Down Payment %" min="0" max="100"
@@ -220,7 +222,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="row g-1">
                     <div class="col-md-12">
-                        <label class="form-label fs-5" for="installments_start_date">Installments Start Date</label>
+                        <label class="form-label fs-5" for="installments_start_date">Installments Start Date<span
+                                class="text-danger">*</span></label>
                         <input type="text" id="installments_start_date" name="installments[start_date]" readonly
                             class="form-control" placeholder="YYYY-MM-DD" />
                     </div>
@@ -274,17 +277,18 @@
                                 <div class="row mb-1">
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                         <label class="form-label fs-5"
-                                            for="expense_label_{{ isset($key) ? $key : 0}}">Expense
-                                            label</label>
+                                            for="expense_label_{{ isset($key) ? $key : 0 }}">Expense
+                                            label<span class="text-danger">*</span></label>
                                         <input type="text"
                                             class="form-control form-control-lg @error('expense_label') is-invalid @enderror"
                                             id="expense_label_{{ isset($key) ? $key : 0 }}"
-                                            name="expenses[{{ isset($key) ? $key : 0}}][expense_label]"
+                                            name="expenses[{{ isset($key) ? $key : 0 }}][expense_label]"
                                             placeholder="Expense Label" />
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_due_date">Expense Due Date</label>
+                                        <label class="form-label fs-5" for="expense_due_date">Expense Due Date<span
+                                                class="text-danger">*</span></label>
                                         <input type="text" id="expense_due_date"
                                             name="expenses[{{ isset($key) ? $key : 0 }}][due_date]" readonly
                                             class="form-control form-control-lg expense_due_date"
@@ -292,16 +296,19 @@
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_amount">Amount</label>
+                                        <label class="form-label fs-5" for="expense_amount">Amount<span
+                                                class="text-danger">*</span></label>
                                         <input type="number" min="0" class="form-control form-control-lg"
-                                            id="expense_amount" name="expenses[{{ isset($key) ? $key : 0}}][amount]"
+                                            id="expense_amount" name="expenses[{{ isset($key) ? $key : 0 }}][amount]"
                                             placeholder="Amount">
                                     </div>
 
                                     <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="expense_remarks">Remarks</label>
+                                        <label class="form-label fs-5" for="expense_remarks">Remarks<span
+                                                class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="expense_remarks" name="expenses[{{ isset($key) ? $key : 0 }}][remarks]"
+                                            id="expense_remarks"
+                                            name="expenses[{{ isset($key) ? $key : 0 }}][remarks]"
                                             placeholder="Remarks">
                                     </div>
                                 </div>
@@ -371,28 +378,32 @@
             {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
-                    class="text-danger">*</span></label>
+                        class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
-                    name="stackholder[full_name]" placeholder="Full Name" value="{{old('stackholder.full_name')}}"/>
+                    name="stackholder[full_name]" placeholder="Full Name"
+                    value="{{ old('stackholder.full_name') }}" />
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name <span
-                    class="text-danger">*</span></label>
+                        class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
-                    name="stackholder[father_name]" placeholder="Father / Husband Name" value="{{old('stackholder.father_name')}}"/>
+                    name="stackholder[father_name]" placeholder="Father / Husband Name"
+                    value="{{ old('stackholder.father_name') }}" />
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
-                    name="stackholder[occupation]" placeholder="Occupation" value="{{old('stackholder.occupation')}}"/>
+                    name="stackholder[occupation]" placeholder="Occupation"
+                    value="{{ old('stackholder.occupation') }}" />
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_designation">Designation</label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_designation"
-                    name="stackholder[designation]" placeholder="Designation" value="{{old('stackholder.designation')}}"/>
+                    name="stackholder[designation]" placeholder="Designation"
+                    value="{{ old('stackholder.designation') }}" />
             </div>
         </div>
 
@@ -401,28 +412,27 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
-                    name="stackholder[ntn]" placeholder="NTN" value="{{old('stackholder.ntn')}}"/>
+                    name="stackholder[ntn]" placeholder="NTN" value="{{ old('stackholder.ntn') }}" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
-                    class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="stackholder_cnic">CNIC <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
-                    name="stackholder[cnic]" placeholder="CNIC" value="{{old('stackholder.cnic')}}"/>
+                    name="stackholder[cnic]" placeholder="CNIC" value="{{ old('stackholder.cnic') }}" />
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_contact">Contact <span
-                    class="text-danger">*</span></label>
+                        class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_contact"
-                    name="stackholder[contact]" placeholder="Contact" value="{{old('stackholder.contact')}}"/>
+                    name="stackholder[contact]" placeholder="Contact" value="{{ old('stackholder.contact') }}" />
             </div>
         </div>
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_address">Address <span
-                    class="text-danger">*</span></label>
+                        class="text-danger">*</span></label>
                 <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
                     placeholder="Address" rows="5"></textarea>
             </div>
@@ -495,7 +505,8 @@
 
             <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
                 <div id="div_sales_source_lead_source">
-                    <label class="form-label fs-5" for="sales_source_new">New Sale Source</label>
+                    <label class="form-label fs-5" for="sales_source_new">New Sale Source <span
+                            class="text-danger">*</span></label>
                     <input type="text" class="form-control form-control-lg" id="sales_source_new"
                         name="sales_source[new]" placeholder="New Sale Source"
                         value="{{ old('sales_source.new') }}" />

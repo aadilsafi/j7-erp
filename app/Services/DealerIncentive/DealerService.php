@@ -52,10 +52,13 @@ class DealerService implements DealerInterface
 
             $dealer_incentive = $this->model()->create($dealerIncentive);
 
+
             foreach ($uids as $ids) {
-                $rebate = RebateIncentiveModel::where('dealer_id', $inputs['dealer_id'])->where('unit_id', $ids)->first();
-                $rebate->is_for_dealer_incentive = false;
-                $rebate->save();
+                $rebates = RebateIncentiveModel::where('dealer_id', $inputs['dealer_id'])->where('unit_id', $ids)->get();
+                foreach ($rebates as $rebate) {
+                    $rebate->is_for_dealer_incentive = false;
+                    $rebate->save();
+                }
             }
 
             return $dealer_incentive;

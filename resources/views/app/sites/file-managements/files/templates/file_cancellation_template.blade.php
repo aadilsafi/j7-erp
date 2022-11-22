@@ -214,7 +214,7 @@
                     <td width="40%">
                         <div class="row">
                             <div class="col">
-                                <strong>Father Name</strong>
+                                <strong>Father / Husband Name</strong>
                             </div>
                             <div class="col">
                                 {{ $customer->father_name }}

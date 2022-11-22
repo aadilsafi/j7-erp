@@ -863,4 +863,5 @@ class StakeholderController extends Controller
 
         return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
+    
 }

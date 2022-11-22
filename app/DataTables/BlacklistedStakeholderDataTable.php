@@ -160,7 +160,7 @@ class BlacklistedStakeholderDataTable extends DataTable
         $columns = [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('fatherName')->title('Father Name')->addClass('text-nowrap'),
+            Column::make('fatherName')->title('Father / Husband Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('province')->title('Province')->addClass('text-nowrap'),
             Column::make('district')->title('District')->addClass('text-nowrap'),

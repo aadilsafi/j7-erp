@@ -197,10 +197,10 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                         <input @if (isset($buyer)) disabled @endif type="text"
                             class="form-control form-control-lg" id="stackholder_father_name"
-                            name="stackholder[father_name]" placeholder="Father Name"
+                            name="stackholder[father_name]" placeholder="Father / Husband Name"
                             value="{{ isset($buyer) ? $buyer->father_name : '' }}" />
                     </div>
 
@@ -281,9 +281,9 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                         <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Father Name" />
+                            class="form-control form-control-lg" id="" placeholder="Father / Husband Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">

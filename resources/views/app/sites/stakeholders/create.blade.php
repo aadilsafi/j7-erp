@@ -149,6 +149,60 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
+            $("#city_id").empty()
+
+            var e = $("#state_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).change(function() {
+                $("#city_id").empty()
+                // alert($(this).val());
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
+                    .replace(':stateId', $(this).val());
+                if ($(this).val() > 0) {
+                    showBlockUI('#loader');
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'stateId': $(this).val(),
+                            '_token': _token
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                $('#city_id-dd').html('<option value="">Select City</option>');
+                                $.each(response.cities, function(key, value) {
+                                    $("#city_id").append('<option value="' + value
+                                        .id + '">' + value.name + '</option>');
+                                });
+
+                                hideBlockUI('#loader');
+
+                            } else {
+                                hideBlockUI('#loader');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            hideBlockUI('#loader');
+                        }
+                    });
+                }
+            });
+
+
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({

@@ -370,13 +370,15 @@
         <div class="row mb-1">
             {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
+                <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
+                    class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
                     name="stackholder[full_name]" placeholder="Full Name" value="{{old('stackholder.full_name')}}"/>
             </div>
 
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
+                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name <span
+                    class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
                     name="stackholder[father_name]" placeholder="Father / Husband Name" value="{{old('stackholder.father_name')}}"/>
             </div>
@@ -403,13 +405,15 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
+                    class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
                     name="stackholder[cnic]" placeholder="CNIC" value="{{old('stackholder.cnic')}}"/>
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="stackholder_contact">Contact</label>
+                <label class="form-label fs-5" for="stackholder_contact">Contact <span
+                    class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_contact"
                     name="stackholder[contact]" placeholder="Contact" value="{{old('stackholder.contact')}}"/>
             </div>
@@ -417,7 +421,8 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="stackholder_address">Address</label>
+                <label class="form-label fs-5" for="stackholder_address">Address <span
+                    class="text-danger">*</span></label>
                 <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
                     placeholder="Address" rows="5"></textarea>
             </div>

@@ -35,6 +35,7 @@ class Stakeholder extends Model implements HasMedia
         'relation',
         'optional_contact_number',
         'nationality',
+        'countryDetails',
     ];
 
     public $rules = [
@@ -129,5 +130,10 @@ class Stakeholder extends Model implements HasMedia
     public function salesPlans()
     {
         return $this->hasMany(SalesPlan::class);
+    }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
 }

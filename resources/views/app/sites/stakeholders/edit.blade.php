@@ -12,6 +12,8 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
+
 @endsection
 
 @section('custom-css')
@@ -28,9 +30,32 @@
             background-color: #e3e0fd;
         }
 
+        .iti {
+            width: 100%;
+        }
+
+        .intl-tel-input {
+            display: table-cell;
+        }
+
+        .intl-tel-input .selected-flag {
+            z-index: 4;
+        }
+
+        .intl-tel-input .country-list {
+            z-index: 5;
+        }
+
+        .input-group .intl-tel-input .form-control {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 0;
+        }
+
         /* .filepond--item {
-                                                                                                                width: calc(20% - 0.5em);
-                                                                                                            } */
+                                                                                                                                                                                width: calc(20% - 0.5em);
+                                                                                                                                                                            } */
     </style>
 @endsection
 
@@ -66,6 +91,7 @@
                     'city' => $city,
                     'state' => $state,
                     'emtyNextOfKin' => $emtyNextOfKin,
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 
@@ -115,12 +141,40 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
 @endsection
 
 @section('custom-js')
 
     <script type="text/javascript">
+        var input = document.querySelector("#contact");
+        intl = window.intlTelInput(input, ({
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            preferredCountries: ["pk"],
+            separateDialCode: true,
+            autoPlaceholder: 'polite',
+            formatOnDisplay: true,
+            nationalMode: true
+        }));
+        @if (is_null($stakeholder->countryDetails))
+            intl.setCountry('pk');
+        @else
+            var selectdCountry = {!! $stakeholder->countryDetails != null ? $stakeholder->countryDetails : null !!}
+            intl.setCountry(selectdCountry['iso2']);
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+        @endif
+
         $(document).ready(function() {
+            $('#contact').on('change', function() {
+
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            })
+
+
+            input.addEventListener("countrychange", function() {
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            });
             $('#div-next-of-kin').hide();
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
@@ -162,6 +216,21 @@
                         width: 14,
                         height: 14
                     })
+                    // var index = $(this).index();
+                    // var id = '#contact_' + index;
+                    // console.log(id);
+                    // var input = document.querySelector(id);
+
+                    // intl[index] = window.intlTelInput(input, ({
+                    //     utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                    //     preferredCountries: ["pk"],
+                    //     separateDialCode: true,
+                    //     autoPlaceholder: 'polite',
+                    //     formatOnDisplay: true,
+                    //     nationalMode: true
+                    // }));
+
+
                 },
                 hide: function(e) {
                     $(this).slideUp(e)
@@ -195,6 +264,14 @@
                 return cnicRepeated === 1 || cnicRepeated === 0;
 
             }, "Kins can't be duplicated");
+
+            $.validator.addMethod("ContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                return intl.isValidNumber();
+
+            }, "In Valid number");
+
             var validator = $("#stakeholderForm").validate({
 
                 errorClass: 'is-invalid text-danger',
@@ -298,9 +375,9 @@
 
                             if (firstLoad) {
                                 state_id.val('{{ $stakeholder->state_id }}');
-                                if(state_id.val() > 0){
-                                state_id.trigger('change');
-                                }else{
+                                if (state_id.val() > 0) {
+                                    state_id.trigger('change');
+                                } else {
                                     firstLoad = false;
                                 }
                             }

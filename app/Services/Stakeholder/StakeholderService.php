@@ -5,6 +5,7 @@ namespace App\Services\Stakeholder;
 use App\DataTables\BlacklistedStakeholderDataTable;
 use App\Models\{
     BacklistedStakeholder,
+    CustomFieldValue,
     Stakeholder,
     StakeholderContact,
     StakeholderNextOfKin,
@@ -52,9 +53,9 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->with($relationships)->find($id);
     }
 
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs, $customFields) {
             $data = [
                 'site_id' => decryptParams($site_id),
                 'full_name' => $inputs['full_name'],
@@ -71,6 +72,7 @@ class StakeholderService implements StakeholderInterface
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
                 'nationality' => $inputs['nationality'],
+                'countryDetails' => $inputs['countryDetails'],
             ];
             // dd($inputs);
 
@@ -233,6 +235,17 @@ class StakeholderService implements StakeholderInterface
             }
             // dd($stakeholderTypeData);
             $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
+
+            //save custom fields
+
+            foreach ($customFields as $key => $value) {
+                // dd($inputs[$value->name]);
+                $customFieldData = [
+                    'custom_field_id' => $value->id,
+                    'value' => $inputs[$value->name],
+                ];
+                $stakeholder->CustomFieldValues()->create($customFieldData);
+            }
             return $stakeholder;
         });
     }
@@ -258,6 +271,7 @@ class StakeholderService implements StakeholderInterface
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
                 'nationality' => $inputs['nationality'],
+                'countryDetails' => $inputs['countryDetails'],
             ];
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {

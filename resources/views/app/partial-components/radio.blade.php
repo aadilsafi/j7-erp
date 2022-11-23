@@ -4,13 +4,12 @@
 
 <div class="row text-capitalize">
     <div class="col">
-        <h5>{{ $label }}</h5>
+        <h5>{{ $label }}<span class="text-danger">{{ $required ? ' *' : null }}</span></h5>
     </div>
     @foreach ($values ?? [] as $key => $value)
         <div class="col">
             <div class="form-check form-check-inline">
-                <label class="form-check-label" for="{{ $key }}">{{ $value }} <span
-                        class="text-danger">{{ $required ? ' *' : null }}</span></label>
+                <label class="form-check-label" for="{{ $key }}">{{ $value }} </label>
                 <input class="form-check-input" type="radio" id="{{ $key }}" name="{{ $label }}"
                     value="{{ $value }}" {{ $disabled ? 'disabled' : null }}>
             </div>

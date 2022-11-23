@@ -98,79 +98,83 @@
 @section('custom-js')
     <script type="text/javascript">
         function getData(dealer_id) {
-            var _token = '{{ csrf_token() }}';
-            let url =
-                "{{ route('sites.file-managements.dealer-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'dealer_id': dealer_id,
-                    '_token': _token
-                },
-                success: function(response) {
-                    showBlockUI('#loader');
-                    if (response.success) {
-                        $('.hideDiv').css("display", "block");
-                        // $.each(response.units, function(i, item) {
-                        //     // $('.unit_id').append($('<option>', {
-                        //     //     value: item.id + '_' + item.gross_area,
-                        //     //     text: item.name,
-                        //     // }));
+            if (dealer_id != 0) {
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('sites.file-managements.dealer-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'dealer_id': dealer_id,
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        showBlockUI('#loader');
+                        if (response.success) {
+                            $('.hideDiv').css("display", "block");
+                            // $.each(response.units, function(i, item) {
+                            //     // $('.unit_id').append($('<option>', {
+                            //     //     value: item.id + '_' + item.gross_area,
+                            //     //     text: item.name,
+                            //     // }));
 
-                        //     $('#dynamic_unit_rows').append('<tr>',
-                        //         '<td class="checkedInput"><input type="checkbox" ></td>',
-                        //         '<td>'+item.name+'</td>',
-                        //         '<td>'+item.floor_unit_number+'</td>',
-                        //         '<td>'+item.gross_area.toLocaleString()+'</td>',
-                        //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
-                        //     );
+                            //     $('#dynamic_unit_rows').append('<tr>',
+                            //         '<td class="checkedInput"><input type="checkbox" ></td>',
+                            //         '<td>'+item.name+'</td>',
+                            //         '<td>'+item.floor_unit_number+'</td>',
+                            //         '<td>'+item.gross_area.toLocaleString()+'</td>',
+                            //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
+                            //     );
 
-                        // });
-                        $('#dynamic_unit_rows').empty();
-                        for (var i = 0; i <= response.units.length; i++) {
-                            if (response.units[i] != null) {
-                                $('#dynamic_unit_rows').append(
-                                    '<tr class="text-nowrap">',
-                                    '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                    '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="unit_id" type="checkbox" area="' +
-                                    response.units[i]['gross_area'] + '" value="' + response.units[i][
-                                    'id'] + '"><input type="hidden" value="' + response.units[i]['id'] +
-                                    '" name="unit_ids[][uid]"></td>',
-                                    '<td class="text-nowrap text-center">' + response
-                                    .units[i]['name'] + '</td>',
-                                    // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
-                                    '<td class="text-nowrap text-center">' + response
-                                    .units[i]['floor_unit_number'].toLocaleString('en') + '</td>',
-                                    '<td class="text-nowrap text-center">' + response
-                                    .units[i]['gross_area'].toLocaleString('en') +
-                                    '</td>',
-                                    '<td class="text-nowrap text-center">' + response
-                                    .units[i]['price_sqft'].toLocaleString('en') +
-                                    '</td>',
-                                    '</tr>', );
+                            // });
+                            $('#dynamic_unit_rows').empty();
+                            for (var i = 0; i <= response.units.length; i++) {
+                                if (response.units[i] != null) {
+                                    $('#dynamic_unit_rows').append(
+                                        '<tr class="text-nowrap">',
+                                        '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
+                                        '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="unit_ids[]" type="checkbox" area="' +
+                                        response.units[i]['gross_area'] + '" value="' + response.units[i][
+                                            'id'
+                                        ] + '"></td>',
+                                        '<td class="text-nowrap text-center">' + response
+                                        .units[i]['name'] + '</td>',
+                                        // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                        '<td class="text-nowrap text-center">' + response
+                                        .units[i]['floor_unit_number'] + '</td>',
+                                        '<td class="text-nowrap text-center">' + response
+                                        .units[i]['gross_area'].toLocaleString('en') +
+                                        '</td>',
+                                        // '<td class="text-nowrap text-center">' + response
+                                        // .units[i]['price_sqft'].toLocaleString('en') +
+                                        // '</td>',
+                                        '</tr>', );
+                                }
+
                             }
-
+                            hideBlockUI('#loader');
+                        } else {
+                            hideBlockUI('#loader');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something Went Wrong!!',
+                            });
                         }
+                    },
+                    error: function(error) {
                         hideBlockUI('#loader');
-                    } else {
-                        hideBlockUI('#loader');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something Went Wrong!!',
-                        });
+                        console.log(error);
                     }
-                },
-                error: function(error) {
-                    hideBlockUI('#loader');
-                    console.log(error);
-                }
-            });
+                });
+            }
+
         }
 
-        function CalculateTotalArea() {
+
+        function CalculateTotalArea(e) {
             $('.hideDiv').css("display", "block");
             showBlockUI('#loader');
             // var selectedValues = $('#unit_id').val();
@@ -182,7 +186,7 @@
             //     total_area = parseFloat(total_area) + parseFloat(element[1]);
             // }
 
-            $("input:checkbox[name=unit_id]:checked").each(function() {  
+            $("input:checkbox[name='unit_ids\\[\\]']:checked").each(function() {
                 element.push($(this).attr('area'));
             });
 

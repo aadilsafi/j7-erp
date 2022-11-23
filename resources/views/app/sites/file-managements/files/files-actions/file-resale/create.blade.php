@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+                                width: calc(20% - 0.5em);
+                            } */
     </style>
 @endsection
 
@@ -72,7 +72,6 @@
                     'customFields' => $customFields,
                 ]) }}
             </div>
-
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
@@ -161,10 +160,9 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-
             $("#payment_due_date").flatpickr({
-                defaultDate: "today",
-                minDate: "today",
+                defaultDate: 'today',
+                minDate: '{{ $salesPlan->approved_date }}',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

@@ -15,6 +15,7 @@ class SalesPlan extends Model
         'unit_id',
         'user_id',
         'stakeholder_id',
+        'kin_data',
         'stakeholder_data',
         'unit_price',
         'total_price',
@@ -29,6 +30,11 @@ class SalesPlan extends Model
         'status',
         'approved_date',
         'cancel',
+        'created_date',
+    ];
+
+    protected $casts = [
+        'stakeholder_data' => 'array',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -64,12 +70,12 @@ class SalesPlan extends Model
 
     public function PaidorPartiallyPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','paid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status', 'paid')->orWhere('status', 'partially_paid')->orderBy('installment_order', 'asc');
     }
 
     public function unPaidInstallments()
     {
-        return $this->hasMany(SalesPlanInstallments::class)->where('status','unpaid')->orWhere('status','partially_paid')->orderBy('installment_order', 'asc');
+        return $this->hasMany(SalesPlanInstallments::class)->where('status', 'unpaid')->orWhere('status', 'partially_paid')->orderBy('installment_order', 'asc');
     }
 
     public function leadSource()
@@ -80,5 +86,9 @@ class SalesPlan extends Model
     public function receipts()
     {
         return $this->hasMany(Receipt::class);
+    }
+    public function accountLedgers()
+    {
+        return $this->hasMany(AccountLedger::class);
     }
 }

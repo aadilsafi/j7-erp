@@ -38,9 +38,9 @@ class TypesDataTable extends DataTable
             ->editColumn('parent_id', function ($type) {
                 return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
             })
-            // ->editColumn('status', function ($type) {
-            //     return  editBooleanColumn($type->status);
-            // })
+            ->editColumn('account_number', function ($type) {
+                return  account_number_format($type->account_number);
+            })
             ->editColumn('created_at', function ($type) {
                 return editDateColumn($type->created_at);
             })
@@ -71,17 +71,12 @@ class TypesDataTable extends DataTable
     {
 
         $createPermission =  Auth::user()->hasPermissionTo('sites.types.create');
+        $importPermission =  Auth::user()->hasPermissionTo('sites.types.importTypes');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.types.destroy-selected');
 
         $buttons = [];
 
         $buttons = [
-            Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i data-feather="upload"></i> Import Types')
-                ->attr([
-                    'onclick' => 'Import()',
-                ]),
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
                 Button::make('copy')->addClass('dropdown-item'),
@@ -93,6 +88,16 @@ class TypesDataTable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
+        if ($importPermission) {
+            $importButton =  Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Types')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]);
+            array_unshift($buttons, $importButton);
+        }
+
         if ($createPermission) {
             $newButton = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
@@ -103,6 +108,8 @@ class TypesDataTable extends DataTable
             array_unshift($buttons, $newButton);
         }
 
+
+
         if ($selectedDeletePermission) {
 
             $buttons[] = Button::raw('delete-selected')
@@ -112,6 +119,7 @@ class TypesDataTable extends DataTable
                     'onclick' => 'deleteSelected()',
                 ]);
         }
+
 
         return $this->builder()
             ->setTableId('types-table')
@@ -162,9 +170,9 @@ class TypesDataTable extends DataTable
 
 
         $columns = [
-            Column::make('name')->title('Type Name'),
+            Column::make('name')->title('Type Name')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
-            // Column::make('status')->title('Active'),
+            Column::make('account_number')->title('Account Number')->addClass('text-nowrap'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),

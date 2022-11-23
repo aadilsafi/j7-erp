@@ -27,10 +27,9 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+        #stakeholderNextOfKin {
+            display: none;
+        }
     </style>
 @endsection
 
@@ -161,7 +160,7 @@
 
             $("#payment_due_date").flatpickr({
                 defaultDate: "today",
-                minDate: "today",
+                minDate: '{{ $salesPlan->approved_date }}',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -201,7 +200,24 @@
 
                         if (response.status) {
                             if (response.data) {
-                                stakeholderData = response.data;
+                                stakeholderData = response.data[0];
+                            }
+
+                            $('#stackholder_next_of_kin').empty();
+                            if (response.data[1].length > 0) {
+                                $('#stakeholderNextOfKin').show();
+                                $.each(response.data[1], function(i, item) {
+
+                                    $('#stackholder_next_of_kin').append($('<option>', {
+                                        value: item.id,
+                                        text: item.full_name + ' s/o ' +
+                                            item.father_name + ' ,' + item
+                                            .cnic,
+                                    }));
+
+                                });
+                            } else {
+                                $('#stakeholderNextOfKin').hide();
                             }
 
                             $('#stackholder_full_name').val(stakeholderData.full_name).attr(
@@ -223,6 +239,8 @@
                             hideBlockUI('#stakeholders_card');
                             $('#stackholder_comments').text(stakeholderData.comments).attr(
                                 'readonly', (stakeholderData.comments.length > 0));
+
+
 
 
                             let stakeholderType = '';
@@ -344,20 +362,12 @@
                     'stackholder[father_name]': {
                         required: true
                     },
-                    'stackholder[occupation]': {
-                        required: true
-                    },
-                    'stackholder[designation]': {
-                        required: true
-                    },
-                    'stackholder[ntn]': {
-                        required: true
-                    },
+
                     'stackholder[cnic]': {
                         required: true,
-                        digits: true,
-                        maxlength: 13,
-                        minlength: 13
+                        // digits: true,
+                        // maxlength: 13,
+                        // minlength: 13
                     },
                     'stackholder[contact]': {
                         required: true
@@ -366,12 +376,12 @@
                         required: true
                     },
                 },
-                messages: {
-                    'stackholder[cnic]': {
-                        maxlength: "Cnic can't be greater then {0} digits without dashes",
-                        minlength: "Cnic can't be less then {0} digits without dashes",
-                    }
-                },
+                // messages: {
+                //     'stackholder[cnic]': {
+                //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+                //         minlength: "Cnic can't be less then {0} digits without dashes",
+                //     }
+                // },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\{Role, Permission};
@@ -15,7 +16,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Permission())->insert([
+         (new Permission())->insert([
 
             // Roles Routes
             [
@@ -285,7 +286,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.types.importTypes',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Unit Types',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -356,7 +357,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.additional-costs.importAdcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Additional Costs',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -488,11 +489,32 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.floors.floor-plan',
+                'show_name' => 'Can View Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.floor-plan.upload',
+                'show_name' => 'Can Upload Floor Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //
             // Unit Routes
             [
                 'name' => 'sites.floors.units.index',
                 'show_name' => 'Can View Sites Floors Units',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.floors.units.details',
+                'show_name' => 'Can View Unit Details',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -562,7 +584,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.unitsImport.importUnits',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Units file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -665,7 +687,7 @@ class PermissionTableSeeder extends Seeder
             //sales Plan Import
             [
                 'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -694,7 +716,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Additional Costs Import
             [
                 'name' => 'sites.floors.spadcostsImport.importspadcosts',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Additional Costs file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -724,7 +746,7 @@ class PermissionTableSeeder extends Seeder
             // sales Plan Installments Import
             [
                 'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Sales Plan Installments file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -809,6 +831,8 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            //Stakeholders Import
             [
                 'name' => 'sites.stakeholders.importStakeholders',
                 'show_name' => 'Can Import file',
@@ -837,6 +861,117 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            //Stakeholders Kins Import
+
+            [
+                'name' => 'sites.stakeholders.kins.importStakeholders',
+                'show_name' => 'Can Import Stakeholders Kin',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.importStakeholdersPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.kins.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Blacklisted Stakeholders
+            // Stakeholders
+            [
+                'name' => 'sites.blacklisted-stakeholders.index',
+                'show_name' => 'Can View Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.create',
+                'show_name' => 'Can Create Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.store',
+                'show_name' => 'Can Store Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.edit',
+                'show_name' => 'Can Edit Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.update',
+                'show_name' => 'Can Update Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.destroy',
+                'show_name' => 'Can Destroy Sites Blacklisted Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.destroy-selected',
+                'show_name' => 'Can Destroy Selected Blacklisted Sites Stakeholders',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.importStakeholders',
+                'show_name' => 'Can Import Blacklisted Stakeholder file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.importStakeholdersPreview',
+                'show_name' => 'Can View Blacklisted Stakeholder Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.storePreview',
+                'show_name' => 'Can View Blacklisted Stakeholder store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.blacklisted-stakeholders.saveImport',
+                'show_name' => 'Can Save Blacklisted Stakeholder Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
             // Lead Sources Routes
             [
@@ -1591,6 +1726,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.accounts.recovery.inventory-aging',
+                'show_name' => ' Can View Accounts Recovery Inventory Aging',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.accounts.recovery.salesPlan',
                 'show_name' => ' Can View Accounts Recovery Sales Plan',
                 'guard_name' => 'web',
@@ -1624,6 +1766,13 @@ class PermissionTableSeeder extends Seeder
             // Accounts trial-balance
             [
                 'name' => 'sites.accounts.trial-balance.index',
+                'show_name' => 'Can View Accounts Trial Balance',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.accounts.trial-balance.filter-trial-blance',
                 'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),
@@ -1933,7 +2082,160 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.settings.import.images.store',
-                'show_name' => 'Can View Images Import',
+                'show_name' => 'Can Save Images Import',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.import.images.create',
+                'show_name' => 'Can Images Import',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.import.images.cancel',
+                'show_name' => 'Cancel Images Import',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            //Countries Permissions
+            [
+                'name' => 'sites.settings.countries.index',
+                'show_name' => 'Can View Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.create',
+                'show_name' => 'Can Create Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.store',
+                'show_name' => 'Can save Country',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.edit',
+                'show_name' => 'Can Edit Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.update',
+                'show_name' => 'Can Update Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.countries.destroy',
+                'show_name' => 'Can Delete Countries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //States Permissions
+            [
+                'name' => 'sites.settings.states.index',
+                'show_name' => 'Can View States',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.create',
+                'show_name' => 'Can Create State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.store',
+                'show_name' => 'Can save State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.edit',
+                'show_name' => 'Can Edit State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.update',
+                'show_name' => 'Can Update State',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.states.destroy',
+                'show_name' => 'Can Delete States',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //City Permissions
+            [
+                'name' => 'sites.settings.cities.index',
+                'show_name' => 'Can View Cities',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.create',
+                'show_name' => 'Can Create City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.store',
+                'show_name' => 'Can save City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.edit',
+                'show_name' => 'Can Edit City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.update',
+                'show_name' => 'Can Update City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.cities.destroy',
+                'show_name' => 'Can Delete City',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            // Logs Permission
+            [
+                'name' => 'sites.settings.activity-logs.index',
+                'show_name' => 'Can View Activity Logs',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

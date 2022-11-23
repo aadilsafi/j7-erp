@@ -18,6 +18,9 @@ class Stakeholder extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'country_id',
+        'city_id',
+        'state_id',
         'full_name',
         'father_name',
         'occupation',
@@ -30,17 +33,19 @@ class Stakeholder extends Model implements HasMedia
         'parent_id',
         'comments',
         'relation',
+        'optional_contact_number',
+        'nationality',
     ];
 
     public $rules = [
         // 'site_id' => 'required|numeric',
         'full_name' => 'required|string|min:1|max:50',
         'father_name' => 'required|string|min:1|max:50',
-        'occupation' => 'required|string|min:1|max:50',
-        'designation' => 'required|string|min:1|max:50',
-        'cnic' => 'required|numeric|unique:stakeholders,cnic',
-        'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
-        'ntn' => 'required|numeric',
+        'occupation' => 'nullable|string|max:50',
+        'designation' => 'nullable|string|max:50',
+        'cnic' => 'required|unique:stakeholders,cnic',
+        // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
+        'ntn' => 'sometimes',
         'contact' => 'required|string|min:1|max:20',
         'address' => 'required|string',
         'parent_id' => 'nullable|numeric',
@@ -49,6 +54,13 @@ class Stakeholder extends Model implements HasMedia
         'attachment' => 'sometimes|min:2',
         'stakeholder_type' => 'required|in:C,V,D,L,K',
         'contact-persons' => 'nullable|array',
+        'next-of-kins' => 'nullable|array',
+        'city_id' => 'nullable|numeric',
+        'state_id' => 'nullable|numeric',
+        'country_id' => 'nullable|numeric',
+        'next-of-kins.*.relation' => 'required',
+        'nationality' => 'sometimes',
+
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
@@ -57,6 +69,8 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons.*.cnic.numeric' => 'CNIC must be numeric.',
         'contact-persons.*.cnic.min' => 'CNIC must be at least 1 digit.',
         'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
+        'next-of-kins.*.relation' => 'Kin Relation Field is Required.',
+        'cnic.exists' => 'Cnic is Blacklisted.'
     ];
 
     protected $casts = [
@@ -88,8 +102,14 @@ class Stakeholder extends Model implements HasMedia
         return $this->hasMany(StakeholderType::class);
     }
 
-    public function multiValues() {
+    public function multiValues()
+    {
         return $this->morphMany(MultiValue::class, 'multivalueable');
+    }
+
+    public function nextOfKin()
+    {
+        return $this->hasMany(StakeholderNextOfKin::class);
     }
 
     public function contacts()
@@ -99,11 +119,15 @@ class Stakeholder extends Model implements HasMedia
 
     public function dealer_stakeholder()
     {
-        return $this->hasMany(StakeholderType::class)->where('type','D')->where('status',1);
+        return $this->hasMany(StakeholderType::class)->where('type', 'D')->where('status', 1);
     }
 
     public function stakeholderAsCustomer()
     {
-        return $this->hasMany(StakeholderType::class)->where('type','C');
+        return $this->hasMany(StakeholderType::class)->where('type', 'C');
+    }
+    public function salesPlans()
+    {
+        return $this->hasMany(SalesPlan::class);
     }
 }

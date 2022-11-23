@@ -110,31 +110,37 @@ class ImportBanksDataTable extends DataTable
             Column::computed('name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'name'
             ])->render())->addClass('removeTolltip'),
             Column::computed('account_number')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'account_number'
             ])->render())->addClass('removeTolltip'),
             Column::computed('branch_code')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'branch_code'
             ])->render())->addClass('removeTolltip'),
             Column::computed('address')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'address'
             ])->render())->addClass('removeTolltip'),
             Column::computed('contact_number')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'contact_number'
             ])->render())->addClass('removeTolltip'),
             Column::computed('comments')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
+                'required_fields' => $this->required_fields,
                 'name' => 'comments'
             ])->render())->addClass('removeTolltip'),
 

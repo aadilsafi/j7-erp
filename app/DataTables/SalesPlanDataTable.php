@@ -54,13 +54,13 @@ class SalesPlanDataTable extends DataTable
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
 
-                // $staleholder = json_decode($salesPlan->stakeholder_data);
-                // return $staleholder->full_name;
+                $staleholder = json_decode($salesPlan->stakeholder_data);
+                return $staleholder->full_name;
 
-                return $salesPlan->stakeholder->full_name;
+                // return $salesPlan->stakeholder->full_name;
             })
             ->editColumn('created_at', function ($salesPlan) {
-                return editDateColumn($salesPlan->created_at);
+                return editDateColumn($salesPlan->created_date);
             })
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);
@@ -69,7 +69,7 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -110,15 +110,16 @@ class SalesPlanDataTable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
-        if ($createPermission && $unitStatus == 1) {
-
-            $addNewButton = Button::raw('add-new')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')
-                ->attr([
-                    'onclick' => 'addNew()',
-                ]);
-            array_unshift($buttons, $addNewButton);
+        if ($createPermission) {
+            if ($unitStatus == 1 || $unitStatus == 6) {
+                $addNewButton = Button::raw('add-new')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')
+                    ->attr([
+                        'onclick' => 'addNew()',
+                    ]);
+                array_unshift($buttons, $addNewButton);
+            }
         }
 
         if ($selectedDeletePermission) {
@@ -176,8 +177,8 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('user_id')->title('Sales Person'),
-            // Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
-            Column::computed('stakeholder_id')->title('Stakeholder'),
+            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
+            // Column::computed('stakeholder_id')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

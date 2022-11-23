@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\FileTitleTransfer;
 
+use App\Models\BacklistedStakeholder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -41,8 +42,26 @@ class storeRequest extends FormRequest
             'stackholder.contact' => 'required|string|min:1|max:20',
             'stackholder.address' => 'required|string',
         ];
-        $rules['stackholder.cnic'] = ['required', 'numeric', Rule::unique('stakeholders','cnic')->ignore($this->input('stackholder.stackholder_id'))];
+        $rules['stackholder.cnic'] = ['required', 'numeric', Rule::unique('stakeholders', 'cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;
+    }
+    /**
+     * Configure the validator instance.
+     *
+     * @param  \Illuminate\Validation\Validator  $validator
+     * @return void
+     */
+    public function withValidator($validator)
+    {
+        // if (!$validator->fails()) {
+        $validator->after(function ($validator) {
+
+            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('stackholder.cnic'))->first();
+            if ($blacklisted) {
+                $validator->errors()->add('cnic', 'CNIC is BlackListed.');
+            }
+        });
+        // }
     }
 
     public function messages()

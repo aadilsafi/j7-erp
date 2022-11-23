@@ -16,6 +16,8 @@ class AccountLedger extends Model
         'site_id',
         'account_head_code',
         'account_action_id',
+        'origin_name',
+        'origin_number',
         'credit',
         'debit',
         'balance',
@@ -28,10 +30,14 @@ class AccountLedger extends Model
         'file_cancellation_id',
         'file_title_transfer_id',
         'status',
+        'created_date',
     ];
 
     protected $casts = [
+        'account_head_code'=> 'string',
         'site_id' => 'integer',
+        'origin_name'=> 'string',
+        'origin_number'=> 'string',
         'sales_plan_id' => 'integer',
         'receipt_id' => 'integer',
         'account_action_id' => 'integer',
@@ -58,7 +64,7 @@ class AccountLedger extends Model
 
     public function salesPlan()
     {
-        return $this->belongsTo(SalesPlan::class, 'sales_plan_id', 'id')->with('unit', 'unit.floor');
+        return $this->belongsTo(SalesPlan::class, 'sales_plan_id', 'id')->with('unit', 'unit.floor' ,'stakeholder');
     }
 
     public function receipt()

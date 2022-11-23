@@ -29,9 +29,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->addIndexColumn()
-            ->editColumn('parent_id', function ($ledger) {
-                return Str::of(getRoleParentByParentId($ledger->parent_id))->ucfirst();
+            // ->addIndexColumn()
+            ->editColumn('id', function ($ledger) {
+                return 'JE-' . $ledger->origin_number;
             })
             ->setRowId('id')
             ->editColumn('debit', function ($ledger) {
@@ -53,6 +53,10 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 // return $ledger->created_at->format('D, d-M-Y , H:i:s');
                 return editDateColumn($ledger->created_at);
             })
+            ->editColumn('created_date', function ($ledger) {
+                // return $ledger->created_at->format('D, d-M-Y , H:i:s');
+                return editDateColumn($ledger->created_date);
+            })
             ->editColumn('updated_at', function ($ledger) {
                 return editDateColumn($ledger->updated_at);
             })
@@ -67,29 +71,82 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
                                 <span class="badge rounded-pill bg-warning">
                                 <i class="bi bi-box-arrow-right" ></i>
-                                </span>
+                                </span> ('.$ledger->origin_name.')
                             </a>';
                 } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11 || $ledger->account_action_id == 12) {
                     $receipt = $file = DB::table('receipts')
                         ->where('id', $ledger->receipt_id)
                         ->first();
-                    return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
-                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
+                    if (isset($receipt)) {
+                        return '<a href="' . route('sites.receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($receipt->id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
                             </a>';
-                } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
-                    $file = DB::table('file_management')
-                        ->where('sales_plan_id', $ledger->sales_plan_id)
-                        ->first();
-
-                    if (isset($file)) {
-                        return '<a href="' . route('sites.file-managements.customers.units.files.show', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_id' => encryptParams($file->id)]) . '">
-                            <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>
-                        </a>';
                     } else {
-                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span> ('.$ledger->origin_name.')';
+                    }
+                } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
+
+                    if ($ledger->account_action_id == 3) {
+                        $file = DB::table('file_buy_backs')->where('id', $ledger->file_buyback_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-buy-back.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_buy_back_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>'  ('.$ledger->origin_name.');
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 5) {
+                        $file = DB::table('file_refunds')->where('id', $ledger->file_refund_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-refund.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_refund_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  ('.$ledger->origin_name.')';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 6) {
+                        $file = DB::table('file_cancellations')->where('id', $ledger->file_cancellation_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-cancellation.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_cancellation_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  ('.$ledger->origin_name.')';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 7) {
+                        $file = DB::table('file_title_transfers')->where('id', $ledger->file_title_transfer_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-title-transfer.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_title_transfer_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  ('.$ledger->origin_name.')';
+                        }
+                    }
+
+                    if ($ledger->account_action_id == 24) {
+                        $file = DB::table('file_resales')->where('id', $ledger->file_resale_id)
+                            ->first();
+                        if (isset($file)) {
+                            return '<a href="' . route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($ledger->site_id), 'customer_id' => encryptParams($file->stakeholder_id), 'unit_id' => encryptParams($file->unit_id), 'file_resale_id' => encryptParams($file->id)]) . '">
+                                    <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  ('.$ledger->origin_name.')
+                                </a>';
+                        } else {
+                            return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  ('.$ledger->origin_name.')';
+                        }
                     }
                 } else {
-                    return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>';
+                    return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  ('.$ledger->origin_name.')';
                 }
             })
 
@@ -113,6 +170,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             ->setTableId('ledger-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             // ->select()
             // ->selectClassName('bg-primary')
             ->serverSide()
@@ -133,7 +191,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
             )
-            ->rowGroupDataSrc('unit')
+            ->rowGroupDataSrc('id')
             ->columnDefs([])
             ->orders([
                 // [4, 'asc'],
@@ -149,9 +207,9 @@ class SalesInvoiceLedgerDatatable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('DT_RowIndex')->title('#'),
-            Column::computed('origin')->title('Origin'),
-            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center'),
+            Column::computed('id')->title('#')->addClass('text-nowrap'),
+            Column::computed('origin')->title('Origin')->addClass('text-nowrap'),
+            Column::make('account_action_id')->name('accountActions.name')->title('Account Action')->addClass('text-nowrap text-center')->orderable(false),
             Column::computed('unit')->name('salesPlan.unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap text-center'),
             Column::computed('account_head_code_name')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap text-center'),
             Column::make('account_head_code')->title('Account Code')->addClass('text-nowrap text-center'),
@@ -159,7 +217,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
             Column::make('credit')->title('Credit')->addClass('text-nowrap text-center'),
             // Column::make('balance')->title('Balance')->addClass('text-nowrap text-center'),
             // Column::make('nature_of_account'),
-            Column::make('created_at')->title('Transaction At')->addClass('text-nowrap text-center'),
+            Column::make('created_date')->title('Transaction At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
     }

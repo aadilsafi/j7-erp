@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 use App\Models\StakeholderType;
 use App\Models\SalesPlanInstallments;
 use App\DataTables\RecoverySalesPlanDataTable;
+use App\Models\AccountHead;
+use App\Models\Site;
 use App\Models\Type;
 use App\Services\AccountRecevories\AccountRecevoryInterface;
 use App\Services\Interfaces\FloorInterface;
@@ -92,6 +94,84 @@ class AccountsRecoveryController extends Controller
                 'types' => $types,
             ]
         );
+    }
+
+    public function inventoryAging(Request $request, $site_id)
+    {
+        $site = (new Site())->find(decryptParams($site_id))->with('siteConfiguration', 'statuses')->first();
+        if ($site && !empty($site)) {
+            $salesPlans = (new SalesPlan())->with(['installments', 'unit', 'user', 'stakeholder', 'accountLedgers'])->withCount('installments')->where(['status' => 1])->get();
+
+            $user = User::with(['salesPlans' => function ($q) {
+                $q->with(['installments', 'unit', 'user']);
+                return $q;
+            }])->get();
+            $account_head = AccountHead::where('level', 5)->whereHas('accountLedgers')->where('name', 'LIKE', '%A/R')
+                ->orWhere('name', 'LIKE', '%A/P')->orderBy('code', 'asc')->get();
+            // dd($salesPlans->toArray());
+            $data = [
+                'site' => $site,
+                'account_head' => $account_head,
+                'salesPlans' => $salesPlans,
+                'users' => $user,
+            ];
+            return view('app.sites.accounts.recovery.inventory-aging', $data);
+        }
+    }
+
+    public function filterInventoryAging(Request $request)
+    {
+        $to_date = $request->to_date;
+        $start_date = substr($request->to_date, 0, 10);
+        $end_date =  substr($request->to_date, 14, 10);
+        $stakeholder_id = $request->stakeholder_id;
+        $installment_id = $request->installment_id;
+        $salesPlan_unit_id = $request->salesPlan_unit_id;
+
+        $account_sales_plan = SalesPlan::with(['installments' => function ($query) use ($installment_id, $start_date, $end_date) {
+            if ($installment_id) {
+
+                $query->where('details', 'LIKE', '%' . $installment_id . '%');
+            } elseif ($start_date && $end_date) {
+
+                $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
+            }
+
+            return $query;
+        }, 'unit' => function ($query) use ($salesPlan_unit_id) {
+            if ($salesPlan_unit_id > 0) {
+                $query->where('id', $salesPlan_unit_id);
+            }
+            return $query;
+        }, 'stakeholder' => function ($query) use ($stakeholder_id) {
+            if ($stakeholder_id > 0) {
+
+                $query->where('id', $stakeholder_id);
+            }
+            return $query;
+        }])->get();
+
+        $Stakeholder = Stakeholder::when(($stakeholder_id), function ($query) use ($stakeholder_id) {
+            $query->where('id', $stakeholder_id);
+            return $query;
+        })->when(($start_date && $end_date or $installment_id), function ($query) use ($start_date, $end_date, $installment_id, $salesPlan_unit_id) {
+            $query->with(['salesPlans.installments' => function ($query) use ($start_date, $end_date, $installment_id, $salesPlan_unit_id) {
+                if ($start_date && $end_date) {
+                    $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
+                }
+                if ($installment_id) {
+                    $query->where('details', $installment_id);
+                }
+                return $query;
+            }, 'salesPlans.unit' => function ($query) use ($salesPlan_unit_id) {
+                if ($salesPlan_unit_id) {
+                    $query->where('id', $salesPlan_unit_id);;
+                }
+                return $query;
+            }]);
+        })
+            ->get();
+        dd($Stakeholder->toArray());
     }
 
     public function salesPlan(Request $request, $site_id)

@@ -40,6 +40,7 @@ class Receipt extends Model implements HasMedia
         'comments',
         'status',
         'bank_details',
+        'created_date',
     ];
 
     public $rules = [

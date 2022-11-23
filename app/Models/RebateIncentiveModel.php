@@ -20,6 +20,7 @@ class RebateIncentiveModel extends Model
         'deal_type',
         'commision_percentage',
         'commision_total',
+        'is_for_dealer_incentive',
         'status',
         'comments',
         'dealer_id',
@@ -46,6 +47,6 @@ class RebateIncentiveModel extends Model
     }
     public function dealer()
     {
-        return $this->belongsTo(Stakeholder::class,'dealer_id','id');
+        return $this->belongsTo(Stakeholder::class, 'dealer_id', 'id');
     }
 }

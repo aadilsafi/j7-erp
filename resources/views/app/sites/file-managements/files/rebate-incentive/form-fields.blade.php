@@ -138,7 +138,8 @@
                             <div class="row mb-1">
                                 <input type="hidden" name="dealer[type]" value="D">
                                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="full_name">Full Name</label>
+                                    <label class="form-label fs-5" for="full_name">Full Name<span
+                                        class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('full_name') is-invalid @enderror"
                                         id="stackholder_full_name" name="dealer[full_name]"
@@ -150,11 +151,12 @@
                                 </div>
 
                                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="father_name">Father Name</label>
+                                    <label class="form-label fs-5" for="father_name">Father / Husband Name<span
+                                        class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('father_name') is-invalid @enderror"
                                         id="stackholder_father_name" name="dealer[father_name]"
-                                        placeholder="Father Name"
+                                        placeholder="Father / Husband Name"
                                         value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                                     @error('father_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -190,7 +192,8 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="contact">Contact</label>
+                                    <label class="form-label fs-5" for="contact">Contact<span
+                                        class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('contact') is-invalid @enderror"
                                         id="stackholder_contact" name="dealer[contact]" placeholder="Contact Number"
@@ -204,7 +207,8 @@
                             <div class="row mb-1">
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="cnic">CNIC</label>
+                                    <label class="form-label fs-5" for="cnic">CNIC<span
+                                        class="text-danger">*</span></label>
                                     <input type="text"
                                         class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
                                         id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC Without Dashes"
@@ -228,7 +232,8 @@
 
                             <div class="row mb-1">
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="address">Address</label>
+                                    <label class="form-label fs-5" for="address">Address<span
+                                        class="text-danger">*</span></label>
                                     <textarea class="form-control @error('address') is-invalid @enderror" name="dealer[address]" id="stackholder_address"
                                         rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->address : old('address') }}</textarea>
                                     @error('address')

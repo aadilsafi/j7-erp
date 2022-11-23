@@ -683,6 +683,7 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Status',
                 'App\Models\StakeholderContact',
                 'App\Models\StakeholderType',
+                'App\Models\SalesPlan',
                 'App\Models\SalesPlanAdditionalCost',
                 'App\Models\SalesPlanInstallments',
                 'App\Models\ReceiptDraftModel',
@@ -690,6 +691,8 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Notification',
                 'App\Models\MultiValue',
                 'App\Models\SiteOwner',
+                'TempStakeholder',
+                'StakeholderNextOfKin',
             ];
         }
         $customFieldModels = array();
@@ -1009,10 +1012,10 @@ if (!function_exists('addAccountCodes')) {
         )->get();
 
         $account_code = $starting_code;
-
-        if (isset($account_head)) {
-
+     
+        if (isset($account_head) && count($account_head) > 0) {
             $last_account_head = collect($account_head)->last();
+            // dd($last_account_head);
             $level = $last_account_head->level;
             $level_code = $last_account_head->level_code;
 

@@ -26,6 +26,17 @@ use App\Services\Permissions\{PermissionInterface, PermissionService};
 use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
 use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
 use App\Services\Roles\{RoleInterface, RoleService};
+use App\Services\AccountCreations\FirstLevel\FirstLevelAccountinterface as FirstLevelAccountInterface;
+use App\Services\AccountCreations\FirstLevel\FirstLevelAccountservice as FirstLevelAccountService;
+use App\Services\AccountCreations\SecondLevel\SecondLevelAccountinterface as SecondLevelAccountInterface;
+use App\Services\AccountCreations\SecondLevel\SecondLevelAccountservice as SecondLevelAccountService;
+use App\Services\AccountCreations\ThirdLevel\ThirdLevelAccountinterface as ThirdLevelAccountInterface;
+use App\Services\AccountCreations\ThirdLevel\ThirdLevelAccountservice as ThirdLevelAccountService;
+use App\Services\AccountCreations\FourthLevel\FourthLevelACcountinterface as FourthLevelAccountInterface;
+use App\Services\AccountCreations\FourthLevel\FourthLevelAccountservice as FourthLevelAccountService;
+use App\Services\AccountCreations\FifthLevel\FifthLevelAccountinterface as FifthLevelAccountInterface;
+use App\Services\AccountCreations\FifthLevel\FifthLevelAccountservice as FifthLevelAccountService;
+
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Telescope;
 
@@ -64,6 +75,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CustomFieldValueInterface::class, CustomFieldService::class);
         $this->app->bind(AccountRecevoryInterface::class, AccountRecevoryService::class);
         $this->app->bind(FinancialTransactionInterface::class, FinancialTransactionService::class);
+        $this->app->bind(FirstLevelAccountInterface::class, FirstLevelAccountService::class);
+        $this->app->bind(SecondLevelAccountInterface::class, SecondLevelAccountService::class);
+        $this->app->bind(ThirdLevelAccountInterface::class, ThirdLevelAccountService::class);
+        $this->app->bind(FourthLevelAccountInterface::class, FourthLevelAccountService::class);
+        $this->app->bind(FifthLevelAccountInterface::class, FifthLevelAccountService::class);
 
         Telescope::ignoreMigrations();
 

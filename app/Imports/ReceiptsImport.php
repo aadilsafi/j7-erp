@@ -55,7 +55,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
             'mode_of_payment' => $row['mode_of_payment'],
             'amount' => $row['amount'],
-            'installment_no' => $row['installment_no'],
+            'installment_no' => $row['installment'],
             'cheque_no' => $row['cheque_no'],
             'bank_name' => $row['bank_name'],
             'bank_acount_number' => $row['bank_acount_number'],
@@ -90,7 +90,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'mode_of_payment' =>  ['required'],
             'amount' => ['required'],
             'status' => ['required'],
-            'installment_no' => ['required']
+            'installment' => ['required']
         ];
     }
 

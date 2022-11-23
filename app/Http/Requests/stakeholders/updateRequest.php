@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\stakeholders;
 
+use App\Models\BacklistedStakeholder;
 use App\Models\Stakeholder;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -28,6 +29,7 @@ class updateRequest extends FormRequest
         $rules['cnic'] .= ',' . decryptParams($this->id);
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
+
         return $rules;
     }
 
@@ -45,6 +47,11 @@ class updateRequest extends FormRequest
 
             if ($parent_id > 0 && (strlen($this->input('relation')) < 1 || empty($this->input('relation')) || is_null($this->input('relation')))) {
                 $validator->errors()->add('relation', 'Relation is required');
+            }
+
+            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('cnic'))->first();
+            if ($blacklisted) {
+                $validator->errors()->add('cnic', 'CNIC is BlackListed.');
             }
         });
         // }

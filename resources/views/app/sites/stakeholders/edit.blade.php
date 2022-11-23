@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                width: calc(20% - 0.5em);
-                                                            } */
+                                                                                                                width: calc(20% - 0.5em);
+                                                                                                            } */
     </style>
 @endsection
 
@@ -62,6 +62,10 @@
                     'stakeholder' => $stakeholder,
                     'stakeholderTypes' => $stakeholderTypes,
                     'emptyRecord' => $emptyRecord,
+                    'country' => $country,
+                    'city' => $city,
+                    'state' => $state,
+                    'emtyNextOfKin' => $emtyNextOfKin,
                 ]) }}
             </div>
 
@@ -116,6 +120,102 @@
 @section('custom-js')
 
     <script type="text/javascript">
+        $(document).ready(function() {
+            $('#div-next-of-kin').hide();
+            var e = $("#parent_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).change(function() {
+                if ($(this).val() == 0) {
+                    $('#stakeholder_name').attr("readonly", true).val('');
+                } else {
+                    $('#stakeholder_name').removeAttr("readonly");
+                }
+            });
+
+            var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
+            var areStakeholderKinsExist = {{ count($stakeholder->nextOfKin) > 0 ? 'false' : 'true' }};
+
+            $(".next-of-kin-list").repeater({
+
+                initEmpty: areStakeholderKinsExist,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            })
+
+            $(".contact-persons-list").repeater({
+
+                initEmpty: areStakeholderContactsExist,
+                show: function() {
+                    $(this).slideDown(), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            })
+
+            $.validator.addMethod("unique", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var cnicRepeated = 0;
+                if (value != '') {
+                    $(parentForm.find('.cp_cnic')).each(function() {
+                        if ($(this).val() === value) {
+                            cnicRepeated++;
+                        }
+                    });
+                }
+                return cnicRepeated === 1 || cnicRepeated === 0;
+
+            }, "Contact Person CNIC can't be duplicated");
+
+            $.validator.addMethod("uniqueKinId", function(value, element) {
+                var parentForm = $(element).closest('form');
+                var cnicRepeated = 0;
+                if (value != '') {
+                    $(parentForm.find('.kinId')).each(function() {
+                        if ($(this).val() === value) {
+                            cnicRepeated++;
+                        }
+                    });
+                }
+                return cnicRepeated === 1 || cnicRepeated === 0;
+
+            }, "Kins can't be duplicated");
+            var validator = $("#stakeholderForm").validate({
+
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
+
+            @forelse ($stakeholder->stakeholder_types as $type)
+                @if ($type->type == 'C' && $type->status)
+                    $('#div-next-of-kin').show();
+                @else
+                @endif
+            @empty
+            @endforelse
+
+
+        });
+
         var editImage = "";
         var id = <?php echo $stakeholder->id; ?>;
 
@@ -157,70 +257,143 @@
                 url: ''
             }
         });
+        var firstLoad = true;
 
-        $(document).ready(function() {
-            var e = $("#parent_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            }).change(function() {
-                if ($(this).val() == 0) {
-                    $('#stakeholder_name').attr("readonly", true).val('');
-                } else {
-                    $('#stakeholder_name').removeAttr("readonly");
-                }
-            });
+        var country_id = $("#country_id");
+        country_id.wrap('<div class="position-relative"></div>');
+        country_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: country_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            showBlockUI('#stakeholderForm');
 
-            var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
+            $("#city_id").empty()
+            $('#state_id').empty();
 
-            $(".contact-persons-list").repeater({
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
+                .replace(':countryId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#stakeholderForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#state_id').html('<option value=0>Select State</option>');
+                            $('#city_id').html('<option value=0>Select City</option>');
+                            $.each(response.states, function(key, value) {
+                                $("#state_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            hideBlockUI('#stakeholderForm');
 
-                initEmpty: areStakeholderContactsExist,
-                show: function() {
-                    $(this).slideDown(), feather && feather.replace({
-                        width: 14,
-                        height: 14
-                    })
-                },
-                hide: function(e) {
-                    $(this).slideUp(e)
-                }
-            })
-
-            $.validator.addMethod("unique", function(value, element) {
-                var parentForm = $(element).closest('form');
-                var cnicRepeated = 0;
-                if (value != '') {
-                    $(parentForm.find('.cp_cnic')).each(function() {
-                        if ($(this).val() === value) {
-                            cnicRepeated++;
+                            if (firstLoad) {
+                                state_id.val('{{ $stakeholder->state_id }}');
+                                if(state_id.val() > 0){
+                                state_id.trigger('change');
+                                }else{
+                                    firstLoad = false;
+                                }
+                            }
+                        } else {
+                            hideBlockUI('#stakeholderForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
                         }
-                    });
-                }
-                return cnicRepeated === 1 || cnicRepeated === 0;
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            }
+        });
+        var city_id = $("#city_id");
+        city_id.wrap('<div class="position-relative"></div>');
+        city_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: city_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        });
 
-            }, "Contact Person CNIC can't be duplicated");
+        var state_id = $("#state_id");
+        state_id.wrap('<div class="position-relative"></div>');
+        state_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: state_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            $("#city_id").empty()
+            // alert($(this).val());
+            showBlockUI('#stakeholderForm');
 
-            var validator = $("#stakeholderForm").validate({
-
-                errorClass: 'is-invalid text-danger',
-                errorElement: "span",
-                wrapper: "div",
-                submitHandler: function(form) {
-                    form.submit();
-                }
-            });
-
-
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
+                .replace(':stateId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#stakeholderForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#city_id').html('<option value=0>Select City</option>');
+                            $.each(response.cities, function(key, value) {
+                                $("#city_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            hideBlockUI('#stakeholderForm');
+                            if (firstLoad) {
+                                city_id.val('{{ $stakeholder->city_id }}');
+                                firstLoad = false;
+                            }
+                        } else {
+                            hideBlockUI('#stakeholderForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            }
         });
 
         function performAction(action) {
             if (action == 'C') {
-                $('#div-next-of-kin').toggle('fast', 'linear');
+                // $('#div-next-of-kin').toggle('fast', 'linear');
+                $('#div-next-of-kin').show();
+            } else {
+                $('#div-next-of-kin').hide();
             }
         }
+
+        country_id.val('{{ $stakeholder->country_id }}');
+        country_id.trigger('change');
     </script>
 @endsection

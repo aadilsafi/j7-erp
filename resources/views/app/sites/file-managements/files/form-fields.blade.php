@@ -242,80 +242,77 @@
                 </div>
 
                 {{-- Next Of KIN Data --}}
-                <div class="row mb-1">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <div class="card m-0"
-                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                            <div class="card-header">
-                                <h3>Next Of KIN</h3>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="row g-1 mb-1">
-                                    <input type="hidden" name="application_form[stakeholder_id]"
-                                        value="{{ !is_null($nextOfKin) ? $nextOfKin->id : '-' }}">
-
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_name">Name</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_name"
-                                            placeholder="Name"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->full_name : '-' }}"
-                                            disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_father_name">Father/Husband
-                                            Name</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_father_name"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->father_name : '-' }}"
-                                            placeholder="Father/Husband Name" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5"
-                                            for="customer_relationship">Relationship</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_relationship"
-                                            value="{{ !is_null($nextOfKin) ? $customer->relation : '-' }}"
-                                            placeholder="Relationship" disabled />
-                                    </div>
+                @forelse ($nextOfKin as $kin)
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="card m-0"
+                                style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                                <div class="card-header">
+                                    <h3>Next Of KIN</h3>
                                 </div>
+                                <div class="card-body">
+                                    <div class="row g-1 mb-1">
+                                        <input type="hidden" name="application_form[stakeholder_id]"
+                                            value="{{ $kin->id }}">
 
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ !is_null($nextOfKin) ? cnicFormat($nextOfKin->cnic) : '-' }}"
-                                            disabled />
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="customer_name">Name</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_name" placeholder="Name" value="{{ $kin->full_name }}"
+                                                disabled />
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="customer_father_name">Father/Husband
+                                                Name</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_father_name" value="{{ $kin->father_name }}"
+                                                placeholder="Father/Husband Name" disabled />
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5"
+                                                for="customer_relationship">Relationship</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_relationship" value="{{ $kin->relation }}"
+                                                placeholder="Relationship" disabled />
+                                        </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_phone">Cell</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_phone" placeholder="Cell"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->contact : '-' }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_occupation">Occupation</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_occupation" placeholder="Occupation"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->occupation : '-' }}"
-                                            disabled />
-                                    </div>
-                                </div>
 
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Address</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Address"
-                                            value="{{ !is_null($nextOfKin) ? $nextOfKin->address : '-' }}" disabled />
+                                    <div class="row g-1 mb-1">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_cnic" placeholder="CNIC/Passport"
+                                                value="{{ cnicFormat($kin->cnic) }}" disabled />
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5" for="customer_phone">Cell</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_phone" placeholder="Cell" value="{{ $kin->contact }}"
+                                                disabled />
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                            <label class="form-label fs-5"
+                                                for="customer_occupation">Occupation</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_occupation" placeholder="Occupation"
+                                                value="{{ $kin->occupation }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-1 mb-1">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                            <label class="form-label fs-5" for="customer_address">Address</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                id="customer_address" placeholder="Address"
+                                                value="{{ $kin->address }}" disabled />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                @empty
+                @endforelse
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-end">
@@ -605,7 +602,7 @@
                                         <tbody>
                                             @php
                                                 $receipts = collect($salesPlan->receipts)
-                                                    ->sortBy('transaction_date')
+                                                    ->sortBy('created_date')
                                                     ->values()
                                                     ->all();
                                             @endphp
@@ -619,7 +616,7 @@
                                                     @endphp
                                                     <td>{{ $installmentsInfo }}</td>
 
-                                                    <td>{{ $receipt->created_at }}</td>
+                                                    <td>{!! editDateColumn($receipt->created_date) !!}</td>
                                                     <td>{{ number_format($receipt->amount_in_numbers, 2) }}</td>
                                                     <td>{{ $receipt->mode_of_payment }}</td>
                                                 </tr>

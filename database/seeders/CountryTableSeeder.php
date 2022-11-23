@@ -15,7 +15,12 @@ class CountryTableSeeder extends Seeder
     public function run()
     {
         (new Country())->create([
-            'name' => 'Pakistan'
+            'name' => 'Pakistan',
+            'short_label' => 'PK'
+        ]);
+        (new Country())->create([
+            'name' => 'Afghanistan',
+            'short_label' => 'AFG'
         ]);
     }
 }

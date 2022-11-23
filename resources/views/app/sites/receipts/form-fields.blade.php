@@ -18,8 +18,14 @@
                                         <option selected>Select Unit No</option>
                                         @foreach ($units as $row)
                                             @if (!$row->salesPlan->isEmpty())
+                                                @php
+                                                    $paidAmount = $row->salesPlan[0]['PaidorPartiallyPaidInstallments'];
+                                                    $paidAmount = collect($paidAmount)->sum('amount');
+                                                @endphp
                                                 @continue(isset($unit) && $unit->id == $row['id'])
-                                                <option value="{{ $row->id }}"
+                                                @continue(isset($paidAmount) && $paidAmount  == $row->salesPlan[0]['total_price'])
+
+                                                <option  value="{{ $row->id }}"
                                                     {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
                                                     {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
                                                     {{ $row->salesPlan[0]['stakeholder']['full_name'] }},
@@ -108,9 +114,9 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                                 <input type="text" readonly value="" class="form-control form-control-lg"
-                                    id="stackholder_father_name" placeholder="Father Name" />
+                                    id="stackholder_father_name" placeholder="Father / Husband Name" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">

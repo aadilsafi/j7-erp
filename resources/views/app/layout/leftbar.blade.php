@@ -125,13 +125,31 @@
             @endcan
 
             {{-- Setting Menu --}}
-            @canany(['sites.settings.custom-fields.index'])
+            @canany(['sites.settings.custom-fields.index', 'sites.settings.activity-logs.index',
+                'sites.settings.accounts.first-level.index', 'sites.settings.accounts.second-level.index',
+                'sites.settings.accounts.third-level.index', 'sites.settings.accounts.fourth-level.index',
+                'sites.settings.accounts.fifth-level.index', 'sites.settings.import',
+                'sites.stakeholders.importStakeholders', 'sites.stakeholders.kins.importStakeholders',
+                'sites.stakeholders.kins.importStakeholders', 'sites.floors.importFloors', 'sites.types.importTypes',
+                'sites.additional-costs.importAdcosts', 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks',
+                'sites.settings.import.images.index', 'sites.settings.countries.index', 'sites.settings.states.index',
+                'sites.settings.cities.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
                         <span class="menu-title text-truncate" data-i18n="Settings">Settings</span>
                     </a>
                     <ul class="menu-context">
+                        @can('sites.settings.activity-logs.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.activity-logs.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.activity-logs.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span class="menu-title text-truncate" data-i18n="Activity Logs">Activity Logs</span>
+                                </a>
+                            </li>
+                        @endcan
                         @can('sites.settings.custom-fields.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.settings.custom-fields.index') ? 'active' : null }}">
@@ -209,7 +227,7 @@
                             </ul>
                         </li>
                     </ul>
-                    {{-- <ul class="menu-content">
+                    <ul class="menu-content">
                         @can('sites.settings.import')
                             <li class="nav-item ">
                                 <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -220,19 +238,185 @@
                                 </a>
                                 <ul class="menu-content">
 
+                                    @can('sites.stakeholders.importStakeholders')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.stakeholders.importStakeholders') || request()->routeIs('sites.stakeholders.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.stakeholders.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='users'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Stakeholders</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.stakeholders.kins.importStakeholders')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.stakeholders.kins.importStakeholders') || request()->routeIs('sites.stakeholders.kins.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.stakeholders.kins.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='user'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Stakeholders Kins</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.floors.importFloors')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.importFloors', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='layers'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Floors">Floors</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.types.importTypes')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.types.importTypes') || request()->routeIs('sites.types.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.types.importTypes', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='menu'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Types</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.additional-costs.importAdcosts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.additional-costs.importAdcosts') || request()->routeIs('sites.additional-costs.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.additional-costs.importAdcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='dollar-sign'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Additional Costs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.floors.unitsImport.importUnits')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.floors.unitsImport.importUnits') || request()->routeIs('sites.floors.unitsImport.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.floors.unitsImport.importUnits', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-shop-window"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Types">Units</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    {{-- @can('sites.floors.SalesPlanImport.importSalesPlan')
+                                        <li class="nav-item ">
+                                            <a class="d-flex align-items-center" href="javascript:void(0)">
+
+                                                <span class="menu-title text-truncate">
+                                                    Sales Plan</span>
+                                            </a>
+                                            <ul class="menu-content">
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.SalesPlanImport.importSalesPlan') || request()->routeIs('sites.floors.SalesPlanImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.SalesPlanImport.importSalesPlan', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calculator"></i>
+                                                        <span class="menu-title text-truncate" data-i18n="Types">Sales Plan</span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                    @can('sites.floors.spadcostsImport.importspadcosts')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spadcostsImport.importspadcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-currency-dollar"></i>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Additional
+                                                            Costs</span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                    @can('sites.floors.spInstallmentsImport.ImportInstallments')
+                                                <li
+                                                    class="nav-item {{ request()->routeIs('sites.floors.spInstallmentsImport.ImportInstallments') || request()->routeIs('sites.floors.spInstallmentsImport.storePreviewInstallments') ? 'active' : null }}">
+                                                    <a class="d-flex align-items-center"
+                                                        href="{{ route('sites.floors.spInstallmentsImport.ImportInstallments', ['site_id' => encryptParams($site_id)]) }}">
+                                                        <i class="bi bi-calendar-date"></i>
+                                                        <span class="menu-title" data-i18n="Types">Sales Plan Installments
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                    @endcan
+                                            </ul>
+                                        </li> --}}
+                                    @can('sites.banks.importBanks')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.banks.importBanks') || request()->routeIs('sites.banks.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.banks.importBanks', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-bank2"></i>
+                                                <span class="menu-title" data-i18n="Types">Bank
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                     @can('sites.settings.import.images.index')
-                                        <li class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.import.images.index') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.settings.import.images.index', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='users'></i>
+                                                <i class="bi bi-images"></i>
                                                 <span class="menu-title text-truncate" data-i18n="Users">Images</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    {{-- @can('sites.receipts.importReceipts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.receipts.importReceipts') || request()->routeIs('sites.receipts.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.receipts.importReceipts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-wallet2"></i>
+                                                <span class="menu-title" data-i18n="Types">Receipts
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan --}}
+                                </ul>
+                            </li>
+                        @endcan
+                        @if (Auth::user()->can('sites.settings.countries.index'))
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">Locations</span>
+                                </a>
+                                <ul class="menu-content">
+                                    @can('sites.settings.countries.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.countries.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.countries.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='flag'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Countries</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('sites.settings.states.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.states.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.states.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-geo"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">States</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.settings.cities.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.cities.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.cities.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-map-fill"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Cities</span>
                                             </a>
                                         </li>
                                     @endcan
                                 </ul>
                             </li>
-                        @endcan
-                    </ul> --}}
+                        @endif
+                    </ul>
                 </li>
             @endcanany
 
@@ -252,6 +436,18 @@
                             Stakeholders</span>
                     </a>
                     <ul class="menu-content">
+                        @can('sites.blacklisted-stakeholders.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.blacklisted-stakeholders.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='users'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Blacklisted
+                                        Stakeholders</span>
+                                </a>
+                            </li>
+                        @endcan
+
                         @can('sites.stakeholders.index')
                             <li class="nav-item {{ request()->routeIs('sites.stakeholders.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
@@ -556,6 +752,16 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.accounts.recovery.inventory-aging')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='calendar'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Calender"> Aging Report</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </li>
                         @endcanany
@@ -579,16 +785,16 @@
                                 </a>
                             </li>
                         @endcan
-                        {{-- @can('sites.accounts.trial-balance.index')
-                        <li
-                            class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                            <a class="d-flex align-items-center"
-                                href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
-                               <i data-feather='dollar-sign'></i>
-                                <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
-                            </a>
-                        </li>
-                    @endcan --}}
+                        @can('sites.accounts.trial-balance.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='dollar-sign'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </li>
             @endcanany

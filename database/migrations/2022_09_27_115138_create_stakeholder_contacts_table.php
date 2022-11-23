@@ -16,6 +16,10 @@ return new class extends Migration
         Schema::create('stakeholder_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
+            $table->foreignId('country_id')->default(1)->nullable();
+            $table->foreignId('state_id')->default(0)->nullable();
+            $table->foreignId('city_id')->default(0)->nullable();
+            $table->string('nationality', 50)->default('pakistani');
             $table->string('full_name', 50)->nullable();
             $table->string('father_name', 50)->nullable();
             $table->string('occupation', 50)->nullable();
@@ -24,6 +28,7 @@ return new class extends Migration
             $table->string('ntn')->nullable();
             $table->string('contact', 20)->nullable();
             $table->string('address')->nullable();
+            $table->jsonb('optional_contact_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

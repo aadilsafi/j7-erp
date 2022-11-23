@@ -3,12 +3,12 @@
     <option value="">...No match,select a field...</option>
     @foreach ($db_fields as $k => $db_field)
         @continue(isset($spInstallment) && ($db_field == 'unit_short_label' || $db_field == 'stakeholder_cnic' || $db_field == 'total_price' || $db_field == 'down_payment_total' || $db_field == 'validity'))
-        @if ($db_field == 'cnic')
+        @if (in_array($db_field, $required_fields))
             <option class="text-danger" value="{{ $db_field }}" {{ $name == $db_field ? 'selected' : '' }}>
-                {{ $db_field }}<span class="text-danger">*</span></option>
+                {{ Str::title($db_field) }}<span class="text-danger">*</span></option>
         @else
             <option value="{{ $db_field }}" {{ $name == $db_field ? 'selected' : '' }}>
-                {{ $db_field }}
+                {{ Str::title($db_field) }}
             </option>
         @endif
     @endforeach

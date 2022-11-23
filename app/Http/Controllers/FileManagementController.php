@@ -19,6 +19,7 @@ use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Http\Requests\File\store;
 use App\Models\FileManagement;
 use App\Models\ModelTemplate;
+use App\Models\StakeholderNextOfKin;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class FileManagementController extends Controller
@@ -79,7 +80,7 @@ class FileManagementController extends Controller
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
-            'nextOfKin' => null,
+            'nextOfKin' => [],
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
             // 'customer_file' => FileManagement::where('unit_id', decryptParams($unit_id))->where('stakeholder_id', decryptParams($customer_id))->first(),
@@ -109,6 +110,15 @@ class FileManagementController extends Controller
         // if (isset($data['customer_file'])) {
         //     return view('app.sites.file-managements.files.viewFile', $data);
         // }
+        $kinsIds = json_decode($data['salesPlan']->kin_data);
+        if ($kinsIds > 0) {
+            foreach ($kinsIds as $key => $id) {
+                $kin = Stakeholder::find($id);
+                $data['nextOfKin'][$key] = $kin;
+                $relation = StakeholderNextOfKin::where('stakeholder_id', decryptParams($customer_id))->where('kin_id', $kin->id)->first();
+                $data['nextOfKin'][$key]['relation'] = $relation->relation != null ? $relation->relation : '';
+            }
+        }
         return view('app.sites.file-managements.files.create', $data);
     }
 
@@ -119,7 +129,7 @@ class FileManagementController extends Controller
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'customer' => (new Stakeholder())->find(decryptParams($customer_id)),
-            'nextOfKin' => null,
+            'nextOfKin' => [],
             'unit' => (new Unit())->with(['type', 'floor'])->find(decryptParams($unit_id)),
             'user' => auth()->user(),
             'customer_file' => FileManagement::find(decryptParams($file_id)),
@@ -137,6 +147,16 @@ class FileManagementController extends Controller
 
         if (isset($data['customer']) && $data['customer']->parent_id > 0) {
             $data['nextOfKin'] = (new Stakeholder())->find($data['customer']->parent_id);
+        }
+
+        $kinsIds = json_decode($data['salesPlan']->kin_data);
+        if ($kinsIds > 0) {
+            foreach ($kinsIds as $key => $id) {
+                $kin = Stakeholder::find($id);
+                $data['nextOfKin'][$key] = $kin;
+                $relation = StakeholderNextOfKin::where('stakeholder_id', decryptParams($customer_id))->where('kin_id', $kin->id)->first();
+                $data['nextOfKin'][$key]['relation'] = $relation->relation != null ? $relation->relation : '';
+            }
         }
 
         return view('app.sites.file-managements.files.preview', $data);

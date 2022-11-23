@@ -991,12 +991,23 @@ class UnitController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
+            $required = [
+                'floor_short_label',
+                'name',
+                'unit_short_label',
+                'gross_area',
+                'price_sqft',
+                'unit_type_slug',
+                'parent_unit_short_label'
+            ];
+
             $dataTable = new ImportUnitsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
+                'required_fields' => $required,
             ];
             return $dataTable->with($data)->render('app.sites.floors.units.importUnitsPreview', $data);
         }
@@ -1089,5 +1100,25 @@ class UnitController extends Controller
         TempUnit::query()->truncate();
 
         return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    /**
+     * Get unit details based on Unit Number (e.g 1F-01)
+     */
+    public function details(Request $request, $site_id, $floor_id)
+    {
+        $floor_id = decryptParams($floor_id);
+        $site_id = decryptParams($site_id);
+        $validator = \Validator::make($request->all(), [
+            'unit_no' => 'required|string',
+        ],
+        );
+
+        $validator->validate();
+
+        $unit_details = Unit::where('floor_id', $floor_id)->where('floor_unit_number', $request->unit_no)->first();
+
+        return response()->json($unit_details);
+
     }
 }

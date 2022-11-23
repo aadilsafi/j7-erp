@@ -66,7 +66,7 @@ class SalesPlanService implements SalesPlanInterface
     public function store($site_id, $floor_id, $unit_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
-
+            // dd($inputs);
             LogBatch::startBatch();
 
             $site = (new Site())->find($site_id);
@@ -84,7 +84,7 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
 
-            if($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+            if ($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
                 throw new GeneralException('Stakeholder CNIC already exists');
             }
 
@@ -183,36 +183,43 @@ class SalesPlanService implements SalesPlanInterface
                 'validity' => $inputs['sales_plan_validity'],
                 'comments' => $inputs['comments']['custom'],
                 'status' => false,
+                'created_date' => $inputs['created_date'] . date(' H:i:s'),
             ];
+            // dd(json_encode($stakeholderInput['next_of_kin']));
 
-            $salesPlan = $this->model()->create($sales_plan_data);
+            if (isset($stakeholderInput['next_of_kin'])) {
 
-            $additionalCosts = $inputs['unit']['additional_cost'];
-
-            foreach ($additionalCosts as $key => $value) {
-                if ($value['status'] == 'true') {
-                    $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
-
-                    $additionalCostData = [
-                        'sales_plan_id' => $salesPlan->id,
-                        'additional_cost_id' => $additonalCost->id,
-                        'percentage' => $value['percentage'],
-                        'amount' => str_replace(',', '', $value['total']),
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-
-                    (new SalesPlanAdditionalCost())->create($additionalCostData);
-                }
+                $sales_plan_data['kin_data'] = json_encode($stakeholderInput['next_of_kin']);
             }
 
+            $salesPlan = $this->model()->create($sales_plan_data);
+            if (isset($inputs['unit']['additional_cost'])) {
+                $additionalCosts = $inputs['unit']['additional_cost'];
+
+                foreach ($additionalCosts as $key => $value) {
+                    if ($value['status'] == 'true') {
+                        $additonalCost = (new AdditionalCost())->where('slug', $key)->first();
+
+                        $additionalCostData = [
+                            'sales_plan_id' => $salesPlan->id,
+                            'additional_cost_id' => $additonalCost->id,
+                            'percentage' => $value['percentage'],
+                            'amount' => str_replace(',', '', $value['total']),
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        (new SalesPlanAdditionalCost())->create($additionalCostData);
+                    }
+                }
+            }
             $downpaymentTotal = $inputs['unit']['downpayment']['total'];
             $installments = $inputs['installments']['table'];
             $installmentsData = [];
 
             $installmentsData[] = [
                 'sales_plan_id' => $salesPlan->id,
-                'date' => now(),
+                'date' => $inputs['created_date'] . date(' H:i:s'),
                 'details' => 'Downpayment',
                 'type' => 'downpayment',
                 'amount' => floatval(str_replace(',', '', $downpaymentTotal)),

@@ -22,13 +22,9 @@ return new class extends Migration
             $table->date('validity');
             $table->string('type');
             $table->string('label')->nullable();
-            $table->date('due_date');
             $table->integer('installment_no');
             $table->float('total_amount');
-            $table->float('paid_amount');
-            $table->float('remaining_amount')->nullable();
-            $table->date('last_paid_at')->nullable();
-            $table->string('status');
+            $table->date('due_date')->nullable();
             $table->timestamps();
         });
     }

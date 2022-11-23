@@ -10,11 +10,10 @@
                         <select id="dealer_id" @if (isset($edit_unit)) disabled @endif
                             class="select2 form-select  @error('unit_id') is-invalid @enderror" name="dealer_id"
                             onchange="getData(this.options[this.selectedIndex].value)">
-                            <option>Select Dealer</option>
+                            <option value="0">Select Dealer</option>
                             @foreach ($stakeholders as $row)
-                                 @continue ($row->stakeholder_types[2]->status == 0)
-                                <option value="{{ $row->id }}">
-                                    {{ $row->full_name }} ( {{ cnicFormat($row->cnic) }})
+                                <option value="{{ $row->stakeholder->id }}">
+                                    {{ $row->stakeholder->full_name }} ( {{ cnicFormat($row->stakeholder->cnic) }})
                                 </option>
                             @endforeach
                         </select>
@@ -61,7 +60,7 @@
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
-                            
+
                                 <table class="table table-hover table-striped table-borderless" id="installments_table"
                                     style="position: relative;">
                                     <thead style="position: sticky; top: 0; z-index: 10;">
@@ -73,7 +72,7 @@
                                             <th>Unit Name</th>
                                             <th>Unit Number</th>
                                             <th>Unit Area</th>
-                                            <th>Unit Price</th>
+                                            {{-- <th>Unit Price</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody id="dynamic_unit_rows">
@@ -147,16 +146,16 @@
 
 @if (isset($customFields) && count($customFields) > 0)
 
-<div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
 
-    <div class="card-body">
-    
-        <div class="row mb-1 g-1">
-            @forelse ($customFields as $field)
-            {!! $field !!}
-            @empty
-            @endforelse
+        <div class="card-body">
+
+            <div class="row mb-1 g-1">
+                @forelse ($customFields as $field)
+                    {!! $field !!}
+                @empty
+                @endforelse
+            </div>
         </div>
     </div>
-</div>
 @endif

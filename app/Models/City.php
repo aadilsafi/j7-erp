@@ -15,4 +15,8 @@ class City extends Model
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
+    public function state(){
+        return $this->belongsTo(State::class);
+    }
 }

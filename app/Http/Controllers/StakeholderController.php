@@ -65,7 +65,7 @@ class StakeholderController extends Controller
             $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
-            // dd($customFields);
+           
             $emtyNextOfKin[0]['id'] = 0;
             $emtyNextOfKin[0]['kin_id'] = 0;
             $emtyNextOfKin[0]['relation'] = '';
@@ -101,8 +101,8 @@ class StakeholderController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-
-                $record = $this->stakeholderInterface->store($site_id, $inputs);
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+                $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
@@ -136,6 +136,10 @@ class StakeholderController extends Controller
         $id = decryptParams($id);
         try {
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin']);
+           
+            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');
@@ -154,6 +158,8 @@ class StakeholderController extends Controller
                     'state' => State::all(),
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                     'emtyNextOfKin' => $emtyNextOfKin,
+                    'customFields' => $customFields,
+
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
                 // dd($data);

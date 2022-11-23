@@ -386,7 +386,7 @@
             var validator = $("#stakeholderForm").validate({
 
                 errorClass: 'is-invalid text-danger',
-                errorElement: "div",
+                errorElement: "span",
                 wrapper: "div",
                 submitHandler: function(form) {
                     form.submit();

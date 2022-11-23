@@ -30,9 +30,10 @@
             background-color: #e3e0fd;
         }
 
-        .iti{
+        .iti {
             width: 100%;
         }
+
         .intl-tel-input {
             display: table-cell;
         }
@@ -53,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                            width: calc(20% - 0.5em);
-                                                                                                                                                                        } */
+                                                                                                                                                                                width: calc(20% - 0.5em);
+                                                                                                                                                                            } */
     </style>
 @endsection
 
@@ -90,6 +91,7 @@
                     'city' => $city,
                     'state' => $state,
                     'emtyNextOfKin' => $emtyNextOfKin,
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 

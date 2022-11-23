@@ -137,9 +137,9 @@ class StakeholderController extends Controller
         try {
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin']);
            
-            $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+            $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
-            $customFields = generateCustomFields($customFields);
+            $customFields = generateCustomFields($customFields, true);
 
             if ($stakeholder && !empty($stakeholder)) {
                 $images = $stakeholder->getMedia('stakeholder_cnic');

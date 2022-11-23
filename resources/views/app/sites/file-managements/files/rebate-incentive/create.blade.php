@@ -22,6 +22,22 @@
         .hideDiv {
             display: none;
         }
+
+        .onlineValueDiv {
+            display: none;
+        }
+
+        .bankDiv {
+            display: none;
+        }
+
+        .chequeValueDiv {
+            display: none;
+        }
+
+        #modeOfPaymentDiv {
+            display: none;
+        }
     </style>
 @endsection
 
@@ -52,6 +68,8 @@
                     'dealer_data' => $dealer_data,
                     'rebate_files' => $rebate_files,
                     'customFields' => $customFields,
+                    'banks' => $banks,
+                    'chequebanks' => $banks,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -341,8 +359,52 @@
                 form.submit();
             }
         });
+        $(document).ready(function() {
 
+            $(".other-mode-of-payment").click(function() {
+                $('#otherValueDiv').show();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
+            });
 
+            $(".cheque-mode-of-payment").click(function() {
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').show();
+                $('.bankDiv').show();
+            });
+
+            $(".online-mode-of-payment").click(function() {
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').show();
+                $('#chequeValueDiv').hide();
+                $('.bankDiv').show();
+            });
+
+            $(".mode-of-payment").click(function() {
+                $('#otherValueDiv').hide();
+                $('#onlineValueDiv').hide();
+                $('#chequeValueDiv').hide();
+                $('.bankDiv').hide();
+            });
+
+            $(".other-purpose").click(function() {
+                $('#otherPurposeValueDiv').show();
+                $('#installmentValueDiv').hide();
+            });
+
+            $(".installment-purpose").click(function() {
+                $('#installmentValueDiv').show();
+                $('#otherPurposeValueDiv').hide();
+            });
+
+            $(".purpose").click(function() {
+                $('#otherPurposeValueDiv').hide();
+                $('#installmentValueDiv').hide();
+            });
+
+        });
 
         $("#saveButton").click(function() {
             $("#rebateForm").submit();

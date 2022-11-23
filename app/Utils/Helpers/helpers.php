@@ -284,17 +284,13 @@ if (!function_exists('base64ToImage')) {
 if (!function_exists('account_number_format')) {
     function account_number_format($account_number): string
     {
-        $first_6_number = substr($account_number,0,6);
-        $code = wordwrap($first_6_number , 2 , '-' , true );
-        if(Str::length($account_number) >6)
-        {
-           $code = $code.'-'.$next_4_number = substr($account_number,6,4);
-
+        $first_6_number = substr($account_number, 0, 6);
+        $code = wordwrap($first_6_number, 2, '-', true);
+        if (Str::length($account_number) > 6) {
+            $code = $code . '-' . $next_4_number = substr($account_number, 6, 4);
         }
-        if(Str::length($account_number) >10)
-        {
-            $code = $code.'-'. $after_10_number = substr($account_number,10);
-
+        if (Str::length($account_number) > 10) {
+            $code = $code . '-' . $after_10_number = substr($account_number, 10);
         }
         return $code;
     }
@@ -640,7 +636,7 @@ if (!function_exists('getMaxUnitNumber')) {
 }
 
 if (!function_exists('getModelsClasses')) {
-    function getModelsClasses(string $dir, array $excepts = null)
+    function getModelsClasses(string $dir, array $excepts = null, array $includes = null)
     {
         if ($excepts === null) {
             $excepts = [
@@ -691,8 +687,18 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Notification',
                 'App\Models\MultiValue',
                 'App\Models\SiteOwner',
-                'TempStakeholder',
-                'StakeholderNextOfKin',
+                'App\Models\TempStakeholder',
+                'App\Models\StakeholderNextOfKin',
+                'App\Models\TempUnit',
+                'App\Models\TempUnitType',
+                'App\Models\TempSalesPlanAdditionalCost',
+                'App\Models\TempSalePlanInstallment',
+                'App\Models\TempReceipt',
+            ];
+        }
+        if ($includes === null) {
+            $includes = [
+                'App\Models\Stakeholder',
             ];
         }
         $customFieldModels = array();
@@ -703,7 +709,7 @@ if (!function_exists('getModelsClasses')) {
                     $customFieldModels[$value] = getModelsClasses($dir . DIRECTORY_SEPARATOR . $value);
                 } else {
                     $fullClassName = "App\\Models\\" . basename($value, '.php');
-                    if (!in_array($fullClassName, $excepts)) {
+                    if (in_array($fullClassName, $includes)) {
                         $customFieldModels[$fullClassName] = Str::snake(basename($value, '.php'));
                     }
                 }
@@ -1012,7 +1018,7 @@ if (!function_exists('addAccountCodes')) {
         )->get();
 
         $account_code = $starting_code;
-     
+
         if (isset($account_head) && count($account_head) > 0) {
             $last_account_head = collect($account_head)->last();
             // dd($last_account_head);

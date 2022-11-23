@@ -12,6 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
 @endsection
 
 @section('custom-css')
@@ -30,6 +31,22 @@
 
         #div-next-of-kin {
             display: none;
+        }
+
+        .iti {
+            width: 100%;
+        }
+
+        .intl-tel-input {
+            display: table-cell;
+        }
+
+        .intl-tel-input .selected-flag {
+            z-index: 4;
+        }
+
+        .intl-tel-input .country-list {
+            z-index: 5;
         }
     </style>
 @endsection
@@ -117,6 +134,10 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
+    {{-- <script src="/vendors/formvalidation/dist/js/FormValidation.min.js"></script>
+    <script src="/vendors/formvalidation/dist/js/plugins/InternationalTelephoneInput.min.js"></script> --}}
 @endsection
 
 @section('custom-js')
@@ -148,6 +169,22 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            var input = document.querySelector("#contact");
+            intl = window.intlTelInput(input, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+
+
+
+            $('#contact').on('change', function() {
+
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            })
 
             $("#city_id").empty()
             $('#state_id').empty();
@@ -160,11 +197,9 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             }).change(function() {
-                showBlockUI('#stakeholderForm');
 
                 $("#city_id").empty()
                 $('#state_id').empty();
-
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -342,7 +377,12 @@
                 return cnicRepeated === 1 || cnicRepeated === 0;
 
             }, "Contact Person CNIC can't be duplicated");
+            $.validator.addMethod("ContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                return intl.isValidNumber();
 
+            }, "In Valid number");
             var validator = $("#stakeholderForm").validate({
 
                 errorClass: 'is-invalid text-danger',

@@ -26,6 +26,7 @@ class StakeholderContact extends Model
         'contact',
         'address',
         'nationality',
+        'countryDetails',
     ];
 
     public function getActivitylogOptions(): LogOptions

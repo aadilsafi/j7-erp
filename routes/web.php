@@ -48,6 +48,7 @@ use App\Http\Controllers\{
     FifthLevelAccountController,
     StakeholdersImportControler,
     StateController,
+    LogController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -281,6 +282,12 @@ Route::group([
                             Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
                         });
                     });
+
+                    // Logs Route
+                    Route::group(['prefix' => 'activity-logs', 'as' => 'activity-logs.'], function () {
+                        Route::get('/', [LogController::class, 'index'])->name('index');
+                    });
+
                 });
 
                 //Additional Costs Routes

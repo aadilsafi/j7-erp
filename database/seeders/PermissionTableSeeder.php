@@ -2231,6 +2231,14 @@ class PermissionTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+            // Logs Permission
+            [
+                'name' => 'sites.settings.activity-logs.index',
+                'show_name' => 'Can View Activity Logs',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
 

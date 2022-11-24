@@ -110,13 +110,13 @@ class SalesPlanController extends Controller
     {
         // dd($request->all());
         try {
-            $validator = Validator::make($request->all(),[
+            $validator = Validator::make($request->all(), [
                 'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
-            ],[
+            ], [
                 'stackholder.cnic' => 'This CNIC is BlackListed.'
             ]);
 
-            if($validator->fails()) {
+            if ($validator->fails()) {
                 return Redirect::back()->withErrors($validator);
             }
             $inputs = $request->input();

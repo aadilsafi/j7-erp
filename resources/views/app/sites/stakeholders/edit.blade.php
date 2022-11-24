@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                                                                            } */
+                                                                                                                                                                                                width: calc(20% - 0.5em);
+                                                                                                                                                                                            } */
     </style>
 @endsection
 
@@ -165,12 +165,28 @@
             $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
         @endif
 
+        var inputOptional = document.querySelector("#optional_contact");
+        intlOptional = window.intlTelInput(inputOptional, ({
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+            preferredCountries: ["pk"],
+            separateDialCode: true,
+            autoPlaceholder: 'polite',
+            formatOnDisplay: true,
+            nationalMode: true
+        }));
+        @if (is_null($stakeholder->optional_contact))
+            intlOptional.setCountry('pk');
+        @else
+            var OptionalselectdCountry = {!! $stakeholder->OptionalCountryDetails != null ? $stakeholder->OptionalCountryDetails : null !!}
+            intlOptional.setCountry(OptionalselectdCountry['iso2']);
+        @endif
+        inputOptional.addEventListener("countrychange", function() {
+            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+        });
+        $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+
+
         $(document).ready(function() {
-            $('#contact').on('change', function() {
-
-                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            })
-
 
             input.addEventListener("countrychange", function() {
                 $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
@@ -271,9 +287,37 @@
                 return intl.isValidNumber();
 
             }, "In Valid number");
-
+            $.validator.addMethod("OPTContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                // if(value != '' )
+                if (value.length > 0) {
+                    return intlOptional.isValidNumber();
+                } else {
+                    return true;
+                }
+            }, "In Valid number");
             var validator = $("#stakeholderForm").validate({
-
+                rules: {
+                    'mailing_address': {
+                        required: true,
+                    },
+                    'address': {
+                        required: true,
+                    },
+                    'optional_contact': {
+                        required: false,
+                    },
+                    'full_name': {
+                        required: true,
+                    },
+                    'father_name': {
+                        required: true,
+                    },
+                    'cnic': {
+                        required: true,
+                    }
+                },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",

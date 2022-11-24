@@ -826,10 +826,11 @@ if (!function_exists('generateSelect')) {
 }
 
 if (!function_exists('generateRadio')) {
-    function generateRadio($id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateRadio($isEditMode,$id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
 
         $element = view('app.partial-components.radio', [
+            'isEditMode' => $isEditMode,
             'id' => $id,
             'name' => $name,
             'label' => $label,
@@ -846,11 +847,12 @@ if (!function_exists('generateRadio')) {
 }
 
 if (!function_exists('generateCustomFields')) {
-    function generateCustomFields($customFields)
+    function generateCustomFields($customFields, $isEditMode =false)
     {
         $customFieldHTML = [];
 
         foreach ($customFields as $customField) {
+                // dd($customField->modelable);
             switch ($customField->type) {
                 case 'checkbox':
                     $customFieldHTML[] = generateCheckbox(
@@ -935,6 +937,7 @@ if (!function_exists('generateCustomFields')) {
                     break;
                 case 'radio':
                     $customFieldHTML[] = generateRadio(
+                        $isEditMode,
                         $customField->slug,
                         $customField->slug,
                         $customField->name,

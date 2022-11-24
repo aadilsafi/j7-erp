@@ -98,7 +98,10 @@ class SalesPlanService implements SalesPlanInterface
                 'cnic' => $stakeholderInput['cnic'],
                 'contact' => $stakeholderInput['contact'],
                 'countryDetails' => $stakeholderInput['countryDetails'],
+                'optional_contact' => $stakeholderInput['optional_contact'],
+                'OptionalCountryDetails' => $stakeholderInput['OptionalCountryDetails'],
                 'address' => $stakeholderInput['address'],
+                'mailing_address' => $stakeholderInput['mailing_address'],
                 'comments' => $stakeholderInput['comments'],
             ];
 

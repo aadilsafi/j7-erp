@@ -108,7 +108,7 @@
             <input type="hidden" name="countryDetails" id="countryDetails">
 
             <div class="col-lg-6 col-md-6 col-sm-6">
-                <label class="form-label fs-5" for="contact">Optional Contact #
+                <label class="form-label fs-5" for="contact">Optional Contact # </label>
                     <input type="tel"
                         class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
                         id="optional_contact" name="optional_contact" placeholder=""

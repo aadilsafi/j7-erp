@@ -67,7 +67,7 @@
 
                                 @php
                                     $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-
+                                    
                                     $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
                                 @endphp
 
@@ -409,39 +409,57 @@
 
         <div class="row mb-1">
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
                 <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
                     name="stackholder[ntn]" placeholder="NTN" value="{{ old('stackholder.ntn') }}" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_cnic">CNIC <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
                     name="stackholder[cnic]" placeholder="CNIC" value="{{ old('stackholder.cnic') }}" />
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_contact">Contact <span
                         class="text-danger">*</span></label>
                 <input type="tel" class="form-control form-control-lg ContactNoError" id="stackholder_contact"
                     name="stackholder[contact]" placeholder="" value="{{ old('stackholder.contact') }}" />
             </div>
+            <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+            <div class="col-lg-3 col-md-3 col-sm-12">
+                <label class="form-label fs-5" for="contact">Optional Contact # </label>
+                <input type="tel"
+                    class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
+                    id="optional_contact" name="stackholder[optional_contact]" placeholder=""
+                    value="{{ old('stackholder.optional_contact') }}" />
+                @error('optional_contact')
+                    <div class="invalid-feedback ">{{ $message }}</div>
+                @enderror
+            </div>
+            <input type="hidden" name="stackholder[OptionalCountryDetails]" id="OptionalCountryDetails">
         </div>
-        <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
-
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_address">Address <span
                         class="text-danger">*</span></label>
                 <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                    placeholder="Address" rows="5"></textarea>
+                    placeholder="Address" rows="4"></textarea>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                        class="text-danger">*</span></label>
+                <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
+                    placeholder="Mailing Address" rows="4"></textarea>
+            </div>
+        </div>
+        <div class="row mb-1">
+            <div class="col-lg- col-md- col-sm-12 position-relative">
                 <label class="form-label fs-5" for="stackholder_comments">Comments</label>
                 <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
-                    placeholder="Comments" rows="5"></textarea>
+                    placeholder="Comments" rows="4"></textarea>
             </div>
         </div>
 

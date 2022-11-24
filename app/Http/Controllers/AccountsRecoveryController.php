@@ -125,20 +125,20 @@ class AccountsRecoveryController extends Controller
         $to_date = $request->to_date;
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
-        $stakeholder_id = $request->stakeholder_id;
-        $installment_id = $request->installment_id;
+        $sales_plan_id = $request->stakeholder_id;
+        $details = $request->installment_id;
         $salesPlan_unit_id = $request->salesPlan_unit_id;
 
-        $installment = SalesPlanInstallments::when(($installment_id), function ($query) use ($installment_id) {
-            $query->where('details', $installment_id);
+        $installment = SalesPlanInstallments::when(($details), function ($query) use ($details) {
+            $query->where('details', $details);
             return $query;
         })
             ->when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
                 $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
                 return $query;
             })
-            ->when(($stakeholder_id), function ($query) use ($stakeholder_id) {
-                $query->where('sales_plan_id', $stakeholder_id);
+            ->when(($sales_plan_id), function ($query) use ($sales_plan_id) {
+                $query->where('sales_plan_id', $sales_plan_id);
                 return $query;
             })
             // ->with(['salesPlan.unit'=>function($query) use ($salesPlan_unit_id){

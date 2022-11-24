@@ -863,4 +863,27 @@ class ReceiptController extends Controller
             return apiErrorResponse($ex->getMessage());
         }
     }
+
+    public function revertPayment(Request $request, $site_id)
+    {
+        try {
+            $site_id = decryptParams($site_id);
+            if (!request()->ajax()) {
+                if ($request->has('chkRole')) {
+
+                    $record = $this->receiptInterface->revertPayment($site_id, $request->chkRole);
+
+                    if ($record) {
+                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess('Data Reverted');
+                    } else {
+                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                    }
+                }
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
 }

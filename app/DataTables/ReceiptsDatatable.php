@@ -83,6 +83,7 @@ class ReceiptsDatatable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
+        $revertPermission =  Auth::user()->hasPermissionTo('sites.receipts.revert-payment');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
         $importPermission =  Auth::user()->hasPermissionTo('sites.receipts.importReceipts');
 
@@ -96,6 +97,7 @@ class ReceiptsDatatable extends DataTable
             ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+
         ];
 
         if ($importPermission) {
@@ -117,6 +119,14 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
+        if ($revertPermission) {
+            $revertButton =  Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
+                    'onclick' => 'revertPayment()',
+                ]);
+            array_unshift($buttons, $revertButton);
+        }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')
@@ -127,6 +137,8 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
+
+
 
         if ($selectedActivePermission) {
             $buttons[] = Button::raw('delete-selected')

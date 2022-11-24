@@ -44,7 +44,11 @@ class ReceiptService implements ReceiptInterface
             $data = $requested_data['receipts'];
 
             $amount_received = $requested_data['amount_received'];
-
+            $discounted_amount = $requested_data['discounted_amount'];
+            if(isset($discounted_amount)){
+                $amount_received = (float)$discounted_amount + (float)$amount_received;
+                $amount_received = (string)$amount_received;
+            }
             for ($i = 0; $i < count($data); $i++) {
 
                 $unit = Unit::find($data[$i]['unit_id']);
@@ -111,14 +115,18 @@ class ReceiptService implements ReceiptInterface
                     'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 ];
 
-                if ($amount_received > $data[$i]['amount_in_numbers']) {
+                if(isset($discounted_amount)){
+                    $receiptData['discounted_amount'] = $discounted_amount;
+                }
+
+                if ($requested_data['amount_received'] > $data[$i]['amount_in_numbers']) {
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
 
-                    $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
+                    $remaining_amount = $requested_data['amount_received'] - $data[$i]['amount_in_numbers'];
 
                     $data = [
                         'unit_name'  => $unit->name,
@@ -148,11 +156,12 @@ class ReceiptService implements ReceiptInterface
                                 'comments' => $draftReceiptData->comments,
                                 'purpose' => 'installments',
                                 'installment_number' => '1',
-                                'amount_received' => $requested_data['amount_received'],
+                                'amount_received' => $amount_received,
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
                                 'bank_id' => $draftReceiptData->bank_id,
                                 'created_date' => $draftReceiptData->created_date,
+                                'discounted_amount' => $draftReceiptData->discounted_amount,
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
@@ -360,6 +369,24 @@ class ReceiptService implements ReceiptInterface
     {
         $this->model()->whereIn('id', $id)->delete();
 
+        return true;
+    }
+
+    public function revertPayment($site_id, $id)
+    {
+        $data = [
+            'status' => 3,
+        ];
+
+        for ($i = 0; $i < count($id); $i++) {
+            if ($this->model()->find($id[$i])->status == 0) {
+                // $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+            }
+            $this->model()->where([
+                'site_id' => $site_id,
+                'id' => $id[$i],
+            ])->update($data);
+        }
         return true;
     }
 

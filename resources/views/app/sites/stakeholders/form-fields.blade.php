@@ -51,7 +51,7 @@
         @endif
         <div class="row mb-1">
             <input type="hidden" value="0" name="parent_id">
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="full_name">Full Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('full_name') is-invalid @enderror"
                     id="full_name" name="full_name" placeholder="Stakeholder Name"
@@ -61,7 +61,7 @@
                 @enderror
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="father_name">Father / Husband Name <span
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('father_name') is-invalid @enderror"
@@ -71,21 +71,8 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="occupation">Occupation </label>
-                <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
-                    id="occupation" name="occupation" placeholder="Occupation"
-                    value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
-                @error('occupation')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
         </div>
-
         <div class="row mb-1">
-
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="cnic">CNIC <span class="text-danger">*</span></label>
                 <input type="text" class="cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
@@ -95,20 +82,6 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
-
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <label class="form-label fs-5 col-lg-6 col-md-6 col-sm-6" for="contact">Contact <span class="text-danger">*</span></label>
-                <input type="tel"
-                    class="form-control form-control-md ContactNoError @error('contact') is-invalid @enderror"
-                    id="contact" name="contact" placeholder=""
-                    value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" />
-                @error('contact')
-                    <div class="invalid-feedback ">{{ $message }}</div>
-                @enderror
-            </div>
-            <input type="hidden" name="countryDetails" id="countryDetails">
-        </div>
-        <div class="row mb-1">
 
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="ntn">NTN </label>
@@ -120,12 +93,49 @@
                 @enderror
             </div>
 
+        </div>
+        <div class="row mb-1">
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label class="form-label fs-5" for="contact">Contact # <span class="text-danger">*</span></label>
+                <input type="tel"
+                    class="form-control form-control-md ContactNoError @error('contact') is-invalid @enderror"
+                    id="contact" name="contact" placeholder=""
+                    value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" />
+                @error('contact')
+                    <div class="invalid-feedback ">{{ $message }}</div>
+                @enderror
+            </div>
+            <input type="hidden" name="countryDetails" id="countryDetails">
+
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <label class="form-label fs-5" for="contact">Optional Contact #
+                    <input type="tel"
+                        class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
+                        id="optional_contact" name="optional_contact" placeholder=""
+                        value="{{ isset($stakeholder) ? $stakeholder->optional_contact : old('optional_contact') }}" />
+                    @error('optional_contact')
+                        <div class="invalid-feedback ">{{ $message }}</div>
+                    @enderror
+            </div>
+            <input type="hidden" name="OptionalCountryDetails" id="OptionalCountryDetails">
+        </div>
+        <div class="row mb-1">
+
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="designation">Designation </label>
                 <input type="text" class="form-control form-control-md @error('designation') is-invalid @enderror"
                     id="designation" name="designation" placeholder="Designation"
                     value="{{ isset($stakeholder) ? $stakeholder->designation : old('designation') }}" />
                 @error('designation')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                <label class="form-label fs-5" for="occupation">Occupation </label>
+                <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
+                    id="occupation" name="occupation" placeholder="Occupation"
+                    value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
+                @error('occupation')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -174,8 +184,7 @@
                 @enderror
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="occupation">Nationality <span
-                        class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="occupation">Nationality </label>
                 <input type="text" class="form-control form-control-md @error('occupation') is-invalid @enderror"
                     id="nationality" name="nationality" placeholder="Nationality"
                     value="{{ isset($stakeholder) ? $stakeholder->nationality : old('nationality') }}" />
@@ -197,6 +206,18 @@
                 @enderror
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                        class="text-danger">*</span></label>
+                <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing_address" id="mailing_address" rows="3"
+                    placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
+                @error('mailing_address')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
+        <div class="row mb-1">
+
+            <div class="col-lg col-md col-sm position-relative">
                 <label class="form-label fs-5" for="comments">Comments</label>
                 <textarea class="form-control @error('comments') is-invalid @enderror" name="comments" id="comments"
                     rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>

@@ -98,6 +98,7 @@ class StakeholderController extends Controller
     public function store(stakeholderStoreRequest $request, $site_id)
     // public function store(Request $request, $site_id)
     {
+        // dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();

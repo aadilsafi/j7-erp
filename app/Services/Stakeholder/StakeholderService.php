@@ -65,14 +65,17 @@ class StakeholderService implements StakeholderInterface
                 'cnic' => $inputs['cnic'],
                 'ntn' => $inputs['ntn'],
                 'contact' => $inputs['contact'],
+                'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
                 'address' => $inputs['address'],
+                'mailing_address' => $inputs['mailing_address'],
                 'parent_id' => $inputs['parent_id'],
                 'comments' => $inputs['comments'],
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                'nationality' => $inputs['nationality'],
-                'countryDetails' => $inputs['countryDetails'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
             ];
             // dd($inputs);
 
@@ -128,8 +131,8 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->contacts()->saveMany($contacts);
             }
 
-            // // customer ar code 1020201001 for customer 1 receivable Customer Code
-            // // customer ap code 2020101001 for customer 1 payable Customer Code
+            // customer ar code 1020201001 for customer 1 receivable Customer Code
+            // customer ap code 2020101001 for customer 1 payable Customer Code
 
             // $customerStakeholderType = StakeholderType::where('type','C')->get();
             // $lastExistedCustomerCode = collect($customerStakeholderType)->last();
@@ -169,7 +172,6 @@ class StakeholderService implements StakeholderInterface
             //     $payableVendorCode = 2020103003;
             // }
 
-
             //  // Dealer only payable code
             // // dealer ap code 2020103001 for dealer 1 payable vendor code
             // $dealerStakeholderType = StakeholderType::where('type','D')->get();
@@ -183,9 +185,6 @@ class StakeholderService implements StakeholderInterface
             // else{
             //     $payableDealerCode = 2020102003;
             // }
-
-
-
 
             $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
             $stakeholderTypeData = [];
@@ -270,8 +269,11 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                'nationality' => $inputs['nationality'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
                 'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
+                'mailing_address' => $inputs['mailing_address'],
             ];
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {

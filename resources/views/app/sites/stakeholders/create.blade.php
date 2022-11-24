@@ -182,7 +182,23 @@
             input.addEventListener("countrychange", function() {
                 $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             });
-            
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+
+            var inputOptional = document.querySelector("#optional_contact");
+            intlOptional = window.intlTelInput(inputOptional, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+
+            inputOptional.addEventListener("countrychange", function() {
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+            });
+            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+
             $("#city_id").empty()
             $('#state_id').empty();
 
@@ -380,8 +396,38 @@
                 return intl.isValidNumber();
 
             }, "In Valid number");
-            var validator = $("#stakeholderForm").validate({
 
+            $.validator.addMethod("OPTContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                // if(value != '' )
+                if(value.length > 0){
+                    return intlOptional.isValidNumber();
+                }else{
+                    return true;
+                }
+            }, "In Valid number");
+            var validator = $("#stakeholderForm").validate({
+                rules: {
+                'mailing_address': {
+                    required: true,
+                },
+                'address': {
+                    required: true,
+                },
+                'optional_contact': {
+                    required: false,
+                },
+                'full_name': {
+                    required: true,
+                },
+                'father_name': {
+                    required: true,
+                },
+                'cnic': {
+                    required: true,
+                }
+            },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",

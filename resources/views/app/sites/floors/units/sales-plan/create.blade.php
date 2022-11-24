@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
+
 @endsection
 
 @section('custom-css')
@@ -181,6 +183,8 @@
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -198,6 +202,18 @@
 
         $(document).ready(function() {
 
+            var input = document.querySelector("#stackholder_contact");
+            intl = window.intlTelInput(input, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+            input.addEventListener("countrychange", function() {
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            });
             var e = $("#stackholders");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -244,6 +260,17 @@
                             $('#stackholder_contact').val(stakeholderData.contact);
                             $('#stackholder_address').text(stakeholderData.address);
                             $('#stackholder_comments').text(stakeholderData.comments);
+                            var countryDetails = stakeholderData.countryDetails;
+                            if (countryDetails == null) {
+                                intl.setCountry('pk');
+
+                            } else {
+                                intl.setCountry(countryDetails['iso2']);
+
+                            }
+
+                            $('#countryDetails').val(JSON.stringify(intl
+                            .getSelectedCountryData()))
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -639,6 +666,12 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
+        $.validator.addMethod("ContactNoError", function(value, element) {
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            return intl.isValidNumber();
+
+        }, "In Valid number");
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,
             rules: {
@@ -729,7 +762,7 @@
             // validClass: "is-valid",
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
-            wrapper: "div",
+            // wrapper: "div",
             submitHandler: function(form) {
                 form.submit();
             }

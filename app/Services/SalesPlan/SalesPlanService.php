@@ -97,6 +97,7 @@ class SalesPlanService implements SalesPlanInterface
                 'ntn' => $stakeholderInput['ntn'],
                 'cnic' => $stakeholderInput['cnic'],
                 'contact' => $stakeholderInput['contact'],
+                'countryDetails' => $stakeholderInput['countryDetails'],
                 'address' => $stakeholderInput['address'],
                 'comments' => $stakeholderInput['comments'],
             ];

@@ -179,13 +179,10 @@
                 nationalMode: true
             }));
 
-
-
-            $('#contact').on('change', function() {
-
+            input.addEventListener("countrychange", function() {
                 $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            })
-
+            });
+            
             $("#city_id").empty()
             $('#state_id').empty();
 

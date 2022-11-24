@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                                                                            } */
+                                                                                                                                                                                    width: calc(20% - 0.5em);
+                                                                                                                                                                                } */
     </style>
 @endsection
 
@@ -166,11 +166,6 @@
         @endif
 
         $(document).ready(function() {
-            $('#contact').on('change', function() {
-
-                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            })
-
 
             input.addEventListener("countrychange", function() {
                 $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))

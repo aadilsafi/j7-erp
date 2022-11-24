@@ -424,10 +424,12 @@
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="stackholder_contact">Contact <span
                         class="text-danger">*</span></label>
-                <input type="number" class="form-control form-control-lg" id="stackholder_contact"
-                    name="stackholder[contact]" placeholder="Contact" value="{{ old('stackholder.contact') }}" />
+                <input type="tel" class="form-control form-control-lg ContactNoError" id="stackholder_contact"
+                    name="stackholder[contact]" placeholder="" value="{{ old('stackholder.contact') }}" />
             </div>
         </div>
+        <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">

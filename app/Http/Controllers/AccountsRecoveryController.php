@@ -22,6 +22,7 @@ use App\Services\Interfaces\FloorInterface;
 use App\Services\Interfaces\UnitTypeInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\User\Interface\UserInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -128,50 +129,40 @@ class AccountsRecoveryController extends Controller
         $installment_id = $request->installment_id;
         $salesPlan_unit_id = $request->salesPlan_unit_id;
 
-        $account_sales_plan = SalesPlan::with(['installments' => function ($query) use ($installment_id, $start_date, $end_date) {
-            if ($installment_id) {
-
-                $query->where('details', 'LIKE', '%' . $installment_id . '%');
-            } elseif ($start_date && $end_date) {
-
-                $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
-            }
-
+        $installment = SalesPlanInstallments::when(($installment_id), function ($query) use ($installment_id) {
+            $query->where('details', $installment_id);
             return $query;
-        }, 'unit' => function ($query) use ($salesPlan_unit_id) {
-            if ($salesPlan_unit_id > 0) {
-                $query->where('id', $salesPlan_unit_id);
-            }
-            return $query;
-        }, 'stakeholder' => function ($query) use ($stakeholder_id) {
-            if ($stakeholder_id > 0) {
-
-                $query->where('id', $stakeholder_id);
-            }
-            return $query;
-        }])->get();
-
-        $Stakeholder = Stakeholder::when(($stakeholder_id), function ($query) use ($stakeholder_id) {
-            $query->where('id', $stakeholder_id);
-            return $query;
-        })->when(($start_date && $end_date or $installment_id), function ($query) use ($start_date, $end_date, $installment_id, $salesPlan_unit_id) {
-            $query->with(['salesPlans.installments' => function ($query) use ($start_date, $end_date, $installment_id, $salesPlan_unit_id) {
-                if ($start_date && $end_date) {
-                    $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
-                }
-                if ($installment_id) {
-                    $query->where('details', $installment_id);
-                }
-                return $query;
-            }, 'salesPlans.unit' => function ($query) use ($salesPlan_unit_id) {
-                if ($salesPlan_unit_id) {
-                    $query->where('id', $salesPlan_unit_id);;
-                }
-                return $query;
-            }]);
         })
+            ->when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
+                $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
+                return $query;
+            })
+            ->when(($stakeholder_id), function ($query) use ($stakeholder_id) {
+                $query->where('sales_plan_id', $stakeholder_id);
+                return $query;
+            })
+            // ->with(['salesPlan.unit'=>function($query) use ($salesPlan_unit_id){
+
+            // }])
+            ->where([['status', 'Unpaid'], ['created_at', '<=', Carbon::now()]])
             ->get();
-        dd($Stakeholder->toArray());
+        // dd($installment->toArray());
+        $data = [];
+        $amount = $installment->pluck('amount')->sum();
+        $paid_amount = $installment->pluck('paid_amount')->sum();
+        $remaining_amount = $installment->pluck('remaining_amount')->sum();
+        $due_amount = $amount - $paid_amount;
+        array_push($data, [
+            'amount' => $amount,
+            'paid_amount' => $paid_amount,
+            'due_amount' => $due_amount,
+            'remaining_amount' => $remaining_amount,
+        ]);
+        return [
+            'status' => true,
+            'message' => ' filter data',
+            'data' => $data
+        ];
     }
 
     public function salesPlan(Request $request, $site_id)

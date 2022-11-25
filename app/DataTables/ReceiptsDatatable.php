@@ -52,7 +52,16 @@ class ReceiptsDatatable extends DataTable
                 return  number_format($receipt->amount_in_numbers);
             })
             ->editColumn('status', function ($receipt) {
-                return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                if ($receipt->status == 1) {
+                    return '<span class="badge badge-glow bg-success">Active</span>';
+                } elseif ($receipt->status == 2) {
+                    return '<span class="badge badge-glow bg-danger">Cancel</span>';
+                } elseif ($receipt->status == 3) {
+                    return '<span class="badge badge-glow bg-danger">Reverted</span>';
+                } else {
+                    return '<span class="badge badge-glow bg-warning">InActive</span>';
+                }
+                // return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
             ->editColumn('created_date', function ($receipt) {
                 return editDateColumn($receipt->created_date);

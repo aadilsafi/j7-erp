@@ -115,10 +115,12 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
+                '<th></th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('debit')->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('credit')->sum()) . '</th>' .
-                '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';

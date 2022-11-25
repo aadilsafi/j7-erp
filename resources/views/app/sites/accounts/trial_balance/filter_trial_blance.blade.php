@@ -188,10 +188,12 @@
                                         <tr>
                                             <th></th>
                                             <th></th>
-                                            <th>{{number_format(collect($starting_balance)->sum())}}</th>
+                                            {{-- <th>{{number_format(collect($starting_balance)->sum())}}</th> --}}
+                                            <th></th>
                                             <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
                                             <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
-                                            <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th>
+                                            <th></th>
+                                            {{-- <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th> --}}
                                             <th></th>
                                         </tr>
                                     </tfoot>

@@ -52,4 +52,9 @@ class Floor extends Model
     {
         return $this->hasMany(Unit::class);
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

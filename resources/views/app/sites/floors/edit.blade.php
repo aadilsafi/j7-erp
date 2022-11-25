@@ -39,7 +39,7 @@
 
                 @method('PUT')
                 @csrf
-                {{ view('app.sites.floors.form-fields', ['floor' => $floor, 'floorShortLable' => $floorShortLable]) }}
+                {{ view('app.sites.floors.form-fields', ['floor' => $floor, 'floorShortLable' => $floorShortLable, 'customFields' => $customFields]) }}
 
             </div>
 

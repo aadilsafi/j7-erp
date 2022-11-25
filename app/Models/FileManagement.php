@@ -91,4 +91,9 @@ class FileManagement extends Model implements HasMedia
     {
         return $this->hasMany(FileTitleTransfer::class, 'file_id');
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

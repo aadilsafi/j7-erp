@@ -23,4 +23,9 @@ class BacklistedStakeholder extends Model
         'province',
         'district',
     ];
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

@@ -45,7 +45,7 @@
 
                 @csrf
                 @method('PUT')
-                {{ view('app.sites.types.form-fields', ['types' => $types, 'type' => $type]) }}
+                {{ view('app.sites.types.form-fields', ['types' => $types, 'type' => $type,  'customFields' => $customFields,]) }}
 
             </div>
 

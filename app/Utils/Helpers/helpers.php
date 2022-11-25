@@ -699,6 +699,8 @@ if (!function_exists('getModelsClasses')) {
         if ($includes === null) {
             $includes = [
                 'App\Models\Stakeholder',
+                'App\Models\Type',
+                'App\Models\Floor'
             ];
         }
         $customFieldModels = array();

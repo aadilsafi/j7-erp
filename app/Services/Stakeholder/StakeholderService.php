@@ -357,7 +357,7 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->CustomFieldValues()->updateOrCreate([
                     'custom_field_id' => $value->id,
                 ], [
-                    'value' => $inputs[$value->name],
+                    'value' => $inputs[$value->slug],
                 ]);
             }
 

@@ -35,7 +35,7 @@ class UnitTypeService implements UnitTypeInterface
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
         $accountCode = addAccountCodes($this->model()::class);
         $data = [
@@ -63,10 +63,18 @@ class UnitTypeService implements UnitTypeInterface
             ]);
         }
 
+        foreach ($customFields as $key => $value) {
+            $customFieldData = [
+                'custom_field_id' => $value->id,
+                'value' => $inputs[$value->name],
+            ];
+            $type->CustomFieldValues()->create($customFieldData);
+        }
+
         return $type;
     }
 
-    public function update($site_id, $inputs, $id)
+    public function update($site_id, $inputs, $id, $customFields)
     {
         $data = [
             'site_id' => $site_id,
@@ -74,7 +82,18 @@ class UnitTypeService implements UnitTypeInterface
             'slug' => Str::of($inputs['type_name'])->slug(),
             'parent_id' => $inputs['type'],
         ];
-        $type = $this->model()->where('id', $id)->update($data);
+        $type = $this->model()->find($id);
+        $type->update($data);
+
+        foreach ($customFields as $key => $value) {
+
+            $type->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
+
         return $type;
     }
 

@@ -74,4 +74,9 @@ class Receipt extends Model implements HasMedia
     {
         return $this->belongsTo(Bank::class);
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

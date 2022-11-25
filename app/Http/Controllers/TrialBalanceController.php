@@ -62,7 +62,7 @@ class TrialBalanceController extends Controller
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .
-                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Account Codes asdasd</th>' .
                 '<th class="text-nowrap">Opening Balance</th>' .
                 '<th class="text-nowrap">Debit</th>' .
                 '<th class="text-nowrap">Credit</th>' .
@@ -146,8 +146,8 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<td></td>' .
                 '<td></td>' .
-                '<td class="text-nowrap">No Record Found Of </td>' .
                 '<td></td>' .
+                '<td class="text-nowrap">No Record Found</td>' .
                 '<td></td>' .
                 '<td></td>' .
                 '<td></td>' .
@@ -158,10 +158,10 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';

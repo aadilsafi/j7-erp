@@ -163,39 +163,7 @@
             </div>
         </div>
 
-            <div id="pipe_chart_filter_data" class="row d-none">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="container">
-                            <div class="row my-3">
-                                <div class="col">
-                                    <h4>Filter Data Show</h4>
-                                </div>
-                            </div>
-                            <div class="row py-2">
-                                <input type="hidden" name="amount" id="amount">
-                                <input type="hidden" name="paid_amount" id="paid_amount">
-                                <input type="hidden" name="due_amount" id="due_amount">
-                                <input type="hidden" name="remaining_amount" id="remaining_amount">
-                                <div class="col-md-6 py-1">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <canvas id="chDonut3"></canvas>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 py-1">
-                                    {{-- <div class="card">
-                                        <div class="card-body">
-                                            <canvas id="chDonut3"></canvas>
-                                        </div>
-                                    </div> --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="row">
 
             <div class="card">
@@ -236,8 +204,43 @@
                         </div>
 
                         <div class="row">
-                            <div class="card chart-container">
-                                <canvas id="chart"></canvas>
+                                {{-- <div class="card chart-container full_width_graph">
+                                    <canvas id="chart"></canvas>
+                                </div> --}}
+                            <div class="col-md-6 col-sm-12" id="full_bar_graph">
+                                <div class="card chart-container">
+                                    <canvas id="chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12" id="pipe_chart_bar">
+                                <div id="pipe_chart_filter_data" class="row d-none">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="container">
+                                                <div class="row my-3">
+                                                    <div class="col">
+                                                        <h4>Filter Data Show</h4>
+                                                    </div>
+                                                </div>
+                                                <div class="row py-2">
+                                                    <input type="hidden" name="amount" id="amount">
+                                                    <input type="hidden" name="paid_amount" id="paid_amount">
+                                                    <input type="hidden" name="due_amount" id="due_amount">
+                                                    <input type="hidden" name="remaining_amount" id="remaining_amount">
+                                                    <div class="col-md-12 py-1">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <canvas id="chDonut3"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 py-1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
                         </div>

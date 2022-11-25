@@ -700,7 +700,9 @@ if (!function_exists('getModelsClasses')) {
             $includes = [
                 'App\Models\Stakeholder',
                 'App\Models\Type',
-                'App\Models\Floor'
+                'App\Models\Floor',
+                'App\Models\AdditionalCost',
+                'App\Models\LeadSource'
             ];
         }
         $customFieldModels = array();
@@ -722,7 +724,7 @@ if (!function_exists('getModelsClasses')) {
 }
 
 if (!function_exists('generateCheckbox')) {
-    function generateCheckbox($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
+    function generateCheckbox($isEditMode, $customFieldValue, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
     {
         $element = view('app.partial-components.checkbox', [
             'isEditMode' => $isEditMode,
@@ -743,7 +745,7 @@ if (!function_exists('generateCheckbox')) {
 }
 
 if (!function_exists('generateDate')) {
-    function generateDate($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateDate($isEditMode, $customFieldValue, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.date', [
             'isEditMode' => $isEditMode,
@@ -766,7 +768,7 @@ if (!function_exists('generateDate')) {
 
 
 if (!function_exists('generateInput')) {
-    function generateInput($isEditMode, $customFieldValue = null, $maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateInput($isEditMode, $customFieldValue, $maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.input', [
             'isEditMode' => $isEditMode,
@@ -792,7 +794,7 @@ if (!function_exists('generateInput')) {
 }
 
 if (!function_exists('generateTextarea')) {
-    function generateTextarea($isEditMode, $customFieldValue = null, $maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateTextarea($isEditMode, $customFieldValue, $maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.textarea', [
             'isEditMode' => $isEditMode,
@@ -815,7 +817,7 @@ if (!function_exists('generateTextarea')) {
 }
 
 if (!function_exists('generateSelect')) {
-    function generateSelect($isEditMode, $customFieldValue = null, $multiple, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateSelect($isEditMode, $customFieldValue, $multiple, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
 
         $element = view('app.partial-components.select', [
@@ -838,7 +840,7 @@ if (!function_exists('generateSelect')) {
 }
 
 if (!function_exists('generateRadio')) {
-    function generateRadio($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateRadio($isEditMode, $customFieldValue, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
 
         $element = view('app.partial-components.radio', [

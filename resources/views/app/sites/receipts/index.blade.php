@@ -156,7 +156,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             }
         }
 
-        function revertPayment(){
+        function revertPayment() {
             var selectedCheckboxes = $('.dt-checkboxes:checked').length;
             if (selectedCheckboxes > 0) {
 
@@ -176,13 +176,16 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                 }).then((result) => {
                     if (result.isConfirmed) {
                         // $('#stakeholder-table-form').submit();
-                        let array =[];
-                       let formData =  $('#stakeholder-table-form').serializeArray();
-                       for (let index = 0; index < formData.length ; index++) {
-                         array[index] = formData[index]['value'] ;
-                       }
-                        location.href = "{{ route('sites.receipts.revert-payment', ['site_id' => $site_id ,'ids' => ':ids']) }}"
-                        .replace(':ids', array);
+                        let array = [];
+                        let formData = $('#stakeholder-table-form').serializeArray();
+                        for (let index = 0; index < formData.length; index++) {
+                            array[index] = formData[index]['value'];
+                            var id =  formData[index]['value'];
+
+                        }
+                        location.href =
+                            "{{ route('sites.receipts.revert-payment', ['site_id' => $site_id, 'ids' => ':ids']) }}"
+                            .replace(':ids', array);
                     }
                 });
             } else {

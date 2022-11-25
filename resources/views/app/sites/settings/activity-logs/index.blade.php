@@ -208,9 +208,15 @@
                                                                 $key == 'created_at')
                                                                 @continue
                                                             @endif
-                                                            <p class="mb-0 custom_detail">{{ ucfirst($key) }} -
-                                                                {{ ucfirst($data) }}
+                                                            @if(is_string($data))
+                                                            <p class="mb-0 custom_detail text-title">{{ $key }} -
+                                                                {{ $data}}
+                                                                {{-- {{ is_object($data)? 'object' : ''}}
+                                                                {{ is_array($data)? 'array' : '' }}
+                                                                {{ Str::isJson($data)? 'json' : ''}} --}}
+
                                                             </p>
+                                                            @endif
                                                         @endforeach
                                                     @endif
                                                 </div>

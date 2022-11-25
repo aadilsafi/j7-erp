@@ -70,6 +70,7 @@ class CustomFieldController extends Controller
 
         try {
             $customField = $this->customFieldInterface->getById($site_id, $id);
+            $customValues = count($customField->CustomFieldValue);
 
             if ($customField && !empty($customField)) {
 
@@ -79,6 +80,7 @@ class CustomFieldController extends Controller
                     'fieldTypes' => CustomFieldsEnum::array(),
                     'models' => getModelsClasses(app_path('Models')),
                     'customField' => $customField,
+                    'customValues' => $customValues,
                 ];
                 // dd($data);
                 return view('app.sites.settings.custom-fields.edit', $data);

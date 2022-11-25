@@ -42,6 +42,7 @@
                     'fieldTypes' => $fieldTypes,
                     'models' => $models,
                     'customField' => $customField,
+                    'customValues' => $customValues
                 ]) }}
 
             </div>

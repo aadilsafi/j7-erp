@@ -23,7 +23,6 @@ class LeadSourceController extends Controller
     {
         $this->leadSourceInterface = $leadSourceInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -56,7 +55,6 @@ class LeadSourceController extends Controller
             $data = [
                 'site_id' => decryptParams($site_id),
                 'customFields' => $customFields
-
             ];
 
             return view('app.sites.lead-sources.create', $data);
@@ -76,16 +74,18 @@ class LeadSourceController extends Controller
         try {
             if (!request()->ajax()) {
 
-                $inputs = $request->validated();
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->leadSourceInterface->model()));
 
                 $site_id = decryptParams($site_id);
 
-                $record = $this->leadSourceInterface->store($site_id, $inputs);
+                $record = $this->leadSourceInterface->store($site_id, $inputs, $customFields);
                 return redirect()->route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
             }
         } catch (Exception $ex) {
+
             return redirect()->route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -114,12 +114,16 @@ class LeadSourceController extends Controller
             $id = decryptParams($id);
 
             $leadSource = $this->leadSourceInterface->getById($site_id, $id);
+            $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->leadSourceInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields, true, $leadSource->id);
 
             if ($leadSource && !empty($leadSource)) {
 
                 $data = [
                     'site_id' => $site_id,
                     'leadSource' => $leadSource,
+                    'customFields' => $customFields
                 ];
                 // dd($data);
                 return view('app.sites.lead-sources.edit', $data);
@@ -127,7 +131,6 @@ class LeadSourceController extends Controller
 
             return redirect()->route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            dd($ex->getMessage());
             return redirect()->route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -143,12 +146,13 @@ class LeadSourceController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
 
                 $site_id = decryptParams($site_id);
                 $id = decryptParams($id);
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->leadSourceInterface->model()));
 
-                $record = $this->leadSourceInterface->update($site_id, $id, $inputs,);
+                $record = $this->leadSourceInterface->update($site_id, $id, $inputs, $customFields);
 
                 return redirect()->route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {

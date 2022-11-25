@@ -701,7 +701,8 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Stakeholder',
                 'App\Models\Type',
                 'App\Models\Floor',
-                'App\Models\AdditionalCost'
+                'App\Models\AdditionalCost',
+                'App\Models\LeadSource'
             ];
         }
         $customFieldModels = array();

@@ -410,11 +410,11 @@ class ReceiptService implements ReceiptInterface
                 $installment->paid_amount = $installment->paid_amount - $specficAmount;
                 $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
 
-                // if ($installment->remaining_amount == $installment->amount) {
-                //     $installment->status = 'unpaid';
-                // } else {
-                //     $installment->status = 'partially_paid';
-                // }
+                if ($installment->remaining_amount == $installment->amount) {
+                    $installment->status = 'unpaid';
+                } else {
+                    $installment->status = 'partially_paid';
+                }
                 $installment->update();
             }
             // }

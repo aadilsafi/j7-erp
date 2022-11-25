@@ -156,7 +156,7 @@ class FileAdjustmentDatatable extends DataTable
             Column::make('unit_type')->name('unit.type.name')->title('Unit Type')->addClass('text-nowrap'),
             Column::make('unit_status')->name('unit.status.name')->title('Unit Status')->addClass('text-nowrap text-center'),
             Column::make('stakeholder_full_name')->name('stakeholder.full_name')->title('Customer Name')->addClass('text-nowrap'),
-            Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Son of')->addClass('text-nowrap'),
+            Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Father/Husband')->addClass('text-nowrap'),
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap'),
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center'),

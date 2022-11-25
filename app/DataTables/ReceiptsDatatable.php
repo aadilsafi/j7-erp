@@ -51,6 +51,12 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('amount_in_numbers', function ($receipt) {
                 return  number_format($receipt->amount_in_numbers);
             })
+            ->editColumn('amount_received', function ($receipt) {
+                return  number_format($receipt->amount_received);
+            })
+            ->editColumn('discounted_amount', function ($receipt) {
+                return  number_format($receipt->discounted_amount);
+            })
             ->editColumn('status', function ($receipt) {
                 if ($receipt->status == 1) {
                     return '<span class="badge badge-glow bg-success">Active</span>';
@@ -206,6 +212,8 @@ class ReceiptsDatatable extends DataTable
         $columns = [
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
+            Column::make('amount_received')->title('Amount Received'),
+            Column::make('discounted_amount')->title('Discounted Amount'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
             Column::computed('status')->title('Status'),
             Column::make('created_date')->title('Created At')->addClass('text-nowrap'),

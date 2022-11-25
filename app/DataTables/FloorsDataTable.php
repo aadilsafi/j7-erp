@@ -25,7 +25,7 @@ class FloorsDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns = (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('check', function ($floor) {
                 return $floor;
@@ -96,6 +96,21 @@ class FloorsDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -187,7 +202,7 @@ class FloorsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        return [
+        $columns = [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Floors'),
             Column::make('order'),
@@ -201,8 +216,18 @@ class FloorsDataTable extends DataTable
             Column::computed('units_dp_count')->title('Partial Paid'),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
-            Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1'),
         ];
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center p-1');
+
+        return $columns;
     }
 
     /**

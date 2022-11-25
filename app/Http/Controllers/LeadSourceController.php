@@ -32,8 +32,11 @@ class LeadSourceController extends Controller
      */
     public function index(LeadSourceDataTable $dataTable, $site_id)
     {
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->leadSourceInterface->model()));
+
         $data = [
-            'site_id' => decryptParams($site_id)
+            'site_id' => decryptParams($site_id),
+            'customFields' => $customFields->where('in_table', true),
         ];
 
         return $dataTable->with($data)->render('app.sites.lead-sources.index', $data);

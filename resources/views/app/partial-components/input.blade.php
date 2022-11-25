@@ -5,7 +5,7 @@
 <label class="form-label fs-5 text-capitalize" for="{{ $id }}">{{ $label ?? 'Password' }} <span
         class="text-danger">{{ $required ? ' *' : null }}</span></label>
 
-<input type="{{ $type }}" class="form-control form-control-lg" id="{{ $id }}" name="{{ $name }}"
+<input type="{{ $type }}" class="form-control form-control-lg" id="{{ $id }}" name="{{ $id }}"
     value="{{ $isEditMode && $customFieldValue ? $customFieldValue->value : '' }}"
     {{ $type == 'text' && $maxlength > 0 ? 'maxlength=' . $maxlength . '' : '' }}
     {{ $type == 'text' && $minlength > 0 ? 'minlength=' . $minlength . '' : ' ' }}

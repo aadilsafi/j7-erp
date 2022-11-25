@@ -64,6 +64,11 @@
                                         <th rowspan="2" class="text-nowrap">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="6">STATUSES</th>
+                                        @if (count($customFields) > 0) 
+                                            @foreach ($customFields as $customfields) 
+                                            <th rowspan="2" class="text-nowrap">{{$customfields->name}}</th>
+                                            @endforeach
+                                       @endif
                                         <th rowspan="2" class="text-nowrap">CREATED AT</th>
                                         <th rowspan="2" class="text-nowrap">UPDATED AT</th>
                                         <th rowspan="2" id="action">ACTIONS</th>
@@ -93,6 +98,11 @@
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
                                         <th class="text-nowrap">Partial Paid</th>
+                                        @if (count($customFields) > 0) 
+                                            @foreach ($customFields as $customfields) 
+                                            <th rowspan="2" class="text-nowrap">{{$customfields->name}}</th>
+                                            @endforeach
+                                        @endif
                                         <th rowspan="2" class="text-nowrap">CREATED AT</th>
                                         <th rowspan="2" class="text-nowrap">UPDATED AT</th>
                                         <th rowspan="2">ACTIONS</th>
@@ -225,6 +235,17 @@
                         searchable: false,
                         orderable: false,
                     },
+                    @if (count($customFields) > 0) 
+                                            @foreach ($customFields as $customfields) 
+                                            {
+                        data: '{{$customfields->slug}}',
+                        name: '{{$customfields->name}}',
+                        className: 'text-nowrap',
+                        searchable: false,
+                        orderable: true,
+                    },
+                                            @endforeach
+                                        @endif
                     {
                         data: 'created_at',
                         name: 'created_at',

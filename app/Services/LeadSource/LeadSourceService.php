@@ -41,7 +41,7 @@ class LeadSourceService implements LeadSourceInterface
             $leadSource->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
             ], [
-                'value' => $inputs[$value->slug],
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
             ]);
         }
         return $leadSource;
@@ -64,7 +64,7 @@ class LeadSourceService implements LeadSourceInterface
             $leadSource->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
             ], [
-                'value' => $inputs[$value->slug],
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
             ]);
         }
         return $leadSource;

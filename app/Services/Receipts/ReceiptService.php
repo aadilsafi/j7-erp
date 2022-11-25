@@ -105,7 +105,7 @@ class ReceiptService implements ReceiptInterface
                     'online_instrument_no' => $data[$i]['online_instrument_no'],
                     'transaction_date' => $data[$i]['transaction_date'],
                     'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                    'amount_in_numbers' => $data[$i]['amount_in_numbers'],
+                    'amount_in_numbers' => $amount_received,
                     'purpose' => 'installments',
                     'installment_number' => '1',
                     'amount_received' => $requested_data['amount_received'],
@@ -157,7 +157,7 @@ class ReceiptService implements ReceiptInterface
                                 'comments' => $draftReceiptData->comments,
                                 'purpose' => 'installments',
                                 'installment_number' => '1',
-                                'amount_received' => $amount_received,
+                                'amount_received' => $draftReceiptData->amount_received,
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
                                 'bank_id' => $draftReceiptData->bank_id,
@@ -393,7 +393,7 @@ class ReceiptService implements ReceiptInterface
 
             $instalmentNumbers = json_decode($receipt->installment_number);
             $sales_plan = SalesPlan::find($receipt->sales_plan_id);
-            $amount_received = (float)$receipt->discounted_amount + (float)$receipt->amount_received;
+            $amount_received = (float)$receipt->amount_in_numbers;
             $countData = count($instalmentNumbers);
 
             for ($j = $countData; $j >= 1; $j--) {

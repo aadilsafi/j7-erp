@@ -196,25 +196,24 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">Amount In Numbers</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         placeholder="" value="{{ number_format($receipt->discounted_amount) }}"
                                         readonly />
                                 </div>
-                                @php
-                                    $paid_amount = (float) $receipt->amount_in_numbers + (float) $receipt->discounted_amount;
-                                @endphp
+
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder="" value="{{ number_format($paid_amount) }}"
+                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}"
+                                        readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="floor_no">Amount In Words</label>
+                                    <input type="text" class="form-control form-control-lg" id="floor_no"
+                                        name="unit[floor_no]" placeholder=""
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
                                         readonly />
                                 </div>
 
@@ -273,13 +272,7 @@
                                     </div>
                                 @endif
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="floor_no">Amount In Words</label>
-                                    <input type="text" class="form-control form-control-lg" id="floor_no"
-                                        name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
-                                        readonly />
-                                </div>
+
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="stackholder_address">Comments</label>

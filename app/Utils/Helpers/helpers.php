@@ -700,7 +700,8 @@ if (!function_exists('getModelsClasses')) {
             $includes = [
                 'App\Models\Stakeholder',
                 'App\Models\Type',
-                'App\Models\Floor'
+                'App\Models\Floor',
+                'App\Models\AdditionalCost'
             ];
         }
         $customFieldModels = array();

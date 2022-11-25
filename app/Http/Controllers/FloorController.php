@@ -63,14 +63,16 @@ class FloorController extends Controller
         if (!empty($nonActiveFloors) && count($nonActiveFloors) > 0) {
             return redirect()->route('sites.floors.preview', ['site_id' => encryptParams(decryptParams($site_id))]);
         }
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
 
         if ($request->ajax()) {
-            return $dataTable->with(['site_id' => decryptParams($site_id)])->ajax();
+            return $dataTable->with(['site_id' => decryptParams($site_id), 'customFields' => $customFields->where('in_table', true)])->ajax();
         }
 
         $totalFloors = Floor::count();
 
-        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id)), 'totalFloors' => $totalFloors]);
+        return view('app.sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id)), 'totalFloors' => $totalFloors,
+        'customFields' => $customFields->where('in_table', true)]);
     }
 
     /**

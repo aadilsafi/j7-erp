@@ -45,9 +45,11 @@ class StakeholderController extends Controller
      */
     public function index(StakeholderDataTable $dataTable, $site_id)
     {
-        //
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+        
         $data = [
-            'site_id' => $site_id
+            'site_id' => $site_id,
+            'customFields' => $customFields->where('in_table', true),
         ];
 
         return $dataTable->with($data)->render('app.sites.stakeholders.index', $data);

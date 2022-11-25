@@ -34,7 +34,7 @@ class StakeholderDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns = (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('parent_id', function ($stakeholder) {
                 return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() : '-';
@@ -43,7 +43,7 @@ class StakeholderDataTable extends DataTable
                 return cnicFormat($stakeholder->cnic);
             })
             ->editColumn('nationality', function ($stakeholder) {
-                    return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
+                return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
@@ -59,6 +59,21 @@ class StakeholderDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -173,9 +188,14 @@ class StakeholderDataTable extends DataTable
             Column::make('contact')->title('Contact'),
             // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
             // Column::make('relation')->title('Relation'),
-            Column::make('created_at')->addClass('text-nowrap'),
-            Column::make('updated_at')->addClass('text-nowrap'),
         ];
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
 
         if ($selectedDeletePermission) {
             $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');

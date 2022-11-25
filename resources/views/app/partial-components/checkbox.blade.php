@@ -5,7 +5,7 @@
 
     <label class="form-check-label" for="{{ $id }}">{{ $label ?? 'Checkbox' }} <span
             class="text-danger">{{ $required ? ' *' : null }}</span></label>
-    <input class="form-check-input" type="checkbox" id="{{ $id }}" name="{{ $name }}"
+    <input class="form-check-input" type="checkbox" id="{{ $id }}" name="{{ $id }}"
         value="{{ $value }}" {{ $required ? 'required' : null }}
         {{ $isEditMode && $customFieldValue && $value == $customFieldValue->value ? 'checked' : null }}
         {{ $disabled ? 'disabled' : null }}>

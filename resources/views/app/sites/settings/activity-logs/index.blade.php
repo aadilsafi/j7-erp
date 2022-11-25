@@ -160,7 +160,7 @@
                                             <ul class="timeline ms-50">
                                                 <li class="timeline-item custom_timeline">
                                                     <span class="timeline-point timeline-point-indicator"></span>
-                                                    <h6 class="custom_card_heading"> {{ $log->causer->name }} {{ $log->description }} {{ Str::replace('App\Models\\', ' ', $log->log_name) }}</h6>
+                                                    <h6 class="custom_card_heading"> {{ $log->causer->name }} {{ ucfirst($log->description) }} {{ Str::replace('App\Models\\', ' ', $log->log_name) }}</h6>
                                                 </li>
 
                                                 <li class="timeline-item custom_timeline custom_title_2"
@@ -193,7 +193,7 @@
                                                             @if ($key == 'site_id' ||
                                                                 $key == 'password' ||
                                                                 $key == 'slug' ||
-                                                                $key == 'status' ||
+                                                                // $key == 'status' ||
                                                                 $key == 'OptionalCountryDetails' ||
                                                                 $key == 'countryDetails'||
                                                                 $key == 'stakeholder_data' ||
@@ -208,8 +208,8 @@
                                                                 $key == 'created_at')
                                                                 @continue
                                                             @endif
-                                                            <p class="mb-0 custom_detail">{{ $key }} -
-                                                                {{ $data }}
+                                                            <p class="mb-0 custom_detail">{{ ucfirst($key) }} -
+                                                                {{ ucfirst($data) }}
                                                             </p>
                                                         @endforeach
                                                     @endif

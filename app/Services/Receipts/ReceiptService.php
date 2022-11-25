@@ -3,6 +3,7 @@
 namespace App\Services\Receipts;
 
 use App\Models\AccountHead;
+use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\Unit;
 use App\Models\Receipt;
@@ -45,7 +46,7 @@ class ReceiptService implements ReceiptInterface
 
             $amount_received = $requested_data['amount_received'];
             $discounted_amount = $requested_data['discounted_amount'];
-            if(isset($discounted_amount)){
+            if (isset($discounted_amount)) {
                 $amount_received = (float)$discounted_amount + (float)$amount_received;
                 $amount_received = (string)$amount_received;
             }
@@ -115,7 +116,7 @@ class ReceiptService implements ReceiptInterface
                     'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 ];
 
-                if(isset($discounted_amount)){
+                if (isset($discounted_amount)) {
                     $receiptData['discounted_amount'] = $discounted_amount;
                 }
 
@@ -378,14 +379,45 @@ class ReceiptService implements ReceiptInterface
             'status' => 3,
         ];
 
-        for ($i = 0; $i < count($id); $i++) {
-            if ($this->model()->find($id[$i])->status == 0) {
-                // $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+        $id = explode(",", $id);
+        for ($i = 1; $i < count($id); $i++) {
+            // if ($this->model()->find($id[$i])->status == 0) {
+            //     // $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+            //     // $accountLedger = AccountLedger::where('receipt_id',$id[$i])->where('code','!=','')->first();
+
+            // }
+            $receipt = $this->model()->find($id[$i]);
+            $receipt->status = 3;
+            $receipt->update();
+            // if ($this->model()->find($id[$i])->status == 0) {
+
+            $instalmentNumbers = json_decode($receipt->installment_number);
+            $sales_plan = SalesPlan::find($receipt->sales_plan_id);
+            $amount_received = (float)$receipt->discounted_amount + (float)$receipt->amount_received;
+            $countData = count($instalmentNumbers);
+
+            for ($j = $countData; $j >= 1; $j--) {
+                $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j - 1])->first();
+
+                if ($amount_received > $installment->amount) {
+                    $specficAmount = $installment->amount;
+                    $amount_received = $amount_received - $specficAmount;
+                } else {
+                    $specficAmount = $amount_received;
+                    $amount_received = $amount_received - $specficAmount;
+                }
+
+                $installment->paid_amount = $installment->paid_amount - $specficAmount;
+                $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
+
+                if ($installment->remaining_amount == $installment->amount) {
+                    $installment->status = 'unpaid';
+                } else {
+                    $installment->status = 'partially_paid';
+                }
+                $installment->update();
             }
-            $this->model()->where([
-                'site_id' => $site_id,
-                'id' => $id[$i],
-            ])->update($data);
+            // }
         }
         return true;
     }

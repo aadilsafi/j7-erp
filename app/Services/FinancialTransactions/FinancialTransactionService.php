@@ -456,6 +456,44 @@ class FinancialTransactionService implements FinancialTransactionInterface
         }
     }
 
+     // in case of receipt revert
+     public function makeReceiptRevertTransaction($receipt_id)
+     {
+         try {
+             DB::beginTransaction();
+
+             $receipt = (new Receipt())->find($receipt_id);
+             $bankAccount = $receipt->bank->account_number;
+             $origin_number = AccountLedger::get();
+
+             if (isset($origin_number)) {
+
+                 $origin_number = collect($origin_number)->last();
+                 $origin_number = $origin_number->origin_number + 1;
+             } else {
+                 $origin_number = '001';
+             }
+             // bank Transaction
+             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 12, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+             // Customer AR Transaction
+             $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+             $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+             if (is_null($customerAccount)) {
+                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+             }
+
+             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 12, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+             DB::commit();
+             return 'transaction_completed';
+         } catch (GeneralException | Exception $ex) {
+             DB::rollBack();
+             return $ex;
+         }
+     }
+
 
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id)
     {

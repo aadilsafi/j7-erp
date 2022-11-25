@@ -40,7 +40,7 @@ class AdditionalCostService implements AdditionalCostInterface
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
         $data = [
             'site_id' => decryptParams($site_id),
@@ -58,10 +58,18 @@ class AdditionalCostService implements AdditionalCostInterface
 
         // dd($data);
         $additionalCost = $this->model()->create($data);
+
+        foreach ($customFields as $key => $value) {
+            $additionalCost->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
         return $additionalCost;
     }
 
-    public function update($site_id, $inputs, $id)
+    public function update($site_id, $inputs, $id, $customFields)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
@@ -82,8 +90,16 @@ class AdditionalCostService implements AdditionalCostInterface
         $additionalCost = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,
-        ])->update($data);
+        ])->first();
+        $additionalCost->update($data);
 
+        foreach ($customFields as $key => $value) {
+            $additionalCost->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
         return $additionalCost;
     }
 

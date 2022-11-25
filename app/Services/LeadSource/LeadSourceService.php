@@ -28,7 +28,7 @@ class LeadSourceService implements LeadSourceInterface
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
         $data = [
             'site_id' => $site_id,
@@ -36,10 +36,18 @@ class LeadSourceService implements LeadSourceInterface
         ];
 
         $leadSource = $this->model()->create($data);
+
+        foreach ($customFields as $key => $value) {
+            $leadSource->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
         return $leadSource;
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
         $data = [
             'name' => filter_strip_tags($inputs['lead_source_name']),
@@ -52,7 +60,13 @@ class LeadSourceService implements LeadSourceInterface
 
         $leadSource->name = $data['name'];
         $leadSource->update();
-
+        foreach ($customFields as $key => $value) {
+            $leadSource->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
         return $leadSource;
     }
 

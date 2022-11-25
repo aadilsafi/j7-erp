@@ -3,6 +3,7 @@
 namespace App\Services\Receipts;
 
 use App\Models\AccountHead;
+use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\Unit;
 use App\Models\Receipt;
@@ -44,7 +45,11 @@ class ReceiptService implements ReceiptInterface
             $data = $requested_data['receipts'];
 
             $amount_received = $requested_data['amount_received'];
-
+            $discounted_amount = $requested_data['discounted_amount'];
+            if (isset($discounted_amount)) {
+                $amount_received = (float)$discounted_amount + (float)$amount_received;
+                $amount_received = (string)$amount_received;
+            }
             for ($i = 0; $i < count($data); $i++) {
 
                 $unit = Unit::find($data[$i]['unit_id']);
@@ -100,7 +105,7 @@ class ReceiptService implements ReceiptInterface
                     'online_instrument_no' => $data[$i]['online_instrument_no'],
                     'transaction_date' => $data[$i]['transaction_date'],
                     'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                    'amount_in_numbers' => $data[$i]['amount_in_numbers'],
+                    'amount_in_numbers' => $amount_received,
                     'purpose' => 'installments',
                     'installment_number' => '1',
                     'amount_received' => $requested_data['amount_received'],
@@ -111,14 +116,18 @@ class ReceiptService implements ReceiptInterface
                     'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 ];
 
-                if ($amount_received > $data[$i]['amount_in_numbers']) {
+                if (isset($discounted_amount)) {
+                    $receiptData['discounted_amount'] = $discounted_amount;
+                }
+
+                if ($requested_data['amount_received'] > $data[$i]['amount_in_numbers']) {
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
 
-                    $remaining_amount = $amount_received - $data[$i]['amount_in_numbers'];
+                    $remaining_amount = $requested_data['amount_received'] - $data[$i]['amount_in_numbers'];
 
                     $data = [
                         'unit_name'  => $unit->name,
@@ -148,11 +157,12 @@ class ReceiptService implements ReceiptInterface
                                 'comments' => $draftReceiptData->comments,
                                 'purpose' => 'installments',
                                 'installment_number' => '1',
-                                'amount_received' => $requested_data['amount_received'],
+                                'amount_received' => $draftReceiptData->amount_received,
                                 'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                                 'bank_details' => $draftReceiptData->bank_details,
                                 'bank_id' => $draftReceiptData->bank_id,
                                 'created_date' => $draftReceiptData->created_date,
+                                'discounted_amount' => $draftReceiptData->discounted_amount,
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
@@ -360,6 +370,55 @@ class ReceiptService implements ReceiptInterface
     {
         $this->model()->whereIn('id', $id)->delete();
 
+        return true;
+    }
+
+    public function revertPayment($site_id, $id)
+    {
+        $data = [
+            'status' => 3,
+        ];
+
+        $id = explode(",", $id);
+        for ($i = 1; $i < count($id); $i++) {
+            // if ($this->model()->find($id[$i])->status == 0) {
+            //     // $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+            //     // $accountLedger = AccountLedger::where('receipt_id',$id[$i])->where('code','!=','')->first();
+
+            // }
+            $receipt = $this->model()->find($id[$i]);
+            $receipt->status = 3;
+            $receipt->update();
+            // if ($this->model()->find($id[$i])->status == 0) {
+
+            $instalmentNumbers = json_decode($receipt->installment_number);
+            $sales_plan = SalesPlan::find($receipt->sales_plan_id);
+            $amount_received = (float)$receipt->amount_in_numbers;
+            $countData = count($instalmentNumbers);
+
+            for ($j = $countData; $j >= 1; $j--) {
+                $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j - 1])->first();
+
+                if ($amount_received > $installment->amount) {
+                    $specficAmount = $installment->amount;
+                    $amount_received = $amount_received - $specficAmount;
+                } else {
+                    $specficAmount = $amount_received;
+                    $amount_received = $amount_received - $specficAmount;
+                }
+
+                $installment->paid_amount = $installment->paid_amount - $specficAmount;
+                $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
+
+                if ($installment->remaining_amount == $installment->amount) {
+                    $installment->status = 'unpaid';
+                } else {
+                    $installment->status = 'partially_paid';
+                }
+                $installment->update();
+            }
+            // }
+        }
         return true;
     }
 

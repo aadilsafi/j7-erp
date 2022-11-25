@@ -13,7 +13,7 @@ interface StakeholderInterface
     public function getAllWithTree();
 
     public function store($site_id, $inputs, $customFields);
-    public function update($site_id, $id, $inputs);
+    public function update($site_id, $id, $inputs, $customFields);
 
     public function destroy($site_id, $id);
 

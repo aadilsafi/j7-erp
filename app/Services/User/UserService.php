@@ -44,6 +44,13 @@ class UserService implements UserInterface
                 }
             }
 
+            // foreach ($customFields as $key => $value) {
+            //     $customFieldData = [
+            //         'custom_field_id' => $value->id,
+            //         'value' => $inputs[$value->name],
+            //     ];
+            //     $user->CustomFieldValues()->create($customFieldData);
+            // }
             return $user;
         });
     }

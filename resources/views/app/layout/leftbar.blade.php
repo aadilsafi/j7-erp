@@ -118,7 +118,7 @@
                     class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
-                        <i data-feather='settings'></i>
+                        <i class="fa-solid fa-gears"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                     </a>
                 </li>

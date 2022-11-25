@@ -237,6 +237,23 @@
             input.addEventListener("countrychange", function() {
                 $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             });
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            var inputOptional = document.querySelector("#optional_contact");
+            intlOptional = window.intlTelInput(inputOptional, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+
+            inputOptional.addEventListener("countrychange", function() {
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+            });
+            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+
+
             var e = $("#stackholders");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -281,19 +298,30 @@
                             $('#stackholder_cnic').val(stakeholderData.cnic);
                             $('#stackholder_ntn').val(stakeholderData.ntn);
                             $('#stackholder_contact').val(stakeholderData.contact);
+                            $('#optional_contact').val(stakeholderData.optional_contact);
+                            $('#mailing_address').val(stakeholderData.mailing_address);
                             $('#stackholder_address').text(stakeholderData.address);
                             $('#stackholder_comments').text(stakeholderData.comments);
-                            var countryDetails = stakeholderData.countryDetails;
+                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+                            
                             if (countryDetails == null) {
                                 intl.setCountry('pk');
-
                             } else {
                                 intl.setCountry(countryDetails['iso2']);
-
                             }
 
                             $('#countryDetails').val(JSON.stringify(intl
-                            .getSelectedCountryData()))
+                                .getSelectedCountryData()))
+
+                            var OptionalCountryDetails = JSON.parse(stakeholderData.OptionalCountryDetails);
+                            if (OptionalCountryDetails == null) {
+                                intlOptional.setCountry('pk');
+                            } else {
+                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            }
+
+                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                                .getSelectedCountryData()))
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -695,6 +723,16 @@
             return intl.isValidNumber();
 
         }, "In Valid number");
+        $.validator.addMethod("OPTContactNoError", function(value, element) {
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            // if(value != '' )
+            if (value.length > 0) {
+                return intlOptional.isValidNumber();
+            } else {
+                return true;
+            }
+        }, "In Valid number");
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,
             rules: {
@@ -764,6 +802,9 @@
                     required: true
                 },
                 'stackholder[address]': {
+                    required: true
+                },
+                'stackholder[mailing_address]': {
                     required: true
                 },
                 'stackholder[cnic]': {

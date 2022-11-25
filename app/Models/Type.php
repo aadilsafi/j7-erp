@@ -56,4 +56,8 @@ class Type extends Model
         return $this->morphOne(AccountHead::class,'modelable');
     }
 
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

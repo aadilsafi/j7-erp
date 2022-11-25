@@ -96,4 +96,9 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(SalesPlan::class);
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

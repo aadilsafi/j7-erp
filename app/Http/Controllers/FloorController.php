@@ -111,8 +111,11 @@ class FloorController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
-                $record = $this->floorInterface->store($site_id, $inputs);
+                $inputs = $request->all();
+
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
+
+                $record = $this->floorInterface->store($site_id, $inputs, $customFields);
 
                 return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -146,10 +149,15 @@ class FloorController extends Controller
         try {
             $floor = $this->floorInterface->getById($site_id, $id);
             if ($floor && !empty($floor)) {
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
+                $customFields = collect($customFields)->sortBy('order');
+                $customFields = generateCustomFields($customFields, true, $floor->id);
+
                 $data = [
                     'site_id' => $site->id,
                     'floor' => $floor,
                     'floorShortLable' => $site->siteConfiguration->floor_prefix,
+                    'customFields' => $customFields,
                 ];
 
                 // dd($data);
@@ -174,9 +182,11 @@ class FloorController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
                 // return [$site_id, $id, $inputs];
-                $record = $this->floorInterface->update($site_id, $id, $inputs);
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->floorInterface->model()));
+
+                $record = $this->floorInterface->update($site_id, $id, $inputs, $customFields);
                 return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
@@ -507,8 +517,8 @@ class FloorController extends Controller
 
         $json = file_get_contents($request->file('floorplan_file'));
 
-        if(!$json){
-        return back()->with('error', 'Invalid file format');
+        if (!$json) {
+            return back()->with('error', 'Invalid file format');
         }
 
         $floor = (new Floor())->find($id);
@@ -516,6 +526,5 @@ class FloorController extends Controller
         $floor->saveOrFail();
 
         return back()->with('success', 'Floorplan uploaded successfully');
-
     }
 }

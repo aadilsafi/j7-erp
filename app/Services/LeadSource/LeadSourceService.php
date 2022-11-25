@@ -48,7 +48,10 @@ class LeadSourceService implements LeadSourceInterface
         $leadSource = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,
-        ])->update($data);
+        ])->first();
+
+        $leadSource->name = $data['name'];
+        $leadSource->update();
 
         return $leadSource;
     }

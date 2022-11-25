@@ -36,6 +36,9 @@ class Stakeholder extends Model implements HasMedia
         'optional_contact_number',
         'nationality',
         'countryDetails',
+        'mailing_address',
+        'optional_contact',
+        'OptionalCountryDetails',
     ];
 
     public $rules = [

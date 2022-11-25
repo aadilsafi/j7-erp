@@ -51,8 +51,23 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('amount_in_numbers', function ($receipt) {
                 return  number_format($receipt->amount_in_numbers);
             })
+            ->editColumn('amount_received', function ($receipt) {
+                return  number_format($receipt->amount_received);
+            })
+            ->editColumn('discounted_amount', function ($receipt) {
+                return  number_format($receipt->discounted_amount);
+            })
             ->editColumn('status', function ($receipt) {
-                return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                if ($receipt->status == 1) {
+                    return '<span class="badge badge-glow bg-success">Active</span>';
+                } elseif ($receipt->status == 2) {
+                    return '<span class="badge badge-glow bg-danger">Cancel</span>';
+                } elseif ($receipt->status == 3) {
+                    return '<span class="badge badge-glow bg-danger">Reverted</span>';
+                } else {
+                    return '<span class="badge badge-glow bg-warning">InActive</span>';
+                }
+                // return $receipt->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
             ->editColumn('created_date', function ($receipt) {
                 return editDateColumn($receipt->created_date);
@@ -83,6 +98,7 @@ class ReceiptsDatatable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
+        $revertPermission =  Auth::user()->hasPermissionTo('sites.receipts.revert-payment');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
         $importPermission =  Auth::user()->hasPermissionTo('sites.receipts.importReceipts');
 
@@ -96,6 +112,7 @@ class ReceiptsDatatable extends DataTable
             ]),
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+
         ];
 
         if ($importPermission) {
@@ -117,6 +134,14 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
+        if ($revertPermission) {
+            $revertButton =  Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
+                    'onclick' => 'revertPayment()',
+                ]);
+            array_unshift($buttons, $revertButton);
+        }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')
@@ -127,6 +152,8 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
+
+
 
         if ($selectedActivePermission) {
             $buttons[] = Button::raw('delete-selected')
@@ -185,6 +212,8 @@ class ReceiptsDatatable extends DataTable
         $columns = [
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
+            Column::make('amount_received')->title('Amount Received'),
+            Column::make('discounted_amount')->title('Discounted Amount'),
             Column::make('amount_in_numbers')->title('Paid Amount'),
             Column::computed('status')->title('Status'),
             Column::make('created_date')->title('Created At')->addClass('text-nowrap'),

@@ -59,4 +59,8 @@ class FileRefund extends Model
         return $this->hasMany(FileRefundAttachment::class);
     }
 
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

@@ -156,6 +156,44 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             }
         }
 
+        function revertPayment(){
+            var selectedCheckboxes = $('.dt-checkboxes:checked').length;
+            if (selectedCheckboxes > 0) {
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Are you sure you want to revert payment the selected receipts?',
+                    showCancelButton: true,
+                    cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                    confirmButtonText: 'Yes, Revert it!',
+                    confirmButtonClass: 'btn-danger',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // $('#stakeholder-table-form').submit();
+                        let array =[];
+                       let formData =  $('#stakeholder-table-form').serializeArray();
+                       for (let index = 0; index < formData.length ; index++) {
+                         array[index] = formData[index]['value'] ;
+                       }
+                        location.href = "{{ route('sites.receipts.revert-payment', ['site_id' => $site_id ,'ids' => ':ids']) }}"
+                        .replace(':ids', array);
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
+                });
+            }
+        }
+
         function openTemplatesModal(receipt_id) {
             $('#receipt_id').val(receipt_id);
             $('#modal-receipt-template').modal('show');

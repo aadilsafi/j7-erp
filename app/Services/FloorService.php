@@ -37,7 +37,7 @@ class FloorService implements FloorInterface
     }
 
     // Store
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields )
     {
         $data = [
             'site_id' => decryptParams($site_id),
@@ -49,6 +49,14 @@ class FloorService implements FloorInterface
         ];
 
         $floor = $this->model()->create($data);
+
+        foreach ($customFields as $key => $value) {
+            $customFieldData = [
+                'custom_field_id' => $value->id,
+                'value' => $inputs[$value->slug],
+            ];
+            $floor->CustomFieldValues()->create($customFieldData);
+        }
         return $floor;
     }
 
@@ -59,7 +67,7 @@ class FloorService implements FloorInterface
         return true;
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
@@ -75,7 +83,17 @@ class FloorService implements FloorInterface
         $floor = $this->model()->where([
             'site_id' => $site_id,
             'id' => $id,
-        ])->update($data);
+        ])->first();
+
+        $floor->update($data);
+        foreach ($customFields as $key => $value) {
+
+            $floor->CustomFieldValues()->updateOrCreate([
+                'custom_field_id' => $value->id,
+            ], [
+                'value' => $inputs[$value->slug],
+            ]);
+        }
 
         return $floor;
     }

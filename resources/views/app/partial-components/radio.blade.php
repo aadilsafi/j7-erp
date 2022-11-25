@@ -11,7 +11,9 @@
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="{{ $key }}">{{ $value }} </label>
                 <input class="form-check-input" type="radio" id="{{ $key }}" name="{{ $label }}"
-                    value="{{ $value }}" {{ $disabled ? 'disabled' : null }}>
+                    value="{{ $value }}" {{ $disabled ? 'disabled' : null }}
+                    {{ $required ? ' required' : null }}
+                    {{ $isEditMode && $customFieldValue && $value == $customFieldValue->value ? 'checked' : null }}>
             </div>
         </div>
     @endforeach

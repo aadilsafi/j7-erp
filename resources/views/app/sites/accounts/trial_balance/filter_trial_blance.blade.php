@@ -138,10 +138,10 @@
                                                 if(substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12 )
                                                 {
                                                    
-                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
                                                     array_push($starting_balance,$ending_balance); 
                                                 }else {
-                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                                                     array_push($starting_balance,$ending_balance);
                                                 }
                                                 @endphp

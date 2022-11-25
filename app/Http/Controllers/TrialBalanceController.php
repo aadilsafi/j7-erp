@@ -78,10 +78,10 @@ class TrialBalanceController extends Controller
             foreach ($account_ledgers as $account_ledger) {
                 if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
 
-                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
                 } else {
-                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                     array_push($starting_balance, $ending_balance);
                 }
 
@@ -225,9 +225,9 @@ class TrialBalanceController extends Controller
                 $debits = $account->accountLedgers->pluck('debit')->sum();
                 $ending = 0;
                 if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
-                    $ending = number_format($credits - $debits);
-                } else {
                     $ending = number_format($debits - $credits);
+                } else {
+                    $ending = number_format($credits - $debits);
                 }
 
                 $table .= '<tr>' .

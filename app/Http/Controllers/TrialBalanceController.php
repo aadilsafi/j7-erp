@@ -53,7 +53,7 @@ class TrialBalanceController extends Controller
 
 
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-            $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
+            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
             return $query;
         })->where('account_head_code', $account_head_code)->get();
 
@@ -62,7 +62,7 @@ class TrialBalanceController extends Controller
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .
-                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Account Codes asdasd</th>' .
                 '<th class="text-nowrap">Opening Balance</th>' .
                 '<th class="text-nowrap">Debit</th>' .
                 '<th class="text-nowrap">Credit</th>' .
@@ -78,10 +78,10 @@ class TrialBalanceController extends Controller
             foreach ($account_ledgers as $account_ledger) {
                 if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
 
-                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
                 } else {
-                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                     array_push($starting_balance, $ending_balance);
                 }
 
@@ -98,9 +98,9 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
 
                     '<td>' .
-                    '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')
+                    '<span>' . date_format(new DateTime($account_ledger->created_at), 'h:i:s')
                     . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                    date_format(new DateTime($account_ledger->created_date), 'Y-m-d') .
+                    date_format(new DateTime($account_ledger->created_at), 'Y-m-d') .
                     '</span>' .
 
                     '</td>' .
@@ -115,10 +115,12 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
+                '<th></th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('debit')->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('credit')->sum()) . '</th>' .
-                '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';
@@ -144,8 +146,8 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<td></td>' .
                 '<td></td>' .
-                '<td class="text-nowrap">No Record Found Of </td>' .
                 '<td></td>' .
+                '<td class="text-nowrap">No Record Found</td>' .
                 '<td></td>' .
                 '<td></td>' .
                 '<td></td>' .
@@ -156,10 +158,10 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';
@@ -179,22 +181,22 @@ class TrialBalanceController extends Controller
         $end_date =  substr($request->to_date, 14, 10);
 
         $account_head = AccountHead::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-            $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
+            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
             return $query;
         })->when(($request->months_id == 'months12'), function ($query) {
-            $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(12));
+            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(12));
             return $query;
         })
             ->when(($request->months_id == 'months6'), function ($query) {
-                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(6));
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
                 return $query;
             })
             ->when(($request->months_id == 'months1'), function ($query) {
-                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth());
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth());
                 return $query;
             })
             ->when(($request->months_id == 'months3'), function ($query) {
-                $query->whereMonth('created_date', '>=', Carbon::now()->subMonth(3));
+                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(3));
                 return $query;
             })
             ->when(($account_head_code > 0), function ($query) use ($account_head_code) {
@@ -225,9 +227,9 @@ class TrialBalanceController extends Controller
                 $debits = $account->accountLedgers->pluck('debit')->sum();
                 $ending = 0;
                 if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
-                    $ending = number_format($credits - $debits);
-                } else {
                     $ending = number_format($debits - $credits);
+                } else {
+                    $ending = number_format($credits - $debits);
                 }
 
                 $table .= '<tr>' .
@@ -239,9 +241,9 @@ class TrialBalanceController extends Controller
                     '<td class="text-nowrap">' . number_format($debits) . '</td>' .
                     '<td class="text-nowrap">' . $ending . '</td>' .
                     '<td class="text-nowrap">' .
-                    '<span>' . date_format(new DateTime($account->created_date), 'h:i:s')
+                    '<span>' . date_format(new DateTime($account->created_at), 'h:i:s')
                     . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                    date_format(new DateTime($account->created_date), 'Y-m-d') .
+                    date_format(new DateTime($account->created_at), 'Y-m-d') .
                     '</span>' .
 
                     '</td>' .

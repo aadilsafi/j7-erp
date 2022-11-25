@@ -92,7 +92,7 @@
 
                                                     array_push($installment_large_number,$salesPlan->installments->pluck('details')->count());
                                                 @endphp
-                                                        <option value="{{ $salesPlan->stakeholder->id }}">{{ $salesPlan->stakeholder->full_name }}</option>
+                                                        <option value="{{ $salesPlan->id }}">{{ $salesPlan->stakeholder->full_name }}</option>
                                                 @endforeach
                                             </select>
                                             </div>
@@ -163,29 +163,39 @@
             </div>
         </div>
 
-        <div class="row">
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="container">
-    <div class="row my-3">
-        <div class="col">
-            <h4>Filter Data Show</h4>
-        </div>
-    </div>
-    <div class="row py-2">
-        <div class="col-md-12 py-1">
-            <div class="card">
-                <div class="card-body">
-                    <canvas id="chDonut3"></canvas>
+            <div id="pipe_chart_filter_data" class="row d-none">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row my-3">
+                                <div class="col">
+                                    <h4>Filter Data Show</h4>
+                                </div>
+                            </div>
+                            <div class="row py-2">
+                                <input type="hidden" name="amount" id="amount">
+                                <input type="hidden" name="paid_amount" id="paid_amount">
+                                <input type="hidden" name="due_amount" id="due_amount">
+                                <input type="hidden" name="remaining_amount" id="remaining_amount">
+                                <div class="col-md-6 py-1">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="chDonut3"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 py-1">
+                                    {{-- <div class="card">
+                                        <div class="card-body">
+                                            <canvas id="chDonut3"></canvas>
+                                        </div>
+                                    </div> --}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-                </div>
-            </div>
-        </div>
             <div class="row">
 
             <div class="card">
@@ -198,46 +208,6 @@
                                 </h3>
                             </div>
                         </div>
-                        {{-- <div class="row mt-3" id="dropdow_installment">
-                            <div class="col-md-4 col-xl-4 col-sm-12 align-content-center">
-                                <label for="installments"> <b> Installments</b></label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4 col-xl-4 col-sm-12 align-content-center">
-                                <div class="form-group">
-                                    <label class="col-md-12 control-label" for="checkboxes"><b> Year. Quarter. Month ...</b></label>
-                                     @foreach ([1=>'year 2020',2=>'year 2021',3=>'year 2022',4=>'year 2023'] as $check )
-                                        <div class="checkbox">
-                                            <label for="checkboxes-0">
-                                            <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                                            {{$check}}
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                            </div>
-                            <div class="col-md-4 col-xl-4 col-sm-12 align-content-center">
-                                <div class="form-group">
-                                    <label class="col-md-12 control-label" for="checkboxes"><b> Floor</b></label>
-                                    <div class="col-md-6">
-                                        @foreach ([1=>'Ground Floor 1',2=>'Ground Floor 2',3=>'Ground Floor 3',4=>'Ground Floor 4'] as $check )
-                                            <div class="checkbox">
-                                                <label for="checkboxes-0">
-                                                <input type="checkbox" name="checkboxes" id="checkboxes-0" value="1">
-                                                {{$check}}
-                                                </label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                         <div class="row mt-3" id="sub_manu">
                             <div class="col-md-4 sm-md-12">
                                 <p>
@@ -269,6 +239,7 @@
                             <div class="card chart-container">
                                 <canvas id="chart"></canvas>
                             </div>
+                            
                         </div>
 
                         <div class="row table-responsive">
@@ -421,7 +392,6 @@
                     data_data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
                         filter_date_to;
                 }
-                console.log(data_data);
                 let url = "{{ route('sites.accounts.recovery.ajax-filter-inventory-aging', ['site_id' => encryptParams($site->id)]) }}";
         var _token = '{{ csrf_token() }}';
         $.ajax({
@@ -437,10 +407,197 @@
                     '_token': _token,
                 },
             success: function(data) {
-
-                console.log((data))
                 if(data.status==true){
-                    $('#example').html(data.data);
+                    $('#pipe_chart_filter_data').removeClass('d-none').addClass('d-block');
+                    var data_pipe_chart = [];
+                    data_pipe_chart.push(data.data[0].amount,data.data[0].paid_amount,data.data[0].due_amount,data.data[0].remaining_amount);
+                    $('#amount').val(data.data[0].amount);
+                    $('#paid_amount').val(data.data[0].paid_amount);
+                    $('#due_amount').val(data.data[0].due_amount);
+                    $('#remaining_amount').val(data.data[0].remaining_amount);
+/* chart.js chart examples */
+
+// chart colors
+var colors = ['#007bff','#28a745','#333333','#c3e6cb','#dc3545','#6c757d'];
+
+/* large pie/donut chart */
+var chPie = document.getElementById("chPie");
+if (chPie) {
+  new Chart(chPie, {
+    type: 'pie',
+    data: {
+      labels: ['Desktop', 'Phone', 'Tablet', 'Unknown'],
+      datasets: [
+        {
+          backgroundColor: [colors[1],colors[0],colors[2],colors[5]],
+          borderWidth: 0,
+          data: [50, 40, 15, 5]
+        }
+      ]
+    },
+    plugins: [{
+      beforeDraw: function(chart) {
+        var width = chart.chart.width,
+            height = chart.chart.height,
+            ctx = chart.chart.ctx;
+        ctx.restore();
+        var fontSize = (height / 70).toFixed(2);
+        ctx.font = fontSize + "em sans-serif";
+        ctx.textBaseline = "middle";
+        var text = chart.config.data.datasets[0].data[0] + "%",
+            textX = Math.round((width - ctx.measureText(text).width) / 2),
+            textY = height / 2;
+        ctx.fillText(text, textX, textY);
+        ctx.save();
+      }
+    }],
+    options: {layout:{padding:0}, legend:{display:false}, cutoutPercentage: 80}
+  });
+}
+
+
+/* 3 donut charts */
+var donutOptions = {
+  cutoutPercentage: 85,
+  legend: {position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}}
+};
+
+// donut 1
+var chDonutData1 = {
+    labels: ['Bootstrap', 'Popper', 'Other'],
+    datasets: [
+      {
+        backgroundColor: colors.slice(0,3),
+        borderWidth: 0,
+        data: [74, 11, 40]
+      }
+    ]
+};
+console.log(amount_pipe_chart,
+paid_amount_pipe_chart,
+due_amount_pipe_chart,'pipe chart value')
+// donut 3
+var chDonutData3 = {
+
+    labels: ["Due Amount","Amount","Paid Amount","Remaining Amount"],
+    datasets: [
+      {
+        backgroundColor: colors.slice(0,3),
+        borderWidth: 0,
+        data: [data.data[0].due_amount, data.data[0].amount, data.data[0].paid_amount,data.data[0].remaining_amount]
+      }
+    ]
+};
+var chDonut3 = document.getElementById("chDonut3");
+if (chDonut3) {
+  new Chart(chDonut3, {
+      type: 'pie',
+      data: chDonutData3,
+      options: donutOptions
+  });
+}
+
+/* 3 line charts */
+var lineOptions = {
+    legend:{display:false},
+    tooltips:{interest:false,bodyFontSize:11,titleFontSize:11},
+    scales:{
+        xAxes:[
+            {
+                ticks:{
+                    display:false
+                },
+                gridLines: {
+                    display:false,
+                    drawBorder:false
+                }
+            }
+        ],
+        yAxes:[{display:false}]
+    },
+    layout: {
+        padding: {
+            left: 6,
+            right: 6,
+            top: 4,
+            bottom: 6
+        }
+    }
+};
+
+var chLine1 = document.getElementById("chLine1");
+if (chLine1) {
+  new Chart(chLine1, {
+      type: 'line',
+      data: {
+          labels: ['Jan','Feb','Mar','Apr','May'],
+          datasets: [
+            {
+              backgroundColor:'#ffffff',
+              borderColor:'#ffffff',
+              data: [10, 11, 4, 11, 4],
+              fill: false
+            }
+          ]
+      },
+      options: lineOptions
+  });
+}
+var chLine2 = document.getElementById("chLine2");
+if (chLine2) {
+  new Chart(chLine2, {
+      type: 'line',
+      data: {
+          labels: ['A','B','C','D','E'],
+          datasets: [
+            {
+              backgroundColor:'#ffffff',
+              borderColor:'#ffffff',
+              data: [4, 5, 7, 13, 12],
+              fill: false
+            }
+          ]
+      },
+      options: lineOptions
+  });
+}
+
+var chLine3 = document.getElementById("chLine3");
+if (chLine3) {
+  new Chart(chLine3, {
+      type: 'line',
+      data: {
+          labels: ['Pos','Neg','Nue','Other','Unknown'],
+          datasets: [
+            {
+              backgroundColor:'#ffffff',
+              borderColor:'#ffffff',
+              data: [13, 15, 10, 9, 14],
+              fill: false
+            }
+          ]
+      },
+      options: lineOptions
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 }else{
                     console.log(data.data);
                 }
@@ -458,12 +615,13 @@
 
             $('#form_date').val('');
             $('#to_date').val('');
+            $('#pipe_chart_filter_data').addClass('d-none');
             $("#type_name").select2("val", "0");
             $("#unit_value").select2("val", "0");
             $("#installment_value").select2("val", "0");
             flatpicker_to_date.clear();
 
-            $('#apply_filter').trigger('click');
+            // $('#apply_filter').trigger('click');
 
         }
 
@@ -476,6 +634,9 @@
             }
 
         var amount = $('#amount_sum').val();
+        var amount_pipe_chart = $('#amount').val();
+        var paid_amount_pipe_chart = $('#paid_amount').val();
+        var due_amount_pipe_chart = $('#due_amount').val();
         var remaining_amount_sum = $('#remaining_amount_sum').val();
         var paid_amount = $('#paid_amount').val();
         var amount_due = $('#amount_due').val();
@@ -493,6 +654,7 @@
       const myChart = new Chart(ctx, {
         type: 'bar',
         data: {
+            //working chart
           labels: ["Amount","Remaining Amount","Paid Amount"],
           datasets: [{
             label: 'Payment',
@@ -581,15 +743,19 @@ var chDonutData1 = {
       }
     ]
 };
-
+console.log(amount_pipe_chart,
+paid_amount_pipe_chart,
+due_amount_pipe_chart,'pipe chart value')
 // donut 3
+console.log(data_pipe_chart);
 var chDonutData3 = {
-    labels: ["Amount","Remaining Amount","Paid Amount"],
+
+    labels: ["Due Amount","Amount","Paid Amount","Remaining Amount"],
     datasets: [
       {
         backgroundColor: colors.slice(0,3),
         borderWidth: 0,
-        data: [21, 45, 55, 33]
+        data: data_pipe_chart
       }
     ]
 };

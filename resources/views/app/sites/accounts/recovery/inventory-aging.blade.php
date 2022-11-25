@@ -207,12 +207,12 @@
                                 {{-- <div class="card chart-container full_width_graph">
                                     <canvas id="chart"></canvas>
                                 </div> --}}
-                            <div class="col-md-6 col-sm-12" id="full_bar_graph">
+                            <div class="col-md-12 col-sm-12" id="full_bar_graph">
                                 <div class="card chart-container">
                                     <canvas id="chart"></canvas>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-12" id="pipe_chart_bar">
+                            <div class="col-md-6 col-sm-12 d-none" id="pipe_chart_bar">
                                 <div id="pipe_chart_filter_data" class="row d-none">
                                     <div class="card">
                                         <div class="card-body">
@@ -411,7 +411,8 @@
                 },
             success: function(data) {
                 if(data.status==true){
-                    $('#pipe_chart_filter_data').removeClass('d-none').addClass('d-block');
+                    $('#pipe_chart_bar').removeClass('d-none').addClass('d-block');
+                    $('#full_bar_graph').removeClass('col-md-12').addClass('col-md-6');
                     var data_pipe_chart = [];
                     data_pipe_chart.push(data.data[0].amount,data.data[0].paid_amount,data.data[0].due_amount,data.data[0].remaining_amount);
                     $('#amount').val(data.data[0].amount);

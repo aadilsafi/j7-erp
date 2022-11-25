@@ -6,7 +6,7 @@
 
 <textarea class="form-control form-control-lg" id="{{ $id }}" name="{{ $name }}"
     maxlength="{{ $maxlength }}" minlength="{{ $minlength }}" {{ $required ? 'required' : null }}
-    {{ $readonly ? 'readonly' : null }} {{ $disabled ? 'disabled' : null }} rows="5"></textarea>
+    {{ $readonly ? 'readonly' : null }} {{ $disabled ? 'disabled' : null }} rows="5">{{ $isEditMode && $customFieldValue ? $customFieldValue->value : null }}</textarea>
 
 @if ($with_col)
     </div>

@@ -723,12 +723,14 @@ if (!function_exists('generateCheckbox')) {
     function generateCheckbox($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
     {
         $element = view('app.partial-components.checkbox', [
+            'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'id' => $id,
             'name' => $name,
             'label' => $label,
             'bootstrapCols' => $bootstrapCols,
             'with_col' => $with_col,
-            'value' => $values,
+            'value' => key($values),
             'required' => $required,
             'checked' => $checked,
             'disabled' => $disabled,
@@ -742,6 +744,8 @@ if (!function_exists('generateDate')) {
     function generateDate($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.date', [
+            'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'id' => $id,
             'name' => $name,
             'label' => $label,
@@ -763,6 +767,8 @@ if (!function_exists('generateInput')) {
     function generateInput($isEditMode, $customFieldValue = null, $maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.input', [
+            'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'type' => $type,
             'id' => $id,
             'name' => $name,
@@ -787,6 +793,8 @@ if (!function_exists('generateTextarea')) {
     function generateTextarea($isEditMode, $customFieldValue = null, $maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.textarea', [
+            'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'maxlength' => $maxlength,
             'minlength' => $minlength,
             'id' => $id,
@@ -855,7 +863,6 @@ if (!function_exists('generateCustomFields')) {
         $customFieldHTML = [];
 
         foreach ($customFields as $customField) {
-            // dd($customField->CustomFieldValue->where('modelable_id',$modelId)->first());
             switch ($customField->type) {
                 case 'checkbox':
                     $customFieldHTML[] = generateCheckbox(
@@ -865,7 +872,7 @@ if (!function_exists('generateCustomFields')) {
                         $customField->slug,
                         $customField->name,
                         $customField->bootstrap_column,
-                        $customField->values[0] ?? '',
+                        $customField->values,
                         $customField->required,
                         $customField->checked,
                         $customField->disabled,

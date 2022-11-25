@@ -11,7 +11,8 @@
     {{ $type == 'number' ? 'min=' . $min .'' : null }} 
     {{ $type == 'number' && $max > 0 ? ' max=' . $max . '' : null }} 
     {{ $required ? ' required' : null }}
-    {{ $readonly ? 'readonly' : null }} {{ $disabled ? 'disabled' : null }} />
+    {{ $readonly ? 'readonly' : null }} {{ $disabled ? 'disabled' : null }} 
+    {{ $isEditMode && $customFieldValue ? ' value=' . $customFieldValue->value  .'' : null }}/>
 
 
 @if ($with_col)

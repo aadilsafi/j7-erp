@@ -109,13 +109,13 @@
 
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <label class="form-label fs-5" for="contact">Optional Contact # </label>
-                    <input type="tel"
-                        class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
-                        id="optional_contact" name="optional_contact" placeholder=""
-                        value="{{ isset($stakeholder) ? $stakeholder->optional_contact : old('optional_contact') }}" />
-                    @error('optional_contact')
-                        <div class="invalid-feedback ">{{ $message }}</div>
-                    @enderror
+                <input type="tel"
+                    class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
+                    id="optional_contact" name="optional_contact" placeholder=""
+                    value="{{ isset($stakeholder) ? $stakeholder->optional_contact : old('optional_contact') }}" />
+                @error('optional_contact')
+                    <div class="invalid-feedback ">{{ $message }}</div>
+                @enderror
             </div>
             <input type="hidden" name="OptionalCountryDetails" id="OptionalCountryDetails">
         </div>
@@ -197,7 +197,7 @@
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="address">Stakeholder Address <span
+                <label class="form-label fs-5" for="address">Permanent Address <span
                         class="text-danger">*</span></label>
                 <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="address" rows="3"
                     placeholder="Stakeholder Address">{{ isset($stakeholder) ? $stakeholder->address : old('address') }}</textarea>
@@ -208,8 +208,8 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="mailing_address">Mailing Address <span
                         class="text-danger">*</span></label>
-                <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing_address" id="mailing_address" rows="3"
-                    placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
+                <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing_address"
+                    id="mailing_address" rows="3" placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
                 @error('mailing_address')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

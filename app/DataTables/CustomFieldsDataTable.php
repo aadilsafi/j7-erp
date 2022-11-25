@@ -39,7 +39,8 @@ class CustomFieldsDataTable extends DataTable
                 return editDateColumn($customField->updated_at);
             })
             ->editColumn('actions', function ($customField) {
-                return view('app.sites.settings.custom-fields.actions', ['site_id' => $this->site_id, 'id' => $customField->id]);
+                $customValues = count($customField->CustomFieldValue);
+                return view('app.sites.settings.custom-fields.actions', ['site_id' => $this->site_id, 'id' => $customField->id, 'customValues' => $customValues]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

@@ -720,7 +720,7 @@ if (!function_exists('getModelsClasses')) {
 }
 
 if (!function_exists('generateCheckbox')) {
-    function generateCheckbox($id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
+    function generateCheckbox($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $checked = false, $disabled = false, $with_col = true)
     {
         $element = view('app.partial-components.checkbox', [
             'id' => $id,
@@ -739,7 +739,7 @@ if (!function_exists('generateCheckbox')) {
 }
 
 if (!function_exists('generateDate')) {
-    function generateDate($id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateDate($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.date', [
             'id' => $id,
@@ -760,7 +760,7 @@ if (!function_exists('generateDate')) {
 
 
 if (!function_exists('generateInput')) {
-    function generateInput($maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateInput($isEditMode, $customFieldValue = null, $maxlength, $minlength, $min, $max, $type, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.input', [
             'type' => $type,
@@ -784,7 +784,7 @@ if (!function_exists('generateInput')) {
 }
 
 if (!function_exists('generateTextarea')) {
-    function generateTextarea($maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateTextarea($isEditMode, $customFieldValue = null, $maxlength, $minlength, $id, $name, $label, $bootstrapCols, $value = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
         $element = view('app.partial-components.textarea', [
             'maxlength' => $maxlength,
@@ -805,10 +805,12 @@ if (!function_exists('generateTextarea')) {
 }
 
 if (!function_exists('generateSelect')) {
-    function generateSelect($multiple, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateSelect($isEditMode, $customFieldValue = null, $multiple, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
 
         $element = view('app.partial-components.select', [
+            'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'id' => $id,
             'name' => $name,
             'label' => $label,
@@ -826,11 +828,12 @@ if (!function_exists('generateSelect')) {
 }
 
 if (!function_exists('generateRadio')) {
-    function generateRadio($isEditMode,$id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
+    function generateRadio($isEditMode, $customFieldValue = null, $id, $name, $label, $bootstrapCols, $values = '', $required = false, $disabled = false, $readonly = false, $with_col = true)
     {
 
         $element = view('app.partial-components.radio', [
             'isEditMode' => $isEditMode,
+            'customFieldValue' => $customFieldValue,
             'id' => $id,
             'name' => $name,
             'label' => $label,
@@ -847,15 +850,17 @@ if (!function_exists('generateRadio')) {
 }
 
 if (!function_exists('generateCustomFields')) {
-    function generateCustomFields($customFields, $isEditMode =false)
+    function generateCustomFields($customFields, $isEditMode = false, $modelId = 0)
     {
         $customFieldHTML = [];
 
         foreach ($customFields as $customField) {
-                // dd($customField->modelable);
+            // dd($customField->CustomFieldValue->where('modelable_id',$modelId)->first());
             switch ($customField->type) {
                 case 'checkbox':
                     $customFieldHTML[] = generateCheckbox(
+                        $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
@@ -870,6 +875,8 @@ if (!function_exists('generateCustomFields')) {
 
                 case 'date':
                     $customFieldHTML[] = generateDate(
+                        $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->slug,
                         $customField->slug,
                         $customField->name,
@@ -888,6 +895,8 @@ if (!function_exists('generateCustomFields')) {
                 case 'text':
 
                     $customFieldHTML[] = generateInput(
+                        $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->maxlength,
                         $customField->minlength,
                         $customField->min,
@@ -907,6 +916,8 @@ if (!function_exists('generateCustomFields')) {
 
                 case 'textarea':
                     $customFieldHTML[] = generateTextarea(
+                        $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->maxlength,
                         $customField->minlength,
                         $customField->slug,
@@ -923,6 +934,8 @@ if (!function_exists('generateCustomFields')) {
 
                 case 'select':
                     $customFieldHTML[] = generateSelect(
+                        $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->multiple,
                         $customField->slug,
                         $customField->slug,
@@ -938,6 +951,7 @@ if (!function_exists('generateCustomFields')) {
                 case 'radio':
                     $customFieldHTML[] = generateRadio(
                         $isEditMode,
+                        $customField->CustomFieldValue->where('modelable_id', $modelId)->first(),
                         $customField->slug,
                         $customField->slug,
                         $customField->name,

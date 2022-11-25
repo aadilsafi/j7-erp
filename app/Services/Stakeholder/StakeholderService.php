@@ -249,9 +249,9 @@ class StakeholderService implements StakeholderInterface
         });
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $id, $inputs) {
+        DB::transaction(function () use ($site_id, $id, $inputs, $customFields) {
             $stakeholder = $this->model()->find($id);
             $nextOfKinId = $stakeholder->parent_id;
             $cnic = $stakeholder->cnic;
@@ -349,6 +349,16 @@ class StakeholderService implements StakeholderInterface
                         'status' => true,
                     ]);
                 }
+            }
+
+            foreach ($customFields as $key => $value) {
+                // dd($inputs[$value->name]);
+
+                $stakeholder->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => $inputs[$value->name],
+                ]);
             }
 
             return $stakeholder;

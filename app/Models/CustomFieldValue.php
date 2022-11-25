@@ -14,4 +14,10 @@ class CustomFieldValue extends Model
         'value',
         'view',
     ];
+
+
+    public function modelable()
+    {
+        return $this->morphTo();
+    }
 }

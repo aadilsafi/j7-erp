@@ -418,7 +418,9 @@ class ReceiptService implements ReceiptInterface
                 $installment->update();
             }
             // }
+
         }
+
         return true;
     }
 

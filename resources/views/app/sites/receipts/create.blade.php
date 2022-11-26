@@ -114,7 +114,7 @@
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
                     @endphp
                 @endforeach
-
+            {{-- @dd($amount_received,$amount_paid); --}}
             @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"

@@ -22,8 +22,8 @@
                                                     $paidAmount = $row->salesPlan[0]['PaidorPartiallyPaidInstallments'];
                                                     $paidAmount = collect($paidAmount)->sum('amount');
                                                 @endphp
-                                                @continue(isset($unit) && $unit->id == $row['id'])
-                                                @continue(isset($paidAmount) && $paidAmount  == $row->salesPlan[0]['total_price'])
+                                                {{-- @continue(isset($unit) && $unit->id == $row['id'])
+                                                @continue(isset($paidAmount) && $paidAmount  == $row->salesPlan[0]['total_price']) --}}
 
                                                 <option  value="{{ $row->id }}"
                                                     {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>

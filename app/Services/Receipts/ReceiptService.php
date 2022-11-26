@@ -44,13 +44,14 @@ class ReceiptService implements ReceiptInterface
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
 
-            $amount_received = $requested_data['amount_received'];
-            $discounted_amount = $requested_data['discounted_amount'];
-            if (isset($discounted_amount)) {
-                $amount_received = (float)$discounted_amount + (float)$amount_received;
-                $amount_received = (string)$amount_received;
-            }
+
             for ($i = 0; $i < count($data); $i++) {
+                $amount_in_numbers = $data[$i]['amount_in_numbers'];
+                $discounted_amount = $requested_data['discounted_amount'];
+                if (isset($discounted_amount)) {
+                    $amount_in_numbers = (float)$discounted_amount + (float)$amount_in_numbers;
+                    $amount_in_numbers = (string)$amount_in_numbers;
+                }
 
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
@@ -105,7 +106,7 @@ class ReceiptService implements ReceiptInterface
                     'online_instrument_no' => $data[$i]['online_instrument_no'],
                     'transaction_date' => $data[$i]['transaction_date'],
                     'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                    'amount_in_numbers' => $amount_received,
+                    'amount_in_numbers' => $amount_in_numbers,
                     'purpose' => 'installments',
                     'installment_number' => '1',
                     'amount_received' => $requested_data['amount_received'],
@@ -402,14 +403,17 @@ class ReceiptService implements ReceiptInterface
                         $specficAmount = $amount_received;
                         $amount_received = $amount_received - $specficAmount;
                     }
-
                     $installment->paid_amount = $installment->paid_amount - $specficAmount;
                     $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
 
+                    // dd($amount_received,$specficAmount,$installment->amount,$installment->paid_amount ,$installment->remaining_amount);
+
                     if ($installment->remaining_amount == $installment->amount) {
                         $installment->status = 'unpaid';
-                    } else {
-                        $installment->status = 'partially_paid';
+                    } elseif($installment->remaining_amount > $installment->amount) {
+                        $installment->status = 'paid';
+                    }else{
+                        $installment->status =  'partially_paid';
                     }
                     $installment->update();
                 }
@@ -442,7 +446,6 @@ class ReceiptService implements ReceiptInterface
                     $unit->status_id = 5;
                     $unit->is_for_rebate = true;
                 }
-
             }
         }
 

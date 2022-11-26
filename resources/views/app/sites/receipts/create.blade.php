@@ -136,6 +136,20 @@
                         </div>
 
                         <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                Discounted Amount
+                            </label>
+                            <input min="0" type="number"
+                                class="form-control   @error('discounted_amount') is-invalid @enderror"
+                                name="discounted_amount" id="discounted_amount"
+                                placeholder="Discounted Amount "
+                                value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />
+                            @error('discounted_amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-block mb-1">
                             <label class="form-label fs-5" for="created_date">Creation Date</label>
                             <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
                                 class="form-control form-control-lg" />
@@ -359,10 +373,19 @@
             dateFormat: "Y-m-d",
         });
 
+        $('#discounted_amount').on('focusout', function() {
+            var discounted_amount = $(this).val();
+            $('.amountToBePaid').trigger('focusout');
+        });
+
         $('.amountToBePaid').on('focusout', function() {
 
             var amount = $(this).val();
             var unit_id = $(this).attr('unit_id');
+            var discounted_amount = $('#discounted_amount').val();
+            if(discounted_amount > 0){
+                amount= parseFloat(amount) + parseFloat(discounted_amount);
+            }
             if (amount <= 0) {
                 toastr.error('Invalid Amount.',
                     "Error!", {

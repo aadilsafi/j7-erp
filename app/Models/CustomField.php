@@ -54,4 +54,14 @@ class CustomField extends Model
     {
         return $this->belongsTo(Site::class);
     }
+
+    public function CustomFieldValue()
+    {
+        return $this->hasMany(CustomFieldValue::class);
+    }
+
+    public function modelable()
+    {
+        return $this->morphTo();
+    }
 }

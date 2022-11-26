@@ -70,7 +70,7 @@ class User extends Authenticatable implements HasMedia
 
     public function teams()
     {
-        return $this->belongsToMany(Team::class,'team_users')->withPivot('site_id');
+        return $this->belongsToMany(Team::class, 'team_users')->withPivot('site_id');
     }
 
     /**
@@ -91,5 +91,14 @@ class User extends Authenticatable implements HasMedia
     public function userBatches()
     {
         return $this->hasMany(UserBatch::class);
+    }
+    public function salesPlans()
+    {
+        return $this->hasMany(SalesPlan::class);
+    }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
 }

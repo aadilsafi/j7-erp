@@ -62,4 +62,9 @@ class FileResale extends Model
     {
         return $this->hasMany(FileResaleAttachment::class);
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

@@ -138,10 +138,10 @@
                                                 if(substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12 )
                                                 {
                                                    
-                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
                                                     array_push($starting_balance,$ending_balance); 
                                                 }else {
-                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                                                     array_push($starting_balance,$ending_balance);
                                                 }
                                                 @endphp
@@ -188,10 +188,12 @@
                                         <tr>
                                             <th></th>
                                             <th></th>
-                                            <th>{{number_format(collect($starting_balance)->sum())}}</th>
+                                            {{-- <th>{{number_format(collect($starting_balance)->sum())}}</th> --}}
+                                            <th></th>
                                             <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
                                             <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
-                                            <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th>
+                                            <th></th>
+                                            {{-- <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th> --}}
                                             <th></th>
                                         </tr>
                                     </tfoot>

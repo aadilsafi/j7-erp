@@ -134,7 +134,7 @@ class CustomerUnitsDataTable extends DataTable
             Column::make('type_id')->name('type.name')->title('Type')->orderable(false),
             Column::make('status_id')->name('status.name')->title('Status')->addClass('text-center')->orderable(false),
             Column::computed('full_name')->name('salesPlan.stakeholder.full_name')->title('Full Name')->addClass('text-center text-nowrap')->orderable(false),
-            Column::computed('father_name')->name('salesPlan.stakeholder.father_name')->title('FATHER NAME')->addClass('text-center text-nowrap')->orderable(false),
+            Column::computed('father_name')->name('salesPlan.stakeholder.father_name')->title('Father / Husband Name')->addClass('text-center text-nowrap')->orderable(false),
             Column::computed('cnic')->name('salesPlan.stakeholder.cnic')->title('CNIC')->addClass('text-center text-nowrap')->orderable(false),
             Column::computed('contact')->name('salesPlan.stakeholder.contact')->title('CONTACT')->addClass('text-center text-nowrap')->orderable(false),
             // Column::make('created_at')->addClass('text-nowrap'),

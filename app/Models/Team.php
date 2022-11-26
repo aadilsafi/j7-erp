@@ -35,4 +35,9 @@ class Team extends Model
     {
         return $this->belongsToMany(User::class, 'team_users')->withPivot('site_id');
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

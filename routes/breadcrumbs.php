@@ -557,3 +557,10 @@ Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_i
     $trail->parent('dashboard');
     $trail->push('Cities', route('sites.settings.cities.index', ['site_id' => $site_id]));
 });
+
+//Activity Logs Breadcrumbs
+Breadcrumbs::for('sites.settings.activity-logs.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.activity-logs.index', ['site_id' => $site_id]));
+    $trail->push('Activity Logs', route('sites.settings.activity-logs.index', ['site_id' => $site_id]));
+});

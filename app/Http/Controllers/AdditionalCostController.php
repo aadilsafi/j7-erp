@@ -77,8 +77,10 @@ class AdditionalCostController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
-                $record = $this->additionalCostInterface->store($site_id, $inputs);
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->additionalCostInterface->model()));
+
+                $record = $this->additionalCostInterface->store($site_id, $inputs, $customFields);
                 return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
@@ -110,10 +112,15 @@ class AdditionalCostController extends Controller
         try {
             $additionalCost = $this->additionalCostInterface->getById($site_id, $id);
             if ($additionalCost && !empty($additionalCost)) {
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->additionalCostInterface->model()));
+                $customFields = collect($customFields)->sortBy('order');
+                $customFields = generateCustomFields($customFields, true, $additionalCost->id);
+
                 $data = [
                     'site_id' => $site_id,
                     'additionalCost' => $additionalCost,
                     'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+                    'customFields' => $customFields
                 ];
 
                 return view('app.additional-costs.edit', $data);
@@ -136,9 +143,11 @@ class AdditionalCostController extends Controller
     {
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
+                $inputs = $request->all();
                 // return [$site_id, $id, $inputs];
-                $record = $this->additionalCostInterface->update($site_id, $inputs, $id);
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->additionalCostInterface->model()));
+       
+                $record = $this->additionalCostInterface->update($site_id, $inputs, $id, $customFields );
                 return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);

@@ -12,6 +12,7 @@ use App\Services\CustomFields\CustomFieldInterface;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
+use App\Models\Bank;
 use App\Models\SalesPlan;
 use Redirect;
 use Validator;
@@ -62,8 +63,8 @@ class RebateIncentiveController extends Controller
                 'units' => Unit::where('status_id', 5)->where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
                 'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
-                'customFields' => $customFields
-
+                'customFields' => $customFields,
+                'banks' => Bank::all(),
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);
@@ -82,7 +83,7 @@ class RebateIncentiveController extends Controller
     {
         try {
             $inputs = $request->input();
-            
+
             $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {

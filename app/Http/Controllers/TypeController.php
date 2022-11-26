@@ -82,10 +82,14 @@ class TypeController extends Controller
      */
     public function store(typeStoreRequest $request, $site_id)
     {
+        // dd($request->all());
+
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
-                $record = $this->unitTypeInterface->store($site_id, $inputs);
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->unitTypeInterface->model()));
+
+                $record = $this->unitTypeInterface->store($site_id, $inputs, $customFields);
                 return redirect()->route('sites.types.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
@@ -123,11 +127,17 @@ class TypeController extends Controller
 
             if ($type && !empty($type)) {
 
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->unitTypeInterface->model()));
+                $customFields = collect($customFields)->sortBy('order');
+                $customFields = generateCustomFields($customFields, true, $type->id);
+
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
                     'types' => $this->unitTypeInterface->getAllWithTree($site_id),
                     'type' => $type,
+                    'customFields' => $customFields,
+
                 ];
 
                 return view('app.sites.types.edit', $data);
@@ -153,8 +163,10 @@ class TypeController extends Controller
 
         try {
             if (!request()->ajax()) {
-                $inputs = $request->validated();
-                $record = $this->unitTypeInterface->update($site_id, $inputs, $id);
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->unitTypeInterface->model()));
+
+                $record = $this->unitTypeInterface->update($site_id, $inputs, $id, $customFields);
                 return redirect()->route('sites.types.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
@@ -423,7 +435,7 @@ class TypeController extends Controller
                     'level' => 3,
                 ]);
             }
-           $accountCode++;
+            $accountCode++;
         }
 
         TempUnitType::query()->truncate();

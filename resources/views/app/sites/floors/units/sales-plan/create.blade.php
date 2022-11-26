@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
+
 @endsection
 
 @section('custom-css')
@@ -36,6 +38,29 @@
 
         #stakeholderNextOfKin {
             display: none;
+        }
+
+        .iti {
+            width: 100%;
+        }
+
+        .intl-tel-input {
+            display: table-cell;
+        }
+
+        .intl-tel-input .selected-flag {
+            z-index: 4;
+        }
+
+        .intl-tel-input .country-list {
+            z-index: 5;
+        }
+
+        .input-group .intl-tel-input .form-control {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 0;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 0;
         }
     </style>
 @endsection
@@ -118,13 +143,15 @@
                             <div class="row g-1">
                                 <div class="col-md-12">
                                     <div class="d-block mb-1">
-                                        <label class="form-label fs-5" for="created_date">Creation Date</label>
+                                        <label class="form-label fs-5" for="created_date">Creation Date<span
+                                                class="text-danger">*</span></label>
                                         <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
                                             name="created_date" class="form-control form-control-md" />
                                     </div>
                                     <hr>
                                     <div class="d-block mb-1">
-                                        <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity</label>
+                                        <label class="form-label fs-5" for="sales_plan_validity">Sales Plan Validity<span
+                                                class="text-danger">*</span></label>
                                         <input type="text" id="sales_plan_validity" name="sales_plan_validity"
                                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
                                     </div>
@@ -179,6 +206,8 @@
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -195,6 +224,35 @@
             lastInstallemtDate = 'today';
 
         $(document).ready(function() {
+
+            var input = document.querySelector("#stackholder_contact");
+            intl = window.intlTelInput(input, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+            input.addEventListener("countrychange", function() {
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            });
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            var inputOptional = document.querySelector("#optional_contact");
+            intlOptional = window.intlTelInput(inputOptional, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+
+            inputOptional.addEventListener("countrychange", function() {
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+            });
+            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+
 
             var e = $("#stackholders");
             e.wrap('<div class="position-relative"></div>');
@@ -240,8 +298,30 @@
                             $('#stackholder_cnic').val(stakeholderData.cnic);
                             $('#stackholder_ntn').val(stakeholderData.ntn);
                             $('#stackholder_contact').val(stakeholderData.contact);
+                            $('#optional_contact').val(stakeholderData.optional_contact);
+                            $('#mailing_address').val(stakeholderData.mailing_address);
                             $('#stackholder_address').text(stakeholderData.address);
                             $('#stackholder_comments').text(stakeholderData.comments);
+                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+                            
+                            if (countryDetails == null) {
+                                intl.setCountry('pk');
+                            } else {
+                                intl.setCountry(countryDetails['iso2']);
+                            }
+
+                            $('#countryDetails').val(JSON.stringify(intl
+                                .getSelectedCountryData()))
+
+                            var OptionalCountryDetails = JSON.parse(stakeholderData.OptionalCountryDetails);
+                            if (OptionalCountryDetails == null) {
+                                intlOptional.setCountry('pk');
+                            } else {
+                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            }
+
+                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                                .getSelectedCountryData()))
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -349,11 +429,14 @@
                 dateFormat: "Y-m-d",
                 onChange: function(selectedDates, dateStr, instance) {
                     installmentDate.set("minDate", dateStr);
-                    installmentDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_installment_days }}));
+                    installmentDate.setDate(new Date(dateStr).fp_incr(
+                        {{ $site->siteConfiguration->salesplan_installment_days }}));
 
-                    validityDate.set('minDate', new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+                    validityDate.set('minDate', new Date(dateStr).fp_incr(
+                        {{ $site->siteConfiguration->salesplan_validity_days }}));
 
-                    validityDate.setDate(new Date(dateStr).fp_incr({{ $site->siteConfiguration->salesplan_validity_days }}));
+                    validityDate.setDate(new Date(dateStr).fp_incr(
+                        {{ $site->siteConfiguration->salesplan_validity_days }}));
 
                     dataArrays.ArrDueDates = [];
                     mergeArrays();
@@ -634,6 +717,22 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
+        $.validator.addMethod("ContactNoError", function(value, element) {
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            return intl.isValidNumber();
+
+        }, "In Valid number");
+        $.validator.addMethod("OPTContactNoError", function(value, element) {
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            // if(value != '' )
+            if (value.length > 0) {
+                return intlOptional.isValidNumber();
+            } else {
+                return true;
+            }
+        }, "In Valid number");
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,
             rules: {
@@ -705,6 +804,9 @@
                 'stackholder[address]': {
                     required: true
                 },
+                'stackholder[mailing_address]': {
+                    required: true
+                },
                 'stackholder[cnic]': {
                     // minlength: 13,
                     // maxlength: 13,
@@ -724,7 +826,7 @@
             // validClass: "is-valid",
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
-            wrapper: "div",
+            // wrapper: "div",
             submitHandler: function(form) {
                 form.submit();
             }

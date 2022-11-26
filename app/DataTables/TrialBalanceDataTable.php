@@ -37,7 +37,7 @@ class TrialBalanceDataTable extends DataTable
                 return account_number_format($accountHead->code);
             })
             ->editColumn('created_at', function ($accountHead) {
-                return editDateColumn($accountHead->created_at);
+                return editDateColumn($accountHead->created_date);
             })
             ->editColumn('starting_balance', function ($accountHead) {
                 // if (count($accountHead->accountLedgers) > 0) {
@@ -78,9 +78,9 @@ class TrialBalanceDataTable extends DataTable
                     $credits = $accountHead->accountLedgers->pluck('credit')->sum();
                     $debits = $accountHead->accountLedgers->pluck('debit')->sum();
                     if ((substr($accountHead->code, 0, 2) == 10) || (substr($accountHead->code, 0, 2) == 12)) {
-                        return number_format($credits - $debits);
-                    } else {
                         return number_format($debits - $credits);
+                    } else {
+                        return number_format($credits - $debits);
                     }
                 }
             })

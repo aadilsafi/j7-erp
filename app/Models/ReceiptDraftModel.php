@@ -37,6 +37,7 @@ class ReceiptDraftModel extends Model implements HasMedia
         'status',
         'bank_details',
         'created_date',
+        'discounted_amount',
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -15,5 +15,6 @@ interface ReceiptInterface
     public function updateInstallments($inputs);
 
     public function ImportReceipts($site_id);
+    public function revertPayment($site_id, $id);
 
 }

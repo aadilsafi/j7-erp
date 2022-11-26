@@ -16,7 +16,8 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-         (new Permission())->insert([
+        //  (new Permission())->insert(
+        $data = [
 
             // Roles Routes
             [
@@ -1042,6 +1043,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.receipts.show',
                 'show_name' => 'Can View Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.receipts.revert-payment',
+                'show_name' => 'Can Revert Payment Of Selected Receipts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -2231,8 +2239,31 @@ class PermissionTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]
-        ]);
+            ],
+            // Logs Permission
+            [
+                'name' => 'sites.settings.activity-logs.index',
+                'show_name' => 'Can View Activity Logs',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ];
+        // ]);
+        foreach ($data as $permission) {
+            $permision_exist = Permission::where('name', $permission['name'])->first();
+            if ($permision_exist) {
+                continue;
+            } else {
+                Permission::firstOrCreate([
+                    'name' => $permission['name'],
+                    'show_name' => $permission['show_name'],
+                    'guard_name' => 'web',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         (new Role())->find(1)->givePermissionTo((new Permission())->pluck('id'));
     }

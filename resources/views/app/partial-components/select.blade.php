@@ -5,11 +5,13 @@
 <label class="form-label fs-5 text-capitalize" for="{{ $id }}">
     {{ $label ?? 'Select' }} <span class="text-danger">{{ $required ? ' *' : null }}</span>
 </label>
-<select id="{{ $id }}" class="select2 form-select" name="{{ $name }}" {{ $multiple ? 'multiple' : null }}
-    {{ $required ? 'required' : null }} {{ $readonly ? 'readonly' : null }} {{ $disabled ? 'disabled' : null }}>
-
-    @foreach ($values as $key => $value)
-        <option value="{{ $key }}">
+<select id="{{ $id }}" class="select2 form-select" name="{{ $name }}{{ $multiple ? '[]' : null }}"
+    {{ $multiple ? 'multiple' : null }} {{ $required ? 'required' : null }} {{ $readonly ? 'readonly' : null }}
+    {{ $disabled ? 'disabled' : null }}>
+    <option>Select {{ $label }}</option>
+    @foreach ($values ?? [] as $key => $value)
+        <option value="{{ $key }}"
+            {{ $isEditMode && $customFieldValue && $value == $customFieldValue->value ? 'selected' : null }}>
             {{ $value }}
         </option>
     @endforeach

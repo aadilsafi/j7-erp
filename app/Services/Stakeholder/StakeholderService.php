@@ -5,6 +5,7 @@ namespace App\Services\Stakeholder;
 use App\DataTables\BlacklistedStakeholderDataTable;
 use App\Models\{
     BacklistedStakeholder,
+    CustomFieldValue,
     Stakeholder,
     StakeholderContact,
     StakeholderNextOfKin,
@@ -52,9 +53,9 @@ class StakeholderService implements StakeholderInterface
         return $this->model()->with($relationships)->find($id);
     }
 
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs, $customFields) {
             $data = [
                 'site_id' => decryptParams($site_id),
                 'full_name' => $inputs['full_name'],
@@ -64,13 +65,17 @@ class StakeholderService implements StakeholderInterface
                 'cnic' => $inputs['cnic'],
                 'ntn' => $inputs['ntn'],
                 'contact' => $inputs['contact'],
+                'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
                 'address' => $inputs['address'],
+                'mailing_address' => $inputs['mailing_address'],
                 'parent_id' => $inputs['parent_id'],
                 'comments' => $inputs['comments'],
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                'nationality' => $inputs['nationality'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
             ];
             // dd($inputs);
 
@@ -126,8 +131,8 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->contacts()->saveMany($contacts);
             }
 
-            // // customer ar code 1020201001 for customer 1 receivable Customer Code
-            // // customer ap code 2020101001 for customer 1 payable Customer Code
+            // customer ar code 1020201001 for customer 1 receivable Customer Code
+            // customer ap code 2020101001 for customer 1 payable Customer Code
 
             // $customerStakeholderType = StakeholderType::where('type','C')->get();
             // $lastExistedCustomerCode = collect($customerStakeholderType)->last();
@@ -167,7 +172,6 @@ class StakeholderService implements StakeholderInterface
             //     $payableVendorCode = 2020103003;
             // }
 
-
             //  // Dealer only payable code
             // // dealer ap code 2020103001 for dealer 1 payable vendor code
             // $dealerStakeholderType = StakeholderType::where('type','D')->get();
@@ -181,9 +185,6 @@ class StakeholderService implements StakeholderInterface
             // else{
             //     $payableDealerCode = 2020102003;
             // }
-
-
-
 
             $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
             $stakeholderTypeData = [];
@@ -233,13 +234,24 @@ class StakeholderService implements StakeholderInterface
             }
             // dd($stakeholderTypeData);
             $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
+
+            //save custom fields
+
+            foreach ($customFields as $key => $value) {
+                // dd($inputs[$value->name]);
+                $customFieldData = [
+                    'custom_field_id' => $value->id,
+                    'value' => $inputs[$value->name],
+                ];
+                $stakeholder->CustomFieldValues()->create($customFieldData);
+            }
             return $stakeholder;
         });
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $id, $inputs) {
+        DB::transaction(function () use ($site_id, $id, $inputs, $customFields) {
             $stakeholder = $this->model()->find($id);
             $nextOfKinId = $stakeholder->parent_id;
             $cnic = $stakeholder->cnic;
@@ -257,7 +269,11 @@ class StakeholderService implements StakeholderInterface
                 'city_id' => $inputs['city_id'],
                 'country_id' => $inputs['country_id'],
                 'state_id' => $inputs['state_id'],
-                'nationality' => $inputs['nationality'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
+                'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
+                'mailing_address' => $inputs['mailing_address'],
             ];
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
@@ -333,6 +349,16 @@ class StakeholderService implements StakeholderInterface
                         'status' => true,
                     ]);
                 }
+            }
+
+            foreach ($customFields as $key => $value) {
+                // dd($inputs[$value->name]);
+
+                $stakeholder->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => $inputs[$value->slug],
+                ]);
             }
 
             return $stakeholder;

@@ -41,6 +41,7 @@ class Receipt extends Model implements HasMedia
         'status',
         'bank_details',
         'created_date',
+        'discounted_amount',
     ];
 
     public $rules = [
@@ -72,5 +73,10 @@ class Receipt extends Model implements HasMedia
     public function bank()
     {
         return $this->belongsTo(Bank::class);
+    }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
 }

@@ -59,4 +59,9 @@ class FileTitleTransfer extends Model
     {
         return $this->hasMany(FileTitleTransferAttachment::class);
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

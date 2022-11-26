@@ -160,7 +160,7 @@
                             </div>
                         </div>
 
-                        <div class="card filter_table_data d-none" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card filter_table_data d-none table-responsive" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
                                 <div class="col-sm-12 d-flex justify-content-end align-items-center">
                                     <button id="btnGroupDrop1" type="button" class="btn btn-relief-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-upload"></i> Export</button>
@@ -175,7 +175,7 @@
                                     <button type="reset" class="btn btn-relief-outline-primary ml-3" style="margin-right: 7px;"><i class="bi bi-arrow-clockwise"></i> Reload</button>
 
                                 </div>
-                                <table id="example" class=" table-responsive table table-striped dt-complex-header table"
+                                <table id="example" class="table-responsive table table-striped dt-complex-header table"
                                     style="width:100%">
                                     <thead>
                                         <tr>

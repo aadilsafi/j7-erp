@@ -3,11 +3,12 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, FileBuyBack, FileCancellation, FileManagement, FileTitleTransfer, Receipt, SalesPlan, Stakeholder, StakeholderType};
+use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, Receipt, SalesPlan, Stakeholder, StakeholderType};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Svg\Tag\Rect;
 
 class FinancialTransactionService implements FinancialTransactionInterface
 {
@@ -237,7 +238,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         return true;
     }
 
-    public function makeFinancialTransaction($site_id, $origin_number, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $action_id = null, $balance = 0)
+    public function makeFinancialTransaction($site_id, $origin_number,$account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $action_id = null, $balance = 0)
     {
         $account_action_name = AccountAction::find($account_action)->name;
 
@@ -254,28 +255,46 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $data[$type] = $amount;
         $data['origin_name'] = $data['nature_of_account']->value . '-' . $origin_number;
 
+        if($account_action == 1 || $account_action == 8){
+            $sales_plan = SalesPlan::find($sales_plan);
+            $data['created_date'] = $sales_plan->approved_date;
+        }
+
+
         if ($account_action == 2 || $account_action == 9 || $account_action == 10 || $account_action == 11 || $account_action == 12) {
+            $receipt = Receipt::find($action_id);
             $data['receipt_id'] = $action_id;
+            $data['created_date'] = $receipt->created_date;
         }
 
         if ($account_action == 3) {
+            $file_buy_back = FileBuyBack::find($action_id);
             $data['file_buyback_id'] = $action_id;
+            $data['created_date'] = $file_buy_back->updated_at;
         }
 
         if ($account_action == 5) {
+            $file_refund = FileRefund::find($action_id);
             $data['file_refund_id'] = $action_id;
+            $data['created_date'] = $file_refund->updated_at;
         }
 
         if ($account_action == 6) {
+            $file_cancellation = FileCancellation::find($action_id);
             $data['file_cancellation_id'] = $action_id;
+            $data['created_date'] = $file_cancellation->updated_at;
         }
 
         if ($account_action == 7) {
+            $file_title_transfer = FileTitleTransfer::find($action_id);
             $data['file_title_transfer_id'] = $action_id;
+            $data['created_date'] = $file_title_transfer->updated_at;
         }
 
         if ($account_action == 24) {
+            $file_resale = FileResale::find($action_id);
             $data['file_resale_id'] = $action_id;
+            $data['created_date'] = $file_resale->updated_at;
         }
 
         return (new AccountLedger())->create($data);
@@ -436,6 +455,44 @@ class FinancialTransactionService implements FinancialTransactionInterface
             return $ex;
         }
     }
+
+     // in case of receipt revert
+     public function makeReceiptRevertTransaction($receipt_id)
+     {
+         try {
+             DB::beginTransaction();
+
+             $receipt = (new Receipt())->find($receipt_id);
+             $bankAccount = $receipt->bank->account_number;
+             $origin_number = AccountLedger::get();
+
+             if (isset($origin_number)) {
+
+                 $origin_number = collect($origin_number)->last();
+                 $origin_number = $origin_number->origin_number + 1;
+             } else {
+                 $origin_number = '001';
+             }
+             // bank Transaction
+             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 12, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+             // Customer AR Transaction
+             $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+             $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+             if (is_null($customerAccount)) {
+                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+             }
+
+             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 12, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
+             DB::commit();
+             return 'transaction_completed';
+         } catch (GeneralException | Exception $ex) {
+             DB::rollBack();
+             return $ex;
+         }
+     }
 
 
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id)

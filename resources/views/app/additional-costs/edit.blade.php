@@ -38,7 +38,7 @@
 
             @csrf
             @method('PUT')
-            {{ view('app.additional-costs.form-fields', ['additionalCost' => $additionalCost, 'additionalCosts' => $additionalCosts]) }}
+            {{ view('app.additional-costs.form-fields', ['additionalCost' => $additionalCost, 'additionalCosts' => $additionalCosts, 'customFields' => $customFields]) }}
 
         </div>
 

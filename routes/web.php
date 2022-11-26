@@ -48,6 +48,7 @@ use App\Http\Controllers\{
     FifthLevelAccountController,
     StakeholdersImportControler,
     StateController,
+    LogController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -281,6 +282,12 @@ Route::group([
                             Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
                         });
                     });
+
+                    // Logs Route
+                    Route::group(['prefix' => 'activity-logs', 'as' => 'activity-logs.'], function () {
+                        Route::get('/', [LogController::class, 'index'])->name('index');
+                    });
+
                 });
 
                 //Additional Costs Routes
@@ -607,6 +614,7 @@ Route::group([
                     Route::get('destroy-draft', [ReceiptController::class, 'destroyDraft'])->name('destroy-draft');
                     Route::get('delete-selected', [ReceiptController::class, 'destroySelected'])->name('destroy-selected');
                     Route::get('make-active-selected', [ReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+                    Route::get('revert-payment/{ids}', [ReceiptController::class, 'revertPayment'])->name('revert-payment');
 
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('show', [ReceiptController::class, 'show'])->name('show');
@@ -794,6 +802,7 @@ Route::group([
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
+                            Route::post('filter-inventory-aging', [AccountsRecoveryController::class, 'filterInventoryAging'])->name('filter-inventory-aging');
                         });
                     });
 
@@ -852,6 +861,9 @@ Route::group([
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
         Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
         Route::post('ajax-import-image/delete-file', [ImageImportController::class, 'deleteFile'])->name('ajax-import-image.delete-file');
+
+        Route::post('ajax-get-cities/{stateId}', [CityController::class, 'getCities'])->name('ajax-get-cities');
+        Route::post('ajax-get-states/{countryId}', [StateController::class, 'getStates'])->name('ajax-get-states');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

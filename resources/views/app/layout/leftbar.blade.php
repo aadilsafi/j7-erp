@@ -118,20 +118,38 @@
                     class="nav-item {{ request()->routeIs('sites.configurations.configView', ['id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.configurations.configView', ['id' => encryptParams($site_id)]) }}">
-                        <i data-feather='settings'></i>
+                        <i class="fa-solid fa-gears"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Site Configurations</span>
                     </a>
                 </li>
             @endcan
 
             {{-- Setting Menu --}}
-            @canany(['sites.settings.custom-fields.index'])
+            @canany(['sites.settings.custom-fields.index', 'sites.settings.activity-logs.index',
+                'sites.settings.accounts.first-level.index', 'sites.settings.accounts.second-level.index',
+                'sites.settings.accounts.third-level.index', 'sites.settings.accounts.fourth-level.index',
+                'sites.settings.accounts.fifth-level.index', 'sites.settings.import',
+                'sites.stakeholders.importStakeholders', 'sites.stakeholders.kins.importStakeholders',
+                'sites.stakeholders.kins.importStakeholders', 'sites.floors.importFloors', 'sites.types.importTypes',
+                'sites.additional-costs.importAdcosts', 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks',
+                'sites.settings.import.images.index', 'sites.settings.countries.index', 'sites.settings.states.index',
+                'sites.settings.cities.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
                         <span class="menu-title text-truncate" data-i18n="Settings">Settings</span>
                     </a>
                     <ul class="menu-context">
+                        @can('sites.settings.activity-logs.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.activity-logs.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.activity-logs.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i class="bi bi-clock-history"></i>
+                                    <span class="menu-title text-truncate" data-i18n="Activity Logs">Activity Logs</span>
+                                </a>
+                            </li>
+                        @endcan
                         @can('sites.settings.custom-fields.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.settings.custom-fields.index') ? 'active' : null }}">
@@ -283,7 +301,7 @@
                                     {{-- @can('sites.floors.SalesPlanImport.importSalesPlan')
                                         <li class="nav-item ">
                                             <a class="d-flex align-items-center" href="javascript:void(0)">
-                                                
+
                                                 <span class="menu-title text-truncate">
                                                     Sales Plan</span>
                                             </a>
@@ -356,7 +374,7 @@
                                 </ul>
                             </li>
                         @endcan
-                        @if (Auth::user()->can('sites.settings.countries.index') || Auth::user()->can('roles.index'))
+                        @if (Auth::user()->can('sites.settings.countries.index'))
                             <li class="nav-item ">
                                 <a class="d-flex align-items-center" href="javascript:void(0)">
                                     <i class="bi bi-geo-alt-fill"></i>
@@ -365,30 +383,33 @@
                                 </a>
                                 <ul class="menu-content">
                                     @can('sites.settings.countries.index')
-                                        <li class="nav-item {{ request()->routeIs('sites.settings.countries.index') ? 'active' : null }}">
-                                            <a class="d-flex align-items-center" href="{{ route('sites.settings.countries.index', ['site_id' => encryptParams($site_id)]) }}">
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.countries.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.countries.index', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i data-feather='flag'></i>
-                                                <span class="menu-title text-truncate"
-                                                    data-i18n="Email">Countries</span>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Countries</span>
                                             </a>
                                         </li>
                                     @endcan
 
                                     @can('sites.settings.states.index')
-                                        <li class="nav-item {{ request()->routeIs('sites.settings.states.index') ? 'active' : null }}">
-                                            <a class="d-flex align-items-center" href="{{ route('sites.settings.states.index', ['site_id' => encryptParams($site_id)])}}">
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.states.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.states.index', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i class="bi bi-geo"></i>
-                                                <span class="menu-title text-truncate"
-                                                    data-i18n="Email">States</span>
+                                                <span class="menu-title text-truncate" data-i18n="Email">States</span>
                                             </a>
                                         </li>
                                     @endcan
                                     @can('sites.settings.cities.index')
-                                        <li class="nav-item {{ request()->routeIs('sites.settings.cities.index') ? 'active' : null }}">
-                                            <a class="d-flex align-items-center" href="{{ route('sites.settings.cities.index', ['site_id' => encryptParams($site_id)])}}">
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.cities.index') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.cities.index', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i class="bi bi-map-fill"></i>
-                                                <span class="menu-title text-truncate"
-                                                    data-i18n="Email">Cities</span>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Cities</span>
                                             </a>
                                         </li>
                                     @endcan
@@ -737,7 +758,7 @@
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i data-feather='calendar'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Calender">Inventory Aging</span>
+                                                <span class="menu-title text-truncate" data-i18n="Calender"> Aging Report</span>
                                             </a>
                                         </li>
                                     @endcan

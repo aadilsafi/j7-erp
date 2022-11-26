@@ -213,7 +213,7 @@
                     <td width="33%">
                         <div class="row">
                             <div class="col-4">
-                                <strong>Father Name</strong>
+                                <strong>Father / Husband Name</strong>
                             </div>
                             <div class="col">
                                 {{ $customer->father_name }}
@@ -302,7 +302,7 @@
                     <td width="33%">
                         <div class="row">
                             <div class="col-4">
-                                <strong>Father Name</strong>
+                                <strong>Father / Husband Name</strong>
                             </div>
                             <div class="col">
                                 {{ $titleTransferPerson->father_name }}

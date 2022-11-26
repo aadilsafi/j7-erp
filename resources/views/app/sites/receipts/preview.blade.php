@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                            width: calc(20% - 0.5em);
-                        } */
+                                width: calc(20% - 0.5em);
+                            } */
     </style>
 @endsection
 
@@ -69,10 +69,10 @@
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                             <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
                                 class="form-control form-control-lg" id="stackholder_father_name"
-                                placeholder="Father Name" />
+                                placeholder="Father / Husband Name" />
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -196,10 +196,25 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">Amount In Numbers</label>
+                                    <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                                        placeholder="" value="{{ number_format($receipt->discounted_amount) }}"
+                                        readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
+                                    <input type="text" class="form-control form-control-lg" id="unit_no"
+                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}"
+                                        readonly />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label fs-5" for="floor_no">Amount In Words</label>
+                                    <input type="text" class="form-control form-control-lg" id="floor_no"
+                                        name="unit[floor_no]" placeholder=""
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
+                                        readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
@@ -213,7 +228,7 @@
                                     <label class="form-label fs-5" for="unit_type">Created At</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_type"
                                         name="unit[type]" placeholder="Unit Type"
-                                        value="{{ \Carbon\Carbon::parse($receipt->created_at)->format('F j, Y') }}"
+                                        value="{{ \Carbon\Carbon::parse($receipt->created_date)->format('F j, Y') }}"
                                         readonly />
                                 </div>
                                 @if ($receipt->mode_of_payment == 'Cheque')
@@ -257,13 +272,7 @@
                                     </div>
                                 @endif
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="floor_no">Amount In Words</label>
-                                    <input type="text" class="form-control form-control-lg" id="floor_no"
-                                        name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
-                                        readonly />
-                                </div>
+
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="stackholder_address">Comments</label>

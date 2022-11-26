@@ -207,11 +207,11 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father Name <span
+                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
                             class="form-control form-control-lg" id="stackholder_father_name"
-                            name="stackholder[father_name]" placeholder="Father Name"
+                            name="stackholder[father_name]" placeholder="Father / Husband Name"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->father_name : '' }}" />
                     </div>
 
@@ -245,18 +245,18 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
                                 class="text-danger">*</span></label>
-                        <input @if (isset($titleTransferPerson)) disabled  type="text" @else type="number" @endif
-                            type="text" class="form-control form-control-lg" id="stackholder_cnic"
-                            name="stackholder[cnic]" placeholder="CNIC"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_cnic" name="stackholder[cnic]"
+                            placeholder="CNIC"
                             value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_contact">Contact <span
                                 class="text-danger">*</span></label>
-                        <input @if (isset($titleTransferPerson)) disabled   type="text" @else type="number" @endif
-                            type="number" class="form-control form-control-lg" id="stackholder_contact"
-                            name="stackholder[contact]" placeholder="Contact"
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_contact" name="stackholder[contact]"
+                            placeholder="Contact"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}" />
                     </div>
                 </div>
@@ -278,7 +278,8 @@
                 <div class="row mb-1" id="stakeholderNextOfKin">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
-                        <select class="select2" multiple name="stackholder[next_of_kin][]" id="stackholder_next_of_kin">
+                        <select class="select2" multiple name="stackholder[next_of_kin][]"
+                            id="stackholder_next_of_kin">
 
                         </select>
                     </div>
@@ -306,9 +307,10 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father Name</label>
+                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
                         <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Father Name" />
+                            class="form-control form-control-lg" id=""
+                            placeholder="Father / Husband Name" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">

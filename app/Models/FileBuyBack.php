@@ -58,4 +58,8 @@ class FileBuyBack extends Model
     {
         return $this->hasMany(FileBuyBackLabelsAttachment::class);
     }
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

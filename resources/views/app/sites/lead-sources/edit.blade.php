@@ -38,7 +38,7 @@
 
                 @csrf
                 @method('PUT')
-                {{ view('app.sites.lead-sources.form-fields', ['leadSource' => $leadSource]) }}
+                {{ view('app.sites.lead-sources.form-fields', ['leadSource' => $leadSource, 'customFields' => $customFields]) }}
 
             </div>
 

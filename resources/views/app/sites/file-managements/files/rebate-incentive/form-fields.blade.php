@@ -138,7 +138,8 @@
                             <div class="row mb-1">
                                 <input type="hidden" name="dealer[type]" value="D">
                                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="full_name">Full Name</label>
+                                    <label class="form-label fs-5" for="full_name">Full Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('full_name') is-invalid @enderror"
                                         id="stackholder_full_name" name="dealer[full_name]"
@@ -150,11 +151,12 @@
                                 </div>
 
                                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                    <label class="form-label fs-5" for="father_name">Father Name</label>
+                                    <label class="form-label fs-5" for="father_name">Father / Husband Name<span
+                                            class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('father_name') is-invalid @enderror"
                                         id="stackholder_father_name" name="dealer[father_name]"
-                                        placeholder="Father Name"
+                                        placeholder="Father / Husband Name"
                                         value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
                                     @error('father_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -190,7 +192,8 @@
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="contact">Contact</label>
+                                    <label class="form-label fs-5" for="contact">Contact<span
+                                            class="text-danger">*</span></label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('contact') is-invalid @enderror"
                                         id="stackholder_contact" name="dealer[contact]" placeholder="Contact Number"
@@ -204,7 +207,8 @@
                             <div class="row mb-1">
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="cnic">CNIC</label>
+                                    <label class="form-label fs-5" for="cnic">CNIC<span
+                                            class="text-danger">*</span></label>
                                     <input type="text"
                                         class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
                                         id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC Without Dashes"
@@ -228,7 +232,8 @@
 
                             <div class="row mb-1">
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="address">Address</label>
+                                    <label class="form-label fs-5" for="address">Address<span
+                                            class="text-danger">*</span></label>
                                     <textarea class="form-control @error('address') is-invalid @enderror" name="dealer[address]" id="stackholder_address"
                                         rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->address : old('address') }}</textarea>
                                     @error('address')
@@ -397,6 +402,231 @@
         </div>
     </div>
 </div>
+
+
+<div class="col-lg-12 col-md-12 col-sm-12 position-relative hideDiv mb-2" id="modeOfPaymentDiv">
+
+    <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+        <div class="card-header justify-content-between">
+            <h3>Mode of Payments</h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row custom-options-checkable mb-2 g-1">
+                <div class="col-md-3">
+                    <input class="custom-option-item-check checkClass mode-of-payment" type="radio" checked
+                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1" value="Cash">
+                    <label class="custom-option-item text-center p-1" for="customOptionsCheckableRadiosWithIcon1">
+                        {{-- <i data-feather='dollar-sign'></i> --}}
+                        <i class="bi bi-cash-coin" style="font-size: 20px"></i>
+                        <span class="custom-option-item-title h4 d-block">Cash</span>
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <input class="custom-option-item-check checkClass cheque-mode-of-payment" type="radio"
+                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
+                    <label class="custom-option-item text-center p-1" for="customOptionsCheckableRadiosWithIcon2">
+                        <i class="bi bi-bank" style="font-size: 20px"></i>
+                        <span class="custom-option-item-title h4 d-block">Cheque</span>
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <input class="custom-option-item-check checkClass online-mode-of-payment" type="radio"
+                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3" value="Online">
+                    <label class="custom-option-item text-center p-1" for="customOptionsCheckableRadiosWithIcon3">
+                        <i class="bi bi-app-indicator" style="font-size: 20px"></i>
+                        <span class="custom-option-item-title h4 d-block">Online</span>
+                    </label>
+                </div>
+                <div class="col-md-3">
+                    <input class="custom-option-item-check other-mode-of-payment" type="radio"
+                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon4" value="Other">
+                    <label class="custom-option-item text-center text-center p-1"
+                        for="customOptionsCheckableRadiosWithIcon4">
+                        <i class="bi bi-wallet" style="font-size: 20px"></i>
+                        <span class="custom-option-item-title h4 d-block">Other</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row mb-2 g-1" id="otherValueDiv" style="display: none;">
+                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                    <label class="form-label" style="font-size: 15px" for="other_value">Other Payment
+                        Mode <span class="text-danger">*</span></label>
+                    <input type="text"
+                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                        id="other_value" name="other_value" placeholder="Other Payment Mode"
+                        value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
+                    @error('other_value')
+                        <div class="invalid-tooltip">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="row mb-2 g-1" id="onlineValueDiv" style="display: none;">
+
+                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                    <label class="form-label" style="font-size: 15px" for="online_instrument_no">Transaction
+                        No <span class="text-danger">*</span></label>
+                    <input type="text"
+                        class="form-control form-control-lg @error('online_instrument_no') is-invalid @enderror"
+                        id="online_instrument_no" name="online_instrument_no" placeholder="Online Transaction"
+                        value="{{ isset($receipt) ? $receipt->online_instrument_no : old('online_instrument_no') }}" />
+                    @error('online_instrument_no')
+                        <div class="invalid-tooltip">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                    <label class="form-label" style="font-size: 15px" for="transaction_date">Transaction
+                        Date <span class="text-danger">*</span></label>
+                    <input type="date"
+                        class="form-control form-control-lg @error('transaction_date') is-invalid @enderror"
+                        id="transaction_date" name="transaction_date" placeholder="Transaction Date"
+                        value="{{ isset($receipt) ? $receipt->transaction_date : old('transaction_date') }}" />
+                    @error('transaction_date')
+                        <div class="invalid-tooltip">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+
+            <div class="row mb-2 g-1" id="chequeValueDiv" style="display: none;">
+
+                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                    <label class="form-label" style="font-size: 15px" for="cheque_no">Cheque No <span
+                            class="text-danger">*</span></label>
+                    <input type="text"
+                        class="form-control form-control-lg @error('cheque_no') is-invalid @enderror" id="cheque_no"
+                        name="cheque_no" placeholder="Cheque No"
+                        value="{{ isset($receipt) ? $receipt->cheque_no : old('cheque_no') }}" />
+                    @error('cheque_no')
+                        <span class="text-danger">*</span>
+                        <div class="invalid-tooltip">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row mb-2 bankDiv">
+    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+            <div class="card-header justify-content-between">
+                <h3>Banks</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="bank">Select Bank<span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-lg bank" id="bank" name="bank_id">
+                            <option value="0">Create new Bank</option>
+                            @foreach ($chequebanks as $banks)
+                                <option value="{{ $banks->id }}">{{ $banks->name }} -
+                                    {{ $banks->branch_code }}</option>
+                                {{-- @empty --}}
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-6 mt-2 position-relative">
+                        <div id="div_new_bank">
+                            <div class="row mb-1">
+                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                    <label class="form-label fs-5" for="full_name">Bank Name<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text"
+                                        class="form-control form-control-lg name @error('full_name') is-invalid @enderror"
+                                        id="name" name="bank_name" placeholder="Bank Name" />
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                    <label class="form-label fs-5" for="father_name">Account Number<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number"
+                                        class="form-control form-control-lg  account_number @error('account_number') is-invalid @enderror"
+                                        id="account_number" name="bank_account_number"
+                                        placeholder="Account Number" />
+                                    @error('account_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                    <label class="form-label fs-5" for="father_name">Contact Number<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number"
+                                        class="form-control contact_number form-control-lg @error('contact_number') is-invalid @enderror"
+                                        id="contact_number" name="bank_contact_number"
+                                        placeholder="Contact Number" />
+                                    @error('contact_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-1">
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="designation">Branch<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text"
+                                        class="form-control branch form-control-lg @error('branch') is-invalid @enderror"
+                                        id="branch" name="bank_branch" placeholder="Branch" />
+                                    @error('branch')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="contact">Branch Code<span
+                                            class="text-danger">*</span></label>
+                                    <input type="number"
+                                        class="form-control branch_code form-control-lg @error('contact') is-invalid @enderror"
+                                        id="branch_code" name="bank_branch_code" placeholder="Branch Code" />
+                                    @error('branch_code')
+                                        <div class="invalid-feedback ">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="address">Address<span
+                                            class="text-danger">*</span></label>
+                                    <textarea class="form-control address @error('address') is-invalid @enderror" name="bank_address" id="address"
+                                        rows="3" placeholder="Address"></textarea>
+                                    @error('address')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="comments">Comments</label>
+                                    <textarea class="form-control comments @error('comments') is-invalid @enderror" name="bank_comments" id="comments"
+                                        rows="3" placeholder="Comments"></textarea>
+                                    @error('comments')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
     id="installments_acard">

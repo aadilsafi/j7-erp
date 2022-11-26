@@ -62,7 +62,7 @@ class TrialBalanceController extends Controller
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .
-                '<th class="text-nowrap">Account Codes</th>' .
+                '<th class="text-nowrap">Account Codes asdasd</th>' .
                 '<th class="text-nowrap">Opening Balance</th>' .
                 '<th class="text-nowrap">Debit</th>' .
                 '<th class="text-nowrap">Credit</th>' .
@@ -78,10 +78,10 @@ class TrialBalanceController extends Controller
             foreach ($account_ledgers as $account_ledger) {
                 if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
 
-                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
                 } else {
-                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
                     array_push($starting_balance, $ending_balance);
                 }
 
@@ -115,10 +115,12 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
+                '<th></th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('debit')->sum()) . '</th>' .
                 '<th>' . number_format($account_ledgers->pluck('credit')->sum()) . '</th>' .
-                '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                // '<th>' . number_format(collect($starting_balance)->sum() + $balance_add_starting) . '</th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';
@@ -144,8 +146,8 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<td></td>' .
                 '<td></td>' .
-                '<td class="text-nowrap">No Record Found Of </td>' .
                 '<td></td>' .
+                '<td class="text-nowrap">No Record Found</td>' .
                 '<td></td>' .
                 '<td></td>' .
                 '<td></td>' .
@@ -156,10 +158,10 @@ class TrialBalanceController extends Controller
                 '<tr>' .
                 '<th></th>' .
                 '<th></th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
-                '<th>0</th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
+                '<th></th>' .
                 '<th></th>' .
                 '</tr>' .
                 '</tfoot>';
@@ -225,9 +227,9 @@ class TrialBalanceController extends Controller
                 $debits = $account->accountLedgers->pluck('debit')->sum();
                 $ending = 0;
                 if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
-                    $ending = number_format($credits - $debits);
-                } else {
                     $ending = number_format($debits - $credits);
+                } else {
+                    $ending = number_format($credits - $debits);
                 }
 
                 $table .= '<tr>' .

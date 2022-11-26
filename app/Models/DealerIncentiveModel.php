@@ -32,4 +32,9 @@ class DealerIncentiveModel extends Model
     {
         return $this->belongsTo(Stakeholder::class,'dealer_id','id');
     }
+
+    public function CustomFieldValues()
+    {
+        return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
 }

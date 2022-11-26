@@ -171,7 +171,10 @@
                 <td>
                     <table id="cnic" style="width: 90%;">
                         <tr style="text-align: center;">
-                            <td style="width: 6%;">{{ $preview_data['cnic'][0] }}</td>
+                            @foreach($preview_data['cnic'] as $cnic)
+                            <td>{{ $cnic }}</td>
+                            @endforeach
+                            {{-- <td style="width: 6%;">{{ $preview_data['cnic'][0] }}</td>
                             <td style="width: 6%;">{{ $preview_data['cnic'][1] }}</td>
                             <td style="width: 6%;">{{ $preview_data['cnic'][2] }}</td>
                             <td style="width: 6%;">{{ $preview_data['cnic'][3] }}</td>
@@ -185,7 +188,7 @@
                             <td style="width: 6%;">{{ $preview_data['cnic'][10] }}</td>
                             <td style="width: 6%;">{{ $preview_data['cnic'][11] }}</td>
                             <td style="width: 6%;">-</td>
-                            <td style="width: 6%;">{{ $preview_data['cnic'][12] }}</td>
+                            <td style="width: 6%;">{{ $preview_data['cnic'][12] }}</td> --}}
                         </tr>
                     </table>
                 </td>

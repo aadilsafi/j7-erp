@@ -31,4 +31,6 @@ interface FinancialTransactionInterface
     public function makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
 
     public function makeFileTitleTransferTransaction($site_id, $unit_id, $customer_id, $file_id);
+
+    public function makeRebateIncentiveTransaction($rebate_id);
 }

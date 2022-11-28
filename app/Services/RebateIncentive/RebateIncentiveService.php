@@ -9,9 +9,21 @@ use App\Models\Unit;
 use App\Services\RebateIncentive\RebateIncentiveInterface;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Rebateincentive\storeRequest;
+use App\Models\AccountHead;
+use App\Models\Bank;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Str;
 
 class RebateIncentiveService implements RebateIncentiveInterface
 {
+
+    private $financialTransactionInterface;
+
+    public function __construct(
+        FinancialTransactionInterface $financialTransactionInterface
+    ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
+    }
 
     public function model()
     {
@@ -34,7 +46,6 @@ class RebateIncentiveService implements RebateIncentiveInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
-
             $dealer_id = $inputs['dealer_id'];
             if ($dealer_id == 0) {
                 $dealer_data = $inputs['dealer'];
@@ -93,6 +104,42 @@ class RebateIncentiveService implements RebateIncentiveInterface
 
                 $dealer_id = $dealer->id;
             }
+            if (!isset($inputs['bank_name'])) {
+                $inputs['bank_id'] =  null;
+                $inputs['bank_name'] = null;
+            }
+
+            if ($inputs['bank_id'] == 0) {
+
+                if ($inputs['mode_of_payment'] == 'Cheque' || $inputs['mode_of_payment'] == 'Online') {
+                    $bankData = [
+                        'site_id' => $site_id,
+                        'name' => $inputs['bank_name'],
+                        'slug' => Str::slug($inputs['bank_name']),
+                        'account_number' => $inputs['bank_account_number'],
+                        'branch' => $inputs['bank_branch'],
+                        'branch_code' => $inputs['bank_branch_code'],
+                        'address' => $inputs['bank_address'],
+                        'contact_number' => $inputs['bank_contact_number'],
+                        'status' => true,
+                        'comments' => $inputs['bank_comments'],
+                    ];
+                    $bank = Bank::create($bankData);
+                    $inputs['bank_id'] = $bank->id;
+                    $inputs['bank_name'] = $bank->name;
+                    // added in accound heads
+                    $acountHeadData = [
+                        'site_id' => $site_id,
+                        'modelable_id' => null,
+                        'modelable_type' => null,
+                        'code' => $bank->account_number,
+                        'name' => $bank->name,
+                        'level' => 5,
+                    ];
+                    $accountHead =  AccountHead::create($acountHeadData);
+                }
+            }
+
 
             $rebatedata = [
                 'site_id' => $site_id,
@@ -103,9 +150,16 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'deal_type' => $inputs['deal_type'],
                 'commision_percentage' => $inputs['rebate_percentage'],
                 'commision_total' => $inputs['rebate_total'],
-                'status' => 0,
+                'status' => 1,
                 'comments' => $inputs['comments'],
                 'dealer_id' => $dealer_id,
+                'is_for_dealer_incentive' => true,
+                'bank_id' => $inputs['bank_id'],
+                'mode_of_payment' => $inputs['mode_of_payment'],
+                'other_value' => $inputs['other_value'],
+                'cheque_no' => $inputs['cheque_no'],
+                'online_instrument_no' => $inputs['online_instrument_no'],
+                'transaction_date' => $inputs['transaction_date'],
             ];
 
             $rebate = $this->model()->create($rebatedata);
@@ -114,6 +168,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $unit->is_for_rebate = false;
             $unit->update();
 
+            $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate->id);
             return $rebate;
         });
     }

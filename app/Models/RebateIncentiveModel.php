@@ -24,6 +24,13 @@ class RebateIncentiveModel extends Model
         'status',
         'comments',
         'dealer_id',
+        'bank_id',
+        'mode_of_payment',
+        'other_value',
+        'cheque_no',
+        'online_instrument_no',
+        'transaction_date',
+        'created_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

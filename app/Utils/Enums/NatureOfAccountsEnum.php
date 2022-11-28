@@ -17,4 +17,6 @@ enum NatureOfAccountsEnum: string
     case JOURNAL_RESALE = 'JRC';
     case JOURNAL_REFUND = 'JRF';
     case JOURNAL_TITLE_TRANSFER = 'JTT';
+    case Rebate_Incentive = 'RI';
+    case Dealer_Incentive = 'DI';
 }

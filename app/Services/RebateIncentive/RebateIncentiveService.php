@@ -50,6 +50,10 @@ class RebateIncentiveService implements RebateIncentiveInterface
                     'contact' => $dealer_data['contact'],
                     'address' => $dealer_data['address'],
                     'comments' => $dealer_data['comments'],
+                    'countryDetails' => $dealer_data['countryDetails'],
+                    'optional_contact' => $dealer_data['optional_contact'],
+                    'OptionalCountryDetails' => $dealer_data['OptionalCountryDetails'],
+                    'mailing_address' => $dealer_data['mailing_address'],
                 ]);
 
                 $stakeholdertype = [
@@ -109,7 +113,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $unit = Unit::find($inputs['unit_id']);
             $unit->is_for_rebate = false;
             $unit->update();
-            
+
             return $rebate;
         });
     }

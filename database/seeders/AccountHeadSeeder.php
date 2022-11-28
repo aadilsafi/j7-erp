@@ -518,8 +518,6 @@ class AccountHeadSeeder extends Seeder
                 'name' => 'Cost of Goods Sold',
                 'level' => 2,
             ],
-
-
             [
                 'site_id' => 1,
                 'modelable_id' => null,
@@ -527,6 +525,14 @@ class AccountHeadSeeder extends Seeder
                 'code' => '60',
                 'name' => 'Sales, General Admin - Expense',
                 'level' => 1,
+            ],
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
+                'code' => '6010',
+                'name' => 'General Admin Expenses',
+                'level' => 2,
             ],
             [
                 'site_id' => 1,
@@ -540,6 +546,14 @@ class AccountHeadSeeder extends Seeder
                 'site_id' => 1,
                 'modelable_id' => null,
                 'modelable_type' => null,
+                'code' => '601001',
+                'name' => 'Discount Allowed',
+                'level' => 3,
+            ],
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
                 'code' => '603010',
                 'name' => 'Dealer Rebate and Incentive',
                 'level' => 3,
@@ -548,9 +562,25 @@ class AccountHeadSeeder extends Seeder
                 'site_id' => 1,
                 'modelable_id' => null,
                 'modelable_type' => null,
+                'code' => '6010011000',
+                'name' => 'Cash Discount',
+                'level' => 4,
+            ],
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
                 'code' => '6030101000',
                 'name' => 'Dealer Rebate and Incentive',
                 'level' => 4,
+            ],
+            [
+                'site_id' => 1,
+                'modelable_id' => null,
+                'modelable_type' => null,
+                'code' => '60100110001001',
+                'name' => 'Cash Discount',
+                'level' => 5,
             ],
             [
                 'site_id' => 1,

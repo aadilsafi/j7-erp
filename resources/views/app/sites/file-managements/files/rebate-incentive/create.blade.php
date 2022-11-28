@@ -15,6 +15,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.css" />
 @endsection
 
 @section('custom-css')
@@ -61,7 +63,7 @@
         @csrf
 
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+            <div id="rebate" class="col-lg-9 col-md-9 col-sm-12 position-relative">
                 {{ view('app.sites.file-managements.files.rebate-incentive.form-fields', [
                     'site_id' => $site_id,
                     'units' => $units,
@@ -109,11 +111,47 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/additional-methods.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.min.js"></script>
 @endsection
 
 @section('custom-js')
+    <script>
+        $(document).ready(function() {
+
+            var input = document.querySelector("#stackholder_contact");
+            intl = window.intlTelInput(input, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+            input.addEventListener("countrychange", function() {
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            });
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            var inputOptional = document.querySelector("#optional_contact");
+            intlOptional = window.intlTelInput(inputOptional, ({
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                preferredCountries: ["pk"],
+                separateDialCode: true,
+                autoPlaceholder: 'polite',
+                formatOnDisplay: true,
+                nationalMode: true
+            }));
+
+            inputOptional.addEventListener("countrychange", function() {
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+            });
+            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+
+        });
+    </script>
     <script type="text/javascript">
         function getData(unit_id) {
+            showBlockUI('#rebate');
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('sites.file-managements.rebate-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
@@ -129,6 +167,7 @@
                     if (response.success) {
 
                         if ($('.newAddition').length > 0) {
+
                             $('.newAddition').remove();
                             $('#faceCharges').css("display", "block");
                             $('#faceChargesPercentage').css("display", "block");
@@ -141,7 +180,7 @@
                                 $('#faceCharges').before('<th class="text-nowrap newAddition">' + response
                                     .additionalCosts[i].name + '</th>');
                                 $('#faceChargesPercentage').before(
-                                '<th class="text-nowrap newAddition">%</th>');
+                                    '<th class="text-nowrap newAddition">%</th>');
                                 $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
                                     response.additionalCosts[i].unit_percentage + '%</td>');
                                 let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
@@ -156,6 +195,7 @@
                             $('#td_unit_facing_charges_value').css("display", "none");
                         }
 
+
                         $('#sales_source_lead_source').val(response.leadSource.name);
                         $('#stakeholder_id').val(response.stakeholder.id);
                         $('#customer_name').val(response.stakeholder.full_name);
@@ -164,8 +204,32 @@
                         $('#customer_ntn').val(response.stakeholder.ntn);
                         $('#customer_comments').val(response.stakeholder.comments);
                         $('#customer_address').val(response.stakeholder.address);
+                        $('#customer_mailing_address').val(response.stakeholder.mailing_address);
                         $('#customer_phone').val(response.stakeholder.contact);
+                        $('#optional_customer_phone').val(response.stakeholder.optional_contact);
                         $('#customer_occupation').val(response.stakeholder.occupation);
+                        $('#customer_designation').val(response.stakeholder.designation);
+
+                        var countryDetails = JSON.parse(response.stakeholder.countryDetails);
+
+                        if (countryDetails == null) {
+                            intl.setCountry('pk');
+                        } else {
+                            intl.setCountry(countryDetails['iso2']);
+                        }
+
+                        $('#countryDetails').val(JSON.stringify(intl
+                            .getSelectedCountryData()))
+
+                        var OptionalCountryDetails = JSON.parse(response.stakeholder.OptionalCountryDetails);
+                        if (OptionalCountryDetails == null) {
+                            intlOptional.setCountry('pk');
+                        } else {
+                            intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                        }
+
+                        $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                            .getSelectedCountryData()))
 
                         $('#td_unit_id').html(response.unit.unit_number);
                         $('#td_unit_area').html(response.unit.gross_area);
@@ -199,8 +263,9 @@
                             .toLocaleString());
                         $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
                             .toLocaleString());
-
+                            hideBlockUI('#rebate');
                     } else {
+                        hideBlockUI('#rebate');
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -216,7 +281,7 @@
 
         $('#rebate_percentage').on('change', function() {
 
-            showBlockUI('#rebate-form');
+            showBlockUI('#rebate');
 
             let rebate_percentage = parseInt($('#rebate_percentage').val());
 
@@ -234,11 +299,14 @@
 
             $('#rebate_total').val(rebate_value);
 
-            hideBlockUI('#rebate-form');
-
             if (unit_total > 0) {
                 $('.hideDiv').css("display", "block");
             }
+
+            window.setTimeout(function(){
+                 // do whatever you want to do
+                 hideBlockUI('#rebate');
+                  }, 800);
         });
 
         var e = $("#dealer");
@@ -276,22 +344,29 @@
                             isDisable = dealer == 0 ? false : true;
 
                             console.log(isDisable);
-                        // $('#stackholder_id').val(stakeholderData.id);
-                        $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled', isDisable);
-                        $('#stackholder_father_name').val(stakeholderData.father_name).attr('disabled',isDisable);
-                        $('#stackholder_occupation').val(stakeholderData.occupation).attr('disabled', isDisable);
-                        $('#stackholder_designation').val(stakeholderData.designation).attr('disabled',isDisable);
+                            // $('#stackholder_id').val(stakeholderData.id);
+                            $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled',
+                                isDisable);
+                            $('#stackholder_father_name').val(stakeholderData.father_name).attr(
+                                'disabled', isDisable);
+                            $('#stackholder_occupation').val(stakeholderData.occupation).attr(
+                                'disabled', isDisable);
+                            $('#stackholder_designation').val(stakeholderData.designation).attr(
+                                'disabled', isDisable);
 
-                        $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
-                            .attr('disabled', isDisable);
-                        $('#stackholder_contact').val(stakeholderData.contact).attr('disabled', isDisable);
-                        $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', isDisable);
-                        if ((stakeholderData.comments != null)) {
-                            $('#stackholder_comments').val(stakeholderData.comments).attr('disabled', isDisable);
+                            $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
+                                .attr('disabled', isDisable);
+                            $('#stackholder_contact').val(stakeholderData.contact).attr('disabled',
+                                isDisable);
+                            $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', isDisable);
+                            if ((stakeholderData.comments != null)) {
+                                $('#stackholder_comments').val(stakeholderData.comments).attr(
+                                    'disabled', isDisable);
+                            }
+                            $('#stackholder_address').text(stakeholderData.address).attr('disabled',
+                                isDisable);
                         }
-                        $('#stackholder_address').text(stakeholderData.address).attr('disabled', isDisable);
                     }
-                }
 
                     hideBlockUI('#stakeholders_card');
                 },
@@ -319,12 +394,12 @@
                 'dealer[father_name]': {
                     required: true
                 },
-                'dealer[occupation]': {
-                    required: true
-                },
-                'dealer[designation]': {
-                    required: true
-                },
+                // 'dealer[occupation]': {
+                //     required: true
+                // },
+                // 'dealer[designation]': {
+                //     required: true
+                // },
                 'dealer[contact]': {
                     required: true,
                     digits: true,
@@ -335,10 +410,13 @@
                     // maxlength: 13,
                     // minlength: 13
                 },
-                'dealer[ntn]': {
+                // 'dealer[ntn]': {
+                //     required: true,
+                // },
+                'dealer[address]': {
                     required: true,
                 },
-                'dealer[address]': {
+                'dealer[mailing_address]': {
                     required: true,
                 },
                 'deal_type': {
@@ -404,6 +482,67 @@
                 $('#installmentValueDiv').hide();
             });
 
+        });
+
+        var e = $(".bank");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).on("change", function(e) {
+            let bank = parseInt($(this).val());
+            showBlockUI('.bankDiv');
+            let bankData = {
+                id: 0,
+                name: '',
+                account_number: '',
+                branch: '',
+                branch_code: '',
+                comments: '',
+                contact_number: '',
+                address: '',
+            };
+            $.ajax({
+                url: "{{ route('sites.banks.ajax-get-by-id', ['site_id' => encryptParams($site_id)]) }}",
+                type: 'POST',
+                data: {
+                    'id': bank
+                },
+                success: function(response) {
+                    if (response.success == true && response.bank != null) {
+                        $('.name').val(response.bank.name).attr('readOnly', (
+                            response.bank.name.length > 0));
+                        $('.account_number').val(response.bank.account_number).attr('readOnly', (
+                            response.bank.account_number.length > 0));
+                        $('.contact_number').val(response.bank.contact_number).attr('readOnly', (
+                            response.bank.contact_number.length > 0));
+                        $('.branch').val(response.bank.branch).attr('readOnly', (response.bank.branch
+                            .length > 0));
+                        $('.branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
+                            .branch_code.length > 0));
+                        $('.comments').val(response.bank.comments).attr('readOnly', true);
+                        $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
+                            .length > 0));
+                        hideBlockUI('.bankDiv');
+                    } else {
+
+                        $('#name').val('').removeAttr('readOnly');
+                        $('#account_number').val('').removeAttr('readOnly');
+                        $('#contact_number').val('').removeAttr('readOnly');
+                        $('#branch').val('').removeAttr('readOnly');
+                        $('#branch_code').val('').removeAttr('readOnly');
+                        $('#comments').val('').removeAttr('readOnly');
+                        $('#address').val('').removeAttr('readOnly');
+                    }
+                    hideBlockUI('.bankDiv');
+                },
+                error: function(errors) {
+                    console.error(errors);
+                    hideBlockUI('.bankDiv');
+                }
+            });
         });
 
         $("#saveButton").click(function() {

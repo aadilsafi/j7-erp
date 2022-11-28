@@ -46,6 +46,7 @@
         .title {
             font-size: 22px;
         }
+
         .title2 {
             font-size: 17px;
         }
@@ -57,18 +58,18 @@
     <div id="printable" class="bg-light mx-2 my-1">
 
 
-        <div class="row mt-4">
+        <div class="row mt-3">
             <div class="col">
-                <img height="40px" width="70%" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png" alt="logo">
+                {{-- <img height="40px" width="70%" src="{{ asset('app-assets') }}/images/receipts/logo_j7Global.png" alt="logo"> --}}
             </div>
             <div class="col">
                 <span class="title">RESALE REQUEST</span> <strong class="title"> FORM</strong>
 
-                <div class="row mt-3">
+                <div class="row mt-2">
                     <div class="col-2">
-                        Date:
+                        <strong> Date: </strong>
                     </div>
-                    <div class="col-6" style="border-bottom: 1px solid black">
+                    <div class="col-6" style="border-bottom: 1px solid black">{{ $file_resale->created_date }}
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@
 
         <div style="border-bottom: 1px solid black" class="mt-2"></div>
 
-        <div class="row mt-5">
+        {{-- <div class="row mt-5">
             <div class="col-3 mt-2" style="width: fit-content;">
                 <h5>J7 Emporium:*</h5>
             </div>
@@ -89,7 +90,7 @@
             <div class="col-3 mt-2">
                 <input type="checkbox" class="mx-1">
             </div>
-        </div>
+        </div> --}}
 
 
         <div class="row mt-3 text-justify">
@@ -98,31 +99,31 @@
             </div>
             <div class="col-2 text-center">
                 <p style="border-bottom: 1px solid black;">
-                    Ali
+                    {{ $customer->full_name }}
                 </p>
             </div>
             <div class="col text-nowrap" style="width: fit-content;">
-                <p>requesting Sign Marketing team to resale my unit </p>
+                <p>are requesting Sign Marketing team to resale my unit </p>
             </div>
             <div class="col text-center">
                 <p style="border-bottom: 1px solid black;">
-                   {{--  --}}
+                    {{ $unit->floor_unit_number }}
                 </p>
             </div>
             <div class="col-4 text-nowrap" style="width: fit-content;">
-                <p>Which was booked by me in J7 Emporium B-17, Islamabad. I also agree to pay </p>
+                <p>Which was booked by me in J7 Global, Mumtaz City, Islamabad. I also agree to pay </p>
             </div>
             <div class="col-1 text-center" style="width: fit-content;">
                 <p style="border-bottom: 1px solid black;">
-                    100000
+                    {{ number_format($file_resale->marketing_service_charges) }}
                 </p>
             </div>
-            <div class="col text-justify" style="width: fit-content;">
+            <div class="col text-nowrap" style="width: fit-content;">
                 <p>sign marketing</p>
             </div>
             <p>
                 service charges at the time of unit sale. Further details of the unit are as under:
-          </p>
+            </p>
 
         </div>
 
@@ -133,26 +134,33 @@
             <div class="col" style="width: fit-content;">
                 <h4>Owner Name:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <p style="border-bottom: 1px solid black">
+                    {{ $customer->full_name }}
+                </p>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Unit No:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <p style="border-bottom: 1px solid black">
+                    {{ $unit->floor_unit_number }}
+                </p>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4> Size Of Unit:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <div style="border-bottom: 1px solid black">
+                    {{ $unit->gross_area }}
+                </div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Floor:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <div style="border-bottom: 1px solid black">
+                    {{ $unit->floor->short_label }}</div>
             </div>
         </div>
 
@@ -160,14 +168,16 @@
             <div class="col" style="width: fit-content;">
                 <h4>Previous Sold Rate/sqft:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <div style="border-bottom: 1px solid black">
+                    {{ $unit->price_sqft }}</div>
             </div>
             <div class="col-2">
                 <h4>Total Amount:*</h4>
             </div>
-            <div class="col-4 text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col-4 text-center">
+                <div style="border-bottom: 1px solid black">
+                    {{ $salesPlan->total_price }}</div>
             </div>
         </div>
         <div class="row mt-1 text-nowrap g-1">
@@ -187,7 +197,8 @@
                 <h4>Date Of Purchase :*</h4>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                <div style="border-bottom: 1px solid black">
+                    {{ $salesPlan->approved_date }}</div>
             </div>
         </div>
 
@@ -316,12 +327,13 @@
     </div>
 
     <!-- <button type="button" id="print">Print</button> -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.print.min.js"></script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
 
             $("#printable").printThis({
                 debug: false, // show the iframe for debugging
@@ -347,7 +359,7 @@
                 afterPrint: null // function called before iframe is removed
             });
 
-            $("#print").click(function () { });
+            $("#print").click(function() {});
         });
     </script>
 </body>

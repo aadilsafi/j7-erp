@@ -22,7 +22,6 @@ class TeamController extends Controller
     {
         $this->teamInterface = $teamInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -32,9 +31,11 @@ class TeamController extends Controller
      */
     public function index(TeamsDataTable $dataTable, $site_id)
     {
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->teamInterface->model()));
 
         $data = [
-            'site_id' => $site_id
+            'site_id' => $site_id,
+            'customFields' => $customFields->where('in_table', true),
         ];
 
         return $dataTable->with($data)->render('app.sites.teams.index', $data);
@@ -79,8 +80,10 @@ class TeamController extends Controller
         try {
             if (!request()->ajax()) {
 
-                $inputs = $request->validated();
-                $record = $this->teamInterface->store($site_id, $inputs);
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->teamInterface->model()));
+
+                $record = $this->teamInterface->store($site_id, $inputs, $customFields);
 
                 return redirect()->route('sites.teams.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -117,13 +120,18 @@ class TeamController extends Controller
             $team = $this->teamInterface->getById($site_id, $id);
             if ($team && !empty($team)) {
 
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->teamInterface->model()));
+                $customFields = collect($customFields)->sortBy('order');
+                $customFields = generateCustomFields($customFields, true, $team->id);
+
                 $data = [
                     'site_id' => $site_id,
                     'id' => $id,
                     'team' => $team,
                     'teams' => $this->teamInterface->getAllWithTree(),
                     'team_users' => $team->users->pluck('name')->toArray(),
-                    'users' => User::all()
+                    'users' => User::all(),
+                    'customFields' => $customFields,
                 ];
 
                 return view('app.sites.teams.edit', $data);
@@ -150,8 +158,9 @@ class TeamController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-                
-                $record = $this->teamInterface->update($site_id, $id, $inputs);
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->teamInterface->model()));
+
+                $record = $this->teamInterface->update($site_id, $id, $inputs, $customFields);
                 return redirect()->route('sites.teams.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);

@@ -703,8 +703,8 @@ if (!function_exists('getModelsClasses')) {
                 'App\Models\Floor',
                 'App\Models\AdditionalCost',
                 'App\Models\LeadSource',
-                'App\Models\User'
-
+                'App\Models\User',
+                'App\Models\Team'
             ];
         }
         $customFieldModels = array();

@@ -47,7 +47,8 @@
 
                 @csrf
                 @method('PUT')
-                {{ view('app.sites.teams.form-fields', ['teams' => $teams, 'team' => $team, 'users' => $users, 'team_users' => $team_users]) }}
+                {{ view('app.sites.teams.form-fields', ['teams' => $teams, 'team' => $team, 'users' => $users, 
+                'customFields' => $customFields,'team_users' => $team_users]) }}
 
             </div>
 

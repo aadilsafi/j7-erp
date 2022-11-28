@@ -58,7 +58,6 @@ class UserDataTable extends DataTable
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
 
-
         if (count($this->customFields) > 0) {
             foreach ($this->customFields as $customfields) {
                 $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {

@@ -80,7 +80,7 @@
                                     @endphp
                                     @foreach ($salesPlans as $salesPlan)
                                         @php
-
+                                            
                                             array_push($installment_large_number, $salesPlan->installments->pluck('details')->count());
                                         @endphp
                                         <option value="{{ $salesPlan->id }}">{{ $salesPlan->stakeholder->full_name }}

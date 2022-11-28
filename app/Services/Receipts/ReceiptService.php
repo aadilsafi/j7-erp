@@ -381,6 +381,15 @@ class ReceiptService implements ReceiptInterface
             if ($this->model()->find($id[$i])->status == 0 || $this->model()->find($id[$i])->status == 1) {
 
                 $receipt = $this->model()->find($id[$i]);
+                if($receipt->mode_of_payment == "Cash"){
+                    $transaction = $this->financialTransactionInterface->makeReceiptRevertCashTransaction($receipt->id);
+                }
+                if($receipt->mode_of_payment == "Cheque"){
+                    $transaction = $this->financialTransactionInterface->makeReceiptRevertChequeTransaction($receipt->id);
+                }
+                if($receipt->mode_of_payment == "Online"){
+                    $transaction = $this->financialTransactionInterface->makeReceiptRevertOnlineTransaction($receipt->id);
+                }
                 $receipt->status = 3;
                 $receipt->update();
 

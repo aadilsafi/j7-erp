@@ -20,7 +20,11 @@ interface FinancialTransactionInterface
 
     public function makeReceiptOnlineTransaction($receipt_id); // for online
 
-    public function makeReceiptRevertTransaction($receipt_id); // for Revert Receipt
+    public function makeReceiptRevertCashTransaction($receipt_id); // for Revert Receipt cash
+
+    public function makeReceiptRevertChequeTransaction($receipt_id); // for Revert Receipt cheque
+
+    public function makeReceiptRevertOnlineTransaction($receipt_id); //for online Revert receipt
 
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 

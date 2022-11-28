@@ -207,7 +207,9 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="mailing_address">Mailing Address <span
-                        class="text-danger">*</span></label>
+                        class="text-danger">*</span><span
+                        class="text-info">( Same as Permanent Address <input type="checkbox" id="cpyAddress" />
+                        )</span></label>
                 <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing_address"
                     id="mailing_address" rows="3" placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
                 @error('mailing_address')

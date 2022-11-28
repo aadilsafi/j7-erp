@@ -445,6 +445,14 @@
             @if (!isset($data['next-of-kin']))
                 $('#delete-next-of-kin').trigger('click');
             @endif
+
+            $('#cpyAddress').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#mailing_address').val($('#address').val());
+                } else {
+                    $('#mailing_address').val('')
+                }
+            })
         });
     </script>
 @endsection

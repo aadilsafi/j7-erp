@@ -44,13 +44,14 @@ class ReceiptService implements ReceiptInterface
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
 
-            $amount_received = $requested_data['amount_received'];
-            $discounted_amount = $requested_data['discounted_amount'];
-            if (isset($discounted_amount)) {
-                $amount_received = (float)$discounted_amount + (float)$amount_received;
-                $amount_received = (string)$amount_received;
-            }
+
             for ($i = 0; $i < count($data); $i++) {
+                $amount_in_numbers = $data[$i]['amount_in_numbers'];
+                $discounted_amount = $requested_data['discounted_amount'];
+                if (isset($discounted_amount)) {
+                    $amount_in_numbers = (float)$discounted_amount + (float)$amount_in_numbers;
+                    $amount_in_numbers = (string)$amount_in_numbers;
+                }
 
                 $unit = Unit::find($data[$i]['unit_id']);
                 $sales_plan = $unit->salesPlan->toArray();
@@ -105,7 +106,7 @@ class ReceiptService implements ReceiptInterface
                     'online_instrument_no' => $data[$i]['online_instrument_no'],
                     'transaction_date' => $data[$i]['transaction_date'],
                     'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
-                    'amount_in_numbers' => $amount_received,
+                    'amount_in_numbers' => $amount_in_numbers,
                     'purpose' => 'installments',
                     'installment_number' => '1',
                     'amount_received' => $requested_data['amount_received'],
@@ -381,44 +382,73 @@ class ReceiptService implements ReceiptInterface
 
         $id = explode(",", $id);
         for ($i = 1; $i < count($id); $i++) {
-            // if ($this->model()->find($id[$i])->status == 0) {
-            //     // $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
-            //     // $accountLedger = AccountLedger::where('receipt_id',$id[$i])->where('code','!=','')->first();
+            if ($this->model()->find($id[$i])->status == 0 || $this->model()->find($id[$i])->status == 1) {
 
-            // }
-            $receipt = $this->model()->find($id[$i]);
-            $receipt->status = 3;
-            $receipt->update();
-            // if ($this->model()->find($id[$i])->status == 0) {
+                $receipt = $this->model()->find($id[$i]);
+                $receipt->status = 3;
+                $receipt->update();
 
-            $instalmentNumbers = json_decode($receipt->installment_number);
-            $sales_plan = SalesPlan::find($receipt->sales_plan_id);
-            $amount_received = (float)$receipt->amount_in_numbers;
-            $countData = count($instalmentNumbers);
+                $instalmentNumbers = json_decode($receipt->installment_number);
+                $sales_plan = SalesPlan::find($receipt->sales_plan_id);
+                $amount_received = (float)$receipt->amount_in_numbers;
+                $countData = count($instalmentNumbers);
 
-            for ($j = $countData; $j >= 1; $j--) {
-                $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j - 1])->first();
+                for ($j = $countData; $j >= 1; $j--) {
+                    $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j - 1])->first();
 
-                if ($amount_received > $installment->amount) {
-                    $specficAmount = $installment->amount;
-                    $amount_received = $amount_received - $specficAmount;
-                } else {
-                    $specficAmount = $amount_received;
-                    $amount_received = $amount_received - $specficAmount;
+                    if ($amount_received > $installment->amount) {
+                        $specficAmount = $installment->amount;
+                        $amount_received = $amount_received - $specficAmount;
+                    } else {
+                        $specficAmount = $amount_received;
+                        $amount_received = $amount_received - $specficAmount;
+                    }
+                    $installment->paid_amount = $installment->paid_amount - $specficAmount;
+                    $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
+
+                    // dd($amount_received,$specficAmount,$installment->amount,$installment->paid_amount ,$installment->remaining_amount);
+
+                    if ($installment->remaining_amount == $installment->amount) {
+                        $installment->status = 'unpaid';
+                    } elseif($installment->remaining_amount > $installment->amount) {
+                        $installment->status = 'paid';
+                    }else{
+                        $installment->status =  'partially_paid';
+                    }
+                    $installment->update();
                 }
 
-                $installment->paid_amount = $installment->paid_amount - $specficAmount;
-                $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
+                $totalAmountOfSalesPlan =  $sales_plan->total_price;
+                $down_payment_total = $sales_plan->down_payment_total;
+                $approved_sales_plan_date = $sales_plan->approved_date;
+                $site_token_percentage = SiteConfigration::where('site_id', $receipt->site_id)->first()->site_token_percentage;
+                $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
 
-                if ($installment->remaining_amount == $installment->amount) {
-                    $installment->status = 'unpaid';
-                } else {
-                    $installment->status = 'partially_paid';
+
+                $total_paid_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->get();
+                $total_paid_amount = collect($total_paid_amount)->sum('paid_amount');
+
+                $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=', $approved_sales_plan_date)->get();
+                $total_committed_amount = collect($total_committed_amount)->sum('amount');
+
+                $unit = Unit::find($receipt->unit_id);
+                if ($total_paid_amount <= $token_price) {
+                    $unit->status_id = 2;
+                    $unit->is_for_rebate = false;
                 }
-                $installment->update();
+
+                if ($total_paid_amount > $token_price &&  $total_paid_amount < $total_committed_amount) {
+                    $unit->status_id = 3;
+                    $unit->is_for_rebate = false;
+                }
+
+                if ($total_paid_amount >= $total_committed_amount) {
+                    $unit->status_id = 5;
+                    $unit->is_for_rebate = true;
+                }
             }
-            // }
         }
+
         return true;
     }
 

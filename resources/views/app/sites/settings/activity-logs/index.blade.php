@@ -160,7 +160,7 @@
                                             <ul class="timeline ms-50">
                                                 <li class="timeline-item custom_timeline">
                                                     <span class="timeline-point timeline-point-indicator"></span>
-                                                    <h6 class="custom_card_heading"> {{ $log->causer->name }} {{ ucfirst($log->description) }} {{ Str::replace('App\Models\\', ' ', $log->log_name) }}</h6>
+                                                    <h6 class="custom_card_heading"> @if(isset($log->causer->name )) {{ $log->causer->name }} @endif {{ ucfirst($log->description) }} {{ Str::replace('App\Models\\', ' ', $log->log_name) }}</h6>
                                                 </li>
 
                                                 <li class="timeline-item custom_timeline custom_title_2"

@@ -148,8 +148,6 @@ class LeadSourceDataTable extends DataTable
         $columns = [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Lead Source'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
         ];
 
         if (count($this->customFields) > 0) {

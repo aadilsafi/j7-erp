@@ -559,28 +559,28 @@
                         <div class="avatar-group">
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Billy Hopkins" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Amy Carson" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Brandon Miles" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Daisy Weber" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Jenny Looper" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <h6 class="align-self-center cursor-pointer ms-50 mb-0">+42</h6>
                         </div>
@@ -610,8 +610,8 @@
                     <div class="card-body">
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png"
-                                    class="rounded me-1" height="30" alt="Google Chrome" />
+                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png" class="rounded me-1"
+                                    height="30" alt="Google Chrome" />
                                 <h6 class="align-self-center mb-0">Google Chrome</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -621,8 +621,8 @@
                         </div>
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png"
-                                    class="rounded me-1" height="30" alt="Mozila Firefox" />
+                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png" class="rounded me-1"
+                                    height="30" alt="Mozila Firefox" />
                                 <h6 class="align-self-center mb-0">Mozila Firefox</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -781,19 +781,128 @@
                     </div>
                 </div>
             </div>
-            <!--/ Transaction Card -->
-        </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card card-transaction">
+                    <div class="card-header">
+                        <h4 class="card-title">Transactions 2222222222222</h4>
+                        <div class="dropdown chart-dropdown">
+                            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"
+                                data-bs-toggle="dropdown"></i>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#">Last 28 Days</a>
+                                <a class="dropdown-item" href="#">Last Month</a>
+                                <a class="dropdown-item" href="#">Last Year</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="transaction-item">
+                            <div class="d-flex">
+                                {{-- <div id="chartContainer" style="height: 200px; width: 50%;"></div> --}}
+                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Transaction Card -->
+            </div>
     </section>
     <!-- Dashboard Ecommerce ends -->
 @endsection
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/charts/apexcharts.min.js"></script>
+
+    <script src="{{ asset('app-assets') }}/vendors/js/charts/chart.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app-menu.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/customizer.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/charts/chart-chartjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/9d1d9a82d2.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 @endsection
 
 @section('page-js')
     <script src="{{ asset('app-assets') }}/js/scripts/pages/dashboard-ecommerce.min.js"></script>
+    {{-- <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
 @endsection
 
 @section('custom-js')
 @endsection
+
+{{-- 
+<script>
+    window.onload = function() {
+
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            title: {
+                // text: "Email Categories",
+                horizontalAlign: "left"
+            },
+            data: [{
+                type: "doughnut",
+                startAngle: 60,
+                //innerRadius: 60,
+                indexLabelFontSize: 17,
+                // indexLabel: "{label} - #percent%",
+                // toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+                dataPoints: [{
+                        y: 12,
+                        label: "Amount"
+                    },
+                    {
+                        y: 12,
+                        label: "Remaining Amount"
+                    },
+                    {
+                        y: 12,
+                        label: "Paid Amount"
+                    },
+                ]
+            }]
+        });
+        chart.render();
+
+
+    }
+
+
+
+    $(document).ready(function() {
+        $('.canvasjs-chart-credit').find('.canvasjs-chart-credit').addClass('d-none');
+    });
+</script> --}}
+
+<script>
+    window.onload = function() {
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            title: {
+                text: "Revenue Chart of Acme Corporation"
+            },
+            axisY: {
+                title: "Revenue (in USD)",
+                includeZero: true,
+                prefix: "$",
+                suffix: "k"
+            },
+            data: [{
+                type: "bar",
+                yValueFormatString: "$#,##0K",
+                indexLabel: "{y}",
+                indexLabelPlacement: "inside",
+                indexLabelFontWeight: "bolder",
+                indexLabelFontColor: "white",
+                dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+            }]
+        });
+        chart.render();
+
+    }
+</script>

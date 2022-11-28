@@ -84,6 +84,10 @@ Route::group([
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
+        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+            Route::post('get-filtered-data-dasboard', [DashboardController::class, 'dasboard_chart'])->name('get-filtered-data-dasboard');
+        });
+
         Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');
 
         //Role Routes
@@ -287,7 +291,6 @@ Route::group([
                     Route::group(['prefix' => 'activity-logs', 'as' => 'activity-logs.'], function () {
                         Route::get('/', [LogController::class, 'index'])->name('index');
                     });
-
                 });
 
                 //Additional Costs Routes

@@ -137,7 +137,7 @@
                         <div id="div_new_dealer">
                             <div class="row mb-1">
                                 <input type="hidden" name="dealer[type]" value="D">
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                                     <label class="form-label fs-5" for="full_name">Full Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text"
@@ -150,7 +150,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                                     <label class="form-label fs-5" for="father_name">Father / Husband Name<span
                                             class="text-danger">*</span></label>
                                     <input type="text"
@@ -163,7 +163,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                                     <label class="form-label fs-5" for="occupation">Occupation</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('occupation') is-invalid @enderror"
@@ -175,11 +175,7 @@
                                     @enderror
                                 </div>
 
-                            </div>
-
-                            <div class="row mb-1">
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                                     <label class="form-label fs-5" for="designation">Designation</label>
                                     <input type="text"
                                         class="form-control form-control-lg @error('designation') is-invalid @enderror"
@@ -191,7 +187,55 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                            </div>
+
+                            <div class="row mb-1">
+
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                    <label class="form-label fs-5" for="cnic">CNIC<span
+                                            class="text-danger">*</span></label>
+                                    <input type="text"
+                                        class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
+                                        id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC"
+                                        value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
+                                    @error('cnic')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                    <label class="form-label fs-5" for="ntn">NTN</label>
+                                    <input type="number"
+                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                        id="stackholder_ntn" name="dealer[ntn]" placeholder="NTN Number"
+                                        value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
+                                    @error('ntn')
+                                        <div class="invalid-feedback ">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="stackholder_contact">Contact <span
+                                            class="text-danger">*</span></label>
+                                    <input type="tel" class="form-control form-control-lg ContactNoError"
+                                        id="stackholder_contact" name="dealer[contact]" placeholder=""
+                                        value="{{ old('stackholder.contact') }}" />
+                                </div>
+                                <input type="hidden" name="dealer[countryDetails]" id="countryDetails">
+                                <div class="col-lg-3 col-md-3 col-sm-12">
+                                    <label class="form-label fs-5" for="contact">Optional Contact # </label>
+                                    <input type="tel"
+                                        class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
+                                        id="optional_contact" name="dealer[optional_contact]" placeholder=""
+                                        value="{{ old('stackholder.optional_contact') }}" />
+                                    @error('optional_contact')
+                                        <div class="invalid-feedback ">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <input type="hidden" name="dealer[OptionalCountryDetails]"
+                                    id="OptionalCountryDetails">
+
+                                {{-- <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="contact">Contact<span
                                             class="text-danger">*</span></label>
                                     <input type="text"
@@ -202,32 +246,19 @@
                                         <div class="invalid-feedback ">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
-
-                            <div class="row mb-1">
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="cnic">CNIC<span
+                                    <label class="form-label fs-5" for="contact">Optional Contact<span
                                             class="text-danger">*</span></label>
                                     <input type="text"
-                                        class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
-                                        id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC Without Dashes"
-                                        value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
-                                    @error('cnic')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="ntn">NTN</label>
-                                    <input type="number"
-                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                        id="stackholder_ntn" name="dealer[ntn]" placeholder="NTN Number"
-                                        value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
-                                    @error('ntn')
+                                        class="form-control form-control-lg @error('contact') is-invalid @enderror"
+                                        id="stackholder_contact" name="dealer[optional_contact]" placeholder="Optional Contact Number"
+                                        value="{{ isset($stakeholder) ? $stakeholder->optional_contact : old('contact') }}" />
+                                    @error('contact')
                                         <div class="invalid-feedback ">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
+
                             </div>
 
                             <div class="row mb-1">
@@ -241,6 +272,20 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="address">Mailing Address<span
+                                            class="text-danger">*</span></label>
+                                    <textarea class="form-control @error('address') is-invalid @enderror" name="dealer[mailing_address]"
+                                        id="stackholder_mailing_address" rows="3" placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('address') }}</textarea>
+                                    @error('mailing_address')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+
+                            <div class="row mb-1">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                     <label class="form-label fs-5" for="comments">Comments</label>
                                     <textarea class="form-control @error('comments') is-invalid @enderror" name="dealer[comments]"
                                         id="stackholder_comments" rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
@@ -248,7 +293,10 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -271,40 +319,53 @@
                 <div class="row g-1 mb-1">
                     <input id="stakeholder_id" type="hidden" name="stakeholder_id" value="">
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="customer_name">Name</label>
                         <input type="text" class="form-control form-control-lg" id="customer_name"
                             placeholder="Name" value="" disabled />
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="customer_father_name">Father/Husband
                             Name</label>
                         <input type="text" class="form-control form-control-lg" id="customer_father_name"
                             value="" placeholder="Father/Husband Name" disabled />
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
-                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                            placeholder="CNIC/Passport" value="" disabled />
-                    </div>
-                </div>
 
-                <div class="row g-1 mb-1">
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="customer_ntn">NTN</label>
-                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
-                            placeholder="NTN" value="" disabled />
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                        <label class="form-label fs-5" for="customer_phone">Cell</label>
-                        <input type="text" class="form-control form-control-lg" id="customer_phone"
-                            placeholder="Cell" value="" disabled />
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="customer_occupation">Occupation</label>
                         <input type="text" class="form-control form-control-lg" id="customer_occupation"
                             placeholder="Occupation" value="" disabled />
                     </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="customer_occupation">Designation</label>
+                        <input type="text" class="form-control form-control-lg" id="customer_designation"
+                            placeholder="Designation" value="" disabled />
+                    </div>
+                </div>
+
+                <div class="row g-1 mb-1">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="customer_ntn">NTN</label>
+                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
+                            placeholder="NTN" value="" disabled />
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
+                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
+                            placeholder="CNIC/Passport" value="" disabled />
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="customer_phone">Contact NO#</label>
+                        <input type="text" class="form-control form-control-lg" id="customer_phone"
+                            placeholder="Cell" value="" disabled />
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="customer_phone">Optional Contact NO#</label>
+                        <input type="text" class="form-control form-control-lg" id="optional_customer_phone"
+                            placeholder="Cell" value="" disabled />
+                    </div>
+
                 </div>
 
                 <div class="row g-1 mb-1">
@@ -314,6 +375,15 @@
                             placeholder="Address" value="" disabled />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                        <label class="form-label fs-5" for="customer_address">Mailing Address</label>
+                        <input type="text" class="form-control form-control-lg" id="customer_mailing_address"
+                            placeholder="Address" value="" disabled />
+                    </div>
+
+                </div>
+
+                <div class="row g-1 mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="customer_comments">Comments</label>
                         <input type="text" class="form-control form-control-lg" id="customer_comments"
                             placeholder="Comments" value="" disabled />
@@ -354,7 +424,7 @@
                                 <th id="floor" style="vertical-align: middle;" rowspan="2" scope="col">
                                     Floor
                                 </th>
-                                <th id="faceCharges" style="vertical-align: middle;" scope="col">Face Charges</th>
+                                <th id="faceCharges" class="text-nowrap" style="vertical-align: middle;" scope="col">Face Charges</th>
                                 <th style="vertical-align: middle;" scope="col">Discount</th>
                                 <th style="vertical-align: middle;" scope="col">Total</th>
                                 <th style="vertical-align: middle;" scope="col">Downpayment</th>
@@ -639,7 +709,7 @@
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label" for="ideal-deal-check">Idea Deal</label>
-                    <input class="form-check-input" type="radio" id="ideal-deal-check" name="deal_type"
+                    <input class="form-check-input" checked type="radio" id="ideal-deal-check" name="deal_type"
                         value="ideal-deal"
                         {{ isset($rebate_data) && $rebate_data->deal_type == 'ideal-deal' ? 'checked' : '' }}>
                 </div>

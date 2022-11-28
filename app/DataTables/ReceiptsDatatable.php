@@ -39,6 +39,9 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('floor_id', function ($receipt) {
                 return  $receipt->unit->floor->name;
             })
+            ->editColumn('serial_no',function ($receipt) {
+                return 'REC-00'.$receipt->id;
+            })
             ->editColumn('unit_id', function ($receipt) {
                 return  $receipt->unit->name;
             })
@@ -210,11 +213,12 @@ class ReceiptsDatatable extends DataTable
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         $columns = [
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(false),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC'),
-            Column::make('amount_received')->title('Amount Received'),
-            Column::make('discounted_amount')->title('Discounted Amount'),
-            Column::make('amount_in_numbers')->title('Paid Amount'),
+            Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),
+            Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
+            Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),
             Column::computed('status')->title('Status'),
             Column::make('created_date')->title('Created At')->addClass('text-nowrap'),
             // Column::make('updated_at')->addClass('text-nowrap'),

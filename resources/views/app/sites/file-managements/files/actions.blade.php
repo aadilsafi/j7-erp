@@ -107,12 +107,12 @@
                 href="{{ route('sites.file-managements.file-resale.preview', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_resale_id' => encryptParams($checkFileResale->id )]) }}">
                 <i class="bi bi-view-stacked" style="font-size: 1.1rem" class="m-10"></i>
             </a>
-            {{-- <a href="javascript:void(0);"
+            <a href="javascript:void(0);"
                 class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1" style="margin: 5px"
                 data-bs-toggle="tooltip" data-bs-placement="top" title="Print File Resale"
                 onclick="openTemplatesModal('{{ encryptParams($checkFileResale->id) }}');">
                 <i class="bi bi-printer" style="font-size: 1.1rem" class="m-10"></i>
-            </a> --}}
+            </a>
             @else
                 <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
                     data-bs-toggle="tooltip" data-bs-placement="top" title="Create File Resale"

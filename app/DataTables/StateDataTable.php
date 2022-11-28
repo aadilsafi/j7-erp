@@ -42,6 +42,9 @@ class StateDataTable extends DataTable
             ->editColumn('country_id', function ($user) {
                 return $user->country->name;
             })
+            ->editColumn('country_flag', function ($user) {
+                return $user->country->emoji;
+            })
             ->editColumn('actions', function ($user) {
                 return view('app.sites.countries.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })
@@ -65,7 +68,7 @@ class StateDataTable extends DataTable
      */
     public function query(State $states): QueryBuilder
     {
-        return $states->newQuery();
+        return $states->newQuery()->orderBy('name');
     }
 
     public function html(): HtmlBuilder
@@ -83,7 +86,7 @@ class StateDataTable extends DataTable
             ->scrollX(true)
             ->deferRender()
             ->dom('BlfrtipC')
-            ->lengthMenu([10, 20, 30, 50, 70, 100])
+            ->lengthMenu([20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
                 // ($createPermission  ?
@@ -166,6 +169,7 @@ class StateDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
             Column::make('country_id')->title('Country'),
+            Column::computed('country_flag')->title('Country Flag'),
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),
 

@@ -180,8 +180,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                         let formData = $('#stakeholder-table-form').serializeArray();
                         for (let index = 0; index < formData.length; index++) {
                             array[index] = formData[index]['value'];
-                            var id =  formData[index]['value'];
-
+                            var id = formData[index]['value'];
                         }
                         location.href =
                             "{{ route('sites.receipts.revert-payment', ['site_id' => $site_id, 'ids' => ':ids']) }}"

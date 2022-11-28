@@ -46,7 +46,7 @@ class StakeholderController extends Controller
     public function index(StakeholderDataTable $dataTable, $site_id)
     {
         $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
-        
+
         $data = [
             'site_id' => $site_id,
             'customFields' => $customFields->where('in_table', true),
@@ -79,8 +79,8 @@ class StakeholderController extends Controller
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'customFields' => $customFields,
                 'country' => Country::all(),
-                'city' => City::all(),
-                'state' => State::all(),
+                'city' => [],
+                'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
@@ -157,8 +157,8 @@ class StakeholderController extends Controller
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
                     'country' => Country::all(),
-                    'city' => City::all(),
-                    'state' => State::all(),
+                    'city' => [],
+                    'state' => [],
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'customFields' => $customFields,

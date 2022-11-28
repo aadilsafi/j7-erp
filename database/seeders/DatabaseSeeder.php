@@ -15,12 +15,17 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            CountriesTableSeeder::class,
+            StatesTableSeeder::class,
+            CitiesTableChunkOneSeeder::class,
+            CitiesTableChunkTwoSeeder::class,
+            CitiesTableChunkThreeSeeder::class,
+            CitiesTableChunkFourSeeder::class,
+            CitiesTableChunkFiveSeeder::class,
+
             RoleTableSeeder::class,
             PermissionTableSeeder::class,
-            CountryTableSeeder::class,
             StatusTableSeeder::class,
-            StatesTableSeeder::class,
-            CityTableSeeder::class,
             SiteTableSeeder::class,
             // TypeSeeder::class,
             UserTableSeeder::class,
@@ -51,6 +56,8 @@ class DatabaseSeeder extends Seeder
             AccountHeadSeeder::class,
             AccountingStartingCodeSeeder::class,
             // AccountLedgerSeeder::class,
+
+
         ]);
     }
 }

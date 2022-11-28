@@ -376,10 +376,6 @@ class ReceiptService implements ReceiptInterface
 
     public function revertPayment($site_id, $id)
     {
-        $data = [
-            'status' => 3,
-        ];
-
         $id = explode(",", $id);
         for ($i = 1; $i < count($id); $i++) {
             if ($this->model()->find($id[$i])->status == 0 || $this->model()->find($id[$i])->status == 1) {
@@ -393,26 +389,29 @@ class ReceiptService implements ReceiptInterface
                 $amount_received = (float)$receipt->amount_in_numbers;
                 $countData = count($instalmentNumbers);
 
-                for ($j = $countData; $j >= 1; $j--) {
-                    $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j - 1])->first();
+                for ($j = 0; $j < $countData; $j++) {
+                    $installment = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('details', $instalmentNumbers[$j])->first();
 
                     if ($amount_received > $installment->amount) {
+
                         $specficAmount = $installment->amount;
                         $amount_received = $amount_received - $specficAmount;
+
+                        $installment->remaining_amount = $installment->amount;
+                        $installment->paid_amount = $installment->paid_amount - $installment->paid_amount;
                     } else {
                         $specficAmount = $amount_received;
                         $amount_received = $amount_received - $specficAmount;
-                    }
-                    $installment->paid_amount = $installment->paid_amount - $specficAmount;
-                    $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
 
-                    // dd($amount_received,$specficAmount,$installment->amount,$installment->paid_amount ,$installment->remaining_amount);
+                        $installment->paid_amount = $installment->paid_amount - $specficAmount;
+                        $installment->remaining_amount = $installment->remaining_amount + $specficAmount;
+                    }
 
                     if ($installment->remaining_amount == $installment->amount) {
                         $installment->status = 'unpaid';
-                    } elseif($installment->remaining_amount > $installment->amount) {
+                    } elseif ($installment->remaining_amount > $installment->amount) {
                         $installment->status = 'paid';
-                    }else{
+                    } else {
                         $installment->status =  'partially_paid';
                     }
                     $installment->update();
@@ -432,6 +431,7 @@ class ReceiptService implements ReceiptInterface
                 $total_committed_amount = collect($total_committed_amount)->sum('amount');
 
                 $unit = Unit::find($receipt->unit_id);
+
                 if ($total_paid_amount <= $token_price) {
                     $unit->status_id = 2;
                     $unit->is_for_rebate = false;
@@ -446,6 +446,9 @@ class ReceiptService implements ReceiptInterface
                     $unit->status_id = 5;
                     $unit->is_for_rebate = true;
                 }
+
+                $unit->update();
+
             }
         }
 

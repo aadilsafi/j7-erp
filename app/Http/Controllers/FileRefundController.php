@@ -265,7 +265,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => $accountActionName . '-' . $origin_number,
+                    'origin_name' => 'RF-'. $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
                 // Cutomer AR entry
@@ -281,7 +281,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => $accountActionName . '-' . $origin_number,
+                    'origin_name' => 'RF-'. $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
                 // Customer AP entry
@@ -297,7 +297,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => $accountActionName . '-' . $origin_number,
+                    'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
                 // Payment Voucher
@@ -313,7 +313,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => $accountActionName . '-' . $origin_number,
+                    'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
                 // cash at office 10209020001001
@@ -329,7 +329,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => $accountActionName . '-' . $origin_number,
+                    'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
 

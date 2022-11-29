@@ -39,10 +39,10 @@
         }
 
         /* .canvasjs-chart-canvas {
-                                                                    display: none !important;
-                                                                    width: 438px !important;
-                                                                    height: 300px !important;
-                                                                } */
+                                                                        display: none !important;
+                                                                        width: 438px !important;
+                                                                        height: 300px !important;
+                                                                    } */
     </style>
 @endsection
 
@@ -283,6 +283,7 @@
                                             array_push($amount_installment, ['amount' => $amount, 'remaining_amount' => $remaining_amount, 'paid_amount' => $paid_amount, 'amount_due' => $amount_due]);
                                         @endphp
                                         @foreach ($salesPlan->installments as $key => $installment)
+                                            @dd($salesPlan->stakeholder_data)
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
                                                 <td class="text-nowrap">

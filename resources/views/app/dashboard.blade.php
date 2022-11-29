@@ -16,6 +16,13 @@
 @endsection
 
 @section('custom-css')
+    <style>
+        .chart-container {
+            width: 50%;
+            height: 50%;
+            margin: auto;
+        }
+    </style>
 @endsection
 
 @section('seo-breadcrumb')
@@ -784,27 +791,56 @@
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card card-transaction">
                     <div class="card-header">
-                        <h4 class="card-title">Transactions 2222222222222</h4>
+                        <h4 class="card-title">Installments</h4>
                         <div class="dropdown chart-dropdown">
                             <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"
                                 data-bs-toggle="dropdown"></i>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="#">Last 28 Days</a>
-                                <a class="dropdown-item" href="#">Last Month</a>
-                                <a class="dropdown-item" href="#">Last Year</a>
+                                <a class="dropdown-item" id="month" href="#">Month</a>
+                                <a class="dropdown-item" id="3_month" href="#">3 Month</a>
+                                <a class="dropdown-item" id="6_month" href="#">6 Month</a>
+                                <a class="dropdown-item" id="year" href="#">Last Year</a>
                             </div>
                         </div>
                     </div>
+
                     <div class="card-body">
-                        <div class="transaction-item">
-                            <div class="d-flex">
-                                {{-- <div id="chartContainer" style="height: 200px; width: 50%;"></div> --}}
-                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                        <canvas class="doughnut-chart-ex chartjs" data-height="275"></canvas>
+                        <div class="d-flex justify-content-between mt-3 mb-1">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="monitor" class="font-medium-2 text-primary"></i>
+                                <span class="fw-bold ms-75 me-25">Amount</span>
+                                <span>- 123</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="tablet" class="font-medium-2 text-warning"></i>
+                                <span class="fw-bold ms-75 me-25">Due Amount</span>
+                                <span>- 123123</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="tablet" class="font-medium-2 text-success"></i>
+                                <span class="fw-bold ms-75 me-25">Received Amount</span>
+                                <span>- 123321</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!--/ Transaction Card -->
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Pie Series</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="chart1"></div>
+                    </div>
+                </div>
             </div>
     </section>
     <!-- Dashboard Ecommerce ends -->
@@ -822,6 +858,12 @@
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/9d1d9a82d2.js" crossorigin="anonymous"></script>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
+    <script type="text/javascript"
+        src="http://www.prepbootstrap.com/Content/shieldui-lite/dist/js/shieldui-lite-all.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -833,76 +875,59 @@
 @section('custom-js')
 @endsection
 
-{{-- 
-<script>
-    window.onload = function() {
+<script type="text/javascript">
+    jQuery(function($) {
+        var data1 = [12, 3, 4, 2];
+        var data2 = [3, 9, 12, 14];
+
+        $(function() {
+            $("#chart1").shieldChart({
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                axisY: {
+                    title: {
+                        text: "Break-Down for selected quarter"
+                    }
+                },
+                dataSeries: [{
+                    seriesType: "pie",
+                    enablePointSelection: true,
+                    data: data1
+                }]
+            });
+
+            $("#chart2").shieldChart({
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                seriesSettings: {
+                    pie: {
+                        enablePointSelection: true,
+                        borderColor: 'black',
+                        borderWidth: 3,
+                        dataPointText: {
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                },
+                axisY: {
+                    title: {
+                        text: "Break-Down for selected quarter"
+                    }
+                },
+                dataSeries: [{
+                    seriesType: "pie",
+                    data: data2
+                }]
+            });
 
 
-        var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            title: {
-                // text: "Email Categories",
-                horizontalAlign: "left"
-            },
-            data: [{
-                type: "doughnut",
-                startAngle: 60,
-                //innerRadius: 60,
-                indexLabelFontSize: 17,
-                // indexLabel: "{label} - #percent%",
-                // toolTipContent: "<b>{label}:</b> {y} (#percent%)",
-                dataPoints: [{
-                        y: 12,
-                        label: "Amount"
-                    },
-                    {
-                        y: 12,
-                        label: "Remaining Amount"
-                    },
-                    {
-                        y: 12,
-                        label: "Paid Amount"
-                    },
-                ]
-            }]
         });
-        chart.render();
 
-
-    }
-
-
-
-    $(document).ready(function() {
-        $('.canvasjs-chart-credit').find('.canvasjs-chart-credit').addClass('d-none');
     });
-</script> --}}
-
-{{-- <script>
-    window.onload = function() {
-
-        var chart = new CanvasJS.Chart("chartContainer", {
-            animationEnabled: true,
-            title: {
-                text: "Revenue Chart of Acme Corporation"
-            },
-            axisY: {
-                title: "Revenue (in USD)",
-                includeZero: true,
-                prefix: "$",
-                suffix: "k"
-            },
-            data: [{
-                type: "bar",
-                yValueFormatString: "$#,##0K",
-                indexLabel: "{y}",
-                indexLabelPlacement: "inside",
-                indexLabelFontWeight: "bolder",
-                indexLabelFontColor: "white",
-                dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-            }]
-        });
-        chart.render();
-
-    }
-</script> --}}
+</script>

@@ -34,30 +34,37 @@ class DashboardController extends Controller
     public function dasboard_chart(Request $request)
     {
         $installment = SalesPlanInstallments::when(($request->months_id == 'months12'), function ($query) {
-            $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(12));
+            $query->whereMonth('date', '>=', Carbon::now()->subMonth(12));
             return $query;
         })
             ->when(($request->months_id == 'months6'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(6));
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth(6));
                 return $query;
             })
             ->when(($request->months_id == 'months1'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth());
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth());
                 return $query;
             })
             ->when(($request->months_id == 'months3'), function ($query) {
-                $query->whereMonth('created_at', '>=', Carbon::now()->subMonth(3));
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth(3));
                 return $query;
-            })->get();
-
+            })->where('status', 'unpaid')->orWhere('status', 'partially_paid')->orWhere('date', '<=', Carbon::now())->get();
+        $installment_paid = SalesPlanInstallments::where('status', 'Paid')->get();
+        // dd($installment_unpiad_partially_paid);
         $amount = $installment->pluck('amount')->sum();
         $paid_amount = $installment->pluck('paid_amount')->sum();
         $remaining_amount = $installment->pluck('remaining_amount')->sum();
 
+        $total = $amount - $remaining_amount;
+
+        $new_percentage = ($total / 100) * $amount;
+
         $data = [
             'amount' => $amount,
             'paid_amount' => $paid_amount,
-            'remaining_amount' => $remaining_amount
+            'remaining_amount' => $remaining_amount,
+            'new_percentage' => $new_percentage,
+            'installment_paid' => $installment_paid->pluck('amount')->sum()
         ];
 
         return [

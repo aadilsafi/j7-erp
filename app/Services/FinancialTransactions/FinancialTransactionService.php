@@ -909,10 +909,10 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             // 5 receipt voucher cash
             $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 28, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             // 6 customer a AR transfer fee entry
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAAccountRecievable, 2, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAAccountRecievable, 28, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             DB::commit();
             return 'transaction_completed';
@@ -920,6 +920,10 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::rollBack();
             return $ex;
         }
+    }
+
+    public function makeFileResaleTransaction($site_id, $unit_id, $customer_id, $file_id){
+
     }
 
     public function makeRebateIncentiveTransaction($rebate_id)

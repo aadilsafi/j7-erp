@@ -533,34 +533,50 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
+
             if (isset($receipt->discounted_amount)) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
                 $amount_in_numbers = $receipt->amount_in_numbers;
             }
-            $bankAccount = $receipt->bank->account_number;
-            $origin_number = AccountLedger::where('account_action_id', 9)->get();
+
+            $origin_number = AccountLedger::get();
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
-                $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number = $origin_number->origin_number + 1;
             } else {
                 $origin_number = '001';
             }
-            // bank Transaction
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 27, $receipt->sales_plan_id, 'credit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+            // Cash Transaction
+            $cashAccount = (new AccountingStartingCode())->where('site_id', $receipt->site_id)
+                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+
+            if (is_null($cashAccount)) {
+                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+            }
+
+            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 27, $receipt->sales_plan_id, 'credit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
             if (isset($receipt->discounted_amount)) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
+
                 // Discount Transaction
                 $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 27, $receipt->sales_plan_id, 'credit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
             }
 
-            // Clearing account transaction
-            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+            // Customer AR Transaction
+            $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+            $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
 
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $clearanceAccout, 27, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+            if (is_null($customerAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+            // $customerAccount = $customerAccount[0];
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 27, $receipt->sales_plan_id, 'debit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+
 
             DB::commit();
             return 'transaction_completed';

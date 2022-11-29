@@ -710,6 +710,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $refundWithProfit = (int)$file_buy_back->amount_to_be_refunded;
             $onlyProfitAmount = $file_buy_back->amount_profit;
 
+
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->where('status', 1)->get();
+            $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
+            $discountedValue = (float)$discounted_amount;
+
+
             $origin_number = AccountLedger::get();
 
             if (isset($origin_number)) {
@@ -733,6 +739,15 @@ class FinancialTransactionService implements FinancialTransactionInterface
             }
 
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 3, $receipt->sales_plan_id, 'credit', $payable_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+
+
+            // if discount available
+
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
+                // Discount Transaction
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 3, $receipt->sales_plan_id, 'credit', $discounted_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            }
 
             //3 customer payable transaction
             $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
@@ -765,7 +780,15 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 (new AccountHead())->create($accountCodeData);
             }
 
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            $discountedValue = (float)$discounted_amount;
+
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$refunded_amount - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            }
+
 
             //4 Own profit entry
             $profitAccount = AccountHead::where('name', 'Customer Own Paid Expense')->first()->code;
@@ -775,12 +798,20 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_profit, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
 
             //6 Payment Voucher  entry in customer ap ledger
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            }
             //7 Payment Voucher  cash entry
             $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit',  $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            }
             DB::commit();
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
@@ -799,6 +830,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $receipt = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->first();
             $refunded_amount = (int)$file_cancellation->amount_to_be_refunded + (int)$file_cancellation->cancellation_charges;
             $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
+
+
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->where('status', 1)->get();
+            $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
+            $discountedValue = (float)$discounted_amount;
 
             $origin_number = AccountLedger::get();
 
@@ -824,6 +860,15 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 6, $receipt->sales_plan_id, 'credit', $salesPlanRemainingAmount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
 
+            // if discount available
+
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
+                // Discount Transaction
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 6, $receipt->sales_plan_id, 'credit', $discounted_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            }
+
+
             //3 customer payable transaction
             $stakeholderType = StakeholderType::where(['stakeholder_id' => decryptParams($customer_id), 'type' => 'C'])->first();
             $customer_payable_account_code = $stakeholderType->payable_account;
@@ -855,19 +900,31 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 (new AccountHead())->create($accountCodeData);
             }
 
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$file_cancellation->amount_to_be_refunded - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 6, $receipt->sales_plan_id, 'credit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            }
             // 4 Revenue Canceleation Entry
             $revenueCancellationAccount = AccountHead::where('name', 'Revenue - Cancellation Charges')->first()->code;
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $revenueCancellationAccount, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->cancellation_charges, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
 
             // 5 Payment Voucher Customer A/P Entry
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$refunded_amount - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            }
             // 6 Payment Voucher Cash Entry
             $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-
+            if (isset($discounted_amount) && $discountedValue > 0) {
+                $amount = (float)$refunded_amount - (float)$discounted_amount;
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            } else {
+                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            }
             DB::commit();
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {

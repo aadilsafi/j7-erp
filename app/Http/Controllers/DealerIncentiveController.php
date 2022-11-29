@@ -12,16 +12,19 @@ use App\Models\Stakeholder;
 use App\Services\DealerIncentive\DealerInterface;
 use Exception;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use DB;
 
 class DealerIncentiveController extends Controller
 {
 
-    private $dealerIncentiveInterface;
+    private $dealerIncentiveInterface, $financialTransactionInterface;
 
-    public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface)
+    public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->dealerIncentiveInterface = $dealerIncentiveInterface;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
 
@@ -191,12 +194,15 @@ class DealerIncentiveController extends Controller
 
     public function approve($site_id, $dealer_incentive_id)
     {
+        DB::transaction(function () use ($site_id, $dealer_incentive_id) {
+            // Account ledger transaction
+            $transaction = $this->financialTransactionInterface->makeDealerIncentiveTransaction(decryptParams($dealer_incentive_id));
 
+            $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
+            $dealer_incentive->status = 1;
+            $dealer_incentive->update();
 
-        $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
-        $dealer_incentive->status = 1;
-        $dealer_incentive->update();
-
+        });
         return redirect()->route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
 }

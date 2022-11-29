@@ -54,33 +54,28 @@
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
             <div class="card-body">
-
                 <h4 class="mb-1">Unit Details</h3>
-
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
 
-                                <table class="table table-hover table-striped table-borderless" id="installments_table"
-                                    style="position: relative;">
+                                <table class="table table-hover table-striped table-borderless text-center"
+                                    id="installments_table" style="position: relative;">
                                     <thead style="position: sticky; top: 0; z-index: 10;">
-                                        <tr class="text-center text-nowrap">
+                                        <tr class="text-nowrap">
                                             <th>#</th>
-                                            <th>
-                                                Select Unit
-                                            </th>
-                                            <th>Unit Name</th>
-                                            <th>Unit Number</th>
-                                            <th>Unit Area</th>
+                                            <th class="text-start">Select Unit</th>
+                                            <th class="text-center">Unit Name</th>
+                                            <th class="text-center">Unit Number</th>
+                                            <th class="text-center">Unit Area</th>
                                             {{-- <th>Unit Price</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody id="dynamic_unit_rows">
-
+                                        
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
 
@@ -89,7 +84,36 @@
 
     </div>
 </div>
-
+<div class="row mb-1 mt-2 hideDiv">
+    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+            <div class="card-body">
+                <h4 class="mb-1">Paid Unit Details</h3>
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
+                                <table class="table table-hover table-striped table-borderless text-center"
+                                    id="installments_table" style="position: relative;">
+                                    <thead style="position: sticky; top: 0; z-index: 10;">
+                                        <tr class="text-nowrap">
+                                            <th>#</th>
+                                            {{-- <th>Select Unit</th> --}}
+                                            <th class="text-center">Unit Name</th>
+                                            <th class="text-center">Unit Number</th>
+                                            <th class="text-center">Unit Area</th>
+                                            <th>Incentive</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dynamic_paid_unit_rows">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row mb-1 mt-2 hideDiv">
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">

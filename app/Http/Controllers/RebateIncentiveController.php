@@ -28,7 +28,8 @@ class RebateIncentiveController extends Controller
     private $rebateIncentive;
 
     public function __construct(
-        RebateIncentiveInterface $rebateIncentive, CustomFieldInterface $customFieldInterface
+        RebateIncentiveInterface $rebateIncentive,
+        CustomFieldInterface $customFieldInterface
     ) {
         $this->rebateIncentive = $rebateIncentive;
         $this->customFieldInterface = $customFieldInterface;
@@ -60,9 +61,9 @@ class RebateIncentiveController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => Unit::where('status_id', 5)->where('is_for_rebate', true)->with('floor', 'type')->get(),
+                'units' => Unit::where('status_id', '>', 4)->where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
-                'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
             ];
@@ -87,7 +88,7 @@ class RebateIncentiveController extends Controller
             $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -123,7 +124,7 @@ class RebateIncentiveController extends Controller
                     'id' => $id,
                     'rebate_data' => $rebate_data,
                     'edit_unit' => Unit::find($rebate_data->unit_id),
-                    'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                    'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 ];
 
                 return view('app.sites.file-managements.files.rebate-incentive.edit', $data);

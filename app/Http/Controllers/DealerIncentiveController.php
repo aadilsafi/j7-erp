@@ -152,7 +152,6 @@ class DealerIncentiveController extends Controller
 
         $rebate_units = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)
             ->where('is_for_dealer_incentive', true)->distinct()->get();
-
         $units = [];
 
         if ($rebate_units) {
@@ -162,10 +161,31 @@ class DealerIncentiveController extends Controller
             }
         }
 
+        $paid_incentives = DealerIncentiveModel::where('dealer_id', $request->dealer_id)->get();
+
+        $paidTable = '';
+        if ($paid_incentives) {
+            $loopKey = 1;
+            foreach ($paid_incentives as $incentive) {
+                $unitsIds = json_decode($incentive->unit_IDs);
+
+                foreach ($unitsIds as $key => $Units) {
+                    $paid_unit = Unit::find($Units);
+                    $paidTable .= '<tr class="text-nowrap text-center">';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $loopKey++ . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->name . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->floor_unit_number . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->gross_area . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $incentive->dealer_incentive . '</td>';
+                    $paidTable .= '</tr>';
+                }
+            }
+        }
+
         return response()->json([
             'success' => true,
             'units' => $units,
-            // 'rebate_id' => $
+            'paidTable' => $paidTable,
         ], 200);
     }
 

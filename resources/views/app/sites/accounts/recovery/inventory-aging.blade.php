@@ -39,10 +39,10 @@
         }
 
         /* .canvasjs-chart-canvas {
-                                                                        display: none !important;
-                                                                        width: 438px !important;
-                                                                        height: 300px !important;
-                                                                    } */
+                                                                                display: none !important;
+                                                                                width: 438px !important;
+                                                                                height: 300px !important;
+                                                                            } */
     </style>
 @endsection
 
@@ -283,7 +283,7 @@
                                             array_push($amount_installment, ['amount' => $amount, 'remaining_amount' => $remaining_amount, 'paid_amount' => $paid_amount, 'amount_due' => $amount_due]);
                                         @endphp
                                         @foreach ($salesPlan->installments as $key => $installment)
-                                            @dd($salesPlan->stakeholder_data)
+                                            {{-- @dd($salesPlan->stakeholder->full_name) --}}
                                             <tr>
                                                 <th scope="row">{{ $i }}</th>
                                                 <td class="text-nowrap">
@@ -294,7 +294,7 @@
                                                 <td class="text-nowrap">{{ $salesPlan->unit->name }} -
                                                     {{ $salesPlan->unit->floor_unit_number }}</td>
                                                 <td class="text-nowrap">
-                                                    {{ $salesPlan->stakeholder_data['full_name'] ?? '' }}
+                                                    {{ $salesPlan->stakeholder->full_name ?? '' }}
                                                 </td>
                                                 <td class="text-nowrap">{{ $key }}</td>
                                                 <td class="text-nowrap">{{ number_format($installment->amount) }}</td>

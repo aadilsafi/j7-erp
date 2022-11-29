@@ -441,7 +441,12 @@ class ReceiptService implements ReceiptInterface
 
                 $unit = Unit::find($receipt->unit_id);
 
-                if ($total_paid_amount <= $token_price) {
+                if ($total_paid_amount == null || $total_paid_amount == 0) {
+                    $unit->status_id = 1;
+                    $unit->is_for_rebate = false;
+                }
+
+                if ($total_paid_amount <= $token_price && $total_paid_amount > 0) {
                     $unit->status_id = 2;
                     $unit->is_for_rebate = false;
                 }

@@ -33,6 +33,16 @@
         label {
             /* color: Lime; */
         }
+
+        .canvasjs-chart-credit {
+            display: none !important;
+        }
+
+        /* .canvasjs-chart-canvas {
+                                                            display: none !important;
+                                                            width: 438px !important;
+                                                            height: 300px !important;
+                                                        } */
     </style>
 @endsection
 
@@ -80,7 +90,7 @@
                                     @endphp
                                     @foreach ($salesPlans as $salesPlan)
                                         @php
-
+                                            
                                             array_push($installment_large_number, $salesPlan->installments->pluck('details')->count());
                                         @endphp
                                         <option value="{{ $salesPlan->id }}">{{ $salesPlan->stakeholder->full_name }}
@@ -160,7 +170,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12" id="full_bar_graph">
                                     <div class="row mt-3" id="sub_manu">
-                                        <div class="col-md-4 sm-md-12">
+                                        <div class="col-md-4 sm-md-12 responsive">
                                             <p>
                                                 <b> Due Amt</b>
                                             </p>
@@ -185,8 +195,10 @@
                                             </h6>
                                         </div>
                                     </div>
-                                    <div class="card chart-container">
-                                        <canvas id="chart"></canvas>
+                                    <div class="card chart-container" style="float:left;width:100%;overflow-y: auto;">
+
+                                        {{-- <canvas id="chart"></canvas> --}}
+                                        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-sm-12 d-none" id="pipe_chart_bar">
@@ -355,6 +367,7 @@
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/9d1d9a82d2.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -902,5 +915,50 @@
                 options: lineOptions
             });
         }
+    </script>
+
+
+    <script>
+        window.onload = function() {
+
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title: {
+                    // text: "Email Categories",
+                    horizontalAlign: "left"
+                },
+                data: [{
+                    type: "doughnut",
+                    startAngle: 60,
+                    //innerRadius: 60,
+                    indexLabelFontSize: 17,
+                    // indexLabel: "{label} - #percent%",
+                    // toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+                    dataPoints: [{
+                            y: amount,
+                            label: "Amount"
+                        },
+                        {
+                            y: remaining_amount_sum,
+                            label: "Remaining Amount"
+                        },
+                        {
+                            y: paid_amount,
+                            label: "Paid Amount"
+                        },
+                    ]
+                }]
+            });
+            chart.render();
+
+
+        }
+
+
+
+        $(document).ready(function() {
+            $('.canvasjs-chart-credit').find('.canvasjs-chart-credit').addClass('d-none');
+        });
     </script>
 @endsection

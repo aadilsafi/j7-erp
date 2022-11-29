@@ -35,4 +35,6 @@ interface FinancialTransactionInterface
     public function makeFileResaleTransaction($site_id, $unit_id, $customer_id, $file_id);
 
     public function makeRebateIncentiveTransaction($rebate_id);
+
+    public function makeDealerIncentiveTransaction($dealer_incentive_id);
 }

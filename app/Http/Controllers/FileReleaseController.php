@@ -147,7 +147,7 @@ class FileReleaseController extends Controller
         $resale_file = (new FileResale())->find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $resale_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -225,14 +225,13 @@ class FileReleaseController extends Controller
     {
         DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
-            // Account ledger transaction
-            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
-
             $file_resale = FileResale::where('file_id', decryptParams($file_id))->first();
             $file_resale->status = 1;
             $file_resale->update();
 
             $unit = Unit::find(decryptParams($unit_id));
+            $unit->price_sqft = $file_resale->new_resale_rate;
+            $unit->total_price = (float)$unit->price_sqft  *  (float)$unit->gross_area;
             $unit->status_id = 6;
             $unit->update();
 
@@ -263,7 +262,7 @@ class FileReleaseController extends Controller
         $file_resale = (new FileResale())->find(decryptParams($file_id));
         // dd($file_resale ,  json_decode($file_resale['stakeholder_data']));
         $file = FileManagement::where('id', $file_resale->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_resale->unit_data);

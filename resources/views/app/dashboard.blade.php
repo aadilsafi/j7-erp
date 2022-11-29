@@ -16,6 +16,13 @@
 @endsection
 
 @section('custom-css')
+    <style>
+        .chart-container {
+            width: 50%;
+            height: 50%;
+            margin: auto;
+        }
+    </style>
 @endsection
 
 @section('seo-breadcrumb')
@@ -559,28 +566,28 @@
                         <div class="avatar-group">
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Billy Hopkins" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Amy Carson" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Brandon Miles" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Daisy Weber" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Jenny Looper" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <h6 class="align-self-center cursor-pointer ms-50 mb-0">+42</h6>
                         </div>
@@ -610,8 +617,8 @@
                     <div class="card-body">
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png"
-                                    class="rounded me-1" height="30" alt="Google Chrome" />
+                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png" class="rounded me-1"
+                                    height="30" alt="Google Chrome" />
                                 <h6 class="align-self-center mb-0">Google Chrome</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -621,8 +628,8 @@
                         </div>
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png"
-                                    class="rounded me-1" height="30" alt="Mozila Firefox" />
+                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png" class="rounded me-1"
+                                    height="30" alt="Mozila Firefox" />
                                 <h6 class="align-self-center mb-0">Mozila Firefox</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -781,19 +788,146 @@
                     </div>
                 </div>
             </div>
-            <!--/ Transaction Card -->
-        </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card card-transaction">
+                    <div class="card-header">
+                        <h4 class="card-title">Installments</h4>
+                        <div class="dropdown chart-dropdown">
+                            <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"
+                                data-bs-toggle="dropdown"></i>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" id="month" href="#">Month</a>
+                                <a class="dropdown-item" id="3_month" href="#">3 Month</a>
+                                <a class="dropdown-item" id="6_month" href="#">6 Month</a>
+                                <a class="dropdown-item" id="year" href="#">Last Year</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <canvas class="doughnut-chart-ex chartjs" data-height="275"></canvas>
+                        <div class="d-flex justify-content-between mt-3 mb-1">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="monitor" class="font-medium-2 text-primary"></i>
+                                <span class="fw-bold ms-75 me-25">Amount</span>
+                                <span>- 123</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="tablet" class="font-medium-2 text-warning"></i>
+                                <span class="fw-bold ms-75 me-25">Due Amount</span>
+                                <span>- 123123</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <i data-feather="tablet" class="font-medium-2 text-success"></i>
+                                <span class="fw-bold ms-75 me-25">Received Amount</span>
+                                <span>- 123321</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/ Transaction Card -->
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3>Pie Series</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="chart1"></div>
+                    </div>
+                </div>
+            </div>
     </section>
     <!-- Dashboard Ecommerce ends -->
 @endsection
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/charts/apexcharts.min.js"></script>
+
+    <script src="{{ asset('app-assets') }}/vendors/js/charts/chart.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app-menu.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/customizer.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/charts/chart-chartjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/cdb.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cdbootstrap/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/9d1d9a82d2.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+    <link rel="stylesheet" type="text/css"
+        href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
+    <script type="text/javascript"
+        src="http://www.prepbootstrap.com/Content/shieldui-lite/dist/js/shieldui-lite-all.min.js"></script>
 @endsection
 
 @section('page-js')
     <script src="{{ asset('app-assets') }}/js/scripts/pages/dashboard-ecommerce.min.js"></script>
+    {{-- <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
 @endsection
 
 @section('custom-js')
 @endsection
+
+<script type="text/javascript">
+    jQuery(function($) {
+        var data1 = [12, 3, 4, 2];
+        var data2 = [3, 9, 12, 14];
+
+        $(function() {
+            $("#chart1").shieldChart({
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                axisY: {
+                    title: {
+                        text: "Break-Down for selected quarter"
+                    }
+                },
+                dataSeries: [{
+                    seriesType: "pie",
+                    enablePointSelection: true,
+                    data: data1
+                }]
+            });
+
+            $("#chart2").shieldChart({
+                exportOptions: {
+                    image: false,
+                    print: false
+                },
+                seriesSettings: {
+                    pie: {
+                        enablePointSelection: true,
+                        borderColor: 'black',
+                        borderWidth: 3,
+                        dataPointText: {
+                            style: {
+                                fontWeight: 'bold'
+                            }
+                        }
+                    }
+                },
+                axisY: {
+                    title: {
+                        text: "Break-Down for selected quarter"
+                    }
+                },
+                dataSeries: [{
+                    seriesType: "pie",
+                    data: data2
+                }]
+            });
+
+
+        });
+
+    });
+</script>

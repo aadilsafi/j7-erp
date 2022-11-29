@@ -878,7 +878,7 @@
     });
 </script> --}}
 
-<script>
+{{-- <script>
     window.onload = function() {
 
         var chart = new CanvasJS.Chart("chartContainer", {
@@ -905,4 +905,4 @@
         chart.render();
 
     }
-</script>
+</script> --}}

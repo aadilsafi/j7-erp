@@ -185,18 +185,21 @@
                 <h4>DP Received:*</h4>
             </div>
             <div class="col text-center">
-                <div style="border-bottom: 1px solid black"></div>
+                <div style="border-bottom: 1px solid black">
+                    {{ $salesPlan->down_payment_total }}</div>
             </div>
             <div class="col-1" style="width: fit-content;">
                 <h4>DP%:*</h4>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <div style="border-bottom: 1px solid black">
+                    {{ $salesPlan->down_payment_percentage }} %
+                </div>
             </div>
             <div class="col" style="width: fit-content;">
                 <h4>Date Of Purchase :*</h4>
             </div>
-            <div class="col text-end">
+            <div class="col text-center">
                 <div style="border-bottom: 1px solid black">
                     {{ $salesPlan->approved_date }}</div>
             </div>
@@ -209,10 +212,12 @@
             <div class="col-2">
                 <div class="row g-0" style="width: fit-content;">
                     <div class="col-6">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch"
+                            {{ count($installmentsRecevied) > 0 ? 'checked' : '' }}>
                     </div>
                     <div class="col-6">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch"
+                            {{ count($installmentsRecevied) == 0 ? 'checked' : '' }}>
                     </div>
                     <div class="col-6">
                         <h3 class="customLabel">Yes</h3>
@@ -223,7 +228,13 @@
                 </div>
             </div>
             <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                <div style="border-bottom: 1px solid black"
+                    class="{{ count($installmentsRecevied) == 0 ? 'mt-1' : '' }}">
+                    @foreach ($installmentsRecevied as $pending)
+                        {{ !$loop->last ? Str::replace('Installment', '', $pending) : $pending }}
+                        {{ !$loop->last ? ' , ' : null }}
+                    @endforeach
+                </div>
             </div>
         </div>
         <div class="row g-1">
@@ -233,10 +244,10 @@
             <div class="col-2">
                 <div class="row g-0" style="width: fit-content;">
                     <div class="col-6">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch" {{ count($unpaid) > 0 ? 'checked' : '' }}>
                     </div>
                     <div class="col-6">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch" {{ count($unpaid) == 0 ? 'checked' : '' }}>
                     </div>
                     <div class="col-6">
                         <h3 class="customLabel">Yes</h3>
@@ -246,8 +257,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col text-end">
-                <div style="border-bottom: 1px solid black" class="mt-1"></div>
+            <div class="col text-center">
+                <div style="border-bottom: 1px solid black" class="{{ count($unpaid) == 0 ? 'mt-1' : '' }}">
+                    @foreach ($unpaid as $pending)
+                        {{ !$loop->last ? Str::replace('Installment', '', $pending) : $pending }}
+                        {{ !$loop->last ? ' , ' : null }}
+                    @endforeach
+                </div>
             </div>
         </div>
 
@@ -262,7 +278,8 @@
                         <h4>Premium Model:*</h4>
                     </div>
                     <div class="col-2">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch"
+                            {{ $file_resale->premium_demand != null ? 'checked' : '' }}>
                     </div>
                 </div>
                 <div class="row g-1 mt-1">
@@ -270,7 +287,8 @@
                         <h4>New Rate Mode:*</h4>
                     </div>
                     <div class="col-2">
-                        <input type="checkbox" class="mx-1 p-1">
+                        <input type="checkbox" class="mx-1 p-1 untouch"
+                            {{ $file_resale->new_resale_rate != null ? 'checked' : '' }}>
                     </div>
                 </div>
             </div>
@@ -279,16 +297,19 @@
                     <div class="col-4" style="width: fit-content;">
                         <h4>Premium Demand:*</h4>
                     </div>
-                    <div class="col text-end">
-                        <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                    <div class="col text-center">
+                        <div style="border-bottom: 1px solid black">
+                            {{ $file_resale->premium_demand }}</div>
                     </div>
                 </div>
                 <div class="row g-1 mt-2">
                     <div class="col-4" style="width: fit-content;">
                         <h4>Resale Rate:*</h4>
                     </div>
-                    <div class="col text-end">
-                        <div style="border-bottom: 1px solid black" class="mt-1"></div>
+                    <div class="col text-center">
+                        <div style="border-bottom: 1px solid black">
+                            {{ $file_resale->new_resale_rate }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -333,6 +354,7 @@
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/printing/jQuery.print.min.js"></script>
     <script>
+        $('.untouch').css("pointer-events", "none")
         $(document).ready(function() {
 
             $("#printable").printThis({

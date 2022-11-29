@@ -26,6 +26,7 @@ use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
+use Arr;
 use DB;
 
 class FileReleaseController extends Controller
@@ -268,6 +269,10 @@ class FileReleaseController extends Controller
         $unit_data = json_decode($file_resale->unit_data);
         $unitType = Type::find($unit_data->type_id);
 
+        $unpaid = $salesPlan->unPaidInstallments->pluck('details')->toArray();
+       
+        $installmentsRecevied = $salesPlan->PaidorPartiallyPaidInstallments->where('installment_order', '>', 0)->pluck('details')->toArray();
+        
         $template = Template::find(decryptParams($template_id));
 
         $data = [
@@ -277,6 +282,8 @@ class FileReleaseController extends Controller
             'customer' => json_decode($file_resale['stakeholder_data']),
             'unit' => Unit::find($file_resale['unit_id']),
             'salesPlan' => SalesPlan::where('unit_id', $file_resale['unit_id'])->first(),
+            'installmentsRecevied' => $installmentsRecevied,
+            'unpaid' => $unpaid
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;

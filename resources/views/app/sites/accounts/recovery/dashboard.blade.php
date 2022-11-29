@@ -26,10 +26,10 @@
         }
 
         /* #apexchartsj0rxcjpl,
-                                                                                                        #SvgjsSvg1119,
-                                                                                                        .apexcharts-svg {
-                                                                                                            display: none;
-                                                                                                        } */
+                                                                                                                #SvgjsSvg1119,
+                                                                                                                .apexcharts-svg {
+                                                                                                                    display: none;
+                                                                                                                } */
     </style>
 @endsection
 
@@ -891,9 +891,6 @@
 
         }
 
-        // $(document).one("ready", function() {
-        //     // $(".count").html(++n);
-        //     ring_chart(amount = 13);
-        // });
+        ring_chart(amount = 13);
     </script>
 @endsection

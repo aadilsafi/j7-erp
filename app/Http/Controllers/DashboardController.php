@@ -63,7 +63,7 @@ class DashboardController extends Controller
             'amount' => $amount,
             'paid_amount' => $paid_amount,
             'remaining_amount' => $remaining_amount,
-            'new_percentage' => $new_percentage,
+            'new_percentage' => substr($new_percentage, 0, 2),
             'installment_paid' => $installment_paid->pluck('amount')->sum()
         ];
 

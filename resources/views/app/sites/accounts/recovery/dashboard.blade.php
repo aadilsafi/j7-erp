@@ -26,10 +26,10 @@
         }
 
         /* #apexchartsj0rxcjpl,
-                                                        #SvgjsSvg1119,
-                                                        .apexcharts-svg {
-                                                            display: none;
-                                                        } */
+                                                                                                        #SvgjsSvg1119,
+                                                                                                        .apexcharts-svg {
+                                                                                                            display: none;
+                                                                                                        } */
     </style>
 @endsection
 
@@ -579,14 +579,14 @@
                 c = document.querySelector("#sales-visit-chart"),
                 w = "rtl" === $("html").attr("data-textdirection");
             setTimeout(function() {
-                    toastr.success(
-                        "You have successfully logged in to Vuexy. Now you can start to explore!",
-                        "👋 Welcome John Doe!", {
-                            closeButton: !0,
-                            tapToDismiss: !1,
-                            rtl: w
-                        }
-                    );
+                    // toastr.success(
+                    //     "You have successfully logged in to Vuexy. Now you can start to explore!",
+                    //     "👋 Welcome John Doe!", {
+                    //         closeButton: !0,
+                    //         tapToDismiss: !1,
+                    //         rtl: w
+                    //     }
+                    // );
                 }, 2e3),
                 (e = {
                     chart: {
@@ -890,6 +890,10 @@
 
 
         }
-        // ring_chart();
+
+        // $(document).one("ready", function() {
+        //     // $(".count").html(++n);
+        //     ring_chart(amount = 13);
+        // });
     </script>
 @endsection

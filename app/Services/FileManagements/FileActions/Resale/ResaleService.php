@@ -47,15 +47,16 @@ class ResaleService implements ResaleInterface
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
-                'sales_plan_id'=>$file->sales_plan_id,
+                'sales_plan_id' => $file->sales_plan_id,
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
-                'amount_to_be_refunded' => str_replace(',', '', $inputs['amount_to_be_refunded']),
-                'payment_due_date' => $inputs['payment_due_date'],
+                'new_resale_rate' => str_replace(',', '', $inputs['new_resale_rate']),
+                'premium_demand' => str_replace(',', '', $inputs['premium_demand']),
+                'marketing_service_charges' => str_replace(',', '', $inputs['marketing_service_charges']),
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
-                'amount_profit' => $inputs['amount_profit'],
+                'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'comments' => $inputs['comments'],
             ];
 
@@ -71,35 +72,6 @@ class ResaleService implements ResaleInterface
 
             $approvePermission = $permission->roles;
 
-            $notificationData = [
-
-                'title' => 'File Resale Notificaton',
-                'message' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
-                'description' => 'File Attachments are not Attached against Unit number (' . $unit_data->floor_unit_number . ') of customer (' . $stakeholder_data->full_name . ').',
-                'url' => str_replace('/store', '', $currentURL),
-            ];
-
-
-            if (isset($inputs['checkAttachment'])) {
-
-                for ($i = 0; $i < count($inputs['attachments']); $i++) {
-
-                    $resale_attachment_data = [
-                        'site_id' => decryptParams($site_id),
-                        'file_resale_id' => $resalefile->id,
-                        'label' => $inputs['attachments'][$i]['attachment_label'],
-                    ];
-                    $resale_attachment_data = (new FileResaleAttachment())->create($resale_attachment_data);
-                    $resale_attachment_data->addMedia($inputs['attachments'][$i]['image'])->toMediaCollection('file_resale_attachments');
-                }
-                changeImageDirectoryPermission();
-            } else {
-                $specificUsers = collect();
-                foreach ($approvePermission as $role) {
-                    $specificUsers = $specificUsers->merge(User::role($role->name)->whereNot('id', Auth::user()->id)->get());
-                }
-                Notification::send($specificUsers, new FileRefundNotification($notificationData));
-            }
             return $resalefile;
         });
     }

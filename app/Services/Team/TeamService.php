@@ -28,9 +28,9 @@ class TeamService implements TeamInterface
         return getTreeData(collect($teams), $this->model());
     }
 
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs, $customFields) {
             $data = [
                 'site_id' => decryptParams($site_id),
                 'name' => $inputs['team_name'],
@@ -40,10 +40,17 @@ class TeamService implements TeamInterface
 
             $team = $this->model()->create($data);
 
-            if(!$inputs['has_team']){
+            if (!$inputs['has_team']) {
                 $team->users()->attach($inputs['user_id'], ['site_id' => decryptParams($site_id)]);
             }
 
+            foreach ($customFields as $key => $value) {
+                $team->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+                ]);
+            }
             return $team;
         });
     }
@@ -57,9 +64,9 @@ class TeamService implements TeamInterface
         return $this->model()->find($id);
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $id, $inputs) {
+        DB::transaction(function () use ($site_id, $id, $inputs, $customFields) {
 
             $data = [
                 'site_id' => $site_id,
@@ -68,15 +75,21 @@ class TeamService implements TeamInterface
                 'has_team' => $inputs['has_team'],
             ];
 
-            $team = $this->model()->where('id', $id)->update($data);
+            $team = $this->model()->where('id', $id)->first();
+            $team->update($data);
 
-            $team = $this->model()->find($id);
-            if($inputs['has_team']){
-                $team = $this->model()->find($id);
-              $team->users()->detach();
-            }
-            else{
+            if ($inputs['has_team']) {
+                $team->users()->detach();
+            } else {
                 $team->users()->syncWithPivotValues($inputs['user_id'], ['site_id' => $site_id]);
+            }
+
+            foreach ($customFields as $key => $value) {
+                $team->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+                ]);
             }
 
             return $team;

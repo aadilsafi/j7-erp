@@ -20,6 +20,7 @@ use App\Models\FileResaleAttachment;
 use App\Models\ModelTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Template;
+use App\Models\Type;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
@@ -119,7 +120,6 @@ class FileReleaseController extends Controller
      */
     public function store(FileResaleStoreRequest $request, $site_id)
     {
-        //
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
@@ -259,22 +259,28 @@ class FileReleaseController extends Controller
     public function printPage($site_id, $file_id, $template_id)
     {
 
-        $file_refund = (new FileResale())->find(decryptParams($file_id));
-        // dd($file_refund ,  json_decode($file_refund['stakeholder_data']));
+        $file_resale = (new FileResale())->find(decryptParams($file_id));
+        // dd($file_resale ,  json_decode($file_resale['stakeholder_data']));
+        $file = FileManagement::where('id', $file_resale->file_id)->first();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $unit_data = json_decode($file_resale->unit_data);
+        $unitType = Type::find($unit_data->type_id);
 
         $template = Template::find(decryptParams($template_id));
 
         $data = [
             'site_id' => decryptParams($site_id),
-            'file_refund' => $file_refund,
+            'file_resale' => $file_resale,
             'template' => $template,
-            'stakeholder' => json_decode($file_refund['stakeholder_data']),
-            'unit' => Unit::find($file_refund['unit_id']),
-            'salesPlan' => SalesPlan::where('unit_id', $file_refund['unit_id'])->first(),
+            'customer' => json_decode($file_resale['stakeholder_data']),
+            'unit' => Unit::find($file_resale['unit_id']),
+            'salesPlan' => SalesPlan::where('unit_id', $file_resale['unit_id'])->first(),
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
-        return view($printFile, compact('data'));
+        return view($printFile, $data);
     }
 }

@@ -20,13 +20,15 @@ return new class extends Migration
             $table->string('origin_name')->nullable();
             $table->string('origin_number', 20)->nullable();
             $table->foreignId('account_action_id')->constrained();
-            $table->foreignId('sales_plan_id')->constrained();
+            $table->foreignId('sales_plan_id')->nullable();
             $table->foreignId('receipt_id')->nullable();
             $table->foreignId('file_refund_id')->nullable();
             $table->foreignId('file_resale_id')->nullable();
             $table->foreignId('file_buyback_id')->nullable();
             $table->foreignId('file_cancellation_id')->nullable();
             $table->foreignId('file_title_transfer_id')->nullable();
+            $table->foreignId('rebate_incentive_id')->nullable();
+            $table->foreignId('dealer_incentive_id')->nullable();
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);

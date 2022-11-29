@@ -116,7 +116,7 @@
             <tr style="border: 2px solid;">
                 <th style="text-align:start; width:11%;  ">Serial No.</th>
                 <td style="text-align: center; width:20%; border-bottom: 1px solid black; ">
-
+                    {{$preview_data['serial_no']}}
                 </td>
                 <th style="text-align: center; width:8%; ">CC No.</th>
                 <td style="text-align: center; width:20%; border-bottom: 1px solid black; ">

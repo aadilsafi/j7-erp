@@ -27,17 +27,37 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'phone_no',
-        'site_id'
+        'site_id',
+        'country_id',
+        'state_id',
+        'city_id',
+        'nationality',
+        'designation',
+        'cnic',
+        'contact',
+        'countryDetails',
+        'optional_contact',
+        'OptionalCountryDetails',
+        'address',
+        'mailing_address'
     ];
-
 
     public $rules = [
         'name' => 'required|string|min:1|max:50',
         'email' => 'required|email|unique:users',
-        'phone_no' => 'required|string|min:11|max:11',
+        'contact' => 'required|string|min:11|max:11',
         'password' => 'required | confirmed',
         // 'attachment' => 'sometimes|min:2',
-        'role_id' => 'required'
+        'role_id' => 'required',
+
+        'designation' => 'nullable|string|max:50',
+        'cnic' => 'required|unique:users,cnic',
+        'contact' => 'required|string|min:1|max:20',
+        'address' => 'required|string',
+        'city_id' => 'nullable|numeric',
+        'state_id' => 'nullable|numeric',
+        'country_id' => 'nullable|numeric',
+        'nationality' => 'sometimes',
     ];
 
     // public $ruleMessages = [
@@ -100,5 +120,15 @@ class User extends Authenticatable implements HasMedia
     public function CustomFieldValues()
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
+
+    public function city(){
+        return $this->belongsTo(City::class);
+    }
+    public function state(){
+        return $this->belongsTo(State::class);
+    }
+    public function country(){
+        return $this->belongsTo(Country::class);
     }
 }

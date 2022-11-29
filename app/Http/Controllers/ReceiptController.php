@@ -376,6 +376,7 @@ class ReceiptController extends Controller
         $unit = Unit::find($receipt_data->unit_id);
 
         $preview_data = [
+            'serial_no' => 'REC-00'.$receipt_data->id,
             'unit_name' => $unit->name,
             'unit_type' => $unit->type->name,
             'unit_floor' => $unit->floor->name,

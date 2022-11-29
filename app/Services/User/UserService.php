@@ -22,15 +22,27 @@ class UserService implements UserInterface
         return $this->model()->where('site_id', $site_id)->get();
     }
 
-    public function store($site_id, $inputs)
+    public function store($site_id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs, $customFields) {
             $data = [
                 'site_id' => decryptParams($site_id),
                 'name' => $inputs['name'],
                 'email' => $inputs['email'],
-                'phone_no' => $inputs['phone_no'],
                 'password' =>  Hash::make($inputs['password']),
+                'designation' => $inputs['designation'],
+                'contact' => $inputs['contact'],
+                'cnic' => $inputs['cnic'],
+                'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
+                'address' => $inputs['address'],
+                'mailing_address' => $inputs['mailing_address'],
+                'city_id' => $inputs['city_id'],
+                'country_id' => $inputs['country_id'],
+                'state_id' => $inputs['state_id'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
+
             ];
 
             $user = $this->model()->create($data);
@@ -51,6 +63,13 @@ class UserService implements UserInterface
             //     ];
             //     $user->CustomFieldValues()->create($customFieldData);
             // }
+            foreach ($customFields as $key => $value) {
+                $user->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+                ]);
+            }
             return $user;
         });
     }
@@ -64,13 +83,24 @@ class UserService implements UserInterface
         return $this->model()->find($id);
     }
 
-    public function update($site_id, $id, $inputs)
+    public function update($site_id, $id, $inputs, $customFields)
     {
-        DB::transaction(function () use ($site_id, $id, $inputs) {
+        DB::transaction(function () use ($site_id, $id, $inputs, $customFields) {
             $data = [
                 'name' => $inputs['name'],
                 'email' => $inputs['email'],
-                'phone_no' => $inputs['phone_no'],
+                'designation' => $inputs['designation'],
+                'contact' => $inputs['contact'],
+                'cnic' => $inputs['cnic'],
+                'countryDetails' => $inputs['countryDetails'],
+                'optional_contact' => $inputs['optional_contact'],
+                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
+                'address' => $inputs['address'],
+                'mailing_address' => $inputs['mailing_address'],
+                'city_id' => $inputs['city_id'],
+                'country_id' => $inputs['country_id'],
+                'state_id' => $inputs['state_id'],
+                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
             ];
             if (isset($inputs['password'])) {
                 $data['password'] =  Hash::make($inputs['password']);
@@ -87,6 +117,13 @@ class UserService implements UserInterface
             }
             $user->syncRoles([$inputs['role_id']]);
 
+            foreach ($customFields as $key => $value) {
+                $user->CustomFieldValues()->updateOrCreate([
+                    'custom_field_id' => $value->id,
+                ], [
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+                ]);
+            }
             return $user;
         });
     }
@@ -95,7 +132,7 @@ class UserService implements UserInterface
     {
         DB::transaction(function () use ($id) {
             if (!empty($id)) {
-                foreach($id as $data){
+                foreach ($id as $data) {
                     $user = $this->model()->find($data);
                     $user->roles()->detach();
                     $user->delete();

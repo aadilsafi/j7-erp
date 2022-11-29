@@ -72,7 +72,7 @@ class FileReleaseController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -147,7 +147,7 @@ class FileReleaseController extends Controller
         $resale_file = (new FileResale())->find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $resale_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -263,16 +263,16 @@ class FileReleaseController extends Controller
         $file_resale = (new FileResale())->find(decryptParams($file_id));
         // dd($file_resale ,  json_decode($file_resale['stakeholder_data']));
         $file = FileManagement::where('id', $file_resale->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_resale->unit_data);
         $unitType = Type::find($unit_data->type_id);
 
         $unpaid = $salesPlan->unPaidInstallments->pluck('details')->toArray();
-       
+
         $installmentsRecevied = $salesPlan->PaidorPartiallyPaidInstallments->where('installment_order', '>', 0)->pluck('details')->toArray();
-        
+
         $template = Template::find(decryptParams($template_id));
 
         $data = [

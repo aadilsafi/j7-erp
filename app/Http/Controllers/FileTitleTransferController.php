@@ -68,7 +68,7 @@ class FileTitleTransferController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -138,7 +138,7 @@ class FileTitleTransferController extends Controller
         $unit = Unit::find(decryptParams($unit_id));
         $file_title_transfer = FileTitleTransfer::find(decryptParams($id));
         $file = FileManagement::where('id', $file_title_transfer->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
 
         $total_paid_amount = $receipts->sum('amount_in_numbers');
@@ -245,7 +245,7 @@ class FileTitleTransferController extends Controller
 
 
         $file = FileManagement::where('id', $transfer_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($transfer_file->unit_data);

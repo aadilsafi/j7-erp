@@ -39,10 +39,10 @@
         }
 
         /* .canvasjs-chart-canvas {
-                                                            display: none !important;
-                                                            width: 438px !important;
-                                                            height: 300px !important;
-                                                        } */
+                                                                    display: none !important;
+                                                                    width: 438px !important;
+                                                                    height: 300px !important;
+                                                                } */
     </style>
 @endsection
 
@@ -168,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-sm-12" id="full_bar_graph">
+                                <div class="col-md-6 col-sm-12" id="full_bar_graph">
                                     <div class="row mt-3" id="sub_manu">
                                         <div class="col-md-4 sm-md-12 responsive">
                                             <p>
@@ -201,7 +201,7 @@
                                         <div id="chartContainer" style="height: 300px; width: 100%;"></div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-sm-12 d-none" id="pipe_chart_bar">
+                                <div class="col-md-6 col-sm-12" id="pipe_chart_bar">
                                     <div id="pipe_chart_filter_data" class="row">
                                         <div class="card">
                                             <div class="card-body">

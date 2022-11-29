@@ -1239,6 +1239,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.approve',
+                'show_name' => 'Can Approve Rebate Incentive Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
             // file management dealer incentive
             [
                 'name' => 'sites.file-managements.dealer-incentive.index',

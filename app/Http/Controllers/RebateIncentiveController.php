@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
 use App\Models\Bank;
 use App\Models\SalesPlan;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Redirect;
 use Validator;
+use DB;
 
 class RebateIncentiveController extends Controller
 {
@@ -25,14 +27,16 @@ class RebateIncentiveController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $rebateIncentive;
+    private $rebateIncentive, $financialTransactionInterface;
 
     public function __construct(
         RebateIncentiveInterface $rebateIncentive,
-        CustomFieldInterface $customFieldInterface
+        CustomFieldInterface $customFieldInterface,
+        FinancialTransactionInterface $financialTransactionInterface
     ) {
         $this->rebateIncentive = $rebateIncentive;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
     public function index(RebateIncentiveDataTable $dataTable, Request $request, $site_id)
@@ -171,6 +175,21 @@ class RebateIncentiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function approve($site_id, $rebate_incentive_id)
+    {
+        DB::transaction(function () use ($site_id, $rebate_incentive_id) {
+           
+            $rebate_incentive = RebateIncentiveModel::find(decryptParams($rebate_incentive_id));
+            $rebate_incentive->status = 1;
+            $rebate_incentive->update();
+
+             // Account ledger transaction
+             $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate_incentive->id);
+
+        });
+        return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
 
     public function getData(Request $request)

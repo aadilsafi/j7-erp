@@ -22,6 +22,11 @@
             height: 50%;
             margin: auto;
         }
+
+        .container {
+            width: 80%;
+            margin: 15px auto;
+        }
     </style>
 @endsection
 
@@ -788,60 +793,40 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-12">
+            <div class="col-lg-12 col-md-12 col-12">
                 <div class="card card-transaction">
                     <div class="card-header">
-                        <h4 class="card-title">Installments</h4>
+                        <h4 class="card-title"></h4>
                         <div class="dropdown chart-dropdown">
+                            <input type="hidden" id="amount" name="amount">
+                            <input type="hidden" id="paid_amount" name="paid_amount">
+                            <input type="hidden" id="remaining_amount" name="remaining_amount">
                             <i data-feather="more-vertical" class="font-medium-3 cursor-pointer"
                                 data-bs-toggle="dropdown"></i>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" id="month" href="#">Month</a>
-                                <a class="dropdown-item" id="3_month" href="#">3 Month</a>
-                                <a class="dropdown-item" id="6_month" href="#">6 Month</a>
-                                <a class="dropdown-item" id="year" href="#">Last Year</a>
+                                <a class="dropdown-item" value="months1" id="months1" href="#">Month</a>
+                                <a class="dropdown-item" value="months3" id="months3" href="#">3 Month</a>
+                                <a class="dropdown-item" value="months6" id="months6" href="#">6 Month</a>
+                                <a class="dropdown-item" value="months12" id="months12" href="#">Last Year</a>
                             </div>
                         </div>
                     </div>
 
                     <div class="card-body">
-                        <canvas class="doughnut-chart-ex chartjs" data-height="275"></canvas>
-                        <div class="d-flex justify-content-between mt-3 mb-1">
-                            <div class="d-flex align-items-center">
-                                <i data-feather="monitor" class="font-medium-2 text-primary"></i>
-                                <span class="fw-bold ms-75 me-25">Amount</span>
-                                <span>- 123</span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mb-1">
-                            <div class="d-flex align-items-center">
-                                <i data-feather="tablet" class="font-medium-2 text-warning"></i>
-                                <span class="fw-bold ms-75 me-25">Due Amount</span>
-                                <span>- 123123</span>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div class="d-flex align-items-center">
-                                <i data-feather="tablet" class="font-medium-2 text-success"></i>
-                                <span class="fw-bold ms-75 me-25">Received Amount</span>
-                                <span>- 123321</span>
-                            </div>
-                        </div>
+                        <div id="piechart3d"></div>
                     </div>
                 </div>
                 <!--/ Transaction Card -->
             </div>
 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3>Pie Series</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div id="chart1"></div>
+
+            {{-- <div class="container d-flex justify-container-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="piechart3d" style="width: 900px; height: 500px;"></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
     </section>
     <!-- Dashboard Ecommerce ends -->
 @endsection
@@ -864,70 +849,105 @@
         href="http://www.prepbootstrap.com/Content/shieldui-lite/dist/css/light/all.min.css" />
     <script type="text/javascript"
         src="http://www.prepbootstrap.com/Content/shieldui-lite/dist/js/shieldui-lite-all.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 @endsection
 
 @section('page-js')
     <script src="{{ asset('app-assets') }}/js/scripts/pages/dashboard-ecommerce.min.js"></script>
-    {{-- <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script> --}}
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 @endsection
 
 @section('custom-js')
-@endsection
+    <script type="text/javascript">
+        // $(document).ready(function() {
 
-<script type="text/javascript">
-    jQuery(function($) {
-        var data1 = [12, 3, 4, 2];
-        var data2 = [3, 9, 12, 14];
 
-        $(function() {
-            $("#chart1").shieldChart({
-                exportOptions: {
-                    image: false,
-                    print: false
-                },
-                axisY: {
-                    title: {
-                        text: "Break-Down for selected quarter"
-                    }
-                },
-                dataSeries: [{
-                    seriesType: "pie",
-                    enablePointSelection: true,
-                    data: data1
-                }]
+
+        // });
+
+        function reload_cart(amount, paid_amount, remaining_amount) {
+
+            google.charts.load('current', {
+                'packages': ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Task', 'Hours per Day'],
+                    ['Amount', amount],
+                    ['Paid Amount', paid_amount],
+                    ['Remaining Amount', remaining_amount],
+                ]);
+
+                var options = {
+                    title: 'Installment',
+                    is3D: true
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart3d'));
+
+                chart.draw(data, options);
+            }
+        }
+
+        reload_cart(amount = 12, paid_amount = 13, remaining_amount = 14);
+
+
+        $(document).ready(function() {
+
+            flatpicker_to_date = $("#to_date").flatpickr({
+                mode: "range",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
             });
 
-            $("#chart2").shieldChart({
-                exportOptions: {
-                    image: false,
-                    print: false
-                },
-                seriesSettings: {
-                    pie: {
-                        enablePointSelection: true,
-                        borderColor: 'black',
-                        borderWidth: 3,
-                        dataPointText: {
-                            style: {
-                                fontWeight: 'bold'
-                            }
+            $("#months1,#months3,#months6,#months12").on('click', function(e) {
+                // alert("Field " + e.target.id + " changed");
+                // alert('q');
+                let months_id = e.target.id;
+                e.preventDefault();
+                let months1 = $('#months1').val();
+                let months3 = $('#months3').val();
+                let months6 = $('#months6').val();
+                let months12 = $('#months12').val();
+                let url =
+                    "{{ route('ajax-get-filtered-data-dasboard') }}";
+                var _token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'months1': months1,
+                        'months3': months3,
+                        'months6': months6,
+                        'months12': months12,
+                        'months_id': months_id,
+                        '_token': _token,
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            reload_cart(data.data.amount, data.data.paid_amount, data.data
+                                .remaining_amount);
+                            $('#amount').val(data.data.amount);
+                            $('#paid_amount').val(data.data.paid_amount);
+                            // $('#due_amount').val(data.data.due_amount);
+                            $('#remaining_amount').val(data.data.remaining_amount);
+                        } else {
+                            console.log(data.data);
                         }
+
+                    },
+                    error: function(error) {
+                        console.log(error);
                     }
-                },
-                axisY: {
-                    title: {
-                        text: "Break-Down for selected quarter"
-                    }
-                },
-                dataSeries: [{
-                    seriesType: "pie",
-                    data: data2
-                }]
+                });
+
             });
-
-
         });
-
-    });
-</script>
+    </script>
+@endsection

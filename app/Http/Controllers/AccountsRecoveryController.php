@@ -129,29 +129,53 @@ class AccountsRecoveryController extends Controller
         $details = $request->installment_id;
         $salesPlan_unit_id = $request->salesPlan_unit_id;
 
-        $installment = SalesPlanInstallments::when(($details), function ($query) use ($details) {
-            $query->where('details', $details);
+        $salePlans = (new SalesPlan())->when(($sales_plan_id), function ($query) use ($sales_plan_id) {
+            $query->where('id', $sales_plan_id);
             return $query;
-        })
-            ->when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-                $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
+        })->with(['installments' => function ($query) use ($start_date, $end_date, $details) {
+            if ($start_date && $end_date) {
+                $query->whereDate('date', '>=', $start_date)->where('date', '<=', $end_date);
                 return $query;
-            })
-            ->when(($sales_plan_id), function ($query) use ($sales_plan_id) {
-                $query->where('sales_plan_id', $sales_plan_id);
+            }
+            if ($details) {
+                $query->where('details', $details);
                 return $query;
-            })
-            // ->with(['salesPlan.unit'=>function($query) use ($salesPlan_unit_id){
+            }
+        }])->where(['status' => 1])->get();
 
-            // }])
-            ->where([['status', 'Unpaid'], ['created_at', '<=', Carbon::now()]])
-            ->get();
+        // $installment = SalesPlanInstallments::when(($details), function ($query) use ($details) {
+        //     $query->where('details', $details);
+        //     return $query;
+        // })
+        //     ->when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
+        //         $query->whereDate('date', '>=', $start_date)->whereDate('date', '<=', $end_date);
+        //         return $query;
+        //     })
+        //     ->when(($sales_plan_id), function ($query) use ($sales_plan_id) {
+        //         $query->where('sales_plan_id', $sales_plan_id);
+        //         return $query;
+        //     })
+        // ->with(['salesPlan.unit'=>function($query) use ($salesPlan_unit_id){
+
+        // }])
+        // ->where([['status', 'Unpaid'], ['created_at', '<=', Carbon::now()]])
+        // ->get();
+        $amount = 0;
+        $paid_amount = 0;
+        $remaining_amount = 0;
+        $due_amount = 0;
+        foreach ($salePlans as $salePlan) {
+            $amount += $salePlan->installments->pluck('amount')->sum();
+            $paid_amount += $salePlan->installments->pluck('paid_amount')->sum();
+            $remaining_amount += $salePlan->installments->pluck('remaining_amount')->sum();
+            $due_amount += $amount - $paid_amount;
+        }
         // dd($installment->toArray());
         $data = [];
-        $amount = $installment->pluck('amount')->sum();
-        $paid_amount = $installment->pluck('paid_amount')->sum();
-        $remaining_amount = $installment->pluck('remaining_amount')->sum();
-        $due_amount = $amount - $paid_amount;
+        // $amount = $installment->pluck('amount')->sum();
+        // $paid_amount = $installment->pluck('paid_amount')->sum();
+        // $remaining_amount = $installment->pluck('remaining_amount')->sum();
+        // $due_amount = $amount - $paid_amount;
         array_push($data, [
             'amount' => $amount,
             'paid_amount' => $paid_amount,

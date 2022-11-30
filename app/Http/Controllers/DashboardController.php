@@ -73,4 +73,9 @@ class DashboardController extends Controller
             'data' => $data
         ];
     }
+
+    public function dasboardSideChart(Request $request)
+    {
+        return 'hello';
+    }
 }

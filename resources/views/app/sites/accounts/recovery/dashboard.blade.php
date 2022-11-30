@@ -26,10 +26,10 @@
         }
 
         /* #apexchartsj0rxcjpl,
-                                                                                                                                                    #SvgjsSvg1119,
-                                                                                                                                                    .apexcharts-svg {
-                                                                                                                                                        display: none;
-                                                                                                                                                    } */
+                                                                                                                                                                                #SvgjsSvg1119,
+                                                                                                                                                                                .apexcharts-svg {
+                                                                                                                                                                                    display: none;
+                                                                                                                                                                                } */
     </style>
 @endsection
 
@@ -99,6 +99,17 @@
         </div>
         <div class="row match-height">
             <!-- Avg Sessions Chart Card starts -->
+
+
+
+
+            {{-- <________________________ next chart_______________________> --}}
+
+
+
+
+
+
             <div class="col-lg-6 col-12">
                 <div class="card">
                     <div class="card-body">
@@ -479,6 +490,65 @@
                 });
 
             });
+
+
+
+
+
+            // side chart
+            $("#months1,#months3,#months6,#months12").on('click', function(e) {
+
+                let months_id = e.target.id;
+                e.preventDefault();
+                let url =
+                    "{{ route('ajax-get-dasboard-side-chart') }}";
+                var _token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'months_id': months_id,
+                        '_token': _token,
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            function numberWithCommas(num) {
+                                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                            }
+
+                            // $('#amount').val(data.data.amount);
+                            // $('#amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.amount) + '</span>');
+                            // $('#paid_amount').val(data.data.paid_amount);
+                            // $('#paid_amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.paid_amount) + '</span>');
+                            // $('#remaining_amount').val(data.data.remaining_amount);
+                            // $('#remaining_amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.paid_amount) + '</span>');
+                            // $('#installment_paid').html(
+                            //     '<h1 class="font-large-2 fw-bolder mt-2 mb-0" id="installment_paid">' +
+                            //     numberWithCommas(data
+                            //         .data.installment_paid) + '</h1>');
+                            // ring_chart(data.data.new_percentage);
+
+                        } else {
+                            console.log(data.data);
+                        }
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            });
         });
 
 
@@ -814,6 +884,6 @@
 
         }
 
-        // ring_chart(amount = 13);
+        ring_chart(amount = 13);
     </script>
 @endsection

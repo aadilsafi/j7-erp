@@ -244,17 +244,16 @@ class FileRefundController extends Controller
             $file_refund->status = 1;
             $file_refund->update();
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_refund->sales_plan_id)->where('status', 1)->get();
-            $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
-            $discountedValue = (float)$discounted_amount;
-            $amount = (float)$refunded_amount - (float)$discounted_amount;
-
-
             $salesPlan = SalesPlan::find($file_refund->sales_plan_id);
             // after minus payable amount from sales plan
             $refunded_amount = str_replace(',', '', $file_refund->amount_to_be_refunded);
             $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
             $accountActionName = AccountAction::find(5)->name;
+
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_refund->sales_plan_id)->where('status', 1)->get();
+            $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
+            $discountedValue = (float)$discounted_amount;
+            $amount = (float)$refunded_amount - (float)$discounted_amount;
             $ledgerData = [
                 // Refund (3 entries in legder)
                 // Refund account entry

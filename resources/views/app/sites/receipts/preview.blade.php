@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                width: calc(20% - 0.5em);
-                            } */
+                                                width: calc(20% - 0.5em);
+                                            } */
     </style>
 @endsection
 
@@ -205,8 +205,8 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount_in_numbers) }}"
-                                        readonly />
+                                        name="unit[no]" placeholder=""
+                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
@@ -272,7 +272,13 @@
                                     </div>
                                 @endif
 
-
+                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
+                                    <label class="form-label fs-5" for="installments">Installments</label>
+                                    <input type="text" class="form-control form-control-lg text-wrap" id="installments"
+                                        name="installments" placeholder="installments"
+                                        value="@foreach (json_decode($receipt->installment_number) as $values){{ trim($values) }}{{ !$loop->last ? ' , ' : null }} @endforeach"
+                                        readonly />
+                                </div>
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="stackholder_address">Comments</label>

@@ -46,8 +46,8 @@ class ReceiptService implements ReceiptInterface
 
 
             for ($i = 0; $i < count($data); $i++) {
-                $amount_in_numbers = $data[$i]['amount_in_numbers'];
-                $discounted_amount = $requested_data['discounted_amount'];
+                $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
+                $discounted_amount = str_replace(',', '' , $requested_data['discounted_amount']);
                 if (isset($discounted_amount)) {
                     $amount_in_numbers = (float)$discounted_amount + (float)$amount_in_numbers;
                     $amount_in_numbers = (string)$amount_in_numbers;
@@ -93,6 +93,8 @@ class ReceiptService implements ReceiptInterface
 
                 $stakeholder = Stakeholder::find($sales_plan[0]['stakeholder']['id']);
 
+                $max = Receipt::max('id') + 1;
+
                 $receiptData = [
                     'site_id' => decryptParams($site_id),
                     'unit_id'  => $data[$i]['unit_id'],
@@ -105,11 +107,11 @@ class ReceiptService implements ReceiptInterface
                     'cheque_no' => $data[$i]['cheque_no'],
                     'online_instrument_no' => $data[$i]['online_instrument_no'],
                     'transaction_date' => $data[$i]['transaction_date'],
-                    'amount_in_words' => numberToWords($data[$i]['amount_in_numbers']),
+                    'amount_in_words' => numberToWords(str_replace(',', '', $data[$i]['amount_in_numbers'])),
                     'amount_in_numbers' => $amount_in_numbers,
                     'purpose' => 'installments',
                     'installment_number' => '1',
-                    'amount_received' => $requested_data['amount_received'],
+                    'amount_received' => str_replace(',', '', $requested_data['amount_received']),
                     'comments' => $data[$i]['comments'],
                     'status' => ($data[$i]['mode_of_payment'] != 'Cheque') ? 1 : 0,
                     'bank_details' => $data[$i]['bank_name'],
@@ -121,14 +123,14 @@ class ReceiptService implements ReceiptInterface
                     $receiptData['discounted_amount'] = $discounted_amount;
                 }
 
-                if ($requested_data['amount_received'] > $data[$i]['amount_in_numbers']) {
+                if (str_replace(',', '', $requested_data['amount_received']) > str_replace(',', '', $data[$i]['amount_in_numbers'])) {
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
 
-                    $remaining_amount = $requested_data['amount_received'] - $data[$i]['amount_in_numbers'];
+                    $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
 
                     $data = [
                         'unit_name'  => $unit->name,
@@ -164,6 +166,7 @@ class ReceiptService implements ReceiptInterface
                                 'bank_id' => $draftReceiptData->bank_id,
                                 'created_date' => $draftReceiptData->created_date,
                                 'discounted_amount' => $draftReceiptData->discounted_amount,
+                                'serial_no' => sprintf('%03d', $max++)
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
@@ -191,6 +194,7 @@ class ReceiptService implements ReceiptInterface
                         ReceiptDraftModel::truncate();
                     }
 
+                    $receiptData['serial_no'] = sprintf('%03d', $max++);
                     //here is single without draft
                     $receipt = Receipt::create($receiptData);
                     if ($receipt->mode_of_payment == "Cash") {
@@ -381,13 +385,13 @@ class ReceiptService implements ReceiptInterface
             if ($this->model()->find($id[$i])->status == 0 || $this->model()->find($id[$i])->status == 1) {
 
                 $receipt = $this->model()->find($id[$i]);
-                if($receipt->mode_of_payment == "Cash"){
+                if ($receipt->mode_of_payment == "Cash") {
                     $transaction = $this->financialTransactionInterface->makeReceiptRevertCashTransaction($receipt->id);
                 }
-                if($receipt->mode_of_payment == "Cheque"){
+                if ($receipt->mode_of_payment == "Cheque") {
                     $transaction = $this->financialTransactionInterface->makeReceiptRevertChequeTransaction($receipt->id);
                 }
-                if($receipt->mode_of_payment == "Online"){
+                if ($receipt->mode_of_payment == "Online") {
                     $transaction = $this->financialTransactionInterface->makeReceiptRevertOnlineTransaction($receipt->id);
                 }
                 $receipt->status = 3;
@@ -462,7 +466,6 @@ class ReceiptService implements ReceiptInterface
                 }
 
                 $unit->update();
-
             }
         }
 

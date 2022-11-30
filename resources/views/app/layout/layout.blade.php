@@ -202,8 +202,12 @@
         }
         $('.amountFormat').on('focusout', function() {
             var val = $(this).val().replace(/,/g, "")
-            var formated = parseFloat(val).toLocaleString('en');
-            $(this).val(formated)
+            if ($.isNumeric(val)) {
+                var formated = parseFloat(val).toLocaleString('en');
+                $(this).val(formated)
+            }else{
+                $(this).val('')
+            }
         })
 
         // showBlockUI();

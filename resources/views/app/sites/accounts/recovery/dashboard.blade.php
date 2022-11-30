@@ -25,11 +25,16 @@
             font-size: 2rem !important;
         }
 
+        .inline-text-inline {
+            white-space: nowrap;
+
+        }
+
         /* #apexchartsj0rxcjpl,
-                                                                                                                                                                                #SvgjsSvg1119,
-                                                                                                                                                                                .apexcharts-svg {
-                                                                                                                                                                                    display: none;
-                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                            #SvgjsSvg1119,
+                                                                                                                                                                                                                                                                                                            .apexcharts-svg {
+                                                                                                                                                                                                                                                                                                                display: none;
+                                                                                                                                                                                                                                                                                                            } */
     </style>
 @endsection
 
@@ -132,12 +137,16 @@
                                     <button class="btn btn-sm border-0 dropdown-toggle p-50" type="button"
                                         id="dropdownItem5" data-bs-toggle="dropdown" aria-haspopup="true"
                                         aria-expanded="false">
-                                        Last 7 Days
+                                        Last Month
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownItem5">
-                                        <a class="dropdown-item" href="#">Last 28 Days</a>
-                                        <a class="dropdown-item" href="#">Last Month</a>
-                                        <a class="dropdown-item" href="#">Last Year</a>
+                                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownItem4">
+                                        <a class="dropdown-item" value="months1" id="side_months1" href="#">Month</a>
+                                        <a class="dropdown-item" value="months3" id="side_months3" href="#">3
+                                            Month</a>
+                                        <a class="dropdown-item" value="months6" id="side_months6" href="#">6
+                                            Month</a>
+                                        <a class="dropdown-item" value="months12" id="side_months12" href="#">Last
+                                            Year</a>
                                     </div>
                                 </div>
                                 <div id="avg-sessions-chart"></div>
@@ -145,38 +154,39 @@
                         </div>
                         <hr />
                         <div class="row avg-sessions pt-50">
-                            <div class="col-6 mb-2">
+                            <div class="col-6 mb-2" id="downpaidment">
                                 <p class="mb-50">Goal: $100000</p>
                                 <div class="progress progress-bar-primary" style="height: 6px">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="50"
                                         aria-valuemax="100" style="width: 50%"></div>
                                 </div>
                             </div>
-                            <div class="col-6 mb-2">
+                            <div class="col-6 mb-2" id="installment">
                                 <p class="mb-50">Users: 100K</p>
                                 <div class="progress progress-bar-warning" style="height: 6px">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="60"
                                         aria-valuemax="100" style="width: 60%"></div>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <p class="mb-50">Retention: 90%</p>
-                                <div class="progress progress-bar-danger" style="height: 6px">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="70"
-                                        aria-valuemax="100" style="width: 70%"></div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <p class="mb-50">Duration: 1yr</p>
-                                <div class="progress progress-bar-success" style="height: 6px">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="90"
-                                        aria-valuemax="100" style="width: 90%"></div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
+            {{-- <----------------------------------------------end-------------------------------> --}}
+
+
+
+
+
+
+
+
+
+
             <!-- Avg Sessions Chart Card ends -->
             <!-- Support Tracker Chart Card starts -->
             <div class="col-lg-6 col-12">
@@ -496,7 +506,7 @@
 
 
             // side chart
-            $("#months1,#months3,#months6,#months12").on('click', function(e) {
+            $("#side_months1,#side_months3,#side_months6,#side_months12").on('click', function(e) {
 
                 let months_id = e.target.id;
                 e.preventDefault();
@@ -513,30 +523,49 @@
                     },
                     success: function(data) {
                         if (data.status == true) {
+                            console.log(data.data, 'value check')
+
                             function numberWithCommas(num) {
                                 return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
                             }
+                            if (data.data[0].downpaidment) {
 
-                            // $('#amount').val(data.data.amount);
-                            // $('#amount').html(
-                            //     '<span class="font-large-1 fw-bold" id="amount">' +
-                            //     numberWithCommas(data
-                            //         .data.amount) + '</span>');
-                            // $('#paid_amount').val(data.data.paid_amount);
-                            // $('#paid_amount').html(
-                            //     '<span class="font-large-1 fw-bold" id="amount">' +
-                            //     numberWithCommas(data
-                            //         .data.paid_amount) + '</span>');
-                            // $('#remaining_amount').val(data.data.remaining_amount);
-                            // $('#remaining_amount').html(
-                            //     '<span class="font-large-1 fw-bold" id="amount">' +
-                            //     numberWithCommas(data
-                            //         .data.paid_amount) + '</span>');
-                            // $('#installment_paid').html(
-                            //     '<h1 class="font-large-2 fw-bolder mt-2 mb-0" id="installment_paid">' +
-                            //     numberWithCommas(data
-                            //         .data.installment_paid) + '</h1>');
-                            // ring_chart(data.data.new_percentage);
+
+
+                                $('#downpaidment').html(
+                                    `<div class="col-6 mb-2" id="downpaidment">` +
+                                    '<p class="mb-50 inline-text-inline">Amount: ' +
+                                    numberWithCommas(data
+                                        .data[0].downpaidment
+                                        .amount) + '</p>' +
+                                    `<p class="mb-50  inline-text-inline">Paid Amount: ${numberWithCommas(data.data[0].downpaidment.paid_amount)}</p>
+                                <p class="mb-50 inline-text-inline">Remaining Amount: ${numberWithCommas(data.data[0].downpaidment.remaining_amount)}</p>
+                                <div class="progress progress-bar-primary" style="height: 6px">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="50"
+                                        aria-valuemax="100" style="width:${data.data[0].downpaidment.revicable_amount}%"></div>
+                                </div>
+                            </div>`);
+                            }
+                            if (data.data[0].installment) {
+
+
+
+                                $('#installment').html(
+                                    `<div class="col-6 mb-2" id="installment">` +
+                                    '<p class="mb-50 inline-text-inline">Amount: ' +
+                                    numberWithCommas(data
+                                        .data[0].installment
+                                        .amount) + '</p>' +
+                                    `<p class="mb-50  inline-text-inline">Paid Amount: ${numberWithCommas(data.data[0].installment.paid_amount)}</p>
+                                <p class="mb-50 inline-text-inline">Remaining Amount: ${numberWithCommas(data.data[0].installment.remaining_amount)}</p>
+                                <div class="progress progress-bar-warning" style="height: 6px">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="60"
+                                        aria-valuemax="100" style="width: ${data.data[0].installment.revicable_amount}%"></div>
+                                </div>
+                            </div>`);
+                            }
+
+
 
                         } else {
                             console.log(data.data);

@@ -76,6 +76,55 @@ class DashboardController extends Controller
 
     public function dasboardSideChart(Request $request)
     {
-        return 'hello';
+        // return 'hello';
+
+        $installment = SalesPlanInstallments::when(($request->months_id == 'side_months12'), function ($query) {
+            $query->whereMonth('date', '>=', Carbon::now()->subMonth(12));
+            return $query;
+        })
+            ->when(($request->months_id == 'side_months6'), function ($query) {
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth(6));
+                return $query;
+            })
+            ->when(($request->months_id == 'side_months1'), function ($query) {
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth());
+                return $query;
+            })
+            ->when(($request->months_id == 'side_months3'), function ($query) {
+                $query->whereMonth('date', '>=', Carbon::now()->subMonth(3));
+                return $query;
+            })->orWhere('date', '<=', Carbon::now())->get();
+
+        $data = [];
+        $unpaid_installment = $installment->where('status', 'unpaid');
+
+        $paid_installment = $installment->where('status', 'paid');
+        $partially_paid_installment = $installment->where('status', 'partially_paid');
+        $downpaid_installment = $installment->where('type', 'downpayment');
+        $installment_type_installment = $installment->where('type', 'installment');
+
+
+        array_push($data, [
+            'downpaidment' => [
+                'amount' => $downpaid_installment->pluck('amount')->sum(),
+                'paid_amount' => $downpaid_installment->pluck('paid_amount')->sum(),
+                'remaining_amount' => $downpaid_installment->pluck('remaining_amount')->sum(),
+                'revicable_amount' => ($downpaid_installment->pluck('paid_amount')->sum() / $downpaid_installment->pluck('amount')->sum()) * 100,
+                'reviced_amount' => ($downpaid_installment->pluck('remaining_amount')->sum() / $downpaid_installment->pluck('amount')->sum()) * 100,
+            ],
+            'installment' => [
+                'amount' => $installment_type_installment->pluck('amount')->sum(),
+                'paid_amount' => $installment_type_installment->pluck('paid_amount')->sum(),
+                'remaining_amount' => $installment_type_installment->pluck('remaining_amount')->sum(),
+                'revicable_amount' => ($installment_type_installment->pluck('paid_amount')->sum() / $installment_type_installment->pluck('amount')->sum()) * 100,
+                'reviced_amount' => ($installment_type_installment->pluck('remaining_amount')->sum() / $installment_type_installment->pluck('amount')->sum()) * 100,
+            ],
+        ]);
+
+        return [
+            'status' => true,
+            'message' => ' filter by date mouth or year',
+            'data' => $data
+        ];
     }
 }

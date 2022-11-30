@@ -131,7 +131,7 @@ class FileRefundController extends Controller
         $file = FileManagement::where('id', $file_refund->file_id)->first();
         $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->orWhere('status', 2)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
-        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $total_paid_amount = $file_refund->amount_to_be_refunded;
         foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_refund_attachments');
             $images[$key] = $image->getUrl();

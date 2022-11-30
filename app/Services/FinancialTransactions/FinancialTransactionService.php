@@ -274,31 +274,31 @@ class FinancialTransactionService implements FinancialTransactionInterface
         if ($account_action == 3) {
             $file_buy_back = FileBuyBack::find($action_id);
             $data['file_buyback_id'] = $action_id;
-            $data['created_date'] = $file_buy_back->updated_at;
+            $data['created_date'] = $file_buy_back->payment_due_date;
         }
 
         if ($account_action == 5) {
             $file_refund = FileRefund::find($action_id);
             $data['file_refund_id'] = $action_id;
-            $data['created_date'] = $file_refund->updated_at;
+            $data['created_date'] = $file_refund->payment_due_date;
         }
 
         if ($account_action == 6) {
             $file_cancellation = FileCancellation::find($action_id);
             $data['file_cancellation_id'] = $action_id;
-            $data['created_date'] = $file_cancellation->updated_at;
+            $data['created_date'] = $file_cancellation->payment_due_date;
         }
 
         if ($account_action == 7) {
             $file_title_transfer = FileTitleTransfer::find($action_id);
             $data['file_title_transfer_id'] = $action_id;
-            $data['created_date'] = $file_title_transfer->updated_at;
+            $data['created_date'] = $file_title_transfer->payment_due_date;
         }
 
         if ($account_action == 24) {
             $file_resale = FileResale::find($action_id);
             $data['file_resale_id'] = $action_id;
-            $data['created_date'] = $file_resale->updated_at;
+            $data['created_date'] = $file_resale->payment_due_date;
         }
 
         if ($account_action == 25) {

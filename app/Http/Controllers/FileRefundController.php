@@ -129,7 +129,7 @@ class FileRefundController extends Controller
         $file_refund = FileRefund::find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $file_refund->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->orWhere('status', 2)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         foreach ($files_labels as $key => $file) {

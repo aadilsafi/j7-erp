@@ -273,7 +273,7 @@
             $(".online-mode-of-payment").trigger('change');
             $("#transaction_date").flatpickr({
                 defaultDate: 'today',
-                minDate: 'today',
+                // minDate: '',
                 // altInput: !0,
                 dateFormat: "Y-m-d",
             });

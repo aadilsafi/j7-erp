@@ -86,6 +86,7 @@ Route::group([
 
         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
             Route::post('get-filtered-data-dasboard', [DashboardController::class, 'dasboard_chart'])->name('get-filtered-data-dasboard');
+            Route::post('get-dasboard-side-chart', [DashboardController::class, 'dasboardSideChart'])->name('get-dasboard-side-chart');
         });
 
         Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');

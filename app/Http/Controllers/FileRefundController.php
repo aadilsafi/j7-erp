@@ -250,7 +250,7 @@ class FileRefundController extends Controller
             $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
             $accountActionName = AccountAction::find(5)->name;
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_refund->sales_plan_id)->where('status', 1)->get();
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_refund->sales_plan_id)->where('status', 1)->where('discounted_amount', '>',0)->get();
             $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
             $discountedValue = (float)$discounted_amount;
             $amount = (float)$refunded_amount - (float)$discounted_amount;
@@ -294,7 +294,7 @@ class FileRefundController extends Controller
             if (isset($discounted_amount) && $discountedValue > 0) {
 
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
-                $ledgerData[] = [
+                $ledgerData[] =
                     [
                         'site_id' => 1,
                         'account_head_code' => $cashDiscountAccount,
@@ -308,12 +308,11 @@ class FileRefundController extends Controller
                         'status' => true,
                         'origin_number' => $origin_number,
                         'origin_name' => 'RF-' . $origin_number,
-                        'created_date' => $file_refund->updated_at,
-                    ],
+                        'created_date' => $file_refund->payment_due_date,
                 ];
             }
 
-            $ledgerData[] = [
+            $ledgerData[] =
                 // Customer AP entry
                 [
                     'site_id' => 1,
@@ -328,9 +327,10 @@ class FileRefundController extends Controller
                     'status' => true,
                     'origin_number' => $origin_number,
                     'origin_name' => 'RF-' . $origin_number,
-                    'created_date' => $file_refund->updated_at,
-                ],
-                // Payment Voucher
+                    'created_date' => $file_refund->payment_due_date,
+                ];
+                // $ledgerData[] =
+                // // Payment Voucher
                 // [
                 //     'site_id' => 1,
                 //     'account_head_code' => $customer_payable_account_code,
@@ -344,10 +344,10 @@ class FileRefundController extends Controller
                 //     'status' => true,
                 //     'origin_number' => $origin_number,
                 //     'origin_name' => 'RF-' . $origin_number,
-                //     'created_date' => $file_refund->updated_at,
-                // ],
+                //     'created_date' => $file_refund->payment_due_date,
+                // ];
                 // // cash at office 10209020001001
-                // [
+                // $ledgerData[] = [
                 //     'site_id' => 1,
                 //     'account_head_code' => '10209020001001',
                 //     'account_action_id' => 4,
@@ -360,10 +360,9 @@ class FileRefundController extends Controller
                 //     'status' => true,
                 //     'origin_number' => $origin_number,
                 //     'origin_name' => 'RF-' . $origin_number,
-                //     'created_date' => $file_refund->updated_at,
-                // ],
+                //     'created_date' => $file_refund->payment_due_date,
+                // ];
 
-            ];
             // insert all above entries
             foreach ($ledgerData as $item) {
                 (new AccountLedger())->create($item);

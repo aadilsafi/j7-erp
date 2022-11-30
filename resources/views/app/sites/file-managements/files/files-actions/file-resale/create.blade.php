@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                width: calc(20% - 0.5em);
-                                                            } */
+                                                                    width: calc(20% - 0.5em);
+                                                                } */
     </style>
 @endsection
 
@@ -131,12 +131,12 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var created_date = $("#created_date").flatpickr({
-            defaultDate: "today",
-            minDate: '',
-            altInput: !0,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
+                defaultDate: "today",
+                minDate: '{{ $salesPlan->created_date }}',
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
 
 
             var validator = $("#fileRefundForm").validate({

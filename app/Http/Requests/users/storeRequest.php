@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\users;
 
+use App\Models\BacklistedStakeholder;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,6 +28,18 @@ class storeRequest extends FormRequest
         return (new User())->rules;
     }
 
+    public function withValidator($validator)
+    {
+        // if (!$validator->fails()) {
+        $validator->after(function ($validator) {
+
+            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('cnic'))->first();
+            if ($blacklisted) {
+                $validator->errors()->add('cnic', 'CNIC is BlackListed.');
+            }
+        });
+        // }
+    }
     /**
      * Get the error messages for the defined validation rules.
      *

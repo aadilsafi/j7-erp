@@ -2281,42 +2281,42 @@ class PermissionTableSeeder extends Seeder
 
             //  Company permissions
             [
-                'name' => 'sites.comanies.index',
+                'name' => 'sites.settings.companies.index',
                 'show_name' => 'Can View Companies Table',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.comanies.create',
+                'name' => 'sites.settings.companies.create',
                 'show_name' => 'Can Create Company',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.comanies.store',
+                'name' => 'sites.settings.companies.store',
                 'show_name' => 'Can Store Company',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.comanies.edit',
+                'name' => 'sites.settings.companies.edit',
                 'show_name' => 'Can Edit Company',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.comanies.update',
+                'name' => 'sites.settings.companies.update',
                 'show_name' => 'Can Update',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.comanies.delete',
+                'name' => 'sites.settings.companies.delete',
                 'show_name' => 'Can Delete Company',
                 'guard_name' => 'web',
                 'created_at' => now(),

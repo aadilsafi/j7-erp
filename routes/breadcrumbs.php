@@ -580,3 +580,19 @@ Breadcrumbs::for('sites.payment-voucher.show', function (BreadcrumbTrail $trail,
     $trail->parent('sites.payment-voucher.index', $site_id);
     $trail->push(' Payment Voucher Details');
 });
+
+//compnay Breadcrumbs Main
+Breadcrumbs::for('sites.companies.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Companies', route('sites.settings.companies.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.companies.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.companies.index', $site_id);
+    $trail->push('Create New Compnay');
+});
+
+Breadcrumbs::for('sites.companies.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.companies.index', $site_id);
+    $trail->push('Edit Compnay');
+});

@@ -36,6 +36,7 @@ use App\Http\Controllers\{
     FileBuyBackController,
     ChartsOfAccountsController,
     CityController,
+    CompanyController,
     ImageImportController,
     LedgerController,
     SalesPlanImportController,
@@ -289,6 +290,21 @@ Route::group([
                         });
                     });
 
+                    //Company Routes
+                    Route::group(['prefix' => 'companies', 'as' => 'companies.'], function () {
+
+                        Route::get('/', [CompanyController::class, 'index'])->name('index');
+
+                        Route::get('create', [CompanyController::class, 'create'])->name('create');
+                        Route::post('store', [CompanyController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CompanyController::class, 'edit'])->name('edit');
+                            Route::put('update', [CompanyController::class, 'update'])->name('update');
+                            Route::get('delete', [CompanyController::class, 'destroy'])->name('destroy');
+                        });
+                        Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
+                    });
                     // Logs Route
                     Route::group(['prefix' => 'activity-logs', 'as' => 'activity-logs.'], function () {
                         Route::get('/', [LogController::class, 'index'])->name('index');
@@ -655,8 +671,6 @@ Route::group([
 
                     Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
                     Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
-
-
                 });
 
                 // File Management

@@ -160,6 +160,16 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('sites.settings.companies.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.companies.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.companies.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i class="bi bi-building-fill-gear"></i>
+                                    <span class="menu-title text-truncate" data-i18n="Companies">Companies</span>
+                                </a>
+                            </li>
+                        @endcan
                         <li class="nav-item ">
                             <a class="d-flex align-items-center" href="javascript:void(0)">
                                 <i data-feather='list'></i>

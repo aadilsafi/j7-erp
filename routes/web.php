@@ -49,6 +49,7 @@ use App\Http\Controllers\{
     StakeholdersImportControler,
     StateController,
     LogController,
+    PaymentVocuherController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -646,6 +647,16 @@ Route::group([
                         // used for bank selection in receipt creation
                         Route::post('get-by-id', [BankController::class, 'getBank'])->name('get-by-id');
                     });
+                });
+
+                // Payment Vouchers
+                Route::group(['prefix' => 'payment-voucher', 'as' => 'payment-voucher.'], function () {
+                    Route::get('/', [PaymentVocuherController::class, 'index'])->name('index');
+
+                    Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
+                    Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+
+
                 });
 
                 // File Management

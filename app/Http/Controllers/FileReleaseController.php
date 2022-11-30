@@ -246,12 +246,12 @@ class FileReleaseController extends Controller
             //     $SalesPlan->update();
             // }
 
-            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-            foreach ($receipt as $receipt) {
-                $Receipt = Receipt::find($receipt->id);
-                $Receipt->status = 2;
-                $Receipt->update();
-            }
+            // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            // foreach ($receipt as $receipt) {
+            //     $Receipt = Receipt::find($receipt->id);
+            //     $Receipt->status = 2;
+            //     $Receipt->update();
+            // }
         });
         return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Resale Approved');
     }

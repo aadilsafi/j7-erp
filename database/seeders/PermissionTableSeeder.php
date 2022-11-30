@@ -2256,6 +2256,28 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Payment Voucher
+            [
+                'name' => 'sites.payment-voucher.index',
+                'show_name' => 'Can View Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.index',
+                'show_name' => 'Can View Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.index',
+                'show_name' => 'Can View Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ];
         // ]);
         foreach ($data as $permission) {

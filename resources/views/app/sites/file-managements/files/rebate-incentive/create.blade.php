@@ -263,7 +263,7 @@
                             .toLocaleString());
                         $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
                             .toLocaleString());
-                            hideBlockUI('#rebate');
+                        hideBlockUI('#rebate');
                     } else {
                         hideBlockUI('#rebate');
                         Swal.fire({
@@ -303,10 +303,10 @@
                 $('.hideDiv').css("display", "block");
             }
 
-            window.setTimeout(function(){
-                 // do whatever you want to do
-                 hideBlockUI('#rebate');
-                  }, 800);
+            window.setTimeout(function() {
+                // do whatever you want to do
+                hideBlockUI('#rebate');
+            }, 800);
         });
 
         var e = $("#dealer");
@@ -317,6 +317,7 @@
             width: "100%",
             containerCssClass: "select-lg",
         }).on("change", function(e) {
+
             let dealer = parseInt($(this).val());
             showBlockUI('#stakeholders_card');
             let stakeholderData = {
@@ -365,6 +366,8 @@
                             }
                             $('#stackholder_address').text(stakeholderData.address).attr('disabled',
                                 isDisable);
+                            $('#stackholder_mailing_address').val(stakeholderData.mailing_address).attr(
+                                'disabled', isDisable);
                         }
                     }
 

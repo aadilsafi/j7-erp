@@ -150,7 +150,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'deal_type' => $inputs['deal_type'],
                 'commision_percentage' => $inputs['rebate_percentage'],
                 'commision_total' => $inputs['rebate_total'],
-                'status' => 1,
+                'status' => 0,
                 'comments' => $inputs['comments'],
                 'dealer_id' => $dealer_id,
                 'is_for_dealer_incentive' => true,

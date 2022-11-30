@@ -49,11 +49,23 @@ class DealerIncentiveDataTable extends DataTable
                 return editDateColumn($dealerIncentive->updated_at);
             })
             ->editColumn('status', function ($dealerIncentive) {
-                return $dealerIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span><br>
-                <a onClick="ApproveModal()" id="approveID" dealer_id="' . encryptParams($dealerIncentive->id) . '" class="btn btn-relief-outline-primary waves-effect waves-float waves-light text-center" style="margin: 5px"
-                    data-bs-toggle="tooltip" data-bs-placement="top" title="Approve request" href="#">
-                    Approve Request
+                $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.dealer-incentive.approve');
+                $status = $dealerIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                if ($approvePermission && $dealerIncentive->status == 0) {
+                    $status .= '<a onClick="ApproveModal()" id="approveID" dealer_id="' . encryptParams($dealerIncentive->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Approve"
+                    href="#" >
+                    <i class="bi bi-check" style="font-size: 1.1rem" class="m-10"></i>
                 </a>';
+                }
+                return $status;
+
+                //     <a onClick="disApproveModal()" id="disApprove" dealer_incentive_id="' . encryptParams($dealerIncentive->id) . '" class="btn btn-relief-outline-danger waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
+                //     title="Disapprove"
+                //     href="#" >
+                //     <i class="bi bi-x-octagon-fill"></i>
+                // </a>
+                //     ';
             })
             // ->editColumn('actions', function ($dealerIncentive) {
             //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $dealerIncentive->id]);

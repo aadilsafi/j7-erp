@@ -52,13 +52,13 @@ class RebateIncentiveDataTable extends DataTable
                 return $rebateIncentive->stakeholder->contact;
             })
             ->editColumn('commision_percentage', function ($rebateIncentive) {
-                return $rebateIncentive->commision_percentage .'%';
+                return $rebateIncentive->commision_percentage . '%';
             })
             ->editColumn('dealer_id', function ($rebateIncentive) {
-                return $rebateIncentive->dealer->full_name ;
+                return $rebateIncentive->dealer->full_name;
             })
             ->editColumn('commision_total', function ($rebateIncentive) {
-                return number_format($rebateIncentive->commision_total) ;
+                return number_format($rebateIncentive->commision_total);
             })
             ->editColumn('created_at', function ($rebateIncentive) {
                 return editDateColumn($rebateIncentive->created_at);
@@ -67,7 +67,17 @@ class RebateIncentiveDataTable extends DataTable
                 return editDateColumn($rebateIncentive->updated_at);
             })
             ->editColumn('status', function ($rebateIncentive) {
-                return $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');
+                $status = $rebateIncentive->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
+                if ($approvePermission && $rebateIncentive->status == 0) {
+                    $status .= '  <a onClick="ApproveModal()" id="approveID" rebate_id="' . encryptParams($rebateIncentive->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Approve"
+                    href="#" >
+                    <i class="bi bi-check" style="font-size: 1.1rem" class="m-10"></i>
+                </a>';
+                }
+                return $status;
+                
             })
             // ->editColumn('actions', function ($rebateIncentive) {
             //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $rebateIncentive->id]);

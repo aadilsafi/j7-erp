@@ -71,7 +71,7 @@ class FileRefundController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 
@@ -129,7 +129,7 @@ class FileRefundController extends Controller
         $file_refund = FileRefund::find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $file_refund->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         foreach ($files_labels as $key => $file) {
@@ -212,7 +212,6 @@ class FileRefundController extends Controller
             $refundAccount = AccountHead::where('name', 'Refund Account')->first();
             $refundAccountCode = $refundAccount->code;
 
-
             // if payable account code is not set
             if ($customer_payable_account_code == null) {
                 $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
@@ -250,6 +249,11 @@ class FileRefundController extends Controller
             $refunded_amount = str_replace(',', '', $file_refund->amount_to_be_refunded);
             $payable_amount = (int)$salesPlan->total_price - (int)$refunded_amount;
             $accountActionName = AccountAction::find(5)->name;
+
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_refund->sales_plan_id)->where('status', 1)->get();
+            $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
+            $discountedValue = (float)$discounted_amount;
+            $amount = (float)$refunded_amount - (float)$discounted_amount;
             $ledgerData = [
                 // Refund (3 entries in legder)
                 // Refund account entry
@@ -265,7 +269,7 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => 'RF-'. $origin_number,
+                    'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
                 // Cutomer AR entry
@@ -281,15 +285,41 @@ class FileRefundController extends Controller
                     'file_refund_id' => $file_refund->id,
                     'status' => true,
                     'origin_number' => $origin_number,
-                    'origin_name' => 'RF-'. $origin_number,
+                    'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->updated_at,
                 ],
+            ];
+
+            // if discounted acomunt available
+            if (isset($discounted_amount) && $discountedValue > 0) {
+
+                $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
+                $ledgerData[] = [
+                    [
+                        'site_id' => 1,
+                        'account_head_code' => $cashDiscountAccount,
+                        'account_action_id' => 5,
+                        'credit' => $discounted_amount,
+                        'debit' => 0,
+                        'balance' => $discounted_amount,
+                        'nature_of_account' => 'JRF',
+                        'sales_plan_id' => $file_refund->sales_plan_id,
+                        'file_refund_id' => $file_refund->id,
+                        'status' => true,
+                        'origin_number' => $origin_number,
+                        'origin_name' => 'RF-' . $origin_number,
+                        'created_date' => $file_refund->updated_at,
+                    ],
+                ];
+            }
+
+            $ledgerData[] = [
                 // Customer AP entry
                 [
                     'site_id' => 1,
                     'account_head_code' => $customer_payable_account_code,
                     'account_action_id' => 5,
-                    'credit' => $refunded_amount,
+                    'credit' => $discountedValue > 0 ? $amount : $refunded_amount ,
                     'debit' => 0,
                     'balance' => $refunded_amount,
                     'nature_of_account' => 'JRF',
@@ -306,7 +336,7 @@ class FileRefundController extends Controller
                     'account_head_code' => $customer_payable_account_code,
                     'account_action_id' => 4,
                     'credit' => 0,
-                    'debit' => $refunded_amount,
+                    'debit' => $discountedValue > 0 ? $amount : $refunded_amount ,
                     'balance' => $refunded_amount,
                     'nature_of_account' => 'JRF',
                     'sales_plan_id' => $file_refund->sales_plan_id,
@@ -321,7 +351,7 @@ class FileRefundController extends Controller
                     'site_id' => 1,
                     'account_head_code' => '10209020001001',
                     'account_action_id' => 4,
-                    'credit' => $refunded_amount,
+                    'credit' => $discountedValue > 0 ? $amount : $refunded_amount ,
                     'debit' => 0,
                     'balance' => 0,
                     'nature_of_account' => 'JRF',
@@ -371,7 +401,7 @@ class FileRefundController extends Controller
         $template = Template::find(decryptParams($template_id));
 
         $file = FileManagement::where('id', $file_refund->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_refund->unit_data);

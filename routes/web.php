@@ -664,6 +664,8 @@ Route::group([
                             Route::get('edit', [RebateIncentiveController::class, 'edit'])->name('edit');
                             Route::put('update', [RebateIncentiveController::class, 'update'])->name('update');
                         });
+                        Route::get('approve/{rebate_incentive_id}', [RebateIncentiveController::class, 'approve'])->name('approve');
+
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
                         });

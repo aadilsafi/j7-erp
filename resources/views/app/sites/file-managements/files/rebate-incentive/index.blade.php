@@ -15,8 +15,7 @@
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/tables/datatable/rowGroup.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
 
 @endsection
 
@@ -47,7 +46,8 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.receipts.destroy-selected', ['site_id' => $site_id]) }}" id="stakeholder-table-form" method="get">
+            <form action="{{ route('sites.receipts.destroy-selected', ['site_id' => $site_id]) }}"
+                id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
         </div>
@@ -79,6 +79,31 @@
 @section('custom-js')
     {{ $dataTable->scripts() }}
     <script>
+        function ApproveModal() {
+            let rebate_id = $('#approveID').attr('rebate_id');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure You Want To Approve This Request?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Approve it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                        "{{ route('sites.file-managements.rebate-incentive.approve', ['site_id' => encryptParams($site_id), 'rebate_incentive_id' => ':rebate_incentive_id']) }}"
+                        .replace(':rebate_incentive_id', rebate_id);
+                    location.href = url;
+                }
+            });
+        }
+
         function deleteSelected() {
             var selectedCheckboxes = $('.dt-checkboxes:checked').length;
             if (selectedCheckboxes > 0) {
@@ -126,8 +151,8 @@
         }
 
         function addNew() {
-            location.href = '{{ route('sites.file-managements.rebate-incentive.create', ['site_id' => encryptParams($site_id)]) }}';
+            location.href =
+                '{{ route('sites.file-managements.rebate-incentive.create', ['site_id' => encryptParams($site_id)]) }}';
         }
-
     </script>
 @endsection

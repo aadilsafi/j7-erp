@@ -66,7 +66,7 @@ class FileCancellationController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 
@@ -124,7 +124,7 @@ class FileCancellationController extends Controller
         $unit = Unit::find(decryptParams($unit_id));
         $file_cancel = (new FileCancellation())->find(decryptParams($id));
         $file = FileManagement::where('id', $file_cancel->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
 
@@ -220,7 +220,7 @@ class FileCancellationController extends Controller
         $template = Template::find(decryptParams($template_id));
 
         $file = FileManagement::where('id', $file_cancel->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($file_cancel->unit_data);

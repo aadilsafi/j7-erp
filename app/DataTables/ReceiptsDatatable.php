@@ -215,7 +215,7 @@ class ReceiptsDatatable extends DataTable
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(false),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC'),
+            Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),
             Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
             Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),

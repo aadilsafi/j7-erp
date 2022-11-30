@@ -35,8 +35,8 @@ class TrialBalanceController extends Controller
     public function filter(Request $request, $site_id, $account_head_code_id)
     {
         // dd('ehlo to do');
-        $account_ledgers = AccountLedger::where('account_head_code', decryptParams($account_head_code_id))->with('accountHead')->get();
-        $account_head = AccountHead::where('code', decryptParams($account_head_code_id))->with('accountLedgers')->first();
+        $account_ledgers = AccountLedger::where('account_head_code', decryptParams($account_head_code_id))->get();
+        $account_head = AccountHead::where('code', decryptParams($account_head_code_id))->first();
         $data = [
             'site_id' => $site_id,
             'account_ledgers' => $account_ledgers,

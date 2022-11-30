@@ -12,16 +12,19 @@ use App\Models\Stakeholder;
 use App\Services\DealerIncentive\DealerInterface;
 use Exception;
 use App\Services\CustomFields\CustomFieldInterface;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use DB;
 
 class DealerIncentiveController extends Controller
 {
 
-    private $dealerIncentiveInterface;
+    private $dealerIncentiveInterface, $financialTransactionInterface;
 
-    public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface)
+    public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->dealerIncentiveInterface = $dealerIncentiveInterface;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
 
@@ -152,7 +155,6 @@ class DealerIncentiveController extends Controller
 
         $rebate_units = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)
             ->where('is_for_dealer_incentive', true)->distinct()->get();
-
         $units = [];
 
         if ($rebate_units) {
@@ -162,21 +164,45 @@ class DealerIncentiveController extends Controller
             }
         }
 
+        $paid_incentives = DealerIncentiveModel::where('dealer_id', $request->dealer_id)->get();
+
+        $paidTable = '';
+        if ($paid_incentives) {
+            $loopKey = 1;
+            foreach ($paid_incentives as $incentive) {
+                $unitsIds = json_decode($incentive->unit_IDs);
+
+                foreach ($unitsIds as $key => $Units) {
+                    $paid_unit = Unit::find($Units);
+                    $paidTable .= '<tr class="text-nowrap text-center">';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $loopKey++ . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->name . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->floor_unit_number . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $paid_unit->gross_area . '</td>';
+                    $paidTable .= '<td class="text-nowrap text-center">' . $incentive->dealer_incentive . '</td>';
+                    $paidTable .= '</tr>';
+                }
+            }
+        }
+
         return response()->json([
             'success' => true,
             'units' => $units,
-            // 'rebate_id' => $
+            'paidTable' => $paidTable,
         ], 200);
     }
 
     public function approve($site_id, $dealer_incentive_id)
     {
+        DB::transaction(function () use ($site_id, $dealer_incentive_id) {
+            // Account ledger transaction
+            $transaction = $this->financialTransactionInterface->makeDealerIncentiveTransaction(decryptParams($dealer_incentive_id));
 
+            $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
+            $dealer_incentive->status = 1;
+            $dealer_incentive->update();
 
-        $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
-        $dealer_incentive->status = 1;
-        $dealer_incentive->update();
-
+        });
         return redirect()->route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
 }

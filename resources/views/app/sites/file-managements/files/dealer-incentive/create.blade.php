@@ -133,12 +133,13 @@
                             for (var i = 0; i <= response.units.length; i++) {
                                 if (response.units[i] != null) {
                                     $('#dynamic_unit_rows').append(
-                                        '<tr class="text-nowrap">',
-                                        '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                        '<td class="text-nowrap text-center "><input onchange="CalculateTotalArea()" class="checkedInput" name="unit_ids[]" type="checkbox" area="' +
-                                        response.units[i]['gross_area'] + '" value="' + response.units[i][
-                                            'id'
-                                        ] + '"></td>',
+                                        '<tr class="text-nowrap text-center">',
+                                            '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
+                                        '<td class="text-nowrap text-center"><div class="d-flex flex-column"><div class="form-check form-switch form-check-primary"><input type="checkbox" class="form-check-input form-switch" onchange="CalculateTotalArea()" name="unit_ids[]" area="' +
+                                        response.units[i]['gross_area'] + '" value="' +
+                                         response.units[i]['id'] +
+                                          '" id="unit_'+ response.units[i]['id'] +'" /><label class="form-check-label" for="unit_'+
+                                           response.units[i]['id'] +'"><span class="switch-icon-left"><i data-feather="check"></i></span><span class="switch-icon-right"><i data-feather="x"></i></span></label></div></div></td>',
                                         '<td class="text-nowrap text-center">' + response
                                         .units[i]['name'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
@@ -152,8 +153,10 @@
                                         // '</td>',
                                         '</tr>', );
                                 }
-
                             }
+
+                            $('#dynamic_paid_unit_rows').empty();
+                            $('#dynamic_paid_unit_rows').html(response.paidTable)
                             hideBlockUI('#loader');
                         } else {
                             hideBlockUI('#loader');

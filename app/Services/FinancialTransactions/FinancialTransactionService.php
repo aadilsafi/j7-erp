@@ -797,21 +797,21 @@ class FinancialTransactionService implements FinancialTransactionInterface
             //5 again customer ap entry for profit
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 3, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_profit, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
 
-            //6 Payment Voucher  entry in customer ap ledger
-            if (isset($discounted_amount) && $discountedValue > 0) {
-                $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-            } else {
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-            }
-            //7 Payment Voucher  cash entry
-            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            if (isset($discounted_amount) && $discountedValue > 0) {
-                $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit',  $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-            } else {
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
-            }
+            // //6 Payment Voucher  entry in customer ap ledger
+            // if (isset($discounted_amount) && $discountedValue > 0) {
+            //     $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            // } else {
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            // }
+            // //7 Payment Voucher  cash entry
+            // $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            // if (isset($discounted_amount) && $discountedValue > 0) {
+            //     $amount = (float)$file_buy_back->amount_to_be_refunded - (float)$discounted_amount;
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit',  $amount, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            // } else {
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $file_buy_back->amount_to_be_refunded, NatureOfAccountsEnum::JOURNAL_BUY_BACK, $file_buy_back->id);
+            // }
             DB::commit();
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
@@ -910,21 +910,21 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $revenueCancellationAccount = AccountHead::where('name', 'Revenue - Cancellation Charges')->first()->code;
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $revenueCancellationAccount, 6, $receipt->sales_plan_id, 'credit', $file_cancellation->cancellation_charges, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
 
-            // 5 Payment Voucher Customer A/P Entry
-            if (isset($discounted_amount) && $discountedValue > 0) {
-                $amount = (float)$refunded_amount - (float)$discounted_amount;
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-            } else {
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-            }
-            // 6 Payment Voucher Cash Entry
-            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            if (isset($discounted_amount) && $discountedValue > 0) {
-                $amount = (float)$refunded_amount - (float)$discounted_amount;
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-            } else {
-                $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
-            }
+            // // 5 Payment Voucher Customer A/P Entry
+            // if (isset($discounted_amount) && $discountedValue > 0) {
+            //     $amount = (float)$refunded_amount - (float)$discounted_amount;
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            // } else {
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customer_payable_account_code, 4, $receipt->sales_plan_id, 'debit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            // }
+            // // 6 Payment Voucher Cash Entry
+            // $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            // if (isset($discounted_amount) && $discountedValue > 0) {
+            //     $amount = (float)$refunded_amount - (float)$discounted_amount;
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            // } else {
+            //     $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 4, $receipt->sales_plan_id, 'credit', $refunded_amount, NatureOfAccountsEnum::JOURNAL_CANCELLATION, $file_cancellation->id);
+            // }
             DB::commit();
             return 'transaction_completed';
         } catch (GeneralException | Exception $ex) {
@@ -980,12 +980,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $transferAccount = AccountHead::where('name', 'Revenue - Transfer Fees')->first()->code;
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $transferAccount, 7, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
-            // 5 receipt voucher cash
-            $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 28, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            // // 5 receipt voucher cash
+            // $cashAccount = AccountHead::where('name', 'Cash at Office')->first()->code;
+            // $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 28, $receipt->sales_plan_id, 'debit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
-            // 6 customer a AR transfer fee entry
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAAccountRecievable, 28, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
+            // // 6 customer a AR transfer fee entry
+            // $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAAccountRecievable, 28, $receipt->sales_plan_id, 'credit', $fileTitleTransfer->amount_to_be_paid, NatureOfAccountsEnum::JOURNAL_TITLE_TRANSFER, $fileTitleTransfer->id);
 
             DB::commit();
             return 'transaction_completed';
@@ -1058,38 +1058,38 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
         // payment Voucher
         // Dealer AP account credit
-        $this->makeFinancialTransaction($rebate->site_id, $origin_number, $dealer_payable_account_code, 4, null, 'debit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
+        // $this->makeFinancialTransaction($rebate->site_id, $origin_number, $dealer_payable_account_code, 4, null, 'debit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
 
-        if ($rebate->mode_of_payment == 'Cash') {
-            //Cash account credit
-            // Cash Transaction
-            $cashAccount = (new AccountingStartingCode())->where('site_id', $rebate->site_id)
-                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+        // if ($rebate->mode_of_payment == 'Cash') {
+        //     //Cash account credit
+        //     // Cash Transaction
+        //     $cashAccount = (new AccountingStartingCode())->where('site_id', $rebate->site_id)
+        //         ->where('model', 'App\Models\Cash')->where('level', 5)->first();
 
-            if (is_null($cashAccount)) {
-                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
-            }
+        //     if (is_null($cashAccount)) {
+        //         throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+        //     }
 
-            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+        //     $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
 
-            $this->makeFinancialTransaction($rebate->site_id, $origin_number, $cashAccount, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
-        }
+        //     $this->makeFinancialTransaction($rebate->site_id, $origin_number, $cashAccount, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
+        // }
 
-        if ($rebate->mode_of_payment == 'Cheque') {
-            //Cash account credit
-            // Cash Transaction
-            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
-            $this->makeFinancialTransaction($rebate->site_id, $origin_number, $clearanceAccout, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
-        }
+        // if ($rebate->mode_of_payment == 'Cheque') {
+        //     //Cash account credit
+        //     // Cash Transaction
+        //     $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+        //     $this->makeFinancialTransaction($rebate->site_id, $origin_number, $clearanceAccout, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
+        // }
 
-        if ($rebate->mode_of_payment == 'Online') {
-            //Cash account credit
-            // Cash Transaction
-            $bank = Bank::find($rebate->bank_id);
-            $bankAccount = $bank->account_number;
+        // if ($rebate->mode_of_payment == 'Online') {
+        //     //Cash account credit
+        //     // Cash Transaction
+        //     $bank = Bank::find($rebate->bank_id);
+        //     $bankAccount = $bank->account_number;
 
-            $this->makeFinancialTransaction($rebate->site_id, $origin_number, $bankAccount, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
-        }
+        //     $this->makeFinancialTransaction($rebate->site_id, $origin_number, $bankAccount, 4, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
+        // }
     }
 
     public function makeDealerIncentiveTransaction($dealer_incentive_id)

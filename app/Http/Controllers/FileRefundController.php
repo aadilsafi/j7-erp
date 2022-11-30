@@ -294,7 +294,7 @@ class FileRefundController extends Controller
             if (isset($discounted_amount) && $discountedValue > 0) {
 
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
-                $ledgerData[] = 
+                $ledgerData[] =
                     [
                         'site_id' => 1,
                         'account_head_code' => $cashDiscountAccount,
@@ -312,7 +312,7 @@ class FileRefundController extends Controller
                 ];
             }
 
-            $ledgerData[] = 
+            $ledgerData[] =
                 // Customer AP entry
                 [
                     'site_id' => 1,
@@ -329,39 +329,39 @@ class FileRefundController extends Controller
                     'origin_name' => 'RF-' . $origin_number,
                     'created_date' => $file_refund->payment_due_date,
                 ];
-                $ledgerData[] =
-                // Payment Voucher
-                [
-                    'site_id' => 1,
-                    'account_head_code' => $customer_payable_account_code,
-                    'account_action_id' => 4,
-                    'credit' => 0,
-                    'debit' => $discountedValue > 0 ? $amount : $refunded_amount ,
-                    'balance' => $refunded_amount,
-                    'nature_of_account' => 'JRF',
-                    'sales_plan_id' => $file_refund->sales_plan_id,
-                    'file_refund_id' => $file_refund->id,
-                    'status' => true,
-                    'origin_number' => $origin_number,
-                    'origin_name' => 'RF-' . $origin_number,
-                    'created_date' => $file_refund->payment_due_date,
-                ];
-                // cash at office 10209020001001
-                $ledgerData[] = [
-                    'site_id' => 1,
-                    'account_head_code' => '10209020001001',
-                    'account_action_id' => 4,
-                    'credit' => $discountedValue > 0 ? $amount : $refunded_amount ,
-                    'debit' => 0,
-                    'balance' => 0,
-                    'nature_of_account' => 'JRF',
-                    'sales_plan_id' => $file_refund->sales_plan_id,
-                    'file_refund_id' => $file_refund->id,
-                    'status' => true,
-                    'origin_number' => $origin_number,
-                    'origin_name' => 'RF-' . $origin_number,
-                    'created_date' => $file_refund->payment_due_date,
-                ];
+                // $ledgerData[] =
+                // // Payment Voucher
+                // [
+                //     'site_id' => 1,
+                //     'account_head_code' => $customer_payable_account_code,
+                //     'account_action_id' => 4,
+                //     'credit' => 0,
+                //     'debit' => $discountedValue > 0 ? $amount : $refunded_amount ,
+                //     'balance' => $refunded_amount,
+                //     'nature_of_account' => 'JRF',
+                //     'sales_plan_id' => $file_refund->sales_plan_id,
+                //     'file_refund_id' => $file_refund->id,
+                //     'status' => true,
+                //     'origin_number' => $origin_number,
+                //     'origin_name' => 'RF-' . $origin_number,
+                //     'created_date' => $file_refund->payment_due_date,
+                // ];
+                // // cash at office 10209020001001
+                // $ledgerData[] = [
+                //     'site_id' => 1,
+                //     'account_head_code' => '10209020001001',
+                //     'account_action_id' => 4,
+                //     'credit' => $discountedValue > 0 ? $amount : $refunded_amount ,
+                //     'debit' => 0,
+                //     'balance' => 0,
+                //     'nature_of_account' => 'JRF',
+                //     'sales_plan_id' => $file_refund->sales_plan_id,
+                //     'file_refund_id' => $file_refund->id,
+                //     'status' => true,
+                //     'origin_number' => $origin_number,
+                //     'origin_name' => 'RF-' . $origin_number,
+                //     'created_date' => $file_refund->payment_due_date,
+                // ];
 
             // insert all above entries
             foreach ($ledgerData as $item) {

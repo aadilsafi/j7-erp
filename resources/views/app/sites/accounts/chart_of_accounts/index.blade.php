@@ -152,6 +152,8 @@
                                                     @php
                                                         $value_44 = 0;
                                                         $value_55 = 0;
+                                                        $value_frist = [];
+                                                        $value_frist_value = 0;
                                                     @endphp
                                                     {{-- @dd($account_of_head->code); --}}
                                                     <li class="custom_bg nav-item Second_li "><a
@@ -177,33 +179,32 @@
                                                                         <td class="custom_td">
                                                                             {{ account_number_format($account_of_head->code) }}
                                                                         </td>
-
-
-
-
-                                                                        @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                            @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                $account_of_head->code == substr($account_of_head_4->code, 0, 2))
-                                                                                @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                    @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                        @php
-                                                                                            $value_55 += intval(
-                                                                                                trim(
-                                                                                                    $accountLedgers_all
-                                                                                                        ->where(
-                                                                                                            'account_head_code',
-                                                                                                            $account_of_head_5->code -
+                                                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
+                                                                            @if (Str::length($account_of_head_3->code) == 6 and
+                                                                                $account_of_head->code == substr($account_of_head_3->code, 0, 2))
+                                                                                @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
+                                                                                    @if (Str::length($account_of_head_4->code) == 10 and
+                                                                                        $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
+                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
+                                                                                            @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
+                                                                                                {{-- @dd($account_of_head_5->code); --}}
+                                                                                                @php
+                                                                                                    $value_frist_value += intval(
+                                                                                                        trim(
+                                                                                                            $accountLedgers_all
+                                                                                                                ->where('account_head_code', $account_of_head_5->code)
+                                                                                                                ->pluck('debit')
+                                                                                                                ->sum() -
                                                                                                                 $accountLedgers_all
                                                                                                                     ->where('account_head_code', $account_of_head_5->code)
                                                                                                                     ->pluck('credit')
                                                                                                                     ->sum(),
-                                                                                                        )
-                                                                                                        ->pluck('debit')
-                                                                                                        ->sum(),
-                                                                                                    '-',
-                                                                                                ),
-                                                                                            );
-                                                                                        @endphp
+                                                                                                            '-',
+                                                                                                        ),
+                                                                                                    );
+                                                                                                @endphp
+                                                                                            @endif
+                                                                                        @endforeach
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endif
@@ -211,8 +212,16 @@
 
 
 
+
+
+
+
+
+
                                                                         <td class="custom_td">
-                                                                            {{ number_format($value_55) }}</td>
+                                                                            {{ number_format($value_frist_value) }}
+                                                                        </td>
+                                                                        {{-- @dd($value_frist) --}}
 
                                                                         {{-- <td class="custom_td">{{trim((collect($account_balances)->pluck('credit_'.$account_of_head->code)->sum() - collect($account_balances)->pluck('debit_'.$account_of_head->code)->sum()),'-')}}</td> --}}
                                                                     </tr>
@@ -250,39 +259,47 @@
                                                                                         </td>
                                                                                         <td>{{ account_number_format($account_of_head_full_array->code) }}
                                                                                         </td>
-
-
-
-                                                                                        @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                            @if (Str::length($account_of_head_4->code) == 10 and
-                                                                                                $account_of_head_full_array->code == substr($account_of_head_4->code, 0, 4))
-                                                                                                @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                    @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                        @php
-                                                                                                            $value_44 += intval(
-                                                                                                                trim(
-                                                                                                                    $accountLedgers_all
-                                                                                                                        ->where(
-                                                                                                                            'account_head_code',
-                                                                                                                            $account_of_head_5->code -
+                                                                                        @php
+                                                                                            $value_44 = 0;
+                                                                                        @endphp
+                                                                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
+                                                                                            @if (Str::length($account_of_head_3->code) == 6 and
+                                                                                                $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
+                                                                                                @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
+                                                                                                    @if (Str::length($account_of_head_4->code) == 10 and
+                                                                                                        $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
+                                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
+                                                                                                            @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
+                                                                                                                {{-- @dd($account_of_head_5->code); --}}
+                                                                                                                @php
+                                                                                                                    $value_44 += intval(
+                                                                                                                        trim(
+                                                                                                                            $accountLedgers_all
+                                                                                                                                ->where('account_head_code', $account_of_head_5->code)
+                                                                                                                                ->pluck('debit')
+                                                                                                                                ->sum() -
                                                                                                                                 $accountLedgers_all
                                                                                                                                     ->where('account_head_code', $account_of_head_5->code)
                                                                                                                                     ->pluck('credit')
                                                                                                                                     ->sum(),
-                                                                                                                        )
-                                                                                                                        ->pluck('debit')
-                                                                                                                        ->sum(),
-                                                                                                                    '-',
-                                                                                                                ),
-                                                                                                            );
-                                                                                                        @endphp
+                                                                                                                            '-',
+                                                                                                                        ),
+                                                                                                                    );
+                                                                                                                @endphp
+                                                                                                            @endif
+                                                                                                        @endforeach
                                                                                                     @endif
                                                                                                 @endforeach
+                                                                                                <td class="custom_td">
+                                                                                                    {{ number_format($value_44) }}
+                                                                                                </td>
                                                                                             @endif
                                                                                         @endforeach
-                                                                                        <td class="custom_td">
-                                                                                            {{ number_format($value_44) }}
-                                                                                        </td>
+                                                                                        @if (!$value_44 > 0)
+                                                                                            <td class="custom_td">
+                                                                                                {{ number_format(0) }}
+                                                                                            </td>
+                                                                                        @endif
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -533,6 +550,117 @@
                 </div>
             </div>
     </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
+        @if (Str::length($account_of_head_3->code) == 6 and
+            $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
+            @php
+                $value_4 = 0;
+                $value_5 = 0;
+                $value_33 = 0;
+            @endphp
+
+            @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
+                @if (Str::length($account_of_head_4->code) == 10 and
+                    $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
+                    @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
+                        @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
+                            {{-- @dd($account_of_head_5->code); --}}
+                            @php
+                                $value_33 += intval(
+                                    trim(
+                                        $accountLedgers_all
+                                            ->where('account_head_code', $account_of_head_5->code)
+                                            ->pluck('debit')
+                                            ->sum() -
+                                            $accountLedgers_all
+                                                ->where('account_head_code', $account_of_head_5->code)
+                                                ->pluck('credit')
+                                                ->sum(),
+                                        '-',
+                                    ),
+                                );
+                            @endphp
+                        @endif
+                    @endforeach
+                @endif
+            @endforeach
+            <td class="custom_td">
+                {{ number_format($value_33) }}aksljdflkjsdaklfj
+            </td>
+        @endif
+    @endforeach
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection
 
 @section('vendor-js')

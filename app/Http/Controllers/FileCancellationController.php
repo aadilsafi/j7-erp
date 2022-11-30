@@ -126,7 +126,7 @@ class FileCancellationController extends Controller
         $file = FileManagement::where('id', $file_cancel->file_id)->first();
         $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->orWhere('status', 2)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
-        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $total_paid_amount = (float)$file_cancel->amount_to_be_refunded + (float)$file_cancel->cancellation_charges;
 
         foreach ($files_labels as $key => $file) {
             $image = $file->getFirstMedia('file_cancel_attachments');

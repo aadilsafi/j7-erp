@@ -39,8 +39,8 @@ class ReceiptsDatatable extends DataTable
             ->editColumn('floor_id', function ($receipt) {
                 return  $receipt->unit->floor->name;
             })
-            ->editColumn('serial_no',function ($receipt) {
-                return 'REC-00'.$receipt->id;
+            ->editColumn('serial_no', function ($receipt) {
+                return $receipt->serial_no != null ? $receipt->serial_no : 'REC-';
             })
             ->editColumn('unit_id', function ($receipt) {
                 return  $receipt->unit->name;
@@ -58,7 +58,7 @@ class ReceiptsDatatable extends DataTable
                 return  number_format($receipt->amount_received);
             })
             ->editColumn('discounted_amount', function ($receipt) {
-                return  number_format($receipt->discounted_amount);
+                return  number_format($receipt->discounted_amount > 0 ? $receipt->discounted_amount : 0);
             })
             ->editColumn('status', function ($receipt) {
                 if ($receipt->status == 1) {
@@ -213,7 +213,7 @@ class ReceiptsDatatable extends DataTable
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         $columns = [
-            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(false),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),

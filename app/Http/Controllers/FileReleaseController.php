@@ -260,17 +260,13 @@ class FileReleaseController extends Controller
     {
 
         $file_resale = (new FileResale())->find(decryptParams($file_id));
-        // dd($file_resale ,  json_decode($file_resale['stakeholder_data']));
+        
         $file = FileManagement::where('id', $file_resale->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
-        $total_paid_amount = $receipts->sum('amount_in_numbers');
-        $unit_data = json_decode($file_resale->unit_data);
-        $unitType = Type::find($unit_data->type_id);
 
         $unpaid = $salesPlan->unPaidInstallments->pluck('details')->toArray();
 
-        $installmentsRecevied = $salesPlan->PaidorPartiallyPaidInstallments->where('installment_order', '>', 0)->pluck('details')->toArray();
+        $installmentsRecevied = SalesPlanInstallments::where('sales_plan_id', $salesPlan->id)->where('status','paid')->where('installment_order', '>', 0)->pluck('details')->toArray();
 
         $template = Template::find(decryptParams($template_id));
 

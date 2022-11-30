@@ -45,9 +45,9 @@
                                     <label class="form-label" style="font-size: 15px" for="floor">
                                         Amount To be Paid <span class="text-danger">*</span>
                                     </label>
-                                    <input min="0" onclick="setAmountIds(this)" id="amountToBePaid"
-                                        type="number"
-                                        class="form-control amountToBePaid  @error('amount_in_numbers') is-invalid @enderror"
+                                    <input onclick="setAmountIds(this)" id="amountToBePaid"
+                                        type="text"
+                                        class="form-control amountToBePaid @error('amount_in_numbers') is-invalid @enderror"
                                         name="amount_in_numbers" placeholder="Amount To be Paid"
                                         value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
                                     @error('amount_in_numbers')

@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                width: calc(20% - 0.5em);
-                                                                            } */
+                                                                                    width: calc(20% - 0.5em);
+                                                                                } */
     </style>
 @endsection
 
@@ -114,7 +114,7 @@
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
                     @endphp
                 @endforeach
-            {{-- @dd($amount_received,$amount_paid); --}}
+                {{-- @dd($amount_received,$amount_paid); --}}
             @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
@@ -125,8 +125,8 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
                             </label>
-                            <input min="0" type="number"
-                                class="form-control  @error('amount_in_numbers') is-invalid @enderror"
+                            <input min="0" type="text"
+                                class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
                                 value="{{ isset($amount_received) ? $amount_received : null }}" />
@@ -139,10 +139,9 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Discounted Amount
                             </label>
-                            <input min="0" type="number"
-                                class="form-control   @error('discounted_amount') is-invalid @enderror"
-                                name="discounted_amount" id="discounted_amount"
-                                placeholder="Discounted Amount "
+                            <input min="0" type="text"
+                                class="form-control amountFormat @error('discounted_amount') is-invalid @enderror"
+                                name="discounted_amount" id="discounted_amount" placeholder="Discounted Amount "
                                 value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />
                             @error('discounted_amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -379,148 +378,160 @@
         });
 
         $('.amountToBePaid').on('focusout', function() {
+            var amount = $(this).val().replace(/,/g, "")
+            var formatAmount = amount;
+            if ($.isNumeric(amount)) {
+              
+                var unit_id = $(this).attr('unit_id');
+                var discounted_amount = $('#discounted_amount').val();
+                if (discounted_amount > 0) {
+                    amount = parseFloat(amount) + parseFloat(discounted_amount);
+                }
+                if (amount <= 0) {
+                    toastr.error('Invalid Amount.',
+                        "Error!", {
+                            showMethod: "slideDown",
+                            hideMethod: "slideUp",
+                            timeOut: 2e3,
+                            closeButton: !0,
+                            tapToDismiss: !1,
+                        });
+                }
+                if (unit_id == null || unit_id == 'undefined') {
+                    toastr.error('Please Select Unit Number first.',
+                        "Error!", {
+                            showMethod: "slideDown",
+                            hideMethod: "slideUp",
+                            timeOut: 2e3,
+                            closeButton: !0,
+                            tapToDismiss: !1,
+                        });
+                }
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('sites.receipts.ajax-get-unpaid-installments', ['site_id' => encryptParams($site_id)]) }}";
+                if (amount > 0 && unit_id > 0) {
+                    showBlockUI('#loader');
+                    $.ajax({
+                        url: url,
+                        type: 'post',
+                        dataType: 'json',
+                        data: {
+                            'unit_id': unit_id,
+                            'amount': amount,
+                            '_token': _token
+                        },
+                        success: function(response) {
+                            if (response.success) {
 
-            var amount = $(this).val();
-            var unit_id = $(this).attr('unit_id');
-            var discounted_amount = $('#discounted_amount').val();
-            if(discounted_amount > 0){
-                amount= parseFloat(amount) + parseFloat(discounted_amount);
-            }
-            if (amount <= 0) {
-                toastr.error('Invalid Amount.',
-                    "Error!", {
-                        showMethod: "slideDown",
-                        hideMethod: "slideUp",
-                        timeOut: 2e3,
-                        closeButton: !0,
-                        tapToDismiss: !1,
-                    });
-            }
-            if (unit_id == null || unit_id == 'undefined') {
-                toastr.error('Please Select Unit Number first.',
-                    "Error!", {
-                        showMethod: "slideDown",
-                        hideMethod: "slideUp",
-                        timeOut: 2e3,
-                        closeButton: !0,
-                        tapToDismiss: !1,
-                    });
-            }
-            var _token = '{{ csrf_token() }}';
-            let url =
-                "{{ route('sites.receipts.ajax-get-unpaid-installments', ['site_id' => encryptParams($site_id)]) }}";
-            if (amount > 0 && unit_id > 0) {
-                showBlockUI('#loader');
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        'unit_id': unit_id,
-                        'amount': amount,
-                        '_token': _token
-                    },
-                    success: function(response) {
-                        if (response.success) {
+                                $('#paidInstllmentTableDiv').show().parent().addClass('mb-2');
+                                $('#instllmentTableDiv').show().parent().addClass('mb-2');
+                                $('#modeOfPaymentDiv').show().parent().addClass('mb-2');
+                                $('#customerData').show().parent().addClass('mb-2');
+                                $('#paid_dynamic_total_installment_rows').empty();
+                                $('#dynamic_total_installment_rows').empty();
+                                $('#installments').empty();
 
-                            $('#paidInstllmentTableDiv').show().parent().addClass('mb-2');
-                            $('#instllmentTableDiv').show().parent().addClass('mb-2');
-                            $('#modeOfPaymentDiv').show().parent().addClass('mb-2');
-                            $('#customerData').show().parent().addClass('mb-2');
-                            $('#paid_dynamic_total_installment_rows').empty();
-                            $('#dynamic_total_installment_rows').empty();
-                            $('#installments').empty();
+                                $('#stackholder_full_name').val(response.stakeholders['full_name']);
+                                $('#stackholder_father_name').val(response.stakeholders['father_name']);
+                                $('#stackholder_occupation').val(response.stakeholders['occupation']);
+                                $('#stackholder_designation').val(response.stakeholders['designation']);
+                                $('#stackholder_ntn').val(response.stakeholders['ntn']);
+                                $('#stackholder_cnic').val(response.stakeholders['cnic']);
+                                $('#stackholder_contact').val(response.stakeholders['contact']);
+                                $('#stackholder_address').val(response.stakeholders['address']);
 
-                            $('#stackholder_full_name').val(response.stakeholders['full_name']);
-                            $('#stackholder_father_name').val(response.stakeholders['father_name']);
-                            $('#stackholder_occupation').val(response.stakeholders['occupation']);
-                            $('#stackholder_designation').val(response.stakeholders['designation']);
-                            $('#stackholder_ntn').val(response.stakeholders['ntn']);
-                            $('#stackholder_cnic').val(response.stakeholders['cnic']);
-                            $('#stackholder_contact').val(response.stakeholders['contact']);
-                            $('#stackholder_address').val(response.stakeholders['address']);
+                                created_date.set('minDate', new Date(response.sales_plan[
+                                    'created_date']));
 
-                            created_date.set('minDate', new Date(response.sales_plan['created_date']));
+                                var total_installments = 1;
+                                var order = null;
 
-                            var total_installments = 1;
-                            var order = null;
+                                for (var i = 0; i <= response.already_paid.length; i++) {
+                                    if (response.already_paid[i] != null) {
+                                        var d = response.already_paid[i]['details']
 
-                            for (var i = 0; i <= response.already_paid.length; i++) {
-                                if (response.already_paid[i] != null) {
-                                    var d = response.already_paid[i]['details']
-
-                                    $('#paid_dynamic_total_installment_rows').append(
-                                        '<tr class="text-nowrap">',
-                                        '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['details'] + '</td>',
-                                        // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['amount'].toLocaleString('en') + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['paid_amount'].toLocaleString('en') +
-                                        '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['remaining_amount'].toLocaleString('en') +
-                                        '</td>',
-                                        '</tr>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .already_paid[i]['status'] + '</td>',
-                                        '</tr>', );
-                                }
-                            }
-
-                            for (i = 0; i <= response.total_calculated_installments.length; i++) {
-                                if (response.total_calculated_installments[i] != null) {
-                                    if (response.total_calculated_installments[i][
-                                            'installment_order'
-                                        ] == 0) {
-                                        order = 'Down Payment';
-                                    } else {
-                                        order = response.total_calculated_installments[i][
-                                            'installment_order'
-                                        ];
+                                        $('#paid_dynamic_total_installment_rows').append(
+                                            '<tr class="text-nowrap">',
+                                            '<td class="text-nowrap text-center">' + (i + 1) +
+                                            '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .already_paid[i]['details'] + '</td>',
+                                            // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .already_paid[i]['amount'].toLocaleString('en') +
+                                            '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .already_paid[i]['paid_amount'].toLocaleString('en') +
+                                            '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .already_paid[i]['remaining_amount'].toLocaleString(
+                                                'en') +
+                                            '</td>',
+                                            '</tr>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .already_paid[i]['status'] + '</td>',
+                                            '</tr>', );
                                     }
-                                    $('#dynamic_total_installment_rows').append(
-                                        '<tr class="text-nowrap">',
-                                        '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['detail'] + '</td>',
-                                        // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['amount']
-                                        .toLocaleString() + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['paid_amount']
-                                        .toLocaleString() + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['remaining_amount']
-                                        .toLocaleString() +
-                                        '</td>',
-                                        '</tr>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .total_calculated_installments[i]['partially_paid']
-                                        .toLocaleString() +
-                                        '</td>',
-                                        '</tr>', );
                                 }
-                            }
-                            hideBlockUI('#loader');
 
-                        } else {
+                                for (i = 0; i <= response.total_calculated_installments.length; i++) {
+                                    if (response.total_calculated_installments[i] != null) {
+                                        if (response.total_calculated_installments[i][
+                                                'installment_order'
+                                            ] == 0) {
+                                            order = 'Down Payment';
+                                        } else {
+                                            order = response.total_calculated_installments[i][
+                                                'installment_order'
+                                            ];
+                                        }
+                                        $('#dynamic_total_installment_rows').append(
+                                            '<tr class="text-nowrap">',
+                                            '<td class="text-nowrap text-center">' + (i + 1) +
+                                            '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .total_calculated_installments[i]['detail'] + '</td>',
+                                            // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .total_calculated_installments[i]['amount']
+                                            .toLocaleString() + '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .total_calculated_installments[i]['paid_amount']
+                                            .toLocaleString() + '</td>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .total_calculated_installments[i]['remaining_amount']
+                                            .toLocaleString() +
+                                            '</td>',
+                                            '</tr>',
+                                            '<td class="text-nowrap text-center">' + response
+                                            .total_calculated_installments[i]['partially_paid']
+                                            .toLocaleString() +
+                                            '</td>',
+                                            '</tr>', );
+                                    }
+                                }
+                                hideBlockUI('#loader');
+
+                            } else {
+                                hideBlockUI('#loader');
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message,
+                                });
+                            }
+                        },
+                        error: function(error) {
+                            console.log(error);
                             hideBlockUI('#loader');
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
                         }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        hideBlockUI('#loader');
-                    }
-                });
+                    });
+                }
+                var formated = parseFloat(formatAmount).toLocaleString('en');
+                $(this).val(formated)
+            } else {
+                $(this).val('')
             }
         });
 

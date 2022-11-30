@@ -13,7 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Receipt extends Model implements HasMedia
 {
-    use HasFactory , InteractsWithMedia, LogsActivity;
+    use HasFactory, InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -42,6 +42,7 @@ class Receipt extends Model implements HasMedia
         'bank_details',
         'created_date',
         'discounted_amount',
+        'serial_no'
     ];
 
     public $rules = [
@@ -49,6 +50,16 @@ class Receipt extends Model implements HasMedia
         'receipts.mode_of_payment' => 'required',
         'receipts.amount_in_numbers' => 'required',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            $model->serial_no = "REC-" . $model->serial_no;
+            $model->save();
+        });
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

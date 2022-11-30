@@ -170,14 +170,14 @@
             </div>
             <div class="col text-center">
                 <div style="border-bottom: 1px solid black">
-                    {{ $unit->price_sqft }}</div>
+                    {{ number_format($salesPlan->unit_price) }}</div>
             </div>
             <div class="col-2">
                 <h4>Total Amount:*</h4>
             </div>
             <div class="col-4 text-center">
                 <div style="border-bottom: 1px solid black">
-                    {{ $salesPlan->total_price }}</div>
+                    {{ number_format($salesPlan->total_price) }}</div>
             </div>
         </div>
         <div class="row mt-1 text-nowrap g-1">
@@ -186,7 +186,7 @@
             </div>
             <div class="col text-center">
                 <div style="border-bottom: 1px solid black">
-                    {{ $salesPlan->down_payment_total }}</div>
+                    {{ number_format($salesPlan->down_payment_total) }}</div>
             </div>
             <div class="col-1" style="width: fit-content;">
                 <h4>DP%:*</h4>
@@ -207,7 +207,7 @@
 
         <div class="row g-1 mt-1">
             <div class="col-4" style="width: fit-content;">
-                <h4>installment received:*</h4>
+                <h4>Installment Received:*</h4>
             </div>
             <div class="col-2">
                 <div class="row g-0" style="width: fit-content;">
@@ -239,7 +239,7 @@
         </div>
         <div class="row g-1">
             <div class="col-4" style="width: fit-content;">
-                <h4>installment Pending:*</h4>
+                <h4>Installment Pending:*</h4>
             </div>
             <div class="col-2">
                 <div class="row g-0" style="width: fit-content;">
@@ -299,7 +299,7 @@
                     </div>
                     <div class="col text-center">
                         <div style="border-bottom: 1px solid black">
-                            {{ $file_resale->premium_demand }}</div>
+                            {{ number_format($file_resale->premium_demand) }}</div>
                     </div>
                 </div>
                 <div class="row g-1 mt-2">
@@ -308,7 +308,7 @@
                     </div>
                     <div class="col text-center">
                         <div style="border-bottom: 1px solid black">
-                            {{ $file_resale->new_resale_rate }}
+                            {{ number_format($file_resale->new_resale_rate) }}
                         </div>
                     </div>
                 </div>

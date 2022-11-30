@@ -49,6 +49,7 @@ use App\Http\Controllers\{
     StakeholdersImportControler,
     StateController,
     LogController,
+    PaymentVocuherController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -86,6 +87,7 @@ Route::group([
 
         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
             Route::post('get-filtered-data-dasboard', [DashboardController::class, 'dasboard_chart'])->name('get-filtered-data-dasboard');
+            Route::post('get-dasboard-side-chart', [DashboardController::class, 'dasboardSideChart'])->name('get-dasboard-side-chart');
         });
 
         Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');
@@ -645,6 +647,16 @@ Route::group([
                         // used for bank selection in receipt creation
                         Route::post('get-by-id', [BankController::class, 'getBank'])->name('get-by-id');
                     });
+                });
+
+                // Payment Vouchers
+                Route::group(['prefix' => 'payment-voucher', 'as' => 'payment-voucher.'], function () {
+                    Route::get('/', [PaymentVocuherController::class, 'index'])->name('index');
+
+                    Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
+                    Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+
+
                 });
 
                 // File Management

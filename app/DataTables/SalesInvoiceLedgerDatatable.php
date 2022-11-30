@@ -155,7 +155,20 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
-                } else {
+                }
+                elseif ($ledger->account_action_id == 26) {
+                    $dealer = DB::table('dealer_incentive_models')->where('id', $ledger->dealer_incentive_id)
+                        ->first();
+                    if (isset($dealer)) {
+                        return '<a href="' . route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  (' . $ledger->origin_name . ')
+                            </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
+                    }
+                }
+
+                else {
                     return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                 }
             })

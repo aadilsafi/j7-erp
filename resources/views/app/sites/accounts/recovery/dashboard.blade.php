@@ -31,10 +31,10 @@
         }
 
         /* #apexchartsj0rxcjpl,
-                                                                                                                                                                                                                                                                                                            #SvgjsSvg1119,
-                                                                                                                                                                                                                                                                                                            .apexcharts-svg {
-                                                                                                                                                                                                                                                                                                                display: none;
-                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                #SvgjsSvg1119,
+                                                                                                                                                                                                                                                                                                                                .apexcharts-svg {
+                                                                                                                                                                                                                                                                                                                                    display: none;
+                                                                                                                                                                                                                                                                                                                                } */
     </style>
 @endsection
 
@@ -533,13 +533,16 @@
 
 
                                 $('#downpaidment').html(
-                                    `<div class="col-6 mb-2" id="downpaidment">` +
+                                    `<div class="col-6 mb-2" id="downpaidment">
+                                        <p class="mb-50  inline-text-inline">DownPayment:</p>
+                                        ` +
                                     '<p class="mb-50 inline-text-inline">Amount: ' +
                                     numberWithCommas(data
                                         .data[0].downpaidment
                                         .amount) + '</p>' +
                                     `<p class="mb-50  inline-text-inline">Paid Amount: ${numberWithCommas(data.data[0].downpaidment.paid_amount)}</p>
                                 <p class="mb-50 inline-text-inline">Remaining Amount: ${numberWithCommas(data.data[0].downpaidment.remaining_amount)}</p>
+                                <p class="mb-50 inline-text-inline">Receivable Percentage: ${Math.round(data.data[0].downpaidment.revicable_amount)}%</p>
                                 <div class="progress progress-bar-primary" style="height: 6px">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="50"
                                         aria-valuemax="100" style="width:${data.data[0].downpaidment.revicable_amount}%"></div>
@@ -551,13 +554,16 @@
 
 
                                 $('#installment').html(
-                                    `<div class="col-6 mb-2" id="installment">` +
+                                    `<div class="col-6 mb-2" id="installment">
+                                        <p class="mb-50  inline-text-inline">Installment:</p>
+                                        ` +
                                     '<p class="mb-50 inline-text-inline">Amount: ' +
                                     numberWithCommas(data
                                         .data[0].installment
                                         .amount) + '</p>' +
                                     `<p class="mb-50  inline-text-inline">Paid Amount: ${numberWithCommas(data.data[0].installment.paid_amount)}</p>
                                 <p class="mb-50 inline-text-inline">Remaining Amount: ${numberWithCommas(data.data[0].installment.remaining_amount)}</p>
+                                <p class="mb-50 inline-text-inline">Receivable Percentage: ${Math.round(data.data[0].installment.revicable_amount)}%</p>
                                 <div class="progress progress-bar-warning" style="height: 6px">
                                     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="60"
                                         aria-valuemax="100" style="width: ${data.data[0].installment.revicable_amount}%"></div>

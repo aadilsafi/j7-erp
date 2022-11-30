@@ -29,9 +29,9 @@
 
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="marketing_service_charges">Marketing Service Charges <span
-                                class="text-danger">*</span></label>
-                        <input type="text" required name="marketing_service_charges"
+                        <label class="form-label fs-5" for="marketing_service_charges">Marketing Service Charges
+                        </label>
+                        <input type="text" name="marketing_service_charges"
                             class="form-control form-control-lg amountFormat" {{ isset($resale) ? 'disabled' : '' }}
                             id="marketing_service_charges" placeholder=" Marketing Service Charges "
                             value="{{ isset($resale) ? number_format($resale->marketing_service_charges) : '' }}" />
@@ -88,7 +88,7 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input type="number" readonly value="{{ $customer->ntn }}"
+                        <input type="text" readonly value="{{ $customer->ntn }}"
                             class="form-control form-control-lg" id="" placeholder="NTN" />
                     </div>
 
@@ -100,7 +100,7 @@
 
                     <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input type="number" readonly value="{{ $customer->contact }}"
+                        <input type="text" readonly value="{{ $customer->contact }}"
                             class="form-control form-control-lg" id="" placeholder="Contact" />
                     </div>
 

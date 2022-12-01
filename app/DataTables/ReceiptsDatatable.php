@@ -137,14 +137,14 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
-        if ($revertPermission) {
-            $revertButton =  Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
-                    'onclick' => 'revertPayment()',
-                ]);
-            array_unshift($buttons, $revertButton);
-        }
+        // if ($revertPermission) {
+        //     $revertButton =  Button::raw('delete-selected')
+        //         ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+        //         ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
+        //             'onclick' => 'revertPayment()',
+        //         ]);
+        //     array_unshift($buttons, $revertButton);
+        // }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')

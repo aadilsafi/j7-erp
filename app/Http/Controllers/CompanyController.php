@@ -41,7 +41,7 @@ class CompanyController extends Controller
         if (!request()->ajax()) {
 
             $data = [
-                'site_id' => $site_id,
+                'site_id' => decryptParams($site_id),
             ];
             return view('app.sites.companies.create', $data);
         } else {
@@ -62,7 +62,6 @@ class CompanyController extends Controller
         ]);
         try {
             if (!request()->ajax()) {
-
 
                 $inputs = $request->all();
 

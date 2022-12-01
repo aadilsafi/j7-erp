@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\PaymentVoucherDatatable;
 use App\Models\Stakeholder;
+use App\Models\StakeholderType;
 use Illuminate\Http\Request;
 
 class PaymentVocuherController extends Controller
@@ -95,5 +96,29 @@ class PaymentVocuherController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function stakeholder_types($id)
+    {
+        $types = StakeholderType::where('stakeholder_id', $id)->where('status', true)->get();
+        $options = '<option>Select Type</option>';
+
+        foreach ($types as $key => $type) {
+
+            if ($type->type == 'C') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Customer</option>';
+            } else
+            if ($type->type == 'V') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Vendor</option>';
+            } else
+            if ($type->type == 'D') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Dealer</option>';
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'types' => $options
+        ], 200);
     }
 }

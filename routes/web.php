@@ -52,6 +52,7 @@ use App\Http\Controllers\{
     LogController,
     PaymentVocuherController,
 };
+use App\Models\PaymentVocuher;
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -895,6 +896,7 @@ Route::group([
 
         Route::post('ajax-get-cities/{stateId}', [CityController::class, 'getCities'])->name('ajax-get-cities');
         Route::post('ajax-get-states/{countryId}', [StateController::class, 'getStates'])->name('ajax-get-states');
+        Route::post('ajax-get-stakeholder_types/{stakeholderId}', [PaymentVocuherController::class, 'stakeholder_types'])->name('ajax-get-stakeholder_types');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

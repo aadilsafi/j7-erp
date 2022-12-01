@@ -58,7 +58,7 @@ class CompanyService implements CompanyInterface
 
     public function update($site_id, $id, $inputs)
     {
-        DB::transaction(function () use ($site_id, $id, $inputs, $customFields) {
+        DB::transaction(function () use ($site_id, $id, $inputs) {
             $data = [
                 'name' => $inputs['name'],
                 'email' => $inputs['email'],
@@ -90,13 +90,13 @@ class CompanyService implements CompanyInterface
             }
             $user->syncRoles([$inputs['role_id']]);
 
-            foreach ($customFields as $key => $value) {
-                $user->CustomFieldValues()->updateOrCreate([
-                    'custom_field_id' => $value->id,
-                ], [
-                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
-                ]);
-            }
+            // foreach ($customFields as $key => $value) {
+            //     $user->CustomFieldValues()->updateOrCreate([
+            //         'custom_field_id' => $value->id,
+            //     ], [
+            //         'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+            //     ]);
+            // }
             return $user;
         });
     }

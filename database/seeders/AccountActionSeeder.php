@@ -136,6 +136,26 @@ class AccountActionSeeder extends Seeder
                 'name' => 'Resale',
                 'slug' => 'resale',
             ],
+            [
+                'site_id' => 1,
+                'name' => 'Rebate Incentive',
+                'slug' => 'rebate-incentive',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Dealer Incentive',
+                'slug' => 'dealer-incentive',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Reverted Receipt',
+                'slug' => 'reverted-receipt',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Title Transfer Receipt Voucher',
+                'slug' => 'title-transfer-receipt-voucher',
+            ],
         ];
         foreach ($data as $item) {
             (new AccountAction())->create($item);

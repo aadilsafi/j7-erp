@@ -34,6 +34,7 @@ class TrialBalanceController extends Controller
     }
     public function filter(Request $request, $site_id, $account_head_code_id)
     {
+        // dd('ehlo to do');
         $account_ledgers = AccountLedger::where('account_head_code', decryptParams($account_head_code_id))->get();
         $account_head = AccountHead::where('code', decryptParams($account_head_code_id))->first();
         $data = [
@@ -51,11 +52,19 @@ class TrialBalanceController extends Controller
         $end_date =  substr($request->to_date, 14, 10);
         $account_head_code = $request->account_head_code;
 
-
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
-            $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
+            $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
+            // $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
             return $query;
-        })->where('account_head_code', $account_head_code)->get();
+        })
+            ->when(((!$end_date) && $start_date), function ($query) use ($start_date) {
+                $query->whereDate('created_date', '=', $start_date);
+                // $query->whereDate('created_at', '=', $start_date);
+                return $query;
+            })
+            ->where('account_head_code', $account_head_code)->get();
+
+        // dd($account_ledgers);
 
         if (count($account_ledgers) > 0) {
 
@@ -98,9 +107,9 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
 
                     '<td>' .
-                    '<span>' . date_format(new DateTime($account_ledger->created_at), 'h:i:s')
+                    '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')
                     . '</span>' . '<br> <span class="text-primary fw-bold">' .
-                    date_format(new DateTime($account_ledger->created_at), 'Y-m-d') .
+                    date_format(new DateTime($account_ledger->created_date), 'Y-m-d') .
                     '</span>' .
 
                     '</td>' .

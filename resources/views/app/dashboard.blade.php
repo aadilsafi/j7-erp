@@ -16,6 +16,18 @@
 @endsection
 
 @section('custom-css')
+    <style>
+        .chart-container {
+            width: 50%;
+            height: 50%;
+            margin: auto;
+        }
+
+        .container {
+            width: 80%;
+            margin: 15px auto;
+        }
+    </style>
 @endsection
 
 @section('seo-breadcrumb')
@@ -559,28 +571,28 @@
                         <div class="avatar-group">
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Billy Hopkins" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-9.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Amy Carson" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-6.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Brandon Miles" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-8.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Daisy Weber" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="bottom"
                                 title="Jenny Looper" class="avatar pull-up">
-                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg"
-                                    alt="Avatar" width="33" height="33" />
+                                <img src="{{ asset('app-assets') }}/images/portrait/small/avatar-s-20.jpg" alt="Avatar"
+                                    width="33" height="33" />
                             </div>
                             <h6 class="align-self-center cursor-pointer ms-50 mb-0">+42</h6>
                         </div>
@@ -610,8 +622,8 @@
                     <div class="card-body">
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png"
-                                    class="rounded me-1" height="30" alt="Google Chrome" />
+                                <img src="{{ asset('app-assets') }}/images/icons/google-chrome.png" class="rounded me-1"
+                                    height="30" alt="Google Chrome" />
                                 <h6 class="align-self-center mb-0">Google Chrome</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -621,8 +633,8 @@
                         </div>
                         <div class="browser-states">
                             <div class="d-flex">
-                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png"
-                                    class="rounded me-1" height="30" alt="Mozila Firefox" />
+                                <img src="{{ asset('app-assets') }}/images/icons/mozila-firefox.png" class="rounded me-1"
+                                    height="30" alt="Mozila Firefox" />
                                 <h6 class="align-self-center mb-0">Mozila Firefox</h6>
                             </div>
                             <div class="d-flex align-items-center">
@@ -781,14 +793,18 @@
                     </div>
                 </div>
             </div>
-            <!--/ Transaction Card -->
-        </div>
     </section>
     <!-- Dashboard Ecommerce ends -->
 @endsection
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/charts/apexcharts.min.js"></script>
+
+    <script src="{{ asset('app-assets') }}/vendors/js/charts/chart.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app-menu.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/core/app.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/customizer.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/charts/chart-chartjs.min.js"></script>
 @endsection
 
 @section('page-js')

@@ -30,7 +30,11 @@ class FileResale extends Model
         'payment_due_date',
         'amount_remarks',
         'status',
+        'new_resale_rate',
+        'premium_demand',
+        'marketing_service_charges',
         'comments',
+        'created_date'
     ];
 
     public function getActivitylogOptions(): LogOptions

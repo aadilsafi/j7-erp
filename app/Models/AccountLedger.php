@@ -29,6 +29,8 @@ class AccountLedger extends Model
         'file_buyback_id',
         'file_cancellation_id',
         'file_title_transfer_id',
+        'rebate_incentive_id',
+        'dealer_incentive_id',
         'status',
         'created_date',
     ];
@@ -70,5 +72,15 @@ class AccountLedger extends Model
     public function receipt()
     {
         return $this->belongsTo(Receipt::class, 'receipt_id', 'id');
+    }
+
+    public function rebateIncentive()
+    {
+        return $this->belongsTo(RebateIncentiveModel::class, 'rebate_incentive_id', 'id');
+    }
+
+    public function dealerIncentive()
+    {
+        return $this->belongsTo(DealerIncentiveModel::class, 'dealer_incentive_id', 'id');
     }
 }

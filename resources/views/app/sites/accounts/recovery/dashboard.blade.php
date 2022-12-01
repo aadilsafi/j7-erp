@@ -16,6 +16,21 @@
 @endsection
 
 @section('custom-css')
+    <style>
+        .font-large-1 {
+            font-size: 1rem !important;
+        }
+
+        .font-large-2 {
+            font-size: 2rem !important;
+        }
+
+        /* #apexchartsj0rxcjpl,
+                                                                                                                                                                                #SvgjsSvg1119,
+                                                                                                                                                                                .apexcharts-svg {
+                                                                                                                                                                                    display: none;
+                                                                                                                                                                                } */
+    </style>
 @endsection
 
 @section('seo-breadcrumb')
@@ -30,10 +45,10 @@
             <div class="col-lg-6 col-md-12 col-sm-12">
                 <div class="card card-congratulations">
                     <div class="card-body text-center">
-                        <img src="{{ asset('app-assets') }}/images/elements/decore-left.png" class="congratulations-img-left"
-                            alt="card-img-left" />
-                        <img src="{{ asset('app-assets') }}/images/elements/decore-right.png" class="congratulations-img-right"
-                            alt="card-img-right" />
+                        <img src="{{ asset('app-assets') }}/images/elements/decore-left.png"
+                            class="congratulations-img-left" alt="card-img-left" />
+                        <img src="{{ asset('app-assets') }}/images/elements/decore-right.png"
+                            class="congratulations-img-right" alt="card-img-right" />
                         <div class="avatar avatar-xl bg-primary shadow">
                             <div class="avatar-content">
                                 <i data-feather="award" class="font-large-1"></i>
@@ -84,6 +99,17 @@
         </div>
         <div class="row match-height">
             <!-- Avg Sessions Chart Card starts -->
+
+
+
+
+            {{-- <________________________ next chart_______________________> --}}
+
+
+
+
+
+
             <div class="col-lg-6 col-12">
                 <div class="card">
                     <div class="card-body">
@@ -156,24 +182,25 @@
             <div class="col-lg-6 col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between pb-0">
-                        <h4 class="card-title">Support Tracker</h4>
+                        <h4 class="card-title">New Tracker</h4>
                         <div class="dropdown chart-dropdown">
                             <button class="btn btn-sm border-0 dropdown-toggle p-50" type="button" id="dropdownItem4"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Last 7 Days
+                                Last Month
                             </button>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownItem4">
-                                <a class="dropdown-item" href="#">Last 28 Days</a>
-                                <a class="dropdown-item" href="#">Last Month</a>
-                                <a class="dropdown-item" href="#">Last Year</a>
+                                <a class="dropdown-item" value="months1" id="months1" href="#">Month</a>
+                                <a class="dropdown-item" value="months3" id="months3" href="#">3 Month</a>
+                                <a class="dropdown-item" value="months6" id="months6" href="#">6 Month</a>
+                                <a class="dropdown-item" value="months12" id="months12" href="#">Last Year</a>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">163</h1>
-                                <p class="card-text">Tickets</p>
+                                <h1 class="font-large-2 fw-bolder mt-2 mb-0" id="installment_paid">163</h1>
+                                <p class="card-text">Installment Paid</p>
                             </div>
                             <div class="col-sm-10 col-12 d-flex justify-content-center">
                                 <div id="support-trackers-chart"></div>
@@ -181,16 +208,16 @@
                         </div>
                         <div class="d-flex justify-content-between mt-1">
                             <div class="text-center">
-                                <p class="card-text mb-50">New Tickets</p>
-                                <span class="font-large-1 fw-bold">29</span>
+                                <p class="card-text mb-50">Amount</p>
+                                <span class="font-large-1 fw-bold" id="amount">29</span>
                             </div>
                             <div class="text-center">
-                                <p class="card-text mb-50">Open Tickets</p>
-                                <span class="font-large-1 fw-bold">63</span>
+                                <p class="card-text mb-50">Paid Amount</p>
+                                <span class="font-large-1 fw-bold" id="paid_amount">63</span>
                             </div>
                             <div class="text-center">
-                                <p class="card-text mb-50">Response Time</p>
-                                <span class="font-large-1 fw-bold">1d</span>
+                                <p class="card-text mb-50">Remaining Amount</p>
+                                <span class="font-large-1 fw-bold" id="remaining_amount">1d</span>
                             </div>
                         </div>
                     </div>
@@ -377,7 +404,6 @@
             <!--/ App Design Card -->
         </div>
     </section>
-    <!-- Dashboard Analytics end -->
 @endsection
 
 @section('vendor-js')
@@ -389,7 +415,475 @@
 @section('page-js')
     <script src="{{ asset('app-assets') }}/js/scripts/pages/dashboard-analytics.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/pages/app-invoice-list.min.js"></script>
+    <script src="{{ asset('app-assets') }}/js/scripts/pages/dashboard-ecommerce.min.js"></script>
 @endsection
 
 @section('custom-js')
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+            $("#months1,#months3,#months6,#months12").on('click', function(e) {
+                // alert("Field " + e.target.id + " changed");
+                // alert('q');
+                let months_id = e.target.id;
+                e.preventDefault();
+                let months1 = $('#months1').val();
+                let months3 = $('#months3').val();
+                let months6 = $('#months6').val();
+                let months12 = $('#months12').val();
+                let url =
+                    "{{ route('ajax-get-filtered-data-dasboard') }}";
+                var _token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'months1': months1,
+                        'months3': months3,
+                        'months6': months6,
+                        'months12': months12,
+                        'months_id': months_id,
+                        '_token': _token,
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            function numberWithCommas(num) {
+                                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                            }
+                            console.log(data.data.new_percentage, 'percentage');
+                            // reload_cart(data.data.amount, data.data.paid_amount, data.data
+                            //     .remaining_amount);
+
+                            $('#amount').val(data.data.amount);
+                            $('#amount').html(
+                                '<span class="font-large-1 fw-bold" id="amount">' +
+                                numberWithCommas(data
+                                    .data.amount) + '</span>');
+                            $('#paid_amount').val(data.data.paid_amount);
+                            $('#paid_amount').html(
+                                '<span class="font-large-1 fw-bold" id="amount">' +
+                                numberWithCommas(data
+                                    .data.paid_amount) + '</span>');
+                            // $('#due_amount').val(data.data.due_amount);
+                            $('#remaining_amount').val(data.data.remaining_amount);
+                            $('#remaining_amount').html(
+                                '<span class="font-large-1 fw-bold" id="amount">' +
+                                numberWithCommas(data
+                                    .data.paid_amount) + '</span>');
+                            $('#installment_paid').html(
+                                '<h1 class="font-large-2 fw-bolder mt-2 mb-0" id="installment_paid">' +
+                                numberWithCommas(data
+                                    .data.installment_paid) + '</h1>');
+                            ring_chart(data.data.new_percentage);
+                            // $("#support-trackers-chart").first().css("display",
+                            //     "none");
+                        } else {
+                            console.log(data.data);
+                        }
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            });
+
+
+
+
+
+            // side chart
+            $("#months1,#months3,#months6,#months12").on('click', function(e) {
+
+                let months_id = e.target.id;
+                e.preventDefault();
+                let url =
+                    "{{ route('ajax-get-dasboard-side-chart') }}";
+                var _token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'months_id': months_id,
+                        '_token': _token,
+                    },
+                    success: function(data) {
+                        if (data.status == true) {
+                            function numberWithCommas(num) {
+                                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                            }
+
+                            // $('#amount').val(data.data.amount);
+                            // $('#amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.amount) + '</span>');
+                            // $('#paid_amount').val(data.data.paid_amount);
+                            // $('#paid_amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.paid_amount) + '</span>');
+                            // $('#remaining_amount').val(data.data.remaining_amount);
+                            // $('#remaining_amount').html(
+                            //     '<span class="font-large-1 fw-bold" id="amount">' +
+                            //     numberWithCommas(data
+                            //         .data.paid_amount) + '</span>');
+                            // $('#installment_paid').html(
+                            //     '<h1 class="font-large-2 fw-bolder mt-2 mb-0" id="installment_paid">' +
+                            //     numberWithCommas(data
+                            //         .data.installment_paid) + '</h1>');
+                            // ring_chart(data.data.new_percentage);
+
+                        } else {
+                            console.log(data.data);
+                        }
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+            });
+        });
+
+
+
+
+        function ring_chart(amount) {
+
+            "use strict";
+            var e,
+                o,
+                t,
+                r,
+                a,
+                s = "#ebf0f7",
+                i = "#5e5873",
+                n = "#ebe9f1",
+                d = document.querySelector("#gained-chart"),
+                l = document.querySelector("#order-chart"),
+                h = document.querySelector("#avg-sessions-chart"),
+                p = document.querySelector("#support-trackers-chart"),
+                c = document.querySelector("#sales-visit-chart"),
+                w = "rtl" === $("html").attr("data-textdirection");
+            setTimeout(function() {
+                    // toastr.success(
+                    //     "You have successfully logged in to Vuexy. Now you can start to explore!",
+                    //     "👋 Welcome John Doe!", {
+                    //         closeButton: !0,
+                    //         tapToDismiss: !1,
+                    //         rtl: w
+                    //     }
+                    // );
+                }, 2e3),
+                (e = {
+                    chart: {
+                        height: 100,
+                        type: "area",
+                        toolbar: {
+                            show: !1
+                        },
+                        sparkline: {
+                            enabled: !0
+                        },
+                        grid: {
+                            show: !1,
+                            padding: {
+                                left: 0,
+                                right: 0
+                            }
+                        },
+                    },
+                    colors: [window.colors.solid.primary],
+                    dataLabels: {
+                        enabled: !1
+                    },
+                    stroke: {
+                        curve: "smooth",
+                        width: 2.5
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 0.9,
+                            opacityFrom: 0.7,
+                            opacityTo: 0.5,
+                            stops: [0, 80, 100],
+                        },
+                    },
+                    series: [{
+                        name: "Subscribers",
+                        data: [28, 40, 36, 52, 38, 60, 55]
+                    }, ],
+                    xaxis: {
+                        labels: {
+                            show: !1
+                        },
+                        axisBorder: {
+                            show: !1
+                        }
+                    },
+                    yaxis: [{
+                        y: 0,
+                        offsetX: 0,
+                        offsetY: 0,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    }, ],
+                    tooltip: {
+                        x: {
+                            show: !1
+                        }
+                    },
+                }),
+                new ApexCharts(d, e).render(),
+                (o = {
+                    chart: {
+                        height: 100,
+                        type: "area",
+                        toolbar: {
+                            show: !1
+                        },
+                        sparkline: {
+                            enabled: !0
+                        },
+                        grid: {
+                            show: !1,
+                            padding: {
+                                left: 0,
+                                right: 0
+                            }
+                        },
+                    },
+                    colors: [window.colors.solid.warning],
+                    dataLabels: {
+                        enabled: !1
+                    },
+                    stroke: {
+                        curve: "smooth",
+                        width: 2.5
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shadeIntensity: 0.9,
+                            opacityFrom: 0.7,
+                            opacityTo: 0.5,
+                            stops: [0, 80, 100],
+                        },
+                    },
+                    series: [{
+                        name: "Orders",
+                        data: [10, 15, 8, 15, 7, 12, 8]
+                    }],
+                    xaxis: {
+                        labels: {
+                            show: !1
+                        },
+                        axisBorder: {
+                            show: !1
+                        }
+                    },
+                    yaxis: [{
+                        y: 0,
+                        offsetX: 0,
+                        offsetY: 0,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        },
+                    }, ],
+                    tooltip: {
+                        x: {
+                            show: !1
+                        }
+                    },
+                }),
+                new ApexCharts(l, o).render(),
+                (t = {
+                    chart: {
+                        type: "bar",
+                        height: 200,
+                        sparkline: {
+                            enabled: !0
+                        },
+                        toolbar: {
+                            show: !1
+                        },
+                    },
+                    states: {
+                        hover: {
+                            filter: "none"
+                        }
+                    },
+                    colors: [s, s, window.colors.solid.primary, s, s, s],
+                    series: [{
+                        name: "Sessions",
+                        data: [75, 125, 225, 175, 125, 75, 25]
+                    }, ],
+                    grid: {
+                        show: !1,
+                        padding: {
+                            left: 0,
+                            right: 0
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            columnWidth: "45%",
+                            distributed: !0,
+                            endingShape: "rounded",
+                        },
+                    },
+                    tooltip: {
+                        x: {
+                            show: !1
+                        }
+                    },
+                    xaxis: {
+                        type: "numeric"
+                    },
+                }),
+                new ApexCharts(h, t).render(),
+                (r = {
+                    chart: {
+                        height: 270,
+                        type: "radialBar"
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            size: 150,
+                            offsetY: 20,
+                            startAngle: -150,
+                            endAngle: 150,
+                            hollow: {
+                                size: "65%"
+                            },
+                            track: {
+                                background: "#fff",
+                                strokeWidth: "100%"
+                            },
+                            dataLabels: {
+                                name: {
+                                    offsetY: -5,
+                                    color: i,
+                                    fontSize: "1rem"
+                                },
+                                value: {
+                                    offsetY: 15,
+                                    color: i,
+                                    fontSize: "1.714rem"
+                                },
+                            },
+                        },
+                    },
+                    colors: [window.colors.solid.danger],
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shade: "dark",
+                            type: "horizontal",
+                            shadeIntensity: 0.5,
+                            gradientToColors: [window.colors.solid.primary],
+                            inverseColors: !0,
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0, 100],
+                        },
+                    },
+                    stroke: {
+                        dashArray: 8
+                    },
+                    series: [amount],
+                    labels: ["Completed"],
+                }),
+                new ApexCharts(p, r).render(),
+                (a = {
+                    chart: {
+                        height: 300,
+                        type: "radar",
+                        dropShadow: {
+                            enabled: !0,
+                            blur: 8,
+                            left: 1,
+                            top: 1,
+                            opacity: 0.2,
+                        },
+                        toolbar: {
+                            show: !1
+                        },
+                        offsetY: 5,
+                    },
+                    series: [{
+                            name: "Sales",
+                            data: [90]
+                        },
+                        {
+                            name: "Visit",
+                            data: [70]
+                        },
+                    ],
+                    stroke: {
+                        width: 0
+                    },
+                    colors: [window.colors.solid.primary, window.colors.solid.info],
+                    plotOptions: {
+                        radar: {
+                            polygons: {
+                                strokeColors: [n, "transparent"],
+                                connectorColors: "transparent",
+                            },
+                        },
+                    },
+                    fill: {
+                        type: "gradient",
+                        gradient: {
+                            shade: "dark",
+                            gradientToColors: [
+                                window.colors.solid.primary,
+                                window.colors.solid.info,
+                            ],
+                            shadeIntensity: 1,
+                            type: "horizontal",
+                            opacityFrom: 1,
+                            opacityTo: 1,
+                            stops: [0],
+                        },
+                    },
+                    markers: {
+                        size: 0
+                    },
+                    legend: {
+                        show: !1
+                    },
+                    labels: ["Jan", "Feb"],
+                    dataLabels: {
+                        background: {
+                            foreColor: [n]
+                        }
+                    },
+                    yaxis: {
+                        show: !1
+                    },
+                    grid: {
+                        show: !1,
+                        padding: {
+                            bottom: -27
+                        }
+                    },
+                }),
+                new ApexCharts(c, a).render();
+
+
+        }
+
+        ring_chart(amount = 13);
+    </script>
 @endsection

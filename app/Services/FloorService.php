@@ -51,11 +51,12 @@ class FloorService implements FloorInterface
         $floor = $this->model()->create($data);
 
         foreach ($customFields as $key => $value) {
-            $customFieldData = [
+
+            $floor->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
-                'value' => $inputs[$value->slug],
-            ];
-            $floor->CustomFieldValues()->create($customFieldData);
+            ], [
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+            ]);
         }
         return $floor;
     }
@@ -91,7 +92,7 @@ class FloorService implements FloorInterface
             $floor->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
             ], [
-                'value' => $inputs[$value->slug],
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
             ]);
         }
 

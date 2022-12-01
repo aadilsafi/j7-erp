@@ -36,6 +36,7 @@ use App\Http\Controllers\{
     FileBuyBackController,
     ChartsOfAccountsController,
     CityController,
+    CompanyController,
     ImageImportController,
     LedgerController,
     SalesPlanImportController,
@@ -49,6 +50,7 @@ use App\Http\Controllers\{
     StakeholdersImportControler,
     StateController,
     LogController,
+    PaymentVocuherController,
 };
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
@@ -83,6 +85,11 @@ Route::group([
     Route::group(['middleware' => ['auth', 'permission']], function () {
 
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+            Route::post('get-filtered-data-dasboard', [DashboardController::class, 'dasboard_chart'])->name('get-filtered-data-dasboard');
+            Route::post('get-dasboard-side-chart', [DashboardController::class, 'dasboardSideChart'])->name('get-dasboard-side-chart');
+        });
 
         Route::get('cachew/flush', [DashboardController::class, 'cacheFlush'])->name('site.cache.flush');
 
@@ -283,11 +290,25 @@ Route::group([
                         });
                     });
 
+                    //Company Routes
+                    Route::group(['prefix' => 'companies', 'as' => 'companies.'], function () {
+
+                        Route::get('/', [CompanyController::class, 'index'])->name('index');
+
+                        Route::get('create', [CompanyController::class, 'create'])->name('create');
+                        Route::post('store', [CompanyController::class, 'store'])->name('store');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [CompanyController::class, 'edit'])->name('edit');
+                            Route::put('update', [CompanyController::class, 'update'])->name('update');
+                            Route::get('delete', [CompanyController::class, 'destroy'])->name('destroy');
+                        });
+                        Route::get('delete-selected', [FloorController::class, 'destroySelected'])->name('destroy-selected');
+                    });
                     // Logs Route
                     Route::group(['prefix' => 'activity-logs', 'as' => 'activity-logs.'], function () {
                         Route::get('/', [LogController::class, 'index'])->name('index');
                     });
-
                 });
 
                 //Additional Costs Routes
@@ -644,6 +665,14 @@ Route::group([
                     });
                 });
 
+                // Payment Vouchers
+                Route::group(['prefix' => 'payment-voucher', 'as' => 'payment-voucher.'], function () {
+                    Route::get('/', [PaymentVocuherController::class, 'index'])->name('index');
+
+                    Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
+                    Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+                });
+
                 // File Management
                 Route::group(['prefix' => 'file-managements', 'as' => 'file-managements.'], function () {
 
@@ -660,6 +689,8 @@ Route::group([
                             Route::get('edit', [RebateIncentiveController::class, 'edit'])->name('edit');
                             Route::put('update', [RebateIncentiveController::class, 'update'])->name('update');
                         });
+                        Route::get('approve/{rebate_incentive_id}', [RebateIncentiveController::class, 'approve'])->name('approve');
+
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-data', [RebateIncentiveController::class, 'getData'])->name('get-data');
                         });

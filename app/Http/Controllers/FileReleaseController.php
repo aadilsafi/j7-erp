@@ -20,11 +20,13 @@ use App\Models\FileResaleAttachment;
 use App\Models\ModelTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Template;
+use App\Models\Type;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
+use Arr;
 use DB;
 
 class FileReleaseController extends Controller
@@ -70,7 +72,7 @@ class FileReleaseController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
             $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -119,7 +121,6 @@ class FileReleaseController extends Controller
      */
     public function store(FileResaleStoreRequest $request, $site_id)
     {
-        //
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
@@ -146,7 +147,7 @@ class FileReleaseController extends Controller
         $resale_file = (new FileResale())->find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $resale_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $rebate_incentive = RebateIncentiveModel::where('unit_id', $unit->id)->where('stakeholder_id', decryptParams($customer_id))->first();
@@ -224,14 +225,13 @@ class FileReleaseController extends Controller
     {
         DB::transaction(function () use ($site_id, $unit_id, $customer_id, $file_id) {
 
-            // Account ledger transaction
-            // $transaction = $this->financialTransactionInterface->makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
-
             $file_resale = FileResale::where('file_id', decryptParams($file_id))->first();
             $file_resale->status = 1;
             $file_resale->update();
 
             $unit = Unit::find(decryptParams($unit_id));
+            $unit->price_sqft = $file_resale->new_resale_rate;
+            $unit->total_price = (float)$unit->price_sqft  *  (float)$unit->gross_area;
             $unit->status_id = 6;
             $unit->update();
 
@@ -246,12 +246,12 @@ class FileReleaseController extends Controller
             //     $SalesPlan->update();
             // }
 
-            $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
-            foreach ($receipt as $receipt) {
-                $Receipt = Receipt::find($receipt->id);
-                $Receipt->status = 2;
-                $Receipt->update();
-            }
+            // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
+            // foreach ($receipt as $receipt) {
+            //     $Receipt = Receipt::find($receipt->id);
+            //     $Receipt->status = 2;
+            //     $Receipt->update();
+            // }
         });
         return redirect()->route('sites.file-managements.file-resale.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('File Resale Approved');
     }
@@ -259,22 +259,30 @@ class FileReleaseController extends Controller
     public function printPage($site_id, $file_id, $template_id)
     {
 
-        $file_refund = (new FileResale())->find(decryptParams($file_id));
-        // dd($file_refund ,  json_decode($file_refund['stakeholder_data']));
+        $file_resale = (new FileResale())->find(decryptParams($file_id));
+
+        $file = FileManagement::where('id', $file_resale->file_id)->first();
+        $salesPlan = SalesPlan::find($file->sales_plan_id);
+
+        $unpaid = $salesPlan->unPaidInstallments->pluck('details')->toArray();
+
+        $installmentsRecevied = SalesPlanInstallments::where('sales_plan_id', $salesPlan->id)->where('status','paid')->where('installment_order', '>', 0)->pluck('details')->toArray();
 
         $template = Template::find(decryptParams($template_id));
 
         $data = [
             'site_id' => decryptParams($site_id),
-            'file_refund' => $file_refund,
+            'file_resale' => $file_resale,
             'template' => $template,
-            'stakeholder' => json_decode($file_refund['stakeholder_data']),
-            'unit' => Unit::find($file_refund['unit_id']),
-            'salesPlan' => SalesPlan::where('unit_id', $file_refund['unit_id'])->first(),
+            'customer' => json_decode($file_resale['stakeholder_data']),
+            'unit' => Unit::find($file_resale['unit_id']),
+            'salesPlan' => SalesPlan::where('unit_id', $file_resale['unit_id'])->first(),
+            'installmentsRecevied' => $installmentsRecevied,
+            'unpaid' => $unpaid
         ];
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 
-        return view($printFile, compact('data'));
+        return view($printFile, $data);
     }
 }

@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
 use App\Models\Bank;
 use App\Models\SalesPlan;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Redirect;
 use Validator;
+use DB;
 
 class RebateIncentiveController extends Controller
 {
@@ -25,13 +27,16 @@ class RebateIncentiveController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $rebateIncentive;
+    private $rebateIncentive, $financialTransactionInterface;
 
     public function __construct(
-        RebateIncentiveInterface $rebateIncentive, CustomFieldInterface $customFieldInterface
+        RebateIncentiveInterface $rebateIncentive,
+        CustomFieldInterface $customFieldInterface,
+        FinancialTransactionInterface $financialTransactionInterface
     ) {
         $this->rebateIncentive = $rebateIncentive;
         $this->customFieldInterface = $customFieldInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
     public function index(RebateIncentiveDataTable $dataTable, Request $request, $site_id)
@@ -60,9 +65,9 @@ class RebateIncentiveController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => Unit::where('status_id', 5)->where('is_for_rebate', true)->with('floor', 'type')->get(),
+                'units' => Unit::where('status_id', '>', 4)->where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
-                'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
             ];
@@ -87,7 +92,7 @@ class RebateIncentiveController extends Controller
             $record = $this->rebateIncentive->store(decryptParams($site_id), $inputs);
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage() );
+            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -123,7 +128,7 @@ class RebateIncentiveController extends Controller
                     'id' => $id,
                     'rebate_data' => $rebate_data,
                     'edit_unit' => Unit::find($rebate_data->unit_id),
-                    'dealer_data' => StakeholderType::where('type','D')->where('status',1)->with('stakeholder')->get(),
+                    'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 ];
 
                 return view('app.sites.file-managements.files.rebate-incentive.edit', $data);
@@ -170,6 +175,21 @@ class RebateIncentiveController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function approve($site_id, $rebate_incentive_id)
+    {
+        DB::transaction(function () use ($site_id, $rebate_incentive_id) {
+           
+            $rebate_incentive = RebateIncentiveModel::find(decryptParams($rebate_incentive_id));
+            $rebate_incentive->status = 1;
+            $rebate_incentive->update();
+
+             // Account ledger transaction
+             $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate_incentive->id);
+
+        });
+        return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
 
     public function getData(Request $request)

@@ -98,106 +98,121 @@
 
                         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
-                                <div class="col-sm-12 d-flex justify-content-end align-items-center">
-                                    <button id="btnGroupDrop1" type="button" class="btn btn-relief-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-upload"></i> Export</button>
+                                <div class="col-sm-12 d-flex justify-content-end align-items-center table-responsive">
+                                    <button id="btnGroupDrop1" type="button"
+                                        class="btn btn-relief-outline-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false"><i class="bi bi-upload"></i> Export</button>
                                     <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard"></i> Copy</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf"></i> PDF</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-spreadsheet"></i>Excel</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-clipboard"></i> Copy</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="#"><i
+                                                    class="bi bi-file-earmark-spreadsheet"></i> CSV</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-filetype-pdf"></i>
+                                                PDF</a></li>
+                                        <li><a class="dropdown-item" href="#"><i
+                                                    class="bi bi-file-earmark-spreadsheet"></i>Excel</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a>
+                                        </li>
                                     </ul>
-                                    <button type="reset" class="btn btn-relief-outline-danger ml-3" style="margin-right: 8px;margin-left: 8px;"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
-                                    <button type="reset" class="btn btn-relief-outline-primary ml-3" style="margin-right: 7px;"><i class="bi bi-arrow-clockwise"></i> Reload</button>
+                                    <button type="reset" class="btn btn-relief-outline-danger ml-3"
+                                        style="margin-right: 8px;margin-left: 8px;"><i
+                                            class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                                    <button type="reset" class="btn btn-relief-outline-primary ml-3"
+                                        style="margin-right: 7px;"><i class="bi bi-arrow-clockwise"></i> Reload</button>
 
                                 </div>
-                                <table id="example" class="table table-striped dt-complex-header table"
-                                    style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-nowrap">#</th>
-                                            <th class="text-nowrap">Account Codes</th>
-                                            <th class="text-nowrap">Opening Balance</th>
-                                            <th class="text-nowrap">Debit</th>
-                                            <th class="text-nowrap">Credit</th>
-                                            <th class="text-nowrap">Closing Balance</th>
-                                            <th class="text-nowrap">Transactions At</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
-                                            $i = 1;
-                                            $starting_balance_index = 0;
-                                            $starting_balance = [];
-                                            $ending_balance = 0;
-                                            $ending_balance_new_array = [];
-                                        @endphp
-                                        @foreach ($account_ledgers as $account_ledger)
-                                            <tr>
-                                                @php
-                                                if(substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12 )
-                                                {
-                                                   
-                                                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
-                                                    array_push($starting_balance,$ending_balance); 
-                                                }else {
-                                                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
-                                                    array_push($starting_balance,$ending_balance);
-                                                }
-                                                @endphp
-                                                <td>{{ $i }}</td>
-                                                <td class="text-nowrap">{{ account_number_format($account_ledger->account_head_code) }}</td>
-                                                @if ($i > 1)
-                                                    <td>{{number_format($starting_balance[$starting_balance_index - 1])}}</td>
+                                <div class="table-responsive">
 
-                                                @else
-                                                    <td>0</td>
-                                                @endif
-                                                <td class="text-nowrap">{{ number_format($account_ledger->debit) }}</td>
-                                                <td class="text-nowrap">{{ number_format($account_ledger->credit) }}</td>
-                                                @if ($i > 1)
-                                                @php
-                                                    $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
-                                                    $starting_balance[$starting_balance_index]= $new_starting_balance;
-                                                @endphp
-                                                <td class="text-nowrap">{{ number_format($new_starting_balance)}}</td>
-                                                @php
-                                                    array_push($ending_balance_new_array,$new_starting_balance);
-                                                @endphp
-                                                
-                                                @else
-                                                <td class="text-nowrap">{{ number_format($ending_balance)}}</td>
-                                                @php
-                                                    array_push($ending_balance_new_array,$ending_balance);
-                                                @endphp
-                                                    
-                                                @endif
-                                                <td class="text-nowrap">
-                                                    <span>{{ date_format(new DateTime($account_ledger->created_at), 'h:i:s') }}
-                                                    </span> <br> <span class='text-primary fw-bold'>
-                                                        {{ date_format(new DateTime($account_ledger->created_at), 'Y-m-d') }}</span>
-                                                </td>
+                                    <table id="example" class="table  table-striped dt-complex-header table"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-nowrap">#</th>
+                                                <th class="text-nowrap">Account Codes</th>
+                                                <th class="text-nowrap">Opening Balance</th>
+                                                <th class="text-nowrap">Debit</th>
+                                                <th class="text-nowrap">Credit</th>
+                                                <th class="text-nowrap">Closing Balance</th>
+                                                <th class="text-nowrap">Transactions At</th>
                                             </tr>
+                                        </thead>
+                                        <tbody>
                                             @php
-                                                $i++;
-                                                $starting_balance_index++;
+                                                $i = 1;
+                                                $starting_balance_index = 0;
+                                                $starting_balance = [];
+                                                $ending_balance = 0;
+                                                $ending_balance_new_array = [];
                                             @endphp
-                                        @endforeach
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                            {{-- <th>{{number_format(collect($starting_balance)->sum())}}</th> --}}
-                                            <th></th>
-                                            <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
-                                            <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
-                                            <th></th>
-                                            {{-- <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th> --}}
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
+                                            {{-- @dd($account_ledgers) --}}
+                                            @foreach ($account_ledgers as $account_ledger)
+                                                <tr>
+                                                    @php
+                                                        if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
+                                                            $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                                                            array_push($starting_balance, $ending_balance);
+                                                        } else {
+                                                            $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                                                            array_push($starting_balance, $ending_balance);
+                                                        }
+                                                    @endphp
+                                                    <td>{{ $i }}</td>
+                                                    <td class="text-nowrap">
+                                                        {{ account_number_format($account_ledger->account_head_code) }}
+                                                    </td>
+                                                    @if ($i > 1)
+                                                        <td>{{ number_format($starting_balance[$starting_balance_index - 1]) }}
+                                                        </td>
+                                                    @else
+                                                        <td>0</td>
+                                                    @endif
+                                                    <td class="text-nowrap">{{ number_format($account_ledger->debit) }}
+                                                    </td>
+                                                    <td class="text-nowrap">{{ number_format($account_ledger->credit) }}
+                                                    </td>
+                                                    @if ($i > 1)
+                                                        @php
+                                                            $new_starting_balance = $ending_balance + $starting_balance[$starting_balance_index - 1];
+                                                            $starting_balance[$starting_balance_index] = $new_starting_balance;
+                                                        @endphp
+                                                        <td class="text-nowrap">{{ number_format($new_starting_balance) }}
+                                                        </td>
+                                                        @php
+                                                            array_push($ending_balance_new_array, $new_starting_balance);
+                                                        @endphp
+                                                    @else
+                                                        <td class="text-nowrap">{{ number_format($ending_balance) }}</td>
+                                                        @php
+                                                            array_push($ending_balance_new_array, $ending_balance);
+                                                        @endphp
+                                                    @endif
+                                                    <td class="text-nowrap">
+                                                        <span>{{ date_format(new DateTime($account_ledger->created_date), 'h:i:s') }}
+                                                        </span> <br> <span class='text-primary fw-bold'>
+                                                            {{ date_format(new DateTime($account_ledger->created_date), 'Y-m-d') }}</span>
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                    $i++;
+                                                    $starting_balance_index++;
+                                                @endphp
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                {{-- <th>{{number_format(collect($starting_balance)->sum())}}</th> --}}
+                                                <th></th>
+                                                <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
+                                                <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
+                                                <th></th>
+                                                {{-- <th>{{number_format(collect($ending_balance_new_array)->sum())}}</th> --}}
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -265,33 +280,34 @@
                         filter_date_to;
                 }
                 console.log(data_data);
-        let url = "{{ route('sites.accounts.trial-balance.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
-        var _token = '{{ csrf_token() }}';
-        $.ajax({
-            url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'date_filter': data_data,
-                    'to_date': to_date,
-                    '_token': _token,
-                    'account_head_code': '{{$account_ledgers[0]->account_head_code}}',
-                },
-            success: function(data) {
-                
-                console.log((data))
-                if(data.status==true){
-                    $('#example').html(data.data);
-                }else{
-                    console.log(data.data);
-                }
+                let url =
+                    "{{ route('sites.accounts.trial-balance.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
+                var _token = '{{ csrf_token() }}';
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'date_filter': data_data,
+                        'to_date': to_date,
+                        '_token': _token,
+                        'account_head_code': '{{ $account_ledgers[0]->account_head_code }}',
+                    },
+                    success: function(data) {
 
-            },
-            error: function(error) {
-                    console.log(error);
-            }
-        });
-                
+                        console.log((data))
+                        if (data.status == true) {
+                            $('#example').html(data.data);
+                        } else {
+                            console.log(data.data);
+                        }
+
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
             });
         });
 

@@ -35,10 +35,16 @@ class UserDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns =  (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('phone_no', function ($user) {
-                return Str::substrReplace($user->phone_no, '-', 4, 0);
+            ->editColumn('contact', function ($user) {
+                return Str::substrReplace($user->contact, '-', 4, 0);
+            })
+            ->editColumn('cnic', function ($user) {
+                return cnicFormat($user->cnic);
+            })
+            ->editColumn('city_id', function ($user) {
+                return $user->city_id > 0 ? $user->city->name : '-';
             })
             ->editColumn('created_at', function ($user) {
                 return editDateColumn($user->created_at);
@@ -51,6 +57,21 @@ class UserDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -152,7 +173,7 @@ class UserDataTable extends DataTable
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('sites.users.edit');
-        return [
+        $columns = [
             ($selectedDeletePermission ?
                 Column::computed('check')->exportable(false)->printable(false)->width(60)
                 :
@@ -161,15 +182,26 @@ class UserDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
             Column::make('email')->title('Email')->addClass('text-nowrap'),
-            Column::make('phone_no')->title('Phone No'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            ($editPermission ?
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-                :
-                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            )
+            Column::make('contact')->title('Contact')->addClass('text-nowrap'),
+            Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::make('city_id')->title('City')->addClass('text-nowrap'),
+            // Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
 
         ];
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+
+        if ($editPermission) {
+            $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        } else {
+            $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden');
+        }
+        return $columns;
     }
 
     /**

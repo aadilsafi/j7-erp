@@ -238,12 +238,11 @@ class StakeholderService implements StakeholderInterface
             //save custom fields
 
             foreach ($customFields as $key => $value) {
-                // dd($inputs[$value->name]);
-                $customFieldData = [
+                $stakeholder->CustomFieldValues()->updateOrCreate([
                     'custom_field_id' => $value->id,
-                    'value' => $inputs[$value->name],
-                ];
-                $stakeholder->CustomFieldValues()->create($customFieldData);
+                ], [
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+                ]);
             }
             return $stakeholder;
         });
@@ -352,12 +351,10 @@ class StakeholderService implements StakeholderInterface
             }
 
             foreach ($customFields as $key => $value) {
-                // dd($inputs[$value->name]);
-
                 $stakeholder->CustomFieldValues()->updateOrCreate([
                     'custom_field_id' => $value->id,
                 ], [
-                    'value' => $inputs[$value->slug],
+                    'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
                 ]);
             }
 

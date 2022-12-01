@@ -160,6 +160,16 @@
                                 </a>
                             </li>
                         @endcan
+                        @can('sites.settings.companies.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.companies.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.companies.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i class="bi bi-building-fill-gear"></i>
+                                    <span class="menu-title text-truncate" data-i18n="Companies">Companies</span>
+                                </a>
+                            </li>
+                        @endcan
                         <li class="nav-item ">
                             <a class="d-flex align-items-center" href="javascript:void(0)">
                                 <i data-feather='list'></i>
@@ -565,28 +575,39 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('sites.receipts.index')
-                            <li>
-                                <a class="d-flex align-items-center" href="#">
-                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
-                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
-                                </a>
-                                <ul>
+
+                        <li>
+                            <a class="d-flex align-items-center" href="#">
+                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
+                            </a>
+
+                            <ul>
+                                @can('sites.receipts.index')
                                     <li
                                         class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                         <a class="d-flex align-items-center"
                                             href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-receipt-cutoff"
-                                                style="
-                                    margin-bottom: 10px;">
+                                            <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;">
                                             </i>
                                             <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
                                         </a>
                                     </li>
+                                @endcan
+                                @can('sites.payment-voucher.index')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title text-truncate" data-i18n="Email">Payment Voucher</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
 
-                                </ul>
-                            </li>
-                        @endcan
+
                         <li>
                             <a class="d-flex align-items-center" href="#">
                                 <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>

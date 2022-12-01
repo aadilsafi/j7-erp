@@ -19,7 +19,7 @@
                 <label class="form-label" style="font-size: 15px" for="type">Field Type <span
                         class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select @error('type') is-invalid @enderror" id="type"
-                    name="type">
+                    name="type" {{isset($customValues) && $customValues > 0 ? 'readOnly' : ''}}>
                     <option value="0" selected>Field Type</option>
                     @foreach ($fieldTypes as $key => $value)
                         <option value="{{ $value }}"
@@ -67,7 +67,7 @@
                 <label class="form-label" style="font-size: 15px" for="custom_field_model">Bind To <span
                         class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select @error('custom_field_model') is-invalid @enderror"
-                    id="custom_field_model" name="custom_field_model">
+                    id="custom_field_model" name="custom_field_model" {{isset($customValues) && $customValues > 0 ? 'readOnly' : ''}}>
                     <option value="" selected>Bind To</option>
                     @foreach ($models as $path => $name)
                         <option value="{{ $path }}"

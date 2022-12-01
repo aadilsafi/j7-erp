@@ -95,7 +95,7 @@ class FileRefundDataTable extends DataTable
      */
     public function query(FileManagement $model): QueryBuilder
     {
-        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 2);
+        return $model->newQuery()->with('unit', 'stakeholder', 'unit.type', 'unit.status', 'fileRefund', 'fileAction', 'fileBuyBack', 'fileCancellation', 'fileResale', 'fileTitleTransfer')->where('site_id', $this->site_id)->where('file_action_id', 1)->orWhere('file_action_id', 2)->orWhere('file_action_id', 5);
     }
 
     /**
@@ -152,7 +152,7 @@ class FileRefundDataTable extends DataTable
             Column::make('unit_type')->name('unit.type.name')->title('Unit Type')->addClass('text-nowrap')->orderable(false),
             Column::make('unit_status')->name('unit.status.name')->title('Unit Status')->addClass('text-nowrap text-center')->orderable(false),
             Column::make('stakeholder_full_name')->name('stakeholder.full_name')->title('Customer Name')->addClass('text-nowrap')->orderable(false),
-            Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Son of')->addClass('text-nowrap')->orderable(false),
+            Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Father/Husband')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap')->orderable(false),
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center')->orderable(false),

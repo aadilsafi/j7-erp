@@ -34,7 +34,7 @@ class TypesDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns = (new EloquentDataTable($query))
             ->editColumn('parent_id', function ($type) {
                 return Str::of(getTypeParentByParentId($type->parent_id))->ucfirst();
             })
@@ -55,6 +55,20 @@ class TypesDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -173,10 +187,17 @@ class TypesDataTable extends DataTable
             Column::make('name')->title('Type Name')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
             Column::make('account_number')->title('Account Number')->addClass('text-nowrap'),
-            Column::make('created_at')->addClass('text-nowrap'),
-            Column::make('updated_at')->addClass('text-nowrap'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
+         
         ];
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+
 
         if ($selectedDeletePermission) {
             $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);

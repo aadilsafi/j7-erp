@@ -35,7 +35,7 @@ class TeamsDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns = (new EloquentDataTable($query))
             ->editColumn('check', function ($team) {
                 return $team;
             })
@@ -59,6 +59,21 @@ class TeamsDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -155,10 +170,18 @@ class TeamsDataTable extends DataTable
             Column::make('parent_id')->title('Parent')->addClass('text-nowrap'),
             Column::make('has_team'),
             Column::computed('team_members')->title('Team Members')->addClass('text-nowrap'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+            // Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            // Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
+            // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
         ];
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->title('Updated At')->addClass('text-nowrap');
+        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
         if ($selectedDeletePermission) {
             $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);

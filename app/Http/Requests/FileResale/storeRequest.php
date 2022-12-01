@@ -25,13 +25,10 @@ class storeRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'amount_to_be_refunded' => 'required',
-            'payment_due_date' => 'required',
+            'new_resale_rate' => 'required',
+            'premium_demand' => 'required',
             'amount_remarks' => 'required',
-            'amount_profit' => 'required',
-            'attachments' => 'bail|required_if:checkAttachment,1',
-            'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
-            'attachments.*.image' => 'required_if:checkAttachment,1',
+            'marketing_service_charges' => 'required',
         ];
         return $rules;
     }

@@ -10,6 +10,7 @@ use App\Http\Requests\users\{
     storeRequest as userStoreRequest,
     updateRequest as userUpdateRequest,
 };
+use App\Models\Country;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -22,7 +23,6 @@ class UserController extends Controller
     {
         $this->userInterface = $userInterface;
         $this->customFieldInterface = $customFieldInterface;
-
     }
 
     /**
@@ -32,9 +32,11 @@ class UserController extends Controller
      */
     public function index(UserDataTable $dataTable, $site_id)
     {
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->userInterface->model()));
 
         $data = [
-            'site_id' => $site_id
+            'site_id' => $site_id,
+            'customFields' => $customFields->where('in_table', true),
         ];
 
         return $dataTable->with($data)->render('app.sites.users.index', $data);
@@ -58,6 +60,9 @@ class UserController extends Controller
             $data = [
                 'site_id' => decryptParams($site_id),
                 'role' => $role,
+                'country' => Country::all(),
+                'city' => [],
+                'state' => [],
                 'customFields' => $customFields,
             ];
             return view('app.sites.users.create', $data);
@@ -77,8 +82,10 @@ class UserController extends Controller
         try {
             if (!request()->ajax()) {
 
-                $inputs = $request->validated();
-                $record = $this->userInterface->store($site_id, $inputs);
+                $inputs = $request->all();
+                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->userInterface->model()));
+
+                $record = $this->userInterface->store($site_id, $inputs, $customFields);
 
                 return redirect()->route('sites.users.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
             } else {
@@ -114,6 +121,11 @@ class UserController extends Controller
         try {
             $roles = Role::get();
             $user = $this->userInterface->getById($site_id, $id);
+
+            $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->userInterface->model()));
+            $customFields = collect($customFields)->sortBy('order');
+            $customFields = generateCustomFields($customFields, true, $user->id);
+
             $Selectedroles = $user->roles->pluck('name')->toArray();
             if ($user && !empty($user)) {
                 $images = $user->getMedia('user_cnic');
@@ -124,7 +136,11 @@ class UserController extends Controller
                     'user' => $user,
                     'images' => $images,
                     'Selectedroles' => $Selectedroles,
-                    'roles' => $roles
+                    'roles' => $roles,
+                    'customFields' => $customFields,
+                    'country' => Country::all(),
+                    'city' => [],
+                    'state' => [],
                 ];
 
                 return view('app.sites.users.edit', $data);
@@ -151,7 +167,9 @@ class UserController extends Controller
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
-                $record = $this->userInterface->update($site_id, $id, $inputs);
+                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->userInterface->model()));
+
+                $record = $this->userInterface->update($site_id, $id, $inputs, $customFields);
                 return redirect()->route('sites.users.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);

@@ -10,7 +10,7 @@
         <div class="col">
             <div class="form-check form-check-inline">
                 <label class="form-check-label" for="{{ $key }}">{{ $value }} </label>
-                <input class="form-check-input" type="radio" id="{{ $key }}" name="{{ $label }}"
+                <input class="form-check-input" type="radio" id="{{ $key }}" name="{{ $id }}"
                     value="{{ $value }}" {{ $disabled ? 'disabled' : null }}
                     {{ $required ? ' required' : null }}
                     {{ $isEditMode && $customFieldValue && $value == $customFieldValue->value ? 'checked' : null }}>

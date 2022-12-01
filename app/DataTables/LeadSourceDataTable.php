@@ -1,5 +1,7 @@
 <?php
+
 namespace App\DataTables;
+
 use App\Models\LeadSource;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
@@ -8,6 +10,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Str;
 
 class LeadSourceDataTable extends DataTable
 {
@@ -20,7 +23,7 @@ class LeadSourceDataTable extends DataTable
     public function dataTable(QueryBuilder $query)
     {
         $columns = array_column($this->getColumns(), 'data');
-        return (new EloquentDataTable($query))
+        $editColumns = (new EloquentDataTable($query))
             ->editColumn('check', function ($leadSource) {
                 return $leadSource;
             })
@@ -35,6 +38,21 @@ class LeadSourceDataTable extends DataTable
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['actions', 'check']));
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $editColumns->addColumn($customfields->slug, function ($data) use ($customfields) {
+                    $val = $customfields->CustomFieldValue->where('modelable_id', $data->id)->first();
+                    if ($val) {
+                        return Str::title($val->value);
+                    } else {
+                        return '-';
+                    }
+                });
+            }
+        }
+
+        return $editColumns;
     }
 
     /**
@@ -127,13 +145,21 @@ class LeadSourceDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        return [
+        $columns = [
             Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Lead Source'),
-            Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
-            Column::make('updated_at')->title('Updated At')->addClass('text-nowrap'),
-            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
         ];
+
+        if (count($this->customFields) > 0) {
+            foreach ($this->customFields as $customfields) {
+                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+            }
+        }
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+
+        return $columns;
     }
 
     /**

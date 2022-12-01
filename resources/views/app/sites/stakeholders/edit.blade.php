@@ -516,5 +516,13 @@
 
         country_id.val('{{ $stakeholder->country_id }}');
         country_id.trigger('change');
+
+        $('#cpyAddress').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('#mailing_address').val($('#address').val());
+                } else {
+                    $('#mailing_address').val('')
+                }
+            })
     </script>
 @endsection

@@ -14,13 +14,12 @@ class CountryTableSeeder extends Seeder
      */
     public function run()
     {
-        (new Country())->create([
-            'name' => 'Pakistan',
-            'short_label' => 'PK'
-        ]);
-        (new Country())->create([
-            'name' => 'Afghanistan',
-            'short_label' => 'AFG'
-        ]);
+        $this->call(CountriesTableSeeder::class);
+        $this->call(StatesTableSeeder::class);
+        $this->call(CitiesTableChunkOneSeeder::class);
+        $this->call(CitiesTableChunkTwoSeeder::class);
+        $this->call(CitiesTableChunkThreeSeeder::class);
+        $this->call(CitiesTableChunkFourSeeder::class);
+        $this->call(CitiesTableChunkFiveSeeder::class);
     }
 }

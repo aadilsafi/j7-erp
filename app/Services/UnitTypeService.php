@@ -64,11 +64,11 @@ class UnitTypeService implements UnitTypeInterface
         }
 
         foreach ($customFields as $key => $value) {
-            $customFieldData = [
+            $type->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
-                'value' => $inputs[$value->name],
-            ];
-            $type->CustomFieldValues()->create($customFieldData);
+            ], [
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
+            ]);
         }
 
         return $type;
@@ -90,7 +90,7 @@ class UnitTypeService implements UnitTypeInterface
             $type->CustomFieldValues()->updateOrCreate([
                 'custom_field_id' => $value->id,
             ], [
-                'value' => $inputs[$value->slug],
+                'value' => isset($inputs[$value->slug]) ? $inputs[$value->slug] : null,
             ]);
         }
 

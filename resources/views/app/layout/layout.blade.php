@@ -69,7 +69,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/extras/cup.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/app.min.css">
     {{-- font-awsom --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
 
     <!-- END: Custom CSS-->
     <meta name="user_id" content="{{ auth()->user()->id }}" />
@@ -200,7 +200,15 @@
                 showBlockUI(null, offlineErrorMessage);
             }
         }
-
+        $('.amountFormat').on('focusout', function() {
+            var val = $(this).val().replace(/,/g, "")
+            if ($.isNumeric(val)) {
+                var formated = parseFloat(val).toLocaleString('en');
+                $(this).val(formated)
+            }else{
+                $(this).val('')
+            }
+        })
 
         // showBlockUI();
         $("#unreadNotification").on('click', function() {

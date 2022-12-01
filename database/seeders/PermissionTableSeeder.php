@@ -715,64 +715,64 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             // sales Plan Additional Costs Import
-            [
-                'name' => 'sites.floors.spadcostsImport.importspadcosts',
-                'show_name' => 'Can Import Sales Plan Additional Costs file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spadcostsImport.importspadcostsPreview',
-                'show_name' => 'Can View Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spadcostsImport.storePreview',
-                'show_name' => 'Can View store Preview',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spadcostsImport.saveImport',
-                'show_name' => 'Can Save Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.floors.spadcostsImport.importspadcosts',
+            //     'show_name' => 'Can Import Sales Plan Additional Costs file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spadcostsImport.importspadcostsPreview',
+            //     'show_name' => 'Can View Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spadcostsImport.storePreview',
+            //     'show_name' => 'Can View store Preview',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spadcostsImport.saveImport',
+            //     'show_name' => 'Can Save Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
 
             // sales Plan Installments Import
-            [
-                'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
-                'show_name' => 'Can Import Sales Plan Installments file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spInstallmentsImport.ImportPreviewinstallments',
-                'show_name' => 'Can View Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spInstallmentsImport.storePreviewInstallments',
-                'show_name' => 'Can View store Preview',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.spInstallmentsImport.saveImportInstallments',
-                'show_name' => 'Can Save Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.floors.spInstallmentsImport.ImportInstallments',
+            //     'show_name' => 'Can Import Sales Plan Installments file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spInstallmentsImport.ImportPreviewinstallments',
+            //     'show_name' => 'Can View Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spInstallmentsImport.storePreviewInstallments',
+            //     'show_name' => 'Can View store Preview',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.spInstallmentsImport.saveImportInstallments',
+            //     'show_name' => 'Can Save Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             //Sales Plan Print
             [
                 'name' => 'sites.floors.units.sales-plans.templates.print',
@@ -1239,6 +1239,14 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.file-managements.rebate-incentive.approve',
+                'show_name' => 'Can Approve Rebate Incentive Request',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
             // file management dealer incentive
             [
                 'name' => 'sites.file-managements.dealer-incentive.index',
@@ -2248,6 +2256,72 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Payment Voucher
+            [
+                'name' => 'sites.payment-voucher.index',
+                'show_name' => 'Can View Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.create',
+                'show_name' => 'Can Create Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.store',
+                'show_name' => 'Can Store Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            //  Company permissions
+            [
+                'name' => 'sites.settings.companies.index',
+                'show_name' => 'Can View Companies Table',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.companies.create',
+                'show_name' => 'Can Create Company',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.companies.store',
+                'show_name' => 'Can Store Company',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.companies.edit',
+                'show_name' => 'Can Edit Company',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.companies.update',
+                'show_name' => 'Can Update',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.companies.delete',
+                'show_name' => 'Can Delete Company',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
         ];
         // ]);
         foreach ($data as $permission) {

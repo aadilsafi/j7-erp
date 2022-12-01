@@ -99,12 +99,26 @@ class PaymentVocuherController extends Controller
     }
 
 
-    public function stakeholder_types($id){
-        $types = StakeholderType::where('stakeholder_id', $id)->where('status',true)->get();
+    public function stakeholder_types($id)
+    {
+        $types = StakeholderType::where('stakeholder_id', $id)->where('status', true)->get();
+        $options = '<option>Select Type</option>';
+
+        foreach ($types as $key => $type) {
+
+            if ($type->type == 'C') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Customer</option>';
+            } else
+            if ($type->type == 'V') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Vendor</option>';
+            } else
+            if ($type->type == 'D') {
+                $options .= '<option value="' . $type->stakeholder_code . '">Dealer</option>';
+            }
+        }
         return response()->json([
             'success' => true,
-            'types' => $types->toArray()
+            'types' => $options
         ], 200);
-
     }
 }

@@ -135,11 +135,9 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#stakholder_type').html('<option value=0>Select State</option>');
-                            $.each(response.types, function(key, value) {
-                                $("#stakholder_type").append('<option value="' + value
-                                    .stakeholder_code + '">' + value.type + '</option>');
-                            });
+                            $('#stakholder_type').empty();
+                            $("#stakholder_type").html(response.types);
+
                             hideBlockUI('#paymentVoucher');
                         } else {
                             hideBlockUI('#paymentVoucher');

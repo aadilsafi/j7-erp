@@ -22,6 +22,26 @@
         .hideDiv {
             display: none;
         }
+
+        .form-label {
+            margin-top: 10px;
+        }
+
+        #main-div {
+            display: none;
+        }
+
+        /* .c-div {
+            display: none;
+        }
+
+        .d-div {
+            display: none;
+        }
+
+        .v-div {
+            display: none;
+        } */
     </style>
 @endsection
 
@@ -39,8 +59,7 @@
 @endsection
 
 @section('content')
-    <form id="paymentVoucher"
-        action="{{ route('sites.payment-voucher.store', ['site_id' => encryptParams($site_id)]) }}"
+    <form id="paymentVoucher" action="{{ route('sites.payment-voucher.store', ['site_id' => encryptParams($site_id)]) }}"
         method="post" class=" ">
         @csrf
 
@@ -49,7 +68,6 @@
                 {{ view('app.sites.payment-voucher.form-fields', [
                     'site_id' => $site_id,
                     'stakholders' => $stakholders,
-
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -93,85 +111,88 @@
 
 @section('custom-js')
     <script type="text/javascript">
-        function getData(dealer_id) {
-            if (dealer_id != 0) {
-                var _token = '{{ csrf_token() }}';
-                let url =
-                    "{{ route('sites.file-managements.dealer-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
+        var e = $("#stakeholderAP");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-stakeholder_types', ['stakeholderId' => ':stakeholderId']) }}"
+                .replace(':stakeholderId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#paymentVoucher');
                 $.ajax({
                     url: url,
                     type: 'post',
                     dataType: 'json',
                     data: {
-                        'dealer_id': dealer_id,
                         '_token': _token
                     },
                     success: function(response) {
-                        showBlockUI('#loader');
                         if (response.success) {
-                            $('.hideDiv').css("display", "block");
-                            // $.each(response.units, function(i, item) {
-                            //     // $('.unit_id').append($('<option>', {
-                            //     //     value: item.id + '_' + item.gross_area,
-                            //     //     text: item.name,
-                            //     // }));
-
-                            //     $('#dynamic_unit_rows').append('<tr>',
-                            //         '<td class="checkedInput"><input type="checkbox" ></td>',
-                            //         '<td>'+item.name+'</td>',
-                            //         '<td>'+item.floor_unit_number+'</td>',
-                            //         '<td>'+item.gross_area.toLocaleString()+'</td>',
-                            //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
-                            //     );
-
-                            // });
-                            $('#dynamic_unit_rows').empty();
-                            for (var i = 0; i <= response.units.length; i++) {
-                                if (response.units[i] != null) {
-                                    $('#dynamic_unit_rows').append(
-                                        '<tr class="text-nowrap text-center">',
-                                            '<td class="text-nowrap text-center">' + (i + 1) + '</td>',
-                                        '<td class="text-nowrap text-center"><div class="d-flex flex-column"><div class="form-check form-switch form-check-primary"><input type="checkbox" class="form-check-input form-switch" onchange="CalculateTotalArea()" name="unit_ids[]" area="' +
-                                        response.units[i]['gross_area'] + '" value="' +
-                                         response.units[i]['id'] +
-                                          '" id="unit_'+ response.units[i]['id'] +'" /><label class="form-check-label" for="unit_'+
-                                           response.units[i]['id'] +'"><span class="switch-icon-left"><i data-feather="check"></i></span><span class="switch-icon-right"><i data-feather="x"></i></span></label></div></div></td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .units[i]['name'] + '</td>',
-                                        // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .units[i]['floor_unit_number'] + '</td>',
-                                        '<td class="text-nowrap text-center">' + response
-                                        .units[i]['gross_area'].toLocaleString('en') +
-                                        '</td>',
-                                        // '<td class="text-nowrap text-center">' + response
-                                        // .units[i]['price_sqft'].toLocaleString('en') +
-                                        // '</td>',
-                                        '</tr>', );
-                                }
-                            }
-
-                            $('#dynamic_paid_unit_rows').empty();
-                            $('#dynamic_paid_unit_rows').html(response.paidTable)
-                            hideBlockUI('#loader');
+                            $('#stakholder_type').html('<option value=0>Select State</option>');
+                            $.each(response.types, function(key, value) {
+                                $("#stakholder_type").append('<option value="' + value
+                                    .stakeholder_code + '">' + value.type + '</option>');
+                            });
+                            hideBlockUI('#paymentVoucher');
                         } else {
-                            hideBlockUI('#loader');
+                            hideBlockUI('#paymentVoucher');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
-                                text: 'Something Went Wrong!!',
+                                text: response.message,
                             });
                         }
                     },
                     error: function(error) {
-                        hideBlockUI('#loader');
                         console.log(error);
+                        hideBlockUI('#paymentVoucher');
                     }
                 });
             }
+        });
 
-        }
+        var t = $("#stakholder_type");
+        t.wrap('<div class="position-relative"></div>');
+        t.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: t.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            $('#main-div').hide();
 
+            showBlockUI('#paymentVoucher');
+            if ($(this).val()[0] == 'C') {
+                $('#main-div').show();
+                // $('#d-div').hide();
+                // $('#v-div').hide();
+                // $('#c-div').show();
+
+            }
+            if ($(this).val()[0] == 'D') {
+                $('#main-div').show();
+                // $('#c-div').hide();
+                // $('#v-div').hide();
+                // $('#d-div').show();
+
+            }
+            if ($(this).val()[0] == 'V') {
+                $('#main-div').show();
+                // $('#d-div').hide();
+                // $('#c-div').hide();
+                // $('#v-div').show();
+
+            }
+            hideBlockUI('#paymentVoucher');
+
+        });
         var validator = $("#paymentVoucher").validate({
             rules: {
                 // 'dealer_id': {

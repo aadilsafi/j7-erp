@@ -210,14 +210,6 @@
                                                                             @endif
                                                                         @endforeach
 
-
-
-
-
-
-
-
-
                                                                         <td class="custom_td">
                                                                             {{ number_format($value_frist_value) }}
                                                                         </td>
@@ -350,14 +342,6 @@
                                                                                                             {{ account_number_format($account_of_head_3->code) }}
                                                                                                         </td>
 
-
-
-
-
-
-
-
-
                                                                                                         @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
                                                                                                             @if (Str::length($account_of_head_4->code) == 10 and
                                                                                                                 $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
@@ -383,6 +367,7 @@
                                                                                                                 @endforeach
                                                                                                             @endif
                                                                                                         @endforeach
+
                                                                                                         <td
                                                                                                             class="custom_td">
                                                                                                             {{ number_format($value_33) }}
@@ -529,6 +514,7 @@
                                                                                                     </li>
                                                                                                 @endif
                                                                                             @endforeach
+
                                                                                         </ul>
                                                                                     </li>
                                                                                 @endif

@@ -324,7 +324,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $receipt = (new Receipt())->find($receipt_id);
 
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -347,10 +347,10 @@ class FinancialTransactionService implements FinancialTransactionInterface
             }
 
             $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
-            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+            $test = $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 2, $receipt->sales_plan_id, 'debit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
 
                 // Discount Transaction
@@ -360,6 +360,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             // Customer AR Transaction
             $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
             $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+          
 
             if (is_null($customerAccount)) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
@@ -383,7 +384,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -405,7 +406,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 9, $receipt->sales_plan_id, 'debit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
                 // Discount Transaction
                 $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 9, $receipt->sales_plan_id, 'debit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
@@ -438,7 +439,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -456,7 +457,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 9, $receipt->sales_plan_id, 'debit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
                 // Discount Transaction
                 $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 9, $receipt->sales_plan_id, 'debit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
@@ -482,7 +483,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -502,7 +503,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 12, $receipt->sales_plan_id, 'debit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
                 // Discount Transaction
                 $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 12, $receipt->sales_plan_id, 'debit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
@@ -534,7 +535,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $receipt = (new Receipt())->find($receipt_id);
 
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -560,7 +561,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 27, $receipt->sales_plan_id, 'credit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
 
                 // Discount Transaction
@@ -594,7 +595,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $receipt = (new Receipt())->find($receipt_id);
 
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -620,7 +621,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashAccount, 27, $receipt->sales_plan_id, 'credit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
 
                 // Discount Transaction
@@ -653,7 +654,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             DB::beginTransaction();
 
             $receipt = (new Receipt())->find($receipt_id);
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $amount_in_numbers = (float)$receipt->amount_in_numbers - (float)$receipt->discounted_amount;
                 $amount_in_numbers = (string)$amount_in_numbers;
             } else {
@@ -673,7 +674,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $bankAccount, 27, $receipt->sales_plan_id, 'credit', $amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
 
             // if disocunt amount availaibe
-            if (isset($receipt->discounted_amount)) {
+            if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
                 $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
                 // Discount Transaction
                 $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 27, $receipt->sales_plan_id, 'credit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);

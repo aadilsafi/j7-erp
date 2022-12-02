@@ -160,7 +160,7 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('sites.settings.companies.index')
+                        {{-- @can('sites.settings.companies.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.settings.companies.index') ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
@@ -169,7 +169,7 @@
                                     <span class="menu-title text-truncate" data-i18n="Companies">Companies</span>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan --}}
                         <li class="nav-item ">
                             <a class="d-flex align-items-center" href="javascript:void(0)">
                                 <i data-feather='list'></i>

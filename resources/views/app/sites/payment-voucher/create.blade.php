@@ -30,18 +30,6 @@
         #main-div {
             display: none;
         }
-
-        /* .c-div {
-            display: none;
-        }
-
-        .d-div {
-            display: none;
-        }
-
-        .v-div {
-            display: none;
-        } */
     </style>
 @endsection
 
@@ -74,6 +62,18 @@
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
+
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                Amount To Be Paid <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
+                                name="amount_to_be_paid" id="amount_to_be_paid" placeholder="Amount Received"/>
+                            @error('amount_in_numbers')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <a id="saveButton" href="#"
                             class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
@@ -138,6 +138,12 @@
                             $('#stakholder_type').empty();
                             $("#stakholder_type").html(response.types);
 
+                            // Stakhoder data
+                            $('#name').val(response.stakeholder.full_name);
+                            $('#identity_number').val(response.stakeholder.cnic);
+                            $('#buiness_address').val(response.stakeholder.mailing_address);
+                            $('#ntn').val(response.stakeholder.ntn);
+
                             hideBlockUI('#paymentVoucher');
                         } else {
                             hideBlockUI('#paymentVoucher');
@@ -169,6 +175,10 @@
             showBlockUI('#paymentVoucher');
             if ($(this).val()[0] == 'C') {
                 $('#main-div').show();
+                $('#representativeBussinessInputFields').hide();
+                $('#expanseAccountInputField').hide();
+                $('.advanceDiscountInputField').hide();
+                $('#paymentTermsInputs').hide();
                 // $('#d-div').hide();
                 // $('#v-div').hide();
                 // $('#c-div').show();
@@ -176,6 +186,10 @@
             }
             if ($(this).val()[0] == 'D') {
                 $('#main-div').show();
+                $('#representativeBussinessInputFields').show();
+                $('#expanseAccountInputField').show();
+                $('.advanceDiscountInputField').hide();
+                $('#paymentTermsInputs').hide();
                 // $('#c-div').hide();
                 // $('#v-div').hide();
                 // $('#d-div').show();
@@ -183,6 +197,10 @@
             }
             if ($(this).val()[0] == 'V') {
                 $('#main-div').show();
+                $('#representativeBussinessInputFields').show();
+                $('#expanseAccountInputField').show();
+                $('.advanceDiscountInputField').show()
+                $('#paymentTermsInputs').show();
                 // $('#d-div').hide();
                 // $('#c-div').hide();
                 // $('#v-div').show();
@@ -191,6 +209,66 @@
             hideBlockUI('#paymentVoucher');
 
         });
+
+        function getAccountsPayableData(stakeholder_type) {
+            // alert($('#stakeholderAP').val());
+            let stakeholder_id = $('#stakeholderAP').val();
+            var _token = '{{ csrf_token() }}';
+            let url = "{{ route('sites.payment-voucher.ajax-get-accounts-payable-data', ['site_id' => $site_id]) }}";
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    '_token': _token,
+                    'stakeholder_id': stakeholder_id,
+                    'stakeholder_type': stakeholder_type,
+                },
+                success: function(response) {
+                    if (response.success) {
+
+
+                        $('#total_payable_amount').val(response.payable_amount);
+                        $('#account_payable').val(response.account_payable);
+
+
+                        hideBlockUI('#paymentVoucher');
+                    } else {
+                        hideBlockUI('#paymentVoucher');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#paymentVoucher');
+                }
+            });
+
+
+
+
+        }
+
+
+        $('#amount_to_be_paid').on('focusout', function() {
+            let formated_amount = $(this).val().replace(/,/g, "");
+            let amount_to_be_paid = $(this).val();
+
+            if($.isNumeric(formated_amount)){
+
+            }
+            else{
+                $(this).val('');
+
+            }
+
+        });
+
+
         var validator = $("#paymentVoucher").validate({
             rules: {
                 // 'dealer_id': {

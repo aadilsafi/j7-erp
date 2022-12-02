@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\PaymentVoucherDatatable;
+use App\Models\AccountHead;
+use App\Models\AccountLedger;
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
 use Illuminate\Http\Request;
@@ -102,23 +104,58 @@ class PaymentVocuherController extends Controller
     public function stakeholder_types($id)
     {
         $types = StakeholderType::where('stakeholder_id', $id)->where('status', true)->get();
+        $stakeholder = Stakeholder::find($id);
         $options = '<option>Select Type</option>';
-
+        $accounts = [];
         foreach ($types as $key => $type) {
 
             if ($type->type == 'C') {
-                $options .= '<option value="' . $type->stakeholder_code . '">Customer</option>';
+                $options .= '<option value="C">Customer</option>';
+                $accounts[] = [
+                    'customer_payable_account' => $type->payable_account,
+                ];
             } else
             if ($type->type == 'V') {
-                $options .= '<option value="' . $type->stakeholder_code . '">Vendor</option>';
+                $options .= '<option value="V">Vendor</option>';
+                $accounts[] = [
+                    'vendor_payable_account' => $type->payable_account,
+                ];
             } else
             if ($type->type == 'D') {
-                $options .= '<option value="' . $type->stakeholder_code . '">Dealer</option>';
+                $options .= '<option value="D">Dealer</option>';
+                $accounts[] = [
+                    'dealer_payable_account' => $type->payable_account,
+                ];
             }
         }
         return response()->json([
             'success' => true,
-            'types' => $options
+            'types' => $options,
+            'stakeholder' => $stakeholder,
+        ], 200);
+    }
+
+    public function getAccountsPayableData(Request $request, $site_id)
+    {
+
+        $stakeholder = Stakeholder::find($request->stakeholder_id);
+        $stakeholder_type = StakeholderType::where('stakeholder_id', $request->stakeholder_id)->where('type', $request->stakeholder_type)->first();
+
+        $ledger = AccountLedger::where('account_head_code', $stakeholder_type->payable_account)->get();
+        $debit = collect($ledger)->sum('debit');
+        $credit = collect($ledger)->sum('credit');
+
+        $payable_amount = $credit - $debit;
+
+        return response()->json([
+            'success' => true,
+            'site_id' => $site_id,
+            'stakeholder' => $stakeholder,
+            'stakeholder_type' => $stakeholder_type,
+            'account_payable' => account_number_format($stakeholder_type->payable_account),
+            'debit' => $debit,
+            'credit' => $credit,
+            'payable_amount' => number_format($payable_amount),
         ], 200);
     }
 }

@@ -672,6 +672,11 @@ Route::group([
 
                     Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
                     Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-accounts-payable-data', [PaymentVocuherController::class, 'getAccountsPayableData'])->name('get-accounts-payable-data');
+                    });
+
                 });
 
                 // File Management

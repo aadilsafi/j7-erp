@@ -29,6 +29,10 @@ return new class extends Migration
             $table->foreignId('file_title_transfer_id')->nullable();
             $table->foreignId('rebate_incentive_id')->nullable();
             $table->foreignId('dealer_incentive_id')->nullable();
+            $table->string('stakeholder_type')->nullable();
+            $table->string('customer_ap_account')->nullable();
+            $table->string('dealer_ap_account')->nullable();
+            $table->string('vendor_ap_account')->nullable();
             $table->string('customer_dealer_vendor_details')->nullable();
             $table->string('name')->nullable();
             $table->string('representative')->nullable();

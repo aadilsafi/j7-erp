@@ -360,7 +360,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             // Customer AR Transaction
             $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
             $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
-          
+
 
             if (is_null($customerAccount)) {
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
@@ -712,7 +712,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $onlyProfitAmount = $file_buy_back->amount_profit;
 
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->where('status', 1)->get();
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->where('status', 1)->where('discounted_amount', '>',0)->get();
             $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
             $discountedValue = (float)$discounted_amount;
 
@@ -833,7 +833,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
 
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->where('status', 1)->get();
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->where('status', 1)->where('discounted_amount', '>',0)->get();
             $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
             $discountedValue = (float)$discounted_amount;
 

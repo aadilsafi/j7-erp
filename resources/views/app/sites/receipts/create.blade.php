@@ -199,7 +199,7 @@
                         </div>
                         <hr> --}}
                         <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
+                            class="btn disabled text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
                             Save Receipts
                         </a>
@@ -381,7 +381,7 @@
             var amount = $(this).val().replace(/,/g, "")
             var formatAmount = amount;
             if ($.isNumeric(amount)) {
-              
+
                 var unit_id = $(this).attr('unit_id');
                 var discounted_amount = $('#discounted_amount').val();
                 if (discounted_amount > 0) {
@@ -423,7 +423,7 @@
                         },
                         success: function(response) {
                             if (response.success) {
-
+                                $('#saveButton').removeClass('disabled');
                                 $('#paidInstllmentTableDiv').show().parent().addClass('mb-2');
                                 $('#instllmentTableDiv').show().parent().addClass('mb-2');
                                 $('#modeOfPaymentDiv').show().parent().addClass('mb-2');
@@ -514,6 +514,7 @@
                                 hideBlockUI('#loader');
 
                             } else {
+                                $('#saveButton').addClass('disabled');
                                 hideBlockUI('#loader');
                                 Swal.fire({
                                     icon: 'error',

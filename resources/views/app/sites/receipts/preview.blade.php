@@ -198,7 +198,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ number_format($receipt->discounted_amount) }}"
+                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0}}"
                                         readonly />
                                 </div>
 

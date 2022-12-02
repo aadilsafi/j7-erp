@@ -12,6 +12,7 @@ use App\Http\Requests\stakeholders\{
     updateRequest as stakeholderUpdateRequest,
 };
 use App\Imports\StakeholdersImport;
+use App\Jobs\ImportStakeholders;
 use App\Models\BacklistedStakeholder;
 use App\Models\City;
 use App\Models\Country;
@@ -732,7 +733,7 @@ class StakeholderController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        try {
+        // try {
 
             $validator = \Validator::make($request->all(), [
                 'fields.*' => 'required',
@@ -743,114 +744,12 @@ class StakeholderController extends Controller
             ]);
 
             $validator->validate();
-            $model = new TempStakeholder();
-            $tempdata = $model->cursor();
-            $tempCols = $model->getFillable();
+           
+            ImportStakeholders::dispatch($site_id);
 
-            $stakeholder = [];
-            $parentsCnics = [];
-            $parentsRelations = [];
-
-            foreach ($tempdata->chunk(30) as $Importkey => $importData) {
-
-                DB::transaction(function () use ($request, $site_id, $importData, $Importkey, $tempCols) {
-                    foreach ($importData as $key => $items) {
-
-                        foreach ($tempCols as $k => $field) {
-                            $data[$key][$field] = $items[$tempCols[$k]];
-                        }
-                        $data[$key]['site_id'] = decryptParams($site_id);
-                        $data[$key]['is_imported'] = true;
-
-                        if ($data[$key]['country'] != "null") {
-                            $country = Country::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['country']))->first();
-                            if ($country) {
-                                $data[$key]['country_id'] = $country->id;
-                            } else {
-                                $data[$key]['country_id'] = 1;
-                            }
-                        }
-
-                        if ($data[$key]['city'] != "null") {
-                            $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['city']))->first();
-                            if ($city) {
-                                $data[$key]['city_id'] = $city->id;
-                            }
-                        }
-                        if ($data[$key]['state'] != "null") {
-                            $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['state']))->first();
-                            if ($state) {
-                                $data[$key]['state_id'] = $state->id;
-                            }
-                        }
-
-                        $data[$key]['created_at'] = $items->created_at;
-                        $data[$key]['updated_at'] = $items->updated_at;
-
-                        unset($data[$key]['parent_cnic']);
-                        unset($data[$key]['is_dealer']);
-                        unset($data[$key]['is_vendor']);
-                        // unset($data[$key]['is_kin']);
-                        unset($data[$key]['is_customer']);
-                        unset($data[$key]['country']);
-                        unset($data[$key]['state']);
-                        unset($data[$key]['city']);
-
-                        $stakeholder = Stakeholder::create($data[$key]);
-
-                        $stakeholdertype = [
-                            [
-                                'stakeholder_id' => $stakeholder->id,
-                                'type' => 'C',
-                                'stakeholder_code' => 'C-00' . $stakeholder->id,
-                                'status' => $items['is_customer'] ? 1 : 0,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                            [
-                                'stakeholder_id' => $stakeholder->id,
-                                'type' => 'V',
-                                'stakeholder_code' => 'V-00' . $stakeholder->id,
-                                'status' => $items['is_vendor'] ? 1 : 0,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                            [
-                                'stakeholder_id' => $stakeholder->id,
-                                'type' => 'D',
-                                'stakeholder_code' => 'D-00' . $stakeholder->id,
-                                'status' => $items['is_dealer'] ? 1 : 0,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                            [
-                                'stakeholder_id' => $stakeholder->id,
-                                'type' => 'K',
-                                'stakeholder_code' => 'K-00' . $stakeholder->id,
-                                'status' => $items['is_kin'] ? 1 : 0,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ],
-                            [
-                                'stakeholder_id' => $stakeholder->id,
-                                'type' => 'L',
-                                'stakeholder_code' => 'L-00' . $stakeholder->id,
-                                'status' => 1,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]
-                        ];
-
-                        $stakeholder_type = StakeholderType::insert($stakeholdertype);
-                    }
-                });
-            }
-
-            TempStakeholder::query()->truncate();
-
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
-        } catch (\Throwable $th) {
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
-        }
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
+        // } catch (\Throwable $th) {
+        //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
+        // }
     }
 }

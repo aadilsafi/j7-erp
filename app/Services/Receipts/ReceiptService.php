@@ -48,6 +48,8 @@ class ReceiptService implements ReceiptInterface
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '' , $requested_data['discounted_amount']);
+                $discounted_amount = (float)$discounted_amount;
+                
                 if (isset($discounted_amount)) {
                     $amount_in_numbers = (float)$discounted_amount + (float)$amount_in_numbers;
                     $amount_in_numbers = (string)$amount_in_numbers;
@@ -119,7 +121,7 @@ class ReceiptService implements ReceiptInterface
                     'created_date' => $requested_data['created_date'] . date(' H:i:s'),
                 ];
 
-                if (isset($discounted_amount)) {
+                if (isset($discounted_amount) && $discounted_amount > 0) {
                     $receiptData['discounted_amount'] = $discounted_amount;
                 }
 

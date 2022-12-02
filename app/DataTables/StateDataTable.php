@@ -68,7 +68,7 @@ class StateDataTable extends DataTable
      */
     public function query(State $states): QueryBuilder
     {
-        return $states->newQuery()->orderBy('name');
+        return $states->newQuery()->with('country');
     }
 
     public function html(): HtmlBuilder
@@ -147,7 +147,7 @@ class StateDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [2, 'asc'],
+                [1, 'asc'],
             ]);
     }
 
@@ -168,7 +168,7 @@ class StateDataTable extends DataTable
             // ),
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Name'),
-            Column::make('country_id')->title('Country'),
+            Column::make('country_id')->name('country.name')->title('Country'),
             Column::computed('country_flag')->title('Country Flag'),
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),

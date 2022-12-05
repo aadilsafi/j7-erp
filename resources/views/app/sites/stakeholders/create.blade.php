@@ -168,7 +168,35 @@
     </script>
 
     <script type="text/javascript">
+        $('#companyForm').hide();
+        $('#individualForm').hide();
+        $('#common_form').hide();
+
         $(document).ready(function() {
+
+            var t = $("#stakeholder_as");
+            t.wrap('<div class="position-relative"></div>');
+            t.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: t.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).change(function() {
+                if ($(this).val() == 0) {
+                    $('#companyForm').hide();
+                    $('#individualForm').hide();
+                    $('#common_form').hide();
+                } else if ($(this).val() == 'c') {
+                    $('#companyForm').show();
+                    $('#individualForm').hide();
+                    $('#common_form').show();
+                } else if ($(this).val() == 'i') {
+                    $('#companyForm').hide();
+                    $('#individualForm').show();
+                    $('#common_form').show();
+                }
+            });
+
             var input = document.querySelector("#contact");
             intl = window.intlTelInput(input, ({
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -180,9 +208,9 @@
             }));
 
             input.addEventListener("countrychange", function() {
-                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+                $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             });
-            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+            $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
 
             var inputOptional = document.querySelector("#optional_contact");
             intlOptional = window.intlTelInput(inputOptional, ({
@@ -195,7 +223,7 @@
             }));
 
             inputOptional.addEventListener("countrychange", function() {
-                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+                $('.OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
             });
             $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
@@ -305,6 +333,14 @@
                 }
             });
 
+            var e = $("#city_id");
+            e.wrap('<div class="position-relative"></div>');
+            e.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: e.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            });
 
             var e = $("#parent_id");
             e.wrap('<div class="position-relative"></div>');
@@ -401,33 +437,39 @@
                 // alert(intl.isValidNumber());
                 // return intl.getValidationError() == 0;
                 // if(value != '' )
-                if(value.length > 0){
+                if (value.length > 0) {
                     return intlOptional.isValidNumber();
-                }else{
+                } else {
                     return true;
                 }
             }, "In Valid number");
             var validator = $("#stakeholderForm").validate({
                 rules: {
-                'mailing_address': {
-                    required: true,
+                    'mailing_address': {
+                        required: true,
+                    },
+                    'address': {
+                        required: true,
+                    },
+                    'optional_contact': {
+                        required: false,
+                    },
+                    'full_name': {
+                        required: true,
+                    },
+                    'father_name': {
+                        required: true,
+                    },
+                    'cnic': {
+                        required: true,
+                    },
+                    'registration': {
+                        required: true,
+                    },
+                    'company_name': {
+                        required: true,
+                    }
                 },
-                'address': {
-                    required: true,
-                },
-                'optional_contact': {
-                    required: false,
-                },
-                'full_name': {
-                    required: true,
-                },
-                'father_name': {
-                    required: true,
-                },
-                'cnic': {
-                    required: true,
-                }
-            },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",
@@ -453,6 +495,7 @@
                     $('#mailing_address').val('')
                 }
             })
+
         });
     </script>
 @endsection

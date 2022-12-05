@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                                                                                            } */
+                                                                                                                                                                                                            width: calc(20% - 0.5em);
+                                                                                                                                                                                                        } */
     </style>
 @endsection
 
@@ -148,6 +148,9 @@
 @section('custom-js')
 
     <script type="text/javascript">
+        $('#companyForm').hide();
+        $('#individualForm').hide();
+        $('#common_form').hide()
         var input = document.querySelector("#contact");
         intl = window.intlTelInput(input, ({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -315,6 +318,12 @@
                         required: true,
                     },
                     'cnic': {
+                        required: true,
+                    },
+                    'registration': {
+                        required: true,
+                    },
+                    'company_name': {
                         required: true,
                     }
                 },
@@ -505,6 +514,32 @@
             }
         });
 
+        var t = $("#stakeholder_as");
+        t.wrap('<div class="position-relative"></div>');
+        t.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: t.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            if ($(this).val() == 0) {
+                $('#companyForm').hide();
+                $('#individualForm').hide();
+                $('#common_form').hide();
+            } else if ($(this).val() == 'c') {
+                $('#companyForm').show();
+                $('#individualForm').hide();
+                $('#common_form').show();
+            } else if ($(this).val() == 'i') {
+                $('#companyForm').hide();
+                $('#individualForm').show();
+                $('#common_form').show();
+            }
+        });
+
+        t.val('{{ $stakeholder->stakeholder_as }}');
+        t.trigger('change');
+
         function performAction(action) {
             if (action == 'C') {
                 // $('#div-next-of-kin').toggle('fast', 'linear');
@@ -518,11 +553,11 @@
         country_id.trigger('change');
 
         $('#cpyAddress').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#mailing_address').val($('#address').val());
-                } else {
-                    $('#mailing_address').val('')
-                }
-            })
+            if ($(this).is(':checked')) {
+                $('#mailing_address').val($('#address').val());
+            } else {
+                $('#mailing_address').val('')
+            }
+        })
     </script>
 @endsection

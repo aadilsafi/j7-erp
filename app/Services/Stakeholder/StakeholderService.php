@@ -56,27 +56,36 @@ class StakeholderService implements StakeholderInterface
     public function store($site_id, $inputs, $customFields)
     {
         DB::transaction(function () use ($site_id, $inputs, $customFields) {
-            $data = [
-                'site_id' => decryptParams($site_id),
-                'full_name' => $inputs['full_name'],
-                'father_name' => $inputs['father_name'],
-                'occupation' => $inputs['occupation'],
-                'designation' => $inputs['designation'],
-                'cnic' => $inputs['cnic'],
-                'ntn' => $inputs['ntn'],
-                'contact' => $inputs['contact'],
-                'countryDetails' => $inputs['countryDetails'],
-                'optional_contact' => $inputs['optional_contact'],
-                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
-                'address' => $inputs['address'],
-                'mailing_address' => $inputs['mailing_address'],
-                'parent_id' => $inputs['parent_id'],
-                'comments' => $inputs['comments'],
-                'country_id' => isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167,
-                'state_id' => isset($inputs['state_id']) ? $inputs['state_id'] : 0,
-                'city_id' => isset($inputs['city_id']) ? $inputs['city_id'] : 0,
-                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
-            ];
+            if ($inputs['stakeholder_as'] == 'i') {
+                $data = [
+                    'full_name' => $inputs['full_name'],
+                    'father_name' => $inputs['father_name'],
+                    'occupation' => $inputs['occupation'],
+                    'designation' => $inputs['designation'],
+                    'cnic' => $inputs['cnic'],
+                ];
+            } else if ($inputs['stakeholder_as'] == 'c') {
+                $data = [
+                    'full_name' => $inputs['company_name'],
+                    'occupation' => $inputs['occupation'],
+                    'designation' => $inputs['designation'],
+                    'cnic' => $inputs['cnic'],
+                ];
+            }
+            $data['stakeholder_as'] = $inputs['stakeholder_as'];
+            $data['site_id'] = decryptParams($site_id);
+            $data['ntn'] = $inputs['ntn'];
+            $data['contact'] = $inputs['contact'];
+            $data['countryDetails'] = $inputs['countryDetails'];
+            $data['optional_contact'] = $inputs['optional_contact'];
+            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
+            $data['address'] = $inputs['address'];
+            $data['mailing_address'] = $inputs['mailing_address'];
+            $data['comments'] = $inputs['comments'];
+            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
+            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
+            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
 
             $stakeholder = $this->model()->create($data);
@@ -254,26 +263,38 @@ class StakeholderService implements StakeholderInterface
             $stakeholder = $this->model()->find($id);
             $nextOfKinId = $stakeholder->parent_id;
             $cnic = $stakeholder->cnic;
-            $data = [
-                'full_name' => $inputs['full_name'],
-                'father_name' => $inputs['father_name'],
-                'occupation' => $inputs['occupation'],
-                'designation' => $inputs['designation'],
-                'cnic' => $inputs['cnic'],
-                'ntn' => $inputs['ntn'],
-                'contact' => $inputs['contact'],
-                'address' => $inputs['address'],
-                'parent_id' => $inputs['parent_id'],
-                'comments' => $inputs['comments'],
-                'city_id' => $inputs['city_id'],
-                'country_id' => $inputs['country_id'],
-                'state_id' => $inputs['state_id'],
-                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
-                'countryDetails' => $inputs['countryDetails'],
-                'optional_contact' => $inputs['optional_contact'],
-                'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
-                'mailing_address' => $inputs['mailing_address'],
-            ];
+
+
+            if ($inputs['stakeholder_as'] == 'i') {
+                $data = [
+                    'full_name' => $inputs['full_name'],
+                    'father_name' => $inputs['father_name'],
+                    'occupation' => $inputs['occupation'],
+                    'designation' => $inputs['designation'],
+                    'cnic' => $inputs['cnic'],
+                ];
+            } else if ($inputs['stakeholder_as'] == 'c') {
+                $data = [
+                    'full_name' => $inputs['company_name'],
+                    'occupation' => $inputs['occupation'],
+                    'designation' => $inputs['designation'],
+                    'cnic' => $inputs['cnic'],
+                ];
+            }
+            $data['stakeholder_as'] = $inputs['stakeholder_as'];
+            $data['site_id'] = $site_id;
+            $data['ntn'] = $inputs['ntn'];
+            $data['contact'] = $inputs['contact'];
+            $data['countryDetails'] = $inputs['countryDetails'];
+            $data['optional_contact'] = $inputs['optional_contact'];
+            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
+            $data['address'] = $inputs['address'];
+            $data['mailing_address'] = $inputs['mailing_address'];
+            $data['comments'] = $inputs['comments'];
+            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
+            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
+            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
 
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
                 $allNextOfKin = $this->model()->where(['parent_id' => $stakeholder->parent_id])->get();

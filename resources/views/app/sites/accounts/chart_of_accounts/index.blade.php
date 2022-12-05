@@ -282,11 +282,12 @@
                                                                                                         @endforeach
                                                                                                     @endif
                                                                                                 @endforeach
-                                                                                                <td class="custom_td">
-                                                                                                    {{ number_format($value_44) }}
-                                                                                                </td>
+
                                                                                             @endif
                                                                                         @endforeach
+                                                                                        <td class="custom_td">
+                                                                                            {{ number_format($value_44) }}
+                                                                                        </td>
                                                                                         @if (!$value_44 > 0)
                                                                                             <td class="custom_td">
                                                                                                 {{ number_format(0) }}

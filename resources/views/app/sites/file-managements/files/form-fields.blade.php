@@ -596,7 +596,7 @@
                                                 <th scope="col">Transaction Date</th>
                                                 <th scope="col">Total Amount</th>
                                                 <th scope="col">Mode of Payment</th>
-                                                <th scope="col">Status</th>
+                                                {{-- <th scope="col">Status</th> --}}
                                             </tr>
                                         </thead>
 
@@ -620,13 +620,13 @@
                                                     <td>{!! editDateColumn($receipt->created_date) !!}</td>
                                                     <td>{{ number_format($receipt->amount_in_numbers, 2) }}</td>
                                                     <td>{{ $receipt->mode_of_payment }}</td>
-                                                    <td>
+                                                    {{-- <td>
                                                         @if ($receipt->status == 1)
                                                             <span class="badge badge-glow bg-success">Active</span>
                                                         @else
-                                                            <span class="badge badge-glow bg-danger">Reverted</span>
+                                                            <span class="badge badge-glow bg-danger"></span>
                                                         @endif
-                                                    </td>
+                                                    </td> --}}
                                                 </tr>
                                             @empty
                                                 <tr class="text-center">

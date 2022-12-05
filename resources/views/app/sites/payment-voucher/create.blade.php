@@ -69,7 +69,7 @@
                             </label>
                             <input type="text"
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
-                                name="amount_to_be_paid" id="amount_to_be_paid" placeholder="Amount Received"/>
+                                name="amount_to_be_paid" id="amount_to_be_paid" placeholder="Amount Received" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -80,7 +80,7 @@
                             <i data-feather='save'></i>
                             Save
                         </a>
-                        <a href="{{ route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.payment-voucher.index', ['site_id' => $site_id]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -255,16 +255,39 @@
 
 
         $('#amount_to_be_paid').on('focusout', function() {
+            showBlockUI('#paymentVoucher');
             let formated_amount = $(this).val().replace(/,/g, "");
             let amount_to_be_paid = $(this).val();
+            if ($.isNumeric(formated_amount)) {
 
-            if($.isNumeric(formated_amount)){
+                let total_payable_amount = $('#total_payable_amount').val().replace(/,/g, "");
+                if (parseFloat(formated_amount) > parseFloat(total_payable_amount)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Amount to be paid can not be greater than total payable amount',
+                    });
+                    $(this).val('');
+                    hideBlockUI('#paymentVoucher');
+                } else {
+                    let advance_given = $('#advance_given').val().replace(/,/g, "");
+                    let discount_given = $('#discount_recevied').val().replace(/,/g, "");
 
-            }
-            else{
+                    let remaining_amount = parseFloat(total_payable_amount) - parseFloat(formated_amount);
+
+                    let net_payable = parseFloat(total_payable_amount);
+
+                    $('#remaining_payable').val(remaining_amount.toLocaleString());
+                    $('#net_payable').val(net_payable.toLocaleString());
+
+                    hideBlockUI('#paymentVoucher');
+                }
+
+            } else {
                 $(this).val('');
-
+                hideBlockUI('#paymentVoucher');
             }
+            hideBlockUI('#paymentVoucher');
 
         });
 

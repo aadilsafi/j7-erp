@@ -154,7 +154,7 @@
                                 closeButton: !0,
                                 tapToDismiss: !1,
                             });
-                        $('#permissions-table').DataTable().ajax.reload();
+                        // $('#permissions-table').DataTable().ajax.reload();
                     } else {
                         Swal.fire({
                             icon: 'error',

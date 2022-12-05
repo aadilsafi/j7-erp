@@ -226,8 +226,8 @@
             });
             $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
-            $(".city_id").empty()
-            $('.state_id').empty();
+            // $("#city_id").empty()
+            // $('#state_id').empty();
 
             var e = $(".country_id");
             e.wrap('<div class="position-relative"></div>');

@@ -50,6 +50,10 @@ class PaymentVocuher extends Model
         'approved_date',
         'approved_by',
         'comments',
+        'stakeholder_type',
+        'customer_ap_account',
+        'dealer_ap_account',
+        'vendor_ap_account'
     ];
 
     public function getActivitylogOptions(): LogOptions

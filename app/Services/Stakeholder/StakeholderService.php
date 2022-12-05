@@ -72,9 +72,9 @@ class StakeholderService implements StakeholderInterface
                 'mailing_address' => $inputs['mailing_address'],
                 'parent_id' => $inputs['parent_id'],
                 'comments' => $inputs['comments'],
-                'city_id' => $inputs['city_id'],
-                'country_id' => $inputs['country_id'],
-                'state_id' => $inputs['state_id'],
+                'country_id' => isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167,
+                'state_id' => isset($inputs['state_id']) ? $inputs['state_id'] : 0,
+                'city_id' => isset($inputs['city_id']) ? $inputs['city_id'] : 0,
                 'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
             ];
             // dd($inputs);

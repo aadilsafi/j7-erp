@@ -27,6 +27,7 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
+
         #stakeholderNextOfKin {
             display: none;
         }
@@ -224,21 +225,22 @@
                                 'readonly', (stakeholderData.full_name.length > 0));
                             $('#stackholder_father_name').val(stakeholderData.father_name).attr(
                                 'readonly', (stakeholderData.father_name.length > 0));
-                            $('#stackholder_occupation').val(stakeholderData.occupation).attr(
-                                'readonly', (stakeholderData.occupation.length > 0));
-                            $('#stackholder_designation').val(stakeholderData.designation).attr(
-                                'readonly', (stakeholderData.designation.length > 0));
                             $('#stackholder_cnic').val(stakeholderData.cnic).attr('readonly', (
-                                stakeholderData.cnic.length > 0));
+                                stakeholderData.cnic != null));
                             $('#stackholder_contact').val(stakeholderData.contact).attr(
                                 'readonly', (stakeholderData.contact.length > 0));
                             $('#stackholder_address').text(stakeholderData.address).attr(
-                                'readonly', (stakeholderData.address.length > 0));
+                                'readonly', (stakeholderData.address != null));
+                            $('#stackholder_occupation').val(stakeholderData.occupation).attr(
+                                'readonly', (stakeholderData.occupation != null));
+                            $('#stackholder_designation').val(stakeholderData.designation).attr(
+                                'readonly', (stakeholderData.designation != null));
                             $('#stackholder_ntn').val(stakeholderData.ntn).attr('readonly', (
-                                stakeholderData.ntn.length > 0));
+                                stakeholderData.ntn != null));
+
                             hideBlockUI('#stakeholders_card');
                             $('#stackholder_comments').text(stakeholderData.comments).attr(
-                                'readonly', (stakeholderData.comments.length > 0));
+                                'readonly', (stakeholderData.comments != null));
 
 
 

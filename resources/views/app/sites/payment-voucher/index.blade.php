@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', __('Payment Voucher'))
@@ -40,7 +40,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Payment Voucher</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.payment-voucher.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.payment-voucher.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>

@@ -98,7 +98,7 @@ class StakeholderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(stakeholderStoreRequest $request, $site_id)
+    public function store(Request $request, $site_id)
     // public function store(Request $request, $site_id)
     {
         // dd($request->all());
@@ -745,7 +745,7 @@ class StakeholderController extends Controller
             ]);
 
             $validator->validate();
-           
+
             ImportStakeholders::dispatch($site_id);
 
             return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');

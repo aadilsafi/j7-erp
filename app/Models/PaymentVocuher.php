@@ -53,7 +53,8 @@ class PaymentVocuher extends Model
         'stakeholder_type',
         'customer_ap_account',
         'dealer_ap_account',
-        'vendor_ap_account'
+        'vendor_ap_account',
+        'amount_to_be_paid',
     ];
 
     public function getActivitylogOptions(): LogOptions

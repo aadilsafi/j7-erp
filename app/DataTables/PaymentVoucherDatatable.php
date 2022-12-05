@@ -40,23 +40,11 @@ class PaymentVoucherDatatable extends DataTable
             ->editColumn('check', function ($team) {
                 return $team;
             })
-            ->editColumn('parent_id', function ($team) {
-                return Str::of(getTeamParentByParentId($team->parent_id))->ucfirst();
-            })
-            ->editColumn('has_team', function ($team) {
-                return editBooleanColumn($team->has_team);
-            })
             ->editColumn('created_at', function ($team) {
                 return editDateColumn($team->created_at);
             })
             ->editColumn('updated_at', function ($team) {
                 return editDateColumn($team->updated_at);
-            })
-            ->editColumn('team_members', function ($team) {
-                return $team->has_team ? '-' : Count($team->users);
-            })
-            ->editColumn('actions', function ($team) {
-                return view('app.sites.teams.actions', ['site_id' => decryptParams($this->site_id), 'id' => $team->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -120,7 +108,7 @@ class PaymentVoucherDatatable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('parent_id')
+            // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
                 [
                     'targets' => 0,
@@ -152,19 +140,16 @@ class PaymentVoucherDatatable extends DataTable
     {
         // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.teams.destroy-selected');
         $columns = [
+            Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Name'),
-            Column::make('description')->title('Parent')->addClass('text-nowrap'),
-            Column::make('account_payable'),
+            Column::make('identity_number')->title('Identity Number'),
+            Column::make('account_payable')->title('Account Payable'),
+            Column::make('amount_to_be_paid')->title('Paid Amount'),
         ];
-     
+
         $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');
         $columns[] = Column::make('updated_at')->title('Updated At')->addClass('text-nowrap');
-        // $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
-        // if ($selectedDeletePermission) {
-        //     $newColumn = Column::computed('check')->exportable(false)->printable(false)->width(60);
-        //     array_unshift($columns, $newColumn);
-        // }
 
         return $columns;
     }

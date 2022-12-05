@@ -57,6 +57,7 @@ return new class extends Migration
             $table->timestamp('approved_date')->nullable();
             $table->foreignId('approved_by')->nullable();
             $table->string('comments')->nullable();
+            $table->string('amount_to_be_paid')->nullable();
             $table->timestamps();
         });
     }

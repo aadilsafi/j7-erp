@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\DataTables\PaymentVoucherDatatable;
 use App\Models\AccountHead;
 use App\Models\AccountLedger;
+use App\Models\Bank;
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
+use App\Services\PaymentVoucher\paymentInterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class PaymentVocuherController extends Controller
@@ -16,6 +19,14 @@ class PaymentVocuherController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    private $PaymentVoucherInterface;
+
+    public function __construct(paymentInterface $PaymentVoucherInterface)
+    {
+        $this->PaymentVoucherInterface = $PaymentVoucherInterface;
+    }
+
     public function index(PaymentVoucherDatatable $dataTable, $site_id)
     {
         //
@@ -37,6 +48,7 @@ class PaymentVocuherController extends Controller
             $data = [
                 'site_id' => $site_id,
                 'stakholders' => Stakeholder::all(),
+                'banks' => Bank::all(),
             ];
             return view('app.sites.payment-voucher.create', $data);
         } else {
@@ -50,9 +62,21 @@ class PaymentVocuherController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, $site_id)
     {
         //
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+                $site_id = decryptParams($site_id);
+                $record = $this->PaymentVoucherInterface->store($site_id, $inputs);
+                return redirect()->route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.payment-voucher.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**
@@ -105,7 +129,7 @@ class PaymentVocuherController extends Controller
     {
         $types = StakeholderType::where('stakeholder_id', $id)->where('status', true)->get();
         $stakeholder = Stakeholder::find($id);
-        $options = '<option>Select Type</option>';
+        $options = '<option value="">Select Type</option>';
         $accounts = [];
         foreach ($types as $key => $type) {
 

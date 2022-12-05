@@ -37,8 +37,8 @@ use App\Services\AccountCreations\FourthLevel\FourthLevelAccountservice as Fourt
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountinterface as FifthLevelAccountInterface;
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountservice as FifthLevelAccountService;
 use App\Services\Company\{CompanyService, Interface\CompanyInterface};
-
-
+use App\Services\PaymentVoucher\paymentService;
+use App\Services\PaymentVoucher\paymentInterface;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Telescope;
 
@@ -83,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FourthLevelAccountInterface::class, FourthLevelAccountService::class);
         $this->app->bind(FifthLevelAccountInterface::class, FifthLevelAccountService::class);
         $this->app->bind(CompanyInterface::class, CompanyService::class);
-
+        $this->app->bind(paymentInterface::class, paymentService::class);
 
         Telescope::ignoreMigrations();
 

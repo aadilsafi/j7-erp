@@ -30,6 +30,10 @@
         #main-div {
             display: none;
         }
+
+        .bankDiv {
+            display: none;
+        }
     </style>
 @endsection
 
@@ -56,6 +60,8 @@
                 {{ view('app.sites.payment-voucher.form-fields', [
                     'site_id' => $site_id,
                     'stakholders' => $stakholders,
+                    'banks' => $banks,
+                    'chequebanks' => $banks,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -111,6 +117,34 @@
 
 @section('custom-js')
     <script type="text/javascript">
+        $(".other-mode-of-payment").click(function() {
+            $('#otherValueDiv').show();
+            $('#onlineValueDiv').hide();
+            $('#chequeValueDiv').hide();
+            $('.bankDiv').hide();
+        });
+
+        $(".cheque-mode-of-payment").click(function() {
+            $('#otherValueDiv').hide();
+            $('#onlineValueDiv').hide();
+            $('#chequeValueDiv').show();
+            $('.bankDiv').show();
+        });
+
+        $(".online-mode-of-payment").click(function() {
+            $('#otherValueDiv').hide();
+            $('#onlineValueDiv').show();
+            $('#chequeValueDiv').hide();
+            $('.bankDiv').show();
+        });
+
+        $(".mode-of-payment").click(function() {
+            $('#otherValueDiv').hide();
+            $('#onlineValueDiv').hide();
+            $('#chequeValueDiv').hide();
+            $('.bankDiv').hide();
+        });
+
         var e = $("#stakeholderAP");
         e.wrap('<div class="position-relative"></div>');
         e.select2({
@@ -204,7 +238,6 @@
                 // $('#d-div').hide();
                 // $('#c-div').hide();
                 // $('#v-div').show();
-
             }
             hideBlockUI('#paymentVoucher');
 
@@ -294,19 +327,34 @@
 
         var validator = $("#paymentVoucher").validate({
             rules: {
-                // 'dealer_id': {
-                //     required: true,
-                // },
-                // 'dealer_incentive': {
-                //     required: true,
-                //     digits: true
-                // },
-                // 'total_unit_area': {
-                //     required: true
-                // },
-                // 'total_dealer_incentive': {
-                //     required: true
-                // },
+                'stakeholder_id': {
+                    required: true,
+                },
+                'stakeholder_type_id': {
+                    required: true,
+                    // digits: true
+                },
+                'amount_to_be_paid': {
+                    required: true
+                },
+                'tax_status': {
+                    required: true
+                },
+                'description': {
+                    required: true
+                },
+                'account_payable': {
+                    required: true
+                },
+                'total_payable_amount': {
+                    required: true
+                },
+                'remaining_payable': {
+                    required: true
+                },
+                'net_payable': {
+                    required: true
+                },
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
@@ -319,7 +367,116 @@
 
 
         $("#saveButton").click(function() {
-            $("#rebateForm").submit();
+            let mode_of_payment = $("input[name='mode_of_payment']:checked").val();
+
+            if (mode_of_payment == 'Cheque') {
+                let cheque_no = $('#cheque_no').val();
+                if (cheque_no == '') {
+                    $('#cheque_no').addClass('is-invalid');
+                    $('#cheque_no').parent().append(
+                        '<span class="is-invalid text-danger">Cheque No is required!</span>');
+                } else {
+                    $("#paymentVoucher").submit();
+                }
+            } else if (mode_of_payment == 'Online') {
+                let transaction_date = $('#transaction_date').val();
+                let online_instrument_no = $('#online_instrument_no').val();
+
+                if (online_instrument_no == '') {
+                    $('#online_instrument_no').addClass('is-invalid');
+                    $('#online_instrument_no').parent().append(
+                        '<span class="is-invalid text-danger">Transaction No is required!</span>');
+                } else {
+                    $("#paymentVoucher").submit();
+                }
+
+            }
+            else if (mode_of_payment == 'Other') {
+                let other_value = $('#other_value').val();
+                if(other_value == ''){
+                    $('#other_value').addClass('is-invalid');
+                    $('#other_value').parent().append(
+                        '<span class="is-invalid text-danger">Other Value is required!</span>');
+                }
+                else{
+                    $("#paymentVoucher").submit();
+                }
+            }
+            else {
+                $("#paymentVoucher").submit();
+            }
         });
+
+        var e = $(".bank");
+        e.wrap('<div class="position-relative"></div>');
+        e.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: e.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).on("change", function(e) {
+            let bank = parseInt($(this).val());
+            showBlockUI('.bankDiv');
+            let bankData = {
+                id: 0,
+                name: '',
+                account_number: '',
+                branch: '',
+                branch_code: '',
+                comments: '',
+                contact_number: '',
+                address: '',
+            };
+            $.ajax({
+                url: "{{ route('sites.banks.ajax-get-by-id', ['site_id' => encryptParams($site_id)]) }}",
+                type: 'POST',
+                data: {
+                    'id': bank
+                },
+                success: function(response) {
+                    if (response.success == true && response.bank != null) {
+                        $('.name').val(response.bank.name).attr('readOnly', (
+                            response.bank.name.length > 0));
+                        $('.account_number').val(response.bank.account_number).attr('readOnly', (
+                            response.bank.account_number.length > 0));
+                        $('.contact_number').val(response.bank.contact_number).attr('readOnly', (
+                            response.bank.contact_number.length > 0));
+                        $('.branch').val(response.bank.branch).attr('readOnly', (response.bank.branch
+                            .length > 0));
+                        $('.branch_code').val(response.bank.branch_code).attr('readOnly', (response.bank
+                            .branch_code.length > 0));
+                        $('.comments').val(response.bank.comments).attr('readOnly', true);
+                        $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
+                            .length > 0));
+                        hideBlockUI('.bankDiv');
+                    } else {
+
+                        $('#name').val('').removeAttr('readOnly');
+                        $('#account_number').val('').removeAttr('readOnly');
+                        $('#contact_number').val('').removeAttr('readOnly');
+                        $('#branch').val('').removeAttr('readOnly');
+                        $('#branch_code').val('').removeAttr('readOnly');
+                        $('#comments').val('').removeAttr('readOnly');
+                        $('#address').val('').removeAttr('readOnly');
+                    }
+                    hideBlockUI('.bankDiv');
+                },
+                error: function(errors) {
+                    console.error(errors);
+                    hideBlockUI('.bankDiv');
+                }
+            });
+        });
+
+        $("#transaction_date").flatpickr({
+            defaultDate: "today",
+            // minDate: "today",
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
+
+
+
     </script>
 @endsection

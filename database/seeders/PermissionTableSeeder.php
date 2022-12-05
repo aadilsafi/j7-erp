@@ -155,13 +155,7 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'countries.cities',
-                'show_name' => 'Can View Cities',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+
 
             // Sites Routes
             [

@@ -168,9 +168,11 @@
     </script>
 
     <script type="text/javascript">
+        $('#companyForm').hide();
+        $('#individualForm').hide();
+        $('#common_form').hide();
+
         $(document).ready(function() {
-            $('#companyForm').hide();
-            $('#individualForm').hide();
 
             var t = $("#stakeholder_as");
             t.wrap('<div class="position-relative"></div>');
@@ -183,20 +185,19 @@
                 if ($(this).val() == 0) {
                     $('#companyForm').hide();
                     $('#individualForm').hide();
-
+                    $('#common_form').hide();
                 } else if ($(this).val() == 'c') {
                     $('#companyForm').show();
                     $('#individualForm').hide();
-
+                    $('#common_form').show();
                 } else if ($(this).val() == 'i') {
                     $('#companyForm').hide();
                     $('#individualForm').show();
-
+                    $('#common_form').show();
                 }
             });
 
-
-            var input = document.querySelector(".contact");
+            var input = document.querySelector("#contact");
             intl = window.intlTelInput(input, ({
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
                 preferredCountries: ["pk"],
@@ -211,7 +212,7 @@
             });
             $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
 
-            var inputOptional = document.querySelector(".optional_contact");
+            var inputOptional = document.querySelector("#optional_contact");
             intlOptional = window.intlTelInput(inputOptional, ({
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
                 preferredCountries: ["pk"],
@@ -229,7 +230,7 @@
             // $("#city_id").empty()
             // $('#state_id').empty();
 
-            var e = $(".country_id");
+            var e = $("#country_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
                 dropdownAutoWidth: !0,
@@ -238,8 +239,8 @@
                 containerCssClass: "select-lg",
             }).change(function() {
 
-                $(".city_id").empty()
-                $('.state_id').empty();
+                $("#city_id").empty()
+                $('#state_id').empty();
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -256,10 +257,10 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('.state_id').html('<option value=0>Select State</option>');
-                                $('.city_id').html('<option value=0>Select City</option>');
+                                $('#state_id').html('<option value=0>Select State</option>');
+                                $('#city_id').html('<option value=0>Select City</option>');
                                 $.each(response.states, function(key, value) {
-                                    $(".state_id").append('<option value="' + value
+                                    $("#state_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
@@ -281,7 +282,7 @@
             });
 
 
-            var e = $(".state_id");
+            var e = $("#state_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
                 dropdownAutoWidth: !0,
@@ -289,7 +290,7 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             }).change(function() {
-                $(".city_id").empty()
+                $("#city_id").empty()
                 // alert($(this).val());
                 showBlockUI('#stakeholderForm');
 
@@ -309,9 +310,9 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('.city_id').html('<option value=0>Select City</option>');
+                                $('#city_id').html('<option value=0>Select City</option>');
                                 $.each(response.cities, function(key, value) {
-                                    $(".city_id").append('<option value="' + value
+                                    $("#city_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
@@ -332,7 +333,7 @@
                 }
             });
 
-            var e = $(".city_id");
+            var e = $("#city_id");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
                 dropdownAutoWidth: !0,
@@ -461,6 +462,12 @@
                     },
                     'cnic': {
                         required: true,
+                    },
+                    'registration': {
+                        required: true,
+                    },
+                    'company_name': {
+                        required: true,
                     }
                 },
                 errorClass: 'is-invalid text-danger',
@@ -488,36 +495,6 @@
                     $('#mailing_address').val('')
                 }
             })
-
-            var cinput = document.querySelector("#icontact");
-            cntl = window.intlTelInput(cinput, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-
-            input.addEventListener("countrychange", function() {
-                $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            });
-            $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-
-            var inputOptional = document.querySelector("#ioptional_contact");
-            intlOptional = window.intlTelInput(inputOptional, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-
-            inputOptional.addEventListener("countrychange", function() {
-                $('.OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
-            });
-            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
         });
     </script>

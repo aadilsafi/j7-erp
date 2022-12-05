@@ -144,7 +144,7 @@ class PaymentVoucherDatatable extends DataTable
             Column::make('name')->title('Name'),
             Column::make('identity_number')->title('Identity Number'),
             Column::make('account_payable')->title('Account Payable'),
-            Column::make('amount_to_be_paid')->title('Paid Amount'),
+            // Column::make('amount_to_be_paid')->title('Paid Amount'),
         ];
 
         $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');

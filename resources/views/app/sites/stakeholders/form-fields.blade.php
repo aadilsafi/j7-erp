@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             @endif
         </div>
     </div>
@@ -196,11 +196,33 @@
     </div>
 </div>
 
+{{-- common fields --}}
 <div class="card" id="common_form" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
         {{-- <h3> </h3> --}}
     </div>
     <div class="card-body">
+        <div class="row mb-1">
+            <div class="col-lg-6 col-md-6 position-relative">
+                <label class="form-label fs-5" for="email">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                    id="email" name="email" placeholder="Email" autocomplete="false"
+                    value="{{ isset($stakeholder) ? $stakeholder->email : old('email') }}" />
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <div class="col-lg-6 col-md-6 position-relative">
+                <label class="form-label fs-5" for="optional_email">Optional Email</label>
+                <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                    id="email" name="optional_email" placeholder="Optional Email" autocomplete="false"
+                    value="{{ isset($stakeholder) ? $stakeholder->optional_email : old('email') }}" />
+                @error('email')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+        </div>
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <label class="form-label fs-5" for="contact">Contact # <span class="text-danger">*</span></label>

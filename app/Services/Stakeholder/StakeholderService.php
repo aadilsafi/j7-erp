@@ -74,6 +74,8 @@ class StakeholderService implements StakeholderInterface
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = decryptParams($site_id);
             $data['ntn'] = $inputs['ntn'];
+            $data['email'] = $inputs['email'];
+            $data['optional_email'] = $inputs['optional_email'];
             $data['contact'] = $inputs['contact'];
             $data['countryDetails'] = $inputs['countryDetails'];
             $data['optional_contact'] = $inputs['optional_contact'];
@@ -282,6 +284,8 @@ class StakeholderService implements StakeholderInterface
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = $site_id;
             $data['ntn'] = $inputs['ntn'];
+            $data['email'] = $inputs['email'];
+            $data['optional_email'] = $inputs['optional_email'];
             $data['contact'] = $inputs['contact'];
             $data['countryDetails'] = $inputs['countryDetails'];
             $data['optional_contact'] = $inputs['optional_contact'];

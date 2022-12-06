@@ -154,9 +154,35 @@
                         </div>
 
                         <div class="row mb-1">
-                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="country">Country</label>
+                                <input type="text" readonly value=""
+                                    class="form-control form-control-lg" id="stackholder_country" placeholder="Country" />
+                            </div>
+    
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="state">State</label>
+                                <input type="text" readonly value=""
+                                    class="form-control form-control-lg" id="stackholder_state" placeholder="State" />
+                            </div>
+    
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="city">City</label>
+                                <input type="text" readonly value=""
+                                    class="form-control form-control-lg" id="stackholder_city" placeholder="City" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="stackholder_address">Address</label>
                                 <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
+                                    rows="5"></textarea>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="stackholder_mailing_address">Mailing Address</label>
+                                <textarea class="form-control  form-control-lg" readonly id="stackholder_mailing_address" placeholder="Mailing Address"
                                     rows="5"></textarea>
                             </div>
                         </div>

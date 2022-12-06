@@ -70,7 +70,7 @@ class PaymentVocuherController extends Controller
                 $inputs = $request->all();
                 $site_id = decryptParams($site_id);
                 $record = $this->PaymentVoucherInterface->store($site_id, $inputs);
-                return redirect()->route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+                return redirect()->route('sites.payment-voucher.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
             } else {
                 abort(403);
             }

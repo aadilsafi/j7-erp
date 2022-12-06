@@ -3,8 +3,8 @@
 namespace App\DataTables;
 
 use App\Models\PaymentVocuher;
-use App\Models\Team;
-use App\Services\Team\Interface\TeamInterface;
+use App\Models\payment_voucher;
+use App\Services\payment_voucher\Interface\payment_voucherInterface;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -20,13 +20,6 @@ use PHPUnit\Framework\Constraint\Count;
 
 class PaymentVoucherDatatable extends DataTable
 {
-
-    private $teamInterface;
-
-    public function __construct(TeamInterface $teamInterface)
-    {
-        $this->teamInterface = $teamInterface;
-    }
     /**
      * Build DataTable class.
      *
@@ -37,14 +30,17 @@ class PaymentVoucherDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
-            ->editColumn('check', function ($team) {
-                return $team;
+            ->editColumn('check', function ($payment_voucher) {
+                return $payment_voucher;
             })
-            ->editColumn('created_at', function ($team) {
-                return editDateColumn($team->created_at);
+            ->editColumn('created_at', function ($payment_voucher) {
+                return editDateColumn($payment_voucher->created_at);
             })
-            ->editColumn('updated_at', function ($team) {
-                return editDateColumn($team->updated_at);
+            ->editColumn('updated_at', function ($payment_voucher) {
+                return editDateColumn($payment_voucher->updated_at);
+            })
+            ->editColumn('status', function ($payment_voucher) {
+                return $payment_voucher->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -64,8 +60,8 @@ class PaymentVoucherDatatable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.teams.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.teams.destroy-selected');
+        $createPermission =  Auth::user()->hasPermissionTo('sites.payment-voucher.create');
+        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.payment_vouchers.destroy-selected');
 
         $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -88,16 +84,16 @@ class PaymentVoucherDatatable extends DataTable
             array_unshift($buttons, $newButton);
         }
 
-        if ($selectedDeletePermission) {
-            $buttons[] = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                    'onclick' => 'deleteSelected()',
-                ]);
-        }
+        // if ($selectedDeletePermission) {
+            // $buttons[] = Button::raw('delete-selected')
+            //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+            //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+            //         'onclick' => 'deleteSelected()',
+            //     ]);
+        // }
 
         return $this->builder()
-            ->setTableId('team-table')
+            ->setTableId('payment_voucher-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -108,23 +104,23 @@ class PaymentVoucherDatatable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            // ->rowGroupDataSrc('parent_id')
+            ->rowGroupDataSrc('name')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkteams[]\" id=\"chkteams_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkteams_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 3,
+                //     'render' => "function (data, type, full, setting) {
+                //         var role = JSON.parse(data);
+                //         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkpayment_vouchers[]\" id=\"chkpayment_vouchers_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkpayment_vouchers_' + role.id + '\"></label></div>';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                //     ]
+                // ],
             ])
             ->orders([
                 [2, 'asc'],
@@ -138,13 +134,14 @@ class PaymentVoucherDatatable extends DataTable
      */
     protected function getColumns(): array
     {
-        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.teams.destroy-selected');
+        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.payment_vouchers.destroy-selected');
         $columns = [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            // Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('name')->title('Name'),
             Column::make('identity_number')->title('Identity Number'),
             Column::make('account_payable')->title('Account Payable'),
             Column::make('amount_to_be_paid')->title('Paid Amount'),
+            Column::make('status')->title('Status'),
         ];
 
         $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');
@@ -161,7 +158,7 @@ class PaymentVoucherDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'teams_' . date('YmdHis');
+        return 'payment_vouchers_' . date('YmdHis');
     }
 
     /**

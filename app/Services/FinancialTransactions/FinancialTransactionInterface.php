@@ -37,4 +37,6 @@ interface FinancialTransactionInterface
     public function makeRebateIncentiveTransaction($rebate_id);
 
     public function makeDealerIncentiveTransaction($dealer_incentive_id);
+
+    public function makePaymentVoucherTransaction($payment_voucher,$stakeholder_id);
 }

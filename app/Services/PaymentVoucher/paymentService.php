@@ -5,6 +5,7 @@ namespace App\Services\PaymentVoucher;
 use App\Models\AccountHead;
 use App\Models\Bank;
 use App\Models\PaymentVocuher;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\PaymentVoucher\paymentInterface;
 use DB;
 use Exception;
@@ -12,6 +13,14 @@ use Illuminate\Support\Str;
 
 class paymentService implements paymentInterface
 {
+
+    private $financialTransactionInterface;
+
+    public function __construct(
+        FinancialTransactionInterface $financialTransactionInterface
+    ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
+    }
 
     public function model()
     {
@@ -53,7 +62,7 @@ class paymentService implements paymentInterface
             }
 
             $payment_voucher_data = [
-                'site_id' => decryptParams($site_id),
+                'site_id' => 1,
                 'user_id' => auth()->user()->id,
                 "name" => $inputs['name'],
                 "identity_number" => $inputs['identity_number'],
@@ -72,7 +81,7 @@ class paymentService implements paymentInterface
                 "discount_recevied" => str_replace(',', '', $inputs['discount_recevied']) ,
                 "remaining_payable" => str_replace(',', '', $inputs['remaining_payable']) ,
                 "net_payable" => str_replace(',', '', $inputs['net_payable']) ,
-                "mode_of_payment" => $inputs['mode_of_payment'],
+                "payment_mode" => $inputs['mode_of_payment'],
                 "other_value" => $inputs['other_value'],
                 "online_instrument_no" => $inputs['online_instrument_no'],
                 "transaction_date" => $inputs['transaction_date'],
@@ -80,30 +89,29 @@ class paymentService implements paymentInterface
                 "bank_id" => $inputs['bank_id'],
                 "comments" => $inputs['comments'],
                 "amount_to_be_paid" => str_replace(',', '', $inputs['amount_to_be_paid']),
+                "receiving_date" => now(),
             ];
-
 
 
             if ($inputs['stakeholder_type_id'] == 'C') {
                 $payment_voucher_data['customer_id'] = $inputs['stakeholder_id'];
-                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . 'Customer';
+                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . ' Customer';
                 $payment_voucher_data['customer_ap_account'] = $inputs['account_payable'];
             }
             if ($inputs['stakeholder_type_id'] == 'D') {
                 $payment_voucher_data['dealer_id'] = $inputs['stakeholder_id'];
-                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . 'Dealer';
+                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . ' Dealer';
                 $payment_voucher_data['dealer_ap_account'] = $inputs['account_payable'];
             }
             if ($inputs['stakeholder_type_id'] == 'V') {
                 $payment_voucher_data['vendor_id'] = $inputs['stakeholder_id'];
-                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . 'Vendor';
+                $payment_voucher_data['customer_dealer_vendor_details'] = $inputs['name'] . ' Vendor';
                 $payment_voucher_data['vendor_ap_account'] = $inputs['account_payable'];
             }
 
-
-
+            $stakeholder_id = $inputs['stakeholder_id'];
             $payment_voucher = $this->model()->create($payment_voucher_data);
-
+            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher,$stakeholder_id);
         });
 
         return true;

@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                    width: calc(20% - 0.5em);
-                                                                                } */
+                                                                                        width: calc(20% - 0.5em);
+                                                                                    } */
     </style>
 @endsection
 
@@ -440,6 +440,11 @@
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
                                 $('#stackholder_contact').val(response.stakeholders['contact']);
                                 $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_mailing_address').val(response.stakeholders[
+                                    'mailing_address']);
+                                $('#stackholder_country').val(response.country);
+                                $('#stackholder_state').val(response.state);
+                                $('#stackholder_city').val(response.city);
 
                                 created_date.set('minDate', new Date(response.sales_plan[
                                     'created_date']));

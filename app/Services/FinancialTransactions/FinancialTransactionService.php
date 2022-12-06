@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, RebateIncentiveModel, Receipt, SalesPlan, Stakeholder, StakeholderType};
+use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, Stakeholder, StakeholderType};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
@@ -35,6 +35,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -277,6 +278,11 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['created_date'] = $file_buy_back->payment_due_date;
         }
 
+        if ($account_action == 4) {
+            $payment_voucher = PaymentVocuher::find($action_id);
+            $data['payment_voucher_id'] = $action_id;
+        }
+
         if ($account_action == 5) {
             $file_refund = FileRefund::find($action_id);
             $data['file_refund_id'] = $action_id;
@@ -335,6 +341,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -397,6 +404,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -450,6 +458,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
                 $origin_number = (int)$origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -496,6 +505,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -546,6 +556,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -606,6 +617,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             if (isset($origin_number)) {
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -667,6 +679,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -723,6 +736,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -843,6 +857,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -948,6 +963,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
@@ -1009,6 +1025,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         if (isset($origin_number)) {
             $origin_number = collect($origin_number)->last();
             $origin_number = $origin_number->origin_number + 1;
+            $origin_number =  sprintf('%03d', $origin_number);
         } else {
             $origin_number = '001';
         }
@@ -1101,6 +1118,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         if (isset($origin_number)) {
             $origin_number = collect($origin_number)->last();
             $origin_number = $origin_number->origin_number + 1;
+            $origin_number =  sprintf('%03d', $origin_number);
         } else {
             $origin_number = '001';
         }
@@ -1150,4 +1168,49 @@ class FinancialTransactionService implements FinancialTransactionInterface
         # Dealer AP Entry
         $this->makeFinancialTransaction($dealer_incentive->site_id, $origin_number, $dealer_payable_account_code, 26, null, 'credit', $dealer_incentive->total_dealer_incentive, NatureOfAccountsEnum::Dealer_Incentive, $dealer_incentive->id);
     }
+
+    // Payment Voucher Transactions
+    public function makePaymentVoucherTransaction($payment_voucher,$stakeholder_id)
+    {
+        $origin_number = AccountLedger::get();
+        if (isset($origin_number)) {
+            $origin_number = collect($origin_number)->last();
+            $origin_number = $origin_number->origin_number + 1;
+            $origin_number =  sprintf('%03d', $origin_number);
+        } else {
+            $origin_number = '001';
+        }
+
+        // $stakeholder_type = StakeholderType::where(['stakeholder_id' => $stakeholder_id , 'type' => $payment_voucher->stakeholder_type ] )->first();
+
+        $payable_account = str_replace('-', '', $payment_voucher->account_number);
+        // Payment Voucher First Entry Of Customer Or Dealer Or Vendor
+        $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $payable_account, 4, null, 'debit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
+        // Payment Voucher Second Entry Of Cash Or Bank
+
+        if($payment_voucher->payment_mode == "Cash")
+        {
+            //Cash account credit
+            // Cash Transaction
+            $cashAccount = (new AccountingStartingCode())->where('site_id', $payment_voucher->site_id)
+                ->where('model', 'App\Models\Cash')->where('level', 5)->first();
+
+            if (is_null($cashAccount)) {
+                throw new GeneralException('Cash Account is not defined. Please define cash account first.');
+            }
+
+            $cashAccount = $cashAccount->level_code . $cashAccount->starting_code;
+            $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $cashAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
+        }
+
+        if($payment_voucher->payment_mode == "Cheque" || $payment_voucher->payment_mode == "Online")
+        {
+            //Bank account credit
+            // Bank Transaction
+            $bank = Bank::find($payment_voucher->bank_id);
+            $bankAccount = $bank->account_number;
+            $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $bankAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
+        }
+    }
+
 }

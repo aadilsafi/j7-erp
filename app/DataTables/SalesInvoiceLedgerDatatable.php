@@ -145,7 +145,18 @@ class SalesInvoiceLedgerDatatable extends DataTable
                             return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                         }
                     }
-                } elseif ($ledger->account_action_id == 25) {
+                }elseif ($ledger->account_action_id == 4) {
+                    $payment_voucher = DB::table('payment_vocuhers')->where('id', $ledger->payment_voucher_id)
+                        ->first();
+                    if (isset($payment_voucher)) {
+                        return '<a href="' . route('sites.payment-voucher.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  (' . $ledger->origin_name . ')
+                            </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
+                    }
+                }
+                 elseif ($ledger->account_action_id == 25) {
                     $rebate = DB::table('rebate_incentive_models')->where('id', $ledger->rebate_incentive_id)
                         ->first();
                     if (isset($rebate)) {

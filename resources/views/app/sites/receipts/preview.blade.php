@@ -112,7 +112,7 @@
                     <div class="row mb-1">
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="country">Country</label>
-                            <input type="text" readonly value="{{ $$stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
+                            <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
                                 class="form-control form-control-lg" id="country" placeholder="Country" />
                         </div>
 

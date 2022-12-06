@@ -478,6 +478,9 @@
                     },
                     'company_name': {
                         required: true,
+                    },
+                    'email': {
+                        required: true,
                     }
                 },
                 errorClass: 'is-invalid text-danger',

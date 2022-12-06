@@ -66,7 +66,7 @@ class ReceiptController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments','salesPlan.PaidorPartiallyPaidInstallments')->get(),
+                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments', 'salesPlan.PaidorPartiallyPaidInstallments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
@@ -132,12 +132,12 @@ class ReceiptController extends Controller
 
         $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $stakeholder_data = Stakeholder::with('country:id,name','state:id,name','city:id,name')->where('cnic', $receipt->cnic)->first();
+        $stakeholder_data = Stakeholder::with('country:id,name', 'state:id,name', 'city:id,name')->where('cnic', $receipt->cnic)->first();
         // if($lastIntsalmentStatus == 'paid'){
         //     $paid_installments = SalesPlanInstallments::all();
         //     $unpadid_installments = null;
         // }
-            // dd($stakeholder_data);
+        // dd($stakeholder_data);
         $sales_plan = SalesPlan::find($receipt->sales_plan_id);
 
         return view('app.sites.receipts.preview', [
@@ -361,11 +361,11 @@ class ReceiptController extends Controller
             'total_calculated_installments' => $total_calculated_installments,
             'total_installment_required_amount' => $total_installment_required_amount,
             'amount_to_be_paid' => $request->amount,
-            'already_paid' => $sales_plan->PaidorPartiallyPaidInstallments,
-            'stakeholders' => $stakeholders,
-            'country'      => $stakeholders->country->name,
-            'state'      => $stakeholders->state->name,
-            'city'      => $stakeholders->city->name,
+            'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
+            'stakeholders'  => $stakeholders,
+            'country'       => $stakeholders->country->name ?? '',
+            'state'         => $stakeholders->state->name ?? '',
+            'city'          => $stakeholders->city->name ?? '',
         ], 200);
     }
 
@@ -870,20 +870,20 @@ class ReceiptController extends Controller
         }
     }
 
-    public function revertPayment(Request $request, $site_id,$ids)
+    public function revertPayment(Request $request, $site_id, $ids)
     {
         try {
             $site_id = decryptParams($site_id);
             if (!request()->ajax()) {
                 // if ($request->has('chkRole')) {
 
-                    $record = $this->receiptInterface->revertPayment($site_id, $ids);
+                $record = $this->receiptInterface->revertPayment($site_id, $ids);
 
-                    if ($record) {
-                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess('Data Reverted');
-                    } else {
-                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
-                    }
+                if ($record) {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess('Data Reverted');
+                } else {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                }
                 // }
             } else {
                 abort(403);

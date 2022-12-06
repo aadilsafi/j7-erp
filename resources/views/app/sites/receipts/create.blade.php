@@ -440,6 +440,10 @@
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
                                 $('#stackholder_contact').val(response.stakeholders['contact']);
                                 $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_mailing_address').val(response.stakeholders['mailing_address']);
+                                $('#stackholder_country').val(response.stakeholders['country']['name']);
+                                $('#stackholder_state').val(response.stakeholders['state']['name']);
+                                $('#stackholder_city').val(response.stakeholders['city']['name']);
 
                                 created_date.set('minDate', new Date(response.sales_plan[
                                     'created_date']));

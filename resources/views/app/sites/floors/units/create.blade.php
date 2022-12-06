@@ -45,7 +45,7 @@
 @endsection
 
 @section('content')
-    <form class="form form-vertical"
+    <form class="form form-vertical" id="units_form"
         action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
         method="POST">
 
@@ -99,6 +99,7 @@
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/wNumb.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/nouislider.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -300,5 +301,19 @@
 
             });
         });
+
+        var validator = $("#units_form").validate({
+                rules: {
+                    'name': {
+                        required: true,
+                    },
+                },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
     </script>
 @endsection

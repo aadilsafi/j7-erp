@@ -64,7 +64,7 @@
 
                 <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                     id="name" name="name" placeholder="Name" {{ $isSalesplanApproved ? 'readonly' : '' }}
-                    value="{{ isset($unit) ? $unit->name : old('name') }}" />
+                    value="{{ isset($unit) ? $unit->name : old('name') }}" required />
                 @error('name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

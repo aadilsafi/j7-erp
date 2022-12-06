@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label" style="font-size: 15px" for="type_id">Unit Type</label>
+                <label class="form-label" style="font-size: 15px" for="type_id">Unit Type <span class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select" id="type_id" name="type_id"
                     {{ $isSalesplanApproved ? 'disabled' : null }}>
                     <option value="" selected>Unit Type</option>
@@ -60,7 +60,7 @@
         </div>
         <div class="row mb-2" id="hide_div">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                <label class="form-label fs-5" for="name">Name</label>
+                <label class="form-label fs-5" for="name">Name <span class="text-danger">*</span> </label>
 
                 <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror"
                     id="name" name="name" placeholder="Name" {{ $isSalesplanApproved ? 'readonly' : '' }}
@@ -143,7 +143,7 @@
         </div>
         <div class="row mb-2">
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="net_area">Net Area (sqft)</label>
+                <label class="form-label fs-5" for="net_area">Net Area (sqft) <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
                     id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
@@ -163,7 +163,7 @@
                 @enderror
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="price_sqft">Price (sqft)</label>
+                <label class="form-label fs-5" for="price_sqft">Price (sqft) <span class="text-danger">*</span></label>
                 <input type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
                     id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}

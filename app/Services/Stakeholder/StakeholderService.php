@@ -67,14 +67,15 @@ class StakeholderService implements StakeholderInterface
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['occupation'],
-                    'designation' => $inputs['designation'],
-                    'cnic' => $inputs['cnic'],
+                    'occupation' => $inputs['industry'],
+                    'cnic' => $inputs['registration'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = decryptParams($site_id);
             $data['ntn'] = $inputs['ntn'];
+            $data['email'] = $inputs['email'];
+            $data['optional_email'] = $inputs['optional_email'];
             $data['contact'] = $inputs['contact'];
             $data['countryDetails'] = $inputs['countryDetails'];
             $data['optional_contact'] = $inputs['optional_contact'];
@@ -276,14 +277,15 @@ class StakeholderService implements StakeholderInterface
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['occupation'],
-                    'designation' => $inputs['designation'],
-                    'cnic' => $inputs['cnic'],
+                    'occupation' => $inputs['industry'],
+                    'cnic' => $inputs['registration'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = $site_id;
             $data['ntn'] = $inputs['ntn'];
+            $data['email'] = $inputs['email'];
+            $data['optional_email'] = $inputs['optional_email'];
             $data['contact'] = $inputs['contact'];
             $data['countryDetails'] = $inputs['countryDetails'];
             $data['optional_contact'] = $inputs['optional_contact'];

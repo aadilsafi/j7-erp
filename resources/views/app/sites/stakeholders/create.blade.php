@@ -142,6 +142,8 @@
 
 @section('custom-js')
     <script>
+        showBlockUI('#stakeholderForm');
+
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -171,6 +173,7 @@
         $('#companyForm').hide();
         $('#individualForm').hide();
         $('#common_form').hide();
+        $('#stakeholderType').hide();
 
         $(document).ready(function() {
 
@@ -182,19 +185,26 @@
                 width: "100%",
                 containerCssClass: "select-lg",
             }).change(function() {
+                showBlockUI('#stakeholderForm');
+
                 if ($(this).val() == 0) {
+                    $('#stakeholderType').hide();
                     $('#companyForm').hide();
                     $('#individualForm').hide();
                     $('#common_form').hide();
                 } else if ($(this).val() == 'c') {
+                    $('#stakeholderType').show();
                     $('#companyForm').show();
                     $('#individualForm').hide();
                     $('#common_form').show();
                 } else if ($(this).val() == 'i') {
+                    $('#stakeholderType').show();
                     $('#companyForm').hide();
                     $('#individualForm').show();
                     $('#common_form').show();
                 }
+                hideBlockUI('#stakeholderForm');
+
             });
 
             var input = document.querySelector("#contact");
@@ -468,6 +478,9 @@
                     },
                     'company_name': {
                         required: true,
+                    },
+                    'email': {
+                        required: true,
                     }
                 },
                 errorClass: 'is-invalid text-danger',
@@ -497,5 +510,6 @@
             })
 
         });
+        hideBlockUI('#stakeholderForm');
     </script>
 @endsection

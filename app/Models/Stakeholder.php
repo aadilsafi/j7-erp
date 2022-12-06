@@ -40,6 +40,8 @@ class Stakeholder extends Model implements HasMedia
         'optional_contact',
         'OptionalCountryDetails',
         'stakeholder_as',
+        'email',
+        'optional_email',
     ];
 
     public $rules = [
@@ -65,7 +67,7 @@ class Stakeholder extends Model implements HasMedia
         'country_id' => 'nullable|numeric',
         'next-of-kins.*.relation' => 'required',
         'nationality' => 'sometimes',
-
+        'email' => 'required',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
@@ -139,5 +141,20 @@ class Stakeholder extends Model implements HasMedia
     public function CustomFieldValues()
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

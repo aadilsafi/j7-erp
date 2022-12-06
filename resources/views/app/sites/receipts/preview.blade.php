@@ -139,7 +139,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="mailing_address">Mailing Address</label>
                             <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
+                                placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
                         </div>
                     </div>
                     
@@ -147,7 +147,7 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="stackholder_comments">Comments</label>
                             <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->comments }}</textarea>
+                                placeholder="Comments" rows="5">{{ $stakeholder_data->comments }}</textarea>
                         </div>
                     </div>
                 </div>

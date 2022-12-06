@@ -67,9 +67,8 @@ class StakeholderService implements StakeholderInterface
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['occupation'],
-                    'designation' => $inputs['designation'],
-                    'cnic' => $inputs['cnic'],
+                    'occupation' => $inputs['industry'],
+                    'cnic' => $inputs['registration'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
@@ -276,9 +275,8 @@ class StakeholderService implements StakeholderInterface
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['occupation'],
-                    'designation' => $inputs['designation'],
-                    'cnic' => $inputs['cnic'],
+                    'occupation' => $inputs['industry'],
+                    'cnic' => $inputs['registration'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];

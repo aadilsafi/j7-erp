@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                            width: calc(20% - 0.5em);
-                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                width: calc(20% - 0.5em);
+                                                                                                                                                                                                            } */
     </style>
 @endsection
 
@@ -151,6 +151,8 @@
         $('#companyForm').hide();
         $('#individualForm').hide();
         $('#common_form').hide()
+        $('#stakeholderType').hide();
+
         var input = document.querySelector("#contact");
         intl = window.intlTelInput(input, ({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -526,14 +528,20 @@
                 $('#companyForm').hide();
                 $('#individualForm').hide();
                 $('#common_form').hide();
+                $('#stakeholderType').hide();
+
             } else if ($(this).val() == 'c') {
                 $('#companyForm').show();
                 $('#individualForm').hide();
                 $('#common_form').show();
+                $('#stakeholderType').show();
+
             } else if ($(this).val() == 'i') {
                 $('#companyForm').hide();
                 $('#individualForm').show();
                 $('#common_form').show();
+                $('#stakeholderType').show();
+
             }
         });
 

@@ -14,6 +14,58 @@
                 @enderror
             </div>
         </div>
+
+        <div class="py-1" id="stakeholderType">
+            @if (!isset($stakeholder))
+                <div class="row mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="stakeholder_type">Stakeholder Type <span
+                                class="text-danger">*</span></label>
+                        <select class="form-select form-select-lg" id="stakeholder_type" name="stakeholder_type"
+                            {{ isset($stakeholder) ? 'disabled' : null }}>
+                            <option value="0">Select Stakeholder Type</option>
+                            @foreach ($stakeholderTypes as $key => $value)
+                                @continue($value == 'K')
+                                <option value="{{ $value }}">
+                                    {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('stakeholder_type')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+            @else
+                <div class="row mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="d-flex justify-content-between">
+                            @forelse ($stakeholder->stakeholder_types as $type)
+                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                    <span
+                                        class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
+                                    <div class="form-check form-switch form-check-success">
+                                        <input type="checkbox" class="form-check-input"
+                                            id="stakeholder_type_{{ $type->type }}"
+                                            onchange="performAction('{{ $type->type }}')"
+                                            name="stakeholder_type[{{ $type->type }}]" value="1"
+                                            {{ $type->status ? 'checked' : null }}
+                                            {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
+                                        <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
+                                            <span class="switch-icon-left"><i data-feather="check"></i></span>
+                                            <span class="switch-icon-right"><i data-feather="x"></i></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            @empty
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+                
+            @endif
+        </div>
     </div>
 </div>
 
@@ -21,57 +73,6 @@
 
 <div class="card" id="companyForm">
     <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-
-        @if (!isset($stakeholder))
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                    <label class="form-label" style="font-size: 15px" for="stakeholder_type">Stakeholder Type <span
-                            class="text-danger">*</span></label>
-                    <select class="form-select form-select-lg" id="stakeholder_type" name="stakeholder_type"
-                        {{ isset($stakeholder) ? 'disabled' : null }}>
-                        <option value="0" selected>Select Stakeholder Type</option>
-                        @foreach ($stakeholderTypes as $key => $value)
-                            @continue($value == 'K')
-                            <option value="{{ $value }}">
-                                {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('stakeholder_type')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-        @else
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                    <div class="d-flex justify-content-between">
-                        @forelse ($stakeholder->stakeholder_types as $type)
-                           
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <span
-                                    class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
-                                <div class="form-check form-switch form-check-success">
-                                    <input type="checkbox" class="form-check-input"
-                                        id="stakeholder_type_{{ $type->type }}"
-                                        onchange="performAction('{{ $type->type }}')"
-                                        name="stakeholder_type[{{ $type->type }}]" value="1"
-                                        {{ $type->status ? 'checked' : null }}
-                                        {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
-                                    <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
-                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        @empty
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-            <hr>
-        @endif
 
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -124,55 +125,7 @@
 {{-- Individual Form --}}
 <div class="card" id="individualForm">
     <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-        @if (!isset($stakeholder))
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                    <label class="form-label" style="font-size: 15px" for="stakeholder_type">Stakeholder Type <span
-                            class="text-danger">*</span></label>
-                    <select class="form-select form-select-lg" id="stakeholder_type" name="stakeholder_type"
-                        {{ isset($stakeholder) ? 'disabled' : null }}>
-                        <option value="0" selected>Select Stakeholder Type</option>
-                        @foreach ($stakeholderTypes as $key => $value)
-                            @continue($value == 'K')
-                            <option value="{{ $value }}">
-                                {{ Str::of($key)->lower()->ucfirst()->replace('_', ' ') }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('stakeholder_type')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div>
-        @else
-            <div class="row mb-1">
-                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                    <div class="d-flex justify-content-between">
-                        @forelse ($stakeholder->stakeholder_types as $type)
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <span
-                                    class="badge badge-light-{{ $type->status ? 'success' : 'danger' }} fs-5 mb-50">{{ $type->stakeholder_code }}</span>
-                                <div class="form-check form-switch form-check-success">
-                                    <input type="checkbox" class="form-check-input"
-                                        id="stakeholder_type_{{ $type->type }}"
-                                        onchange="performAction('{{ $type->type }}')"
-                                        name="stakeholder_type[{{ $type->type }}]" value="1"
-                                        {{ $type->status ? 'checked' : null }}
-                                        {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
-                                    <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
-                                        <span class="switch-icon-left"><i data-feather="check"></i></span>
-                                        <span class="switch-icon-right"><i data-feather="x"></i></span>
-                                    </label>
-                                </div>
-                            </div>
 
-                        @empty
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-            <hr>
-        @endif
         <div class="row mb-1">
             <input type="hidden" value="0" name="parent_id">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

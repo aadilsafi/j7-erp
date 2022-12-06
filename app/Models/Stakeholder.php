@@ -140,4 +140,19 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }

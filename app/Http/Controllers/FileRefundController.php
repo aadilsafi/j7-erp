@@ -204,6 +204,7 @@ class FileRefundController extends Controller
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }

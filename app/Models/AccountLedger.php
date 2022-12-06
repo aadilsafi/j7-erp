@@ -31,6 +31,7 @@ class AccountLedger extends Model
         'file_title_transfer_id',
         'rebate_incentive_id',
         'dealer_incentive_id',
+        'payment_voucher_id',
         'status',
         'created_date',
     ];

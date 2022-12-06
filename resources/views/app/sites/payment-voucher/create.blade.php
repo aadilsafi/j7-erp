@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.create', $site_id) }}
 @endsection
 
 @section('page-title', 'Create Payment Voucher')
@@ -43,7 +43,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Payment Voucher</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.payment-voucher.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.payment-voucher.create', $site_id) }}
                 </div>
             </div>
         </div>

@@ -230,7 +230,7 @@
                             $('#stackholder_contact').val(stakeholderData.contact).attr(
                                 'readonly', (stakeholderData.contact.length > 0));
                             $('#stackholder_optional_contact').val(stakeholderData.optional_contact).attr(
-                                'readonly', (stakeholderData.optional_contact.length > 0));
+                                'readonly', (stakeholderData.optional_contact.length != null));
                             $('#stackholder_address').text(stakeholderData.address).attr(
                                 'readonly', (stakeholderData.address != null));
                             $('#stackholder_occupation').val(stakeholderData.occupation).attr(

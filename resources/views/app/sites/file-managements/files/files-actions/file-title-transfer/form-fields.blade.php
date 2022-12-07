@@ -234,7 +234,7 @@
 
                 <div class="row mb-1">
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-34 col-sm-34 position-relative">
                         <label class="form-label fs-5" for="stackholder_ntn">NTN </label>
                         <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
                             name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
@@ -242,7 +242,7 @@
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
@@ -251,13 +251,44 @@
                             value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}" />
                     </div>
 
-                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                         <label class="form-label fs-5" for="stackholder_contact">Contact <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
                             class="form-control form-control-lg" id="stackholder_contact" name="stackholder[contact]"
                             placeholder="Contact"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}" />
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                        <label class="form-label fs-5" for="stackholder_optional_contact">Optional Contact <span
+                                class="text-danger">*</span></label>
+                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
+                            class="form-control form-control-lg" id="stackholder_optional_contact" name="stackholder[optional_contact]"
+                            placeholder="Optional Contact"
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_contact : '' }}" />
+                    </div>
+                </div>
+
+                <div class="row mb-1">
+                    <div class="col-lg-6 col-md-6 position-relative">
+                        <label class="form-label fs-5" for="stackholder_email">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                            id="stackholder_email" name="email" placeholder="Email" autocomplete="false"
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->email : old('email') }}"/>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 position-relative">
+                        <label class="form-label fs-5" for="stackholder_optional_email">Optional Email</label>
+                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                            id="stackholder_optional_email" name="optional_email" placeholder="Optional Email" autocomplete="false"
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_email : old('email') }}" />
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -347,6 +378,27 @@
                     </div>
                 </div>
 
+                <div class="row mb-1">
+                    <div class="col-lg-6 col-md-6 position-relative">
+                        <label class="form-label fs-5" for="email">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                            id="email" name="email" placeholder="Email" autocomplete="false"
+                            value="{{ isset($customer) ? $customer->email : old('email') }}"/>
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 position-relative">
+                        <label class="form-label fs-5" for="optional_email">Optional Email</label>
+                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                            id="email" name="optional_email" placeholder="Optional Email" autocomplete="false"
+                            value="{{ isset($customer) ? $customer->optional_email : old('email') }}" />
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>

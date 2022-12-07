@@ -678,7 +678,21 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            //sales plan Lefbar
+            [
+                'name' => 'sites.sales_plan.create',
+                'show_name' => 'Can Create Sale Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.sales_plan.store',
+                'show_name' => 'Can Store Sale Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             //sales Plan Import
             [
                 'name' => 'sites.floors.SalesPlanImport.importSalesPlan',

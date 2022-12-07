@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Imports\ReceiptsImport;
+use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
@@ -18,6 +19,7 @@ use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Site;
 use App\Models\Stakeholder;
+use App\Models\StakeholderType;
 use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\CustomFields\CustomFieldInterface;
@@ -246,6 +248,49 @@ class ReceiptController extends Controller
     {
 
         $unit = Unit::find($request->unit_id);
+        $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('stakeholder')->first();
+        $stakeholders = $sales_plan->stakeholder;
+
+        $stakeholderType = StakeholderType::where('id', $stakeholders->id)->get();
+
+        $customerApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'C'])->first();
+
+        $dealerApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'D'])->first();
+
+        $vendorApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'V'])->first();
+
+        // Customer Ap Amount
+        if (isset($customerApAccount)) {
+            $customerLedger = AccountLedger::where('account_head_code', $customerApAccount->payable_account)->get();
+            $customerDebit = collect($customerLedger)->sum('debit');
+            $customerCredit = collect($customerLedger)->sum('credit');
+            $customerPayableAmount = (float)$customerCredit - (float)$customerDebit;
+        } else {
+            $customerPayableAmount = 0;
+        }
+
+
+        // Vendor Ap Amount
+        if (isset($dealerApAccount)) {
+            $dealerLedger = AccountLedger::where('account_head_code', $dealerApAccount->payable_account)->get();
+            $dealerDebit = collect($dealerLedger)->sum('debit');
+            $dealerCredit = collect($dealerLedger)->sum('credit');
+            $dealerPayableAmount = (float)$dealerCredit - (float)$dealerDebit;
+        } else {
+            $dealerPayableAmount = 0;
+        }
+
+        // Vendor Ap Amount
+        if (isset($vendorApAccount)) {
+            $vendorLedger = AccountLedger::where('account_head_code', $vendorApAccount->payable_account)->get();
+            $vendorDebit = collect($vendorLedger)->sum('debit');
+            $vendorCredit = collect($vendorLedger)->sum('credit');
+            $vendorPayableAmount = (float)$vendorCredit - (float)$vendorDebit;
+        } else {
+            $vendorPayableAmount = 0;
+        }
+
+        $total_payable_amount  = $customerPayableAmount  +  $dealerPayableAmount + $vendorPayableAmount;
 
         return response()->json([
             'success' => true,
@@ -253,6 +298,13 @@ class ReceiptController extends Controller
             'unit_type' => $unit->type->name,
             'unit_floor' => $unit->floor->name,
             'unit_name' => $unit->name,
+            'customerApAccount' => $customerApAccount,
+            'dealerApAccount' => $dealerApAccount,
+            'vendorApAccount' => $vendorApAccount,
+            'customerPayableAmount' => $customerPayableAmount,
+            'dealerPayableAmount' => $dealerPayableAmount,
+            'vendorPayableAmount' => $vendorPayableAmount,
+            'total_payable_amount' => $total_payable_amount,
         ], 200);
     }
 

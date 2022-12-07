@@ -9,11 +9,14 @@
                     </label>
                     <select class="select2 form-select unit_id" name="unit_id" id="unit_id">
                         <option value="0" selected>Select Unit</option>
-                        @foreach ($units as $row)
+                        @forelse ($units as $row)
                             <option value="{{ $row->id }}">
                                 {{ $row->name }} ( {{ $row->floor_unit_number }} ) -
                                 {{ $row->floor->name }} ( {{ $row->floor->short_label }})
                             </option>
+
+                            @empty
+                            <p>No Unit Available
                         @endforeach
                     </select>
                     @error('unit_id')

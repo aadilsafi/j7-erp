@@ -16,7 +16,7 @@
                             </option>
 
                             @empty
-                            <p>No Unit Available
+                            No Unit Available
                         @endforeach
                     </select>
                     @error('unit_id')

@@ -17,7 +17,7 @@
 
                             @empty
                             No Unit Available
-                        @endforeach
+                        @endforelse
                     </select>
                     @error('unit_id')
                         <div class="invalid-feedback">{{ $message }}</div>

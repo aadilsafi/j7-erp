@@ -96,7 +96,7 @@
     @endphp
 
 
-    {{ view('app.layout.topbar', ['batches' => $batches]) }}
+    {{ view('app.layout.topbar', ['batches' => $batches, 'site_id' => 1]) }}
 
     {{ view('app.layout.leftbar', ['site_id' => 1]) }}
 
@@ -205,7 +205,7 @@
             if ($.isNumeric(val)) {
                 var formated = parseFloat(val).toLocaleString('en');
                 $(this).val(formated)
-            }else{
+            } else {
                 $(this).val('')
             }
         })

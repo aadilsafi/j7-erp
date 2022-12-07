@@ -544,6 +544,17 @@
                 </li>
             @endcan
 
+            {{-- Sales Plan  --}}
+            @can('sites.floors.units.sales-plans.create')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='layers'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Sales Plan</span>
+                    </a>
+                </li>
+            @endcan
             {{-- Lead Sources Menu --}}
             @can('sites.lead-sources.index')
                 <li

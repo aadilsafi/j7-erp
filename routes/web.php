@@ -468,6 +468,15 @@ Route::group([
                     });
                 });
 
+                //Sales Plan Leftbar link
+                Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+                    Route::get('create', [SalesPlanController::class, 'create'])->name('create');
+                    Route::post('store', [SalesPlanController::class, 'store'])->name('store');
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
+                    });
+                });
+
                 //Types Routes
                 Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
                     Route::get('/', [TypeController::class, 'index'])->name('index');
@@ -676,7 +685,6 @@ Route::group([
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                         Route::post('get-accounts-payable-data', [PaymentVocuherController::class, 'getAccountsPayableData'])->name('get-accounts-payable-data');
                     });
-
                 });
 
                 // File Management
@@ -894,6 +902,7 @@ Route::group([
         Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
         Route::get('ajax-import-stakeholders.kins.get.input', [StakeholdersImportControler::class, 'getInput'])->name('ajax-import-stakeholders.kins.get.input');
+        Route::post('ajax-get-unit', [SalesPlanController::class, 'getUnitDetails'])->name('ajax-get-unit');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
         Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');

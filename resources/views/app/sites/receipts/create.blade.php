@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                        width: calc(20% - 0.5em);
-                                                                                    } */
+                                                                                            width: calc(20% - 0.5em);
+                                                                                        } */
     </style>
 @endsection
 
@@ -144,6 +144,19 @@
                                 name="discounted_amount" id="discounted_amount" placeholder="Discounted Amount "
                                 value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />
                             @error('discounted_amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                               Total Payable Amount
+                            </label>
+                            <input readonly type="text"
+                                class="form-control amountFormat @error('total_payable_amount') is-invalid @enderror"
+                                 id="total_payable_amount" placeholder="Total Payable Amount "
+                                />
+                            @error('total_payable_amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -558,6 +571,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
+                        showBlockUI('#loader');
                         $('.amountToBePaid').attr('unit_id', response.unit_id);
                         $('#unit_type').empty();
                         $('.amountToBePaid').empty();
@@ -568,12 +582,22 @@
                         $('.floor').append('<option value="0" selected>' + response.unit_floor + '</option>');
                         $('.unit_name').append('<option value="0" selected>' + response.unit_name +
                             '</option>');
+
+                        $('#customer_ap_amount').val(response.customerPayableAmount.toLocaleString());
+                        $('#dealer_ap_amount').val(response.dealerPayableAmount.toLocaleString());
+                        $('#vendor_ap_amount').val(response.vendorPayableAmount.toLocaleString());
+
+                        $('#total_payable_amount').val(response.total_payable_amount.toLocaleString());
+
+                        hideBlockUI('#loader');
                     } else {
+                        hideBlockUI('#loader');
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Something Went Wrong!!',
                         });
+
                     }
                 },
                 error: function(error) {

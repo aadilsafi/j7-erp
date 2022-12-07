@@ -63,15 +63,14 @@ class SalesPlanService implements SalesPlanInterface
     // }
 
     // // Store
-    public function store($site_id, $floor_id, $unit_id, $inputs)
+    public function store($site_id, $inputs)
     {
-        DB::transaction(function () use ($site_id, $floor_id, $unit_id, $inputs) {
+        DB::transaction(function () use ($site_id, $inputs) {
             // dd($inputs);
             LogBatch::startBatch();
 
             $site = (new Site())->find($site_id);
-            $floor = (new Floor())->find($floor_id);
-            $unit = (new Unit())->find($unit_id);
+            $unit = (new Unit())->find($inputs['unit_id']);
 
             // dd($unit);
 
@@ -103,8 +102,16 @@ class SalesPlanService implements SalesPlanInterface
                 'address' => $stakeholderInput['address'],
                 'mailing_address' => $stakeholderInput['mailing_address'],
                 'comments' => $stakeholderInput['comments'],
+                'email' => $stakeholderInput['email'],
+                'optional_email' => $stakeholderInput['optional_email'],
+                'country_id' => $stakeholderInput['country_id'],
+                'state_id' => $stakeholderInput['state_id'],
+                'city_id' => $stakeholderInput['city_id'],
             ];
 
+            if ($stakeholderInput['stackholder_id'] == 0) {
+                $stakeholderData['stakeholder_as'] = 'i';
+            }
             $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
                 'id' => $stakeholderInput['stackholder_id'],
             ], $stakeholderData);
@@ -305,11 +312,11 @@ class SalesPlanService implements SalesPlanInterface
     {
         try {
             $start = microtime(true);
-
+            $unit = (new Unit())->find($inputs['unit_id']);
             $installments = [
                 'site' => (new Site())->find(decryptParams($site_id)),
-                'floor' => (new Floor())->find(decryptParams($floor_id)),
-                'unit' => (new Unit())->find(decryptParams($unit_id)),
+                'floor' => $unit->floor,
+                'unit' => $unit,
             ];
 
             $unchangedData = collect(isset($inputs['unchangedData']) ? $inputs['unchangedData'] : []);

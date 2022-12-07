@@ -114,7 +114,6 @@
                         href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
                         {{-- <i class="bi bi-calculator"></i> --}}
                         <i class="ficon" data-feather="trello"></i>
-
                     </a>
                 </li>
             @endcan

@@ -6,8 +6,8 @@
                         class="text-danger">*</span></label>
                 <select class="form-select form-select-lg" id="stakeholder_as" name="stakeholder_as">
                     <option value="0" selected>Select Stakeholder As</option>
-                    <option value="i">Individual</option>
-                    <option value="c">Company</option>
+                    <option value="i" {{ old('stakeholder_as') == 'i' ? 'selected' : '' }}>Individual</option>
+                    <option value="c" {{ old('stakeholder_as') == 'c' ? 'selected' : '' }}>Company</option>
                 </select>
                 @error('stakeholder_as')
                     <span class="text-danger">{{ $message }}</span>
@@ -104,7 +104,7 @@
                     class="cp_cnic form-control form-control-md @error('registration') is-invalid @enderror"
                     id="registration" name="registration" placeholder="Registration Number"
                     value="{{ isset($stakeholder) ? $stakeholder->cnic : old('registration') }}" />
-                @error('cnic')
+                @error('registration')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
@@ -256,7 +256,7 @@
                 <select class="select2 country_id" id="country_id" name="country_id">
                     <option value="0" selected>Select Country</option>
                     @foreach ($country as $countryRow)
-                        <option @if (isset($stakeholder) && $stakeholder->country_id == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                        <option @if ((isset($stakeholder) && $stakeholder->country_id) || old('country_id') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
                             {{ $countryRow->name }}</option>
                     @endforeach
                 </select>
@@ -269,10 +269,7 @@
                 <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
                 <select class="select2 state_id" id="state_id" name="state_id">
                     <option value="0" selected>Select State</option>
-                    @foreach ($state as $stateRow)
-                        <option @if (isset($stakeholder) && $stakeholder->state_id == $stateRow->id) selected @endif value="{{ $stateRow->id }}">
-                            {{ $stateRow->name }}</option>
-                    @endforeach
+                   
                 </select>
                 @error('state_id')
                     <span class="text-danger">{{ $message }}</span>
@@ -283,10 +280,7 @@
                 <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
                 <select class="select2 city_id" id="city_id" name="city_id">
                     <option value="0" selected>Select City</option>
-                    @foreach ($city as $cityRow)
-                        <option @if (isset($stakeholder) && $stakeholder->city_id == $cityRow->id) selected @endif value="{{ $cityRow->id }}">
-                            {{ $cityRow->name }}</option>
-                    @endforeach
+                   
                 </select>
                 @error('city_id')
                     <span class="text-danger">{{ $message }}</span>

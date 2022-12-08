@@ -361,15 +361,17 @@ class StakeholderService implements StakeholderInterface
                 $nextOfKins = [];
 
                 foreach ($inputs['next-of-kins'] as $nok) {
-                    $nextOfKins[] = StakeholderNextOfKin::create([
-                        'stakeholder_id' => $stakeholder->id,
-                        'kin_id' => $nok['stakeholder_id'],
-                        'site_id' => $site_id,
-                        'relation' => $nok['relation'],
-                    ]);
-                    StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
-                        'status' => true,
-                    ]);
+                    if ($nok['stakeholder_id'] != 0) {
+                        $nextOfKins[] = StakeholderNextOfKin::create([
+                            'stakeholder_id' => $stakeholder->id,
+                            'kin_id' => $nok['stakeholder_id'],
+                            'site_id' => $site_id,
+                            'relation' => $nok['relation'],
+                        ]);
+                        StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
+                            'status' => true,
+                        ]);
+                    }
                 }
             }
 

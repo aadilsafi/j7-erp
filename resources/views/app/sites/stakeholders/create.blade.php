@@ -33,6 +33,22 @@
             display: none;
         }
 
+        #companyForm {
+            display: none;
+        }
+
+        #individualForm {
+            display: none;
+        }
+
+        #common_form {
+            display: none;
+        }
+
+        #stakeholderType {
+            display: none;
+        }
+
         .iti {
             width: 100%;
         }
@@ -170,13 +186,10 @@
     </script>
 
     <script type="text/javascript">
-        $('#companyForm').hide();
-        $('#individualForm').hide();
-        $('#common_form').hide();
-        $('#stakeholderType').hide();
-
         $(document).ready(function() {
-
+            @php
+                $data = old();
+            @endphp
             var t = $("#stakeholder_as");
             t.wrap('<div class="position-relative"></div>');
             t.select2({
@@ -251,6 +264,8 @@
 
                 $("#city_id").empty()
                 $('#state_id').empty();
+                $('#state_id').html('<option value=0>Select State</option>');
+                $('#city_id').html('<option value=0>Select City</option>');
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -267,13 +282,19 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('#state_id').html('<option value=0>Select State</option>');
-                                $('#city_id').html('<option value=0>Select City</option>');
+
                                 $.each(response.states, function(key, value) {
                                     $("#state_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
+
+                                @if (isset($data['state_id']))
+
+                                    state_id.val("{{ $data['state_id'] }}");
+
+                                    state_id.trigger('change');
+                                @endif
                             } else {
                                 hideBlockUI('#stakeholderForm');
                                 Swal.fire({
@@ -292,17 +313,16 @@
             });
 
 
-            var e = $("#state_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
+            var state_id = $("#state_id");
+            state_id.wrap('<div class="position-relative"></div>');
+            state_id.select2({
                 dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
+                dropdownParent: state_id.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
             }).change(function() {
                 $("#city_id").empty()
-                // alert($(this).val());
-                showBlockUI('#stakeholderForm');
+                $('#city_id').html('<option value=0>Select City</option>');
 
                 var _token = '{{ csrf_token() }}';
                 let url =
@@ -320,12 +340,14 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('#city_id').html('<option value=0>Select City</option>');
                                 $.each(response.cities, function(key, value) {
                                     $("#city_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
+                                @if (isset($data['city_id']))
+                                    $("#city_id").val("{{ $data['city_id'] }}");
+                                @endif
                             } else {
                                 hideBlockUI('#stakeholderForm');
                                 Swal.fire({
@@ -491,9 +513,7 @@
                 }
             });
 
-            @php
-                $data = old();
-            @endphp
+
             @if (!isset($data['contact-persons']))
                 $('#delete-contact-person').trigger('click');
             @endif
@@ -508,6 +528,12 @@
                     $('#mailing_address').val('')
                 }
             })
+            @if (isset($data['stakeholder_as']))
+                $("#stakeholder_as").trigger('change');
+            @endif
+            @if (isset($data['country_id']))
+                $("#country_id").trigger('change');
+            @endif
 
         });
         hideBlockUI('#stakeholderForm');

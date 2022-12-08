@@ -98,7 +98,7 @@ class StakeholderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $site_id)
+    public function store(stakeholderStoreRequest $request, $site_id)
     // public function store(Request $request, $site_id)
     {
         try {
@@ -183,7 +183,7 @@ class StakeholderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $site_id, $id)
+    public function update(stakeholderUpdateRequest $request, $site_id, $id)
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);

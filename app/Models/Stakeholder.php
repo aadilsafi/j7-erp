@@ -46,11 +46,13 @@ class Stakeholder extends Model implements HasMedia
 
     public $rules = [
         // 'site_id' => 'required|numeric',
+        'stakeholder_as' => 'required|in:i,c',
         'full_name' => 'required|string|min:1|max:50',
-        'father_name' => 'required|string|min:1|max:50',
+        'father_name' => 'required_if:stakeholder_as,i|string|min:1|max:50',
         'occupation' => 'nullable|string|max:50',
         'designation' => 'nullable|string|max:50',
-        'cnic' => 'required|unique:stakeholders,cnic',
+        'cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
+        'registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
         // 'cnic' => 'required|numeric|digits:13|unique:stakeholders,cnic',
         'ntn' => 'sometimes',
         'contact' => 'required|string|min:1|max:20',
@@ -65,9 +67,11 @@ class Stakeholder extends Model implements HasMedia
         'city_id' => 'nullable|numeric',
         'state_id' => 'nullable|numeric',
         'country_id' => 'nullable|numeric',
-        'next-of-kins.*.relation' => 'required',
+        'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
+        'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
         'nationality' => 'sometimes',
-        'email' => 'required',
+        'email' => 'required|unique:stakeholders,email',
+        'optional_email' => 'sometimes|unique:stakeholders,email',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 
@@ -77,7 +81,7 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons.*.cnic.min' => 'CNIC must be at least 1 digit.',
         'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
         'next-of-kins.*.relation' => 'Kin Relation Field is Required.',
-        'cnic.exists' => 'Cnic is Blacklisted.'
+        'cnic.exists' => 'Cnic is Blacklisted.',
     ];
 
     protected $casts = [

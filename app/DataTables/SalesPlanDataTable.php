@@ -95,7 +95,7 @@ class SalesPlanDataTable extends DataTable
     {
         $unitStatus = Unit::find($this->unit->id)->status_id;
         $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.create');
-        $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
+        // $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         $selectedDeletePermission = 0;
 
         $buttons = [
@@ -171,7 +171,7 @@ class SalesPlanDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $destroyPermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
+        // $destroyPermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         $destroyPermission = 0;
         $printPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.templates.print');
 

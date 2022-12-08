@@ -550,7 +550,7 @@
                     class="nav-item {{ request()->routeIs('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
-                        <i class="bi bi-calculator"></i>
+                        <i class="bi bi-clipboard-data"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Sales Plan</span>
                     </a>
                 </li>

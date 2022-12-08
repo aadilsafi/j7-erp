@@ -46,7 +46,7 @@ class StakeholderDataTable extends DataTable
                 return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
             })
             ->editColumn('country_id', function ($stakeholder) {
-                return  $stakeholder->country->name;
+                return  $stakeholder->country != null ? $stakeholder->country->name : '-';
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);

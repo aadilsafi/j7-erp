@@ -100,9 +100,10 @@
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
                                         
-                                        $additionalCostTotalAmount = ($unit->total_price * $additionalCostPercentage) / 100;
+                                        $additionalCostTotalAmount = ( 1 * $additionalCostPercentage) / 100;
                                     @endphp
 
+<?php echo '<script type="text/javascript">parseFloat($("#total-price-unit").val())</script>'; ?>
                                     <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
                                         style="display: none;">
 

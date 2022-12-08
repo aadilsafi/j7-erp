@@ -36,9 +36,9 @@ class storeRequest extends FormRequest
             'stackholder.stackholder_id' => 'required',
             'stackholder.full_name' => 'required|string|min:1|max:50',
             'stackholder.father_name' => 'required|string|min:1|max:50',
-            'stackholder.occupation' => 'required|string|min:1|max:50',
-            'stackholder.designation' => 'required|string|min:1|max:50',
-            'stackholder.ntn' => 'required|numeric',
+            // 'stackholder.occupation' => 'required|string|min:1|max:50',
+            // 'stackholder.designation' => 'required|string|min:1|max:50',
+            // 'stackholder.ntn' => 'required|numeric',
             'stackholder.contact' => 'required|string|min:1|max:20',
             'stackholder.address' => 'required|string',
         ];

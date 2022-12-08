@@ -80,7 +80,7 @@
                         class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('full_name') is-invalid @enderror"
                     id="company_name" name="company_name" placeholder="Company Name"
-                    value="{{ isset($stakeholder) ? $stakeholder->full_name : old('full_name') }}" />
+                    value="{{ isset($stakeholder) ? $stakeholder->full_name : old('company_name') }}" />
                 @error('full_name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror

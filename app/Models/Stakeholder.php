@@ -47,8 +47,9 @@ class Stakeholder extends Model implements HasMedia
     public $rules = [
         // 'site_id' => 'required|numeric',
         'stakeholder_as' => 'required|in:i,c',
-        'full_name' => 'required|string|min:1|max:50',
-        'father_name' => 'required_if:stakeholder_as,i|string|min:1|max:50',
+        'full_name' => 'exclude_if:stakeholder_as,c|string|min:1|max:50',
+        'father_name' => 'exclude_if:stakeholder_as,c|string|min:1|max:50',
+        'company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
         'occupation' => 'nullable|string|max:50',
         'designation' => 'nullable|string|max:50',
         'cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',

@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                            width: calc(20% - 0.5em);
+                                                                                                                                                                                                                        } */
     </style>
 @endsection
 
@@ -402,11 +402,11 @@
             width: "100%",
             containerCssClass: "select-lg",
         }).change(function() {
-            showBlockUI('#stakeholderForm');
 
             $("#city_id").empty()
             $('#state_id').empty();
-
+            $('#state_id').html('<option value=0>Select State</option>');
+            $('#city_id').html('<option value=0>Select City</option>');
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -423,8 +423,7 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#state_id').html('<option value=0>Select State</option>');
-                            $('#city_id').html('<option value=0>Select City</option>');
+
                             $.each(response.states, function(key, value) {
                                 $("#state_id").append('<option value="' + value
                                     .id + '">' + value.name + '</option>');
@@ -473,8 +472,7 @@
             containerCssClass: "select-lg",
         }).change(function() {
             $("#city_id").empty()
-            // alert($(this).val());
-            showBlockUI('#stakeholderForm');
+            $('#city_id').html('<option value=0>Select City</option>');
 
             var _token = '{{ csrf_token() }}';
             let url =
@@ -492,7 +490,7 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#city_id').html('<option value=0>Select City</option>');
+
                             $.each(response.cities, function(key, value) {
                                 $("#city_id").append('<option value="' + value
                                     .id + '">' + value.name + '</option>');

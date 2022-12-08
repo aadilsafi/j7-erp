@@ -409,7 +409,7 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
-                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                            Route::group(['prefix' => 'bifurcate', 'as' => 'bifurcate.'], function () {
                                 Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
                                 Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
                             });

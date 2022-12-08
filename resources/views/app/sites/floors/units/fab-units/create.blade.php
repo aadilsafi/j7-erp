@@ -53,7 +53,7 @@ encryptParams($floor->id)) }}
 
 @section('content')
 <form class="form form-vertical"
-    action="{{ route('sites.floors.units.fab.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
+    action="{{ route('sites.floors.units.bifurcate.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
     method="POST" id="fabUnitForm">
 
     <div class="row">

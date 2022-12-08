@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        // Schema::table('account_ledgers', function (Blueprint $table) {
-        //     //
-        // });
+        Schema::table('account_ledgers', function (Blueprint $table) {
+           $table->dropColumn('created_date');
+        });
     }
 };

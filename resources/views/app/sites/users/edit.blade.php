@@ -221,7 +221,6 @@
                 containerCssClass: "select-lg",
             }).change(function() {
                 showBlockUI('#userForm');
-
                 $("#city_id").empty()
                 $('#state_id').empty();
                 $('#state_id').html('<option value=0>Select State</option>');
@@ -272,6 +271,8 @@
                         }
                     });
                 }
+
+                hideBlockUI('#userForm');
             });
 
             var city_id = $("#city_id");
@@ -336,6 +337,8 @@
                         }
                     });
                 }
+
+                hideBlockUI('#userForm');
             });
 
 

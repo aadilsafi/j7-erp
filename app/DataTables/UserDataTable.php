@@ -49,6 +49,9 @@ class UserDataTable extends DataTable
             ->editColumn('created_at', function ($user) {
                 return editDateColumn($user->created_at);
             })
+            ->editColumn('updated_at', function ($user) {
+                return editDateColumn($user->updated_at);
+            })
             ->editColumn('actions', function ($user) {
                 return view('app.sites.users.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })

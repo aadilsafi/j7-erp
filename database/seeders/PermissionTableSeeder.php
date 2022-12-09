@@ -1380,14 +1380,14 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.file-managements.file-cancellation.create',
-                'show_name' => 'Can View File Cancellation',
+                'show_name' => 'Can Create File Cancellation',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.file-managements.file-cancellation.store',
-                'show_name' => 'Can View File Cancellation',
+                'show_name' => 'Can Store File Cancellation Form',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

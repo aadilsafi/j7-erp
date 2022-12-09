@@ -417,6 +417,18 @@ class StakeholderService implements StakeholderInterface
             'address' => '',
             'comments' => '',
             'stakeholder_contact_id' => 0,
+            'optional_contact_number' => '',
+            'nationality' => '',
+            'mailing_address'  => '',
+            'optional_contact'  => '',
+            'stakeholder_as' => 'i',
+            'email'  => '',
+            'optional_email'  => '',
+            'country_id' => 0,
+            'city_id' => 0,
+            'state_id' => 0,
+            'countryDetails' => null,
+            'OptionalCountryDetails' => null,
             'stakeholder_types' => [
                 [
                     'stakeholder_id' => 0,

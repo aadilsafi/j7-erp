@@ -355,7 +355,7 @@
                                             <a class="d-flex align-items-center"
                                                 href="{{ route('sites.banks.importBanks', ['site_id' => encryptParams($site_id)]) }}">
                                                 <i class="bi bi-bank2"></i>
-                                                <span class="menu-title" data-i18n="Types">Bank
+                                                <span class="menu-title" data-i18n="Types">Banks
                                                 </span>
                                             </a>
                                         </li>

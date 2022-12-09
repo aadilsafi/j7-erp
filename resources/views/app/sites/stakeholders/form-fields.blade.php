@@ -269,7 +269,7 @@
                 <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
                 <select class="select2 state_id" id="state_id" name="state_id">
                     <option value="0" selected>Select State</option>
-                   
+
                 </select>
                 @error('state_id')
                     <span class="text-danger">{{ $message }}</span>
@@ -280,7 +280,7 @@
                 <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
                 <select class="select2 city_id" id="city_id" name="city_id">
                     <option value="0" selected>Select City</option>
-                   
+
                 </select>
                 @error('city_id')
                     <span class="text-danger">{{ $message }}</span>
@@ -445,6 +445,26 @@
                             </div>
                             <div class="card-body">
                                 <div>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                            <label class="form-label" style="font-size: 15px"
+                                                for="stackholders">Stakeholders</label>
+                                            <select class="form-select contact-person-select"
+                                                data-id="{{ $key }}"
+                                                name="contact-persons[{{ $key }}][stakeholder_contact_id]">
+                                                <option value="0">Create new Stakeholder...</option>
+                                                @forelse ($contactStakeholders as $cstakeholder)
+                                                @continue(isset($stakeholder) && $cstakeholder->id == $stakeholder->id)
+                                                    <option value="{{ $cstakeholder->id }}" {{$oldContactPersons['stakeholder_contact_id'] == $cstakeholder->id ? 'selected' : ''}}>
+                                                        {{ $cstakeholder->full_name }} s/o
+                                                        {{ $cstakeholder->father_name }} {{ $cstakeholder->cnic }},
+                                                        {{ $cstakeholder->contact }}
+                                                    </option>
+                                                @empty
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="row mb-1">
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                             <label class="form-label fs-5" for="full_name_{{ $key }}">Full

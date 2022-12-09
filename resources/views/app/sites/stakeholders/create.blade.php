@@ -96,6 +96,7 @@
                     'city' => $city,
                     'state' => $state,
                     'emtyNextOfKin' => $emtyNextOfKin,
+                    'contactStakeholders' => $contactStakeholders,
                 ]) }}
 
             </div>
@@ -419,6 +420,19 @@
                 }
             });
 
+            function initializeSelect2() {
+                const inputElements = document.querySelectorAll('select.select2');
+                console.log(inputElements.length);
+                Array.from(inputElements).forEach(inputElement => {
+                    console.log(inputElement)
+                    inputElement.select2({
+                        dropdownAutoWidth: !0,
+                        width: "100%",
+                        containerCssClass: "select-lg",
+                    })
+
+                });
+            }
             $(".contact-persons-list").repeater({
                 // initEmpty: true,
                 show: function() {
@@ -426,6 +440,8 @@
                         width: 14,
                         height: 14
                     })
+                    // initializeSelect2();
+
                 },
                 hide: function(e) {
                     $(this).slideUp(e)
@@ -475,6 +491,8 @@
                     return true;
                 }
             }, "In Valid number");
+
+
             var validator = $("#stakeholderForm").validate({
                 rules: {
                     'mailing_address': {
@@ -535,7 +553,66 @@
                 $("#country_id").trigger('change');
             @endif
 
+
         });
+
+        $(document).on('change', '.contact-person-select', function(e) {
+            var index = Number(this.name.replace("contact-persons[", "").replace("][stakeholder_contact_id]", ""));
+            let stakeholder_id = this.value;
+            if (stakeholder_id > 0) {
+                showBlockUI('#stakeholderForm');
+
+                $.ajax({
+                    url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}"
+                        .replace(':id', stakeholder_id),
+                    type: 'GET',
+                    data: {},
+                    success: function(response) {
+                        if (response.status) {
+                            if (response.data) {
+                                stakeholderData = response.data[0];
+                            }
+
+                            $('[name="contact-persons[' + index + '][full_name]"]').val(stakeholderData
+                                .full_name)
+                            $('[name="contact-persons[' + index + '][father_name]"]').val(
+                                stakeholderData
+                                .father_name);
+                            $('[name="contact-persons[' + index + '][occupation]"]').val(stakeholderData
+                                .occupation);
+                            $('[name="contact-persons[' + index + '][designation]"]').val(
+                                stakeholderData
+                                .designation);
+                            $('[name="contact-persons[' + index + '][cnic]"]').val(stakeholderData
+                                .cnic);
+                            $('[name="contact-persons[' + index + '][ntn]"]').val(stakeholderData.ntn);
+                            $('[name="contact-persons[' + index + '][contact]"]').val(stakeholderData
+                                .contact);
+
+                            $('[name="contact-persons[' + index + '][address]"]').val(stakeholderData
+                                .address);
+                            console.log($('[name="contact-persons[' + index + '][address]"]'))
+                        }
+                        hideBlockUI('#stakeholderForm');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            } else {
+                $('[name="contact-persons[' + index + '][full_name]"]').val('')
+                $('[name="contact-persons[' + index + '][father_name]"]').val('');
+                $('[name="contact-persons[' + index + '][occupation]"]').val('');
+                $('[name="contact-persons[' + index + '][designation]"]').val('');
+                $('[name="contact-persons[' + index + '][cnic]"]').val('');
+                $('[name="contact-persons[' + index + '][ntn]"]').val('');
+                $('[name="contact-persons[' + index + '][contact]"]').val('');
+                $('[name="contact-persons[' + index + '][address]"]').val('');
+            }
+
+        });
+
         hideBlockUI('#stakeholderForm');
     </script>
 @endsection

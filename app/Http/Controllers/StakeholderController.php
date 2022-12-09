@@ -83,6 +83,7 @@ class StakeholderController extends Controller
                 'city' => [],
                 'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,
+                'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
 
@@ -163,6 +164,7 @@ class StakeholderController extends Controller
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'customFields' => $customFields,
+                    'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),
 
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
@@ -735,19 +737,19 @@ class StakeholderController extends Controller
     {
         // try {
 
-            $validator = \Validator::make($request->all(), [
-                'fields.*' => 'required',
-            ], [
-                'fields.*.required' => 'Must Select all Fields',
-                'fields.*.distinct' => 'Field can not be duplicated',
+        $validator = \Validator::make($request->all(), [
+            'fields.*' => 'required',
+        ], [
+            'fields.*.required' => 'Must Select all Fields',
+            'fields.*.distinct' => 'Field can not be duplicated',
 
-            ]);
+        ]);
 
-            $validator->validate();
+        $validator->validate();
 
-            ImportStakeholders::dispatch($site_id);
+        ImportStakeholders::dispatch($site_id);
 
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
+        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
         // } catch (\Throwable $th) {
         //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
         // }

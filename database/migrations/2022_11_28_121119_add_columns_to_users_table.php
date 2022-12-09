@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->renameColumn('phone_no', 'contact');
 
-            $table->foreignId('country_id')->default(1)->nullable();
+            $table->foreignId('country_id')->default(167)->nullable();
             $table->foreignId('state_id')->default(0)->nullable();
             $table->foreignId('city_id')->default(0)->nullable();
             $table->string('nationality', 50)->default('pakistani');

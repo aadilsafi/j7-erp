@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
 use App\Models\Bank;
+use App\Models\Country;
 use App\Models\SalesPlan;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Redirect;
@@ -70,6 +71,8 @@ class RebateIncentiveController extends Controller
                 'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
+                'country' => Country::all(),
+
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);

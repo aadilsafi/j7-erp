@@ -15,7 +15,7 @@
                                 {{ $row->floor->name }} ( {{ $row->floor->short_label }})
                             </option>
 
-                            @empty
+                        @empty
                             No Unit Available
                         @endforelse
                     </select>
@@ -100,10 +100,10 @@
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
                                         
-                                        $additionalCostTotalAmount = ( 1 * $additionalCostPercentage) / 100;
+                                        $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
-<?php echo '<script type="text/javascript">parseFloat($("#total-price-unit").val())</script>'; ?>
+                                    <?php echo '<script type="text/javascript">parseFloat($("#total-price-unit").val())</script>'; ?>
                                     <div class="row mb-1" id="div-{{ $additionalCost->slug }}-{{ $key }}"
                                         style="display: none;">
 
@@ -243,7 +243,7 @@
                             <div class="d-flex justify-content-center align-items-center">
                                 <div class="input-group input-group-lg ">
                                     <input type="number" min="0" class="touchspin-icon"
-                                        name="installments[types][value]" value="1" />
+                                        onblur="updateTable()" name="installments[types][value]" value="1" />
                                 </div>
                             </div>
                         </div>

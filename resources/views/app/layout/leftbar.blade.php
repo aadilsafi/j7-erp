@@ -740,14 +740,18 @@
             @endcan
 
             {{-- Accounts Menu --}}
-            @canany(['sites.accounts.recovery.dashboard'])
+            @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',
+                'sites.accounts.recovery.calender', 'sites.accounts.recovery.inventory-aging',
+                'sites.accounts.charts-of-accounts.index', 'sites.accounts.journal-entry.index',
+                'sites.accounts.trial-balance.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
                         <span class="menu-title text-truncate" data-i18n="Account">Accounts</span>
                     </a>
                     <ul>
-                        @canany(['sites.accounts.recovery.dashboard'])
+                        @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',
+                            'sites.accounts.recovery.calender', 'sites.accounts.recovery.inventory-aging'])
                             <li>
                                 <a class="d-flex align-items-center" href="javascript:void(0);">
                                     <i data-feather='dollar-sign'></i>

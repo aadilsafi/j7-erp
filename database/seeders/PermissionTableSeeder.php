@@ -288,21 +288,21 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.types.importTypesPreview',
-                'show_name' => 'Can View Import file',
+                'show_name' => 'Can View TYPES Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.types.storePreview',
-                'show_name' => 'Can View store Preview',
+                'show_name' => 'Can View TYPES store Preview',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.types.saveImport',
-                'show_name' => 'Can Save Import file',
+                'show_name' => 'Can Save TYPES Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -359,7 +359,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.additional-costs.importAdcostsPreview',
-                'show_name' => 'Can View Import file',
+                'show_name' => 'Can View Additional Costs Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -586,7 +586,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.floors.unitsImport.importUnitsPreview',
-                'show_name' => 'Can View Import file',
+                'show_name' => 'Can View Units Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -694,34 +694,34 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             //sales Plan Import
-            [
-                'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
-                'show_name' => 'Can Import Sales Plan file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.SalesPlanImport.importSalesPlanPreview',
-                'show_name' => 'Can View Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.SalesPlanImport.storePreview',
-                'show_name' => 'Can View store Preview',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.SalesPlanImport.saveImport',
-                'show_name' => 'Can Save Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
+            //     'show_name' => 'Can Import Sales Plan file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.SalesPlanImport.importSalesPlanPreview',
+            //     'show_name' => 'Can View Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.SalesPlanImport.storePreview',
+            //     'show_name' => 'Can View store Preview',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.SalesPlanImport.saveImport',
+            //     'show_name' => 'Can Save Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             // sales Plan Additional Costs Import
             // [
             //     'name' => 'sites.floors.spadcostsImport.importspadcosts',
@@ -844,14 +844,14 @@ class PermissionTableSeeder extends Seeder
             //Stakeholders Import
             [
                 'name' => 'sites.stakeholders.importStakeholders',
-                'show_name' => 'Can Import file',
+                'show_name' => 'Can Import Stakeholders file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'sites.stakeholders.importStakeholdersPreview',
-                'show_name' => 'Can View Import file',
+                'show_name' => 'Can View Stakeholders Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -882,7 +882,7 @@ class PermissionTableSeeder extends Seeder
             ],
             [
                 'name' => 'sites.stakeholders.kins.importStakeholdersPreview',
-                'show_name' => 'Can View Import file',
+                'show_name' => 'Can View Stakeholders Kins Import file',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -1105,34 +1105,35 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
-            [
-                'name' => 'sites.receipts.importReceipts',
-                'show_name' => 'Can Import Receipts File',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.receipts.importReceiptsPreview',
-                'show_name' => 'Can View Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.receipts.storePreview',
-                'show_name' => 'Can View store Preview of Import File',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.receipts.saveImport',
-                'show_name' => 'Can Save Import file',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // Receipts imports
+            // [
+            //     'name' => 'sites.receipts.importReceipts',
+            //     'show_name' => 'Can Import Receipts File',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.receipts.importReceiptsPreview',
+            //     'show_name' => 'Can View Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.receipts.storePreview',
+            //     'show_name' => 'Can View store Preview of Import File',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.receipts.saveImport',
+            //     'show_name' => 'Can Save Import file',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             // Customer File Management Routes
             [
                 'name' => 'sites.file-managements.customers',

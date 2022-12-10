@@ -174,7 +174,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $unit->is_for_rebate = false;
             $unit->update();
 
-            $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate->id);
+            // $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate->id);
             return $rebate;
         });
     }

@@ -90,7 +90,7 @@ class UserDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.users.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
+        $selectedDeletePermission =  Auth::user()->can('sites.users.destroy-selected');
 
         return $this->builder()
             ->setTableId('user-table')

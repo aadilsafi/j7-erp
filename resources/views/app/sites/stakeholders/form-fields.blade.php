@@ -454,8 +454,9 @@
                                                 name="contact-persons[{{ $key }}][stakeholder_contact_id]">
                                                 <option value="0">Create new Stakeholder...</option>
                                                 @forelse ($contactStakeholders as $cstakeholder)
-                                                @continue(isset($stakeholder) && $cstakeholder->id == $stakeholder->id)
-                                                    <option value="{{ $cstakeholder->id }}" {{$oldContactPersons['stakeholder_contact_id'] == $cstakeholder->id ? 'selected' : ''}}>
+                                                    @continue(isset($stakeholder) && $cstakeholder->id == $stakeholder->id)
+                                                    <option value="{{ $cstakeholder->id }}"
+                                                        {{ $oldContactPersons['stakeholder_contact_id'] == $cstakeholder->id ? 'selected' : '' }}>
                                                         {{ $cstakeholder->full_name }} s/o
                                                         {{ $cstakeholder->father_name }} {{ $cstakeholder->cnic }},
                                                         {{ $cstakeholder->contact }}

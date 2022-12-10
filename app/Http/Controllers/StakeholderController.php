@@ -79,7 +79,7 @@ class StakeholderController extends Controller
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'customFields' => $customFields,
-                'country' => Country::all(),
+                'country' => Country::whereHas('cities')->get(),
                 'city' => [],
                 'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,

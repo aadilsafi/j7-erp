@@ -103,7 +103,7 @@ class ReceiptsDatatable extends DataTable
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
         $revertPermission =  Auth::user()->hasPermissionTo('sites.receipts.revert-payment');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-        $importPermission =  Auth::user()->hasPermissionTo('sites.receipts.importReceipts');
+        $importPermission =  Auth::user()->can('sites.receipts.importReceipts');
 
         $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([

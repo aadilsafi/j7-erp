@@ -95,11 +95,14 @@
 
                     <hr> --}}
 
-                        <button type="submit"
-                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                            <i data-feather='save'></i>
-                            Save User
-                        </button>
+                        @can('sites.users.store')
+                            <button type="submit"
+                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                <i data-feather='save'></i>
+                                Save User
+                            </button>
+                        @endcan
+
 
                         <a href="{{ route('sites.users.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -256,7 +259,7 @@
             }).change(function() {
                 $("#city_id").empty()
                 $('#city_id').html('<option value=0>Select City</option>');
-               
+
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"

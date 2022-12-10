@@ -85,11 +85,13 @@
                             </div>
                         </div>
 
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save File Title Transfer
-                        </a>
+                        @can('sites.file-managements.file-title-transfer.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save File Title Transfer
+                            </a>
+                        @endcan
 
                         <a href="{{ route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">

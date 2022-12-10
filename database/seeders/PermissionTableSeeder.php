@@ -1610,13 +1610,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'sites.users.destroy',
-                'show_name' => 'Can Destroy Sites Users',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.users.destroy',
+            //     'show_name' => 'Can Destroy Sites Users',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'sites.users.destroy-selected',
                 'show_name' => 'Can Destroy Selected Sites Users',

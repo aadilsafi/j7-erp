@@ -51,10 +51,14 @@
             </div>
 
             <div class="card-footer d-flex align-items-center justify-content-end">
-                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1">
-                    <i data-feather='save'></i>
-                    {{ __('lang.commons.save') }} {{ __('lang.roles.role_singular') }}
-                </button>
+                @can('roles.store')
+                    <button type="submit"
+                        class="btn btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI me-1">
+                        <i data-feather='save'></i>
+                        {{ __('lang.commons.save') }} {{ __('lang.roles.role_singular') }}
+                    </button>
+                @endcan
+
                 <a href="{{ route('roles.index') }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>

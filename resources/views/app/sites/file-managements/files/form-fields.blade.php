@@ -962,10 +962,12 @@
                         <span class="align-middle d-sm-inline-block d-none">Previous</span>
                     </button>
                     @if (!isset($customer_file))
-                        <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
-                            type="submit">
-                            <span class="align-middle d-sm-inline-block d-none">Save</span>
-                        </button>
+                        @can('sites.file-managements.customers.units.files.store')
+                            <button class="btn btn-relief-outline-success waves-effect waves-float waves-light btn-next"
+                                type="submit">
+                                <span class="align-middle d-sm-inline-block d-none">Save</span>
+                            </button>
+                        @endcan
                     @endif
                 </div>
             </div>

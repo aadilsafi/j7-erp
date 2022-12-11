@@ -64,11 +64,13 @@
                                 <div class="col-md-12">
                                     @if (isset($unit) && count($unit->salesPlan) > 0 && $unit->salesPlan[0]->status == 1)
                                     @else
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI">
-                                            <i data-feather='save'></i>
-                                            <span id="update_unit_button_span">Update Unit</span>
-                                        </button>
+                                        @can('sites.floors.units.update')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI">
+                                                <i data-feather='save'></i>
+                                                <span id="update_unit_button_span">Update Unit</span>
+                                            </button>
+                                        @endcan
                                     @endif
                                 </div>
                                 <div class="col-md-12">

@@ -135,7 +135,7 @@ class TypesDataTable extends DataTable
         }
 
 
-        return $this->builder()
+        $builder = $this->builder()
             ->setTableId('types-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
@@ -148,8 +148,9 @@ class TypesDataTable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('parent_id')
-            ->columnDefs([
+            ->rowGroupDataSrc('parent_id');
+        if ($selectedDeletePermission) {
+            $builder->columnDefs([
                 [
                     'targets' => 0,
                     'className' => 'text-center text-primary',
@@ -158,18 +159,16 @@ class TypesDataTable extends DataTable
                     'searchable' => false,
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
+                            var role = JSON.parse(data);
+                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        }",
                     'checkboxes' => [
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
-            ])
-            ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
             ]);
+        }
+        return $builder;
     }
 
     /**
@@ -187,7 +186,7 @@ class TypesDataTable extends DataTable
             Column::make('name')->title('Type Name')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
             Column::make('account_number')->title('Account Number')->addClass('text-nowrap'),
-         
+
         ];
         if (count($this->customFields) > 0) {
             foreach ($this->customFields as $customfields) {

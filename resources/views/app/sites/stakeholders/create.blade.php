@@ -117,11 +117,13 @@
 
                             <hr>
 
-                            <button type="submit" value="save"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                <i data-feather='save'></i>
-                                Save Stakeholder
-                            </button>
+                            @can('sites.stakeholders.store')
+                                <button type="submit" value="save"
+                                    class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                    <i data-feather='save'></i>
+                                    Save Stakeholder
+                                </button>
+                            @endcan
 
                             <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                                 class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">

@@ -159,11 +159,14 @@
                                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
                                     </div>
                                     <hr>
-                                    <button type="submit" value="save" disabled id="savebtn"
-                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                        <i data-feather='save'></i>
-                                        <span id="create_sales_plan_button_span">Save Sales Plan</span>
-                                    </button>
+                                    @can('sites.sales_plan.store')
+                                        <button type="submit" value="save" disabled id="savebtn"
+                                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                            <i data-feather='save'></i>
+                                            <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                                        </button>
+                                    @endcan
+
                                     {{-- <button type="submit" value="save_print"
                                         class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                                         <i data-feather='printer'></i>

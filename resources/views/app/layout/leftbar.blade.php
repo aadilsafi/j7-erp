@@ -568,7 +568,11 @@
             @endcan
 
             {{-- File Management Menu --}}
-            @can('sites.file-managements.customers')
+            @canany(['sites.file-managements.view-files', 'sites.receipts.index', 'sites.payment-voucher.index',
+                'sites.file-managements.customers', 'sites.file-managements.rebate-incentive.index',
+                'sites.file-managements.dealer-incentive.index', 'sites.file-managements.file-refund.index',
+                'sites.file-managements.file-buy-back.index', 'sites.file-managements.file-cancellation.index',
+                'sites.file-managements.file-resale.index', 'sites.file-managements.file-title-transfer.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
@@ -586,81 +590,86 @@
                                 </a>
                             </li>
                         @endcan
+                        @canany(['sites.receipts.index', 'sites.payment-voucher.index'])
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
+                                </a>
+                                <ul>
+                                    @can('sites.receipts.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;">
+                                                </i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.payment-voucher.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Payment Voucher</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
+                        @canany(['sites.file-managements.customers', 'sites.file-managements.rebate-incentive.index',
+                            'sites.file-managements.dealer-incentive.index'])
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 2</span>
+                                </a>
+                                <ul>
+                                    @can('sites.file-managements.customers')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title text-truncate" data-i18n="file-managements">File Creation
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
-                        <li>
-                            <a class="d-flex align-items-center" href="#">
-                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
-                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 1</span>
-                            </a>
+                                    @can('sites.file-managements.rebate-incentive.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title text-truncate" data-i18n="file-managements">Rebate
+                                                    Incentive Form
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
 
-                            <ul>
-                                @can('sites.receipts.index')
-                                    <li
-                                        class="nav-item {{ request()->routeIs('sites.receipts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                        <a class="d-flex align-items-center"
-                                            href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;">
-                                            </i>
-                                            <span class="menu-title text-truncate" data-i18n="Email">Receipts</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('sites.payment-voucher.index')
-                                    <li
-                                        class="nav-item {{ request()->routeIs('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                        <a class="d-flex align-items-center"
-                                            href="{{ route('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;"></i>
-                                            <span class="menu-title text-truncate" data-i18n="Email">Payment Voucher</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
+                                    @can('sites.file-managements.dealer-incentive.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
+                                                    Incentive Form
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
 
-
-                        <li>
-                            <a class="d-flex align-items-center" href="#">
-                                <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
-                                <span class="menu-title text-truncate" data-i18n="file-managements">Step 2</span>
-                            </a>
-                            <ul>
-                                @can('sites.file-managements.customers')
-                                    <li
-                                        class="nav-item {{ request()->routeIs('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                        <a class="d-flex align-items-center"
-                                            href="{{ route('sites.file-managements.customers', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                            <span class="menu-title text-truncate" data-i18n="file-managements">File Creation
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endcan
-
-                                <li
-                                    class="nav-item {{ request()->routeIs('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                    <a class="d-flex align-items-center"
-                                        href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
-                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                        <span class="menu-title text-truncate" data-i18n="file-managements">Rebate
-                                            Incentive Form
-                                        </span>
-                                    </a>
-                                </li>
-
-                                <li
-                                    class="nav-item {{ request()->routeIs('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                    <a class="d-flex align-items-center"
-                                        href="{{ route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($site_id)]) }}">
-                                        <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                        <span class="menu-title text-truncate" data-i18n="file-managements">Dealer
-                                            Incentive Form
-                                        </span>
-                                    </a>
-                                </li>
-
-                            </ul>
-                        </li>
                         @canany(['sites.file-managements.file-refund.index', 'sites.file-managements.file-buy-back.index',
                             'sites.file-managements.file-cancellation.index', 'sites.file-managements.file-resale.index',
                             'sites.file-managements.file-title-transfer.index'])
@@ -750,7 +759,7 @@
                         @endcanany
                     </ul>
                 </li>
-            @endcan
+            @endcanany
 
             {{-- Accounts Menu --}}
             @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',

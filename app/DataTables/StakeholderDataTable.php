@@ -93,6 +93,7 @@ class StakeholderDataTable extends DataTable
     {
         $createPermission = Auth::user()->hasPermissionTo('sites.stakeholders.create');
         $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $importPermission = Auth::user()->can('sites.stakeholders.importStakeholders');
         $selectedDeletePermission = 0;
 
         $buttons = [
@@ -104,18 +105,20 @@ class StakeholderDataTable extends DataTable
                 Button::make('pdf')->addClass('dropdown-item'),
             ]),
 
-            Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i data-feather="upload"></i> Import Stakeholders')
-                ->attr([
-                    'onclick' => 'Import()',
-                ]),
+
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
-
-
+        if ($importPermission) {
+            $importbutton = Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Stakeholders')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]);
+            array_unshift($buttons, $importbutton);
+        }
         if ($createPermission) {
             $addbutton = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')

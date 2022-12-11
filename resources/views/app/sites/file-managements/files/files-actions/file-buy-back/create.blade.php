@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                                width: calc(20% - 0.5em);
-                                                                            } */
+                                                                                    width: calc(20% - 0.5em);
+                                                                                } */
     </style>
 @endsection
 
@@ -60,9 +60,8 @@
                     'customer' => $customer,
                     'file' => $file,
                     'total_paid_amount' => $total_paid_amount,
-                    'salesPlan'=>$salesPlan,
-                    'customFields' => $customFields
-
+                    'salesPlan' => $salesPlan,
+                    'customFields' => $customFields,
                 ]) }}
             </div>
 
@@ -81,11 +80,14 @@
                             </div>
                         </div>
 
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save File Buy Back
-                        </a>
+                        @can('sites.file-managements.file-buy-back.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save File Buy Back
+                            </a>
+                        @endcan
+
 
                         <a href="{{ route('sites.file-managements.file-buy-back.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -189,40 +191,40 @@
             formValidations();
         })
 
-        function formValidations(){
+        function formValidations() {
             var validator = $("#fileRefundForm").validate({
-                    rules: {
-                        'amount_profit' : {
-                            required: true,
-                            digits: true,
-                        },
-                        'payment_due_date' : {
-                            required: true
-                        },
-                        'amount_remarks' : {
-                            required: true
-                        },
-                        'amount_to_be_refunded' : {
-                            required: true,
-                        },
-                        'attachments[0][attachment_label]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
-                        'attachment[0][image]': {
-                            required: function(){
-                                return checkbtn;
-                            }
-                        },
+                rules: {
+                    'amount_profit': {
+                        required: true,
+                        digits: true,
                     },
-                    errorClass: 'is-invalid text-danger',
-                    errorElement: "span",
-                    wrapper: "div",
-                    submitHandler: function(form) {
-                        form.submit();
-                    }
-                });
+                    'payment_due_date': {
+                        required: true
+                    },
+                    'amount_remarks': {
+                        required: true
+                    },
+                    'amount_to_be_refunded': {
+                        required: true,
+                    },
+                    'attachments[0][attachment_label]': {
+                        required: function() {
+                            return checkbtn;
+                        }
+                    },
+                    'attachment[0][image]': {
+                        required: function() {
+                            return checkbtn;
+                        }
+                    },
+                },
+                errorClass: 'is-invalid text-danger',
+                errorElement: "span",
+                wrapper: "div",
+                submitHandler: function(form) {
+                    form.submit();
+                }
+            });
         }
 
         $("#saveButton").click(function() {

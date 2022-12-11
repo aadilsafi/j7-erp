@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('account_ledgers', function (Blueprint $table) {
-            $table->timestamp('created_date')->nullable();
+        Schema::table('stakeholder_contacts', function (Blueprint $table) {
+            $table->integer('stakeholder_contact_id')->nullable();
         });
     }
 
@@ -25,8 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('account_ledgers', function (Blueprint $table) {
-           $table->dropColumn('created_date');
+        Schema::table('stakeholder_contacts', function (Blueprint $table) {
+            $table->dropColumn('stakeholder_contact_id');
+            
         });
     }
 };

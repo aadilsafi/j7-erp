@@ -82,7 +82,7 @@ class ImportStakeholders implements ShouldQueue
                             $data[$key]['state_id'] = $state->id;
                         }
                     }
-
+                    $data[$key]['stakeholder_as'] = 'i';
                     $data[$key]['created_at'] = $items->created_at;
                     $data[$key]['updated_at'] = $items->updated_at;
 

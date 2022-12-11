@@ -264,18 +264,20 @@
                         <label class="form-label fs-5" for="stackholder_optional_contact">Optional Contact <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                            class="form-control form-control-lg" id="stackholder_optional_contact" name="stackholder[optional_contact]"
-                            placeholder="Optional Contact"
+                            class="form-control form-control-lg" id="stackholder_optional_contact"
+                            name="stackholder[optional_contact]" placeholder="Optional Contact"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_contact : '' }}" />
                     </div>
                 </div>
 
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 position-relative">
-                        <label class="form-label fs-5" for="stackholder_email">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
+                        <label class="form-label fs-5" for="stackholder_email">Email <span
+                                class="text-danger">*</span></label>
+                        <input type="email" @if (isset($titleTransferPerson)) disabled @endif
+                            class="form-control form-control-md @error('email') is-invalid @enderror"
                             id="stackholder_email" name="email" placeholder="Email" autocomplete="false"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->email : old('email') }}"/>
+                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->email : old('email') }}" />
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -283,8 +285,10 @@
 
                     <div class="col-lg-6 col-md-6 position-relative">
                         <label class="form-label fs-5" for="stackholder_optional_email">Optional Email</label>
-                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
-                            id="stackholder_optional_email" name="optional_email" placeholder="Optional Email" autocomplete="false"
+                        <input type="email" @if (isset($titleTransferPerson)) disabled @endif
+                            class="form-control form-control-md @error('email') is-invalid @enderror"
+                            id="stackholder_optional_email" name="optional_email" placeholder="Optional Email"
+                            autocomplete="false"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_email : old('email') }}" />
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -380,10 +384,12 @@
 
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 position-relative">
-                        <label class="form-label fs-5" for="email">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
-                            id="email" name="email" placeholder="Email" autocomplete="false"
-                            value="{{ isset($customer) ? $customer->email : old('email') }}"/>
+                        <label class="form-label fs-5" for="email">Email <span
+                                class="text-danger">*</span></label>
+                        <input type="email"
+                            class="form-control form-control-lg @error('email') is-invalid @enderror"
+                            name="email" placeholder="Email" autocomplete="false" readonly
+                            value="{{ isset($customer) ? $customer->email : old('email') }}" />
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -391,8 +397,9 @@
 
                     <div class="col-lg-6 col-md-6 position-relative">
                         <label class="form-label fs-5" for="optional_email">Optional Email</label>
-                        <input type="email" class="form-control form-control-md @error('email') is-invalid @enderror"
-                            id="email" name="optional_email" placeholder="Optional Email" autocomplete="false"
+                        <input type="email"
+                            class="form-control form-control-lg @error('email') is-invalid @enderror"
+                            name="optional_email" placeholder="Optional Email" autocomplete="false" readonly
                             value="{{ isset($customer) ? $customer->optional_email : old('email') }}" />
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>

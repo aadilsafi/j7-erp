@@ -18,7 +18,8 @@ class Country extends Model
 
     public function cities()
     {
-        return $this->hasManyThrough(City::class,State::class,'country_id','state_id');
+        return $this->hasMany(City::class);
+        // return $this->hasManyThrough(City::class,State::class,'country_id','state_id');
     }
     public function states()
     {

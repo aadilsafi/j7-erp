@@ -65,6 +65,12 @@ class RebateIncentiveService implements RebateIncentiveInterface
                     'optional_contact' => $dealer_data['optional_contact'],
                     'OptionalCountryDetails' => $dealer_data['OptionalCountryDetails'],
                     'mailing_address' => $dealer_data['mailing_address'],
+                    'email' => $dealer_data['email'],
+                    'optional_email' => $dealer_data['optional_email'],
+                    'country_id' => $dealer_data['country_id'],
+                    'state_id' => $dealer_data['state_id'],
+                    'city_id' => $dealer_data['city_id'],
+                    'stakeholder_as' => 'i'
                 ]);
 
                 $stakeholdertype = [
@@ -168,7 +174,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $unit->is_for_rebate = false;
             $unit->update();
 
-            $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate->id);
+            // $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate->id);
             return $rebate;
         });
     }

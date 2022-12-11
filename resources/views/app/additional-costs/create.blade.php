@@ -47,11 +47,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        Save Additional Cost
-                                    </button>
+                                    @can('sites.additional-costs.store')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Save Additional Cost
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"

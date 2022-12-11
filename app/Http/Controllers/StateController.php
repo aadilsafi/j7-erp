@@ -20,7 +20,7 @@ class StateController extends Controller
 
     public function getStates($countryId)
     {
-        $states = State::select('name', 'id')->where('country_id', $countryId)->get();
+        $states = State::select('name', 'id')->where('country_id', $countryId)->whereHas('cities')->get();
 
         return response()->json([
             'success' => true,

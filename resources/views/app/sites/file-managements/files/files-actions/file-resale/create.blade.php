@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                    width: calc(20% - 0.5em);
-                                                                } */
+                                                                        width: calc(20% - 0.5em);
+                                                                    } */
     </style>
 @endsection
 
@@ -83,11 +83,14 @@
                             <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
                                 class="form-control form-control-lg" />
                         </div>
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save File Resale Request
-                        </a>
+                        @can('sites.file-managements.file-resale.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save File Resale Request
+                            </a>
+                        @endcan
+
 
                         <a href="{{ route('sites.file-managements.file-resale.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">

@@ -71,10 +71,7 @@ class FileRefundDataTable extends DataTable
                     return editBadgeColumn(' File Refund Request Not Found');
                 }
             })
-            // All File Actions
-            ->editColumn('actions', function ($fileManagement) {
-                return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id,'file_id' =>$fileManagement->id]);
-            })
+            
             // Refund Actions
             ->editColumn('refund_actions', function ($fileManagement) {
                 if (isset($fileManagement->fileRefund[0])) {
@@ -82,6 +79,10 @@ class FileRefundDataTable extends DataTable
                 } else {
                     return "-";
                 }
+            })
+            // All File Actions
+            ->editColumn('actions', function ($fileManagement) {
+                return view('app.sites.file-managements.files.actions', ['site_id' => $this->site_id, 'customer_id' => $fileManagement->stakeholder->id, 'unit_id' => $fileManagement->unit->id,'file_id' =>$fileManagement->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

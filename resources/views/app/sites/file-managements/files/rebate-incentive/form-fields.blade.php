@@ -118,6 +118,7 @@
             <div class="card-body">
 
                 <div class="row g-1 mb-1">
+
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                         <label class="form-label" style="font-size: 15px" for="dealer">Dealer</label>
                         <select class="form-select form-select-lg" id="dealer" name="dealer_id">
@@ -132,85 +133,123 @@
                             @endforelse
                         </select>
                     </div>
-
                     <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
                         <div id="div_new_dealer">
-                            <div class="row mb-1">
-                                <input type="hidden" name="dealer[type]" value="D">
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="full_name">Full Name<span
-                                            class="text-danger">*</span></label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                                        id="stackholder_full_name" name="dealer[full_name]"
-                                        placeholder="Stakeholder Name"
-                                        value="{{ isset($stakeholder) ? $stakeholder->full_name : old('full_name') }}" />
-                                    @error('full_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <input type="hidden" name="dealer[type]" value="D">
 
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="father_name">Father / Husband Name<span
-                                            class="text-danger">*</span></label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('father_name') is-invalid @enderror"
-                                        id="stackholder_father_name" name="dealer[father_name]"
-                                        placeholder="Father / Husband Name"
-                                        value="{{ isset($stakeholder) ? $stakeholder->father_name : old('father_name') }}" />
-                                    @error('father_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                            {{--  individual Form --}}
+                            <div id="individualForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="stackholder_full_name" name="stackholder[full_name]"
+                                            placeholder="Full Name" value="{{ old('stackholder.full_name') }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband
+                                            Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="stackholder_father_name" name="stackholder[father_name]"
+                                            placeholder="Father / Husband Name"
+                                            value="{{ old('stackholder.father_name') }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="stackholder_occupation" name="stackholder[occupation]"
+                                            placeholder="Occupation" value="{{ old('stackholder.occupation') }}" />
+                                    </div>
                                 </div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5"
+                                            for="stackholder_designation">Designation</label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="stackholder_designation" name="stackholder[designation]"
+                                            placeholder="Designation" value="{{ old('stackholder.designation') }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
+                                        <input type="number" class="form-control form-control-lg"
+                                            id="stackholder_ntn" name="stackholder[ntn]" placeholder="NTN"
+                                            value="{{ old('stackholder.ntn') }}" />
+                                    </div>
 
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="occupation">Occupation</label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                                        id="stackholder_occupation" name="dealer[occupation]"
-                                        placeholder="Occupation"
-                                        value="{{ isset($stakeholder) ? $stakeholder->occupation : old('occupation') }}" />
-                                    @error('occupation')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control form-control-lg"
+                                            id="stackholder_cnic" name="stackholder[cnic]" placeholder="CNIC"
+                                            value="{{ old('stackholder.cnic') }}" />
+                                    </div>
                                 </div>
-
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="designation">Designation</label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('designation') is-invalid @enderror"
-                                        id="stackholder_designation" name="dealer[designation]"
-                                        placeholder="Designation"
-                                        value="{{ isset($stakeholder) ? $stakeholder->designation : old('designation') }}" />
-                                    @error('designation')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                             </div>
 
-                            <div class="row mb-1">
+                            {{-- company form --}}
+                            <div id="companyForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="company_name">Company Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly
+                                            class="form-control form-control-lg @error('full_name') is-invalid @enderror"
+                                            id="company_name" placeholder="Company Name"
+                                            value="{{ old('full_name') }}" />
+                                    </div>
 
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="cnic">CNIC<span
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="industry">Industry </label>
+                                        <input type="text" readonly
+                                            class="form-control form-control-lg @error('industry') is-invalid @enderror"
+                                            id="industry" placeholder="Industry" value="{{ old('industry') }}" />
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="registration">Registration # <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly
+                                            class="cp_cnic form-control form-control-lg @error('registration') is-invalid @enderror"
+                                            id="registration" placeholder="Registration Number"
+                                            value="{{ old('registration') }}" />
+
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="ntn">NTN </label>
+                                        <input type="number" readonly
+                                            class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                            id="ntn" placeholder="NTN Number" value="{{ old('ntn') }}" />
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- common form  --}}
+                            <div class="row mb-1">
+                                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="email">Email <span
                                             class="text-danger">*</span></label>
-                                    <input type="text"
-                                        class="cp_cnic form-control form-control-lg @error('cnic') is-invalid @enderror"
-                                        id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC"
-                                        value="{{ isset($stakeholder) ? $stakeholder->cnic : old('cnic') }}" />
-                                    @error('cnic')
+                                    <input type="email"
+                                        class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                        id="stackholder_email" name="stackholder[email]" placeholder="Email"
+                                        autocomplete="false" value="{{ old('stackholder.email') }}" />
+                                    @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                    <label class="form-label fs-5" for="ntn">NTN</label>
-                                    <input type="number"
-                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                        id="stackholder_ntn" name="dealer[ntn]" placeholder="NTN Number"
-                                        value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
-                                    @error('ntn')
-                                        <div class="invalid-feedback ">{{ $message }}</div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="optional_email">Optional Email</label>
+                                    <input type="email"
+                                        class="form-control form-control-lg @error('email') is-invalid @enderror"
+                                        id="stackholder_optional_email" name="stackholder[optional_email]"
+                                        placeholder="Optional Email" autocomplete="false"
+                                        value="{{ old('stackholder.optional_email') }}" />
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -218,89 +257,103 @@
                                     <label class="form-label fs-5" for="stackholder_contact">Contact <span
                                             class="text-danger">*</span></label>
                                     <input type="tel" class="form-control form-control-lg ContactNoError"
-                                        id="stackholder_contact" name="dealer[contact]" placeholder=""
+                                        id="stackholder_contact" name="stackholder[contact]" placeholder=""
                                         value="{{ old('stackholder.contact') }}" />
                                 </div>
-                                <input type="hidden" name="dealer[countryDetails]" id="countryDetails">
+                                <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+
                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                     <label class="form-label fs-5" for="contact">Optional Contact # </label>
                                     <input type="tel"
-                                        class="form-control form-control-md OPTContactNoError @error('contact') is-invalid @enderror"
-                                        id="optional_contact" name="dealer[optional_contact]" placeholder=""
+                                        class="form-control form-control-lg OPTContactNoError @error('contact') is-invalid @enderror"
+                                        id="optional_contact" name="stackholder[optional_contact]" placeholder=""
                                         value="{{ old('stackholder.optional_contact') }}" />
                                     @error('optional_contact')
                                         <div class="invalid-feedback ">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <input type="hidden" name="dealer[OptionalCountryDetails]"
+                                <input type="hidden" name="stackholder[OptionalCountryDetails]"
                                     id="OptionalCountryDetails">
-
-                                {{-- <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="contact">Contact<span
-                                            class="text-danger">*</span></label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                                        id="stackholder_contact" name="dealer[contact]" placeholder="Contact Number"
-                                        value="{{ isset($stakeholder) ? $stakeholder->contact : old('contact') }}" />
-                                    @error('contact')
-                                        <div class="invalid-feedback ">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="contact">Optional Contact<span
-                                            class="text-danger">*</span></label>
-                                    <input type="text"
-                                        class="form-control form-control-lg @error('contact') is-invalid @enderror"
-                                        id="stackholder_contact" name="dealer[optional_contact]" placeholder="Optional Contact Number"
-                                        value="{{ isset($stakeholder) ? $stakeholder->optional_contact : old('contact') }}" />
-                                    @error('contact')
-                                        <div class="invalid-feedback ">{{ $message }}</div>
-                                    @enderror
-                                </div> --}}
-
                             </div>
-
-                            <div class="row mb-1">
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="address">Address<span
-                                            class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('address') is-invalid @enderror" name="dealer[address]" id="stackholder_address"
-                                        rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->address : old('address') }}</textarea>
-                                    @error('address')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="address">Mailing Address<span
-                                            class="text-danger">*</span></label>
-                                    <textarea class="form-control @error('address') is-invalid @enderror" name="dealer[mailing_address]"
-                                        id="stackholder_mailing_address" rows="3" placeholder="Mailing Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('address') }}</textarea>
-                                    @error('mailing_address')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                            </div>
-
                             <div class="row mb-1">
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="comments">Comments</label>
-                                    <textarea class="form-control @error('comments') is-invalid @enderror" name="dealer[comments]"
-                                        id="stackholder_comments" rows="3" placeholder="Comments">{{ isset($stakeholder) ? $stakeholder->comments : old('comments') }}</textarea>
-                                    @error('comments')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="parent_id">Select
+                                        Country</label>
+                                    <select class="select2 country_id" id="country_id"
+                                        name="stackholder[country_id]">
+                                        <option value="0" selected>Select Country</option>
+                                        @foreach ($country as $data)
+                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
 
+                                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="city_id">Select
+                                        State</label>
+                                    <select class="select2 state_id" id="state_id" name="stackholder[state_id]">
+                                        <option value="0" selected>Select State</option>
 
+                                    </select>
+                                    @error('state_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="city_id">Select
+                                        City</label>
+                                    <select class="select2 city_id" id="city_id" name="stackholder[city_id]">
+                                        <option value="0" selected>Select City</option>
+
+                                    </select>
+                                    @error('city_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="occupation">Nationality </label>
+                                    <input type="text"
+                                        class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                                        id="nationality" name="nationality" placeholder="Nationality"
+                                        value="{{ old('nationality') }}" />
+                                    @error('nationality')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="stackholder_address">Address <span
+                                            class="text-danger">*</span></label>
+                                    <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
+                                        placeholder="Address" rows="4"></textarea>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                                            class="text-danger">*</span><span class="text-info">( Same as Permanent
+                                            Address
+                                            <input type="checkbox" id="cpyAddress" />
+                                            )</span></label>
+                                    <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
+                                        placeholder="Mailing Address" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg- col-md- col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="stackholder_comments">Comments</label>
+                                    <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                                        placeholder="Comments" rows="4"></textarea>
+                                </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -424,7 +477,8 @@
                                 <th id="floor" style="vertical-align: middle;" rowspan="2" scope="col">
                                     Floor
                                 </th>
-                                <th id="faceCharges" class="text-nowrap" style="vertical-align: middle;" scope="col">Face Charges</th>
+                                <th id="faceCharges" class="text-nowrap" style="vertical-align: middle;"
+                                    scope="col">Face Charges</th>
                                 <th style="vertical-align: middle;" scope="col">Discount</th>
                                 <th style="vertical-align: middle;" scope="col">Total</th>
                                 <th style="vertical-align: middle;" scope="col">Downpayment</th>

@@ -81,11 +81,14 @@
                             @enderror
                         </div>
 
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save
-                        </a>
+                        @can('sites.payment-voucher.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save
+                            </a>
+                        @endcan
+
                         <a href="{{ route('sites.payment-voucher.index', ['site_id' => $site_id]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
@@ -390,19 +393,16 @@
                     $("#paymentVoucher").submit();
                 }
 
-            }
-            else if (mode_of_payment == 'Other') {
+            } else if (mode_of_payment == 'Other') {
                 let other_value = $('#other_value').val();
-                if(other_value == ''){
+                if (other_value == '') {
                     $('#other_value').addClass('is-invalid');
                     $('#other_value').parent().append(
                         '<span class="is-invalid text-danger">Other Value is required!</span>');
-                }
-                else{
+                } else {
                     $("#paymentVoucher").submit();
                 }
-            }
-            else {
+            } else {
                 $("#paymentVoucher").submit();
             }
         });
@@ -475,8 +475,5 @@
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
         });
-
-
-
     </script>
 @endsection

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->string('account_head_code', 20);
             $table->string('origin_name')->nullable();
-            $table->string('origin_number', 20)->nullable();
+            $table->string('origin_number')->nullable();
             $table->foreignId('account_action_id')->constrained();
-            $table->foreignId('bank_id')->constrained();
+            $table->foreignId('bank_id')->nullable();
             $table->foreignId('sales_plan_id')->nullable();
             $table->foreignId('receipt_id')->nullable();
             $table->foreignId('file_refund_id')->nullable();
@@ -36,6 +36,7 @@ return new class extends Migration
             $table->double('balance')->default(0);
             $table->string('nature_of_account', 3);
             $table->boolean('status')->default(true);
+            $table->timestamp('created_date')->nullable();
             $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();

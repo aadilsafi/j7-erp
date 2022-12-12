@@ -17,6 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->foreignId('state_id')->constrained();
+            $table->string('state_code')->nullable();
+            $table->unsignedInteger('country_id')->index()->nullable();
+            $table->string('country_code')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->boolean('flag')->default(false);
+            $table->string('wikiDataId')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

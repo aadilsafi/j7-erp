@@ -72,18 +72,21 @@
                     'customFields' => $customFields,
                     'banks' => $banks,
                     'chequebanks' => $banks,
+                    'country' => $country,
                 ]) }}
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
+                        @can('sites.file-managements.rebate-incentive.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save
+                            </a>
+                        @endcan
 
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save
-                        </a>
                         <a href="{{ route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
@@ -150,163 +153,185 @@
         });
     </script>
     <script type="text/javascript">
+        $('#companyForm').hide();
+
+        var selected_state_id = 0;
+        var selected_city_id = 0;
+
         function getData(unit_id) {
             showBlockUI('#rebate');
-            var _token = '{{ csrf_token() }}';
-            let url =
-                "{{ route('sites.file-managements.rebate-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
-            $.ajax({
-                url: url,
-                type: 'post',
-                dataType: 'json',
-                data: {
-                    'unit_id': unit_id,
-                    '_token': _token
-                },
-                success: function(response) {
-                    if (response.success) {
+            if (unit_id > 0) {
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('sites.file-managements.rebate-incentive.ajax-get-data', ['site_id' => encryptParams($site_id)]) }}";
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'unit_id': unit_id,
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
 
-                        if ($('.newAddition').length > 0) {
+                            if ($('.newAddition').length > 0) {
 
-                            $('.newAddition').remove();
-                            $('#faceCharges').css("display", "block");
-                            $('#faceChargesPercentage').css("display", "block");
-                            $('#td_unit_facing_charges').css("display", "block");
-                            $('#td_unit_facing_charges_value').css("display", "block");
-                        }
-
-                        if (response.additionalCosts.length > 0) {
-                            for (let i = 0; i < response.additionalCosts.length; i++) {
-                                $('#faceCharges').before('<th class="text-nowrap newAddition">' + response
-                                    .additionalCosts[i].name + '</th>');
-                                $('#faceChargesPercentage').before(
-                                    '<th class="text-nowrap newAddition">%</th>');
-                                $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
-                                    response.additionalCosts[i].unit_percentage + '%</td>');
-                                let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
-                                    (response.salesPlan.unit_price * response.unit.gross_area);
-                                $('#td_unit_facing_charges_value').before(
-                                    '<td class="text-nowrap newAddition">' + facing_value.toLocaleString() +
-                                    '</td>');
+                                $('.newAddition').remove();
+                                $('#faceCharges').css("display", "block");
+                                $('#faceChargesPercentage').css("display", "block");
+                                $('#td_unit_facing_charges').css("display", "block");
+                                $('#td_unit_facing_charges_value').css("display", "block");
                             }
-                            $('#faceCharges').css("display", "none");
-                            $('#faceChargesPercentage').css("display", "none");
-                            $('#td_unit_facing_charges').css("display", "none");
-                            $('#td_unit_facing_charges_value').css("display", "none");
-                        }
+
+                            if (response.additionalCosts.length > 0) {
+                                for (let i = 0; i < response.additionalCosts.length; i++) {
+                                    $('#faceCharges').before('<th class="text-nowrap newAddition">' + response
+                                        .additionalCosts[i].name + '</th>');
+                                    $('#faceChargesPercentage').before(
+                                        '<th class="text-nowrap newAddition">%</th>');
+                                    $('#td_unit_facing_charges').before('<td class="text-nowrap newAddition">' +
+                                        response.additionalCosts[i].unit_percentage + '%</td>');
+                                    let facing_value = (response.additionalCosts[i].unit_percentage / 100) *
+                                        (response.salesPlan.unit_price * response.unit.gross_area);
+                                    $('#td_unit_facing_charges_value').before(
+                                        '<td class="text-nowrap newAddition">' + facing_value
+                                        .toLocaleString() +
+                                        '</td>');
+                                }
+                                $('#faceCharges').css("display", "none");
+                                $('#faceChargesPercentage').css("display", "none");
+                                $('#td_unit_facing_charges').css("display", "none");
+                                $('#td_unit_facing_charges_value').css("display", "none");
+                            }
 
 
-                        $('#sales_source_lead_source').val(response.leadSource.name);
-                        $('#stakeholder_id').val(response.stakeholder.id);
-                        $('#customer_name').val(response.stakeholder.full_name);
-                        $('#customer_father_name').val(response.stakeholder.father_name);
-                        $('#customer_cnic').val(response.cnic);
-                        $('#customer_ntn').val(response.stakeholder.ntn);
-                        $('#customer_comments').val(response.stakeholder.comments);
-                        $('#customer_address').val(response.stakeholder.address);
-                        $('#customer_mailing_address').val(response.stakeholder.mailing_address);
-                        $('#customer_phone').val(response.stakeholder.contact);
-                        $('#optional_customer_phone').val(response.stakeholder.optional_contact);
-                        $('#customer_occupation').val(response.stakeholder.occupation);
-                        $('#customer_designation').val(response.stakeholder.designation);
+                            $('#sales_source_lead_source').val(response.leadSource.name);
+                            $('#stakeholder_id').val(response.stakeholder.id);
+                            $('#customer_name').val(response.stakeholder.full_name);
+                            $('#customer_father_name').val(response.stakeholder.father_name);
+                            $('#customer_cnic').val(response.cnic);
+                            $('#customer_ntn').val(response.stakeholder.ntn);
+                            $('#customer_comments').val(response.stakeholder.comments);
+                            $('#customer_address').val(response.stakeholder.address);
+                            $('#customer_mailing_address').val(response.stakeholder.mailing_address);
+                            $('#customer_phone').val(response.stakeholder.contact);
+                            $('#optional_customer_phone').val(response.stakeholder.optional_contact);
+                            $('#customer_occupation').val(response.stakeholder.occupation);
+                            $('#customer_designation').val(response.stakeholder.designation);
 
-                        var countryDetails = JSON.parse(response.stakeholder.countryDetails);
+                            var countryDetails = JSON.parse(response.stakeholder.countryDetails);
 
-                        if (countryDetails == null) {
-                            intl.setCountry('pk');
+                            if (countryDetails == null) {
+                                intl.setCountry('pk');
+                            } else {
+                                intl.setCountry(countryDetails['iso2']);
+                            }
+
+                            $('#countryDetails').val(JSON.stringify(intl
+                                .getSelectedCountryData()))
+
+                            var OptionalCountryDetails = JSON.parse(response.stakeholder
+                                .OptionalCountryDetails);
+                            if (OptionalCountryDetails == null) {
+                                intlOptional.setCountry('pk');
+                            } else {
+                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            }
+
+                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                                .getSelectedCountryData()))
+
+                            $('#td_unit_id').html(response.unit.unit_number);
+                            $('#td_unit_area').html(response.unit.gross_area);
+                            $('#td_unit_rate').html(parseFloat(response.salesPlan.unit_price).toLocaleString());
+                            $('#td_unit_floor').html(response.floor);
+
+                            if (response.facing != null) {
+                                $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
+                            } else {
+                                $('#td_unit_facing_charges').html(0 + '%');
+                            }
+
+                            let unit_total = response.unit.price_sqft * response.unit.gross_area;
+                            $('#unit_total').val(unit_total)
+
+                            $('#td_unit_discount').html(response.salesPlan.discount_percentage + '%');
+                            $('#td_unit_total').html(unit_total.toLocaleString());
+                            $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
+
+                            if (response.facing != null) {
+                                let facing_value = response.salesPlan.discount_percentage * response.salesPlan
+                                    .total_price;
+                                $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
+                            } else {
+                                $('#td_unit_facing_charges_value').html(0);
+                            }
+
+                            $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total)
+                                .toLocaleString());
+                            $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
+                                .toLocaleString());
+                            $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan
+                                    .down_payment_total)
+                                .toLocaleString());
+                            hideBlockUI('#rebate');
                         } else {
-                            intl.setCountry(countryDetails['iso2']);
+                            hideBlockUI('#rebate');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Something Went Wrong!!',
+                            });
                         }
-
-                        $('#countryDetails').val(JSON.stringify(intl
-                            .getSelectedCountryData()))
-
-                        var OptionalCountryDetails = JSON.parse(response.stakeholder.OptionalCountryDetails);
-                        if (OptionalCountryDetails == null) {
-                            intlOptional.setCountry('pk');
-                        } else {
-                            intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                        }
-
-                        $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                            .getSelectedCountryData()))
-
-                        $('#td_unit_id').html(response.unit.unit_number);
-                        $('#td_unit_area').html(response.unit.gross_area);
-                        $('#td_unit_rate').html(parseFloat(response.salesPlan.unit_price).toLocaleString());
-                        $('#td_unit_floor').html(response.floor);
-
-                        if (response.facing != null) {
-                            $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
-                        } else {
-                            $('#td_unit_facing_charges').html(0 + '%');
-                        }
-
-                        let unit_total = response.unit.price_sqft * response.unit.gross_area;
-                        $('#unit_total').val(unit_total)
-
-                        $('#td_unit_discount').html(response.salesPlan.discount_percentage + '%');
-                        $('#td_unit_total').html(unit_total.toLocaleString());
-                        $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
-
-                        if (response.facing != null) {
-                            let facing_value = response.salesPlan.discount_percentage * response.salesPlan
-                                .total_price;
-                            $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
-                        } else {
-                            $('#td_unit_facing_charges_value').html(0);
-                        }
-
-                        $('#td_unit_discount_value').html(parseFloat(response.salesPlan.discount_total)
-                            .toLocaleString());
-                        $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
-                            .toLocaleString());
-                        $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan.down_payment_total)
-                            .toLocaleString());
+                    },
+                    error: function(error) {
                         hideBlockUI('#rebate');
-                    } else {
-                        hideBlockUI('#rebate');
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'Something Went Wrong!!',
-                        });
+                        console.log(error);
                     }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+                });
+            } else {
+                $('.hideDiv').hide();
+                hideBlockUI('#rebate');
+
+            }
+
         }
 
-        $('#rebate_percentage').on('change', function() {
+        $(document).on('blur', '#rebate_percentage', function() {
 
             showBlockUI('#rebate');
 
-            let rebate_percentage = parseInt($('#rebate_percentage').val());
+            if ($('#rebate_percentage').val() > 0) {
+                let rebate_percentage = parseInt($('#rebate_percentage').val());
 
-            rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
+                rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
 
-            rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
+                rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
-            let unit_total = parseFloat($('#unit_total').val());
+                let unit_total = parseFloat($('#unit_total').val());
 
-            let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
+                let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
 
-            $('#td_rebate').html(rebate_percentage + '%');
+                $('#td_rebate').html(rebate_percentage + '%');
 
-            $('#td_rebate_value').html(rebate_value.toLocaleString());
+                $('#td_rebate_value').html(rebate_value.toLocaleString());
 
-            $('#rebate_total').val(rebate_value);
+                $('#rebate_total').val(rebate_value);
 
-            if (unit_total > 0) {
-                $('.hideDiv').css("display", "block");
+                if (unit_total > 0) {
+                    $('.hideDiv').show();
+                }
+            } else {
+                $('.hideDiv').hide();
+
             }
+
 
             window.setTimeout(function() {
                 // do whatever you want to do
                 hideBlockUI('#rebate');
-            }, 800);
+            }, 700);
         });
 
         var e = $("#dealer");
@@ -319,7 +344,7 @@
         }).on("change", function(e) {
 
             let dealer = parseInt($(this).val());
-            showBlockUI('#stakeholders_card');
+            showBlockUI('#rebateForm');
             let stakeholderData = {
                 id: 0,
                 full_name: '',
@@ -343,10 +368,11 @@
                         if (response.data) {
                             stakeholderData = response.data[0];
                             isDisable = dealer == 0 ? false : true;
-
-                            console.log(isDisable);
+                            country_id.val(stakeholderData.country_id);
+                            country_id.trigger('change');
                             // $('#stackholder_id').val(stakeholderData.id);
-                            $('#stackholder_full_name').val(stakeholderData.full_name).attr('disabled',
+                            $('#stackholder_full_name').val(stakeholderData.full_name).attr(
+                                'disabled',
                                 isDisable);
                             $('#stackholder_father_name').val(stakeholderData.father_name).attr(
                                 'disabled', isDisable);
@@ -355,29 +381,88 @@
                             $('#stackholder_designation').val(stakeholderData.designation).attr(
                                 'disabled', isDisable);
 
-                            $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData.cnic))
+                            $('#stackholder_cnic').val(format('XXXXX-XXXXXXX-X', stakeholderData
+                                    .cnic))
                                 .attr('disabled', isDisable);
                             $('#stackholder_contact').val(stakeholderData.contact).attr('disabled',
                                 isDisable);
-                            $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled', isDisable);
+                            $('#stackholder_ntn').val(stakeholderData.ntn).attr('disabled',
+                                isDisable);
                             if ((stakeholderData.comments != null)) {
                                 $('#stackholder_comments').val(stakeholderData.comments).attr(
                                     'disabled', isDisable);
                             }
-                            $('#stackholder_address').text(stakeholderData.address).attr('disabled',
-                                isDisable);
-                            $('#stackholder_mailing_address').val(stakeholderData.mailing_address).attr(
+                            $('#optional_contact').val(stakeholderData.optional_contact).attr(
                                 'disabled', isDisable);
+                            $('#mailing_address').val(stakeholderData.mailing_address).attr(
+                                'disabled', isDisable);
+                            $('#stackholder_address').text(stakeholderData.address).attr(
+                                'disabled', isDisable);
+                            $('#stackholder_email').val(stakeholderData.email).attr(
+                                'disabled', isDisable);
+                            $('#stackholder_optional_email').val(stakeholderData
+                                .optional_email).attr(
+                                'disabled', isDisable);
+                            $('#nationality').val(stakeholderData.nationality).attr(
+                                'disabled', isDisable);
+
+                            selected_state_id = stakeholderData.state_id;
+                            selected_city_id = stakeholderData.city_id;
+
+                            if (stakeholderData.stakeholder_as == 'c') {
+                                $('#company_name').val(stakeholderData.full_name).attr(
+                                    'disabled', isDisable);
+                                $('#industry').val(stakeholderData.occupation).attr(
+                                    'disabled', isDisable);
+                                $('#registration').val(stakeholderData.cnic).attr(
+                                    'disabled', isDisable);
+                                $('#ntn').val(stakeholderData.ntn).attr(
+                                    'disabled', isDisable);
+                                $('#companyForm').show();
+                                $('#individualForm').hide();
+
+                            }
+                            if (stakeholderData.stakeholder_as == 'i') {
+
+                                $('#companyForm').hide();
+                                $('#individualForm').show();
+
+                            }
+                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+
+                            if (countryDetails == null) {
+                                intl.setCountry('pk');
+                            } else {
+                                intl.setCountry(countryDetails['iso2']);
+                            }
+
+                            $('#countryDetails').val(JSON.stringify(intl
+                                .getSelectedCountryData()))
+
+                            var OptionalCountryDetails = JSON.parse(stakeholderData
+                                .OptionalCountryDetails);
+                            if (OptionalCountryDetails == null) {
+                                intlOptional.setCountry('pk');
+                            } else {
+                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            }
+
+                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                                .getSelectedCountryData()))
+
                         }
                     }
 
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 }
+
             });
+
+
             // if (dealer === "0") {
             //     $('#div_new_dealer').show();
             // } else {
@@ -413,9 +498,10 @@
                     // maxlength: 13,
                     // minlength: 13
                 },
-                // 'dealer[ntn]': {
-                //     required: true,
-                // },
+                'dealer_id': {
+                    required: true,
+                    min: 1
+                },
                 'dealer[address]': {
                     required: true,
                 },
@@ -431,6 +517,9 @@
                 'dealer[cnic]': {
                     maxlength: "Cnic can't be greater then {0} digits without dashes",
                     minlength: "Cnic can't be less then {0} digits without dashes",
+                },
+                'dealer_id' : {
+                    min: "Select Dealer."
                 }
             },
             errorClass: 'is-invalid text-danger',
@@ -548,8 +637,137 @@
             });
         });
 
+        var country_id = $("#country_id");
+        country_id.wrap('<div class="position-relative"></div>');
+        country_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: country_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+
+            $("#city_id").empty()
+            $('#state_id').empty();
+
+            $('#state_id').html('<option value=0>Select State</option>');
+            $('#city_id').html('<option value=0>Select City</option>');
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
+                .replace(':countryId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#rebateForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+
+                            $.each(response.states, function(key, value) {
+                                $("#state_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            state_id.val(selected_state_id);
+                            state_id.trigger('change');
+                            hideBlockUI('#rebateForm');
+                        } else {
+                            hideBlockUI('#rebateForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#rebateForm');
+                    }
+                });
+            }
+        });
+
+
+        var state_id = $("#state_id");
+        state_id.wrap('<div class="position-relative"></div>');
+        state_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: state_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            $("#city_id").empty()
+            $('#city_id').html('<option value=0>Select City</option>');
+
+            // alert($(this).val());
+            showBlockUI('#rebateForm');
+
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
+                .replace(':stateId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#rebateForm');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $.each(response.cities, function(key, value) {
+                                $("#city_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+
+                            city_id.val(selected_city_id);
+                            city_id.trigger('change');
+
+                            hideBlockUI('#rebateForm');
+                        } else {
+                            hideBlockUI('#rebateForm');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#rebateForm');
+                    }
+                });
+            }
+        });
+
+        var city_id = $("#city_id");
+        city_id.wrap('<div class="position-relative"></div>');
+        city_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: city_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        });
+
         $("#saveButton").click(function() {
             $("#rebateForm").submit();
         });
+
+        $('#cpyAddress').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#mailing_address').val($('#stackholder_address').val());
+            } else {
+                $('#mailing_address').val('')
+            }
+        })
     </script>
 @endsection

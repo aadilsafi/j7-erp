@@ -51,6 +51,7 @@ use App\Http\Controllers\{
     StateController,
     LogController,
     PaymentVocuherController,
+    TransferReceiptController,
 };
 use App\Models\PaymentVocuher;
 use App\Models\Type;
@@ -409,7 +410,7 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
-                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                            Route::group(['prefix' => 'bifurcate', 'as' => 'bifurcate.'], function () {
                                 Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
                                 Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
                             });
@@ -652,6 +653,36 @@ Route::group([
                         // Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         // Route::put('update', [ReceiptController::class, 'update'])->name('update');
                         // Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                // File Transfer Receipts
+                Route::group(['prefix' => 'file-transfer-receipts', 'as' => 'file-transfer-receipts.'], function () {
+                    Route::get('/', [TransferReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [TransferReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [TransferReceiptController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-unit-type-and-unit-floor', [TransferReceiptController::class, 'getUnitTypeAndFloorAjax'])->name('get-unit-type-and-unit-floor');
+                        Route::post('get-unpaid-installments', [TransferReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
+                    });
+
+                    Route::group(['prefix' => '/{receipts_id}'], function () {
+                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('/print', [TransferReceiptController::class, 'printReceipt'])->name('print');
+                            });
+                        });
+                    });
+
+                    Route::get('destroy-draft', [TransferReceiptController::class, 'destroyDraft'])->name('destroy-draft');
+                    Route::get('delete-selected', [TransferReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [TransferReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+                    Route::get('revert-payment/{ids}', [TransferReceiptController::class, 'revertPayment'])->name('revert-payment');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [TransferReceiptController::class, 'show'])->name('show');
                     });
                 });
 

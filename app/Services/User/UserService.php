@@ -38,13 +38,14 @@ class UserService implements UserInterface
                 'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
                 'address' => $inputs['address'],
                 'mailing_address' => $inputs['mailing_address'],
-                'city_id' => $inputs['city_id'],
-                'country_id' => $inputs['country_id'],
-                'state_id' => $inputs['state_id'],
-                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
+
 
             ];
 
+            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
+            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
+            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             $user = $this->model()->create($data);
 
 
@@ -97,11 +98,14 @@ class UserService implements UserInterface
                 'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
                 'address' => $inputs['address'],
                 'mailing_address' => $inputs['mailing_address'],
-                'city_id' => $inputs['city_id'],
-                'country_id' => $inputs['country_id'],
-                'state_id' => $inputs['state_id'],
-                'nationality' => isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani',
+
             ];
+
+            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
+            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
+            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
+
             if (isset($inputs['password'])) {
                 $data['password'] =  Hash::make($inputs['password']);
             }

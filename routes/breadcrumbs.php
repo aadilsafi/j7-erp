@@ -572,7 +572,7 @@ Breadcrumbs::for('sites.payment-voucher.index', function (BreadcrumbTrail $trail
 });
 
 Breadcrumbs::for('sites.payment-voucher.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.payment-voucher.index', decryptParams($site_id));
+    $trail->parent('sites.payment-voucher.index', $site_id);
     $trail->push('Create Payment Voucher');
 });
 
@@ -595,4 +595,21 @@ Breadcrumbs::for('sites.companies.create', function (BreadcrumbTrail $trail, $si
 Breadcrumbs::for('sites.companies.edit', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.companies.index', $site_id);
     $trail->push('Edit Compnay');
+});
+
+
+//file-transfer-receipts
+Breadcrumbs::for('sites.file-transfer-receipts.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('File Transfer Receipts', route('sites.file-transfer-receipts.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.file-transfer-receipts.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-transfer-receipts.index', $site_id);
+    $trail->push('Create File Transfer Receipts');
+});
+
+Breadcrumbs::for('sites.file-transfer-receipts.show', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.file-transfer-receipts.index', $site_id);
+    $trail->push(' Receipt Details');
 });

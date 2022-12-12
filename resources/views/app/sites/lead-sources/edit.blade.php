@@ -48,11 +48,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        Update Lead Source
-                                    </button>
+                                    @can('sites.lead-sources.update')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Update Lead Source
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"

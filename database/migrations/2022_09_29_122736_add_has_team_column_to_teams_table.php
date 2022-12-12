@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('teams', function (Blueprint $table) {
-            $table->boolean('has_team')->default(false);
+            // $table->boolean('has_team')->default(false);
         });
     }
 

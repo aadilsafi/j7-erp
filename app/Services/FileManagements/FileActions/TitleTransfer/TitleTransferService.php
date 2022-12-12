@@ -57,6 +57,16 @@ class TitleTransferService implements TitleTransferInterface
                     'contact' => $inputs['stackholder']['contact'],
                     'address' => $inputs['stackholder']['address'],
                     'comments' => $inputs['stackholder']['comments'],
+                    'countryDetails' => $inputs['stackholder']['countryDetails'],
+                    'optional_contact' => $inputs['stackholder']['optional_contact'],
+                    'OptionalCountryDetails' => $inputs['stackholder']['OptionalCountryDetails'],
+                    'mailing_address' => $inputs['stackholder']['mailing_address'],
+                    'email' => $inputs['stackholder']['email'],
+                    'optional_email' => $inputs['stackholder']['optional_email'],
+                    'country_id' => $inputs['stackholder']['country_id'],
+                    'state_id' => $inputs['stackholder']['state_id'],
+                    'city_id' => $inputs['stackholder']['city_id'],
+                    'stakeholder_as' => "i"
                 ];
 
 
@@ -110,7 +120,7 @@ class TitleTransferService implements TitleTransferInterface
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['customer_id'],
                 'transfer_person_id' => $transfer_person_id,
-                'sales_plan_id'=>$file->sales_plan_id,
+                'sales_plan_id' => $file->sales_plan_id,
                 'transfer_person_data' => json_encode(Stakeholder::find($transfer_person_id)),
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),

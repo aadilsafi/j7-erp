@@ -33,6 +33,22 @@
             display: none;
         }
 
+        #companyForm {
+            display: none;
+        }
+
+        #individualForm {
+            display: none;
+        }
+
+        #common_form {
+            display: none;
+        }
+
+        #stakeholderType {
+            display: none;
+        }
+
         .iti {
             width: 100%;
         }
@@ -80,6 +96,7 @@
                     'city' => $city,
                     'state' => $state,
                     'emtyNextOfKin' => $emtyNextOfKin,
+                    'contactStakeholders' => $contactStakeholders,
                 ]) }}
 
             </div>
@@ -100,11 +117,13 @@
 
                             <hr>
 
-                            <button type="submit" value="save"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                <i data-feather='save'></i>
-                                Save Stakeholder
-                            </button>
+                            @can('sites.stakeholders.store')
+                                <button type="submit" value="save"
+                                    class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                    <i data-feather='save'></i>
+                                    Save Stakeholder
+                                </button>
+                            @endcan
 
                             <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                                 class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -170,13 +189,10 @@
     </script>
 
     <script type="text/javascript">
-        $('#companyForm').hide();
-        $('#individualForm').hide();
-        $('#common_form').hide();
-        $('#stakeholderType').hide();
-
         $(document).ready(function() {
-
+            @php
+                $data = old();
+            @endphp
             var t = $("#stakeholder_as");
             t.wrap('<div class="position-relative"></div>');
             t.select2({
@@ -217,10 +233,13 @@
                 nationalMode: true
             }));
 
+            
+            
+
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             input.addEventListener("countrychange", function() {
-                $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             });
-            $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
 
             var inputOptional = document.querySelector("#optional_contact");
             intlOptional = window.intlTelInput(inputOptional, ({
@@ -233,10 +252,15 @@
             }));
 
             inputOptional.addEventListener("countrychange", function() {
-                $('.OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
             });
             $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
+            @if (!is_null(old('countryDetails')))
+                $('#countryDetails').val({!!old('countryDetails') !!})
+                intl.setCountry('pk');
+                inputOptional.setCountry('pk')
+            @endif
             // $("#city_id").empty()
             // $('#state_id').empty();
 
@@ -251,6 +275,8 @@
 
                 $("#city_id").empty()
                 $('#state_id').empty();
+                $('#state_id').html('<option value=0>Select State</option>');
+                $('#city_id').html('<option value=0>Select City</option>');
                 var _token = '{{ csrf_token() }}';
                 let url =
                     "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -267,13 +293,19 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('#state_id').html('<option value=0>Select State</option>');
-                                $('#city_id').html('<option value=0>Select City</option>');
+
                                 $.each(response.states, function(key, value) {
                                     $("#state_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
+
+                                @if (isset($data['state_id']))
+
+                                    state_id.val("{{ $data['state_id'] }}");
+
+                                    state_id.trigger('change');
+                                @endif
                             } else {
                                 hideBlockUI('#stakeholderForm');
                                 Swal.fire({
@@ -292,17 +324,16 @@
             });
 
 
-            var e = $("#state_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
+            var state_id = $("#state_id");
+            state_id.wrap('<div class="position-relative"></div>');
+            state_id.select2({
                 dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
+                dropdownParent: state_id.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
             }).change(function() {
                 $("#city_id").empty()
-                // alert($(this).val());
-                showBlockUI('#stakeholderForm');
+                $('#city_id').html('<option value=0>Select City</option>');
 
                 var _token = '{{ csrf_token() }}';
                 let url =
@@ -320,12 +351,14 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                $('#city_id').html('<option value=0>Select City</option>');
                                 $.each(response.cities, function(key, value) {
                                     $("#city_id").append('<option value="' + value
                                         .id + '">' + value.name + '</option>');
                                 });
                                 hideBlockUI('#stakeholderForm');
+                                @if (isset($data['city_id']))
+                                    $("#city_id").val("{{ $data['city_id'] }}");
+                                @endif
                             } else {
                                 hideBlockUI('#stakeholderForm');
                                 Swal.fire({
@@ -397,6 +430,19 @@
                 }
             });
 
+            function initializeSelect2() {
+                const inputElements = document.querySelectorAll('select.select2');
+                console.log(inputElements.length);
+                Array.from(inputElements).forEach(inputElement => {
+                    console.log(inputElement)
+                    inputElement.select2({
+                        dropdownAutoWidth: !0,
+                        width: "100%",
+                        containerCssClass: "select-lg",
+                    })
+
+                });
+            }
             $(".contact-persons-list").repeater({
                 // initEmpty: true,
                 show: function() {
@@ -404,6 +450,8 @@
                         width: 14,
                         height: 14
                     })
+                    // initializeSelect2();
+
                 },
                 hide: function(e) {
                     $(this).slideUp(e)
@@ -453,6 +501,8 @@
                     return true;
                 }
             }, "In Valid number");
+
+
             var validator = $("#stakeholderForm").validate({
                 rules: {
                     'mailing_address': {
@@ -491,9 +541,7 @@
                 }
             });
 
-            @php
-                $data = old();
-            @endphp
+
             @if (!isset($data['contact-persons']))
                 $('#delete-contact-person').trigger('click');
             @endif
@@ -508,8 +556,73 @@
                     $('#mailing_address').val('')
                 }
             })
+            @if (isset($data['stakeholder_as']))
+                $("#stakeholder_as").trigger('change');
+            @endif
+            @if (isset($data['country_id']))
+                $("#country_id").trigger('change');
+            @endif
+
 
         });
+
+        $(document).on('change', '.contact-person-select', function(e) {
+            var index = Number(this.name.replace("contact-persons[", "").replace("][stakeholder_contact_id]", ""));
+            let stakeholder_id = this.value;
+            if (stakeholder_id > 0) {
+                showBlockUI('#stakeholderForm');
+
+                $.ajax({
+                    url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}"
+                        .replace(':id', stakeholder_id),
+                    type: 'GET',
+                    data: {},
+                    success: function(response) {
+                        if (response.status) {
+                            if (response.data) {
+                                stakeholderData = response.data[0];
+                            }
+
+                            $('[name="contact-persons[' + index + '][full_name]"]').val(stakeholderData
+                                .full_name)
+                            $('[name="contact-persons[' + index + '][father_name]"]').val(
+                                stakeholderData
+                                .father_name);
+                            $('[name="contact-persons[' + index + '][occupation]"]').val(stakeholderData
+                                .occupation);
+                            $('[name="contact-persons[' + index + '][designation]"]').val(
+                                stakeholderData
+                                .designation);
+                            $('[name="contact-persons[' + index + '][cnic]"]').val(stakeholderData
+                                .cnic);
+                            $('[name="contact-persons[' + index + '][ntn]"]').val(stakeholderData.ntn);
+                            $('[name="contact-persons[' + index + '][contact]"]').val(stakeholderData
+                                .contact);
+
+                            $('[name="contact-persons[' + index + '][address]"]').val(stakeholderData
+                                .address);
+                            console.log($('[name="contact-persons[' + index + '][address]"]'))
+                        }
+                        hideBlockUI('#stakeholderForm');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            } else {
+                $('[name="contact-persons[' + index + '][full_name]"]').val('')
+                $('[name="contact-persons[' + index + '][father_name]"]').val('');
+                $('[name="contact-persons[' + index + '][occupation]"]').val('');
+                $('[name="contact-persons[' + index + '][designation]"]').val('');
+                $('[name="contact-persons[' + index + '][cnic]"]').val('');
+                $('[name="contact-persons[' + index + '][ntn]"]').val('');
+                $('[name="contact-persons[' + index + '][contact]"]').val('');
+                $('[name="contact-persons[' + index + '][address]"]').val('');
+            }
+
+        });
+
         hideBlockUI('#stakeholderForm');
     </script>
 @endsection

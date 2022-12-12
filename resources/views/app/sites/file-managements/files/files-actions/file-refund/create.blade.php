@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                    width: calc(20% - 0.5em);
-                                } */
+                                            width: calc(20% - 0.5em);
+                                        } */
     </style>
 @endsection
 
@@ -79,13 +79,13 @@
                                 </label>
                             </div>
                         </div>
-
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save File Refund
-                        </a>
-
+                        @can('sites.file-managements.file-refund.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save File Refund
+                            </a>
+                        @endcan
                         <a href="{{ route('sites.file-managements.file-refund.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>

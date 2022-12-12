@@ -29,7 +29,7 @@ class updateRequest extends FormRequest
         $rules['cnic'] .= ',' . decryptParams($this->id);
         $rules['registration'] .= ',' . decryptParams($this->id);
         $rules['email'] .= ',' . decryptParams($this->id);
-        $rules['optional_email'] .= ',' . decryptParams($this->id);
+        // $rules['optional_email'] .= ',' . decryptParams($this->id);
 
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);

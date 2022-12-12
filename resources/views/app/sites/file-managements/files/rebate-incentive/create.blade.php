@@ -498,9 +498,10 @@
                     // maxlength: 13,
                     // minlength: 13
                 },
-                // 'dealer[ntn]': {
-                //     required: true,
-                // },
+                'dealer_id': {
+                    required: true,
+                    min: 1
+                },
                 'dealer[address]': {
                     required: true,
                 },
@@ -516,6 +517,9 @@
                 'dealer[cnic]': {
                     maxlength: "Cnic can't be greater then {0} digits without dashes",
                     minlength: "Cnic can't be less then {0} digits without dashes",
+                },
+                'dealer_id' : {
+                    min: "Select Dealer."
                 }
             },
             errorClass: 'is-invalid text-danger',
@@ -757,5 +761,13 @@
         $("#saveButton").click(function() {
             $("#rebateForm").submit();
         });
+
+        $('#cpyAddress').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#mailing_address').val($('#stackholder_address').val());
+            } else {
+                $('#mailing_address').val('')
+            }
+        })
     </script>
 @endsection

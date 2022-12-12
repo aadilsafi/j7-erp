@@ -572,7 +572,7 @@ Breadcrumbs::for('sites.payment-voucher.index', function (BreadcrumbTrail $trail
 });
 
 Breadcrumbs::for('sites.payment-voucher.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.payment-voucher.index', decryptParams($site_id));
+    $trail->parent('sites.payment-voucher.index', $site_id);
     $trail->push('Create Payment Voucher');
 });
 

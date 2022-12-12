@@ -101,8 +101,8 @@ class store extends FormRequest
                 $attachment = $this->attachment;
                 $amount_received = $this->input('amount_received');
                 $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
-                if ($modeOfPayment[0] != 'Cash' && $attachment == null) {
-                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online or Other.');
+                if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
+                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
                 }
                 if($amount_in_numbers[0] >  $amount_received){
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');

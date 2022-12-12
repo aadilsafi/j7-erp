@@ -39,6 +39,13 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->string('bank_details')->nullable();
             $table->dateTime('created_date')->nullable();
+            $table->string('customer_ar_account')->nullable();
+            $table->string('customer_ap_amount')->nullable();
+            $table->string('customer_ap_account')->nullable();
+            $table->string('dealer_ap_amount')->nullable();
+            $table->string('dealer_ap_account')->nullable();
+            $table->string('vendor_ap_amount')->nullable();
+            $table->string('vendor_ap_account')->nullable();
             $table->timestamps();
         });
     }

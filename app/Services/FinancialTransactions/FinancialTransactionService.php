@@ -318,7 +318,6 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['dealer_incentive_id'] = $action_id;
             $data['created_date'] = now();
         }
-
         return (new AccountLedger())->create($data);
     }
 
@@ -537,6 +536,68 @@ class FinancialTransactionService implements FinancialTransactionInterface
         }
     }
 
+
+    // in case of other payment mode
+    public function makeReceiptOtherTransaction($receipt_id)
+    {
+
+        $origin_number = AccountLedger::get();
+        if (isset($origin_number)) {
+            $origin_number = collect($origin_number)->last();
+            $origin_number = $origin_number->origin_number + 1;
+            $origin_number =  sprintf('%03d', $origin_number);
+        } else {
+            $origin_number = '001';
+        }
+
+        $receipt = (new Receipt())->find($receipt_id);
+
+        if (isset($receipt->customer_ap_amount) && (float)$receipt->customer_ap_amount > 0) {
+
+            $customerPayableAccount = StakeholderType::where('stakeholder_id', $receipt->salesPlan->stakeholder_id)->where('type', 'C')->first()->payable_account;
+
+            if (is_null($customerPayableAccount)) {
+                throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerPayableAccount, 29, $receipt->sales_plan_id, 'debit', $receipt->customer_ap_amount, NatureOfAccountsEnum::Customer_AP_Account, $receipt->id);
+        }
+
+        if (isset($receipt->dealer_ap_amount) && (float)$receipt->dealer_ap_amount) {
+
+            $dealerPayableAccount = StakeholderType::where('stakeholder_id', $receipt->salesPlan->stakeholder_id)->where('type', 'D')->first()->payable_account;
+
+
+            if (is_null($dealerPayableAccount)) {
+                throw new GeneralException('Dealer Account is not defined. Please define dealer account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $dealerPayableAccount, 29, $receipt->sales_plan_id, 'debit', $receipt->dealer_ap_amount, NatureOfAccountsEnum::Dealer_AP_Account, $receipt->id);
+        }
+
+        if (isset($receipt->vendor_ap_amount) && (float)$receipt->vendor_ap_amount) {
+
+            $vendorPayableAccount = StakeholderType::where('stakeholder_id', $receipt->salesPlan->stakeholder_id)->where('type', 'V')->first()->payable_account;
+
+            if (is_null($vendorPayableAccount)) {
+                throw new GeneralException('Vendor Account is not defined. Please define vendor account first.');
+            }
+
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $vendorPayableAccount, 29, $receipt->sales_plan_id, 'debit', $receipt->vendor_ap_amount, NatureOfAccountsEnum::Vendor_AP_Account, $receipt->id);
+        }
+
+
+        // Customer AR Transaction
+        $customerAccount = collect($receipt->salesPlan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
+        $customerAccount = collect($customerAccount)->where('unit_id', $receipt->unit_id)->first();
+
+        if (is_null($customerAccount)) {
+            throw new GeneralException('Customer Account is not defined. Please define customer account first.');
+        }
+
+        $this->makeFinancialTransaction($receipt->site_id, $origin_number, $customerAccount['account_code'], 29, $receipt->sales_plan_id, 'credit', $receipt->amount_in_numbers, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
+    }
+
     // in case of cash receipt revert
     public function makeReceiptRevertCashTransaction($receipt_id)
     {
@@ -725,7 +786,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $onlyProfitAmount = $file_buy_back->amount_profit;
 
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->where('status', 1)->where('discounted_amount', '>',0)->get();
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_buy_back->sales_plan_id)->where('status', 1)->where('discounted_amount', '>', 0)->get();
             $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
             $discountedValue = (float)$discounted_amount;
 
@@ -847,7 +908,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $salesPlanRemainingAmount = (int)$sales_plan->total_price - (int)$refunded_amount;
 
 
-            $receiptDiscounted = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->where('status', 1)->where('discounted_amount', '>',0)->get();
+            $receiptDiscounted = Receipt::where('sales_plan_id', $file_cancellation->sales_plan_id)->where('status', 1)->where('discounted_amount', '>', 0)->get();
             $discounted_amount = collect($receiptDiscounted)->sum('discounted_amount');
             $discountedValue = (float)$discounted_amount;
 
@@ -1170,7 +1231,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
     }
 
     // Payment Voucher Transactions
-    public function makePaymentVoucherTransaction($payment_voucher,$stakeholder_id)
+    public function makePaymentVoucherTransaction($payment_voucher, $stakeholder_id)
     {
         $origin_number = AccountLedger::get();
         if (isset($origin_number)) {
@@ -1188,8 +1249,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $payable_account, 4, null, 'debit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
         // Payment Voucher Second Entry Of Cash Or Bank
 
-        if($payment_voucher->payment_mode == "Cash")
-        {
+        if ($payment_voucher->payment_mode == "Cash") {
             //Cash account credit
             // Cash Transaction
             $cashAccount = (new AccountingStartingCode())->where('site_id', $payment_voucher->site_id)
@@ -1203,8 +1263,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $cashAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
         }
 
-        if($payment_voucher->payment_mode == "Cheque" || $payment_voucher->payment_mode == "Online")
-        {
+        if ($payment_voucher->payment_mode == "Cheque" || $payment_voucher->payment_mode == "Online") {
             //Bank account credit
             // Bank Transaction
             $bank = Bank::find($payment_voucher->bank_id);
@@ -1212,5 +1271,4 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $bankAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
         }
     }
-
 }

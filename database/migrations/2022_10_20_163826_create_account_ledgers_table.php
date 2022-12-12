@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->string('account_head_code', 20);
             $table->string('origin_name')->nullable();
-            $table->string('origin_number', 20)->nullable();
+            $table->string('origin_number')->nullable();
             $table->foreignId('account_action_id')->constrained();
             $table->foreignId('bank_id')->nullable();
             $table->foreignId('sales_plan_id')->nullable();

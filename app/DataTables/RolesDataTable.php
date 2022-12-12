@@ -131,7 +131,7 @@ class RolesDataTable extends DataTable
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('roles.destroy-selected');
         $editPermission =  Auth::user()->hasPermissionTo('roles.edit');
-        $destroyPermission =  Auth::user()->hasPermissionTo('roles.destroy');
+        $destroyPermission =  Auth::user()->can('roles.destroy');
         $defaultPermission =  Auth::user()->hasPermissionTo('roles.make-default');
         return [
             (

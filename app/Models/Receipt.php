@@ -42,7 +42,14 @@ class Receipt extends Model implements HasMedia
         'bank_details',
         'created_date',
         'discounted_amount',
-        'serial_no'
+        'serial_no',
+        'customer_ar_account',
+        'customer_ap_amount',
+        'customer_ap_account',
+        'dealer_ap_amount',
+        'dealer_ap_account',
+        'vendor_ap_amount',
+        'vendor_ap_account',
     ];
 
     public $rules = [

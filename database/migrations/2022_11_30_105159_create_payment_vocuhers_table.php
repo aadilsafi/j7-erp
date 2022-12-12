@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('customer_id')->nullable();
             $table->foreignId('dealer_id')->nullable();
             $table->foreignId('vendor_id')->nullable();
+            $table->foreignId('bank_id')->nullable();
             // $table->foreignId('sales_plan_id')->nullable();
             // $table->foreignId('receipt_id')->nullable();
             // $table->foreignId('file_refund_id')->nullable();

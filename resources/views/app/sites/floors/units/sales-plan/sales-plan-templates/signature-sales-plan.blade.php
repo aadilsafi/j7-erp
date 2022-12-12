@@ -334,7 +334,7 @@
                     <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 8px;">
                         {{ number_format($instalment->amount) }}
                     </td>
-                    <td style="white-space: nowrap; border: 1px solid black;text-align: center; padding: 8px;">
+                    <td style="border: 1px solid black;text-align: center; padding: 8px;">
                         @if ($instalment->remarks)
                             {{ $instalment->remarks }}
                         @else

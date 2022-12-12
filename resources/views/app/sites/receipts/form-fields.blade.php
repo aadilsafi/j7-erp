@@ -369,6 +369,49 @@
 
                             </div>
 
+                            <div class="row mb-2">
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px"
+                                        for="customer_ap_amount_paid">Paid Customer Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="customer_ap_amount_paid" value="0" name="customer_ap_amount"  placeholder="Customer AP Amount"
+                                        value="" />
+                                    @error('customer_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="vendor_ap_amount_paid">Paid Vendor
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="vendor_ap_amount_paid" value="0" name="vendor_ap_amount" placeholder="Vendor AP Amount"
+                                        value="" />
+                                    @error('vendor_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="dealer_ap_amount_paid">Paid Dealer
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="dealer_ap_amount_paid" value="0" name="dealer_ap_amount"  placeholder="Dealer AP Amount"
+                                        value="" />
+                                    @error('dealer_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+
                         </div>
 
                         {{-- Online Payment Mode Details --}}

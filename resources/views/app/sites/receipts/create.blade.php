@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                                width: calc(20% - 0.5em);
-                                                                                            } */
+                                                                                                        width: calc(20% - 0.5em);
+                                                                                                    } */
     </style>
 @endsection
 
@@ -125,7 +125,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
                             </label>
-                            <input min="0" type="text"
+                            <input min="0" id="amount_received" type="text"
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
@@ -252,6 +252,7 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -591,6 +592,18 @@
 
                         $('#total_payable_amount').val(response.total_payable_amount.toLocaleString());
 
+                        if (response.customerPayableAmount <= 0) {
+                            $('#customer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.dealerPayableAmount <= 0) {
+                            $('#dealer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.vendorPayableAmount <= 0) {
+                            $('#vendor_ap_amount_paid').attr('readonly', true);
+                        }
+
                         hideBlockUI('#loader');
                     } else {
                         hideBlockUI('#loader');
@@ -609,7 +622,64 @@
         }
 
         $("#saveButton").click(function() {
-            $("#receiptForm").submit();
+            let mode_of_payment = $("input[name='receipts[0][mode_of_payment]']:checked").val();
+
+            $('.is-invalid').removeClass('is-invalid');
+            $('.errorClass').remove();
+
+            if (mode_of_payment == 'Cheque') {
+                let cheque_no = $('#cheque_no').val();
+                if (cheque_no == '') {
+                    $('#cheque_no').addClass('is-invalid');
+                    $('#cheque_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Cheque No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+            } else if (mode_of_payment == 'Online') {
+                let transaction_date = $('#transaction_date').val();
+                let online_instrument_no = $('#online_instrument_no').val();
+
+                if (online_instrument_no == '') {
+                    $('#online_instrument_no').addClass('is-invalid');
+                    $('#online_instrument_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Transaction No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else if (mode_of_payment == 'Other') {
+                let other_value = $('#other_value').val();
+                let dealer_ap_amount_paid = $('#dealer_ap_amount_paid').val();
+                let customer_ap_amount_paid = $('#customer_ap_amount_paid').val();
+                let vendor_ap_amount_paid = $('#vendor_ap_amount_paid').val();
+
+                let sum_ap_amount = parseFloat(dealer_ap_amount_paid) + parseFloat(customer_ap_amount_paid) +
+                    parseFloat(vendor_ap_amount_paid);
+                let amount_toBe_paid = parseFloat($('#amountToBePaid').val().replace(/,/g, ''));
+
+                if (other_value == '') {
+                    $('#other_value').addClass('is-invalid');
+                    $('#other_value').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Other Payment Purpose is required!</span>'
+                        );
+                }
+                 if (sum_ap_amount != amount_toBe_paid) {
+
+                    $('#customer_ap_amount_paid').addClass('is-invalid');
+                    $('#vendor_ap_amount_paid').addClass('is-invalid');
+                    $('#dealer_ap_amount_paid').addClass('is-invalid');
+                    $('#attachment').after(
+                        '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
+                        );
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else {
+                $("#receiptForm").submit();
+            }
+
         });
 
         function destroyDraft() {

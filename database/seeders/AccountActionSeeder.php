@@ -156,6 +156,11 @@ class AccountActionSeeder extends Seeder
                 'name' => 'Title Transfer Receipt Voucher',
                 'slug' => 'title-transfer-receipt-voucher',
             ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Other',
+                'slug' => 'receipt-voucher-other',
+            ],
         ];
         foreach ($data as $item) {
             (new AccountAction())->create($item);

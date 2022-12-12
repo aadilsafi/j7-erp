@@ -19,4 +19,7 @@ enum NatureOfAccountsEnum: string
     case JOURNAL_TITLE_TRANSFER = 'JTT';
     case Rebate_Incentive = 'RI';
     case Dealer_Incentive = 'DI';
+    case Customer_AP_Account = 'C-AP';
+    case Dealer_AP_Account = 'D-AP';
+    case Vendor_AP_Account = 'V-AP';
 }

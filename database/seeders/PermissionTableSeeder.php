@@ -55,13 +55,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'roles.destroy',
-            //     'show_name' => 'Can Destroy Role',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'roles.destroy',
+                'show_name' => 'Can Destroy Role',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'name' => 'roles.destroy-selected',
                 'guard_name' => 'web',
@@ -120,13 +120,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'permissions.destroy',
-            //     'guard_name' => 'web',
-            //     'show_name' => 'Can Destroy Permission',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'permissions.destroy',
+                'guard_name' => 'web',
+                'show_name' => 'Can Destroy Permission',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'name' => 'permissions.destroy-selected',
                 'guard_name' => 'web',

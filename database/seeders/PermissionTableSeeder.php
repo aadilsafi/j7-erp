@@ -1149,13 +1149,13 @@ class PermissionTableSeeder extends Seeder
             //     'created_at' => now(),
             //     'updated_at' => now(),
             // ],
-            [
-                'name' => 'sites.file-managements.customers.units.files.index',
-                'show_name' => 'Can Create Customer Files',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.file-managements.customers.units.files.index',
+            //     'show_name' => 'Can Create Customer Files',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'sites.file-managements.customers.units.files.show',
                 'show_name' => 'Can Preview Created Customers Files',
@@ -1163,13 +1163,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'sites.file-managements.customers.units.files.create',
-            //     'show_name' => 'Can Create Files',
-            //     'guard_name' => 'web',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
+            [
+                'name' => 'sites.file-managements.customers.units.files.create',
+                'show_name' => 'Can Create Customer Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             [
                 'name' => 'sites.file-managements.customers.units.files.store',
                 'show_name' => 'Can Store Customer File',

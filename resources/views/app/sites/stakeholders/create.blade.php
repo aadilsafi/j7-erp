@@ -233,10 +233,13 @@
                 nationalMode: true
             }));
 
+            
+            
+
+            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             input.addEventListener("countrychange", function() {
-                $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
+                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
             });
-            $('.countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
 
             var inputOptional = document.querySelector("#optional_contact");
             intlOptional = window.intlTelInput(inputOptional, ({
@@ -249,10 +252,15 @@
             }));
 
             inputOptional.addEventListener("countrychange", function() {
-                $('.OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
+                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
             });
             $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
+            @if (!is_null(old('countryDetails')))
+                $('#countryDetails').val({!!old('countryDetails') !!})
+                intl.setCountry('pk');
+                inputOptional.setCountry('pk')
+            @endif
             // $("#city_id").empty()
             // $('#state_id').empty();
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateCountriesTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class UpdateCountriesTable extends Migration
      */
     public function up()
     {
-
-        Schema::table('countries', function (Blueprint $table) {
-            $table->dropColumn(['short_label']);
-
+        Schema::create('countries', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->nullable();
             $table->string('iso3')->nullable();
             $table->string('iso2')->nullable();
             $table->string('phonecode')->nullable();
@@ -35,6 +34,8 @@ class UpdateCountriesTable extends Migration
             $table->text('emojiU')->nullable();
             $table->boolean('flag')->default(false);
             $table->text('wikiDataId')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -45,13 +46,6 @@ class UpdateCountriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('countries', function (Blueprint $table) {
-            $table->string('short_label')->nullable();
-
-            $table->dropColumn([
-                'iso3', 'iso2', 'phonecode', 'capital', 'currency', 'currency_symbol', 'tld', 'native', 'region', 'subregion',
-                'timezones', 'translations', 'latitude', 'longitude', 'emoji', 'emojiU', 'flag', 'wikiDataId'
-            ]);
-        });
+        Schema::dropIfExists('countries');
     }
-}
+};

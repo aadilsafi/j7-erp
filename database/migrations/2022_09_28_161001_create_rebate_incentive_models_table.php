@@ -26,6 +26,15 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->foreignId('dealer_id')->constrained('stakeholders');
+            $table->foreignId('bank_id')->nullable();
+            $table->string('mode_of_payment')->nullable();
+            $table->string('other_value')->nullable();
+            $table->string('cheque_no')->nullable();
+            $table->string('online_instrument_no')->nullable();
+            $table->string('transaction_date')->nullable();
+            $table->string('amount_received')->nullable();
+            $table->boolean('is_for_dealer_incentive')->default(true);
+            $table->timestamp('created_date')->nullable();
             $table->timestamps();
         });
     }

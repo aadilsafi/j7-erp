@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('units', function (Blueprint $table) {
-            $table->after('unit_number', function () use ($table) {
-                $table->boolean('is_corner')->default(0);
-                $table->unsignedBigInteger('corner_id')->nullable();
-                $table->boolean('is_facing')->default(0);
-                $table->unsignedBigInteger('facing_id')->nullable();
+            // $table->after('unit_number', function () use ($table) {
+            //     $table->boolean('is_corner')->default(0);
+            //     $table->unsignedBigInteger('corner_id')->nullable();
+            //     $table->boolean('is_facing')->default(0);
+            //     $table->unsignedBigInteger('facing_id')->nullable();
 
-                $table->foreign('facing_id')->references('id')->on('additional_costs');
-            });
+            //     $table->foreign('facing_id')->references('id')->on('additional_costs');
+            // });
         });
     }
 

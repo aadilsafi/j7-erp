@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('floor_area')->default(0);
             $table->string('short_label', 5)->default('F');
             $table->tinyInteger('order')->default(0);
+            $table->json('floor_plan')->nullable();
             $table->foreignId('site_id')->constrained();
             $table->boolean('active')->default(false);
             $table->timestamps();

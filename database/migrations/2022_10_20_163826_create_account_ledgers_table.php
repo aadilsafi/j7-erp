@@ -36,6 +36,7 @@ return new class extends Migration
             $table->double('balance')->default(0);
             $table->string('nature_of_account', 3);
             $table->boolean('status')->default(true);
+            $table->timestamp('created_date')->nullable();
             $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
             $table->softDeletes();

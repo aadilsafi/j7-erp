@@ -234,7 +234,8 @@
                     <div class="invalid-feedback ">{{ $message }}</div>
                 @enderror
             </div>
-            <input type="hidden" name="countryDetails" id="countryDetails" class="countryDetails">
+            <input type="hidden" name="countryDetails" id="countryDetails" class="countryDetails"
+                value="{{ old('countryDetails') }}">
 
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <label class="form-label fs-5" for="contact">Optional Contact # </label>
@@ -247,7 +248,7 @@
                 @enderror
             </div>
             <input type="hidden" name="OptionalCountryDetails" id="OptionalCountryDetails"
-                class="OptionalCountryDetails">
+                class="OptionalCountryDetails" value="{{ old('OptionalCountryDetails') }}">
         </div>
         <div class="row mb-1">
 

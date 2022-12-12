@@ -22,6 +22,11 @@ return new class extends Migration
             $table->integer('parent_id')->default(0);
             $table->boolean('has_sub_units')->default(false);
             $table->tinyInteger('unit_number')->default(0);
+            $table->boolean('is_corner')->default(0);
+            $table->unsignedBigInteger('corner_id')->nullable();
+            $table->boolean('is_facing')->default(0);
+            $table->unsignedBigInteger('facing_id')->nullable();
+            $table->foreign('facing_id')->references('id')->on('additional_costs');
             $table->string('floor_unit_number')->nullable();
             $table->float('net_area')->default(0);
             $table->float('gross_area')->default(0);

@@ -17,6 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->foreignId('country_id')->constrained();
+            $table->string('country_code')->nullable();
+            $table->string('fips_code')->nullable();
+            $table->string('iso2')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->boolean('flag')->default(0);
+            $table->text('wikiDataId')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

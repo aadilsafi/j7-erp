@@ -197,6 +197,9 @@
                     }
                 });
             }
+            else{
+                $('#main-div').hide();
+            }
         });
 
         var t = $("#stakholder_type");

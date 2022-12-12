@@ -608,6 +608,18 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    {{-- @can('sites.file-transfer-receipts.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.file-transfer-receipts.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-receipt-cutoff" style="margin-bottom: 10px;">
+                                                </i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">File Transfer
+                                                    Receipts</span>
+                                            </a>
+                                        </li>
+                                    @endcan --}}
                                     @can('sites.payment-voucher.index')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">

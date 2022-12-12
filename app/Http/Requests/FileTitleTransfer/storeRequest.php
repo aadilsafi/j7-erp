@@ -42,7 +42,7 @@ class storeRequest extends FormRequest
             'stackholder.contact' => 'required|string|min:1|max:20',
             'stackholder.address' => 'required|string',
         ];
-        $rules['stackholder.cnic'] = ['required', 'numeric', Rule::unique('stakeholders', 'cnic')->ignore($this->input('stackholder.stackholder_id'))];
+        $rules['stackholder.cnic'] = ['required', Rule::unique('stakeholders', 'cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;
     }
     /**

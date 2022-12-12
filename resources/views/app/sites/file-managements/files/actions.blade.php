@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-cetner align-items-center">
-    @can('sites.file-managements.customers.units.files.index')
+    @can('sites.file-managements.customers.units.files.show')
         <a class="btn btn-relief-outline-primary waves-effect waves-float waves-light" style="margin: 5px"
             data-bs-toggle="tooltip" data-bs-placement="top" title="View File Details "
             href="{{ route('sites.file-managements.customers.units.files.show', ['site_id' => encryptParams($site_id), 'customer_id' => encryptParams($customer_id), 'unit_id' => encryptParams($unit_id), 'file_id' => encryptParams($file_id)]) }}">

@@ -1105,6 +1105,58 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // File Transfer Receipts
+            [
+                'name' => 'sites.file-transfer-receipts.index',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.create',
+                'show_name' => 'Can Create File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.store',
+                'show_name' => 'Can Store File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.show',
+                'show_name' => 'Can View File Transfer Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.make-active-selected',
+                'show_name' => 'Can Make Active Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.destroy-draft',
+                'show_name' => 'Can Destroy Draft Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-transfer-receipts.templates.print',
+                'show_name' => 'Can Print Selected Receipts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+
             // Receipts imports
             // [
             //     'name' => 'sites.receipts.importReceipts',

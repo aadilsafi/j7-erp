@@ -15,6 +15,7 @@ use App\Models\RebateIncentiveModel;
 use App\DataTables\FileTitleTransferDataTable;
 use App\Http\Requests\FileTitleTransfer\storeRequest;
 use App\Models\Bank;
+use App\Models\Country;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
 use App\Models\ModelTemplate;
@@ -96,7 +97,8 @@ class FileTitleTransferController extends Controller
                 'rebate_incentive' => $rebate_incentive,
                 'rebate_total' => $rebate_total,
                 'salesPlan' => $salesPlan,
-                'customFields' => $customFields
+                'customFields' => $customFields,
+                'country' => Country::all(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-title-transfer.create', $data);
@@ -140,7 +142,7 @@ class FileTitleTransferController extends Controller
         $unit = Unit::find(decryptParams($unit_id));
         $file_title_transfer = FileTitleTransfer::find(decryptParams($id));
         $file = FileManagement::where('id', $file_title_transfer->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
 
         $total_paid_amount = $receipts->sum('amount_in_numbers');
@@ -247,7 +249,7 @@ class FileTitleTransferController extends Controller
 
 
         $file = FileManagement::where('id', $transfer_file->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $receipts->sum('amount_in_numbers');
         $unit_data = json_decode($transfer_file->unit_data);

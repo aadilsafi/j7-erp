@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
+            $table->string('serial_no')->nullable()->default('REC-');
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('sales_plan_id')->constrained();
             $table->foreignId('bank_id')->nullable();
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('drawn_on_bank')->nullable();
             $table->string('transaction_date')->nullable();
             $table->string('amount_in_words');
+            $table->string('discounted_amount')->nullable();
             $table->double('amount_in_numbers');
             $table->string('purpose');
             $table->string('other_purpose')->nullable();

@@ -56,9 +56,9 @@
             ])
 
             {{-- File Approve Modal --}}
-            @include('app.sites.file-managements.files.partials.file-approve-modal', [
+            {{-- @include('app.sites.file-managements.files.partials.file-approve-modal', [
                 'chequebanks' => $banks,
-            ])
+            ]) --}}
         </div>
     </div>
 
@@ -136,41 +136,35 @@
 
         }
 
-
-        var tsite_id;
-        var tcustomer_id;
-        var tunit_id;
-        var tfile_title_transfer_id;
-
         function ApproveModal(site_id, customer_id, unit_id, file_title_transfer_id) {
-            $('#file-approve-modal').modal('show');
-            tsite_id = site_id;
-            tcustomer_id = customer_id;
-            tunit_id = unit_id;
-            tfile_title_transfer_id = file_title_transfer_id;
-            // Swal.fire({
-            //     icon: 'warning',
-            //     title: 'Warning',
-            //     text: 'Are You Sure You Want To Approve This Request?',
-            //     showCancelButton: true,
-            //     cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-            //     confirmButtonText: 'Yes, Approve it!',
-            //     confirmButtonClass: 'btn-danger',
-            //     buttonsStyling: false,
-            //     customClass: {
-            //         confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
-            //         cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
-            //     },
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-            //         showBlockUI('#titleTransfer');
-            //         let url =
-            //             '{{ route('sites.file-managements.file-title-transfer.approve', ['site_id' => ':site_id', 'customer_id' => ':customer_id', 'unit_id' => ':unit_id', 'file_title_transfer_id' => ':file_title_transfer_id']) }}'
-            //             .replace(':site_id', site_id).replace(':customer_id', customer_id).replace(':unit_id',
-            //                 unit_id).replace(':file_title_transfer_id', file_title_transfer_id);
-            //         location.href = url;
-            //     }
-            // });
+            // $('#file-approve-modal').modal('show');
+            // tsite_id = site_id;
+            // tcustomer_id = customer_id;
+            // tunit_id = unit_id;
+            // tfile_title_transfer_id = file_title_transfer_id;
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure You Want To Approve This Request?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Approve it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showBlockUI('#titleTransfer');
+                    let url =
+                        '{{ route('sites.file-managements.file-title-transfer.approve', ['site_id' => ':site_id', 'customer_id' => ':customer_id', 'unit_id' => ':unit_id', 'file_title_transfer_id' => ':file_title_transfer_id']) }}'
+                        .replace(':site_id', site_id).replace(':customer_id', customer_id).replace(':unit_id',
+                            unit_id).replace(':file_title_transfer_id', file_title_transfer_id);
+                    location.href = url;
+                }
+            });
         }
         $('.bankDiv').hide();
 

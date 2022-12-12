@@ -60,6 +60,13 @@ class StakeholderDataTable extends DataTable
             ->editColumn('check', function ($stakeholder) {
                 return $stakeholder;
             })
+            ->editColumn('satkeholderAs', function ($stakeholder) {
+                if ($stakeholder->stakeholder_as == "i") {
+                    return 'Individual';
+                } elseif ($stakeholder->stakeholder_as == "c") {
+                    return 'Company';
+                }
+            })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
 
@@ -148,6 +155,7 @@ class StakeholderDataTable extends DataTable
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
+            ->rowGroupDataSrc('satkeholderAs')
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             // ->rowGroupDataSrc('parent_id')
@@ -193,6 +201,8 @@ class StakeholderDataTable extends DataTable
             Column::make('contact')->title('Contact'),
             Column::make('country_id')->title('Country'),
             Column::make('nationality')->title('Nationality'),
+            Column::computed('satkeholderAs')->visible(false),
+
             // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
             // Column::make('relation')->title('Relation'),
         ];

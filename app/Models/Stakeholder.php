@@ -72,7 +72,7 @@ class Stakeholder extends Model implements HasMedia
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
         'nationality' => 'sometimes',
         'email' => 'required|unique:stakeholders,email',
-        'optional_email' => 'sometimes|unique:stakeholders,email',
+        // 'optional_email' => 'sometimes|unique:stakeholders,email',
         // 'contact-persons.*.cnic' => 'nullable|numeric|digits_between:1,15',
     ];
 

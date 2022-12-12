@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::table('stakeholders', function (Blueprint $table) {
-            $table->string('email')->nullable();
-            $table->string('optional_email')->nullable();
+            // $table->string('email')->nullable();
+            // $table->string('optional_email')->nullable();
         });
     }
 

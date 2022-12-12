@@ -13,31 +13,28 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('receipt_draft_models', function (Blueprint $table) {
+        Schema::create('transfer_receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
+            $table->string('serial_no')->nullable()->default('FT-REC-');
             $table->foreignId('unit_id')->constrained();
-            $table->foreignId('sales_plan_id')->constrained();
-            $table->string('name');
-            $table->string('cnic');
-            $table->string('phone_no');
+            $table->foreignId('file_id');
+            $table->foreignId('file_title_transfer_id')->constrained();
+            $table->foreignId('stakeholder_id')->constrained();
             $table->string('mode_of_payment');
             $table->string('other_value')->nullable();
             $table->string('pay_order')->nullable();
             $table->string('cheque_no')->nullable();
-            $table->string('online_instrument_no')->nullable();
+            $table->string('online_transaction_no')->nullable();
             $table->string('drawn_on_bank')->nullable();
+            $table->foreignId('bank_id')->nullable();
             $table->string('transaction_date')->nullable();
-            $table->string('amount_in_words');
-            $table->double('amount_in_numbers');
-            $table->string('purpose');
             $table->string('discounted_amount')->nullable();
-            $table->string('other_purpose')->nullable();
-            $table->string('installment_number')->nullable();
+            $table->double('amount_in_numbers');
             $table->string('attachment')->nullable();
-            $table->string('amount_received')->nullable();
+            $table->string('amount')->nullable();
             $table->string('comments')->nullable();
-            $table->boolean('status')->default(0);
+            $table->double('status')->default(0);
             $table->string('bank_details')->nullable();
             $table->dateTime('created_date')->nullable();
             $table->string('customer_ar_account')->nullable();
@@ -58,6 +55,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('receipt_draft_models');
+        Schema::dropIfExists('transfer_receipts');
     }
 };

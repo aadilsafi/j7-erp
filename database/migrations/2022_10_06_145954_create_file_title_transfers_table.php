@@ -23,11 +23,14 @@ return new class extends Migration
             $table->longText('stakeholder_data')->nullable();
             $table->foreignId('transfer_person_id')->constrained('stakeholders');
             $table->longText('transfer_person_data')->nullable();
+            $table->json('kin_data')->nullable();
             $table->longText('unit_data')->nullable();
             $table->string('transfer_rate')->nullable();
             $table->string('amount_to_be_paid')->nullable();
             $table->string('payment_due_date')->nullable();
             $table->string('amount_remarks')->nullable();
+            $table->boolean('paid_status')->default(0);
+            $table->timestamp('payment_date')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->timestamps();

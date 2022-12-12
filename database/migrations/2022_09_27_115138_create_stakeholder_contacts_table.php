@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('contact', 20)->nullable();
             $table->string('address')->nullable();
             $table->jsonb('optional_contact_number')->nullable();
+            $table->json('countryDetails')->after('contact')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

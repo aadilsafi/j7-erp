@@ -256,7 +256,7 @@
                 <div class="card-body">
 
                     <div class="row custom-options-checkable mb-2 g-1">
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <input class="custom-option-item-check checkClass  mode_of_payment_value mode-of-payment" type="radio" checked
                                 name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1" value="Cash">
                             <label class="custom-option-item text-center p-1"
@@ -266,7 +266,7 @@
                                 <span class="custom-option-item-title h4 d-block">Cash</span>
                             </label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <input class="custom-option-item-check checkClass  mode_of_payment_value cheque-mode-of-payment" type="radio"
                                 name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
                             <label class="custom-option-item text-center p-1"
@@ -275,7 +275,7 @@
                                 <span class="custom-option-item-title h4 d-block">Cheque</span>
                             </label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <input class="custom-option-item-check checkClass mode_of_payment_value online-mode-of-payment" type="radio"
                                 name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3" value="Online">
                             <label class="custom-option-item text-center p-1"
@@ -284,7 +284,7 @@
                                 <span class="custom-option-item-title h4 d-block">Online</span>
                             </label>
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <input class="custom-option-item-check mode_of_payment_value other-mode-of-payment" type="radio"
                                 name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon4" value="Other">
                             <label class="custom-option-item text-center text-center p-1"
@@ -292,7 +292,7 @@
                                 <i class="bi bi-wallet" style="font-size: 20px"></i>
                                 <span class="custom-option-item-title h4 d-block">Other</span>
                             </label>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="row mb-2 g-1" id="otherValueDiv" style="display: none;">

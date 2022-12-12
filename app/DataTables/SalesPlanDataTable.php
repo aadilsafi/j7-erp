@@ -54,10 +54,10 @@ class SalesPlanDataTable extends DataTable
             })
             ->editColumn('stakeholder_id', function ($salesPlan) {
 
-                $staleholder = json_decode($salesPlan->stakeholder_data);
-                return $staleholder->full_name;
+                // $staleholder = json_decode($salesPlan->stakeholder_data);
+                // return $staleholder->full_name;
 
-                // return $salesPlan->stakeholder->full_name;
+                return $salesPlan->stakeholder->full_name;
             })
             ->editColumn('created_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->created_date);

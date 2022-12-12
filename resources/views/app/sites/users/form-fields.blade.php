@@ -65,7 +65,7 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-   
+
 </div>
 <div class="row mb-1">
     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -98,7 +98,7 @@
         <select class="select2" id="country_id" name="country_id">
             <option value="0" selected>Select Country</option>
             @foreach ($country as $countryRow)
-                <option @if (isset($user) && $user->country_id == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                <option value="{{ $countryRow->id }}">
                     {{ $countryRow->name }}</option>
             @endforeach
         </select>
@@ -111,10 +111,7 @@
         <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
         <select class="select2 " id="state_id" name="state_id">
             <option value="0" selected>Select State</option>
-            @foreach ($state as $stateRow)
-                <option @if (isset($user) && $user->state_id == $stateRow->id) selected @endif value="{{ $stateRow->id }}">
-                    {{ $stateRow->name }}</option>
-            @endforeach
+
         </select>
         @error('state_id')
             <span class="text-danger">{{ $message }}</span>
@@ -125,10 +122,7 @@
         <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
         <select class="select2 " id="city_id" name="city_id">
             <option value="0" selected>Select City</option>
-            @foreach ($city as $cityRow)
-                <option @if (isset($user) && $user->city_id == $cityRow->id) selected @endif value="{{ $cityRow->id }}">
-                    {{ $cityRow->name }}</option>
-            @endforeach
+
         </select>
         @error('city_id')
             <span class="text-danger">{{ $message }}</span>

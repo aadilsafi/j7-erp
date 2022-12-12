@@ -29,7 +29,9 @@ class updateRequest extends FormRequest
 
         $rules =  (new User())->rules;
         $rules['email'] = ['required', 'email', Rule::unique('users')->ignore($this->input('Userid'))];
-        if (!$this->input('password')) {
+        $rules['cnic'] = ['required', Rule::unique('users')->ignore($this->input('Userid'))];
+
+        if (!$this->input('password') && !$this->input('password_confirmation')) {
             unset($rules['password']);
         }
 

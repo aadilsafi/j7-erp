@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                            width: calc(20% - 0.5em);
-                                                                                        } */
+                                                                                                width: calc(20% - 0.5em);
+                                                                                            } */
     </style>
 @endsection
 
@@ -150,12 +150,11 @@
 
                         <div class="d-block mb-1">
                             <label class="form-label" style="font-size: 15px" for="floor">
-                               Total Payable Amount
+                                Total Payable Amount
                             </label>
                             <input readonly type="text"
                                 class="form-control amountFormat @error('total_payable_amount') is-invalid @enderror"
-                                 id="total_payable_amount" placeholder="Total Payable Amount "
-                                />
+                                id="total_payable_amount" placeholder="Total Payable Amount " />
                             @error('total_payable_amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -211,11 +210,14 @@
                             </button>
                         </div>
                         <hr> --}}
-                        <a id="saveButton" href="#"
-                            class="btn disabled text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
-                            <i data-feather='save'></i>
-                            Save Receipts
-                        </a>
+                        @can('sites.receipts.store')
+                            <a id="saveButton" href="#"
+                                class="btn disabled text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
+                                <i data-feather='save'></i>
+                                Save Receipts
+                            </a>
+                        @endcan
+
 
                         @if ($amount_received > 0)
                             <a onclick="destroyDraft()"

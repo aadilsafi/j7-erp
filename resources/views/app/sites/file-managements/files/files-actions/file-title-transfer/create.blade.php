@@ -85,11 +85,13 @@
                             </div>
                         </div>
 
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                            <i data-feather='save'></i>
-                            Save File Title Transfer
-                        </a>
+                        @can('sites.file-managements.file-title-transfer.store')
+                            <a id="saveButton" href="#"
+                                class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                <i data-feather='save'></i>
+                                Save File Title Transfer
+                            </a>
+                        @endcan
 
                         <a href="{{ route('sites.file-managements.file-title-transfer.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -222,15 +224,17 @@
                             }
 
                             $('#stackholder_full_name').val(stakeholderData.full_name).attr(
-                                'readonly', (stakeholderData.full_name.length > 0));
+                                'readonly', (stakeholderData.full_name != null));
                             $('#stackholder_father_name').val(stakeholderData.father_name).attr(
-                                'readonly', (stakeholderData.father_name.length > 0));
+                                'readonly', (stakeholderData.father_name != null));
                             $('#stackholder_cnic').val(stakeholderData.cnic).attr('readonly', (
                                 stakeholderData.cnic != null));
                             $('#stackholder_contact').val(stakeholderData.contact).attr(
-                                'readonly', (stakeholderData.contact.length > 0));
-                            $('#stackholder_optional_contact').val(stakeholderData.optional_contact).attr(
-                                'readonly', (stakeholderData.optional_contact.length != null));
+                                'readonly', (stakeholderData.contact != null));
+                            $('#stackholder_email').val(stakeholderData.email).attr('readonly',
+                                (
+                                    stakeholderData.email != null));
+
                             $('#stackholder_address').text(stakeholderData.address).attr(
                                 'readonly', (stakeholderData.address != null));
                             $('#stackholder_occupation').val(stakeholderData.occupation).attr(
@@ -239,16 +243,17 @@
                                 'readonly', (stakeholderData.designation != null));
                             $('#stackholder_ntn').val(stakeholderData.ntn).attr('readonly', (
                                 stakeholderData.ntn != null));
-                            $('#stackholder_email').val(stakeholderData.email).attr('readonly', (
-                                stakeholderData.email != null));
-                            $('#stackholder_optional_email').val(stakeholderData.optionalemail).attr('readonly', (
-                                stakeholderData.optionalemail != null));
-                            hideBlockUI('#stakeholders_card');
+                            $('#stackholder_optional_contact').val(stakeholderData
+                                .optional_contact).attr(
+                                'readonly', (stakeholderData.optional_contact !=
+                                    null));
+                            $('#stackholder_optional_email').val(stakeholderData.optional_email)
+                                .attr('readonly', (
+                                    stakeholderData.optional_email != null));
+
                             $('#stackholder_comments').text(stakeholderData.comments).attr(
                                 'readonly', (stakeholderData.comments != null));
-
-
-
+                            hideBlockUI('#stakeholders_card');
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {

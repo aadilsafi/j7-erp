@@ -116,7 +116,7 @@
             <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
                 id="stakeholders_card">
                 <div class="card-header justify-content-between">
-                    <h3> Tranaction Details </h3>
+                    <h3> Transaction Details </h3>
                 </div>
 
                 <div class="card-body">

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('origin_name')->nullable();
             $table->string('origin_number', 20)->nullable();
             $table->foreignId('account_action_id')->constrained();
-            $table->foreignId('bank_id')->constrained();
+            $table->foreignId('bank_id')->nullable();
             $table->foreignId('sales_plan_id')->nullable();
             $table->foreignId('receipt_id')->nullable();
             $table->foreignId('file_refund_id')->nullable();

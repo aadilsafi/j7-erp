@@ -52,11 +52,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        Save Type
-                                    </button>
+                                    @can('sites.types.store')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Save Type
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.types.index', ['site_id' => encryptParams($site_id)]) }}"

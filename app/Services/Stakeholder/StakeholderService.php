@@ -134,6 +134,7 @@ class StakeholderService implements StakeholderInterface
                         'ntn' => $contact['ntn'],
                         'contact' => $contact['contact'],
                         'address' => $contact['address'],
+                        'stakeholder_contact_id' => $contact['stackholder_id']
                     ];
 
                     $contacts[] = new StakeholderContact($data);
@@ -361,15 +362,17 @@ class StakeholderService implements StakeholderInterface
                 $nextOfKins = [];
 
                 foreach ($inputs['next-of-kins'] as $nok) {
-                    $nextOfKins[] = StakeholderNextOfKin::create([
-                        'stakeholder_id' => $stakeholder->id,
-                        'kin_id' => $nok['stakeholder_id'],
-                        'site_id' => $site_id,
-                        'relation' => $nok['relation'],
-                    ]);
-                    StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
-                        'status' => true,
-                    ]);
+                    if ($nok['stakeholder_id'] != 0) {
+                        $nextOfKins[] = StakeholderNextOfKin::create([
+                            'stakeholder_id' => $stakeholder->id,
+                            'kin_id' => $nok['stakeholder_id'],
+                            'site_id' => $site_id,
+                            'relation' => $nok['relation'],
+                        ]);
+                        StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
+                            'status' => true,
+                        ]);
+                    }
                 }
             }
 
@@ -413,6 +416,19 @@ class StakeholderService implements StakeholderInterface
             'contact' => '',
             'address' => '',
             'comments' => '',
+            'stakeholder_contact_id' => 0,
+            'optional_contact_number' => '',
+            'nationality' => '',
+            'mailing_address'  => '',
+            'optional_contact'  => '',
+            'stakeholder_as' => 'i',
+            'email'  => '',
+            'optional_email'  => '',
+            'country_id' => 0,
+            'city_id' => 0,
+            'state_id' => 0,
+            'countryDetails' => null,
+            'OptionalCountryDetails' => null,
             'stakeholder_types' => [
                 [
                     'stakeholder_id' => 0,

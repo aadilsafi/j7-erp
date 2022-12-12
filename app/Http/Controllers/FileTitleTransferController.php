@@ -14,6 +14,7 @@ use App\Models\FileTitleTransfer;
 use App\Models\RebateIncentiveModel;
 use App\DataTables\FileTitleTransferDataTable;
 use App\Http\Requests\FileTitleTransfer\storeRequest;
+use App\Models\Bank;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
 use App\Models\ModelTemplate;
@@ -51,6 +52,7 @@ class FileTitleTransferController extends Controller
         $data = [
             'site_id' => decryptParams($site_id),
             'fileTemplates' => (new ModelTemplate())->Model_Templates(get_class(new FileTitleTransfer())),
+            'banks' => Bank::all(),
         ];
 
         $data['unit_ids'] = (new UnitStakeholder())->whereSiteId($data['site_id'])->get()->pluck('unit_id')->toArray();

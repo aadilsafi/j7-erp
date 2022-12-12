@@ -208,38 +208,38 @@ class ImportStakeholdersDataTable extends DataTable
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'full_name'
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('father_name')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'father_name'
 
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('occupation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'occupation'
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('designation')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'designation'
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('cnic')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'cnic'
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('ntn')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'ntn'
-            ])->render())->addClass('removeTolltip'),
+            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
             Column::computed('contact')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,

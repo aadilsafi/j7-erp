@@ -58,8 +58,8 @@
                             <span class="fw-bold">Sales Plan</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="othersTab" data-bs-toggle="tab" href="#othersData"
-                            aria-controls="others" role="tab" aria-selected="false">
+                        <a class="nav-link" id="othersTab" data-bs-toggle="tab" href="#othersData" aria-controls="others"
+                            role="tab" aria-selected="false">
                             <i class="bi bi-receipt font-medium-3 me-50"></i>
                             <span class="fw-bold">Others</span></a>
                     </li>
@@ -143,11 +143,13 @@
 
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                                            <i data-feather='save'></i>
-                                            Update Configurations
-                                        </button>
+                                        @can('sites.configurations.configStore')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                                <i data-feather='save'></i>
+                                                Update Configurations
+                                            </button>
+                                        @endcan
 
                                         <button type="reset"
                                             class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -189,11 +191,13 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                                            <i data-feather='save'></i>
-                                            Update Configurations
-                                        </button>
+                                        @can('sites.configurations.configStore')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                                <i data-feather='save'></i>
+                                                Update Configurations
+                                            </button>
+                                        @endcan
 
                                         <button type="reset"
                                             class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -235,11 +239,13 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                                            <i data-feather='save'></i>
-                                            Update Configurations
-                                        </button>
+                                        @can('sites.configurations.configStore')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                                <i data-feather='save'></i>
+                                                Update Configurations
+                                            </button>
+                                        @endcan
 
                                         <button type="reset"
                                             class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -268,7 +274,8 @@
                                                         for="{{ $key }}">{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_salesplan.' . $key) is-invalid @enderror"
-                                                        id="{{ $key }}" name="arr_salesplan[{{ $key }}]"
+                                                        id="{{ $key }}"
+                                                        name="arr_salesplan[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}" />
                                                     @error('arr_salesplan.' . $key)
@@ -282,11 +289,13 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                                            <i data-feather='save'></i>
-                                            Update Configurations
-                                        </button>
+                                        @can('sites.configurations.configStore')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                                <i data-feather='save'></i>
+                                                Update Configurations
+                                            </button>
+                                        @endcan
 
                                         <button type="reset"
                                             class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -329,11 +338,14 @@
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
-                                            <i data-feather='save'></i>
-                                            Update Configurations
-                                        </button>
+                                        @can('sites.configurations.configStore')
+                                            <button type="submit"
+                                                class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                                                <i data-feather='save'></i>
+                                                Update Configurations
+                                            </button>
+                                        @endcan
+
 
                                         <button type="reset"
                                             class="btn removeErrorMessage btn-relief-outline-danger waves-effect waves-float waves-light">
@@ -362,12 +374,12 @@
 @endsection
 
 @section('custom-js')
-<script>
-    $(".removeErrorMessage").on('click', function() {
-        $('.invalid-feedback').empty();
-        $('.invalid-tooltip').hide();
-        $('.alert-danger').empty();
-        $('.removeInvalidMessages').find('.is-invalid').removeClass("is-invalid");
-    });
-</script>
+    <script>
+        $(".removeErrorMessage").on('click', function() {
+            $('.invalid-feedback').empty();
+            $('.invalid-tooltip').hide();
+            $('.alert-danger').empty();
+            $('.removeInvalidMessages').find('.is-invalid').removeClass("is-invalid");
+        });
+    </script>
 @endsection

@@ -36,8 +36,8 @@
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
                 @csrf
-                {{ view('app.sites.lead-sources.form-fields',[
-                        'customFields' => $customFields
+                {{ view('app.sites.lead-sources.form-fields', [
+                    'customFields' => $customFields,
                 ]) }}
 
             </div>
@@ -48,11 +48,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        Save Lead Source
-                                    </button>
+                                    @can('sites.lead-sources.store')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Save Lead Source
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}"

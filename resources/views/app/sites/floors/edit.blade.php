@@ -49,11 +49,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        Update Floor
-                                    </button>
+                                    @can('sites.floors.update')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Update Floor
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"

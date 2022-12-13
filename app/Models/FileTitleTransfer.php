@@ -28,6 +28,8 @@ class FileTitleTransfer extends Model
         'status',
         'comments',
         'kin_data',
+        'paid_status',
+        'payment_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

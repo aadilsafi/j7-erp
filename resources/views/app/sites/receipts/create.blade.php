@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                                        width: calc(20% - 0.5em);
-                                                                                                    } */
+                                                                                                                    width: calc(20% - 0.5em);
+                                                                                                                } */
     </style>
 @endsection
 
@@ -662,16 +662,16 @@
                     $('#other_value').addClass('is-invalid');
                     $('#other_value').parent().append(
                         '<span class="is-invalid text-danger errorClass">Other Payment Purpose is required!</span>'
-                        );
+                    );
                 }
-                 if (sum_ap_amount != amount_toBe_paid) {
+                if (sum_ap_amount != amount_toBe_paid) {
 
                     $('#customer_ap_amount_paid').addClass('is-invalid');
                     $('#vendor_ap_amount_paid').addClass('is-invalid');
                     $('#dealer_ap_amount_paid').addClass('is-invalid');
                     $('#attachment').after(
                         '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
-                        );
+                    );
                 } else {
                     $("#receiptForm").submit();
                 }
@@ -766,6 +766,33 @@
                     hideBlockUI('.bankDiv');
                 }
             });
+        });
+
+        var validator = $("#receiptForm").validate({
+            rules: {
+                'receipts[0][bank_name]': {
+                    required: function() {
+                        let mode_of_payment = $("input[name='receipts[0][mode_of_payment]']:checked").val();
+                        if (mode_of_payment == 'Cheque' || mode_of_payment == 'Online') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            },
+            // messages: {
+            //     'stackholder[cnic]': {
+            //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+            //         minlength: "Cnic can't be less then {0} digits without dashes",
+            //     }
+            // },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

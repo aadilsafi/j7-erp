@@ -3,19 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TransferReceiptsDatatable;
+use App\Http\Requests\FileTransferReceipt\store;
 use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\FileTitleTransfer;
 use App\Models\ReceiptTemplate;
 use App\Models\StakeholderType;
-use App\Models\Unit;
+use App\Services\TransferFileReceipts\TransferFileReceiptInterface;
+use Exception;
 use Illuminate\Http\Request;
 
 class TransferReceiptController extends Controller
 {
+
+    private $transferFileReceiptInterface;
+
+    public function __construct(
+        TransferFileReceiptInterface $transferFilereceiptInterface
+    ) {
+        $this->transferFileReceiptInterface = $transferFilereceiptInterface;
+    }
+
     public function index(TransferReceiptsDatatable $dataTable, $site_id)
     {
-        //
+
         $data = [
             'site_id' => $site_id,
             'receipt_templates' => ReceiptTemplate::all(),
@@ -60,9 +71,37 @@ class TransferReceiptController extends Controller
         }
     }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(store $request, $site_id)
+    {
+        $validator = \Validator::make($request->all(), [
+            'created_date' => 'required',
+        ]);
+
+        $validator->validate();
+        try {
+            if (!request()->ajax()) {
+                $data = $request->all();
+                $record = $this->transferFileReceiptInterface->store($site_id, $data);
+
+                return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
+
+
     public function getTransferFileData(Request $request)
     {
-        $transferFiles = FileTitleTransfer::find($request->getTransferFileData);
+        $transferFiles = FileTitleTransfer::find($request->transfer_file_id);
 
         $fileOwner = json_decode($transferFiles->stakeholder_data);
         $fileOwner->country = $transferFiles->stakeholder->country->name;
@@ -125,6 +164,7 @@ class TransferReceiptController extends Controller
             'total_payable_amount' => $total_payable_amount,
             'fileOwner' => $fileOwner,
             'transferOwner' => $transferOwner,
+            'transferFile' => $transferFiles,
         ], 200);
     }
 }

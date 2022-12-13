@@ -74,8 +74,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                        width: calc(20% - 0.5em);
-                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                    width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                } */
     </style>
 @endsection
 
@@ -112,23 +112,15 @@
                     style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0; z-index:10;">
                     <div class="card-body g-1">
 
-                        {{-- <div class="d-block mb-1">
-                            <label class="form-label" style="font-size: 15px" for="floor">
-                                Discounted Amount
-                            </label>
-                            <input min="0" type="text"
-                                class="form-control amountFormat @error('discounted_amount') is-invalid @enderror"
-                                name="discounted_amount" id="discounted_amount" placeholder="Discounted Amount "
-                                value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />
-                            @error('discounted_amount')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div> --}}
+                        <div class="d-block mb-1">
+                            <label class="form-label" for="total_payable_amount">Total Payable Amount</label>
+                            <input readonly type="text" class="form-control amountFormat" id="total_payable_amount"
+                                placeholder="Total Payable Amount " />
 
-
+                        </div>
 
                         <div class="d-block mb-1">
-                            <label class="form-label fs-5" for="created_date">Creation Date</label>
+                            <label class="form-label fs-5" for="created_date">Payment Date</label>
                             <input id="created_date" type="date" required placeholder="YYYY-MM-DD" name="created_date"
                                 class="form-control form-control-lg" />
                         </div>
@@ -175,6 +167,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
+
 @endsection
 
 @section('custom-js')
@@ -195,13 +189,10 @@
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
-            allowMultiple: true,
+            allowMultiple: false,
             maxFiles: 1,
             checkValidity: true,
-            credits: {
-                label: '',
-                url: ''
-            }
+
         });
     </script>
 
@@ -235,6 +226,9 @@
                 $('#onlineValueDiv').hide();
                 $('#chequeValueDiv').show();
                 $('.bankDiv').show();
+                // $.fn.filepond.setDefaults({
+                //     required: true,
+                // });
             });
 
             $(".online-mode-of-payment").click(function() {
@@ -242,6 +236,9 @@
                 $('#onlineValueDiv').show();
                 $('#chequeValueDiv').hide();
                 $('.bankDiv').show();
+                // $.fn.filepond.setDefaults({
+                //     required: true,
+                // });
             });
 
             $(".mode-of-payment").click(function() {
@@ -276,14 +273,18 @@
             dateFormat: "Y-m-d",
         });
 
-        var unit_id = $('#unit_id');
-        unit_id.wrap('<div class="position-relative"></div>');
-        unit_id.select2({
+        var transfer_file_id = $('#transfer_file_id');
+        transfer_file_id.wrap('<div class="position-relative"></div>');
+        transfer_file_id.select2({
             dropdownAutoWidth: !0,
-            dropdownParent: unit_id.parent(),
+            dropdownParent: transfer_file_id.parent(),
             width: "100%",
             containerCssClass: "select-lg",
         }).on("change", function(e) {
+            $('#modeOfPaymentDiv').hide();
+            $('#transferOwner').hide();
+            $('#fileOwner').hide()
+            $('#saveButton').addClass('disabled');
 
             var _token = '{{ csrf_token() }}';
             let url =
@@ -293,11 +294,12 @@
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    'getTransferFileData': parseInt($(this).val()),
+                    'transfer_file_id': parseInt($(this).val()),
                     '_token': _token
                 },
                 success: function(response) {
                     if (response.success) {
+
                         showBlockUI('#receiptForm');
                         $('#unit_type').empty();
                         $('.floor').empty()
@@ -385,9 +387,29 @@
                             $('#OwnerIndividualForm').show();
                         }
 
+                        $('#customer_ap_amount').val(response.customerPayableAmount.toLocaleString());
+                        $('#dealer_ap_amount').val(response.dealerPayableAmount.toLocaleString());
+                        $('#vendor_ap_amount').val(response.vendorPayableAmount.toLocaleString());
+
+                        if (response.customerPayableAmount <= 0) {
+                            $('#customer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.dealerPayableAmount <= 0) {
+                            $('#dealer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.vendorPayableAmount <= 0) {
+                            $('#vendor_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        $('#total_payable_amount').val(response.transferFile.amount_to_be_paid)
                         $('#fileOwner').show()
+                        $('#modeOfPaymentDiv').show();
 
                         hideBlockUI('#receiptForm');
+                        $('#saveButton').removeClass('disabled');
+
                     } else {
                         hideBlockUI('#receiptForm');
                         Swal.fire({
@@ -408,7 +430,64 @@
 
 
         $("#saveButton").click(function() {
-            $("#receiptForm").submit();
+            let mode_of_payment = $("input[name='mode_of_payment']:checked").val();
+
+            $('.is-invalid').removeClass('is-invalid');
+            $('.errorClass').remove();
+
+            if (mode_of_payment == 'Cheque') {
+                let cheque_no = $('#cheque_no').val();
+                if (cheque_no == '') {
+                    $('#cheque_no').addClass('is-invalid');
+                    $('#cheque_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Cheque No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+            } else if (mode_of_payment == 'Online') {
+                let transaction_date = $('#transaction_date').val();
+                let online_instrument_no = $('#online_instrument_no').val();
+
+                if (online_instrument_no == '') {
+                    $('#online_instrument_no').addClass('is-invalid');
+                    $('#online_instrument_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Transaction No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else if (mode_of_payment == 'Other') {
+                let other_value = $('#other_value').val();
+                let dealer_ap_amount_paid = $('#dealer_ap_amount_paid').val();
+                let customer_ap_amount_paid = $('#customer_ap_amount_paid').val();
+                let vendor_ap_amount_paid = $('#vendor_ap_amount_paid').val();
+
+                let sum_ap_amount = parseFloat(dealer_ap_amount_paid) + parseFloat(customer_ap_amount_paid) +
+                    parseFloat(vendor_ap_amount_paid);
+                let amount_toBe_paid = parseFloat($('#total_payable_amount').val().replace(/,/g, ''));
+
+                if (other_value == '') {
+                    $('#other_value').addClass('is-invalid');
+                    $('#other_value').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Other Payment Purpose is required!</span>'
+                    );
+                }
+                if (sum_ap_amount != amount_toBe_paid) {
+
+                    $('#customer_ap_amount_paid').addClass('is-invalid');
+                    $('#vendor_ap_amount_paid').addClass('is-invalid');
+                    $('#dealer_ap_amount_paid').addClass('is-invalid');
+                    $('#attachment').after(
+                        '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
+                    );
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else {
+                $("#receiptForm").submit();
+            }
+
         });
 
 
@@ -471,6 +550,33 @@
                     hideBlockUI('.bankDiv');
                 }
             });
+        });
+
+        var validator = $("#receiptForm").validate({
+            rules: {
+                'bank_name': {
+                    required: function() {
+                        let mode_of_payment = $("input[name='mode_of_payment']:checked").val();
+                        if (mode_of_payment == 'Cheque' || mode_of_payment == 'Online') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            },
+            // messages: {
+            //     'stackholder[cnic]': {
+            //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+            //         minlength: "Cnic can't be less then {0} digits without dashes",
+            //     }
+            // },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

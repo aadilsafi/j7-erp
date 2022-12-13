@@ -34,29 +34,18 @@ class TransferReceiptsDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-            ->editColumn('floor_id', function ($receipt) {
-                return  $receipt->unit->floor->name;
-            })
+
             ->editColumn('serial_no', function ($receipt) {
                 return $receipt->serial_no != null ? $receipt->serial_no : 'REC-';
             })
-            ->editColumn('unit_id', function ($receipt) {
-                return  $receipt->unit->name;
-            })
             ->editColumn('cnic', function ($receipt) {
-                return  cnicFormat($receipt->cnic);
+                return  cnicFormat($receipt->stakeholder->cnic);
             })
-            ->editColumn('installment_number', function ($receipt) {
-                return  str_replace(str_split('[]"'), '', $receipt->installment_number);
+            ->editColumn('name', function ($receipt) {
+                return $receipt->stakeholder->full_name;
             })
-            ->editColumn('amount_in_numbers', function ($receipt) {
-                return  number_format($receipt->amount_in_numbers);
-            })
-            ->editColumn('amount_received', function ($receipt) {
-                return  number_format($receipt->amount_received);
-            })
-            ->editColumn('discounted_amount', function ($receipt) {
-                return  number_format($receipt->discounted_amount > 0 ? $receipt->discounted_amount : 0);
+            ->editColumn('amount', function ($receipt) {
+                return  number_format($receipt->amount);
             })
             ->editColumn('status', function ($receipt) {
                 if ($receipt->status == 1) {
@@ -73,9 +62,7 @@ class TransferReceiptsDatatable extends DataTable
             ->editColumn('created_date', function ($receipt) {
                 return editDateColumn($receipt->created_date);
             })
-            ->editColumn('updated_at', function ($receipt) {
-                return editDateColumn($receipt->updated_at);
-            })
+         
             ->editColumn('actions', function ($receipt) {
                 return view('app.sites.receipts.actions', ['site_id' => decryptParams($this->site_id), 'id' => $receipt->id]);
             })
@@ -101,7 +88,7 @@ class TransferReceiptsDatatable extends DataTable
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
         $revertPermission =  Auth::user()->hasPermissionTo('sites.receipts.revert-payment');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-       
+
         $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
@@ -136,14 +123,13 @@ class TransferReceiptsDatatable extends DataTable
         }
 
 
-
-        if ($selectedActivePermission) {
-            $buttons[] = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-                    'onclick' => 'changeStatusSelected()',
-                ]);
-        }
+        // if ($selectedActivePermission) {
+        //     $buttons[] = Button::raw('delete-selected')
+        //         ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
+        //         ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
+        //             'onclick' => 'changeStatusSelected()',
+        //         ]);
+        // }
 
         $dataTableBuilder = $this->builder()
             ->setTableId('stakeholder-table')
@@ -202,8 +188,6 @@ class TransferReceiptsDatatable extends DataTable
             Column::computed('name')->title('Name')->addClass('text-nowrap'),
             Column::computed('cnic')->title('CNIC')->addClass('text-nowrap'),
             Column::make('amount')->title('Amount Received')->addClass('text-nowrap'),
-            Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
-            Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),
             Column::computed('status')->title('Status'),
             Column::make('created_date')->title('Created At')->addClass('text-nowrap'),
             // Column::make('updated_at')->addClass('text-nowrap'),

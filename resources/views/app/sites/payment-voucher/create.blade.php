@@ -196,8 +196,7 @@
                         hideBlockUI('#paymentVoucher');
                     }
                 });
-            }
-            else{
+            } else {
                 $('#main-div').hide();
             }
         });
@@ -477,6 +476,33 @@
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
+        });
+
+        var validator = $("#paymentVoucher").validate({
+            rules: {
+                'bank_name': {
+                    required: function() {
+                        let mode_of_payment = $("input[name='mode_of_payment']:checked").val();
+                        if (mode_of_payment == 'Cheque' || mode_of_payment == 'Online') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            },
+            // messages: {
+            //     'stackholder[cnic]': {
+            //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+            //         minlength: "Cnic can't be less then {0} digits without dashes",
+            //     }
+            // },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

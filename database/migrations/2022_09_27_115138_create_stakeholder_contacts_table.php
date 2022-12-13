@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('stakeholder_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('stakeholder_id')->constrained('stakeholders');
+            $table->integer('stakeholder_contact_id')->nullable();
             $table->foreignId('country_id')->default(167)->nullable();
             $table->foreignId('state_id')->default(0)->nullable();
             $table->foreignId('city_id')->default(0)->nullable();

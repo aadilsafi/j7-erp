@@ -134,7 +134,7 @@ class StakeholderService implements StakeholderInterface
                         'ntn' => $contact['ntn'],
                         'contact' => $contact['contact'],
                         'address' => $contact['address'],
-                        'stakeholder_contact_id' => $contact['stackholder_id']
+                        'stakeholder_contact_id' => $contact['stakeholder_contact_id']
                     ];
 
                     $contacts[] = new StakeholderContact($data);

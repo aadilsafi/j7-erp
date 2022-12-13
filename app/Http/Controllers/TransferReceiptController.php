@@ -110,8 +110,8 @@ class TransferReceiptController extends Controller
 
         $transferOwner = json_decode($transferFiles->transfer_person_data);
         $transferOwner->country = $transferFiles->transferStakeholder->country->name;
-        $transferOwner->state = $transferFiles->transferStakeholder->state->name;
-        $transferOwner->city = $transferFiles->transferStakeholder->city->name;
+        $transferOwner->state = $transferFiles->transferStakeholder->state->name ?? '';
+        $transferOwner->city = $transferFiles->transferStakeholder->city->name ?? '';
 
         $customerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->transfer_person_id, 'type' => 'C'])->first();
         $dealerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->transfer_person_id, 'type' => 'D'])->first();

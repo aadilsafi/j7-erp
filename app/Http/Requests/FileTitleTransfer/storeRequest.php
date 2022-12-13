@@ -34,13 +34,10 @@ class storeRequest extends FormRequest
             'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
             'attachments.*.image' => 'required_if:checkAttachment,1',
             'stackholder.stackholder_id' => 'required',
-            'stackholder.full_name' => 'required|string|min:1|max:50',
-            'stackholder.father_name' => 'required|string|min:1|max:50',
-            // 'stackholder.occupation' => 'required|string|min:1|max:50',
-            // 'stackholder.designation' => 'required|string|min:1|max:50',
-            // 'stackholder.ntn' => 'required|numeric',
-            'stackholder.contact' => 'required|string|min:1|max:20',
-            'stackholder.address' => 'required|string',
+            'stackholder.full_name' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:50',
+            'stackholder.father_name' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:50',
+            'stackholder.contact' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:20',
+            'stackholder.address' => 'required_if:stackholder.stackholder_id,0|string',
         ];
         $rules['stackholder.cnic'] = ['required', Rule::unique('stakeholders', 'cnic')->ignore($this->input('stackholder.stackholder_id'))];
         return $rules;

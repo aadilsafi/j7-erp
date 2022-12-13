@@ -60,7 +60,7 @@
                     'labels' => $labels,
                     'total_paid_amount' => $total_paid_amount,
                     'titleTransferPerson' => $titleTransferPerson,
-                    'salesPlan'=>$salesPlan,
+                    'salesPlan' => $salesPlan,
                     'country' => $country,
                 ]) }}
             </div>
@@ -95,6 +95,17 @@
 
 @section('custom-js')
     <script type="text/javascript">
+        $('#individualForm').hide();
+        $('#companyForm').hide();
+
+        @if (isset($titleTransferPerson) && $titleTransferPerson->stakeholder_as == 'i')
+            $('#individualForm').show();
+        @endif
+
+        @if (isset($titleTransferPerson) && $titleTransferPerson->stakeholder_as == 'c')
+            $('#companyForm').show();
+            
+        @endif
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
             FilePondPluginFileValidateType,
@@ -157,3 +168,4 @@
         });
     </script>
 @endsection
+@endif

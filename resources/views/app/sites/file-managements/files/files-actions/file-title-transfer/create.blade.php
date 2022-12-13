@@ -556,9 +556,9 @@
                     'stackholder[full_name]': {
                         required: true
                     },
-                    'stackholder[father_name]': {
-                        required: true
-                    },
+                    // 'stackholder[father_name]': {
+                    //     required: true
+                    // },
 
                     'stackholder[cnic]': {
                         required: true,

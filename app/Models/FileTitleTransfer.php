@@ -55,6 +55,11 @@ class FileTitleTransfer extends Model
         return $this->belongsTo(Stakeholder::class);
     }
 
+    public function transferStakeholder()
+    {
+        return $this->belongsTo(Stakeholder::class, 'transfer_person_id', 'id');
+    }
+
     public function fileTitleTransferAttachments()
     {
         return $this->hasMany(FileTitleTransferAttachment::class);

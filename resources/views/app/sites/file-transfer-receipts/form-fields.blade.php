@@ -13,17 +13,15 @@
                                         Unit No <span class="text-danger">*</span>
                                     </label>
 
-                                    <select class="select2 form-select  unit_id @error('unit_id') is-invalid @enderror"
-                                        name="unit_id" onclick="setIds(this)"
-                                        onchange="getUnitTypeAndFloor(this.options[this.selectedIndex].value,this.id)">
+                                    <select class="select2 form-select unit_id @error('unit_id') is-invalid @enderror"
+                                        name="unit_id" id="unit_id">
                                         <option selected>Select Unit No</option>
 
-                                        @foreach ($transferUnits as $row)
-                                            <option value="{{ $row->unit->id }}"
-                                                {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
-                                                {{ $row->unit->name }} ( {{ $row->unit->floor_unit_number }} ) (
-                                                {{ $row->unit->salesPlan[0]['stakeholder']['full_name'] }},
-                                                {{ $row->unit->salesPlan[0]['stakeholder']['cnic'] }} )
+                                        @foreach ($units as $row)
+                                            <option value="{{ $row->transferFileId }}">
+                                                {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
+                                                {{ $row->full_name }},
+                                                {{ $row->cnic }} )
                                             </option>
                                         @endforeach
                                     </select>
@@ -74,7 +72,7 @@
             </div>
         </div>
 
-        <div id="titleTransferPersonInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div id="transferOwner" class="col-lg-12 col-md-12 col-sm-12 position-relative">
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
                 id="stakeholders_card">
                 <div class="card-header justify-content-between">
@@ -87,46 +85,40 @@
                     <div id="individualForm">
                         <div class="row mb-1">
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
+                                <label class="form-label fs-5" for="transferOwner_full_name">Full Name <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="stackholder_full_name" name="stackholder[full_name]" placeholder="Full Name"
-                                    value="" />
+                                    id="transferOwner_full_name" placeholder="Full Name" value="" />
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name
+                                <label class="form-label fs-5" for="transferOwner_father_name">Father / Husband Name
                                     <span class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="stackholder_father_name" name="stackholder[father_name]"
-                                    placeholder="Father / Husband Name" value="" />
+                                    id="transferOwner_father_name" placeholder="Father / Husband Name" value="" />
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_occupation">Occupation </label>
+                                <label class="form-label fs-5" for="transferOwner_occupation">Occupation </label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="stackholder_occupation" name="stackholder[occupation]" placeholder="Occupation"
-                                    value="" />
+                                    id="transferOwner_occupation" placeholder="Occupation" value="" />
                             </div>
                         </div>
                         <div class="row mb-1">
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_designation">Designation</label>
+                                <label class="form-label fs-5" for="transferOwner_designation">Designation</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="stackholder_designation" name="stackholder[designation]"
-                                    placeholder="Designation" value="" />
+                                    id="transferOwner_designation" placeholder="Designation" value="" />
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_ntn">NTN </label>
-                                <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
-                                    name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
-                                    placeholder="NTN" value="" />
+                                <label class="form-label fs-5" for="transferOwner_ntn">NTN </label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_ntn" placeholder="NTN" value="" />
                             </div>
 
                             <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
+                                <label class="form-label fs-5" for="transferOwner_cnic">CNIC <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="stackholder_cnic" name="stackholder[cnic]" placeholder="CNIC"
-                                    value="" />
+                                    id="transferOwner_cnic" placeholder="CNIC" value="" />
                             </div>
                         </div>
                     </div>
@@ -137,25 +129,22 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="company_name">Company Name <span
                                         class="text-danger">*</span></label>
-                                <input type="text" readonly
-                                    class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                                    id="company_name" placeholder="Company Name" value="" />
+                                <input type="text" readonly class="form-control form-control-lg" id="transferOwner_company_name"
+                                    placeholder="Company Name" value="" />
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="industry">Industry </label>
-                                <input type="text" readonly
-                                    class="form-control form-control-lg @error('industry') is-invalid @enderror"
-                                    id="industry" placeholder="Industry" value="" />
+                                <input type="text" readonly class="form-control form-control-lg" id="transferOwner_industry"
+                                    placeholder="Industry" value="" />
                             </div>
                         </div>
                         <div class="row mb-1">
                             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="registration">Registration # <span
                                         class="text-danger">*</span></label>
-                                <input type="text" readonly
-                                    class="cp_cnic form-control form-control-lg @error('registration') is-invalid @enderror"
-                                    id="registration" placeholder="Registration Number" value="" />
+                                <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                    id="transferOwner_registration" placeholder="Registration Number" value="" />
 
                             </div>
 
@@ -163,7 +152,7 @@
                                 <label class="form-label fs-5" for="ntn">NTN </label>
                                 <input type="number" readonly
                                     class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                    id="ntn" placeholder="NTN Number" value="" />
+                                    id="transferOwner_ntn" placeholder="NTN Number" value="" />
 
                             </div>
                         </div>
@@ -172,207 +161,253 @@
                     {{-- common form  --}}
                     <div class="row mb-1">
                         <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_email">Email <span
+                            <label class="form-label fs-5" for="transferOwner_email">Email <span
                                     class="text-danger">*</span></label>
-                            <input type="email" readonly
-                                class="form-control form-control-md @error('email') is-invalid @enderror"
-                                id="stackholder_email" name="stackholder[email]" placeholder="Email"
-                                autocomplete="false" value="" />
+                            <input type="email" readonly class="form-control form-control-md"
+                                id="transferOwner_email" placeholder="Email" autocomplete="false" value="" />
 
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_optional_email">Optional Email</label>
-                            <input type="email" readonly
-                                class="form-control form-control-md @error('email') is-invalid @enderror"
-                                id="stackholder_optional_email" name="stackholder[optional_email]"
-                                placeholder="Optional Email" autocomplete="false" value="" />
-
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Contact <span
-                                    class="text-danger">*</span></label>
-                            <input readonly type="text" class="form-control form-control-lg"
-                                id="stackholder_contact" name="stackholder[contact]" placeholder="Contact"
+                            <label class="form-label fs-5" for="transferOwner_optional_email">Optional Email</label>
+                            <input type="email" readonly class="form-control form-control-md"
+                                id="transferOwner_optional_email" placeholder="Optional Email" autocomplete="false"
                                 value="" />
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-12">
-                            <label class="form-label fs-5" for="stackholder_optional_contact">Optional Contact <span
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="transferOwner_contact">Contact <span
                                     class="text-danger">*</span></label>
                             <input readonly type="text" class="form-control form-control-lg"
-                                id="stackholder_optional_contact" name="stackholder[optional_contact]"
-                                placeholder="Optional Contact" value="" />
+                                id="transferOwner_contact" placeholder="Contact" value="" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <label class="form-label fs-5" for="transferOwner_optional_contact">Optional Contact <span
+                                    class="text-danger">*</span></label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="transferOwner_optional_contact" placeholder="Optional Contact" value="" />
                         </div>
                     </div>
+
                     <div class="row mb-1">
-
                         <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label" style="font-size: 15px" for="parent_id">Select
-                                Country</label>
-                            <select class="select2 country_id" id="country_id" name="stackholder[country_id]"
-                                readonly>
-
-                            </select>
+                            <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="transferOwner_country" placeholder="Country" value="" />
 
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label" style="font-size: 15px" for="city_id">Select
-                                State</label>
-                            <select class="select2 state_id" id="state_id" name="stackholder[state_id]" readonly>
-
-                            </select>
+                            <label class="form-label" style="font-size: 15px" for="city_id">State</label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="transferOwner_state" placeholder="State" value="" />
 
                         </div>
 
                         <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label" style="font-size: 15px" for="city_id">Select
-                                City</label>
-                            <select class="select2 city_id" id="city_id" name="stackholder[city_id]" readonly>
-
-                            </select>
+                            <label class="form-label" style="font-size: 15px" for="city_id">City</label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="transferOwner_city" placeholder="City" value="" />
 
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="occupation">Nationality </label>
+                            <label class="form-label fs-5" for="transferOwner_nationality">Nationality </label>
                             <input type="text" readonly
                                 class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                                id="nationality" name="nationality" placeholder="Nationality" value="" />
+                                id="transferOwner_nationality" placeholder="Nationality" value="" />
 
                         </div>
                     </div>
                     <div class="row mb-1">
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Address <span
+                            <label class="form-label fs-5" for="transferOwner_address">Address <span
                                     class="text-danger">*</span></label>
-                            <textarea readonly class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                                placeholder="Address" rows="4">  </textarea>
+                            <textarea readonly class="form-control form-control-lg" id="transferOwner_address" placeholder="Address"
+                                rows="3">  </textarea>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                            <label class="form-label fs-5" for="transferOwner_mailing_address">Mailing Address <span
                                     class="text-danger">*</span>
                             </label>
-                            <textarea readonly class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
-                                placeholder="Mailing Address" rows="4"></textarea>
+                            <textarea readonly class="form-control form-control-lg" id="transferOwner_mailing_address"
+                                placeholder="Mailing Address" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="row mb-1">
                         <div class="col-lg- col-md- col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                            <textarea readonly class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Comments" rows="5"></textarea>
+                            <label class="form-label fs-5" for="transferOwner_comments">Comments</label>
+                            <textarea readonly class="form-control form-control-lg" id="transferOwner_comments" name="transferOwner[comments]"
+                                placeholder="Comments" rows="4"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="sellerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div id="fileOwner" class="col-lg-12 col-md-12 col-sm-12 position-relative">
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-                id="">
+                id="stakeholders_card">
                 <div class="card-header justify-content-between">
-                    <h3> File Owner Informaton </h3>
+                    <h3> File Owner Information</h3>
                 </div>
 
                 <div class="card-body">
-                    <div class="row mb-1">
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                            <input type="text" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Full Name" />
+
+                    {{--  individual Form --}}
+                    <div id="OwnerIndividualForm">
+                        <div class="row mb-1">
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_full_name">Full Name <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_full_name" placeholder="Full Name" value="" />
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_father_name">Father / Husband Name
+                                    <span class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_father_name" placeholder="Father / Husband Name" value="" />
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_occupation">Occupation </label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_occupation" placeholder="Occupation" value="" />
+                            </div>
                         </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_designation">Designation</label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_designation" placeholder="Designation" value="" />
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_ntn">NTN </label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_ntn" placeholder="NTN" value="" />
+                            </div>
 
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                            <input type="text" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Father / Husband Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                            <input type="text" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Occupation" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                            <input type="text" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Designation" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-
-                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                            <input type="number" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="NTN" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                            <input type="text" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="CNIC" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                            <input type="number" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Contact" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Optional Contact</label>
-                            <input type="number" readonly value="" class="form-control form-control-lg"
-                                id="" placeholder="Optional Contact" />
+                            <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_cnic">CNIC <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_cnic" placeholder="CNIC" value="" />
+                            </div>
                         </div>
                     </div>
 
+                    {{-- company form --}}
+                    <div id="OwnerCompanyForm">
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="company_name">Company Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" readonly class="form-control form-control-lg" id="fileOwner_company_name"
+                                    placeholder="Company Name" value="" />
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="industry">Industry </label>
+                                <input type="text" readonly class="form-control form-control-lg" id="fileOwner_industry"
+                                    placeholder="Industry" value="" />
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="registration">Registration # <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                    id="fileOwner_registration" placeholder="Registration Number" value="" />
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="ntn">NTN </label>
+                                <input type="number" readonly
+                                    class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                    id="fileOwner_ntn" placeholder="NTN Number" value="" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- common form  --}}
                     <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 position-relative">
-                            <label class="form-label fs-5" for="email">Email <span
+                        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="fileOwner_email">Email <span
                                     class="text-danger">*</span></label>
-                            <input type="email"
-                                class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                name="email" placeholder="Email" autocomplete="false" readonly
-                                value="{{ isset($customer) ? $customer->email : old('email') }}" />
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <input type="email" readonly class="form-control form-control-md" id="fileOwner_email"
+                                placeholder="Email" autocomplete="false" value="" />
+
                         </div>
 
-                        <div class="col-lg-6 col-md-6 position-relative">
-                            <label class="form-label fs-5" for="optional_email">Optional Email</label>
-                            <input type="email"
-                                class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                name="optional_email" placeholder="Optional Email" autocomplete="false" readonly
-                                value="{{ isset($customer) ? $customer->optional_email : old('email') }}" />
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="fileOwner_optional_email">Optional Email</label>
+                            <input type="email" readonly class="form-control form-control-md"
+                                id="fileOwner_optional_email" placeholder="Optional Email" autocomplete="false"
+                                value="" />
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="fileOwner_contact">Contact <span
+                                    class="text-danger">*</span></label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="fileOwner_contact" placeholder="Contact" value="" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <label class="form-label fs-5" for="fileOwner_optional_contact">Optional Contact <span
+                                    class="text-danger">*</span></label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="fileOwner_optional_contact" placeholder="Optional Contact" value="" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                            <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
+                            <input readonly type="text" class="form-control form-control-lg"
+                                id="fileOwner_country" placeholder="Country" value="" />
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                            <label class="form-label" style="font-size: 15px" for="city_id">State</label>
+                            <input readonly type="text" class="form-control form-control-lg" id="fileOwner_state"
+                                placeholder="State" value="" />
+
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                            <label class="form-label" style="font-size: 15px" for="city_id">City</label>
+                            <input readonly type="text" class="form-control form-control-lg" id="fileOwner_city"
+                                placeholder="City" value="" />
+
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                            <label class="form-label fs-5" for="fileOwner_nationality">Nationality </label>
+                            <input type="text" readonly
+                                class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                                id="fileOwner_nationality" placeholder="Nationality" value="" />
+
                         </div>
                     </div>
                     <div class="row mb-1">
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Address</label>
-                            <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                                rows="4"></textarea>
+                            <label class="form-label fs-5" for="fileOwner_address">Address <span
+                                    class="text-danger">*</span></label>
+                            <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3">  </textarea>
                         </div>
-
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Mailling Address</label>
-                            <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                                rows="4"></textarea>
+                            <label class="form-label fs-5" for="fileOwner_mailing_address">Mailing Address <span
+                                    class="text-danger">*</span>
+                            </label>
+                            <textarea readonly class="form-control form-control-lg" id="fileOwner_mailing_address" placeholder="Mailing Address"
+                                rows="3"></textarea>
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-lg col-md col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                            <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Comments"
-                                rows="4"></textarea>
+                        <div class="col-lg- col-md- col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="fileOwner_comments">Comments</label>
+                            <textarea readonly class="form-control form-control-lg" id="fileOwner_comments" name="fileOwner[comments]"
+                                placeholder="Comments" rows="4"></textarea>
                         </div>
-
                     </div>
                 </div>
             </div>

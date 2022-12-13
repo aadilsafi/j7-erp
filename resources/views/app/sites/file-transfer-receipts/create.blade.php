@@ -52,9 +52,14 @@
             display: none;
         }
 
-        /* #customerData {
+        #transferOwner {
             display: none;
-        } */
+
+        }
+
+        #fileOwner {
+            display: none;
+        }
 
         .filepond--drop-label {
             color: #7367F0 !important;
@@ -69,8 +74,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                    width: calc(20% - 0.5em);
-                                                                                                                } */
+                                                                                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                                                                                    } */
     </style>
 @endsection
 
@@ -96,7 +101,7 @@
             <div id="loader" class="col-lg-9 col-md-9 col-sm-9 position-relative">
                 {{ view('app.sites.file-transfer-receipts.form-fields', [
                     'site_id' => $site_id,
-                    'transferUnits' => $transferUnits,
+                    'units' => $units,
                     'banks' => $banks,
                     'chequebanks' => $banks,
                 ]) }}
@@ -215,33 +220,8 @@
                 show: function() {
                     $(this).slideDown();
                 },
-
-                // hide: function(deleteElement) {
-
-                //     Swal.fire({
-                //         icon: 'warning',
-                //         title: 'Warning',
-                //         text: 'Are you sure you want to delete this receipt form!!!',
-                //         showCancelButton: true,
-                //         cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                //         confirmButtonText: '{{ __('lang.commons.yes_delete') }}',
-                //         confirmButtonClass: 'btn-danger',
-                //     }).then((result) => {
-                //         if (result.isConfirmed) {
-                //             $(this).slideUp(deleteElement);
-                //         }
-                //     });
-                // },
                 isFirstItemUndeletable: true
             })
-            var e = $("#unit_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            });
 
             $(".other-mode-of-payment").click(function() {
                 $('#otherValueDiv').show();
@@ -288,15 +268,6 @@
 
         });
 
-        function setIds(a) {
-            var unit_id = a.name;
-            $('.unit_id').attr('id', unit_id);
-        }
-
-        function setAmountIds(a) {
-            let elements = document.getElementsByName(a.name);
-        }
-
         var created_date = $("#created_date").flatpickr({
             defaultDate: "today",
             minDate: '',
@@ -305,38 +276,36 @@
             dateFormat: "Y-m-d",
         });
 
-        // $('#discounted_amount').on('focusout', function() {
-        //     var discounted_amount = $(this).val();
-        //     $('.amountToBePaid').trigger('focusout');
-        // });
+        var unit_id = $('#unit_id');
+        unit_id.wrap('<div class="position-relative"></div>');
+        unit_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: unit_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).on("change", function(e) {
 
-
-        function getUnitTypeAndFloor(unit_id, id) {
-            var unit_type = id.replace("unit_id", "unit_type");
-            var unit_name = id.replace("unit_id", "unit_name");
-            var floor = id.replace("unit_id", "floor");
             var _token = '{{ csrf_token() }}';
             let url =
-                "{{ route('sites.receipts.ajax-get-unit-type-and-unit-floor', ['site_id' => encryptParams($site_id)]) }}";
+                "{{ route('sites.file-transfer-receipts.ajax-get-transfer-file-data', ['site_id' => encryptParams($site_id)]) }}";
             $.ajax({
                 url: url,
                 type: 'post',
                 dataType: 'json',
                 data: {
-                    'unit_id': unit_id,
+                    'getTransferFileData': parseInt($(this).val()),
                     '_token': _token
                 },
                 success: function(response) {
                     if (response.success) {
-                        showBlockUI('#loader');
-                        $('.amountToBePaid').attr('unit_id', response.unit_id);
+                        showBlockUI('#receiptForm');
                         $('#unit_type').empty();
-                        $('.amountToBePaid').empty();
                         $('.floor').empty()
                         $('.unit_name').empty();
                         $('.unit_type').append('<option value="0" selected>' + response.unit_type +
                             '</option>');
-                        $('.floor').append('<option value="0" selected>' + response.unit_floor + '</option>');
+                        $('.floor').append('<option value="0" selected>' + response.unit_floor +
+                            '</option>');
                         $('.unit_name').append('<option value="0" selected>' + response.unit_name +
                             '</option>');
 
@@ -346,9 +315,81 @@
 
                         $('#total_payable_amount').val(response.total_payable_amount.toLocaleString());
 
-                        hideBlockUI('#loader');
+                        stakeholderData = response.transferOwner;
+                        $('#transferOwner_full_name').val(stakeholderData.full_name);
+                        $('#transferOwner_father_name').val(stakeholderData.father_name);
+                        $('#transferOwner_cnic').val(stakeholderData.cnic);
+                        $('#transferOwner_contact').val(stakeholderData.contact);
+                        $('#transferOwner_email').val(stakeholderData.email);
+                        $('#transferOwner_address').text(stakeholderData.address);
+                        $('#transferOwner_occupation').val(stakeholderData.occupation);
+                        $('#transferOwner_designation').val(stakeholderData.designation);
+                        $('#transferOwner_ntn').val(stakeholderData.ntn);
+                        $('#transferOwner_country').val(stakeholderData.country);
+                        $('#transferOwner_state').val(stakeholderData.state);
+                        $('#transferOwner_city').val(stakeholderData.city);
+
+                        $('#transferOwner_optional_contact').val(stakeholderData
+                            .optional_contact);
+                        $('#transferOwner_optional_email').val(stakeholderData
+                            .optional_email);
+                        $('#transferOwner_comments').text(stakeholderData.comments);
+                        $('#transferOwner_mailing_address').val(stakeholderData.mailing_address);
+                        $('#transferOwner_nationality').val(stakeholderData.nationality);
+                        if (stakeholderData.stakeholder_as == 'c') {
+                            $('#transferOwner_company_name').val(stakeholderData.full_name);
+                            $('#transferOwner_industry').val(stakeholderData.occupation);
+                            $('#transferOwner_registration').val(stakeholderData.cnic);
+                            $('#transferOwner_ntn').val(stakeholderData.ntn);
+                            $('#companyForm').show();
+                            $('#individualForm').hide();
+                        }
+                        if (stakeholderData.stakeholder_as == 'i') {
+                            $('#companyForm').hide();
+                            $('#individualForm').show();
+                        }
+                        $('#transferOwner').show();
+
+
+                        fileOwnerData = response.fileOwner;
+                        $('#fileOwner_full_name').val(fileOwnerData.full_name);
+                        $('#fileOwner_father_name').val(fileOwnerData.father_name);
+                        $('#fileOwner_cnic').val(fileOwnerData.cnic);
+                        $('#fileOwner_contact').val(fileOwnerData.contact);
+                        $('#fileOwner_email').val(fileOwnerData.email);
+                        $('#fileOwner_address').text(fileOwnerData.address);
+                        $('#fileOwner_occupation').val(fileOwnerData.occupation);
+                        $('#fileOwner_designation').val(fileOwnerData.designation);
+                        $('#fileOwner_ntn').val(fileOwnerData.ntn);
+                        $('#fileOwner_country').val(fileOwnerData.country);
+                        $('#fileOwner_state').val(fileOwnerData.state);
+                        $('#fileOwner_city').val(fileOwnerData.city);
+
+                        $('#fileOwner_optional_contact').val(fileOwnerData
+                            .optional_contact);
+                        $('#fileOwner_optional_email').val(fileOwnerData
+                            .optional_email);
+                        $('#fileOwner_comments').text(fileOwnerData.comments);
+                        $('#fileOwner_mailing_address').val(fileOwnerData.mailing_address);
+                        $('#fileOwner_nationality').val(fileOwnerData.nationality);
+                        if (fileOwnerData.stakeholder_as == 'c') {
+                            $('#fileOwner_company_name').val(fileOwnerData.full_name);
+                            $('#fileOwner_industry').val(fileOwnerData.occupation);
+                            $('#fileOwner_registration').val(fileOwnerData.cnic);
+                            $('#fileOwner_ntn').val(fileOwnerData.ntn);
+                            $('#OwnerCompanyForm').show();
+                            $('#OwnerIndividualForm').hide();
+                        }
+                        if (fileOwnerData.stakeholder_as == 'i') {
+                            $('#OwnerCompanyForm').hide();
+                            $('#OwnerIndividualForm').show();
+                        }
+
+                        $('#fileOwner').show()
+
+                        hideBlockUI('#receiptForm');
                     } else {
-                        hideBlockUI('#loader');
+                        hideBlockUI('#receiptForm');
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
@@ -358,39 +399,18 @@
                     }
                 },
                 error: function(error) {
+                    hideBlockUI('#receiptForm');
+
                     console.log(error);
                 }
             });
-        }
+        });
+
 
         $("#saveButton").click(function() {
             $("#receiptForm").submit();
         });
 
-        function destroyDraft() {
-
-            Swal.fire({
-                icon: 'warning',
-                title: 'Warning',
-                text: 'Are you sure you want to destroy the draft receipts ?',
-                showCancelButton: true,
-                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                confirmButtonText: 'Yes, Change it!',
-                confirmButtonClass: 'btn-danger',
-                buttonsStyling: false,
-                customClass: {
-                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
-                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
-                },
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let url =
-                        "{{ route('sites.receipts.destroy-draft', ['site_id' => encryptParams($site_id)]) }}";
-                    location.href = url;
-                }
-            });
-
-        }
 
         var e = $(".bank");
         e.wrap('<div class="position-relative"></div>');

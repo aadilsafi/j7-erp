@@ -664,8 +664,7 @@ Route::group([
                     Route::post('store', [TransferReceiptController::class, 'store'])->name('store');
 
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                        Route::post('get-unit-type-and-unit-floor', [TransferReceiptController::class, 'getUnitTypeAndFloorAjax'])->name('get-unit-type-and-unit-floor');
-                        Route::post('get-unpaid-installments', [TransferReceiptController::class, 'getUnpaidInstallments'])->name('get-unpaid-installments');
+                        Route::post('get-transfer-file-data', [TransferReceiptController::class, 'getTransferFileData'])->name('get-transfer-file-data');
                     });
 
                     Route::group(['prefix' => '/{receipts_id}'], function () {

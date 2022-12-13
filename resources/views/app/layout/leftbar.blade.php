@@ -608,7 +608,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.file-transfer-receipts.index')
+                                    @can('sites.file-transfer-receipts.index')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.file-transfer-receipts.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -619,7 +619,7 @@
                                                     Receipts</span>
                                             </a>
                                         </li>
-                                    @endcan --}}
+                                    @endcan
                                     @can('sites.payment-voucher.index')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.payment-voucher.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">

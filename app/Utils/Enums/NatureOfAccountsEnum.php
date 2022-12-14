@@ -22,4 +22,5 @@ enum NatureOfAccountsEnum: string
     case Customer_AP_Account = 'C-AP';
     case Dealer_AP_Account = 'D-AP';
     case Vendor_AP_Account = 'V-AP';
+    case TITLE_TRANSFER_RECEIPT = 'TF';
 }

@@ -52,8 +52,8 @@ class TransferReceiptController extends Controller
             foreach ($transferFiles as $key => $tf) {
 
                 $units[$key] = json_decode($tf->unit_data);
-                $units[$key]->full_name = $tf->transferStakeholder->full_name;
-                $units[$key]->cnic = $tf->transferStakeholder->cnic;
+                $units[$key]->full_name = $tf->stakeholder->full_name;
+                $units[$key]->cnic = $tf->stakeholder->cnic;
                 $units[$key]->transferFileId = $tf->id;
                 $fileOwner[$key] = $tf->stakeholder_data;
                 $transferOwner[$key] = $tf->transfer_person_data;

@@ -89,7 +89,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                 'sales_plan_id'  => $transferFile->sales_plan_id,
                 'file_id'  => $transferFile->file_id,
                 'file_title_transfer_id'  => $transferFile->id,
-                'stakeholder_id' => $transferFile->transfer_person_id,
+                'stakeholder_id' => $transferFile->stakeholder_id,
                 'mode_of_payment' => $data['mode_of_payment'],
                 'other_value' => $data['other_value'],
                 'cheque_no' => $data['cheque_no'],
@@ -113,25 +113,25 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
             $receipt = TransferReceipt::create($receiptData);
             if ($receipt->mode_of_payment == "Cash") {
 
-                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt->id);
+                $transaction = $this->financialTransactionInterface->makeTransferReceiptTransaction($receipt->id);
                 $transferFile->payment_date = $receipt->created_date;
                 $transferFile->paid_status = true;
                 $transferFile->save();
             }
 
             if ($receipt->mode_of_payment == "Cheque") {
-                $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                $transaction = $this->financialTransactionInterface->makeTransferReceiptChequeTransaction($receipt->id);
             }
 
             if ($receipt->mode_of_payment == "Online") {
-                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+                $transaction = $this->financialTransactionInterface->makeTransferReceiptOnlineTransaction($receipt->id);
                 $transferFile->payment_date = $receipt->created_date;
                 $transferFile->paid_status = true;
                 $transferFile->save();
             }
 
             if ($receipt->mode_of_payment == "Other") {
-                $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt->id);
+                $transaction = $this->financialTransactionInterface->makeTransferReceiptOtherTransaction($receipt->id);
                 $transferFile->payment_date = $receipt->created_date;
                 $transferFile->paid_status = true;
                 $transferFile->save();

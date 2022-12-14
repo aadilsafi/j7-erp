@@ -57,4 +57,9 @@ class TransferReceipt extends Model implements HasMedia
     {
         return $this->belongsTo(Stakeholder::class);
     }
+
+    public function TransferFile()
+    {
+        return $this->belongsTo(FileTitleTransfer::class , 'file_title_transfer_id');
+    }
 }

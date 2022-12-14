@@ -34,8 +34,8 @@ class storeRequest extends FormRequest
             'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
             'attachments.*.image' => 'required_if:checkAttachment,1',
             'stackholder.stackholder_id' => 'required',
-            'stackholder.full_name' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:50',
-            'stackholder.father_name' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:50',
+            'stackholder.full_name' => 'required_if:stackholder.stackholder_id,0',
+            'stackholder.father_name' => 'required_if:stackholder.stackholder_id,0',
             'stackholder.contact' => 'required_if:stackholder.stackholder_id,0|string|min:1|max:20',
             'stackholder.address' => 'required_if:stackholder.stackholder_id,0|string',
         ];

@@ -55,6 +55,10 @@ class TransferReceiptController extends Controller
                 $units[$key]->full_name = $tf->stakeholder->full_name;
                 $units[$key]->cnic = $tf->stakeholder->cnic;
                 $units[$key]->transferFileId = $tf->id;
+
+                $units[$key]->tp_full_name = $tf->transferStakeholder->full_name;
+                $units[$key]->tp_cnic = $tf->transferStakeholder->cnic;
+            
                 $fileOwner[$key] = $tf->stakeholder_data;
                 $transferOwner[$key] = $tf->transfer_person_data;
             }

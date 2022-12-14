@@ -10,7 +10,8 @@
                                 Transfer File <span class="text-danger">*</span>
                             </label>
 
-                            <select class="select2 form-select transfer_file_id @error('transfer_file_id') is-invalid @enderror"
+                            <select
+                                class="select2 form-select transfer_file_id @error('transfer_file_id') is-invalid @enderror"
                                 name="transfer_file_id" id="transfer_file_id">
                                 <option selected>Select Transfer File</option>
 
@@ -18,7 +19,7 @@
                                     <option value="{{ $row->transferFileId }}">
                                         {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
                                         {{ $row->full_name }},
-                                        {{ $row->cnic }} )
+                                        {{ $row->cnic }} ) -> ( {{ $row->tp_full_name }}, {{ $row->tp_cnic }})
                                     </option>
                                 @endforeach
                             </select>

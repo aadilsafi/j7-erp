@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string('optional_contact')->after('contact')->nullable();
             $table->json('OptionalCountryDetails')->after('optional_contact')->nullable();
             $table->string('stakeholder_as')->nullable()->default('i');
-            $table->integer('stakeholder_contact_id')->nullable();
             $table->string('address')->nullable();
             $table->foreignId('country_id')->default(167)->nullable();
             $table->foreignId('state_id')->default(0)->nullable();

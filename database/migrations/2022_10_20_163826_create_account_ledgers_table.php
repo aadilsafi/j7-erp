@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('account_ledgers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->string('account_head_code', 20);
+            $table->string('account_head_code');
             $table->string('origin_name')->nullable();
             $table->string('origin_number')->nullable();
             $table->foreignId('account_action_id')->constrained();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);
-            $table->string('nature_of_account', 3);
+            $table->string('nature_of_account');
             $table->boolean('status')->default(true);
             $table->timestamp('created_date')->nullable();
             $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();

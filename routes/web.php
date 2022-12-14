@@ -52,6 +52,7 @@ use App\Http\Controllers\{
     LogController,
     PaymentVocuherController,
     JournalVoucherController,
+    TransferReceiptController,
 };
 use App\Models\PaymentVocuher;
 use App\Models\Type;
@@ -682,6 +683,35 @@ Route::group([
                         // Route::get('edit', [ReceiptController::class, 'edit'])->name('edit');
                         // Route::put('update', [ReceiptController::class, 'update'])->name('update');
                         // Route::get('delete', [ReceiptController::class, 'destroy'])->name('destroy');
+                    });
+                });
+
+                // File Transfer Receipts
+                Route::group(['prefix' => 'file-transfer-receipts', 'as' => 'file-transfer-receipts.'], function () {
+                    Route::get('/', [TransferReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [TransferReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [TransferReceiptController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-transfer-file-data', [TransferReceiptController::class, 'getTransferFileData'])->name('get-transfer-file-data');
+                    });
+
+                    Route::group(['prefix' => '/{receipts_id}'], function () {
+                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('/print', [TransferReceiptController::class, 'printReceipt'])->name('print');
+                            });
+                        });
+                    });
+
+                    Route::get('destroy-draft', [TransferReceiptController::class, 'destroyDraft'])->name('destroy-draft');
+                    Route::get('delete-selected', [TransferReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [TransferReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+                    Route::get('revert-payment/{ids}', [TransferReceiptController::class, 'revertPayment'])->name('revert-payment');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [TransferReceiptController::class, 'show'])->name('show');
                     });
                 });
 

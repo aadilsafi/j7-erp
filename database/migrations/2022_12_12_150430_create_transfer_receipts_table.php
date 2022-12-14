@@ -30,7 +30,7 @@ return new class extends Migration
             $table->foreignId('bank_id')->nullable();
             $table->string('transaction_date')->nullable();
             $table->string('discounted_amount')->nullable();
-            $table->double('amount_in_numbers');
+            $table->double('amount_in_numbers')->nullable();
             $table->string('attachment')->nullable();
             $table->string('amount')->nullable();
             $table->string('comments')->nullable();

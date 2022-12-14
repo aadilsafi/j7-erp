@@ -24,6 +24,7 @@ use App\Services\Team\{TeamService, Interface\TeamInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
 use App\Services\Permissions\{PermissionInterface, PermissionService};
 use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
+use App\Services\TransferFileReceipts\{TransferFileReceiptService, TransferFileReceiptInterface};
 use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
 use App\Services\Roles\{RoleInterface, RoleService};
 use App\Services\AccountCreations\FirstLevel\FirstLevelAccountinterface as FirstLevelAccountInterface;
@@ -87,12 +88,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CompanyInterface::class, CompanyService::class);
         $this->app->bind(paymentInterface::class, paymentService::class);
         $this->app->bind(JournalVouchersInterface::class, JournalVouchersService::class);
+        $this->app->bind(TransferFileReceiptInterface::class, TransferFileReceiptService::class);
 
         Telescope::ignoreMigrations();
 
         // if ($this->app->environment('local')) {
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
+        $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+        $this->app->register(TelescopeServiceProvider::class);
         // }
     }
 

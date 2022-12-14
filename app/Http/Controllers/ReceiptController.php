@@ -251,13 +251,13 @@ class ReceiptController extends Controller
         $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('stakeholder')->first();
         $stakeholders = $sales_plan->stakeholder;
 
-        $stakeholderType = StakeholderType::where('id', $stakeholders->id)->get();
+        $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholders->id)->get();
 
-        $customerApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'C'])->first();
+        $customerApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'C'])->first();
 
-        $dealerApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'D'])->first();
+        $dealerApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'D'])->first();
 
-        $vendorApAccount  = StakeholderType::where(['id' => $stakeholders->id, 'type' => 'V'])->first();
+        $vendorApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'V'])->first();
 
         // Customer Ap Amount
         if (isset($customerApAccount)) {

@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('stakeholder_contacts', function (Blueprint $table) {
-            // $table->integer('stakeholder_contact_id')->nullable();
+        Schema::table('transfer_receipts', function (Blueprint $table) {
+            $table->dropColumn('amount_in_numbers');
+            $table->string('amount_in_words')->nullable();
+            $table->softDeletes();
         });
     }
 
@@ -25,9 +27,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('stakeholder_contacts', function (Blueprint $table) {
-            $table->dropColumn('stakeholder_contact_id');
-            
+        Schema::table('transfer_receipts', function (Blueprint $table) {
+            $table->double('amount_in_numbers')->nullable();
+            $table->dropColumn('amount_in_words');
         });
     }
 };

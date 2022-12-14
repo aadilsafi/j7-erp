@@ -28,6 +28,8 @@ class FileTitleTransfer extends Model
         'status',
         'comments',
         'kin_data',
+        'paid_status',
+        'payment_date',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -53,6 +55,11 @@ class FileTitleTransfer extends Model
     public function stakeholder()
     {
         return $this->belongsTo(Stakeholder::class);
+    }
+
+    public function transferStakeholder()
+    {
+        return $this->belongsTo(Stakeholder::class, 'transfer_person_id', 'id');
     }
 
     public function fileTitleTransferAttachments()

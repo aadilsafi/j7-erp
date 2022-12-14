@@ -500,7 +500,6 @@
                 },
                 'dealer_id': {
                     required: true,
-                    min: 1
                 },
                 'dealer[address]': {
                     required: true,

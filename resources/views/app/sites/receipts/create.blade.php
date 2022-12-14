@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                    width: calc(20% - 0.5em);
-                                                                                                                } */
+                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                    } */
     </style>
 @endsection
 
@@ -125,7 +125,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
                             </label>
-                            <input min="0" id="amount_received" type="text"
+                            <input id="amount_received" type="text"
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif

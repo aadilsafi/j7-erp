@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.show', encryptParams($site->id)) }}
 @endsection
 
-@section('page-title', 'Receipt Details')
+@section('page-title', 'Transfer Receipt Details')
 
 @section('page-vendor')
 @endsection
@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+                                                                    width: calc(20% - 0.5em);
+                                                                } */
     </style>
 @endsection
 
@@ -39,7 +39,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Receipt Details</h2>
+                <h2 class="content-header-title float-start mb-0">Transfer Receipt Details</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.receipts.show', encryptParams($site->id)) }}
                 </div>
@@ -52,106 +52,6 @@
 
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-
-            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-                id="stakeholders_card">
-                <div class="card-header justify-content-between">
-                    <h3>1. CUSTOMER DATA </h3>
-                </div>
-
-                <div class="card-body">
-
-                    <div class="row mb-1">
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->full_name }}"
-                                class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
-                                class="form-control form-control-lg" id="stackholder_father_name"
-                                placeholder="Father / Husband Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->occupation }}"
-                                class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->designation }}"
-                                class="form-control form-control-lg" id="stackholder_designation"
-                                placeholder="Designation" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->ntn }}"
-                                class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                            <input type="text" readonly value="{{ cnicFormat($stakeholder_data->cnic) }}"
-                                class="form-control form-control-lg" id="stackholder_cnic" placeholder="CNIC" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->contact }}"
-                                class="form-control form-control-lg" id="stackholder_contact" placeholder="Contact" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="country">Country</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
-                                class="form-control form-control-lg" id="country" placeholder="Country" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="state">State</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->state ? $stakeholder_data->state->name : '-' }}"
-                                class="form-control form-control-lg" id="state" placeholder="State" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="city">City</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->city ? $stakeholder_data->city->name : '-' }}"
-                                class="form-control form-control-lg" id="city" placeholder="City" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Address</label>
-                            <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->address }}</textarea>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="mailing_address">Mailing Address</label>
-                            <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
-                                placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-1">
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                            <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Comments" rows="5">{{ $stakeholder_data->comments }}</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                 <div class="card-header">
@@ -168,9 +68,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Floor No</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}"
-                                readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -190,9 +89,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="Floor No"
-                                value="{{ number_format($sales_plan->unit_price) }}" readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ number_format($sales_plan->unit_price) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -216,32 +114,19 @@
 
                         <div class="col-lg-9 col-md-9 col-sm-12">
                             <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">Total Amount Received</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
-                                </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
+                                    <label class="form-label fs-5" for="unit_no">Total Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0}}"
+                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount) }}"
                                         readonly />
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                    <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="floor_no">Amount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
-                                        readonly />
+                                        value="{{ \Str::title(numberToWords($receipt->amount)) }} Only." readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
@@ -279,7 +164,7 @@
                                         <label class="form-label fs-5" for="unit_type">Transaction No</label>
                                         <input type="text" class="form-control form-control-lg" id="unit_type"
                                             name="unit[type]" placeholder="Transaction No"
-                                            value="{{ $receipt->online_instrument_no }}" readonly />
+                                            value="{{ $receipt->online_transaction_no }}" readonly />
                                     </div>
 
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
@@ -300,17 +185,9 @@
                                 @endif
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
-                                    <label class="form-label fs-5" for="installments">Installments</label>
-                                    <input type="text" class="form-control form-control-lg text-wrap" id="installments"
-                                        name="installments" placeholder="installments"
-                                        value="@foreach (json_decode($receipt->installment_number) as $values){{ trim($values) }}{{ !$loop->last ? ' , ' : null }} @endforeach"
-                                        readonly />
-                                </div>
-
-                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="stackholder_address">Comments</label>
                                     <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
-                                        rows="5">{{ $receipt->comments }}</textarea>
+                                        rows="2">{{ $receipt->comments }}</textarea>
                                 </div>
 
                             </div>
@@ -331,109 +208,353 @@
                 </div>
             </div>
 
-            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-                id="installments_acard">
-                <div class="card-header">
-                    <h3>4. PAID OR PARTIALLY PAID INSTALLMENT DETAILS</h3>
-                </div>
+            <div id="transferOwner" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                    id="stakeholders_card">
+                    <div class="card-header justify-content-between">
+                        <h3> Transfer Owner Information</h3>
+                    </div>
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
-                                <div class="card-body">
-                                    <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
+                    <div class="card-body">
 
-                                        <table class="table table-hover table-striped table-borderless"
-                                            id="installments_table" style="position: relative;">
-                                            <thead style="position: sticky; top: 0; z-index: 10;">
-                                                <tr class="text-center text-nowrap">
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Installments</th>
-                                                    <th scope="col">Due Date</th>
-                                                    <th scope="col">Total Amount</th>
-                                                    <th scope="col">Paid Amount</th>
-                                                    <th scope="col">Remaining Amount</th>
-                                                    <th scope="col">Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="dynamic_installment_rows">
-                                                @foreach ($paid_installments as $paidIntsallment)
-                                                    <tr class="text-center text-nowrap">
-                                                        <td>{{ $loop->index + 1 }}</td>
-                                                        <td>{{ $paidIntsallment->details }}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
-                                                        </td>
-                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
-                                                        <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        {{--  individual Form --}}
+                        <div id="individualForm">
+                            <div class="row mb-1">
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_full_name">Full Name <span
+                                            class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_full_name" placeholder="Full Name"
+                                        value="{{ $transferOwner->full_name }}" />
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_father_name">Father / Husband Name
+                                        <span class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_father_name" placeholder="Father / Husband Name"
+                                        value="{{ $transferOwner->father_name }}" />
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_occupation">Occupation </label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_occupation" placeholder="Occupation"
+                                        value="{{ $transferOwner->full_name }}" />
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_designation">Designation</label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_designation" placeholder="Designation"
+                                        value="{{ $transferOwner->full_name }}" />
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_ntn">NTN </label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_ntn" placeholder="NTN"
+                                        value="{{ $transferOwner->full_name }}" />
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="transferOwner_cnic">CNIC <span
+                                            class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="transferOwner_cnic" placeholder="CNIC"
+                                        value="{{ $transferOwner->full_name }}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- company form --}}
+                        <div id="companyForm">
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="company_name">Company Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" readonly class="form-control form-control-lg"
+                                        id="transferOwner_company_name" placeholder="Company Name" value="" />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="industry">Industry </label>
+                                    <input type="text" readonly class="form-control form-control-lg"
+                                        id="transferOwner_industry" placeholder="Industry" value="" />
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="registration">Registration # <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                        id="transferOwner_registration" placeholder="Registration Number"
+                                        value="" />
+
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="ntn">NTN </label>
+                                    <input type="number" readonly
+                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                        id="transferOwner_ntn" placeholder="NTN Number" value="" />
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- common form  --}}
+                        <div class="row mb-1">
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_email">Email <span
+                                        class="text-danger">*</span></label>
+                                <input type="email" readonly class="form-control form-control-md"
+                                    id="transferOwner_email" placeholder="Email" autocomplete="false" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_optional_email">Optional Email</label>
+                                <input type="email" readonly class="form-control form-control-md"
+                                    id="transferOwner_optional_email" placeholder="Optional Email" autocomplete="false"
+                                    value="" />
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_contact">Contact <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_contact" placeholder="Contact" value="" />
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <label class="form-label fs-5" for="transferOwner_optional_contact">Optional Contact <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_optional_contact" placeholder="Optional Contact" value="" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_country" placeholder="Country" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="city_id">State</label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_state" placeholder="State" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="city_id">City</label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="transferOwner_city" placeholder="City" value="" />
+
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_nationality">Nationality </label>
+                                <input type="text" readonly
+                                    class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                                    id="transferOwner_nationality" placeholder="Nationality" value="" />
+
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_address">Address <span
+                                        class="text-danger">*</span></label>
+                                <textarea readonly class="form-control form-control-lg" id="transferOwner_address" placeholder="Address"
+                                    rows="3">  </textarea>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_mailing_address">Mailing Address <span
+                                        class="text-danger">*</span>
+                                </label>
+                                <textarea readonly class="form-control form-control-lg" id="transferOwner_mailing_address"
+                                    placeholder="Mailing Address" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg- col-md- col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="transferOwner_comments">Comments</label>
+                                <textarea readonly class="form-control form-control-lg" id="transferOwner_comments" placeholder="Comments"
+                                    rows="3"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-                id="installments_acard">
-                <div class="card-header">
-                    <h3>5. UNPAID INSTALLMENT DETAILS</h3>
-                </div>
+            <div id="fileOwner" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                    id="stakeholders_card">
+                    <div class="card-header justify-content-between">
+                        <h3> File Owner Information</h3>
+                    </div>
 
-                <div class="card-body">
+                    <div class="card-body">
 
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <div class="card m-0" style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
-                                <div class="card-body">
-                                    <div class="table-responsive" style="max-height: 50rem; overflow-y: auto;">
-
-                                        <table class="table table-hover table-striped table-borderless"
-                                            id="installments_table" style="position: relative;">
-                                            <thead style="position: sticky; top: 0; z-index: 10;">
-                                                <tr class="text-center text-nowrap">
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">Installments</th>
-                                                    <th scope="col">Due Date</th>
-                                                    <th scope="col">Total Amount</th>
-                                                    <th scope="col">Paid Amount</th>
-                                                    <th scope="col">Remaining Amount</th>
-                                                    <th scope="col">Status</th>
-                                                </tr>
-                                            </thead>
-
-                                            <tbody id="dynamic_installment_rows">
-                                                @isset($unpaid_installments)
-                                                    @foreach ($unpaid_installments as $unPaidIntsallment)
-                                                        <tr class="text-center text-nowrap">
-                                                            <td>{{ $loop->index + 1 }}</td>
-                                                            <td>{{ $unPaidIntsallment->details }}</td>
-                                                            <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
-                                                            </td>
-                                                            <td>{{ number_format($unPaidIntsallment->amount) }}</td>
-                                                            <td>-</td>
-                                                            <td>-</td>
-                                                            <td>Unpaid</td>
-                                                        </tr>
-                                                    @endforeach
-                                                @endisset
-                                            </tbody>
-                                        </table>
-                                    </div>
+                        {{--  individual Form --}}
+                        <div id="OwnerIndividualForm">
+                            <div class="row mb-1">
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_full_name">Full Name <span
+                                            class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_full_name" placeholder="Full Name" value="" />
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_father_name">Father / Husband Name
+                                        <span class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_father_name" placeholder="Father / Husband Name" value="" />
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_occupation">Occupation </label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_occupation" placeholder="Occupation" value="" />
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_designation">Designation</label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_designation" placeholder="Designation" value="" />
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_ntn">NTN </label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_ntn" placeholder="NTN" value="" />
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                    <label class="form-label fs-5" for="fileOwner_cnic">CNIC <span
+                                            class="text-danger">*</span></label>
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="fileOwner_cnic" placeholder="CNIC" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- company form --}}
+                        <div id="OwnerCompanyForm">
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="company_name">Company Name <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" readonly class="form-control form-control-lg"
+                                        id="fileOwner_company_name" placeholder="Company Name" value="" />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="industry">Industry </label>
+                                    <input type="text" readonly class="form-control form-control-lg"
+                                        id="fileOwner_industry" placeholder="Industry" value="" />
+                                </div>
+                            </div>
+                            <div class="row mb-1">
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="registration">Registration # <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                        id="fileOwner_registration" placeholder="Registration Number" value="" />
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                    <label class="form-label fs-5" for="ntn">NTN </label>
+                                    <input type="number" readonly
+                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                        id="fileOwner_ntn" placeholder="NTN Number" value="" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- common form  --}}
+                        <div class="row mb-1">
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_email">Email <span
+                                        class="text-danger">*</span></label>
+                                <input type="email" readonly class="form-control form-control-md" id="fileOwner_email"
+                                    placeholder="Email" autocomplete="false" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_optional_email">Optional Email</label>
+                                <input type="email" readonly class="form-control form-control-md"
+                                    id="fileOwner_optional_email" placeholder="Optional Email" autocomplete="false"
+                                    value="" />
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_contact">Contact <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_contact" placeholder="Contact" value="" />
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-12">
+                                <label class="form-label fs-5" for="fileOwner_optional_contact">Optional Contact <span
+                                        class="text-danger">*</span></label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_optional_contact" placeholder="Optional Contact" value="" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
+                                <input readonly type="text" class="form-control form-control-lg"
+                                    id="fileOwner_country" placeholder="Country" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="city_id">State</label>
+                                <input readonly type="text" class="form-control form-control-lg" id="fileOwner_state"
+                                    placeholder="State" value="" />
+
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label" style="font-size: 15px" for="city_id">City</label>
+                                <input readonly type="text" class="form-control form-control-lg" id="fileOwner_city"
+                                    placeholder="City" value="" />
+
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_nationality">Nationality </label>
+                                <input type="text" readonly
+                                    class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                                    id="fileOwner_nationality" placeholder="Nationality" value="" />
+
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_address">Address <span
+                                        class="text-danger">*</span></label>
+                                <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3">  </textarea>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_mailing_address">Mailing Address <span
+                                        class="text-danger">*</span>
+                                </label>
+                                <textarea readonly class="form-control form-control-lg" id="fileOwner_mailing_address" placeholder="Mailing Address"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-1">
+                            <div class="col-lg- col-md- col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="fileOwner_comments">Comments</label>
+                                <textarea readonly class="form-control form-control-lg" id="fileOwner_comments" placeholder="Comments"
+                                    rows="3"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
 
         </div>
     </div>

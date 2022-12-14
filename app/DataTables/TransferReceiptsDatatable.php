@@ -64,7 +64,7 @@ class TransferReceiptsDatatable extends DataTable
             })
          
             ->editColumn('actions', function ($receipt) {
-                return view('app.sites.receipts.actions', ['site_id' => decryptParams($this->site_id), 'id' => $receipt->id]);
+                return view('app.sites.file-transfer-receipts.actions', ['site_id' => decryptParams($this->site_id), 'id' => $receipt->id]);
             })
             ->editColumn('check', function ($receipt) {
                 return $receipt;

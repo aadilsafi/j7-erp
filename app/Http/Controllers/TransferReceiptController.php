@@ -8,7 +8,10 @@ use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\FileTitleTransfer;
 use App\Models\ReceiptTemplate;
+use App\Models\SalesPlan;
+use App\Models\Site;
 use App\Models\StakeholderType;
+use App\Models\TransferReceipt;
 use App\Services\TransferFileReceipts\TransferFileReceiptInterface;
 use Exception;
 use Illuminate\Http\Request;
@@ -100,6 +103,33 @@ class TransferReceiptController extends Controller
         } catch (Exception $ex) {
             return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($site_id, $id)
+    {
+        $site = (new Site())->find(decryptParams($site_id));
+        $receipt = (new TransferReceipt())->find(decryptParams($id));
+        $image = $receipt->getFirstMediaUrl('file_transfer_receipt_attachments');
+
+        $fileOwner = json_decode($receipt->TransferFile->stakeholder_data);
+        $transferOwner = json_decode($receipt->TransferFile->transfer_person_data);
+        $sales_plan = SalesPlan::find($receipt->TransferFile->sales_plan_id);
+
+        return view('app.sites.file-transfer-receipts.preview', [
+            'site' => $site,
+            'receipt' => $receipt,
+            'unit_data' => $receipt->unit,
+            'image' => $image,
+            'fileOwner' => $fileOwner,
+            'transferOwner' => $transferOwner,
+            'sales_plan' => $sales_plan,
+        ]);
     }
 
     public function makeActiveSelected(Request $request, $site_id)

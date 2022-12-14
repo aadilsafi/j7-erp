@@ -104,7 +104,6 @@
 
         @if (isset($titleTransferPerson) && $titleTransferPerson->stakeholder_as == 'c')
             $('#companyForm').show();
-            
         @endif
         FilePond.registerPlugin(
             FilePondPluginImagePreview,
@@ -168,4 +167,3 @@
         });
     </script>
 @endsection
-@endif

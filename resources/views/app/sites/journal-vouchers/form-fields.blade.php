@@ -1,0 +1,342 @@
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-body">
+        <div class="row mb-1">
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <label class="form-label fs-5" for="name">Serial Number <span class="text-danger">*</span></label>
+                <input readonly type="text"
+                    class="form-control form-control-md @error('serial_number') is-invalid @enderror" id="serial_number"
+                    name="serial_number" placeholder="Journal Serial Number" value="{{ $journal_serial_number }}" />
+                @error('serial_number')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">Journal Voucher Serial Number.</small></p>
+                @enderror
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <label class="form-label fs-5" for="name"> User Name <span class="text-danger">*</span></label>
+                <input readonly type="text"
+                    class="form-control form-control-md @error('voucher_name') is-invalid @enderror" id="user_name"
+                    name="user_name" placeholder="Journal Voucher Name" value="{{ Auth::user()->name }}" />
+                @error('user_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">User Name.</small></p>
+                @enderror
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <label class="form-label fs-5" for="name"> Voucher Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
+                    id="voucher_name" name="voucher_name" placeholder="Journal Voucher Name" value="" />
+                @error('voucher_name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">Enter Journal Voucher Name.</small></p>
+                @enderror
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <label class="form-label fs-5" for="name">Remarks <span class="text-danger">*</span></label>
+                <input type="text" class="form-control form-control-md @error('remarks') is-invalid @enderror"
+                    id="remarks" name="remarks" placeholder="Journal Voucher Remarks" value="" />
+                @error('remarks')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">Enter Journal Voucher Remarks.</small></p>
+                @enderror
+            </div>
+
+            {{-- <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label fs-5" for="second_level">Fifth Level Account Code <span
+                        class="text-danger">*</span></label>
+                <select class="select2" name="account_number" id="fifth_level">
+                    <option value="">Select Account Codes</option>
+                    @foreach ($fifthLevelAccount as $fifthLevel)
+                        <option value="{{ $fifthLevel->code }}">{{ $fifthLevel->name }} ({{ $fifthLevel->code }})
+                        </option>
+                    @endforeach
+                </select>
+                @error('fifth_level')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">Select Fifth Level Account Code.</small></p>
+                @enderror
+            </div> --}}
+        </div>
+    </div>
+</div>
+
+{{--  --}}
+
+
+<div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Journal Voucher Entries</h3>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-hover table-striped table-borderless" id="installments_table"
+            style="position: relative;">
+            <thead style="position: sticky; top: 0; z-index: 10;">
+                {{-- <tr class="">
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Account Code</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Debit</th>
+                    <th scope="col">Credit</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col">Action</th>
+                </tr> --}}
+                <div class="row custom_row mb-1 text-center">
+
+
+                    <div class="col-3 text-center  position-relative">
+                        <p>ACCOUNT CODE</p>
+                    </div>
+
+                    <div class="col-3 position-relative">
+                        <p>DATE</p>
+                    </div>
+
+                    <div class="col position-relative">
+                        <p>DEBIT</p>
+                    </div>
+
+                    <div class="col position-relative">
+                        <p>CREDIT</p>
+                    </div>
+
+                    <div class="col-2 position-relative">
+                        <p>REMARKS</p>
+                    </div>
+
+                    <div class="col-1 position-relative">
+                        {{-- <p>ACTION</p> --}}
+                    </div>
+                </div>
+            </thead>
+        </table>
+        <div class="journal-voucher-entries-list">
+            <div data-repeater-list="journal-voucher-entries">
+                <div data-repeater-item>
+                    <div class="card m-0">
+
+                        <div>
+                            <div>
+                                <table class="table table-hover table-striped table-borderless" id="installments_table"
+                                    style="position: relative;">
+
+                                    <div >
+                                        <div>
+                                            <div >
+                                                <tbody id="">
+
+                                                    <div class="row mb-1">
+
+                                                        <div class="col-3 position-relative">
+                                                            <select class=" form-control selectClass" name="account_number"
+                                                                id="fifth_level">
+                                                                <option value="">Select Account Codes</option>
+                                                                @foreach ($fifthLevelAccount as $fifthLevel)
+                                                                    <option value="{{ $fifthLevel->code }}">
+                                                                        {{ $fifthLevel->name }}
+                                                                        ({{ $fifthLevel->code }})
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+
+                                                        </div>
+
+                                                        <div class="col-3  position-relative">
+                                                            <input type="date"
+                                                                class="form-control voucher_date form-control-md @error('voucher_name') is-invalid @enderror"
+                                                                id="voucher_date" name="voucher_date" value="" />
+                                                        </div>
+
+                                                        <div class="col position-relative">
+                                                            <input type="number"
+                                                                class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
+                                                                id="debit" name="debit" placeholder="Debit"
+                                                                value="" />
+
+                                                        </div>
+                                                        <div class="col position-relative">
+                                                            <input type="number"
+                                                                class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
+                                                                id="credit" name="credit" placeholder="Credit"
+                                                                value="" />
+
+                                                        </div>
+                                                        <div class="col-2 position-relative">
+                                                            <input type="text"
+                                                                class="form-control form-control-md @error('remarks') is-invalid @enderror"
+                                                                id="remarks" name="remarks" placeholder="Remarks"
+                                                                value="" />
+                                                        </div>
+
+                                                        <div class="col-1 position-relative">
+                                                            <button
+                                                                class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                                                data-repeater-delete
+                                                                id="delete-journal-voucher-entries" type="button">
+                                                                <i data-feather="x" class="me-25"></i>
+                                                                {{-- <span>Delete</span> --}}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                </tbody>
+                                            </div>
+                                        </div>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="first-contact-person" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{-- <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Journal Voucher Entries</h3>
+    </div>
+    <div class="card-body">
+        <div class="journal-voucher-entries-list">
+            <div data-repeater-list="journal-voucher-entries">
+                <div data-repeater-item>
+                    <div class="card m-0">
+                        <div class="card-header pt-0">
+                            <h3>Journal Voucher Entries</h3>
+                            <button
+                                class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                data-repeater-delete id="delete-journal-voucher-entries" type="button">
+                                <i data-feather="x" class="me-25"></i>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="full_name">
+                                            Voucher Entry Name</label>
+                                        <input type="text"
+                                            class="form-control form-control-md @error('voucher_entry_name') is-invalid @enderror"
+                                            id="voucher_entry_name" name="voucher_entry_name"
+                                            placeholder="Voucher Entry Name" value="" />
+                                        @error('voucher_entry_name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Enter Voucher Entry Name.</small>
+                                            </p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="second_level">Fifth Level Account Code <span
+                                                class="text-danger">*</span></label>
+                                        <select class="select2" name="account_number" id="fifth_level">
+                                            <option value="">Select Account Codes</option>
+                                            @foreach ($fifthLevelAccount as $fifthLevel)
+                                                <option value="{{ $fifthLevel->code }}">{{ $fifthLevel->name }}
+                                                    ({{ $fifthLevel->code }})
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('fifth_level')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Select Fifth Level Account
+                                                    Code.</small></p>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                                <div class="row mb-1">
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="debit">
+                                            Debit</label>
+                                        <input type="text"
+                                            class="form-control form-control-md @error('debit') is-invalid @enderror"
+                                            id="debit" name="debit" placeholder="debit" value="" />
+                                        @error('debit')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Enter Debit Amount.</small></p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="credit">
+                                            Credit</label>
+                                        <input type="text"
+                                            class="form-control form-control-md @error('credit') is-invalid @enderror"
+                                            id="credit" name="credit" placeholder="credit" value="" />
+                                        @error('credit')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Enter Credit Amount.</small></p>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                        <label class="form-label fs-5" for="remarks">
+                                            Remarks</label>
+                                        <input type="text"
+                                            class="form-control form-control-md @error('remarks') is-invalid @enderror"
+                                            id="remarks" name="remarks" placeholder="remarks" value="" />
+                                        @error('remarks')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Enter Remarks.</small></p>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                                <div class="row mb-1">
+                                    <div class="col-lg- col-md- col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="comments">Comments</label>
+                                        <textarea class="form-control form-control-lg" id="comments" name="comments" placeholder="Comments"
+                                            rows="6"></textarea>
+                                        @error('comments')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @else
+                                            <p class="m-0"><small class="text-muted">Enter Comments.</small></p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="first-contact-person" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}

@@ -2090,6 +2090,57 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Journal Voucher
+            [
+                'name' => 'sites.settings.journal-vouchers.index',
+                'show_name' => 'Can View Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.create',
+                'show_name' => 'Can Create Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.store',
+                'show_name' => 'Can Store Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.edit',
+                'show_name' => 'Can Edit Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.update',
+                'show_name' => 'Can Update Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.destroy',
+                'show_name' => 'Can Destroy Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.destroy-selected',
+                'show_name' => 'Can Destroy Selected Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // import images
             [
                 'name' => 'sites.settings.import',

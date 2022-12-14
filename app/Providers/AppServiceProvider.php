@@ -37,6 +37,8 @@ use App\Services\AccountCreations\FourthLevel\FourthLevelAccountservice as Fourt
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountinterface as FifthLevelAccountInterface;
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountservice as FifthLevelAccountService;
 use App\Services\Company\{CompanyService, Interface\CompanyInterface};
+use App\Services\JournalVouchers\JournalVouchersInterface;
+use App\Services\JournalVouchers\JournalVouchersService;
 use App\Services\PaymentVoucher\paymentService;
 use App\Services\PaymentVoucher\paymentInterface;
 use Illuminate\Support\ServiceProvider;
@@ -84,6 +86,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FifthLevelAccountInterface::class, FifthLevelAccountService::class);
         $this->app->bind(CompanyInterface::class, CompanyService::class);
         $this->app->bind(paymentInterface::class, paymentService::class);
+        $this->app->bind(JournalVouchersInterface::class, JournalVouchersService::class);
 
         Telescope::ignoreMigrations();
 

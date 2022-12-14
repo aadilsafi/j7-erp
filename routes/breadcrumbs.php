@@ -597,6 +597,16 @@ Breadcrumbs::for('sites.companies.edit', function (BreadcrumbTrail $trail, $site
     $trail->push('Edit Compnay');
 });
 
+//Journal Vouchers Breadcrumbs
+Breadcrumbs::for('sites.settings.journal-vouchers.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Journal Vouchers', route('sites.settings.journal-vouchers.index', ['site_id' => $site_id]));
+});
+
+Breadcrumbs::for('sites.settings.journal-vouchers.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.settings.journal-vouchers.index', $site_id);
+    $trail->push('Create New Journal Vouchers');
+});
 
 //file-transfer-receipts
 Breadcrumbs::for('sites.file-transfer-receipts.index', function (BreadcrumbTrail $trail, $site_id) {

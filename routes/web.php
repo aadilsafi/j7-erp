@@ -51,6 +51,7 @@ use App\Http\Controllers\{
     StateController,
     LogController,
     PaymentVocuherController,
+    JournalVoucherController,
     TransferReceiptController,
 };
 use App\Models\PaymentVocuher;
@@ -168,6 +169,7 @@ Route::group([
 
                     //Accounts Routes
                     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+
                         // first level
                         Route::group(['prefix' => 'first-level', 'as' => 'first-level.'], function () {
                             Route::get('/', [FirstLevelAccountController::class, 'index'])->name('index');
@@ -181,6 +183,7 @@ Route::group([
                                 Route::put('update', [FirstLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // second level
                         Route::group(['prefix' => 'second-level', 'as' => 'second-level.'], function () {
                             Route::get('/', [SecondLevelAccountController::class, 'index'])->name('index');
@@ -194,6 +197,7 @@ Route::group([
                                 Route::put('update', [SecondLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // third level
                         Route::group(['prefix' => 'third-level', 'as' => 'third-level.'], function () {
                             Route::get('/', [ThirdLevelAccountController::class, 'index'])->name('index');
@@ -207,6 +211,7 @@ Route::group([
                                 Route::put('update', [ThirdLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // fourth level
                         Route::group(['prefix' => 'fourth-level', 'as' => 'fourth-level.'], function () {
                             Route::get('/', [FourthLevelAccountController::class, 'index'])->name('index');
@@ -220,6 +225,7 @@ Route::group([
                                 Route::put('update', [FourthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // fifth level
                         Route::group(['prefix' => 'fifth-level', 'as' => 'fifth-level.'], function () {
                             Route::get('/', [FifthLevelAccountController::class, 'index'])->name('index');
@@ -233,6 +239,30 @@ Route::group([
                                 Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
+
+
+                    });
+
+                    // Journal Voucher Routes
+                    Route::group(['prefix' => 'journal-vouchers', 'as' => 'journal-vouchers.'], function () {
+
+                        Route::get('/', [JournalVoucherController::class, 'index'])->name('index');
+
+                        Route::get('create', [JournalVoucherController::class, 'create'])->name('create');
+                        Route::post('store', [JournalVoucherController::class, 'store'])->name('store');
+
+                        Route::get('delete', [JournalVoucherController::class, 'destroy'])->name('destroy');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [JournalVoucherController::class, 'edit'])->name('edit');
+                            Route::put('update', [JournalVoucherController::class, 'update'])->name('update');
+                        });
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+
+                        });
+
                     });
 
                     // Import Routes

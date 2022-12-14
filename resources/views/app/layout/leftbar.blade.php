@@ -133,7 +133,7 @@
                 'sites.stakeholders.kins.importStakeholders', 'sites.floors.importFloors', 'sites.types.importTypes',
                 'sites.additional-costs.importAdcosts', 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks',
                 'sites.settings.import.images.index', 'sites.settings.countries.index', 'sites.settings.states.index',
-                'sites.settings.cities.index'])
+                'sites.settings.cities.index', 'sites.settings.journal-vouchers.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
@@ -157,6 +157,16 @@
                                     href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='list'></i>
                                     <span class="menu-title text-truncate" data-i18n="Custom Fields">Custom Fields</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.settings.journal-vouchers.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.journal-vouchers.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='list'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Journal Vouchers">Journal Vouchers</span>
                                 </a>
                             </li>
                         @endcan
@@ -453,7 +463,7 @@
                                     href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='users'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">Blacklisted
-                                        Stakeholders</span>
+                                    </span>
                                 </a>
                             </li>
                         @endcan
@@ -463,7 +473,7 @@
                                 <a class="d-flex align-items-center"
                                     href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='users'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">External Stakeholders</span>
+                                    <span class="menu-title text-truncate" data-i18n="Email">External </span>
                                 </a>
                             </li>
                         @endcan
@@ -474,7 +484,7 @@
                                     <i data-feather='users'></i>
                                     <span class="menu-title text-truncate"
                                         data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">
-                                        Internal Stakeholders</span>
+                                        Internal </span>
                                 </a>
                                 <ul class="menu-content">
 

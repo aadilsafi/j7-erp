@@ -14,7 +14,7 @@
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="second_level">Third Level Code <span
+                <label class="form-label fs-5" for="second_level">Fourth Level Code <span
                         class="text-danger">*</span></label>
                 <select class="select2" name="fourth_level" id="fourth_level">
                     @foreach ($fourthLevelAccount as $fourthLevel)

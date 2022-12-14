@@ -58,7 +58,7 @@ class TransferReceiptController extends Controller
 
                 $units[$key]->tp_full_name = $tf->transferStakeholder->full_name;
                 $units[$key]->tp_cnic = $tf->transferStakeholder->cnic;
-            
+
                 $fileOwner[$key] = $tf->stakeholder_data;
                 $transferOwner[$key] = $tf->transfer_person_data;
             }
@@ -102,7 +102,28 @@ class TransferReceiptController extends Controller
         }
     }
 
+    public function makeActiveSelected(Request $request, $site_id)
+    {
+        try {
+            $site_id = decryptParams($site_id);
+            if (!request()->ajax()) {
+                if ($request->has('chkRole')) {
 
+                    $record = $this->transferFileReceiptInterface->makeActive($site_id, $request->chkRole);
+
+                    if ($record) {
+                        return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('Status Changed'));
+                    } else {
+                        return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                    }
+                }
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        }
+    }
     public function getTransferFileData(Request $request)
     {
         $transferFiles = FileTitleTransfer::find($request->transfer_file_id);
@@ -117,9 +138,10 @@ class TransferReceiptController extends Controller
         $transferOwner->state = $transferFiles->transferStakeholder->state->name ?? '';
         $transferOwner->city = $transferFiles->transferStakeholder->city->name ?? '';
 
-        $customerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->transfer_person_id, 'type' => 'C'])->first();
-        $dealerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->transfer_person_id, 'type' => 'D'])->first();
-        $vendorApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->transfer_person_id, 'type' => 'V'])->first();
+        $stakeholderType = StakeholderType::where('stakeholder_id', $transferFiles->stakeholder_id)->get();
+        $customerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->stakeholder_id, 'type' => 'C'])->first();
+        $dealerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->stakeholder_id, 'type' => 'D'])->first();
+        $vendorApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->stakeholder_id, 'type' => 'V'])->first();
 
         // Customer Ap Amount
         if (isset($customerApAccount)) {

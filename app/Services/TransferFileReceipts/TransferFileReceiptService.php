@@ -121,6 +121,9 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
 
             if ($receipt->mode_of_payment == "Cheque") {
                 $transaction = $this->financialTransactionInterface->makeTransferReceiptChequeTransaction($receipt->id);
+                $transferFile->payment_date = $receipt->created_date;
+                $transferFile->paid_status = true;
+                $transferFile->save();
             }
 
             if ($receipt->mode_of_payment == "Online") {
@@ -141,6 +144,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                 $receipt->addMedia($data['attachment'])->toMediaCollection('file_transfer_receipt_attachments');
                 changeImageDirectoryPermission();
             }
+            return $transaction;
         });
     }
 
@@ -160,7 +164,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
 
         for ($i = 0; $i < count($id); $i++) {
             if ($this->model()->find($id[$i])->status == 0) {
-                $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($id[$i]);
+                $transaction = $this->financialTransactionInterface->makeTransferReceiptActiveTransaction($id[$i]);
             }
             $this->model()->where([
                 'site_id' => $site_id,

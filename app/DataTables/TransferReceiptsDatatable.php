@@ -123,13 +123,13 @@ class TransferReceiptsDatatable extends DataTable
         }
 
 
-        // if ($selectedActivePermission) {
-        //     $buttons[] = Button::raw('delete-selected')
-        //         ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
-        //         ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
-        //             'onclick' => 'changeStatusSelected()',
-        //         ]);
-        // }
+        if ($selectedActivePermission) {
+            $buttons[] = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-pencil"></i> Make Active')->attr([
+                    'onclick' => 'changeStatusSelected()',
+                ]);
+        }
 
         $dataTableBuilder = $this->builder()
             ->setTableId('stakeholder-table')

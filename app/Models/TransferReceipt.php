@@ -60,6 +60,16 @@ class TransferReceipt extends Model implements HasMedia
 
     public function TransferFile()
     {
-        return $this->belongsTo(FileTitleTransfer::class , 'file_title_transfer_id');
+        return $this->belongsTo(FileTitleTransfer::class, 'file_title_transfer_id');
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
     }
 }

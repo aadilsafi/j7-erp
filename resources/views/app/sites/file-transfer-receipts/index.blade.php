@@ -55,7 +55,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.receipts.make-active-selected', ['site_id' => $site_id]) }}"
+            <form action="{{ route('sites.file-transfer-receipts.make-active-selected', ['site_id' => $site_id]) }}"
                 id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
@@ -174,7 +174,5 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
         function addNew() {
             location.href = '{{ route('sites.file-transfer-receipts.create', ['site_id' => $site_id]) }}';
         }
-
-
     </script>
 @endsection

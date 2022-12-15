@@ -274,17 +274,18 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
+                    'ntn' => $inputs['ntn']['i'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
                     'occupation' => $inputs['industry'],
                     'cnic' => $inputs['registration'],
+                    'ntn' => $inputs['ntn']['c'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = $site_id;
-            $data['ntn'] = $inputs['ntn'];
             $data['email'] = $inputs['email'];
             $data['optional_email'] = $inputs['optional_email'];
             $data['contact'] = $inputs['contact'];

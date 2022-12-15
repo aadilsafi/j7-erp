@@ -112,7 +112,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="ntn">NTN </label>
                 <input type="number" class="form-control form-control-md @error('ntn') is-invalid @enderror"
-                    id="ntn" name="ntn" placeholder="NTN Number"
+                    id="ntn" name="ntn[c]" placeholder="NTN Number"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
                 @error('ntn')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -163,7 +163,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="ntn">NTN </label>
                 <input type="number" class="form-control form-control-md @error('ntn') is-invalid @enderror"
-                    id="ntn" name="ntn" placeholder="NTN Number"
+                    id="ntn" name="ntn[i]" placeholder="NTN Number"
                     value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
                 @error('ntn')
                     <div class="invalid-feedback ">{{ $message }}</div>

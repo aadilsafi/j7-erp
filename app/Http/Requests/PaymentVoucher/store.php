@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Receipts;
+namespace App\Http\Requests\PaymentVoucher;
 
 use App\Models\Receipt;
 use Illuminate\Foundation\Http\FormRequest;

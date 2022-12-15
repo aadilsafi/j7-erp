@@ -88,6 +88,17 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span> (' . $ledger->origin_name . ')';
                     }
+                } else if ($ledger->account_action_id == 30 || $ledger->account_action_id == 31 || $ledger->account_action_id == 32 || $ledger->account_action_id == 33 || $ledger->account_action_id == 34 || $ledger->account_action_id == 35) {
+                    $transferReceipt = $file = DB::table('transfer_receipts')
+                        ->where('id', $ledger->transfer_receipt_id)
+                        ->first();
+                    if (isset($transferReceipt)) {
+                        return '<a href="' . route('sites.file-transfer-receipts.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($transferReceipt->id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  (' . $ledger->origin_name . ')
+                            </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span> (' . $ledger->origin_name . ')';
+                    }
                 } else if ($ledger->account_action_id == 3 || $ledger->account_action_id == 5 || $ledger->account_action_id == 6 || $ledger->account_action_id == 7) {
 
                     if ($ledger->account_action_id == 3) {

@@ -31,7 +31,11 @@ class SalesInvoiceLedgerDatatable extends DataTable
         return (new EloquentDataTable($query))
             // ->addIndexColumn()
             ->editColumn('id', function ($ledger) {
-                return 'JE-' . $ledger->origin_number;
+                if ($ledger->account_action_id == 36) {
+                    return 'JVE-' . $ledger->origin_number;
+                } else {
+                    return 'JE-' . $ledger->origin_number;
+                }
             })
             ->setRowId('id')
             ->editColumn('debit', function ($ledger) {
@@ -145,7 +149,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                             return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                         }
                     }
-                }elseif ($ledger->account_action_id == 4) {
+                } elseif ($ledger->account_action_id == 4) {
                     $payment_voucher = DB::table('payment_vocuhers')->where('id', $ledger->payment_voucher_id)
                         ->first();
                     if (isset($payment_voucher)) {
@@ -155,8 +159,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
-                }
-                 elseif ($ledger->account_action_id == 25) {
+                } elseif ($ledger->account_action_id == 25) {
                     $rebate = DB::table('rebate_incentive_models')->where('id', $ledger->rebate_incentive_id)
                         ->first();
                     if (isset($rebate)) {
@@ -166,8 +169,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
-                }
-                elseif ($ledger->account_action_id == 26) {
+                } elseif ($ledger->account_action_id == 26) {
                     $dealer = DB::table('dealer_incentive_models')->where('id', $ledger->dealer_incentive_id)
                         ->first();
                     if (isset($dealer)) {
@@ -177,9 +179,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
-                }
-
-                else {
+                } else {
                     return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                 }
             })

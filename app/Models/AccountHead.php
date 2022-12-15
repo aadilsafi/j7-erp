@@ -45,4 +45,9 @@ class AccountHead extends Model
     {
         return $this->morphTo();
     }
+
+    public function journalVouchersEntries()
+    {
+        return $this->HasMany(JournalVoucherEntry::class);
+    }
 }

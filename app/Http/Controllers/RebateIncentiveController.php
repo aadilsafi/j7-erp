@@ -66,7 +66,7 @@ class RebateIncentiveController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => Unit::where('status_id', '>', 4)->where('is_for_rebate', true)->with('floor', 'type')->get(),
+                'units' => Unit::where('is_for_rebate', true)->with('floor', 'type')->get(),
                 'rebate_files' => RebateIncentiveModel::pluck('unit_id')->toArray(),
                 'dealer_data' => StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get(),
                 'customFields' => $customFields,
@@ -183,14 +183,13 @@ class RebateIncentiveController extends Controller
     public function approve($site_id, $rebate_incentive_id)
     {
         DB::transaction(function () use ($site_id, $rebate_incentive_id) {
-           
+
             $rebate_incentive = RebateIncentiveModel::find(decryptParams($rebate_incentive_id));
             $rebate_incentive->status = 1;
             $rebate_incentive->update();
 
-             // Account ledger transaction
-             $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate_incentive->id);
-
+            // Account ledger transaction
+            $transaction = $this->financialTransactionInterface->makeRebateIncentiveTransaction($rebate_incentive->id);
         });
         return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
@@ -199,23 +198,32 @@ class RebateIncentiveController extends Controller
     {
         // dd($request->all());
         $unit = Unit::find($request->unit_id);
-        $stakeholder = $unit->salesPlan[0]['stakeholder'];
-        $leadSource = $unit->salesPlan[0]['leadSource'];
-        $salesPlan = SalesPlan::find($unit->salesPlan[0]['id']);
-        $additionalCosts = $salesPlan->additionalCosts;
+        if (count($unit->salesPlan) > 0) {
+            $stakeholder = $unit->salesPlan[0]['stakeholder'];
+            $leadSource = $unit->salesPlan[0]['leadSource'];
+            $salesPlan = SalesPlan::find($unit->salesPlan[0]['id']);
+            $additionalCosts = $salesPlan->additionalCosts;
+        } else {
+            $file = $unit->file->first();
+
+            $stakeholder = $file->salePlan->stakeholder;
+            $leadSource = $file->salePlan->leadSource;
+            $salesPlan = $file->salePlan;
+            $additionalCosts = $salesPlan->additionalCosts;
+        }
 
         $floor = $unit->floor->short_label;
 
         return response()->json([
             'success' => true,
             'unit' => $unit,
-            'stakeholder' => $stakeholder,
-            'leadSource' => $leadSource,
-            'cnic' => cnicFormat($stakeholder->cnic),
-            'salesPlan' => $salesPlan,
-            'floor' => $floor,
-            'facing' => $unit->facing,
-            'additionalCosts' => $additionalCosts,
+            'stakeholder' => $stakeholder ?? [],
+            'leadSource' => $leadSource ?? [],
+            'cnic' => cnicFormat($stakeholder->cnic) ?? '',
+            'salesPlan' => $salesPlan ?? [],
+            'floor' => $floor ?? '',
+            'facing' => $unit->facing ?? '',
+            'additionalCosts' => $additionalCosts ?? [],
             // 'corner' => $unit->corner,
         ], 200);
     }

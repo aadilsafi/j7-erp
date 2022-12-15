@@ -34,7 +34,9 @@ class TransferReceiptsDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
-
+        ->editColumn('unit_id', function ($receipt) {
+            return  $receipt->unit->name;
+        })
             ->editColumn('serial_no', function ($receipt) {
                 return $receipt->serial_no != null ? $receipt->serial_no : 'REC-';
             })

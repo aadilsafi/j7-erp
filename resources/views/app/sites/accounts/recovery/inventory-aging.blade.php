@@ -39,10 +39,10 @@
         }
 
         /* .canvasjs-chart-canvas {
-                                                                                display: none !important;
-                                                                                width: 438px !important;
-                                                                                height: 300px !important;
-                                                                            } */
+                                                                                                    display: none !important;
+                                                                                                    width: 438px !important;
+                                                                                                    height: 300px !important;
+                                                                                                } */
     </style>
 @endsection
 
@@ -211,7 +211,7 @@
                                                             <h6 class="text-center"><b> Filter Data Show </b></h6>
                                                         </div>
                                                     </div>
-                                                    <div class="row py-2">
+                                                    <div class="row">
                                                         <input type="hidden" name="amount" id="amount">
                                                         <input type="hidden" name="paid_amount" id="paid_amount">
                                                         <input type="hidden" name="due_amount" id="due_amount">
@@ -224,7 +224,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6 py-1">
+                                                        <div class="col-md-6">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,15 +232,9 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
-
-
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
@@ -268,9 +262,6 @@
                                         $i = 1;
                                         $amount_installment = [];
                                     @endphp
-
-
-
                                     @foreach ($salesPlans as $salesPlan)
                                         @php
                                             $amount = $salesPlan->installments->pluck('amount')->sum();
@@ -327,14 +318,13 @@
                                             ->sum();
                                         echo '<input type="hidden" id="amount_sum" value="' . $amount_sum . '">';
                                         echo '<input type="hidden" id="remaining_amount_sum" value="' . $remaining_amount_sum . '">';
-                                        echo '<input type="hidden" id="paid_amount" value="' . $paid_amount . '">';
+                                        echo '<input type="hidden" id="paid_amount_sum" value="' . $paid_amount . '">';
                                         if ($amount_due > 0) {
                                             echo '<input type="hidden" id="amount_due" value="' . $amount_due . '">';
                                         } else {
                                             echo '<input type="hidden" id="amount_due" value="' . '0' . '">';
                                         }
                                     @endphp
-
                                 </tbody>
                             </table>
                         </div>
@@ -527,9 +517,7 @@
                                     data: [74, 11, 40]
                                 }]
                             };
-                            console.log(amount_pipe_chart,
-                                paid_amount_pipe_chart,
-                                due_amount_pipe_chart, 'pipe chart value')
+
                             // donut 3
                             var chDonutData3 = {
 
@@ -554,111 +542,9 @@
                                 });
                             }
 
-                            /* 3 line charts */
-                            var lineOptions = {
-                                legend: {
-                                    display: false
-                                },
-                                tooltips: {
-                                    interest: false,
-                                    bodyFontSize: 11,
-                                    titleFontSize: 11
-                                },
-                                scales: {
-                                    xAxes: [{
-                                        ticks: {
-                                            display: false
-                                        },
-                                        gridLines: {
-                                            display: false,
-                                            drawBorder: false
-                                        }
-                                    }],
-                                    yAxes: [{
-                                        display: false
-                                    }]
-                                },
-                                layout: {
-                                    padding: {
-                                        left: 6,
-                                        right: 6,
-                                        top: 4,
-                                        bottom: 6
-                                    }
-                                }
-                            };
-
-                            var chLine1 = document.getElementById("chLine1");
-                            if (chLine1) {
-                                new Chart(chLine1, {
-                                    type: 'line',
-                                    data: {
-                                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-                                        datasets: [{
-                                            backgroundColor: '#ffffff',
-                                            borderColor: '#ffffff',
-                                            data: [10, 11, 4, 11, 4],
-                                            fill: false
-                                        }]
-                                    },
-                                    options: lineOptions
-                                });
-                            }
-                            var chLine2 = document.getElementById("chLine2");
-                            if (chLine2) {
-                                new Chart(chLine2, {
-                                    type: 'line',
-                                    data: {
-                                        labels: ['A', 'B', 'C', 'D', 'E'],
-                                        datasets: [{
-                                            backgroundColor: '#ffffff',
-                                            borderColor: '#ffffff',
-                                            data: [4, 5, 7, 13, 12],
-                                            fill: false
-                                        }]
-                                    },
-                                    options: lineOptions
-                                });
-                            }
-
-                            var chLine3 = document.getElementById("chLine3");
-                            if (chLine3) {
-                                new Chart(chLine3, {
-                                    type: 'line',
-                                    data: {
-                                        labels: ['Pos', 'Neg', 'Nue', 'Other',
-                                            'Unknown'
-                                        ],
-                                        datasets: [{
-                                            backgroundColor: '#ffffff',
-                                            borderColor: '#ffffff',
-                                            data: [13, 15, 10, 9, 14],
-                                            fill: false
-                                        }]
-                                    },
-                                    options: lineOptions
-                                });
-                            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         } else {
-                            console.log(data.data);
+                            // console.log(data.data);
                         }
 
                     },
@@ -678,7 +564,7 @@
             $("#type_name").select2("val", "0");
             $("#unit_value").select2("val", "0");
             $("#installment_value").select2("val", "0");
-            flatpicker_to_date.clear();
+            // flatpicker_to_date.clear();
 
             // $('#apply_filter').trigger('click');
 
@@ -691,10 +577,10 @@
 
         var amount = $('#amount_sum').val();
         var amount_pipe_chart = $('#amount').val();
-        var paid_amount_pipe_chart = $('#paid_amount').val();
+        var paid_amount_pipe_chart = $('#paid_amount_sum').val();
         var due_amount_pipe_chart = $('#due_amount').val();
         var remaining_amount_sum = $('#remaining_amount_sum').val();
-        var paid_amount = $('#paid_amount').val();
+        var paid_amount = $('#paid_amount_sum').val();
         var amount_due = $('#amount_due').val();
         $('#received_amout_top').html('<h6>' + numberWithCommas(paid_amount) + '</h6>');
         $('#not_received_amout_top').html('<h6>' + numberWithCommas(remaining_amount_sum) + '</h6>');
@@ -705,7 +591,7 @@
 
             $('#amount_due').html('<h6>' + 0 + '</h6>');
         }
-        console.log(amount_due > 0);
+
         const ctx = document.getElementById("chart").getContext('2d');
         const myChart = new Chart(ctx, {
             type: 'bar',
@@ -729,19 +615,6 @@
                 }
             },
         });
-
-
-
-
-
-
-
-
-
-
-
-
-        /* chart.js chart examples */
 
         // chart colors
         var colors = ['#007bff', '#28a745', '#333333', '#c3e6cb', '#dc3545', '#6c757d'];
@@ -810,11 +683,9 @@
                 data: [74, 11, 40]
             }]
         };
-        console.log(amount_pipe_chart,
-            paid_amount_pipe_chart,
-            due_amount_pipe_chart, 'pipe chart value')
+
         // donut 3
-        console.log(data_pipe_chart);
+
         var chDonutData3 = {
 
             labels: ["Due Amount", "Amount", "Paid Amount", "Remaining Amount"],
@@ -918,10 +789,8 @@
         }
     </script>
 
-
     <script>
         window.onload = function() {
-
 
             var chart = new CanvasJS.Chart("chartContainer", {
                 animationEnabled: true,
@@ -952,11 +821,7 @@
                 }]
             });
             chart.render();
-
-
         }
-
-
 
         $(document).ready(function() {
             $('.canvasjs-chart-credit').find('.canvasjs-chart-credit').addClass('d-none');

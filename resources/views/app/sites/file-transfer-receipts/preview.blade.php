@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.show', encryptParams($site->id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.file-transfer-receipts.show', encryptParams($site->id)) }}
 @endsection
 
 @section('page-title', 'Transfer Receipt Details')
@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                                                    width: calc(20% - 0.5em);
-                                                                } */
+                                                                                                    width: calc(20% - 0.5em);
+                                                                                                } */
     </style>
 @endsection
 
@@ -41,7 +41,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Transfer Receipt Details</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.receipts.show', encryptParams($site->id)) }}
+                    {{ Breadcrumbs::render('sites.file-transfer-receipts.show', encryptParams($site->id)) }}
                 </div>
             </div>
         </div>
@@ -218,96 +218,103 @@
                     <div class="card-body">
 
                         {{--  individual Form --}}
-                        <div id="individualForm">
-                            <div class="row mb-1">
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_full_name">Full Name <span
-                                            class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_full_name" placeholder="Full Name"
-                                        value="{{ $transferOwner->full_name }}" />
+                        @if ($transferOwner->stakeholder_as == 'i')
+                            <div id="individualForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_full_name">Full Name <span
+                                                class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_full_name" placeholder="Full Name"
+                                            value="{{ $transferOwner->full_name }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_father_name">Father / Husband
+                                            Name
+                                            <span class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_father_name" placeholder="Father / Husband Name"
+                                            value="{{ $transferOwner->father_name }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_occupation">Occupation </label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_occupation" placeholder="Occupation"
+                                            value="{{ $transferOwner->occupation }}" />
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_father_name">Father / Husband Name
-                                        <span class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_father_name" placeholder="Father / Husband Name"
-                                        value="{{ $transferOwner->father_name }}" />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_occupation">Occupation </label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_occupation" placeholder="Occupation"
-                                        value="{{ $transferOwner->full_name }}" />
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_designation">Designation</label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_designation" placeholder="Designation"
+                                            value="{{ $transferOwner->designation }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_ntn">NTN </label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_ntn" placeholder="NTN"
+                                            value="{{ $transferOwner->ntn }}" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="transferOwner_cnic">CNIC <span
+                                                class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="transferOwner_cnic" placeholder="CNIC"
+                                            value="{{ $transferOwner->cnic }}" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row mb-1">
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_designation">Designation</label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_designation" placeholder="Designation"
-                                        value="{{ $transferOwner->full_name }}" />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_ntn">NTN </label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_ntn" placeholder="NTN"
-                                        value="{{ $transferOwner->full_name }}" />
-                                </div>
-
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="transferOwner_cnic">CNIC <span
-                                            class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="transferOwner_cnic" placeholder="CNIC"
-                                        value="{{ $transferOwner->full_name }}" />
-                                </div>
-                            </div>
-                        </div>
-
+                        @endif
                         {{-- company form --}}
-                        <div id="companyForm">
-                            <div class="row mb-1">
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="company_name">Company Name <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" readonly class="form-control form-control-lg"
-                                        id="transferOwner_company_name" placeholder="Company Name" value="" />
-                                </div>
+                        @if ($transferOwner->stakeholder_as == 'c')
+                            <div id="companyForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="company_name">Company Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly class="form-control form-control-lg"
+                                            id="transferOwner_company_name" placeholder="Company Name"
+                                            value="{{ $transferOwner->full_name }}" />
+                                    </div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="industry">Industry </label>
-                                    <input type="text" readonly class="form-control form-control-lg"
-                                        id="transferOwner_industry" placeholder="Industry" value="" />
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="industry">Industry </label>
+                                        <input type="text" readonly class="form-control form-control-lg"
+                                            id="transferOwner_industry" placeholder="Industry"
+                                            value="{{ $transferOwner->occupation }}" />
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="registration">Registration # <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                            id="transferOwner_registration" placeholder="Registration Number"
+                                            value="{{ $transferOwner->cnic }}" />
+
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="ntn">NTN </label>
+                                        <input type="number" readonly
+                                            class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                            id="transferOwner_ntn" placeholder="NTN Number"
+                                            value="{{ $transferOwner->ntn }}" />
+
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row mb-1">
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="registration">Registration # <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" readonly class="cp_cnic form-control form-control-lg"
-                                        id="transferOwner_registration" placeholder="Registration Number"
-                                        value="" />
-
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="ntn">NTN </label>
-                                    <input type="number" readonly
-                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                        id="transferOwner_ntn" placeholder="NTN Number" value="" />
-
-                                </div>
-                            </div>
-                        </div>
-
+                        @endif
                         {{-- common form  --}}
                         <div class="row mb-1">
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_email">Email <span
                                         class="text-danger">*</span></label>
                                 <input type="email" readonly class="form-control form-control-md"
-                                    id="transferOwner_email" placeholder="Email" autocomplete="false" value="" />
+                                    id="transferOwner_email" placeholder="Email" autocomplete="false"
+                                    value="{{ $transferOwner->email }}" />
 
                             </div>
 
@@ -315,20 +322,22 @@
                                 <label class="form-label fs-5" for="transferOwner_optional_email">Optional Email</label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="transferOwner_optional_email" placeholder="Optional Email" autocomplete="false"
-                                    value="" />
+                                    value="{{ $transferOwner->optional_email }}" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_contact">Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_contact" placeholder="Contact" value="" />
+                                    id="transferOwner_contact" placeholder="Contact"
+                                    value="{{ $transferOwner->contact }}" />
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label class="form-label fs-5" for="transferOwner_optional_contact">Optional Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_optional_contact" placeholder="Optional Contact" value="" />
+                                    id="transferOwner_optional_contact" placeholder="Optional Contact"
+                                    value="{{ $transferOwner->optional_contact }}" />
                             </div>
                         </div>
 
@@ -336,28 +345,30 @@
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_country" placeholder="Country" value="" />
+                                    id="transferOwner_country" placeholder="Country"
+                                    value="{{ $transferOwner->country }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_state" placeholder="State" value="" />
+                                    id="transferOwner_state" placeholder="State" value="{{ $transferOwner->state }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_city" placeholder="City" value="" />
+                                    id="transferOwner_city" placeholder="City" value="{{ $transferOwner->city }}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_nationality">Nationality </label>
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                                    id="transferOwner_nationality" placeholder="Nationality" value="" />
+                                    id="transferOwner_nationality" placeholder="Nationality"
+                                    value="{{ $transferOwner->nationality }}" />
 
                             </div>
                         </div>
@@ -366,21 +377,21 @@
                                 <label class="form-label fs-5" for="transferOwner_address">Address <span
                                         class="text-danger">*</span></label>
                                 <textarea readonly class="form-control form-control-lg" id="transferOwner_address" placeholder="Address"
-                                    rows="3">  </textarea>
+                                    rows="3"> {{ $transferOwner->address }} </textarea>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_mailing_address">Mailing Address <span
                                         class="text-danger">*</span>
                                 </label>
                                 <textarea readonly class="form-control form-control-lg" id="transferOwner_mailing_address"
-                                    placeholder="Mailing Address" rows="3"></textarea>
+                                    placeholder="Mailing Address" rows="3">{{ $transferOwner->mailing_address }}</textarea>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <div class="col-lg- col-md- col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_comments">Comments</label>
                                 <textarea readonly class="form-control form-control-lg" id="transferOwner_comments" placeholder="Comments"
-                                    rows="3"></textarea>
+                                    rows="3">{{ $transferOwner->comments }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -397,87 +408,96 @@
                     <div class="card-body">
 
                         {{--  individual Form --}}
-                        <div id="OwnerIndividualForm">
-                            <div class="row mb-1">
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_full_name">Full Name <span
-                                            class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_full_name" placeholder="Full Name" value="" />
+                        @if ($fileOwner->stakeholder_as == 'i')
+                            <div id="OwnerIndividualForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_full_name">Full Name <span
+                                                class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_full_name" placeholder="Full Name"
+                                            value="{{ $fileOwner->full_name }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_father_name">Father / Husband Name
+                                            <span class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_father_name" placeholder="Father / Husband Name"
+                                            value="{{ $fileOwner->father_name }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_occupation">Occupation </label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_occupation" placeholder="Occupation"
+                                            value="{{ $fileOwner->occupation }}" />
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_father_name">Father / Husband Name
-                                        <span class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_father_name" placeholder="Father / Husband Name" value="" />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_occupation">Occupation </label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_occupation" placeholder="Occupation" value="" />
+                                <div class="row mb-1">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_designation">Designation</label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_designation" placeholder="Designation"
+                                            value="{{ $fileOwner->designation }}" />
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_ntn">NTN </label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_ntn" placeholder="NTN" value="{{ $fileOwner->ntn }}" />
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
+                                        <label class="form-label fs-5" for="fileOwner_cnic">CNIC <span
+                                                class="text-danger">*</span></label>
+                                        <input readonly type="text" class="form-control form-control-lg"
+                                            id="fileOwner_cnic" placeholder="CNIC" value="{{ $fileOwner->cnic }}" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row mb-1">
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_designation">Designation</label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_designation" placeholder="Designation" value="" />
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_ntn">NTN </label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_ntn" placeholder="NTN" value="" />
-                                </div>
-
-                                <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label fs-5" for="fileOwner_cnic">CNIC <span
-                                            class="text-danger">*</span></label>
-                                    <input readonly type="text" class="form-control form-control-lg"
-                                        id="fileOwner_cnic" placeholder="CNIC" value="" />
-                                </div>
-                            </div>
-                        </div>
-
+                        @endif
                         {{-- company form --}}
-                        <div id="OwnerCompanyForm">
-                            <div class="row mb-1">
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="company_name">Company Name <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" readonly class="form-control form-control-lg"
-                                        id="fileOwner_company_name" placeholder="Company Name" value="" />
-                                </div>
+                        @if ($fileOwner->stakeholder_as == 'c')
+                            <div id="OwnerCompanyForm">
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="company_name">Company Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly class="form-control form-control-lg"
+                                            id="fileOwner_company_name" placeholder="Company Name"
+                                            value="{{ $fileOwner->full_name }}" />
+                                    </div>
 
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="industry">Industry </label>
-                                    <input type="text" readonly class="form-control form-control-lg"
-                                        id="fileOwner_industry" placeholder="Industry" value="" />
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="industry">Industry </label>
+                                        <input type="text" readonly class="form-control form-control-lg"
+                                            id="fileOwner_industry" placeholder="Industry"
+                                            value="{{ $fileOwner->occupation }}" />
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="registration">Registration # <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" readonly class="cp_cnic form-control form-control-lg"
+                                            id="fileOwner_registration" placeholder="Registration Number"
+                                            value="{{ $fileOwner->cnic }}" />
+                                    </div>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                        <label class="form-label fs-5" for="ntn">NTN </label>
+                                        <input type="number" readonly
+                                            class="form-control form-control-lg @error('ntn') is-invalid @enderror"
+                                            id="fileOwner_ntn" placeholder="NTN Number" value="{{ $fileOwner->ntn }}" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row mb-1">
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="registration">Registration # <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" readonly class="cp_cnic form-control form-control-lg"
-                                        id="fileOwner_registration" placeholder="Registration Number" value="" />
-                                </div>
-
-                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                    <label class="form-label fs-5" for="ntn">NTN </label>
-                                    <input type="number" readonly
-                                        class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                        id="fileOwner_ntn" placeholder="NTN Number" value="" />
-                                </div>
-                            </div>
-                        </div>
-
+                        @endif
                         {{-- common form  --}}
                         <div class="row mb-1">
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_email">Email <span
                                         class="text-danger">*</span></label>
                                 <input type="email" readonly class="form-control form-control-md" id="fileOwner_email"
-                                    placeholder="Email" autocomplete="false" value="" />
+                                    placeholder="Email" autocomplete="false" value="{{ $fileOwner->email }}" />
 
                             </div>
 
@@ -485,20 +505,21 @@
                                 <label class="form-label fs-5" for="fileOwner_optional_email">Optional Email</label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="fileOwner_optional_email" placeholder="Optional Email" autocomplete="false"
-                                    value="" />
+                                    value="{{ $fileOwner->optional_email }}" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_contact">Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_contact" placeholder="Contact" value="" />
+                                    id="fileOwner_contact" placeholder="Contact" value="{{ $fileOwner->contact }}" />
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label class="form-label fs-5" for="fileOwner_optional_contact">Optional Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_optional_contact" placeholder="Optional Contact" value="" />
+                                    id="fileOwner_optional_contact" placeholder="Optional Contact"
+                                    value="{{ $fileOwner->optional_contact }}" />
                             </div>
                         </div>
 
@@ -506,28 +527,29 @@
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_country" placeholder="Country" value="" />
+                                    id="fileOwner_country" placeholder="Country" value="{{ $fileOwner->country }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_state"
-                                    placeholder="State" value="" />
+                                    placeholder="State" value="{{ $fileOwner->state }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_city"
-                                    placeholder="City" value="" />
+                                    placeholder="City" value="{{ $fileOwner->city }}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_nationality">Nationality </label>
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                                    id="fileOwner_nationality" placeholder="Nationality" value="" />
+                                    id="fileOwner_nationality" placeholder="Nationality"
+                                    value="{{ $fileOwner->nationality }}" />
 
                             </div>
                         </div>
@@ -535,21 +557,21 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_address">Address <span
                                         class="text-danger">*</span></label>
-                                <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3">  </textarea>
+                                <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3"> {{ $fileOwner->address }}</textarea>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_mailing_address">Mailing Address <span
                                         class="text-danger">*</span>
                                 </label>
                                 <textarea readonly class="form-control form-control-lg" id="fileOwner_mailing_address" placeholder="Mailing Address"
-                                    rows="3"></textarea>
+                                    rows="3">{{ $fileOwner->mailing_address }}</textarea>
                             </div>
                         </div>
                         <div class="row mb-1">
                             <div class="col-lg- col-md- col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_comments">Comments</label>
                                 <textarea readonly class="form-control form-control-lg" id="fileOwner_comments" placeholder="Comments"
-                                    rows="3"></textarea>
+                                    rows="3">{{ $fileOwner->comments }}</textarea>
                             </div>
                         </div>
                     </div>

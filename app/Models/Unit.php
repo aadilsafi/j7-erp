@@ -139,7 +139,7 @@ class Unit extends Model
 
     public function file()
     {
-        return $this->hasMany(FileManagement::class);
+        return $this->hasMany(FileManagement::class)->with('salePlan')->latest();
     }
 
     public function modelable()

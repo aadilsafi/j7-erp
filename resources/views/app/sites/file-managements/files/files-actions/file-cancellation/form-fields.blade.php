@@ -48,7 +48,7 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
                             id="paid_amount" placeholder=" Paid Amount"
-                            value="{{ isset($total_paid_amount) ? number_format($total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) ? $total_paid_amount : '' }}" />
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

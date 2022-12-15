@@ -66,6 +66,15 @@ class SalesPlanController extends Controller
         return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
     }
 
+    public function inLeftbar(Request $request, SalesPlanDataTable $dataTable, $site_id)
+    {
+        $data = [
+            'site' => decryptParams($site_id),
+            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
+        ];
+        return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

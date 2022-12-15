@@ -76,7 +76,7 @@
 
                     <div class="row mb-1">
                         <div class="col-lg col-md col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="ntn">NTN<span class="text-danger">*</span></label>
+                            <label class="form-label fs-5" for="ntn">NTN</label>
                             <input type="text" value="" readonly class="form-control form-control-md"
                                 id="ntn" placeholder="NTN" name="ntn" />
                         </div>
@@ -257,8 +257,9 @@
 
                     <div class="row custom-options-checkable mb-2 g-1">
                         <div class="col-md-4">
-                            <input class="custom-option-item-check checkClass  mode_of_payment_value mode-of-payment" type="radio" checked
-                                name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1" value="Cash">
+                            <input class="custom-option-item-check checkClass  mode_of_payment_value mode-of-payment"
+                                type="radio" checked name="mode_of_payment"
+                                id="customOptionsCheckableRadiosWithIcon1" value="Cash">
                             <label class="custom-option-item text-center p-1"
                                 for="customOptionsCheckableRadiosWithIcon1">
                                 {{-- <i data-feather='dollar-sign'></i> --}}
@@ -267,8 +268,10 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input class="custom-option-item-check checkClass  mode_of_payment_value cheque-mode-of-payment" type="radio"
-                                name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2" value="Cheque">
+                            <input
+                                class="custom-option-item-check checkClass  mode_of_payment_value cheque-mode-of-payment"
+                                type="radio" name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon2"
+                                value="Cheque">
                             <label class="custom-option-item text-center p-1"
                                 for="customOptionsCheckableRadiosWithIcon2">
                                 <i class="bi bi-bank" style="font-size: 20px"></i>
@@ -276,8 +279,10 @@
                             </label>
                         </div>
                         <div class="col-md-4">
-                            <input class="custom-option-item-check checkClass mode_of_payment_value online-mode-of-payment" type="radio"
-                                name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3" value="Online">
+                            <input
+                                class="custom-option-item-check checkClass mode_of_payment_value online-mode-of-payment"
+                                type="radio" name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon3"
+                                value="Online">
                             <label class="custom-option-item text-center p-1"
                                 for="customOptionsCheckableRadiosWithIcon3">
                                 <i class="bi bi-app-indicator" style="font-size: 20px"></i>

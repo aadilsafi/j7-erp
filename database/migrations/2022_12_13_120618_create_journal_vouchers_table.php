@@ -17,14 +17,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('site_id')->constrained();
             $table->foreignId('user_id');
-            $table->foreignId('account_head_id')->nullable();
+            $table->foreignId('account_head_code')->nullable();
             $table->string('account_number')->nullable();
             $table->string('name')->nullable();
             $table->string('serial_number')->nullable();
             $table->string('voucher_date')->nullable();
             $table->string('voucher_type')->nullable();
             $table->string('voucher_amount')->nullable();
-            $table->boolean('status')->default(0);
+            $table->string('total_debit')->nullable();
+            $table->string('total_credit')->nullable();
+            $table->string('status')->default('pending');
             $table->longText('remarks')->nullable();
             $table->longText('comments')->nullable();
             $table->timestamp('created_date')->nullable();

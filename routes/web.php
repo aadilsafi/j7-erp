@@ -53,6 +53,7 @@ use App\Http\Controllers\{
     PaymentVocuherController,
     JournalVoucherController,
     TransferReceiptController,
+    JournalVoucherEntriesController,
 };
 use App\Models\PaymentVocuher;
 use App\Models\Type;
@@ -257,6 +258,15 @@ Route::group([
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [JournalVoucherController::class, 'edit'])->name('edit');
                             Route::put('update', [JournalVoucherController::class, 'update'])->name('update');
+
+                            Route::group(['prefix' => 'journal-vouchers-entries', 'as' => 'journal-vouchers-entries.'], function () {
+                                Route::get('show', [JournalVoucherEntriesController::class, 'show'])->name('show');
+                                Route::get('check-voucher', [JournalVoucherController::class, 'checkVoucher'])->name('check-voucher');
+                                Route::get('post-voucher', [JournalVoucherController::class, 'postVoucher'])->name('post-voucher');
+                                Route::get('dis-approve-voucher', [JournalVoucherController::class, 'disapproveVoucher'])->name('dis-approve-voucher');
+
+
+                            });
                         });
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
@@ -264,6 +274,8 @@ Route::group([
                         });
 
                     });
+
+
 
                     // Import Routes
                     Route::group(['prefix' => 'import', 'as' => 'import.'], function () {
@@ -501,6 +513,7 @@ Route::group([
 
                 //Sales Plan Leftbar link
                 Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+                    Route::get('/', [SalesPlanController::class, 'inLeftbar'])->name('show');
                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {

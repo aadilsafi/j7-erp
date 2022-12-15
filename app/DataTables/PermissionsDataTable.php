@@ -138,7 +138,7 @@ class PermissionsDataTable extends DataTable
         $roles = array_merge(Auth::user()->roles->toArray(), $roles);
         $colArray = [
             // Column::computed('#'),
-            Column::make('show_name')->title('Permission Name')->ucfirst(),
+            Column::make('show_name')->title('Permission Name')->ucfirst()->addClass('text-nowrap'),
             // Column::make('guard_name')->title('Guard Name'),
             Column::computed('class')->title('Class')->visible(false),
         ];
@@ -167,7 +167,7 @@ class PermissionsDataTable extends DataTable
                 ->searchable(false)
                 ->exportable(false)
                 ->printable(false)
-                ->addClass('text-center')
+                ->addClass('text-nowrap')
                 ->render('function () {
                     var roles = data.roles;
                     var isPermissionAssigned = roles.includes(' . $role['id'] . ');

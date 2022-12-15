@@ -47,7 +47,9 @@ class ReceiptService implements ReceiptInterface
 
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
-                $discounted_amount = str_replace(',', '' , $requested_data['discounted_amount']);
+                $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
+                $discounted_amount = (float)$discounted_amount;
+
                 if (isset($discounted_amount)) {
                     $amount_in_numbers = (float)$discounted_amount + (float)$amount_in_numbers;
                     $amount_in_numbers = (string)$amount_in_numbers;
@@ -117,9 +119,12 @@ class ReceiptService implements ReceiptInterface
                     'bank_details' => $data[$i]['bank_name'],
                     'bank_id' => $data[$i]['bank_id'],
                     'created_date' => $requested_data['created_date'] . date(' H:i:s'),
+                    'customer_ap_amount' => $data[$i]['customer_ap_amount'],
+                    'dealer_ap_amount' => $data[$i]['dealer_ap_amount'],
+                    'vendor_ap_amount' => $data[$i]['vendor_ap_amount'],
                 ];
 
-                if (isset($discounted_amount)) {
+                if (isset($discounted_amount) && $discounted_amount > 0) {
                     $receiptData['discounted_amount'] = $discounted_amount;
                 }
 
@@ -166,7 +171,10 @@ class ReceiptService implements ReceiptInterface
                                 'bank_id' => $draftReceiptData->bank_id,
                                 'created_date' => $draftReceiptData->created_date,
                                 'discounted_amount' => $draftReceiptData->discounted_amount,
-                                'serial_no' => sprintf('%03d', $max++)
+                                'serial_no' => sprintf('%03d', $max++),
+                                'customer_ap_amount' => $draftReceiptData->customer_ap_amount,
+                                'dealer_ap_amount' => $draftReceiptData->dealer_ap_amount,
+                                'vendor_ap_amount' => $draftReceiptData->vendor_ap_amount,
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
@@ -207,6 +215,10 @@ class ReceiptService implements ReceiptInterface
 
                     if ($receipt->mode_of_payment == "Online") {
                         $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
+                    }
+
+                    if ($receipt->mode_of_payment == "Other") {
+                        $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt->id);
                     }
 
                     if (isset($requested_data['attachment'])) {

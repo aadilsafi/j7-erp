@@ -156,9 +156,45 @@ class AccountActionSeeder extends Seeder
                 'name' => 'Title Transfer Receipt Voucher',
                 'slug' => 'title-transfer-receipt-voucher',
             ],
+            [
+                'site_id' => 1,
+                'name' => 'Receipt Voucher Other',
+                'slug' => 'receipt-voucher-other',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Receipt Voucher Cash',
+                'slug' => 'transfer-receipt-voucher-cash',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Receipt Voucher Online',
+                'slug' => 'transfer-receipt-voucher-online',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Receipt Voucher Bank',
+                'slug' => 'transfer-receipt-voucher-bank',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Cheque Clearance',
+                'slug' => 'transfer-cheque-clearance',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Cheque Bounced',
+                'slug' => 'transfer-cheque-bounced-back',
+            ],
+            [
+                'site_id' => 1,
+                'name' => 'Transfer Receipt Voucher Other',
+                'slug' => 'transfer-receipt-voucher-other',
+            ],
         ];
+
         foreach ($data as $item) {
-            (new AccountAction())->create($item);
+            (new AccountAction())->updateOrCreate($item);
         }
     }
 }

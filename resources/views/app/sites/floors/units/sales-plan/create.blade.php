@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }}
+    {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
 @endsection
 
 @section('page-title', 'Create Sales Plan')
@@ -40,6 +40,10 @@
             display: none;
         }
 
+        #main-div {
+            display: none;
+        }
+
         .iti {
             width: 100%;
         }
@@ -71,7 +75,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }}
+                    {{-- {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
                 </div>
             </div>
         </div>
@@ -80,8 +84,7 @@
 
 @section('content')
     <form class="form form-vertical" id="create-sales-plan-form"
-        action="{{ route('sites.floors.units.sales-plans.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
-        method="POST">
+        action="{{ route('sites.sales_plan.store', ['site_id' => encryptParams($site->id)]) }}" method="POST">
 
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
@@ -89,13 +92,13 @@
                 @csrf
                 {{ view('app.sites.floors.units.sales-plan.form-fields', [
                     'site' => $site,
-                    'floor' => $floor,
-                    'unit' => $unit,
+                    'units' => $unit,
                     'additionalCosts' => $additionalCosts,
                     'stakeholders' => $stakeholders,
                     'stakeholderTypes' => $stakeholderTypes,
                     'leadSources' => $leadSources,
                     'user' => $user,
+                    'country' => $country,
                     'customFields' => $customFields,
                 ]) }}
 
@@ -156,20 +159,23 @@
                                             class="form-control flatpickr-basic" placeholder="YYYY-MM-DD" />
                                     </div>
                                     <hr>
-                                    <button type="submit" value="save"
-                                        class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
-                                        <i data-feather='save'></i>
-                                        <span id="create_sales_plan_button_span">Save Sales Plan</span>
-                                    </button>
+                                    @can('sites.sales_plan.store')
+                                        <button type="submit" value="save" disabled id="savebtn"
+                                            class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
+                                            <i data-feather='save'></i>
+                                            <span id="create_sales_plan_button_span">Save Sales Plan</span>
+                                        </button>
+                                    @endcan
+
                                     {{-- <button type="submit" value="save_print"
                                         class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light mb-1">
                                         <i data-feather='printer'></i>
                                         <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
                                     </button> --}}
-                                    <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
+                                    {{-- <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
                                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
-                                        {{ __('lang.commons.cancel') }}
+                                        {{ __('lang.commons.cancel') }} --}}
                                     </a>
                                 </div>
                             </div>
@@ -212,6 +218,10 @@
 
 @section('custom-js')
     <script>
+        $('#companyForm').hide();
+        var selected_state_id = 0;
+        var selected_city_id = 0;
+
         window['moment-range'].extendMoment(moment);
 
         var t = setTimeout(calculateInstallments, 1000),
@@ -224,6 +234,60 @@
             lastInstallemtDate = 'today';
 
         $(document).ready(function() {
+
+            var t = $("#unit_id");
+            t.wrap('<div class="position-relative"></div>');
+            t.select2({
+                dropdownAutoWidth: !0,
+                dropdownParent: t.parent(),
+                width: "100%",
+                containerCssClass: "select-lg",
+            }).change(function() {
+                showBlockUI('#create-sales-plan-form');
+
+                if ($(this).val() == 0) {
+                    $('#main-div').hide();
+                    $('#savebtn').attr('disabled', true)
+                } else {
+                    $.ajax({
+                        url: "{{ route('ajax-get-unit') }}",
+                        type: 'POST',
+                        data: {
+                            unit_id: $(this).val(),
+                        },
+                        success: function(response) {
+                            if (response.status) {
+                                if (response.data) {
+                                    unitData = response.data[0];
+                                    floorData = response.data[1];
+                                }
+
+                                $('#unit_no').val(unitData.floor_unit_number);
+                                $('#floor_no').val(floorData.short_label);
+                                $('#unit_type').val(unitData.type.name);
+                                $('#unit_size').val(unitData.gross_area);
+                                $('#unit_price').val(unitData.price_sqft);
+                                $('#floor_id').val(floorData.id);
+
+                                $('#unit_price').trigger('change');
+                                $('#unit_downpayment_percentage').trigger('change');
+                                updateTable();
+                                $('#savebtn').attr('disabled', false)
+
+                            }
+
+                        },
+                        error: function(errors) {
+                            console.error(errors);
+
+                        }
+                    });
+                    $('#main-div').show();
+
+                }
+                hideBlockUI('#create-sales-plan-form');
+
+            });
 
             var input = document.querySelector("#stackholder_contact");
             intl = window.intlTelInput(input, ({
@@ -289,7 +353,8 @@
                             if (response.data) {
                                 stakeholderData = response.data[0];
                             }
-
+                            country_id.val(stakeholderData.country_id);
+                            country_id.trigger('change');
                             // $('#stackholder_id').val(stakeholderData.id);
                             $('#stackholder_full_name').val(stakeholderData.full_name);
                             $('#stackholder_father_name').val(stakeholderData.father_name);
@@ -301,9 +366,33 @@
                             $('#optional_contact').val(stakeholderData.optional_contact);
                             $('#mailing_address').val(stakeholderData.mailing_address);
                             $('#stackholder_address').text(stakeholderData.address);
+                            $('#stackholder_email').val(stakeholderData.email);
+                            $('#stackholder_optional_email').val(stakeholderData
+                                .optional_email);
+                            $('#nationality').val(stakeholderData.nationality);
+
+                            selected_state_id = stakeholderData.state_id;
+                            selected_city_id = stakeholderData.city_id;
+
                             $('#stackholder_comments').text(stakeholderData.comments);
+
+                            if (stakeholderData.stakeholder_as == 'c') {
+                                $('#company_name').val(stakeholderData.full_name);
+                                $('#industry').val(stakeholderData.occupation);
+                                $('#registration').val(stakeholderData.cnic);
+                                $('#ntn').val(stakeholderData.ntn);
+                                $('#companyForm').show();
+                                $('#individualForm').hide();
+
+                            }
+                            if (stakeholderData.stakeholder_as == 'i') {
+
+                                $('#companyForm').hide();
+                                $('#individualForm').show();
+
+                            }
                             var countryDetails = JSON.parse(stakeholderData.countryDetails);
-                            
+
                             if (countryDetails == null) {
                                 intl.setCountry('pk');
                             } else {
@@ -313,7 +402,8 @@
                             $('#countryDetails').val(JSON.stringify(intl
                                 .getSelectedCountryData()))
 
-                            var OptionalCountryDetails = JSON.parse(stakeholderData.OptionalCountryDetails);
+                            var OptionalCountryDetails = JSON.parse(stakeholderData
+                                .OptionalCountryDetails);
                             if (OptionalCountryDetails == null) {
                                 intlOptional.setCountry('pk');
                             } else {
@@ -355,6 +445,8 @@
 
                             div_stakeholder_type.html(stakeholderType);
                             div_stakeholder_type.show();
+
+
                         }
                         hideBlockUI('#stakeholders_card');
                     },
@@ -601,51 +693,57 @@
                 rangeCount: $(".custom-option-item-check:checked").val() == 'quarterly' ? 90 : 30,
                 rangeBy: 'days',
                 unchangedData: unchangedData,
+                unit_id: $('#unit_id').val()
             };
 
-            $.ajax({
-                url: '{{ route('sites.floors.units.sales-plans.ajax-generate-installments', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}',
-                type: 'GET',
-                data: data,
-                success: function(response) {
-                    let InstallmentRows = '';
-                    if (response.status) {
-                        $('#installments_table tbody#dynamic_installment_rows').empty();
+            if ($('#unit_id').val() > 0) {
+                $.ajax({
+                    url: "{{ route('sites.sales_plan.ajax-generate-installments', ['site_id' => encryptParams($site->id)]) }}",
 
-                        for (let row of response.data.installments) {
-                            InstallmentRows += row.row;
-                        }
+                    type: 'GET',
+                    data: data,
+                    success: function(response) {
+                        let InstallmentRows = '';
+                        if (response.status) {
+                            $('#installments_table tbody#dynamic_installment_rows').empty();
 
-                        $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
-                        InstallmentRows = '';
+                            for (let row of response.data.installments) {
+                                InstallmentRows += row.row;
+                            }
 
-                        showBlockUI('#additional_expense_card');
-                        lastInstallemtDate = response.data.installments[response.data.installments.length - 2]
-                            .date;
+                            $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
+                            InstallmentRows = '';
 
-                        flatpickr($(".expense_due_date"), {
-                            defaultDate: lastInstallemtDate,
-                            minDate: lastInstallemtDate,
-                        });
-                        hideBlockUI('#additional_expense_card');
+                            showBlockUI('#additional_expense_card');
+                            lastInstallemtDate = response.data.installments[response.data.installments.length -
+                                    2]
+                                .date;
 
-                        $('#base-installment').val(response.data.baseInstallmentTotal);
-                    } else {
-                        if (response.message.error == 'invalid_amout') {
-                            Toast.fire({
-                                icon: 'error',
-                                title: "Invalid Amount"
+                            flatpickr($(".expense_due_date"), {
+                                defaultDate: lastInstallemtDate,
+                                minDate: lastInstallemtDate,
                             });
+                            hideBlockUI('#additional_expense_card');
+
+                            $('#base-installment').val(response.data.baseInstallmentTotal);
+                        } else {
+                            if (response.message.error == 'invalid_amout') {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: "Invalid Amount"
+                                });
+                            }
                         }
+                        hideBlockUI('#installments_acard');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#installments_acard');
                     }
-                    hideBlockUI('#installments_acard');
-                },
-                error: function(errors) {
-                    console.error(errors);
-                    hideBlockUI('#installments_acard');
-                }
-            });
-            // console.log(action);
+                });
+            }
+
+
         }
 
         function storeUnchangedData(key, field, value, Arr) {
@@ -693,7 +791,7 @@
 
             unchangedData = [...ArrAmounts, ...ArrRemarks, ...ArrDueDates];
 
-            console.log(dataArrays);
+            // console.log(dataArrays);
 
             updateTable();
         }
@@ -736,6 +834,9 @@
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,
             rules: {
+                'unit_id': {
+                    required: true
+                },
                 // 1. PRIMARY DATA
                 'unit[no]': {
                     required: true
@@ -832,6 +933,134 @@
             }
         });
 
+        var country_id = $("#country_id");
+        country_id.wrap('<div class="position-relative"></div>');
+        country_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: country_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+
+            $("#city_id").empty()
+            $('#state_id').empty();
+
+            $('#state_id').html('<option value=0>Select State</option>');
+            $('#city_id').html('<option value=0>Select City</option>');
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
+                .replace(':countryId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#create-sales-plan-form');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+
+                            $.each(response.states, function(key, value) {
+                                $("#state_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+                            state_id.val(selected_state_id);
+                            state_id.trigger('change');
+                            hideBlockUI('#create-sales-plan-form');
+                        } else {
+                            hideBlockUI('#create-sales-plan-form');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#create-sales-plan-form');
+                    }
+                });
+            }
+        });
+
+
+        var state_id = $("#state_id");
+        state_id.wrap('<div class="position-relative"></div>');
+        state_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: state_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            $("#city_id").empty()
+            $('#city_id').html('<option value=0>Select City</option>');
+
+            // alert($(this).val());
+            showBlockUI('#create-sales-plan-form');
+
+            var _token = '{{ csrf_token() }}';
+            let url =
+                "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
+                .replace(':stateId', $(this).val());
+            if ($(this).val() > 0) {
+                showBlockUI('#create-sales-plan-form');
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'stateId': $(this).val(),
+                        '_token': _token
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $.each(response.cities, function(key, value) {
+                                $("#city_id").append('<option value="' + value
+                                    .id + '">' + value.name + '</option>');
+                            });
+
+                            city_id.val(selected_city_id);
+                            city_id.trigger('change');
+
+                            hideBlockUI('#create-sales-plan-form');
+                        } else {
+                            hideBlockUI('#create-sales-plan-form');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
+                        hideBlockUI('#create-sales-plan-form');
+                    }
+                });
+            }
+        });
+
+        var city_id = $("#city_id");
+        city_id.wrap('<div class="position-relative"></div>');
+        city_id.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: city_id.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        });
+
+        $('#cpyAddress').on('change', function() {
+            if ($(this).is(':checked')) {
+                $('#mailing_address').val($('#stackholder_address').val());
+            } else {
+                $('#mailing_address').val('')
+            }
+        })
         // validator.resetForm();
         // validator.showErrors({
         //     "firstname": "I know that your firstname is Pete, Pete!"

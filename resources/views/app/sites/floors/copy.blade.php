@@ -12,7 +12,8 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/nouislider.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sliders.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/colors/palette-noui.css">
 @endsection
 
@@ -118,11 +119,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        <span id="copy_floor_button_span">Copy Floor </span>
-                                    </button>
+                                    @can('sites.floors.copyStore')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            <span id="copy_floor_button_span">Copy Floor </span>
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.floors.index', ['site_id' => encryptParams(decryptParams($site_id))]) }}"
@@ -316,7 +320,8 @@
             for (let i = parseInt(a); i <= parseInt(b); i++) {
                 $('#shortLabelForm').append(
                     '<label class="form-label" style="font-size: 15px" for="floor">Enter Short Label for floor (' + i +
-                    ')<span class="text-danger">*</span></label><input type="text" required class="form-control mb-2" value="' + i + 'F" name="shortLabel[' + i +
+                    ')<span class="text-danger">*</span></label><input type="text" required class="form-control mb-2" value="' +
+                    i + 'F" name="shortLabel[' + i +
                     ']" placeholder="Short label for floor ' + i + '">');
             }
         }

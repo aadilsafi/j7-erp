@@ -43,8 +43,8 @@ class CityDataTable extends DataTable
             ->editColumn('state_id', function ($user) {
                 return $user->state->name;
             })
-            ->editColumn('country', function ($user) {
-                return $user->state->country->name;
+            ->editColumn('country_id', function ($user) {
+                return $user->country->name;
             })
             ->editColumn('country_flag', function ($user) {
                 return $user->state->country->emoji;
@@ -72,7 +72,7 @@ class CityDataTable extends DataTable
      */
     public function query(City $cities): QueryBuilder
     {
-        return $cities->newQuery()->orderBy('name');
+        return $cities->newQuery()->with('country','state');
     }
 
     public function html(): HtmlBuilder
@@ -151,7 +151,7 @@ class CityDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [2, 'asc'],
+                [1, 'asc'],
             ]);
     }
 
@@ -171,9 +171,9 @@ class CityDataTable extends DataTable
             //     Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
             // ),
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('name')->title('Name'),
-            Column::make('state_id')->title('State'),
-            Column::computed('country'),
+            Column::make('name')->title('Name')->addClass('text-nowrap'),
+            Column::make('state_id')->name('state.name')->title('State')->addClass('text-nowrap'),
+            Column::make('country_id')->name('country.name')->title('Country')->addClass('text-nowrap'),
             Column::computed('country_flag')->title('Country Flag'),
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),

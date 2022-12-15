@@ -26,6 +26,8 @@ interface FinancialTransactionInterface
 
     public function makeReceiptRevertOnlineTransaction($receipt_id); //for online Revert receipt
 
+    public function makeReceiptOtherTransaction($receipt_id); // for other
+
     public function makeBuyBackTransaction($site_id, $unit_id, $customer_id, $file_id);
 
     public function makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
@@ -37,4 +39,14 @@ interface FinancialTransactionInterface
     public function makeRebateIncentiveTransaction($rebate_id);
 
     public function makeDealerIncentiveTransaction($dealer_incentive_id);
+
+    public function makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
+
+    // transfer Receipts Transactions
+    public function makeTransferReceiptTransaction($receipt_id); // for cash
+    public function makeTransferReceiptChequeTransaction($receipt_id); // for cheque
+    public function makeTransferReceiptActiveTransaction($receipt_id); // for cheque Active
+    public function makeTransferReceiptOnlineTransaction($receipt_id); // for online
+    public function makeTransferReceiptOtherTransaction($receipt_id); // for other
+
 }

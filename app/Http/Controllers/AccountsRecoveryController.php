@@ -242,7 +242,7 @@ class AccountsRecoveryController extends Controller
         $data = [
             'site_id' => decryptParams($site_id),
             'salesPlans' => $salesPlans,
-            'max_installments' => $maxInstallments,
+            'max_installments' => is_null($maxInstallments) ? 1 : $maxInstallments,
             'floors' => $this->floorInterface->getByAll($site_id),
             'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
                 'stakeholder_types'

@@ -24,6 +24,7 @@ use App\Services\Team\{TeamService, Interface\TeamInterface};
 use App\Services\LeadSource\{LeadSourceService, LeadSourceInterface};
 use App\Services\Permissions\{PermissionInterface, PermissionService};
 use App\Services\Receipts\{ReceiptService, Interface\ReceiptInterface};
+use App\Services\TransferFileReceipts\{TransferFileReceiptService, TransferFileReceiptInterface};
 use App\Services\RebateIncentive\{RebateIncentiveInterface, RebateIncentiveService};
 use App\Services\Roles\{RoleInterface, RoleService};
 use App\Services\AccountCreations\FirstLevel\FirstLevelAccountinterface as FirstLevelAccountInterface;
@@ -37,8 +38,10 @@ use App\Services\AccountCreations\FourthLevel\FourthLevelAccountservice as Fourt
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountinterface as FifthLevelAccountInterface;
 use App\Services\AccountCreations\FifthLevel\FifthLevelAccountservice as FifthLevelAccountService;
 use App\Services\Company\{CompanyService, Interface\CompanyInterface};
-
-
+use App\Services\JournalVouchers\JournalVouchersInterface;
+use App\Services\JournalVouchers\JournalVouchersService;
+use App\Services\PaymentVoucher\paymentService;
+use App\Services\PaymentVoucher\paymentInterface;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Telescope;
 
@@ -83,13 +86,15 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(FourthLevelAccountInterface::class, FourthLevelAccountService::class);
         $this->app->bind(FifthLevelAccountInterface::class, FifthLevelAccountService::class);
         $this->app->bind(CompanyInterface::class, CompanyService::class);
-
+        $this->app->bind(paymentInterface::class, paymentService::class);
+        $this->app->bind(JournalVouchersInterface::class, JournalVouchersService::class);
+        $this->app->bind(TransferFileReceiptInterface::class, TransferFileReceiptService::class);
 
         Telescope::ignoreMigrations();
 
         // if ($this->app->environment('local')) {
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
+        $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+        $this->app->register(TelescopeServiceProvider::class);
         // }
     }
 

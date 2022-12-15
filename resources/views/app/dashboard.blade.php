@@ -11,8 +11,14 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/pages/dashboard-ecommerce.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/charts/chart-apex.min.css">
+<link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sweet-alerts.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-toastr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
 @endsection
 
 @section('custom-css')
@@ -800,11 +806,7 @@
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/charts/apexcharts.min.js"></script>
 
-    <script src="{{ asset('app-assets') }}/vendors/js/charts/chart.min.js"></script>
-    <script src="{{ asset('app-assets') }}/js/core/app-menu.min.js"></script>
-    <script src="{{ asset('app-assets') }}/js/core/app.min.js"></script>
-    <script src="{{ asset('app-assets') }}/js/scripts/customizer.min.js"></script>
-    <script src="{{ asset('app-assets') }}/js/scripts/charts/chart-chartjs.min.js"></script>
+
 @endsection
 
 @section('page-js')

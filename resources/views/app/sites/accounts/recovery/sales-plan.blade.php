@@ -134,14 +134,16 @@
 
                             <div class="row mb-1 g-1">
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label" style="font-size: 15px" for="filter_generated_at">Generated At</label>
+                                    <label class="form-label" style="font-size: 15px" for="filter_generated_at">Generated
+                                        At</label>
                                     <input type="text" id="filter_generated_at" name="filter_generated_at"
                                         class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                         placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
                                 </div>
 
                                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 position-relative">
-                                    <label class="form-label" style="font-size: 15px" for="filter_approved_at">Approved At</label>
+                                    <label class="form-label" style="font-size: 15px" for="filter_approved_at">Approved
+                                        At</label>
                                     <input type="text" id="filter_approved_at" name="filter_approved_at"
                                         class="form-control flatpickr-range flatpickr-input active filter_date_ranger"
                                         placeholder="YYYY-MM-DD to YYYY-MM-DD" readonly="readonly">
@@ -356,56 +358,59 @@
                 },
             ];
 
-            for (let index = 1; index <= maxInstallments; index++) {
+            if (maxInstallments > 0) {
+                for (let index = 1; index <= maxInstallments; index++) {
 
-                dataTableColumns.push({
-                    name: 'installment_' + index + '_date',
-                    data: 'installments.installment_' + index + '_date',
-                    className: 'text-center align-middle text-nowrap',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        if (data) {
-                            return moment(data).format('DD/MM/YYYY');
-                        } else {
-                            return '-';
+                    dataTableColumns.push({
+                        name: 'installment_' + index + '_date',
+                        data: 'installments.installment_' + index + '_date',
+                        className: 'text-center align-middle text-nowrap',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if (data) {
+                                return moment(data).format('DD/MM/YYYY');
+                            } else {
+                                return '-';
+                            }
                         }
-                    }
-                });
+                    });
 
-                dataTableColumns.push({
-                    name: 'installment_' + index + '_paid_amount',
-                    data: 'installments.installment_' + index + '_paid_amount',
-                    className: 'text-center align-middle text-nowrap',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return data ? numberFormat(data) : '-';
-                    }
-                });
-
-                dataTableColumns.push({
-                    name: 'installment_' + index + '_last_paid_at',
-                    data: 'installments.installment_' + index + '_last_paid_at',
-                    className: 'text-center align-middle text-nowrap',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        if (data) {
-                            return moment(data).format('DD/MM/YYYY');
-                        } else {
-                            return '-';
+                    dataTableColumns.push({
+                        name: 'installment_' + index + '_paid_amount',
+                        data: 'installments.installment_' + index + '_paid_amount',
+                        className: 'text-center align-middle text-nowrap',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return data ? numberFormat(data) : '-';
                         }
-                    }
-                });
+                    });
 
-                dataTableColumns.push({
-                    name: 'installment_' + index + '_remaining_amount',
-                    data: 'installments.installment_' + index + '_remaining_amount',
-                    className: 'text-center align-middle text-nowrap',
-                    orderable: false,
-                    render: function(data, type, row) {
-                        return data ? numberFormat(data) : '-';
-                    }
-                });
+                    dataTableColumns.push({
+                        name: 'installment_' + index + '_last_paid_at',
+                        data: 'installments.installment_' + index + '_last_paid_at',
+                        className: 'text-center align-middle text-nowrap',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            if (data) {
+                                return moment(data).format('DD/MM/YYYY');
+                            } else {
+                                return '-';
+                            }
+                        }
+                    });
+
+                    dataTableColumns.push({
+                        name: 'installment_' + index + '_remaining_amount',
+                        data: 'installments.installment_' + index + '_remaining_amount',
+                        className: 'text-center align-middle text-nowrap',
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return data ? numberFormat(data) : '-';
+                        }
+                    });
+                }
             }
+
 
             var statusArray = [
                 [
@@ -530,7 +535,7 @@
                     }
                 },
             ];
-
+            $.fn.dataTable.ext.errMode = 'throw';
             var salesPlanDataTable = $(".dt-complex-header").DataTable({
                 processing: true,
 

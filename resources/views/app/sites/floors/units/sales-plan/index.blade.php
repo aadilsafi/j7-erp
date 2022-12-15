@@ -216,6 +216,7 @@
                         });
                     }
                 });
+                hideBlockUI('#salesPlan');
             }
 
         }

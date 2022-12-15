@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('site_id')->constrained();
             $table->string('name');
             $table->integer('parent_id')->default(0);
+            $table->boolean('has_team')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

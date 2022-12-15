@@ -22,7 +22,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Edit Additional Cost</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render( 'sites.additional-costs.edit', $site_id) }}
+                    {{ Breadcrumbs::render('sites.additional-costs.edit', $site_id) }}
                 </div>
             </div>
         </div>
@@ -30,44 +30,48 @@
 @endsection
 
 @section('content')
-<form class="form form-vertical" action="{{ route('sites.additional-costs.update', ['site_id' => encryptParams($additionalCost->site_id), 'id' => encryptParams($additionalCost->id)]) }}"
-    method="POST">
+    <form class="form form-vertical"
+        action="{{ route('sites.additional-costs.update', ['site_id' => encryptParams($additionalCost->site_id), 'id' => encryptParams($additionalCost->id)]) }}"
+        method="POST">
 
-    <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
-            @csrf
-            @method('PUT')
-            {{ view('app.additional-costs.form-fields', ['additionalCost' => $additionalCost, 'additionalCosts' => $additionalCosts, 'customFields' => $customFields]) }}
+                @csrf
+                @method('PUT')
+                {{ view('app.additional-costs.form-fields', ['additionalCost' => $additionalCost, 'additionalCosts' => $additionalCosts, 'customFields' => $customFields]) }}
 
-        </div>
+            </div>
 
-        <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-            <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
-                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
-                        <div class="row g-1">
-                            <div class="col-md-12">
-                                <button type="submit"
-                                    class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                    <i data-feather='save'></i>
-                                    Update Additional Cost
-                                </button>
-                            </div>
-                            <div class="col-md-12">
-                                <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"
-                                    class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
-                                    <i data-feather='x'></i>
-                                    {{ __('lang.commons.cancel') }}
-                                </a>
+            <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                <div class="sticky-md-top top-lg-100px top-md-100px top-sm-0px" style="z-index: auto;">
+                    <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                        <div class="card-body">
+                            <div class="row g-1">
+                                <div class="col-md-12">
+                                    @can('sites.additional-costs.update')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            Update Additional Cost
+                                        </button>
+                                    @endcan
+
+                                </div>
+                                <div class="col-md-12">
+                                    <a href="{{ route('sites.additional-costs.index', ['site_id' => encryptParams($site_id)]) }}"
+                                        class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
+                                        <i data-feather='x'></i>
+                                        {{ __('lang.commons.cancel') }}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 @endsection
 
 @section('vendor-js')

@@ -227,7 +227,9 @@ class FileBuyBackController extends Controller
         $file = FileManagement::where('id', $buy_back_file->file_id)->first();
         $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status' ,1)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
-        $total_paid_amount = $receipts->sum('amount_in_numbers');
+        $total_paid_amount = (float)$buy_back_file->amount_to_be_refunded - (float)$buy_back_file->amount_profit;
+        // $total_paid_amount = $receipts->sum('amount_in_numbers');
+        // dd($total_paid_amount);
         $unit_data = json_decode($buy_back_file->unit_data);
         $unitType = Type::find($unit_data->type_id);
 

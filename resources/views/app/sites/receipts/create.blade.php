@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                    width: calc(20% - 0.5em);
-                                                                                } */
+                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                    } */
     </style>
 @endsection
 
@@ -125,7 +125,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Amount Received <span class="text-danger">*</span>
                             </label>
-                            <input min="0" type="text"
+                            <input id="amount_received" type="text"
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
@@ -144,6 +144,18 @@
                                 name="discounted_amount" id="discounted_amount" placeholder="Discounted Amount "
                                 value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />
                             @error('discounted_amount')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="d-block mb-1">
+                            <label class="form-label" style="font-size: 15px" for="floor">
+                                Total Payable Amount
+                            </label>
+                            <input readonly type="text"
+                                class="form-control amountFormat @error('total_payable_amount') is-invalid @enderror"
+                                id="total_payable_amount" placeholder="Total Payable Amount " />
+                            @error('total_payable_amount')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -198,11 +210,14 @@
                             </button>
                         </div>
                         <hr> --}}
-                        <a id="saveButton" href="#"
-                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
-                            <i data-feather='save'></i>
-                            Save Receipts
-                        </a>
+                        @can('sites.receipts.store')
+                            <a id="saveButton" href="#"
+                                class="btn disabled text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
+                                <i data-feather='save'></i>
+                                Save Receipts
+                            </a>
+                        @endcan
+
 
                         @if ($amount_received > 0)
                             <a onclick="destroyDraft()"
@@ -237,6 +252,7 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
 @endsection
 
 @section('custom-js')
@@ -381,7 +397,7 @@
             var amount = $(this).val().replace(/,/g, "")
             var formatAmount = amount;
             if ($.isNumeric(amount)) {
-              
+
                 var unit_id = $(this).attr('unit_id');
                 var discounted_amount = $('#discounted_amount').val();
                 if (discounted_amount > 0) {
@@ -423,7 +439,7 @@
                         },
                         success: function(response) {
                             if (response.success) {
-
+                                $('#saveButton').removeClass('disabled');
                                 $('#paidInstllmentTableDiv').show().parent().addClass('mb-2');
                                 $('#instllmentTableDiv').show().parent().addClass('mb-2');
                                 $('#modeOfPaymentDiv').show().parent().addClass('mb-2');
@@ -440,6 +456,11 @@
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
                                 $('#stackholder_contact').val(response.stakeholders['contact']);
                                 $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_mailing_address').val(response.stakeholders[
+                                    'mailing_address']);
+                                $('#stackholder_country').val(response.country);
+                                $('#stackholder_state').val(response.state);
+                                $('#stackholder_city').val(response.city);
 
                                 created_date.set('minDate', new Date(response.sales_plan[
                                     'created_date']));
@@ -514,6 +535,7 @@
                                 hideBlockUI('#loader');
 
                             } else {
+                                $('#saveButton').addClass('disabled');
                                 hideBlockUI('#loader');
                                 Swal.fire({
                                     icon: 'error',
@@ -552,6 +574,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
+                        showBlockUI('#loader');
                         $('.amountToBePaid').attr('unit_id', response.unit_id);
                         $('#unit_type').empty();
                         $('.amountToBePaid').empty();
@@ -562,12 +585,34 @@
                         $('.floor').append('<option value="0" selected>' + response.unit_floor + '</option>');
                         $('.unit_name').append('<option value="0" selected>' + response.unit_name +
                             '</option>');
+
+                        $('#customer_ap_amount').val(response.customerPayableAmount.toLocaleString());
+                        $('#dealer_ap_amount').val(response.dealerPayableAmount.toLocaleString());
+                        $('#vendor_ap_amount').val(response.vendorPayableAmount.toLocaleString());
+
+                        $('#total_payable_amount').val(response.total_payable_amount.toLocaleString());
+
+                        if (response.customerPayableAmount <= 0) {
+                            $('#customer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.dealerPayableAmount <= 0) {
+                            $('#dealer_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        if (response.vendorPayableAmount <= 0) {
+                            $('#vendor_ap_amount_paid').attr('readonly', true);
+                        }
+
+                        hideBlockUI('#loader');
                     } else {
+                        hideBlockUI('#loader');
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
                             text: 'Something Went Wrong!!',
                         });
+
                     }
                 },
                 error: function(error) {
@@ -577,7 +622,64 @@
         }
 
         $("#saveButton").click(function() {
-            $("#receiptForm").submit();
+            let mode_of_payment = $("input[name='receipts[0][mode_of_payment]']:checked").val();
+
+            $('.is-invalid').removeClass('is-invalid');
+            $('.errorClass').remove();
+
+            if (mode_of_payment == 'Cheque') {
+                let cheque_no = $('#cheque_no').val();
+                if (cheque_no == '') {
+                    $('#cheque_no').addClass('is-invalid');
+                    $('#cheque_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Cheque No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+            } else if (mode_of_payment == 'Online') {
+                let transaction_date = $('#transaction_date').val();
+                let online_instrument_no = $('#online_instrument_no').val();
+
+                if (online_instrument_no == '') {
+                    $('#online_instrument_no').addClass('is-invalid');
+                    $('#online_instrument_no').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Transaction No is required!</span>');
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else if (mode_of_payment == 'Other') {
+                let other_value = $('#other_value').val();
+                let dealer_ap_amount_paid = $('#dealer_ap_amount_paid').val();
+                let customer_ap_amount_paid = $('#customer_ap_amount_paid').val();
+                let vendor_ap_amount_paid = $('#vendor_ap_amount_paid').val();
+
+                let sum_ap_amount = parseFloat(dealer_ap_amount_paid) + parseFloat(customer_ap_amount_paid) +
+                    parseFloat(vendor_ap_amount_paid);
+                let amount_toBe_paid = parseFloat($('#amountToBePaid').val().replace(/,/g, ''));
+
+                if (other_value == '') {
+                    $('#other_value').addClass('is-invalid');
+                    $('#other_value').parent().append(
+                        '<span class="is-invalid text-danger errorClass">Other Payment Purpose is required!</span>'
+                    );
+                }
+                if (sum_ap_amount != amount_toBe_paid) {
+
+                    $('#customer_ap_amount_paid').addClass('is-invalid');
+                    $('#vendor_ap_amount_paid').addClass('is-invalid');
+                    $('#dealer_ap_amount_paid').addClass('is-invalid');
+                    $('#attachment').after(
+                        '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
+                    );
+                } else {
+                    $("#receiptForm").submit();
+                }
+
+            } else {
+                $("#receiptForm").submit();
+            }
+
         });
 
         function destroyDraft() {
@@ -664,6 +766,33 @@
                     hideBlockUI('.bankDiv');
                 }
             });
+        });
+
+        var validator = $("#receiptForm").validate({
+            rules: {
+                'receipts[0][bank_name]': {
+                    required: function() {
+                        let mode_of_payment = $("input[name='receipts[0][mode_of_payment]']:checked").val();
+                        if (mode_of_payment == 'Cheque' || mode_of_payment == 'Online') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            },
+            // messages: {
+            //     'stackholder[cnic]': {
+            //         maxlength: "Cnic can't be greater then {0} digits without dashes",
+            //         minlength: "Cnic can't be less then {0} digits without dashes",
+            //     }
+            // },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

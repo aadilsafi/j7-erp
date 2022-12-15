@@ -264,22 +264,21 @@ class FileReleaseController extends Controller
         $file = FileManagement::where('id', $file_resale->file_id)->first();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
 
-        $unpaid = $salesPlan->unPaidInstallments->pluck('details')->toArray();
-
-        $installmentsRecevied = SalesPlanInstallments::where('sales_plan_id', $salesPlan->id)->where('status','paid')->where('installment_order', '>', 0)->pluck('details')->toArray();
+        $installmentsRecevied = SalesPlanInstallments::where('sales_plan_id', $salesPlan->id)->where('status', 'paid')->where('installment_order', '>', 0)->pluck('details')->toArray();
+        $unpaid = SalesPlanInstallments::where('sales_plan_id', $salesPlan->id)->where('installment_order', '>', 0)->where('status', 'unpaid')->orWhere('status', 'partially_paid')->pluck('details')->toArray();
 
         $template = Template::find(decryptParams($template_id));
 
         $data = [
-            'site_id' => decryptParams($site_id),
             'file_resale' => $file_resale,
             'template' => $template,
             'customer' => json_decode($file_resale['stakeholder_data']),
             'unit' => Unit::find($file_resale['unit_id']),
-            'salesPlan' => SalesPlan::where('unit_id', $file_resale['unit_id'])->first(),
+            'salesPlan' => $salesPlan,
             'installmentsRecevied' => $installmentsRecevied,
             'unpaid' => $unpaid
         ];
+
 
         $printFile = 'app.sites.file-managements.files.templates.' . $template->slug;
 

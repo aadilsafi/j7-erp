@@ -103,7 +103,7 @@ class ReceiptsDatatable extends DataTable
         $createPermission =  Auth::user()->hasPermissionTo('sites.receipts.create');
         $revertPermission =  Auth::user()->hasPermissionTo('sites.receipts.revert-payment');
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
-        $importPermission =  Auth::user()->hasPermissionTo('sites.receipts.importReceipts');
+        $importPermission =  Auth::user()->can('sites.receipts.importReceipts');
 
         $buttons = [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -137,14 +137,14 @@ class ReceiptsDatatable extends DataTable
 
             array_unshift($buttons, $addButton);
         }
-        if ($revertPermission) {
-            $revertButton =  Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
-                    'onclick' => 'revertPayment()',
-                ]);
-            array_unshift($buttons, $revertButton);
-        }
+        // if ($revertPermission) {
+        //     $revertButton =  Button::raw('delete-selected')
+        //         ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+        //         ->text('<i class="bi bi-trash3-fill"></i> Revert Receipt')->attr([
+        //             'onclick' => 'revertPayment()',
+        //         ]);
+        //     array_unshift($buttons, $revertButton);
+        // }
 
         if ($createPermission) {
             $addButton = Button::raw('delete-selected')
@@ -166,7 +166,7 @@ class ReceiptsDatatable extends DataTable
                 ]);
         }
 
-        return $this->builder()
+        $dataTableBuilder = $this->builder()
             ->setTableId('stakeholder-table')
             ->addTableClass(['table-hover'])
             ->scrollX()
@@ -180,7 +180,14 @@ class ReceiptsDatatable extends DataTable
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             ->rowGroupDataSrc('unit_id')
-            ->columnDefs([
+
+            ->orders([
+                [2, 'asc'],
+                [4, 'desc'],
+            ]);
+
+        if ($selectedActivePermission) {
+            $dataTableBuilder->columnDefs([
                 [
                     'targets' => 0,
                     'className' => 'text-center text-primary',
@@ -189,18 +196,17 @@ class ReceiptsDatatable extends DataTable
                     'searchable' => false,
                     'responsivePriority' => 3,
                     'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
+                            var role = JSON.parse(data);
+                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        }",
                     'checkboxes' => [
                         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
                     ]
                 ],
-            ])
-            ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
             ]);
+        }
+
+        return $dataTableBuilder;
     }
 
     /**

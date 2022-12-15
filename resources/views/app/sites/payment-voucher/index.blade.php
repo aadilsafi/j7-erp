@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.index', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.payment-voucher.index', encryptParams($site_id)) }}
 @endsection
 
 @section('page-title', __('Payment Voucher'))
@@ -40,7 +40,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Payment Voucher</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.payment-voucher.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.payment-voucher.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -55,8 +55,8 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.receipts.make-active-selected', ['site_id' => $site_id]) }}"
-                id="stakeholder-table-form" method="get">
+            <form action="#"
+                id="payment-voucher-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
 
@@ -125,76 +125,6 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             }
         }
 
-        function changeStatusSelected() {
-            var selectedCheckboxes = $('.dt-checkboxes:checked').length;
-            if (selectedCheckboxes > 0) {
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: 'Are you sure you want to change the staus of selected items ?',
-                    showCancelButton: true,
-                    cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                    confirmButtonText: 'Yes, Change it!',
-                    confirmButtonClass: 'btn-danger',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
-                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#stakeholder-table-form').submit();
-                    }
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
-                });
-            }
-        }
-
-        function revertPayment() {
-            var selectedCheckboxes = $('.dt-checkboxes:checked').length;
-            if (selectedCheckboxes > 0) {
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: 'Are you sure you want to revert payment the selected receipts?',
-                    showCancelButton: true,
-                    cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
-                    confirmButtonText: 'Yes, Revert it!',
-                    confirmButtonClass: 'btn-danger',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
-                        cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // $('#stakeholder-table-form').submit();
-                        let array = [];
-                        let formData = $('#stakeholder-table-form').serializeArray();
-                        for (let index = 0; index < formData.length; index++) {
-                            array[index] = formData[index]['value'];
-                            var id = formData[index]['value'];
-                        }
-                        location.href =
-                            "{{ route('sites.receipts.revert-payment', ['site_id' => $site_id, 'ids' => ':ids']) }}"
-                            .replace(':ids', array);
-                    }
-                });
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: '{{ __('lang.commons.please_select_at_least_one_item') }}',
-                });
-            }
-        }
 
         function openTemplatesModal(receipt_id) {
             $('#receipt_id').val(receipt_id);
@@ -212,15 +142,9 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
         }
 
         function addNew() {
-            location.href = '{{ route('sites.receipts.create', ['site_id' => $site_id]) }}';
+            location.href = '{{ route('sites.payment-voucher.create', ['site_id' => $site_id]) }}';
         }
 
-        function Import() {
-            location.href = '{{ route('sites.receipts.importReceipts', ['site_id' => $site_id]) }}';
-        }
 
-        function ImportBanks() {
-            location.href = '{{ route('sites.banks.importBanks', ['site_id' => $site_id]) }}';
-        }
     </script>
 @endsection

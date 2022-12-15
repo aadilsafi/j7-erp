@@ -1,7 +1,7 @@
 <div data-repeater-list="receipts">
     <div data-repeater-item>
 
-        <div class="row mb-2">
+        <div class="row mb-2" id="divLoader">
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
@@ -25,7 +25,7 @@
                                                 {{-- @continue(isset($unit) && $unit->id == $row['id'])
                                                 @continue(isset($paidAmount) && $paidAmount  == $row->salesPlan[0]['total_price']) --}}
 
-                                                <option  value="{{ $row->id }}"
+                                                <option value="{{ $row->id }}"
                                                     {{ (isset($unit) ? $unit->parent_id : old('unit_id')) == $row['id'] ? 'selected' : '' }}>
                                                     {{ $row->name }} ( {{ $row->floor_unit_number }} ) (
                                                     {{ $row->salesPlan[0]['stakeholder']['full_name'] }},
@@ -45,8 +45,7 @@
                                     <label class="form-label" style="font-size: 15px" for="floor">
                                         Amount To be Paid <span class="text-danger">*</span>
                                     </label>
-                                    <input onclick="setAmountIds(this)" id="amountToBePaid"
-                                        type="text"
+                                    <input onclick="setAmountIds(this)" id="amountToBePaid" type="text"
                                         class="form-control amountToBePaid @error('amount_in_numbers') is-invalid @enderror"
                                         name="amount_in_numbers" placeholder="Amount To be Paid"
                                         value="{{ isset($receipt) ? $receipt->amount_in_numbers : old('amount_in_numbers') }}" />
@@ -114,7 +113,8 @@
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
+                                <label class="form-label fs-5" for="stackholder_father_name">Father / Husband
+                                    Name</label>
                                 <input type="text" readonly value="" class="form-control form-control-lg"
                                     id="stackholder_father_name" placeholder="Father / Husband Name" />
                             </div>
@@ -154,10 +154,37 @@
                         </div>
 
                         <div class="row mb-1">
-                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="country">Country</label>
+                                <input type="text" readonly value="" class="form-control form-control-lg"
+                                    id="stackholder_country" placeholder="Country" />
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="state">State</label>
+                                <input type="text" readonly value="" class="form-control form-control-lg"
+                                    id="stackholder_state" placeholder="State" />
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                                <label class="form-label fs-5" for="city">City</label>
+                                <input type="text" readonly value="" class="form-control form-control-lg"
+                                    id="stackholder_city" placeholder="City" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="stackholder_address">Address</label>
                                 <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
                                     rows="5"></textarea>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="stackholder_mailing_address">Mailing
+                                    Address</label>
+                                <textarea class="form-control  form-control-lg" readonly id="stackholder_mailing_address"
+                                    placeholder="Mailing Address" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -283,116 +310,112 @@
                             </div>
                         </div>
 
-                        <div class="row mb-2 g-1" id="otherValueDiv" style="display: none;">
-                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="other_value">Other Payment
-                                    Mode <span class="text-danger">*</span></label>
-                                <input type="text"
-                                    class="form-control form-control-lg @error('other_value') is-invalid @enderror"
-                                    id="other_value" name="other_value" placeholder="Other Payment Mode"
-                                    value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
-                                @error('other_value')
-                                    <div class="invalid-tooltip">{{ $message }}</div>
-                                @enderror
+                        {{-- Other Payment Mode Details --}}
+                        <div class=" mb-2 g-1" id="otherValueDiv" style="display: none;">
+
+
+                            <div class="row mb-2">
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 mb-2 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="other_value">Other Payment
+                                        Purpose <span class="text-danger">*</span></label>
+                                    <input type="text"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="other_value" name="other_value" placeholder="Other Payment Purpose"
+                                        value="{{ isset($receipt) ? $receipt->other_value : old('other_value') }}" />
+                                    @error('other_value')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px"
+                                        for="customer_ap_amount">Customer Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input readonly type="text"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="customer_ap_amount"  placeholder="Customer AP Amount"
+                                        value="" />
+                                    @error('customer_ap_amount')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="vendor_ap_amount">Vendor
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input readonly type="text"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="vendor_ap_amount"  placeholder="Vendor AP Amount"
+                                        value="" />
+                                    @error('vendor_ap_amount')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="dealer_ap_amount">Dealer
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input readonly type="text"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="dealer_ap_amount"  placeholder="Dealer AP Amount"
+                                        value="" />
+                                    @error('dealer_ap_amount')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
+
+                            <div class="row mb-2">
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px"
+                                        for="customer_ap_amount_paid">Paid Customer Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="customer_ap_amount_paid" value="0" name="customer_ap_amount"  placeholder="Customer AP Amount"
+                                        value="" />
+                                    @error('customer_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="vendor_ap_amount_paid">Paid Vendor
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="vendor_ap_amount_paid" value="0" name="vendor_ap_amount" placeholder="Vendor AP Amount"
+                                        value="" />
+                                    @error('vendor_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class=" col-sm-4 position-relative">
+                                    <label class="form-label" style="font-size: 15px" for="dealer_ap_amount_paid">Paid Dealer
+                                        Payable Amount
+                                        <span class="text-danger">*</span></label>
+                                    <input  type="number"
+                                        class="form-control form-control-lg @error('other_value') is-invalid @enderror"
+                                        id="dealer_ap_amount_paid" value="0" name="dealer_ap_amount"  placeholder="Dealer AP Amount"
+                                        value="" />
+                                    @error('dealer_ap_amount_paid')
+                                        <div class="invalid-tooltip">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                            </div>
+
                         </div>
 
+                        {{-- Online Payment Mode Details --}}
                         <div class="row mb-2 g-1" id="onlineValueDiv" style="display: none;">
-
-                            {{-- <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                <label class="form-label" style="font-size: 15px" for="bank">Select Bank</label>
-                                <select class="form-select form-select-lg bank" id="bank" name="bank_id">
-                                    <option value="0">Create new Bank</option>
-                                    @forelse ($banks as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->name }} - {{ $bank->branch_code }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
-
-                            <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
-                                <div id="div_new_bank">
-                                    <div class="row mb-1">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="full_name">Bank Name</label>
-                                            <input type="text"
-                                                class="form-control form-control-lg name @error('full_name') is-invalid @enderror"
-                                                id="name" name="bank_name"
-                                                placeholder="Bank Name" />
-                                            @error('name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="father_name">Account Number</label>
-                                            <input type="number"
-                                                class="form-control form-control-lg  account_number @error('account_number') is-invalid @enderror"
-                                                id="account_number" name="bank_account_number"
-                                                placeholder="Account Number"/>
-                                            @error('account_number')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="father_name">Contact Number</label>
-                                            <input type="number"
-                                                class="form-control contact_number form-control-lg @error('contact_number') is-invalid @enderror"
-                                                id="contact_number" name="bank_contact_number"
-                                                placeholder="Contact Number"/>
-                                            @error('contact_number')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row mb-1">
-
-                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="designation">Branch</label>
-                                            <input type="text"
-                                                class="form-control branch form-control-lg @error('branch') is-invalid @enderror"
-                                                id="branch" name="bank_branch"
-                                                placeholder="Branch"/>
-                                            @error('branch')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="contact">Branch Code</label>
-                                            <input type="number"
-                                                class="form-control branch_code form-control-lg @error('contact') is-invalid @enderror"
-                                                id="branch_code" name="bank_branch_code" placeholder="Branch Code"/>
-                                            @error('branch_code')
-                                                <div class="invalid-feedback ">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-1">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="address">Address</label>
-                                            <textarea class="form-control address @error('address') is-invalid @enderror" name="bank_address" id="address"
-                                                rows="3" placeholder="Address"></textarea>
-                                            @error('address')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="comments">Comments</label>
-                                            <textarea class="form-control comments @error('comments') is-invalid @enderror" name="bank_comments"
-                                                id="comments" rows="3" placeholder="Comments"></textarea>
-                                            @error('comments')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label" style="font-size: 15px"
                                     for="online_instrument_no">Transaction
@@ -420,7 +443,7 @@
                             </div>
                         </div>
 
-
+                        {{-- Cheque Payment Mode Details --}}
                         <div class="row mb-2 g-1" id="chequeValueDiv" style="display: none;">
 
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">

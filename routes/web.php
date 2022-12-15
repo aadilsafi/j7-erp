@@ -51,7 +51,10 @@ use App\Http\Controllers\{
     StateController,
     LogController,
     PaymentVocuherController,
+    JournalVoucherController,
+    TransferReceiptController,
 };
+use App\Models\PaymentVocuher;
 use App\Models\Type;
 use App\Notifications\DefaultNotification;
 use Illuminate\Support\Facades\Notification;
@@ -166,6 +169,7 @@ Route::group([
 
                     //Accounts Routes
                     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
+
                         // first level
                         Route::group(['prefix' => 'first-level', 'as' => 'first-level.'], function () {
                             Route::get('/', [FirstLevelAccountController::class, 'index'])->name('index');
@@ -179,6 +183,7 @@ Route::group([
                                 Route::put('update', [FirstLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // second level
                         Route::group(['prefix' => 'second-level', 'as' => 'second-level.'], function () {
                             Route::get('/', [SecondLevelAccountController::class, 'index'])->name('index');
@@ -192,6 +197,7 @@ Route::group([
                                 Route::put('update', [SecondLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // third level
                         Route::group(['prefix' => 'third-level', 'as' => 'third-level.'], function () {
                             Route::get('/', [ThirdLevelAccountController::class, 'index'])->name('index');
@@ -205,6 +211,7 @@ Route::group([
                                 Route::put('update', [ThirdLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // fourth level
                         Route::group(['prefix' => 'fourth-level', 'as' => 'fourth-level.'], function () {
                             Route::get('/', [FourthLevelAccountController::class, 'index'])->name('index');
@@ -218,6 +225,7 @@ Route::group([
                                 Route::put('update', [FourthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
                         // fifth level
                         Route::group(['prefix' => 'fifth-level', 'as' => 'fifth-level.'], function () {
                             Route::get('/', [FifthLevelAccountController::class, 'index'])->name('index');
@@ -231,6 +239,30 @@ Route::group([
                                 Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
+
+
+
+                    });
+
+                    // Journal Voucher Routes
+                    Route::group(['prefix' => 'journal-vouchers', 'as' => 'journal-vouchers.'], function () {
+
+                        Route::get('/', [JournalVoucherController::class, 'index'])->name('index');
+
+                        Route::get('create', [JournalVoucherController::class, 'create'])->name('create');
+                        Route::post('store', [JournalVoucherController::class, 'store'])->name('store');
+
+                        Route::get('delete', [JournalVoucherController::class, 'destroy'])->name('destroy');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::get('edit', [JournalVoucherController::class, 'edit'])->name('edit');
+                            Route::put('update', [JournalVoucherController::class, 'update'])->name('update');
+                        });
+
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+
+                        });
+
                     });
 
                     // Import Routes
@@ -408,7 +440,7 @@ Route::group([
                             Route::get('create', [UnitController::class, 'create'])->name('create');
                             Route::post('store', [UnitController::class, 'store'])->name('store');
 
-                            Route::group(['prefix' => 'fab', 'as' => 'fab.'], function () {
+                            Route::group(['prefix' => 'bifurcate', 'as' => 'bifurcate.'], function () {
                                 Route::get('create', [UnitController::class, 'createfabUnit'])->name('create');
                                 Route::post('store', [UnitController::class, 'storefabUnit'])->name('store');
                             });
@@ -464,6 +496,15 @@ Route::group([
                                 });
                             });
                         });
+                    });
+                });
+
+                //Sales Plan Leftbar link
+                Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+                    Route::get('create', [SalesPlanController::class, 'create'])->name('create');
+                    Route::post('store', [SalesPlanController::class, 'store'])->name('store');
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
                     });
                 });
 
@@ -645,6 +686,35 @@ Route::group([
                     });
                 });
 
+                // File Transfer Receipts
+                Route::group(['prefix' => 'file-transfer-receipts', 'as' => 'file-transfer-receipts.'], function () {
+                    Route::get('/', [TransferReceiptController::class, 'index'])->name('index');
+
+                    Route::get('create', [TransferReceiptController::class, 'create'])->name('create');
+                    Route::post('store', [TransferReceiptController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-transfer-file-data', [TransferReceiptController::class, 'getTransferFileData'])->name('get-transfer-file-data');
+                    });
+
+                    Route::group(['prefix' => '/{receipts_id}'], function () {
+                        Route::group(['prefix' => 'templates', 'as' => 'templates.'], function () {
+                            Route::group(['prefix' => '/{id}'], function () {
+                                Route::get('/print', [TransferReceiptController::class, 'printReceipt'])->name('print');
+                            });
+                        });
+                    });
+
+                    Route::get('destroy-draft', [TransferReceiptController::class, 'destroyDraft'])->name('destroy-draft');
+                    Route::get('delete-selected', [TransferReceiptController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('make-active-selected', [TransferReceiptController::class, 'makeActiveSelected'])->name('make-active-selected');
+                    Route::get('revert-payment/{ids}', [TransferReceiptController::class, 'revertPayment'])->name('revert-payment');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [TransferReceiptController::class, 'show'])->name('show');
+                    });
+                });
+
                 // Banks
                 Route::group(['prefix' => 'banks', 'as' => 'banks.'], function () {
                     Route::get('/', [BankController::class, 'index'])->name('index');
@@ -671,6 +741,10 @@ Route::group([
 
                     Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
                     Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-accounts-payable-data', [PaymentVocuherController::class, 'getAccountsPayableData'])->name('get-accounts-payable-data');
+                    });
                 });
 
                 // File Management
@@ -888,6 +962,7 @@ Route::group([
         Route::get('ajax-import-receipts.get.input', [ReceiptController::class, 'getInput'])->name('ajax-import-receipts.get.input');
         Route::get('ajax-import-banks.get.input', [BankController::class, 'getInput'])->name('ajax-import-banks.get.input');
         Route::get('ajax-import-stakeholders.kins.get.input', [StakeholdersImportControler::class, 'getInput'])->name('ajax-import-stakeholders.kins.get.input');
+        Route::post('ajax-get-unit', [SalesPlanController::class, 'getUnitDetails'])->name('ajax-get-unit');
 
         Route::post('ajax-import-image/save-file', [ImageImportController::class, 'saveFile'])->name('ajax-import-image.save-file');
         Route::delete('ajax-import-image/revert-file', [ImageImportController::class, 'revertFile'])->name('ajax-import-image.revert-file');
@@ -895,6 +970,7 @@ Route::group([
 
         Route::post('ajax-get-cities/{stateId}', [CityController::class, 'getCities'])->name('ajax-get-cities');
         Route::post('ajax-get-states/{countryId}', [StateController::class, 'getStates'])->name('ajax-get-states');
+        Route::post('ajax-get-stakeholder_types/{stakeholderId}', [PaymentVocuherController::class, 'stakeholder_types'])->name('ajax-get-stakeholder_types');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

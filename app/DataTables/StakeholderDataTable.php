@@ -45,6 +45,9 @@ class StakeholderDataTable extends DataTable
             ->editColumn('nationality', function ($stakeholder) {
                 return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
             })
+            ->editColumn('country_id', function ($stakeholder) {
+                return  $stakeholder->country != null ? $stakeholder->country->name : '-';
+            })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
             })
@@ -56,6 +59,13 @@ class StakeholderDataTable extends DataTable
             })
             ->editColumn('check', function ($stakeholder) {
                 return $stakeholder;
+            })
+            ->editColumn('satkeholderAs', function ($stakeholder) {
+                if ($stakeholder->stakeholder_as == "i") {
+                    return 'Individual';
+                } elseif ($stakeholder->stakeholder_as == "c") {
+                    return 'Company';
+                }
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -90,6 +100,7 @@ class StakeholderDataTable extends DataTable
     {
         $createPermission = Auth::user()->hasPermissionTo('sites.stakeholders.create');
         $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.stakeholders.destroy-selected');
+        $importPermission = Auth::user()->can('sites.stakeholders.importStakeholders');
         $selectedDeletePermission = 0;
 
         $buttons = [
@@ -101,18 +112,20 @@ class StakeholderDataTable extends DataTable
                 Button::make('pdf')->addClass('dropdown-item'),
             ]),
 
-            Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i data-feather="upload"></i> Import Stakeholders')
-                ->attr([
-                    'onclick' => 'Import()',
-                ]),
+
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ];
 
-
-
+        if ($importPermission) {
+            $importbutton = Button::raw('import')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i data-feather="upload"></i> Import Stakeholders')
+                ->attr([
+                    'onclick' => 'Import()',
+                ]);
+            array_unshift($buttons, $importbutton);
+        }
         if ($createPermission) {
             $addbutton = Button::raw('delete-selected')
                 ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
@@ -142,6 +155,7 @@ class StakeholderDataTable extends DataTable
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([10, 20, 30, 50, 70, 100])
+            ->rowGroupDataSrc('satkeholderAs')
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             // ->rowGroupDataSrc('parent_id')
@@ -182,10 +196,13 @@ class StakeholderDataTable extends DataTable
         $columns = [
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
-            Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC'),
-            Column::make('nationality')->title('Nationality'),
+            // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
+            Column::make('cnic')->title('CNIC / REGISTRATION #'),
             Column::make('contact')->title('Contact'),
+            Column::make('country_id')->title('Country'),
+            Column::make('nationality')->title('Nationality'),
+            Column::computed('satkeholderAs')->visible(false),
+
             // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
             // Column::make('relation')->title('Relation'),
         ];

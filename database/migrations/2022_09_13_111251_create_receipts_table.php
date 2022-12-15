@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
+            $table->string('serial_no')->nullable()->default('REC-');
             $table->foreignId('unit_id')->constrained();
             $table->foreignId('sales_plan_id')->constrained();
             $table->foreignId('bank_id')->nullable();
@@ -30,6 +31,7 @@ return new class extends Migration
             $table->string('drawn_on_bank')->nullable();
             $table->string('transaction_date')->nullable();
             $table->string('amount_in_words');
+            $table->string('discounted_amount')->nullable();
             $table->double('amount_in_numbers');
             $table->string('purpose');
             $table->string('other_purpose')->nullable();
@@ -40,6 +42,13 @@ return new class extends Migration
             $table->double('status')->default(0);
             $table->string('bank_details')->nullable();
             $table->dateTime('created_date')->nullable();
+            $table->string('customer_ar_account')->nullable();
+            $table->string('customer_ap_amount')->nullable();
+            $table->string('customer_ap_account')->nullable();
+            $table->string('dealer_ap_amount')->nullable();
+            $table->string('dealer_ap_account')->nullable();
+            $table->string('vendor_ap_amount')->nullable();
+            $table->string('vendor_ap_account')->nullable();
             $table->timestamps();
         });
     }

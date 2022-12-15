@@ -26,6 +26,10 @@ return new class extends Migration
             $table->string('amount_profit')->nullable();
             $table->string('payment_due_date')->nullable();
             $table->string('amount_remarks')->nullable();
+            $table->string('new_resale_rate')->nullable();
+            $table->string('premium_demand')->nullable();
+            $table->string('marketing_service_charges')->nullable();
+            $table->dateTime('created_date')->nullable();
             // $table->string('rebate_amount')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();

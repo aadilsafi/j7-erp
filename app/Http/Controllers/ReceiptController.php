@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\DataTables\ReceiptsDatatable;
 use App\Http\Requests\Receipts\store;
 use App\Imports\ReceiptsImport;
+use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\Receipt;
 use App\Models\ReceiptDraftModel;
@@ -18,6 +19,7 @@ use App\Models\ReceiptTemplate;
 use App\Models\SalesPlanInstallments;
 use App\Models\Site;
 use App\Models\Stakeholder;
+use App\Models\StakeholderType;
 use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\CustomFields\CustomFieldInterface;
@@ -66,7 +68,7 @@ class ReceiptController extends Controller
 
             $data = [
                 'site_id' => decryptParams($site_id),
-                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments','salesPlan.PaidorPartiallyPaidInstallments')->get(),
+                'units' => (new Unit())->with('salesPlan', 'salesPlan.installments', 'salesPlan.PaidorPartiallyPaidInstallments')->get(),
                 'draft_receipts' => ReceiptDraftModel::all(),
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
@@ -132,12 +134,12 @@ class ReceiptController extends Controller
 
         $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
+        $stakeholder_data = Stakeholder::with('country:id,name', 'state:id,name', 'city:id,name')->where('cnic', $receipt->cnic)->first();
         // if($lastIntsalmentStatus == 'paid'){
         //     $paid_installments = SalesPlanInstallments::all();
         //     $unpadid_installments = null;
         // }
-
+        // dd($stakeholder_data);
         $sales_plan = SalesPlan::find($receipt->sales_plan_id);
 
         return view('app.sites.receipts.preview', [
@@ -246,6 +248,49 @@ class ReceiptController extends Controller
     {
 
         $unit = Unit::find($request->unit_id);
+        $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('stakeholder')->first();
+        $stakeholders = $sales_plan->stakeholder;
+
+        $stakeholderType = StakeholderType::where('stakeholder_id', $stakeholders->id)->get();
+
+        $customerApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'C'])->first();
+
+        $dealerApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'D'])->first();
+
+        $vendorApAccount  = StakeholderType::where(['stakeholder_id' => $stakeholders->id, 'type' => 'V'])->first();
+
+        // Customer Ap Amount
+        if (isset($customerApAccount)) {
+            $customerLedger = AccountLedger::where('account_head_code', $customerApAccount->payable_account)->get();
+            $customerDebit = collect($customerLedger)->sum('debit');
+            $customerCredit = collect($customerLedger)->sum('credit');
+            $customerPayableAmount = (float)$customerCredit - (float)$customerDebit;
+        } else {
+            $customerPayableAmount = 0;
+        }
+
+
+        // Vendor Ap Amount
+        if (isset($dealerApAccount)) {
+            $dealerLedger = AccountLedger::where('account_head_code', $dealerApAccount->payable_account)->get();
+            $dealerDebit = collect($dealerLedger)->sum('debit');
+            $dealerCredit = collect($dealerLedger)->sum('credit');
+            $dealerPayableAmount = (float)$dealerCredit - (float)$dealerDebit;
+        } else {
+            $dealerPayableAmount = 0;
+        }
+
+        // Vendor Ap Amount
+        if (isset($vendorApAccount)) {
+            $vendorLedger = AccountLedger::where('account_head_code', $vendorApAccount->payable_account)->get();
+            $vendorDebit = collect($vendorLedger)->sum('debit');
+            $vendorCredit = collect($vendorLedger)->sum('credit');
+            $vendorPayableAmount = (float)$vendorCredit - (float)$vendorDebit;
+        } else {
+            $vendorPayableAmount = 0;
+        }
+
+        $total_payable_amount  = $customerPayableAmount  +  $dealerPayableAmount + $vendorPayableAmount;
 
         return response()->json([
             'success' => true,
@@ -253,6 +298,13 @@ class ReceiptController extends Controller
             'unit_type' => $unit->type->name,
             'unit_floor' => $unit->floor->name,
             'unit_name' => $unit->name,
+            'customerApAccount' => $customerApAccount,
+            'dealerApAccount' => $dealerApAccount,
+            'vendorApAccount' => $vendorApAccount,
+            'customerPayableAmount' => $customerPayableAmount,
+            'dealerPayableAmount' => $dealerPayableAmount,
+            'vendorPayableAmount' => $vendorPayableAmount,
+            'total_payable_amount' => $total_payable_amount,
         ], 200);
     }
 
@@ -260,6 +312,7 @@ class ReceiptController extends Controller
     {
         $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('PaidorPartiallyPaidInstallments', 'unPaidInstallments', 'stakeholder')->first();
         $stakeholders = $sales_plan->stakeholder;
+        // dd($stakeholders->country->name);
         $stakeholders->cnic = cnicFormat($stakeholders->cnic);
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
@@ -360,8 +413,11 @@ class ReceiptController extends Controller
             'total_calculated_installments' => $total_calculated_installments,
             'total_installment_required_amount' => $total_installment_required_amount,
             'amount_to_be_paid' => $request->amount,
-            'already_paid' => $sales_plan->PaidorPartiallyPaidInstallments,
-            'stakeholders' => $stakeholders,
+            'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
+            'stakeholders'  => $stakeholders,
+            'country'       => $stakeholders->country_id ? $stakeholders->country->name : '',
+            'state'         => $stakeholders->state_id ? $stakeholders->state->name : '',
+            'city'          => $stakeholders->city_id ? $stakeholders->city->name : '',
         ], 200);
     }
 
@@ -866,20 +922,20 @@ class ReceiptController extends Controller
         }
     }
 
-    public function revertPayment(Request $request, $site_id,$ids)
+    public function revertPayment(Request $request, $site_id, $ids)
     {
         try {
             $site_id = decryptParams($site_id);
             if (!request()->ajax()) {
                 // if ($request->has('chkRole')) {
 
-                    $record = $this->receiptInterface->revertPayment($site_id, $ids);
+                $record = $this->receiptInterface->revertPayment($site_id, $ids);
 
-                    if ($record) {
-                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess('Data Reverted');
-                    } else {
-                        return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
-                    }
+                if ($record) {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withSuccess('Data Reverted');
+                } else {
+                    return redirect()->route('sites.receipts.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.data_not_found'));
+                }
                 // }
             } else {
                 abort(403);

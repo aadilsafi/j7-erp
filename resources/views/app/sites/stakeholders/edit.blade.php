@@ -54,8 +54,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                    width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                } */
     </style>
 @endsection
 
@@ -92,6 +92,7 @@
                     'state' => $state,
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'customFields' => $customFields,
+                    'contactStakeholders' => $contactStakeholders,
                 ]) }}
             </div>
 
@@ -109,11 +110,14 @@
                                 @enderror
                             </div>
                             <hr>
-                            <button id="saveButton" type="submit"
-                                class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
-                                <i data-feather='save'></i>
-                                Update Stakeholder
-                            </button>
+                            @can('sites.stakeholders.update')
+                                <button id="saveButton" type="submit"
+                                    class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
+                                    <i data-feather='save'></i>
+                                    Update Stakeholder
+                                </button>
+                            @endcan
+
                             <a href="{{ route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                                 class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                 <i data-feather='x'></i>
@@ -148,6 +152,11 @@
 @section('custom-js')
 
     <script type="text/javascript">
+        $('#companyForm').hide();
+        $('#individualForm').hide();
+        $('#common_form').hide()
+        $('#stakeholderType').hide();
+
         var input = document.querySelector("#contact");
         intl = window.intlTelInput(input, ({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -316,6 +325,15 @@
                     },
                     'cnic': {
                         required: true,
+                    },
+                    'registration': {
+                        required: true,
+                    },
+                    'company_name': {
+                        required: true,
+                    },
+                    'email': {
+                        required: true,
                     }
                 },
                 errorClass: 'is-invalid text-danger',
@@ -388,11 +406,11 @@
             width: "100%",
             containerCssClass: "select-lg",
         }).change(function() {
-            showBlockUI('#stakeholderForm');
 
             $("#city_id").empty()
             $('#state_id').empty();
-
+            $('#state_id').html('<option value=0>Select State</option>');
+            $('#city_id').html('<option value=0>Select City</option>');
             var _token = '{{ csrf_token() }}';
             let url =
                 "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
@@ -409,8 +427,7 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#state_id').html('<option value=0>Select State</option>');
-                            $('#city_id').html('<option value=0>Select City</option>');
+
                             $.each(response.states, function(key, value) {
                                 $("#state_id").append('<option value="' + value
                                     .id + '">' + value.name + '</option>');
@@ -459,8 +476,7 @@
             containerCssClass: "select-lg",
         }).change(function() {
             $("#city_id").empty()
-            // alert($(this).val());
-            showBlockUI('#stakeholderForm');
+            $('#city_id').html('<option value=0>Select City</option>');
 
             var _token = '{{ csrf_token() }}';
             let url =
@@ -478,7 +494,7 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $('#city_id').html('<option value=0>Select City</option>');
+
                             $.each(response.cities, function(key, value) {
                                 $("#city_id").append('<option value="' + value
                                     .id + '">' + value.name + '</option>');
@@ -505,6 +521,38 @@
             }
         });
 
+        var t = $("#stakeholder_as");
+        t.wrap('<div class="position-relative"></div>');
+        t.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: t.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            if ($(this).val() == 0) {
+                $('#companyForm').hide();
+                $('#individualForm').hide();
+                $('#common_form').hide();
+                $('#stakeholderType').hide();
+
+            } else if ($(this).val() == 'c') {
+                $('#companyForm').show();
+                $('#individualForm').hide();
+                $('#common_form').show();
+                $('#stakeholderType').show();
+
+            } else if ($(this).val() == 'i') {
+                $('#companyForm').hide();
+                $('#individualForm').show();
+                $('#common_form').show();
+                $('#stakeholderType').show();
+
+            }
+        });
+
+        t.val('{{ $stakeholder->stakeholder_as }}');
+        t.trigger('change');
+
         function performAction(action) {
             if (action == 'C') {
                 // $('#div-next-of-kin').toggle('fast', 'linear');
@@ -518,11 +566,68 @@
         country_id.trigger('change');
 
         $('#cpyAddress').on('change', function() {
-                if ($(this).is(':checked')) {
-                    $('#mailing_address').val($('#address').val());
-                } else {
-                    $('#mailing_address').val('')
-                }
-            })
+            if ($(this).is(':checked')) {
+                $('#mailing_address').val($('#address').val());
+            } else {
+                $('#mailing_address').val('')
+            }
+        })
+
+        $(document).on('change', '.contact-person-select', function(e) {
+            var index = Number(this.name.replace("contact-persons[", "").replace("][stakeholder_contact_id]", ""));
+            let stakeholder_id = this.value;
+            if (stakeholder_id > 0) {
+                showBlockUI('#stakeholderForm');
+
+                $.ajax({
+                    url: "{{ route('sites.stakeholders.ajax-get-by-id', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}"
+                        .replace(':id', stakeholder_id),
+                    type: 'GET',
+                    data: {},
+                    success: function(response) {
+                        if (response.status) {
+                            if (response.data) {
+                                stakeholderData = response.data[0];
+                            }
+
+                            $('[name="contact-persons[' + index + '][full_name]"]').val(stakeholderData
+                                .full_name)
+                            $('[name="contact-persons[' + index + '][father_name]"]').val(
+                                stakeholderData
+                                .father_name);
+                            $('[name="contact-persons[' + index + '][occupation]"]').val(stakeholderData
+                                .occupation);
+                            $('[name="contact-persons[' + index + '][designation]"]').val(
+                                stakeholderData
+                                .designation);
+                            $('[name="contact-persons[' + index + '][cnic]"]').val(stakeholderData
+                                .cnic);
+                            $('[name="contact-persons[' + index + '][ntn]"]').val(stakeholderData.ntn);
+                            $('[name="contact-persons[' + index + '][contact]"]').val(stakeholderData
+                                .contact);
+
+                            $('[name="contact-persons[' + index + '][address]"]').val(stakeholderData
+                                .address);
+                            console.log($('[name="contact-persons[' + index + '][address]"]'))
+                        }
+                        hideBlockUI('#stakeholderForm');
+                    },
+                    error: function(errors) {
+                        console.error(errors);
+                        hideBlockUI('#stakeholderForm');
+                    }
+                });
+            } else {
+                $('[name="contact-persons[' + index + '][full_name]"]').val('')
+                $('[name="contact-persons[' + index + '][father_name]"]').val('');
+                $('[name="contact-persons[' + index + '][occupation]"]').val('');
+                $('[name="contact-persons[' + index + '][designation]"]').val('');
+                $('[name="contact-persons[' + index + '][cnic]"]').val('');
+                $('[name="contact-persons[' + index + '][ntn]"]').val('');
+                $('[name="contact-persons[' + index + '][contact]"]').val('');
+                $('[name="contact-persons[' + index + '][address]"]').val('');
+            }
+
+        });
     </script>
 @endsection

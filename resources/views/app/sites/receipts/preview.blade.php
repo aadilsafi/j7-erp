@@ -90,7 +90,6 @@
                     </div>
 
                     <div class="row mb-1">
-
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
                             <input type="text" readonly value="{{ $stakeholder_data->ntn }}"
@@ -111,6 +110,26 @@
                     </div>
 
                     <div class="row mb-1">
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="country">Country</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
+                                class="form-control form-control-lg" id="country" placeholder="Country" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="state">State</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->state ? $stakeholder_data->state->name : '-' }}"
+                                class="form-control form-control-lg" id="state" placeholder="State" />
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                            <label class="form-label fs-5" for="city">City</label>
+                            <input type="text" readonly value="{{ $stakeholder_data->city ? $stakeholder_data->city->name : '-' }}"
+                                class="form-control form-control-lg" id="city" placeholder="City" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="stackholder_address">Address</label>
                             <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
@@ -118,9 +137,17 @@
                         </div>
 
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="mailing_address">Mailing Address</label>
+                            <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
+                                placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-1">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="stackholder_comments">Comments</label>
                             <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->comments }}</textarea>
+                                placeholder="Comments" rows="5">{{ $stakeholder_data->comments }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -198,7 +225,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ number_format($receipt->discounted_amount) }}"
+                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0}}"
                                         readonly />
                                 </div>
 

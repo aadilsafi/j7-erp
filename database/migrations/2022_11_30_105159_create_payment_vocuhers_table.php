@@ -20,15 +20,20 @@ return new class extends Migration
             $table->foreignId('customer_id')->nullable();
             $table->foreignId('dealer_id')->nullable();
             $table->foreignId('vendor_id')->nullable();
-            $table->foreignId('sales_plan_id')->nullable();
-            $table->foreignId('receipt_id')->nullable();
-            $table->foreignId('file_refund_id')->nullable();
-            $table->foreignId('file_resale_id')->nullable();
-            $table->foreignId('file_buyback_id')->nullable();
-            $table->foreignId('file_cancellation_id')->nullable();
-            $table->foreignId('file_title_transfer_id')->nullable();
-            $table->foreignId('rebate_incentive_id')->nullable();
-            $table->foreignId('dealer_incentive_id')->nullable();
+            $table->foreignId('bank_id')->nullable();
+            // $table->foreignId('sales_plan_id')->nullable();
+            // $table->foreignId('receipt_id')->nullable();
+            // $table->foreignId('file_refund_id')->nullable();
+            // $table->foreignId('file_resale_id')->nullable();
+            // $table->foreignId('file_buyback_id')->nullable();
+            // $table->foreignId('file_cancellation_id')->nullable();
+            // $table->foreignId('file_title_transfer_id')->nullable();
+            // $table->foreignId('rebate_incentive_id')->nullable();
+            // $table->foreignId('dealer_incentive_id')->nullable();
+            $table->string('stakeholder_type')->nullable();
+            $table->string('customer_ap_account')->nullable();
+            $table->string('dealer_ap_account')->nullable();
+            $table->string('vendor_ap_account')->nullable();
             $table->string('customer_dealer_vendor_details')->nullable();
             $table->string('name')->nullable();
             $table->string('representative')->nullable();
@@ -53,6 +58,8 @@ return new class extends Migration
             $table->timestamp('approved_date')->nullable();
             $table->foreignId('approved_by')->nullable();
             $table->string('comments')->nullable();
+            $table->string('amount_to_be_paid')->nullable();
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

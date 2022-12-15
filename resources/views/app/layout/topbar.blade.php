@@ -108,6 +108,15 @@
                 </a>
             </li> --}}
 
+            @can('sites.floors.units.sales-plans.create')
+                <li class="nav-item">
+                    <a class="nav-link"
+                        href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
+                        {{-- <i class="bi bi-calculator"></i> --}}
+                        <i class="bi bi-clipboard-data"></i>
+                    </a>
+                </li>
+            @endcan
 
             {{-- <li class="nav-item nav-search">
                 <a class="nav-link nav-link-search">
@@ -235,17 +244,19 @@
 
             <li class="nav-item dropdown dropdown-notification me-25"><a class="nav-link" href="#"
                     data-bs-toggle="dropdown"><i class="ficon" data-feather="bell"></i><span
-                        class="badge rounded-pill bg-danger badge-up">{{Auth::user()->unreadNotifications->count()}}</span></a>
+                        class="badge rounded-pill bg-danger badge-up">{{ Auth::user()->unreadNotifications->count() }}</span></a>
                 <ul class="dropdown-menu dropdown-menu-media dropdown-menu-end">
                     <li class="dropdown-menu-header">
                         <div class="dropdown-header d-flex">
                             <h4 class="notification-title mb-0 me-auto">Notifications</h4>
-                            <div class="badge rounded-pill badge-light-primary">{{Auth::user()->unreadNotifications->count()}} New</div>
+                            <div class="badge rounded-pill badge-light-primary">
+                                {{ Auth::user()->unreadNotifications->count() }} New</div>
                         </div>
                     </li>
                     <li class="scrollable-container media-list">
                         @foreach (Auth::user()->unreadNotifications as $notification)
-                            <a class="d-flex" id="unreadNotification" getNotificationID="{{ $notification['id'] }}"  href="{{ $notification->data['url'] }}">
+                            <a class="d-flex" id="unreadNotification" getNotificationID="{{ $notification['id'] }}"
+                                href="{{ $notification->data['url'] }}">
                                 <div class="list-item d-flex align-items-start">
                                     <div class="me-1">
                                         <div class="avatar"><img

@@ -45,7 +45,7 @@
 @endsection
 
 @section('content')
-    <form class="form form-vertical"
+    <form class="form form-vertical" id="units_form"
         action="{{ route('sites.floors.units.store', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
         method="POST">
 
@@ -62,8 +62,7 @@
                     'statuses' => $statuses,
                     'max_unit_number' => $max_unit_number,
                     'bulkOptions' => true,
-                    'customFields' => $customFields
-
+                    'customFields' => $customFields,
                 ]) }}
 
             </div>
@@ -74,11 +73,14 @@
                         <div class="card-body">
                             <div class="row g-1">
                                 <div class="col-md-12">
-                                    <button type="submit"
-                                        class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
-                                        <i data-feather='save'></i>
-                                        <span id="create_unit_button_span">Save Unit</span>
-                                    </button>
+                                    @can('sites.floors.units.store')
+                                        <button type="submit"
+                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                            <i data-feather='save'></i>
+                                            <span id="create_unit_button_span">Save Unit</span>
+                                        </button>
+                                    @endcan
+
                                 </div>
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.floors.units.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id)]) }}"
@@ -99,6 +101,7 @@
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/wNumb.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/nouislider.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/js/forms/validation/jquery.validate.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -299,6 +302,20 @@
                 $('#total_price').val('' + parseFloat(total_price).toFixed(2));
 
             });
+        });
+
+        var validator = $("#units_form").validate({
+            rules: {
+                'name': {
+                    required: true,
+                },
+            },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

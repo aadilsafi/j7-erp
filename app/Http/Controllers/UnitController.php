@@ -124,6 +124,7 @@ class UnitController extends Controller
      */
     public function store(unitStoreRequest $request, $site_id, $floor_id)
     {
+        // dd($request->all());
         try {
             if (!request()->ajax()) {
                 $inputs = $request->validated();

@@ -118,7 +118,15 @@ class TransferReceiptController extends Controller
         $image = $receipt->getFirstMediaUrl('file_transfer_receipt_attachments');
 
         $fileOwner = json_decode($receipt->TransferFile->stakeholder_data);
+        $fileOwner->country = $receipt->TransferFile->stakeholder->country->name ?? '';
+        $fileOwner->state = $receipt->TransferFile->stakeholder->state->name ?? '';
+        $fileOwner->city = $receipt->TransferFile->stakeholder->city->name ?? '';
+
         $transferOwner = json_decode($receipt->TransferFile->transfer_person_data);
+        $transferOwner->country = $receipt->TransferFile->transferStakeholder->country->name ?? '';
+        $transferOwner->state = $receipt->TransferFile->transferStakeholder->state->name ?? '';
+        $transferOwner->city = $receipt->TransferFile->transferStakeholder->city->name ?? '';
+
         $sales_plan = SalesPlan::find($receipt->TransferFile->sales_plan_id);
 
         return view('app.sites.file-transfer-receipts.preview', [

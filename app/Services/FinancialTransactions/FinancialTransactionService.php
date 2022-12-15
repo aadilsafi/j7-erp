@@ -319,7 +319,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['created_date'] = now();
         }
 
-        if ($account_action == 30 || $account_action == 32 || $account_action == 33 || $account_action == 34 || $account_action == 31 || $account_action == 27) {
+        if ($account_action == 30 || $account_action == 32 || $account_action == 33 || $account_action == 34 || $account_action == 31 || $account_action == 35) {
             $receipt = TransferReceipt::find($action_id);
             $data['transfer_receipt_id'] = $action_id;
             $data['created_date'] = $receipt->created_date;

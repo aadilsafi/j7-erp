@@ -2420,6 +2420,15 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
 
+            // Outside Sales Plan Permission
+            [
+                'name' => 'sites.sales_plan.show',
+                'show_name' => 'Can View Sales Plans ',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]
+
             //  Company permissions
             // [
             //     'name' => 'sites.settings.companies.index',

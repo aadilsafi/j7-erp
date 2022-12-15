@@ -15,7 +15,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-
+use Route;
 
 class SalesPlanDataTable extends DataTable
 {
@@ -83,7 +83,13 @@ class SalesPlanDataTable extends DataTable
      */
     public function query(SalesPlan $model): QueryBuilder
     {
-        return $model->newQuery()->with('stakeholder')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+        if (Route::current()->getName() != 'sites.sales_plan.show') {
+            return $model->newQuery()->with('stakeholder')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+        }
+        else{
+            return $model->newQuery()->with('stakeholder')->orderBy('status', 'asc');
+        }
+
     }
 
     /**
@@ -93,7 +99,9 @@ class SalesPlanDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $unitStatus = Unit::find($this->unit->id)->status_id;
+        if (Route::current()->getName() != 'sites.sales_plan.show') {
+            $unitStatus = Unit::find($this->unit->id)->status_id;
+        }
         $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.create');
         // $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         $selectedDeletePermission = 0;
@@ -111,7 +119,17 @@ class SalesPlanDataTable extends DataTable
         ];
 
         if ($createPermission) {
-            if ($unitStatus == 1 || $unitStatus == 6) {
+            if (Route::current()->getName() != 'sites.sales_plan.show') {
+                if ($unitStatus == 1 || $unitStatus == 6) {
+                    $addNewButton = Button::raw('add-new')
+                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                        ->text('<i class="bi bi-plus"></i> Add New')
+                        ->attr([
+                            'onclick' => 'addNew()',
+                        ]);
+                    array_unshift($buttons, $addNewButton);
+                }
+            } else {
                 $addNewButton = Button::raw('add-new')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
                     ->text('<i class="bi bi-plus"></i> Add New')

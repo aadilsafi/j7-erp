@@ -555,11 +555,11 @@
             @endcan
 
             {{-- Sales Plan  --}}
-            @can('sites.floors.units.sales-plans.create')
+            @can('sites.sales_plan.show')
                 <li
-                    class="nav-item {{ request()->routeIs('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
+                        href="{{ route('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) }}">
                         <i class="bi bi-clipboard-data"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Sales Plan</span>
                     </a>

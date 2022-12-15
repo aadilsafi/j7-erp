@@ -513,6 +513,7 @@ Route::group([
 
                 //Sales Plan Leftbar link
                 Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+                    Route::get('/', [SalesPlanController::class, 'inLeftbar'])->name('show');
                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {

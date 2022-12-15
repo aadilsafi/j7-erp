@@ -630,3 +630,8 @@ Breadcrumbs::for('sites.file-transfer-receipts.show', function (BreadcrumbTrail 
     $trail->parent('sites.file-transfer-receipts.index', $site_id);
     $trail->push(' Receipt Details');
 });
+
+Breadcrumbs::for('sites.sales_plan.show', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Sales Plans', route('sites.sales_plan.show', ['site_id' => $site_id]));
+});

@@ -180,7 +180,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
                 } else {
-                    return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
+                    return  '<span  class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                 }
             })
 

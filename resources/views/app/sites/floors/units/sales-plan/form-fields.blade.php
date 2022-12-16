@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                        
+
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -656,10 +656,8 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                     <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
                     <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
-                        name="sales_source[contact_no]" placeholder="Contact No" value="{{ $user->phone_no }}"
+                        name="sales_source[contact_no]" placeholder="Contact No" value="{{ $user->contact }}"
                         disabled />
-                    {{-- invalid-tooltip">{{ $message }}
-            </div> --}}
                 </div>
             </div>
 

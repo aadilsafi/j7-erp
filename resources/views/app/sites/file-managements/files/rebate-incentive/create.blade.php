@@ -247,7 +247,7 @@
                             $('#td_unit_rate').html(parseFloat(response.salesPlan.unit_price).toLocaleString());
                             $('#td_unit_floor').html(response.floor);
 
-                            if (response.facing != null) {
+                            if (response.facing != null && response.facing != '') {
                                 $('#td_unit_facing_charges').html(response.facing.unit_percentage + '%');
                             } else {
                                 $('#td_unit_facing_charges').html(0 + '%');

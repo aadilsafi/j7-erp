@@ -144,7 +144,7 @@ class FileRefundController extends Controller
             'refund_file' => (new FileRefund())->find(decryptParams($id)),
             'images' => $images,
             'labels' => $files_labels,
-            'total_paid_amount' => $total_paid_amount,
+            'total_paid_amount' => str_replace(',', '', $total_paid_amount) ,
             'salesPlan' => $salesPlan,
         ];
 

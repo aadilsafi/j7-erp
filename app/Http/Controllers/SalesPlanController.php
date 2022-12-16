@@ -253,10 +253,16 @@ class SalesPlanController extends Controller
     public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
     {
 
-        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->update([
-            'status' => 2,
-            'approved_date' => $request->approve_date . date(' H:i:s'),
-        ]);
+        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->get();
+        foreach($salesPlan as $salesPlan){
+            $salePlan = SalesPlan::find($salesPlan->id);
+            if($salePlan->status == 1){
+                $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
+            }
+            $salePlan->status= 2;
+            $salePlan->approved_date = $request->approve_date . date(' H:i:s');
+            $salePlan->update();
+        }
 
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,

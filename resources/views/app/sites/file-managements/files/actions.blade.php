@@ -12,6 +12,7 @@
         @php
             $checkFileRefund = DB::table('file_refunds')
                 ->where('file_id', $file_id)
+                ->where('deleted_at', null)
                 ->first();
         @endphp
         @if (isset($checkFileRefund))
@@ -48,6 +49,7 @@
         @php
             $checkFileBuyBack = DB::table('file_buy_backs')
                 ->where('file_id', $file_id)
+                ->where('deleted_at', null)
                 ->first();
         @endphp
         @if (isset($checkFileBuyBack))
@@ -84,6 +86,7 @@
         @php
             $checkFileCancellation = DB::table('file_cancellations')
                 ->where('file_id', $file_id)
+                ->where('deleted_at', null)
                 ->first();
         @endphp
         @if (isset($checkFileCancellation))
@@ -119,6 +122,7 @@
         @php
             $checkFileResale = DB::table('file_resales')
                 ->where('file_id', $file_id)
+                ->where('deleted_at', null)
                 ->first();
         @endphp
         @if (isset($checkFileResale))

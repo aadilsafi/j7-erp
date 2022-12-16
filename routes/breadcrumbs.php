@@ -608,6 +608,11 @@ Breadcrumbs::for('sites.settings.journal-vouchers.create', function (BreadcrumbT
     $trail->push('Create New Journal Vouchers');
 });
 
+Breadcrumbs::for('sites.settings.journal-vouchers.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.settings.journal-vouchers.index', $site_id);
+    $trail->push('Edit Journal Vouchers');
+});
+
 //Journal Vouchers Entries Breadcrumbs
 Breadcrumbs::for('sites.settings.journal-vouchers.journal-vouchers-entries.show', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

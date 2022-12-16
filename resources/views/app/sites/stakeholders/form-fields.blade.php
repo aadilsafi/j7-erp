@@ -164,7 +164,7 @@
                 <label class="form-label fs-5" for="ntn">NTN </label>
                 <input type="number" class="form-control form-control-md @error('ntn') is-invalid @enderror"
                     id="ntn" name="ntn[i]" placeholder="NTN Number"
-                    value="{{ isset($stakeholder) ? $stakeholder->ntn : old('ntn') }}" />
+                    value="" />
                 @error('ntn')
                     <div class="invalid-feedback ">{{ $message }}</div>
                 @enderror

@@ -39,7 +39,7 @@ class store extends FormRequest
             $rules['receipts.*.bank_branch'] = ['required'];
             $rules['receipts.*.bank_address'] = ['required'];
             $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
+            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')];
             $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
             $rules['receipts.*.cheque_no'] = ['required'];
             $rules['attachment'] = ['required'];
@@ -50,7 +50,7 @@ class store extends FormRequest
             $rules['receipts.*.bank_branch'] = ['required'];
             $rules['receipts.*.bank_address'] = ['required'];
             $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
+            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')];
             $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
             $rules['receipts.*.transaction_date'] = ['required'];
             $rules['receipts.*.online_instrument_no'] = ['required'];

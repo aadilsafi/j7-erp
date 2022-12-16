@@ -127,7 +127,7 @@
                         <label class="form-label" style="font-size: 15px" for="floor">
                             Total Unit Area Sold
                         </label>
-                        <input readonly id="total_unit_area" type="number"
+                        <input readonly id="total_unit_area" type="text"
                             class="form-control   @error('total_unit_area') is-invalid @enderror" name="total_unit_area"
                             value="" placeholder="Total Unit Area ">
                         @error('total_unit_area')

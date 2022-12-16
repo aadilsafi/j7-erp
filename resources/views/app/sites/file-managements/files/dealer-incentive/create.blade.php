@@ -200,9 +200,9 @@
             $('#total_unit_area').val(total_area.toLocaleString());
 
             var inputValue = $('#dealer_incentive').val();
-            // var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
+            var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
 
-            // $('#total_dealer_incentive').val(total_incentive);
+            $('#total_dealer_incentive').val(total_incentive);
             hideBlockUI('#loader');
         }
 

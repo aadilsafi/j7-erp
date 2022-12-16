@@ -139,7 +139,7 @@
                         <label class="form-label" style="font-size: 15px" for="floor">
                             Total Incentive Amount
                         </label>
-                        <input min="0" readonly id="total_dealer_incentive" type="text"
+                        <input  readonly id="total_dealer_incentive" type="text"
                             class="form-control @error('total_dealer_incentive') is-invalid @enderror"
                             name="total_dealer_incentive" placeholder="Total Incentive Amount">
                         @error('total_dealer_incentive')

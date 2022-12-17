@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('amount_remarks')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

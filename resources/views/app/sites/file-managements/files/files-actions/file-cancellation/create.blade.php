@@ -187,7 +187,6 @@
             rules: {
                 'cancellation_charges': {
                     required: true,
-                    digits: true,
                 },
                 'payment_due_date': {
                     required: true

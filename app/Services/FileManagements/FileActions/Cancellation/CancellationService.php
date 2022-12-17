@@ -52,7 +52,7 @@ class CancellationService implements CancellationInterface
                 'payment_due_date' => $inputs['payment_due_date'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
-                'cancellation_charges' =>$inputs['cancellation_charges'],
+                'cancellation_charges' =>str_replace( ',', '', $inputs['cancellation_charges']),
                 'comments' => $inputs['comments'],
             ];
 

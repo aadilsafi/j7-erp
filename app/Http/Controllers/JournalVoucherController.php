@@ -113,9 +113,27 @@ class JournalVoucherController extends Controller
      * @param  \App\Models\JournalVoucher  $journalVoucher
      * @return \Illuminate\Http\Response
      */
-    public function edit(JournalVoucher $journalVoucher)
+    public function edit(JournalVoucher $journalVoucher ,$site_id,$id)
     {
         //
+        if (!request()->ajax()) {
+
+            $JournalVoucher = JournalVoucher::find(decryptParams($id));
+            $JournalVoucherEntries = JournalVoucherEntry::where('journal_voucher_id',$JournalVoucher->id)->get();
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'fifthLevelAccount' => AccountHead::where('level', 5)->get(),
+                'stakeholders' => Stakeholder::all(),
+                'journal_serial_number' => $JournalVoucher->serial_number,
+                'JournalVoucher' => $JournalVoucher,
+                'JournalVoucherEntries'=> $JournalVoucherEntries,
+            ];
+
+            return view('app.sites.journal-vouchers.edit', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -171,7 +189,7 @@ class JournalVoucherController extends Controller
             if (isset($origin_number) && count($origin_number) > 0) {
 
                 $origin_number = collect($origin_number)->last();
-                
+
                 $origin_number = $origin_number->origin_number + 1;
                 $origin_number =  sprintf('%03d', $origin_number);
             } else {

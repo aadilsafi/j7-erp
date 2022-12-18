@@ -81,7 +81,7 @@
                                     type="date" required placeholder="YYYY-MM-DD"
                                         name="created_date" class="form-control form-control-md" />
                                 </div>
-                                <div class="d-block">
+                                {{-- <div class="d-block">
                                     <label class="form-label fs-5" for="created_date">Total Debit<span
                                             class="text-danger">*</span></label>
                                     <input readonly id="total_debit" type="text"
@@ -97,7 +97,7 @@
                                         @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @endif
                                         required placeholder="Total Credit" name="total_credit"
                                         class="form-control form-control-md" />
-                                </div>
+                                </div> --}}
 
                                 <hr>
                                 <div class="col-md-12">

@@ -40,7 +40,7 @@
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="name">Remarks <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('remarks') is-invalid @enderror"
-                    id="remarks" name="remarks" placeholder="Journal Voucher Remarks" value="" />
+                    id="remarks"  @if (isset($JournalVoucher)) value="{{ $JournalVoucher->remarks }}" @endif name="remarks" placeholder="Journal Voucher Remarks" value="" />
                 @error('remarks')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -180,13 +180,13 @@
                         <div class="col position-relative">
 
                             <input readonly id="total_debit" type="text" required placeholder=" Debit"
-                                name="total_debit" value="0" class="form-control form-control-md" />
+                                name="total_debit"  @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit) }}" @else value="0"  @endif class="form-control form-control-md" />
 
                         </div>
 
                         <div class="col position-relative">
-                            <input readonly id="total_credit" type="text" required placeholder=" Credit"
-                                name="total_credit" value="0" class="form-control form-control-md" />
+                            <input @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @else value="0" @endif readonly id="total_credit" type="text" required placeholder=" Credit"
+                                name="total_credit"  class="form-control form-control-md" />
                         </div>
 
                         <div class="col-2 position-relative">

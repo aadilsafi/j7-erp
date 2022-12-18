@@ -136,7 +136,7 @@ class JournalVouchersEntriesDatatable extends DataTable
     {
         $columns = [
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::computed('DT_RowIndex')->title('#'),
+            // Column::computed('DT_RowIndex')->title('#'),
             Column::make('account_number')->title('Account Number')->addClass('text-nowrap'),
             Column::make('account_head_id')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap')->orderable(false)->searchable(false),
             Column::make('debit')->title('Debit')->addClass('text-nowrap'),

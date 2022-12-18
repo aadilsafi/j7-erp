@@ -2,10 +2,10 @@
     <div class="card-body">
         <div class="row mb-1">
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                <label class="form-label fs-5" for="name">Serial Number <span class="text-danger">*</span></label>
+                <label class="form-label fs-5" for="name">Voucher Number <span class="text-danger">*</span></label>
                 <input readonly type="text"
                     class="form-control form-control-md @error('serial_number') is-invalid @enderror" id="serial_number"
-                    name="serial_number" placeholder="Journal Serial Number" value="{{ $journal_serial_number }}" />
+                    name="serial_number" placeholder="Journal Voucher Number" value="{{ $journal_serial_number }}" />
                 @error('serial_number')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -29,7 +29,7 @@
                 <label class="form-label fs-5" for="name"> Voucher Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
                     id="voucher_name" name="voucher_name" placeholder="Journal Voucher Name"
-                    @if(isset($JournalVoucher)) value="{{ $JournalVoucher->name }}" @endif />
+                    @if (isset($JournalVoucher)) value="{{ $JournalVoucher->name }}" @endif />
                 @error('voucher_name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -97,16 +97,16 @@
                                 <table class="table table-hover table-striped table-borderless" id="installments_table"
                                     style="position: relative;">
 
-                                    <div >
+                                    <div>
                                         <div>
-                                            <div >
+                                            <div>
                                                 <tbody id="">
 
                                                     <div class="row mb-1">
 
                                                         <div class="col-3 position-relative">
-                                                            <select class=" form-control selectClass" name="account_number"
-                                                                id="fifth_level">
+                                                            <select class=" form-control selectClass"
+                                                                name="account_number" id="fifth_level">
                                                                 <option value="">Select Account Codes</option>
                                                                 @foreach ($fifthLevelAccount as $fifthLevel)
                                                                     <option value="{{ $fifthLevel->code }}">
@@ -165,6 +165,40 @@
                     </div>
                 </div>
             </div>
+            <table class="table table-hover table-striped table-borderless" id="installments_table"
+                style="position: relative;">
+                <thead style="position: sticky; top: 0; z-index: 10;">
+                    <div class="row custom_row mb-1 text-center">
+                        <div class="col-3 text-center  position-relative">
+                            {{-- <p>Total</p> --}}
+                        </div>
+
+                        <div class="col-3 position-relative">
+                            <p>Total </p>
+                        </div>
+
+                        <div class="col position-relative">
+
+                            <input readonly id="total_debit" type="text" required placeholder=" Debit"
+                                name="total_debit" value="0" class="form-control form-control-md" />
+
+                        </div>
+
+                        <div class="col position-relative">
+                            <input readonly id="total_credit" type="text" required placeholder=" Credit"
+                                name="total_credit" value="0" class="form-control form-control-md" />
+                        </div>
+
+                        <div class="col-2 position-relative">
+                            {{-- <p>REMARKS</p> --}}
+                        </div>
+
+                        <div class="col-1 position-relative">
+                            {{-- <p>ACTION</p> --}}
+                        </div>
+                    </div>
+                </thead>
+            </table>
             <div class="row">
                 <div class="col-12">
                     <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
@@ -177,5 +211,3 @@
         </div>
     </div>
 </div>
-
-

@@ -226,22 +226,22 @@
                 nationalMode: true
             }));
 
-            $('#mobileConatctCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
+            $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
 
             mobileContact.addEventListener("countrychange", function() {
-                $('#mobileConatctCountryDetails').val(JSON.stringify(intlMobileContact
+                $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact
                     .getSelectedCountryData()))
             });
 
-            @if (is_null($stakeholder->mobileConatctCountryDetails))
+            @if (is_null($stakeholder->mobileContactCountryDetails))
                 intlMobileContact.setCountry('pk');
             @else
-                var selectdCountry = {!! $stakeholder->mobileConatctCountryDetails != null ? $stakeholder->mobileConatctCountryDetails : null !!}
+                var selectdCountry = {!! $stakeholder->mobileContactCountryDetails != null ? $stakeholder->mobileContactCountryDetails : null !!}
                 intlMobileContact.setCountry(selectdCountry['iso2']);
-                $('#mobileConatctCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
+                $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
             @endif
 
-            // Individual office conatct no
+            // Individual office contact no
             var officeContact = document.querySelector("#office_contact");
             intlOfficeContact = window.intlTelInput(officeContact, ({
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -251,17 +251,17 @@
                 formatOnDisplay: true,
                 nationalMode: true
             }));
-            $('#OfficeConatctCountryDetails').val(JSON.stringify(intlOfficeContact.getSelectedCountryData()))
+            $('#OfficeContactCountryDetails').val(JSON.stringify(intlOfficeContact.getSelectedCountryData()))
 
             officeContact.addEventListener("countrychange", function() {
-                $('#OfficeConatctCountryDetails').val(JSON.stringify(intlOfficeContact
+                $('#OfficeContactCountryDetails').val(JSON.stringify(intlOfficeContact
                     .getSelectedCountryData()))
             });
 
-            @if (is_null($stakeholder->OfficeConatctCountryDetails))
+            @if (is_null($stakeholder->OfficeContactCountryDetails))
                 intlOfficeContact.setCountry('pk');
             @else
-                var OptionalselectdCountry = {!! $stakeholder->OfficeConatctCountryDetails != null ? $stakeholder->OfficeConatctCountryDetails : null !!}
+                var OptionalselectdCountry = {!! $stakeholder->OfficeContactCountryDetails != null ? $stakeholder->OfficeContactCountryDetails : null !!}
                 intlOfficeContact.setCountry(OptionalselectdCountry['iso2']);
             @endif
 
@@ -276,22 +276,22 @@
                 nationalMode: true
             }));
 
-            $('#CompanyOfficeConatctCountryDetails').val(JSON.stringify(intlCompanyMobileContact
+            $('#CompanyOfficeContactCountryDetails').val(JSON.stringify(intlCompanyMobileContact
                 .getSelectedCountryData()));
 
             companyOfficeContact.addEventListener("countrychange", function() {
-                $('#CompanyOfficeConatctCountryDetails').val(JSON.stringify(intlCompanyMobileContact
+                $('#CompanyOfficeContactCountryDetails').val(JSON.stringify(intlCompanyMobileContact
                     .getSelectedCountryData()))
             });
 
-            @if (is_null($stakeholder->OfficeConatctCountryDetails))
+            @if (is_null($stakeholder->OfficeContactCountryDetails))
                 intlOfficeContact.setCountry('pk');
             @else
-                var OptselectdCountry = {!! $stakeholder->OfficeConatctCountryDetails != null ? $stakeholder->OfficeConatctCountryDetails : null !!}
+                var OptselectdCountry = {!! $stakeholder->OfficeContactCountryDetails != null ? $stakeholder->OfficeContactCountryDetails : null !!}
                 intlCompanyMobileContact.setCountry(OptselectdCountry['iso2']);
             @endif
 
-            // company optional conatct no
+            // company optional contact no
             var companyoptionalContact = document.querySelector("#company_optional_contact");
             intlcompanyOptionalContact = window.intlTelInput(companyoptionalContact, ({
                 utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -735,21 +735,21 @@
             mailing_country.val('{{ $stakeholder->mailing_country_id }}');
             mailing_country.trigger('change');
 
-            @if (!is_null(old('mobileConatctCountryDetails')))
-                var mbCountry = {!! old('mobileConatctCountryDetails') !!}
-                $('#mobileConatctCountryDetails').val({!! old('mobileConatctCountryDetails') !!})
+            @if (!is_null(old('mobileContactCountryDetails')))
+                var mbCountry = {!! old('mobileContactCountryDetails') !!}
+                $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
                 intlMobileContact.setCountry(mbCountry['iso2']);
 
-                var officeCountry = {!! old('OfficeConatctCountryDetails') !!}
-                $('#OfficeConatctCountryDetails').val({!! old('OfficeConatctCountryDetails') !!})
+                var officeCountry = {!! old('OfficeContactCountryDetails') !!}
+                $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
                 intlOfficeContact.setCountry(officeCountry['iso2']);
 
-                var companyContact = {!! old('CompanyOfficeConatctCountryDetails') !!}
-                $('#CompanyOfficeConatctCountryDetails').val({!! old('CompanyOfficeConatctCountryDetails') !!})
+                var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
+                $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
                 intlCompanyMobileContact.setCountry(companyContact['iso2']);
 
-                var officeOptional = {!! old('OfficeConatctCountryDetails') !!}
-                $('#OfficeConatctCountryDetails').val({!! old('OfficeConatctCountryDetails') !!})
+                var officeOptional = {!! old('OfficeContactCountryDetails') !!}
+                $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
                 intlcompanyOptionalContact.setCountry(officeOptional['iso2']);
             @endif
 

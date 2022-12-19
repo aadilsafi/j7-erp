@@ -19,20 +19,23 @@ return new class extends Migration
             $table->string('full_name')->nullable();
             $table->string('father_name')->nullable();
             $table->string('cnic')->nullable();
+            $table->string('passport_no')->nullable();
             $table->date('date_of_birth')->nullable();
             $table->boolean('is_filer')->nullable(1);
             $table->string('ntn')->nullable();
+            $table->string('strn')->nullable();
             $table->boolean('is_local')->default(1);
             $table->string('designation')->nullable();
             $table->string('occupation')->nullable();
             $table->string('industry')->nullable();
-            $table->string('nationality')->default('pakistani');
+            $table->integer('nationality')->default(167);
+            $table->integer('origin')->default(167);
             $table->string('email')->nullable();
             $table->string('office_email')->nullable();
             $table->string('mobile_contact')->nullable();
             $table->json('mobileContactCountryDetails')->nullable();
             $table->string('office_contact')->nullable();
-            $table->json('OfficeConatctCountryDetails')->nullable();
+            $table->json('OfficeContactCountryDetails')->nullable();
             // residential_address
             $table->string('residential_address')->nullable();
             $table->string('residential_address_type')->nullable();
@@ -54,6 +57,7 @@ return new class extends Migration
             $table->string('comments')->nullable();
             $table->integer('parent_id')->default(0);
             $table->string('parent_company')->nullable();
+            $table->string('parent_company_id')->nullable();
             $table->string('website')->nullable();
             $table->string('relation')->nullable();
             $table->timestamps();

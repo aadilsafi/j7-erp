@@ -102,6 +102,7 @@
                     'leadSources' => $leadSources,
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'contactStakeholders' => $contactStakeholders,
+                    'emtykinStakeholders' => $emtykinStakeholders,
                 ]) }}
 
             </div>
@@ -201,12 +202,24 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
+            $('#nationality').val(167).change();
+
             @php
                 $data = old();
             @endphp
 
             @if (!is_null(old('stakeholder_type')))
-                $('#stakeholderType').val({{ old('stakeholder_type') }}).change();
+                $('#stakeholderType').trigger('change');
+            @endif
+
+            @if (!is_null(old('residential_country')))
+                $('#residential_country').val({{ old('residential_country') }});
+                $('#residential_country').trigger('change')
+            @endif
+
+            @if (!is_null(old('mailing_country')))
+                $('#mailing_country').val({{ old('mailing_country') }});
+                $('#mailing_country').trigger('change')
             @endif
         });
 
@@ -257,14 +270,14 @@
             nationalMode: true
         }));
 
-        $('#mobileConatctCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
+        $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
 
         mobileContact.addEventListener("countrychange", function() {
-            $('#mobileConatctCountryDetails').val(JSON.stringify(intlMobileContact
+            $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact
                 .getSelectedCountryData()))
         });
 
-        // Individual office conatct no
+        // Individual office contact no
         var officeContact = document.querySelector("#office_contact");
         intlOfficeContact = window.intlTelInput(officeContact, ({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -274,10 +287,10 @@
             formatOnDisplay: true,
             nationalMode: true
         }));
-        $('#OfficeConatctCountryDetails').val(JSON.stringify(intlOfficeContact.getSelectedCountryData()))
+        $('#OfficeContactCountryDetails').val(JSON.stringify(intlOfficeContact.getSelectedCountryData()))
 
         officeContact.addEventListener("countrychange", function() {
-            $('#OfficeConatctCountryDetails').val(JSON.stringify(intlOfficeContact
+            $('#OfficeContactCountryDetails').val(JSON.stringify(intlOfficeContact
                 .getSelectedCountryData()))
         });
 
@@ -292,15 +305,15 @@
             nationalMode: true
         }));
 
-        $('#CompanyOfficeConatctCountryDetails').val(JSON.stringify(intlCompanyMobileContact
+        $('#CompanyOfficeContactCountryDetails').val(JSON.stringify(intlCompanyMobileContact
             .getSelectedCountryData()));
 
         companyOfficeContact.addEventListener("countrychange", function() {
-            $('#CompanyOfficeConatctCountryDetails').val(JSON.stringify(intlCompanyMobileContact
+            $('#CompanyOfficeContactCountryDetails').val(JSON.stringify(intlCompanyMobileContact
                 .getSelectedCountryData()))
         });
 
-        // company optional conatct no
+        // company optional contact no
         var companyoptionalContact = document.querySelector("#company_optional_contact");
         intlcompanyOptionalContact = window.intlTelInput(companyoptionalContact, ({
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
@@ -318,22 +331,27 @@
                 .getSelectedCountryData()))
         });
 
-        @if (!is_null(old('mobileConatctCountryDetails')))
-            var mbCountry = {!! old('mobileConatctCountryDetails') !!}
-            $('#mobileConatctCountryDetails').val({!! old('mobileConatctCountryDetails') !!})
+
+        @if (!is_null(old('mobileContactCountryDetails')))
+            var mbCountry = {!! old('mobileContactCountryDetails') !!}
+            $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
             intlMobileContact.setCountry(mbCountry['iso2']);
-
-            var officeCountry = {!! old('OfficeConatctCountryDetails') !!}
-            $('#OfficeConatctCountryDetails').val({!! old('OfficeConatctCountryDetails') !!})
-            intlOfficeContact.setCountry(officeCountry['iso2']);
-
-            var companyContact = {!! old('CompanyOfficeConatctCountryDetails') !!}
-            $('#CompanyOfficeConatctCountryDetails').val({!! old('CompanyOfficeConatctCountryDetails') !!})
-            intlCompanyMobileContact.setCountry(companyContact['iso2']);
-
-            var officeOptional = {!! old('OfficeConatctCountryDetails') !!}
-            $('#OfficeConatctCountryDetails').val({!! old('OfficeConatctCountryDetails') !!})
-            intlcompanyOptionalContact.setCountry(officeOptional['iso2']);
+        @endif
+        @if (!is_null(old('OfficeContactCountryDetails')))
+            // var officeCountry = {!! old('OfficeContactCountryDetails') !!}
+            // $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
+            // intlOfficeContact.setCountry(officeCountry['iso2']);
+            intlOfficeContact.setCountry('pk');
+        @endif
+        @if (!is_null(old('CompanyOfficeContactCountryDetails')))
+            // var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
+            // $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
+            intlCompanyMobileContact.setCountry('pk');
+        @endif
+        @if (!is_null(old('companyMobileContactCountryDetails')))
+            // var officeOptional = {!! old('companyMobileContactCountryDetails') !!}
+            // $('#companyMobileContactCountryDetails').val({!! old('companyMobileContactCountryDetails') !!})
+            intlcompanyOptionalContact.setCountry('pk');
         @endif
 
         var residential_country = $("#residential_country");
@@ -374,9 +392,9 @@
                             });
                             hideBlockUI('#stakeholderForm');
 
-                            @if (isset($data['residential_state']))
-                                residential_state.val("{{ $data['residential_state'] }}");
-                                residential_state.trigger('change');
+                            @if (!is_null(old('residential_state')))
+                                $('#residential_state').val({{ old('residential_state') }});
+                                $('#residential_state').trigger('change')
                             @endif
                         } else {
                             hideBlockUI('#stakeholderForm');
@@ -429,9 +447,9 @@
                                     .id + '">' + value.name + '</option>');
                             });
                             hideBlockUI('#stakeholderForm');
-                            @if (isset($data['residential_city']))
-                                $("#residential_city").val(
-                                    "{{ $data['residential_city'] }}");
+                            @if (!is_null(old('residential_city')))
+                                $('#residential_city').val({{ old('residential_city') }});
+                                $('#residential_city').trigger('change')
                             @endif
                         } else {
                             hideBlockUI('#stakeholderForm');
@@ -496,13 +514,13 @@
                                     .id + '">' + value.name + '</option>');
                             });
 
+                            mailing_state.val(cp_state);
+                            mailing_state.trigger('change');
+
                             @if (isset($data['mailing_state']))
                                 mailing_state.val("{{ $data['mailing_state'] }}");
                                 mailing_state.trigger('change');
                             @endif
-
-                            mailing_state.val(cp_state);
-                            mailing_state.trigger('change');
 
                             hideBlockUI('#stakeholderForm');
 
@@ -556,13 +574,13 @@
                                     value
                                     .id + '">' + value.name + '</option>');
                             });
+                            mailing_city.val(cp_city);
+                            mailing_city.trigger('change');
+
                             @if (isset($data['mailing_city']))
                                 $("#mailing_city").val(
                                     "{{ $data['mailing_city'] }}");
                             @endif
-
-                            mailing_city.val(cp_city);
-                            mailing_city.trigger('change');
 
                             hideBlockUI('#stakeholderForm');
                         } else {
@@ -669,8 +687,6 @@
             if (element.name == 'company_office_contact') {
                 return intlCompanyMobileContact.isValidNumber();
             }
-
-
         }, "In Valid number");
 
         $.validator.addMethod("OPTContactNoError", function(value, element) {
@@ -728,6 +744,13 @@
             }
         });
 
+        $('#is_local').on('change', function() {
+            if($(this).is(':checked')){
+                $('#nationality').val(167).change();
+            }else{
+                $('#nationality').val(0).change();
+            }
+        });
 
         @if (!isset($data['contact-persons']))
             $('#delete-contact-person').trigger('click');

@@ -74,6 +74,9 @@ class StakeholderController extends Controller
             $emtyNextOfKin[0]['kin_id'] = 0;
             $emtyNextOfKin[0]['relation'] = '';
 
+            $emtykinStakeholders[0]['id'] = 0;
+            $emtykinStakeholders[0]['stakeholder_id'] = '';
+            $emtykinStakeholders[0]['relation'] = '';
             $data = [
                 'site_id' => decryptParams($site_id),
                 'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
@@ -84,6 +87,7 @@ class StakeholderController extends Controller
                 'city' => [],
                 'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,
+                'emtykinStakeholders' => $emtykinStakeholders,
                 'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),
                 'leadSources' => LeadSource::all(),
             ];

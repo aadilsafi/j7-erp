@@ -77,14 +77,13 @@ class RebateIncentiveDataTable extends DataTable
                 </a>';
                 }
                 return $status;
-                
             })
             // ->editColumn('actions', function ($rebateIncentive) {
             //     return view('app.sites.file-managements.files.rebate-incentive.actions', ['site_id' => $this->site_id, 'id' => $rebateIncentive->id]);
             // })
-            ->editColumn('check', function ($rebateIncentive) {
-                return $rebateIncentive;
-            })
+            // ->editColumn('check', function ($rebateIncentive) {
+            //     return $rebateIncentive;
+            // })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }
@@ -102,7 +101,7 @@ class RebateIncentiveDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.create');
-        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.receipts.destroy-selected');
+        $selectedDeletePermission =  Auth::user()->can('sites.file-managements.rebate-incentive.destroy-selected');
         // $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         return $this->builder()
@@ -143,33 +142,29 @@ class RebateIncentiveDataTable extends DataTable
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
 
-                Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
+                // Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
             )
             ->rowGroupDataSrc('dealer_id')
             ->columnDefs([
                 [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
+                    // 'targets' => 0,
+                    // // 'className' => 'text-center text-primary',
+                    // 'width' => '10%',
+                    // 'orderable' => false,
+                    // 'searchable' => false,
+                    // 'responsivePriority' => 3,
+                    // 'render' => "function (data, type, full, setting) {
+                    //     var role = JSON.parse(data);
+                    //     return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                    // }"
+                    // 'checkboxes' => [
+                    //     'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    // ]
                 ],
-            ])
-            ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
             ]);
     }
 
@@ -184,7 +179,8 @@ class RebateIncentiveDataTable extends DataTable
         // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.show');
         return [
 
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            // Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::computed('unit_id')->title('Unit Number')->addClass('text-nowrap text-center'),
             Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
             // Column::computed('unit_type')->title('Unit Type')->addClass('text-nowrap text-center'),

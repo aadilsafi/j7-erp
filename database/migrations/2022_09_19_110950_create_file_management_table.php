@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->string('comments')->nullable();
             $table->dateTime('created_date')->nullable();
+            $table->string('serial_no')->nullable()->default('UF-');
             $table->timestamps();
             $table->softDeletes();
         });

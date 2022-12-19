@@ -35,6 +35,8 @@ class AccountLedger extends Model
         'status',
         'created_date',
         'transfer_receipt_id',
+        'manual_entry',
+        'journal_voucher_id',
     ];
 
     protected $casts = [
@@ -49,6 +51,7 @@ class AccountLedger extends Model
         'debit' => 'double',
         'balance' => 'double',
         'status' => 'boolean',
+        'manual_entry' => 'boolean',
     ];
 
     public function getActivitylogOptions(): LogOptions

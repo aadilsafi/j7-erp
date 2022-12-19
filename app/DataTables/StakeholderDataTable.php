@@ -42,11 +42,15 @@ class StakeholderDataTable extends DataTable
             ->editColumn('cnic', function ($stakeholder) {
                 return cnicFormat($stakeholder->cnic);
             })
+            ->editColumn('contact', function ($stakeholder) {
+                if ($stakeholder->stakeholder_as == 'i') {
+                    return $stakeholder->mobile_contact;
+                } else {
+                    return $stakeholder->office_contact;
+                }
+            })
             ->editColumn('nationality', function ($stakeholder) {
                 return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
-            })
-            ->editColumn('country_id', function ($stakeholder) {
-                return  $stakeholder->country != null ? $stakeholder->country->name : '-';
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
@@ -68,7 +72,13 @@ class StakeholderDataTable extends DataTable
                 }
             })
             ->setRowId('id')
-            ->rawColumns(array_merge($columns, ['action', 'check']));
+            ->rawColumns(array_merge($columns, ['action', 'check']))
+            ->editColumn('residential_country_id', function ($stakeholder) {
+                return  $stakeholder->residentialCountry != null ? $stakeholder->residentialCountry->name : '-';
+            })
+            ->editColumn('residential_city_id', function ($stakeholder) {
+                return  $stakeholder->residentialCity != null ? $stakeholder->residentialCity->name : '-';
+            });
 
         if (count($this->customFields) > 0) {
             foreach ($this->customFields as $customfields) {
@@ -93,7 +103,7 @@ class StakeholderDataTable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        return $this->stakeholderInterface->model()->newQuery()->where('site_id', decryptParams($this->site_id))->orderBy('id', 'desc');
+        return $this->stakeholderInterface->model()->newQuery()->with(['residentialCity', 'residentialCountry'])->where('site_id', decryptParams($this->site_id));
     }
 
     public function html(): HtmlBuilder
@@ -198,8 +208,9 @@ class StakeholderDataTable extends DataTable
             Column::make('full_name')->title('Name'),
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC / REGISTRATION #'),
-            Column::make('contact')->title('Contact'),
-            Column::make('country_id')->title('Country'),
+            Column::computed('contact')->title('Contact'),
+            Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true),
+            Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true),
             Column::make('nationality')->title('Nationality'),
             Column::computed('satkeholderAs')->visible(false),
 

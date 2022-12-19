@@ -197,7 +197,7 @@
                 total_area += parseFloat(this) || 0;
             });
 
-            $('#total_unit_area').val(total_area);
+            $('#total_unit_area').val(total_area.toLocaleString());
 
             var inputValue = $('#dealer_incentive').val();
             var total_incentive = parseFloat(inputValue) * parseFloat(total_area);
@@ -213,7 +213,7 @@
             var total_unit_area = $('#total_unit_area').val();
             var total_incentive = parseFloat(inputValue) * parseFloat(total_unit_area);
 
-            $('#total_dealer_incentive').val(total_incentive);
+            $('#total_dealer_incentive').val(total_incentive.toLocaleString());
             hideBlockUI('#loader');
         }
 

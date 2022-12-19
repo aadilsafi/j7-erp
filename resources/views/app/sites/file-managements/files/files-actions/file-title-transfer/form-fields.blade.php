@@ -322,7 +322,7 @@
                         <label class="form-label fs-5" for="stackholder_contact">Contact <span
                                 class="text-danger">*</span></label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                            class="form-control form-control-lg" id="stackholder_contact" name="stackholder[contact]"
+                            class="form-control form-control-lg ContactNoError" id="stackholder_contact" name="stackholder[contact]"
                             placeholder="Contact"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}" />
                     </div>
@@ -331,7 +331,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-12">
                         <label class="form-label fs-5" for="stackholder_optional_contact">Optional Contact</label>
                         <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                            class="form-control form-control-lg" id="stackholder_optional_contact"
+                            class="form-control form-control-lg OPTContactNoError" id="stackholder_optional_contact"
                             name="stackholder[optional_contact]" placeholder="Optional Contact"
                             value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_contact : '' }}" />
 
@@ -346,7 +346,7 @@
                         <select class="select2 country_id" id="country_id" name="stackholder[country_id]"
                             @if (isset($titleTransferPerson)) disabled @endif>
                             @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->country->name }}</option>
+                                <option selected>{{ $titleTransferPerson->country->name ?? '' }}</option>
                             @else
                                 <option value="0" selected>Select Country</option>
 
@@ -366,7 +366,7 @@
                         <select class="select2 state_id" id="state_id" name="stackholder[state_id]"
                             @if (isset($titleTransferPerson)) disabled @endif>
                             @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->state->name }}</option>
+                                <option selected>{{ $titleTransferPerson->state->name ?? '' }}</option>
                             @else
                                 <option value="0" selected>Select State</option>
                             @endif
@@ -383,7 +383,7 @@
                             @if (isset($titleTransferPerson)) disabled @endif>
 
                             @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->city->name }}</option>
+                                <option selected>{{ $titleTransferPerson->city->name ?? '' }}</option>
                             @else
                                 <option value="0" selected>Select City</option>
                             @endif
@@ -487,27 +487,27 @@
                 <div class="row mb-1">
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
+                        <label class="form-label fs-5">NTN</label>
                         <input type="number" readonly value="{{ $customer->ntn }}"
-                            class="form-control form-control-lg" id="" placeholder="NTN" />
+                            class="form-control form-control-lg" placeholder="NTN" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
+                        <label class="form-label fs-5">CNIC</label>
                         <input type="text" readonly value="{{ cnicFormat($customer->cnic) }}"
-                            class="form-control form-control-lg" id="" placeholder="CNIC" />
+                            class="form-control form-control-lg" placeholder="CNIC" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input type="number" readonly value="{{ $customer->contact }}"
+                        <label class="form-label fs-5">Contact</label>
+                        <input type="text" readonly value="{{ $customer->contact }}"
                             class="form-control form-control-lg" id="" placeholder="Contact" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Optional Contact</label>
-                        <input type="number" readonly value="{{ $customer->optional_contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Optional Contact" />
+                        <label class="form-label fs-5">Optional Contact</label>
+                        <input type="text" readonly value="{{ $customer->optional_contact }}"
+                            class="form-control form-control-lg" placeholder="Optional Contact" />
                     </div>
                 </div>
 

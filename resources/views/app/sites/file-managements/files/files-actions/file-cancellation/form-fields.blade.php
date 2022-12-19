@@ -14,8 +14,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Cancellation Charges <span
                                 class="text-danger">*</span></label>
-                        <input type="text" min="1" onchange="calculateRefundedAmount()" required
-                            name="cancellation_charges" class="form-control form-control-lg"
+                        <input type="text" onchange="calculateRefundedAmount()" required
+                            name="cancellation_charges" class="form-control amountFormat form-control-lg"
                             {{ isset($cancellation_file) ? 'disabled' : '' }} id="cancellation_charges"
                             placeholder=" Cancellation Charges"
                             value="{{ isset($cancellation_file) ? number_format($cancellation_file->cancellation_charges) : '' }}" />

@@ -3,7 +3,7 @@
 namespace App\Services\FinancialTransactions;
 
 use App\Exceptions\GeneralException;
-use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, Stakeholder, StakeholderType, TransferReceipt};
+use App\Models\{AccountAction, AccountHead, AccountingStartingCode, AccountLedger, Bank, DealerIncentiveModel, FileBuyBack, FileCancellation, FileManagement, FileRefund, FileResale, FileTitleTransfer, PaymentVocuher, RebateIncentiveModel, Receipt, SalesPlan, SalesPlanInstallments, Stakeholder, StakeholderType, TransferReceipt};
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Utils\Enums\NatureOfAccountsEnum;
 use Exception;
@@ -28,8 +28,18 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 'additionalCosts'
             ])->find($sales_plan_id);
 
+            $expense = SalesPlanInstallments::where(['sales_plan_id'=>$salesPlan->id , 'type'=>'additional_expense'])->get();
 
+            if(isset($expense) && count($expense) > 0){
+                $expense_amount = collect($expense)->sum('amount');
+                $sales_plan_total = (float)$expense_amount + (float)$salesPlan->total_price;
+            }
+            else{
+                $sales_plan_total = $salesPlan->total_price;
+            }
             $origin_number = AccountLedger::get();
+
+
 
             if (isset($origin_number) && count($origin_number) > 0) {
 
@@ -45,7 +55,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $accountCustomerHeadCode = $this->findOrCreateCustomerAccount($salesPlan->unit->id, $accountUnitHeadCode, $salesPlan->stakeholder->stakeholder_types[0]);
 
-            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $origin_number, $accountCustomerHeadCode, 1, $salesPlan->id, 'debit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id, $origin_number, $accountCustomerHeadCode, 1, $salesPlan->id, 'debit', $sales_plan_total, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
 
             $revenueSales = (new AccountingStartingCode())->where('site_id', $salesPlan->stakeholder->site->id)
                 ->where('model', 'App\Models\RevenueSales')->where('level', 5)->first();
@@ -56,7 +66,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $revenueSalesAccount = $revenueSales->level_code . $revenueSales->starting_code;
 
-            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id,  $origin_number, $revenueSalesAccount, 1, $salesPlan->id, 'credit', $salesPlan->total_price, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
+            $this->makeFinancialTransaction($salesPlan->stakeholder->site->id,  $origin_number, $revenueSalesAccount, 1, $salesPlan->id, 'credit', $sales_plan_total, NatureOfAccountsEnum::SALES_PLAN_APPROVAL);
 
             DB::commit();
             return 'transaction_completed';
@@ -73,6 +83,16 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $sales_plan = SalesPlan::find($sales_plan_id);
 
+            $expense = SalesPlanInstallments::where(['sales_plan_id'=>$sales_plan->id , 'type'=>'additional_expense'])->get();
+
+            if(isset($expense) && count($expense) > 0){
+                $expense_amount = collect($expense)->sum('amount');
+                $sales_plan_total = (float)$expense_amount + (float)$sales_plan->total_price;
+            }
+            else{
+                $sales_plan_total = $sales_plan->total_price;
+            }
+
             $origin_number = AccountLedger::where('account_action_id', 8)->get();
 
             $origin_number = AccountLedger::get();
@@ -81,13 +101,14 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
                 $origin_number = collect($origin_number)->last();
                 $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
             } else {
                 $origin_number = '001';
             }
 
             // 1 disapproval sales plan entry
             $disapprovalAccount = AccountHead::where('name', 'Sales Plan Disapproval Account')->first()->code;
-            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $origin_number, $disapprovalAccount, 8, $sales_plan->id, 'debit', $sales_plan->total_price, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL);
+            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $origin_number, $disapprovalAccount, 8, $sales_plan->id, 'debit', $sales_plan_total, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL);
 
             // 2
             $customerAccount = collect($sales_plan->stakeholder->stakeholder_types)->where('type', 'C')->first()->receivable_account;
@@ -97,7 +118,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 throw new GeneralException('Customer Account is not defined. Please define customer account first.');
             }
 
-            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $origin_number, $customerAccount['account_code'], 8, $sales_plan->id, 'credit', $sales_plan->total_price, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL, null);
+            $this->makeFinancialTransaction($sales_plan->stakeholder->site->id, $origin_number, $customerAccount['account_code'], 8, $sales_plan->id, 'credit', $sales_plan_total, NatureOfAccountsEnum::SALES_PLAN_DISAPPROVAL, null);
 
 
             DB::commit();
@@ -254,7 +275,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
             'status' => true,
         ];
         $data[$type] = $amount;
-        $data['origin_name'] = $data['nature_of_account']->value . '-' . $origin_number;
+
+        if ($account_action == 1 || $account_action == 8) {
+            $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $sales_plan);
+        } else {
+            $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $action_id);
+        }
 
         if ($account_action == 1) {
             $sales_plan = SalesPlan::find($sales_plan);
@@ -319,10 +345,16 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['created_date'] = now();
         }
 
-        if ($account_action == 30 || $account_action == 32 || $account_action == 33 || $account_action == 34 || $account_action == 31 || $account_action == 27) {
+        if ($account_action == 30 || $account_action == 32 || $account_action == 33 || $account_action == 34 || $account_action == 31 || $account_action == 35) {
             $receipt = TransferReceipt::find($action_id);
             $data['transfer_receipt_id'] = $action_id;
             $data['created_date'] = $receipt->created_date;
+        }
+
+        if ($account_action == 26) {
+            $dealer = DealerIncentiveModel::find($action_id);
+            $data['dealer_incentive_id'] = $action_id;
+            $data['created_date'] = now();
         }
 
         return (new AccountLedger())->create($data);

@@ -142,7 +142,7 @@
                             </a>
                         @endcan
 
-                        <a href="{{ route('sites.receipts.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.file-transfer-receipts.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -403,7 +403,8 @@
                             $('#vendor_ap_amount_paid').attr('readonly', true);
                         }
 
-                        $('#total_payable_amount').val(response.transferFile.amount_to_be_paid)
+                        let  total_payable_amount = parseFloat(response.transferFile.amount_to_be_paid)
+                        $('#total_payable_amount').val(total_payable_amount.toLocaleString())
                         $('#fileOwner').show()
                         $('#modeOfPaymentDiv').show();
 

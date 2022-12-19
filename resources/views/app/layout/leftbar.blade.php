@@ -555,11 +555,11 @@
             @endcan
 
             {{-- Sales Plan  --}}
-            @can('sites.floors.units.sales-plans.create')
+            @can('sites.sales_plan.show')
                 <li
-                    class="nav-item {{ request()->routeIs('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) }}">
+                        href="{{ route('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) }}">
                         <i class="bi bi-clipboard-data"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Sales Plan</span>
                     </a>
@@ -784,67 +784,14 @@
             @endcanany
 
             {{-- Accounts Menu --}}
-            @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',
-                'sites.accounts.recovery.calender', 'sites.accounts.recovery.inventory-aging',
-                'sites.accounts.charts-of-accounts.index', 'sites.accounts.journal-entry.index',
-                'sites.accounts.trial-balance.index'])
+            @canany(['sites.accounts.recovery.inventory-aging', 'sites.accounts.charts-of-accounts.index',
+                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
                         <span class="menu-title text-truncate" data-i18n="Account">Accounts</span>
                     </a>
                     <ul>
-                        @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',
-                            'sites.accounts.recovery.calender', 'sites.accounts.recovery.inventory-aging'])
-                            <li>
-                                <a class="d-flex align-items-center" href="javascript:void(0);">
-                                    <i data-feather='dollar-sign'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Recovery">Recovery</span>
-                                </a>
-                                <ul>
-                                    @can('sites.accounts.recovery.dashboard')
-                                        <li
-                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                            <a class="d-flex align-items-center"
-                                                href="{{ route('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='layout'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('sites.accounts.recovery.salesPlan')
-                                        <li
-                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                            <a class="d-flex align-items-center"
-                                                href="{{ route('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='layout'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Sales Plans">Sales Plans</span>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('sites.accounts.recovery.calender')
-                                        <li
-                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                            <a class="d-flex align-items-center"
-                                                href="{{ route('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='calendar'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Calender">Calender</span>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('sites.accounts.recovery.inventory-aging')
-                                        <li
-                                            class="nav-item {{ request()->routeIs('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                                            <a class="d-flex align-items-center"
-                                                href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
-                                                <i data-feather='calendar'></i>
-                                                <span class="menu-title text-truncate" data-i18n="Calender"> Aging Report</span>
-                                            </a>
-                                        </li>
-                                    @endcan
-                                </ul>
-                            </li>
-                        @endcanany
                         @can('sites.accounts.charts-of-accounts.index')
                             <li
                                 class="nav-item {{ request()->routeIs('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
@@ -872,6 +819,58 @@
                                     href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='dollar-sign'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
+                                </a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcanany
+            {{-- Account Recovery  --}}
+            @canany(['sites.accounts.recovery.dashboard', 'sites.accounts.recovery.salesPlan',
+                'sites.accounts.recovery.calender', 'sites.accounts.recovery.inventory-aging'])
+                <li>
+                    <a class="d-flex align-items-center" href="javascript:void(0);">
+                        <i data-feather='dollar-sign'></i>
+                        <span class="menu-title text-truncate" data-i18n="Recovery">Recovery</span>
+                    </a>
+                    <ul>
+                        @can('sites.accounts.recovery.dashboard')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.recovery.dashboard', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='layout'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Dashboard">Dashboard</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.accounts.recovery.salesPlan')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.recovery.salesPlan', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='layout'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Sales Plans">Sales Plans</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.accounts.recovery.calender')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.recovery.calender', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='calendar'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Calender">Calender</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.accounts.recovery.inventory-aging')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.accounts.recovery.inventory-aging', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='calendar'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Calender"> Aging Report</span>
                                 </a>
                             </li>
                         @endcan

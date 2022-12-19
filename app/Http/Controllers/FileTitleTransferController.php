@@ -16,6 +16,10 @@ use App\DataTables\FileTitleTransferDataTable;
 use App\Http\Requests\FileTitleTransfer\storeRequest;
 use App\Models\Bank;
 use App\Models\Country;
+use App\Models\FileBuyBack;
+use App\Models\FileCancellation;
+use App\Models\FileRefund;
+use App\Models\FileResale;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
 use App\Models\ModelTemplate;
@@ -229,6 +233,27 @@ class FileTitleTransferController extends Controller
             $salesPlan->stakeholder_id = $stakeholder->id;
             $salesPlan->kin_data = $file_title_transfer->kin_data;
             $salesPlan->save();
+
+
+            $file_buy_back = FileBuyBack::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
+            if(isset($file_buy_back)){
+                $file_buy_back->delete();
+            }
+
+            $file_refund = FileRefund::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
+            if(isset($file_refund)){
+                $file_refund->delete();
+            }
+
+            $FileCancellation = FileCancellation::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
+            if(isset($FileCancellation)){
+                $FileCancellation->delete();
+            }
+
+            $FileResale = FileResale::where(['file_id'=>$file->id , 'stakeholder_id' => $file_title_transfer->stakeholder_id , 'status' => 0])->first();
+            if(isset($FileResale)){
+                $FileResale->delete();
+            }
 
             // $receipt = Receipt::where('unit_id', decryptParams($unit_id))->where('status', '!=', 3)->get();
             // foreach ($receipt as $receipt) {

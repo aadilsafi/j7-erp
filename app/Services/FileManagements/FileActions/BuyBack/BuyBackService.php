@@ -42,20 +42,29 @@ class BuyBackService implements BuyBackInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
             $file = FileManagement::find($inputs['file_id']);
+            $serail_no  = $this->model()::all();
+            if (isset($serail_no) && count($serail_no) > 0) {
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            } else {
+                $serail_no = '001';
+            }
             $data = [
                 'site_id' => decryptParams($site_id),
                 'file_id' => $inputs['file_id'],
                 'unit_id' => $inputs['unit_id'],
-                'sales_plan_id'=>$file->sales_plan_id,
+                'sales_plan_id' => $file->sales_plan_id,
                 'stakeholder_id' => $inputs['customer_id'],
                 'unit_data' => json_encode(Unit::find($inputs['unit_id'])),
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
-                'amount_to_be_refunded' => str_replace( ',', '', $inputs['amount_to_be_refunded']) ,
+                'amount_to_be_refunded' => str_replace(',', '', $inputs['amount_to_be_refunded']),
                 'payment_due_date' => $inputs['payment_due_date'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
-                'amount_profit' =>$inputs['amount_profit'],
+                'amount_profit' => $inputs['amount_profit'],
                 'comments' => $inputs['comments'],
+                'serail_no' => 'FBB-'.$serail_no,
             ];
 
             $unit_data = Unit::find($inputs['unit_id']);

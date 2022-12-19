@@ -33,6 +33,7 @@ return new class extends Migration
             $table->dateTime('approved_date')->nullable();
             $table->dateTime('created_date')->nullable();
             $table->boolean('cancel')->default(0);
+            $table->string('serial_no')->nullable()->default('SI-');
             $table->timestamps();
             $table->softDeletes();
         });

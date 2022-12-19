@@ -15,7 +15,7 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
                             id="paid_amount" placeholder=" Paid Amount"
-                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format((float)$total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount) : '' }}" />
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -23,7 +23,7 @@
                         <input type="text" readonly required name="amount_to_be_refunded"
                             class="form-control form-control-lg" {{ isset($refund_file) ? 'disabled' : '' }}
                             id="amount_to_be_refunded" placeholder="Amount to be refunded"
-                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format((float)$total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount) : '' }}" />
                     </div>
 
                 </div>

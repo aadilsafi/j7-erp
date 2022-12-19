@@ -144,21 +144,21 @@
                                         <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="stackholder_full_name" name="stackholder[full_name]"
+                                            id="stackholder_full_name" name="dealer[full_name]"
                                             placeholder="Full Name" value="{{ old('stackholder.full_name') }}" />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="stackholder_father_name">Father / Husband
                                             Name <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="stackholder_father_name" name="stackholder[father_name]"
+                                            id="stackholder_father_name" name="dealer[father_name]"
                                             placeholder="Father / Husband Name"
                                             value="{{ old('stackholder.father_name') }}" />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="stackholder_occupation" name="stackholder[occupation]"
+                                            id="stackholder_occupation" name="dealer[occupation]"
                                             placeholder="Occupation" value="{{ old('stackholder.occupation') }}" />
                                     </div>
                                 </div>
@@ -167,13 +167,13 @@
                                         <label class="form-label fs-5"
                                             for="stackholder_designation">Designation</label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="stackholder_designation" name="stackholder[designation]"
+                                            id="stackholder_designation" name="dealer[designation]"
                                             placeholder="Designation" value="{{ old('stackholder.designation') }}" />
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
                                         <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
                                         <input type="number" class="form-control form-control-lg"
-                                            id="stackholder_ntn" name="stackholder[ntn]" placeholder="NTN"
+                                            id="stackholder_ntn" name="dealer[ntn]" placeholder="NTN"
                                             value="{{ old('stackholder.ntn') }}" />
                                     </div>
 
@@ -181,7 +181,7 @@
                                         <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" class="form-control form-control-lg"
-                                            id="stackholder_cnic" name="stackholder[cnic]" placeholder="CNIC"
+                                            id="stackholder_cnic" name="dealer[cnic]" placeholder="CNIC"
                                             value="{{ old('stackholder.cnic') }}" />
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@
                                             class="text-danger">*</span></label>
                                     <input type="email"
                                         class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                        id="stackholder_email" name="stackholder[email]" placeholder="Email"
+                                        id="stackholder_email" name="dealer[email]" placeholder="Email"
                                         autocomplete="false" value="{{ old('stackholder.email') }}" />
                                     @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -245,7 +245,7 @@
                                     <label class="form-label fs-5" for="optional_email">Optional Email</label>
                                     <input type="email"
                                         class="form-control form-control-lg @error('email') is-invalid @enderror"
-                                        id="stackholder_optional_email" name="stackholder[optional_email]"
+                                        id="stackholder_optional_email" name="dealer[optional_email]"
                                         placeholder="Optional Email" autocomplete="false"
                                         value="{{ old('stackholder.optional_email') }}" />
                                     @error('email')
@@ -257,22 +257,22 @@
                                     <label class="form-label fs-5" for="stackholder_contact">Contact <span
                                             class="text-danger">*</span></label>
                                     <input type="tel" class="form-control form-control-lg ContactNoError"
-                                        id="stackholder_contact" name="stackholder[contact]" placeholder=""
+                                        id="stackholder_contact" name="dealer[contact]" placeholder=""
                                         value="{{ old('stackholder.contact') }}" />
                                 </div>
-                                <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+                                <input type="hidden" name="dealer[countryDetails]" id="countryDetails">
 
                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                     <label class="form-label fs-5" for="contact">Optional Contact # </label>
                                     <input type="tel"
                                         class="form-control form-control-lg OPTContactNoError @error('contact') is-invalid @enderror"
-                                        id="optional_contact" name="stackholder[optional_contact]" placeholder=""
+                                        id="optional_contact" name="dealer[optional_contact]" placeholder=""
                                         value="{{ old('stackholder.optional_contact') }}" />
                                     @error('optional_contact')
                                         <div class="invalid-feedback ">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <input type="hidden" name="stackholder[OptionalCountryDetails]"
+                                <input type="hidden" name="dealer[OptionalCountryDetails]"
                                     id="OptionalCountryDetails">
                             </div>
                             <div class="row mb-1">
@@ -281,7 +281,7 @@
                                     <label class="form-label" style="font-size: 15px" for="parent_id">Select
                                         Country</label>
                                     <select class="select2 country_id" id="country_id"
-                                        name="stackholder[country_id]">
+                                        name="dealer[country_id]">
                                         <option value="0" selected>Select Country</option>
                                         @foreach ($country as $data)
                                             <option value="{{ $data->id }}">{{ $data->name }}</option>
@@ -295,7 +295,7 @@
                                 <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                     <label class="form-label" style="font-size: 15px" for="city_id">Select
                                         State</label>
-                                    <select class="select2 state_id" id="state_id" name="stackholder[state_id]">
+                                    <select class="select2 state_id" id="state_id" name="dealer[state_id]">
                                         <option value="0" selected>Select State</option>
 
                                     </select>
@@ -307,7 +307,7 @@
                                 <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                     <label class="form-label" style="font-size: 15px" for="city_id">Select
                                         City</label>
-                                    <select class="select2 city_id" id="city_id" name="stackholder[city_id]">
+                                    <select class="select2 city_id" id="city_id" name="dealer[city_id]">
                                         <option value="0" selected>Select City</option>
 
                                     </select>
@@ -330,7 +330,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                     <label class="form-label fs-5" for="stackholder_address">Address <span
                                             class="text-danger">*</span></label>
-                                    <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
+                                    <textarea class="form-control form-control-lg" id="stackholder_address" name="dealer[address]"
                                         placeholder="Address" rows="4"></textarea>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
@@ -339,14 +339,14 @@
                                             Address
                                             <input type="checkbox" id="cpyAddress" />
                                             )</span></label>
-                                    <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
+                                    <textarea class="form-control form-control-lg" id="mailing_address" name="dealer[mailing_address]"
                                         placeholder="Mailing Address" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="row mb-1">
                                 <div class="col-lg- col-md- col-sm-12 position-relative">
                                     <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                                    <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                                    <textarea class="form-control form-control-lg" id="stackholder_comments" name="dealer[comments]"
                                         placeholder="Comments" rows="4"></textarea>
                                 </div>
                             </div>

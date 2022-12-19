@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class FileResale extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity ,SoftDeletes;
 
 
     protected $fillable = [
@@ -34,7 +35,8 @@ class FileResale extends Model
         'premium_demand',
         'marketing_service_charges',
         'comments',
-        'created_date'
+        'created_date',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

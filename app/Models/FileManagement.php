@@ -28,6 +28,7 @@ class FileManagement extends Model implements HasMedia
         'comments',
         'file_action_id',
         'created_date',
+        'serial_no',
     ];
 
     public $rules = [
@@ -55,6 +56,11 @@ class FileManagement extends Model implements HasMedia
     public function unit()
     {
         return $this->belongsTo(Unit::class)->with('type', 'status');
+    }
+
+    public function salePlan()
+    {
+        return $this->belongsTo(SalesPlan::class, 'sales_plan_id');
     }
 
     public function stakeholder()

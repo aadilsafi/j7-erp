@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\FileCancellationAttachment;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FileCancellation extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity,SoftDeletes;
 
     protected $fillable = [
         'site_id',
@@ -28,6 +29,7 @@ class FileCancellation extends Model
         'amount_remarks',
         'status',
         'comments',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

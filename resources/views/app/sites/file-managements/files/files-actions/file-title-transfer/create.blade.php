@@ -591,6 +591,24 @@
             });
         }
 
+        $.validator.addMethod("ContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                return intl.isValidNumber();
+
+            }, "In Valid number");
+
+            $.validator.addMethod("OPTContactNoError", function(value, element) {
+                // alert(intl.isValidNumber());
+                // return intl.getValidationError() == 0;
+                // if(value != '' )
+                if (value.length > 0) {
+                    return intlOptional.isValidNumber();
+                } else {
+                    return true;
+                }
+            }, "In Valid number");
+
         function calculateTransferAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
             let transfer_rate = $('#transfer_rate').val();

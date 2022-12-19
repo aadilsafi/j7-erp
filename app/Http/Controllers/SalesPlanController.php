@@ -66,6 +66,15 @@ class SalesPlanController extends Controller
         return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
     }
 
+    public function inLeftbar(Request $request, SalesPlanDataTable $dataTable, $site_id)
+    {
+        $data = [
+            'site' => decryptParams($site_id),
+            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
+        ];
+        return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -82,7 +91,7 @@ class SalesPlanController extends Controller
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 // 'floor' => (new Floor())->find(decryptParams($floor_id)),
-                'unit' => (new Unit())->with('status', 'type')->where('status_id', '!=', 5)->get(),
+                'unit' => (new Unit())->with('status', 'type')->where('has_sub_units', false)->where('status_id',1)->orWhere('status_id',6)->get(),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
                     'stakeholder_types',
@@ -244,11 +253,16 @@ class SalesPlanController extends Controller
     public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
     {
 
-        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->update([
-            'status' => 2,
-            'approved_date' => $request->approve_date . date(' H:i:s'),
-        ]);
-
+        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', decryptParams($unit_id))->get();
+        foreach($salesPlan as $salesPlan){
+            $salePlan = SalesPlan::find($salesPlan->id);
+            if($salePlan->status == 1){
+                $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
+            }
+            $salePlan->status= 2;
+            $salePlan->approved_date = $request->approve_date . date(' H:i:s');
+            $salePlan->update();
+        }
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
             'approved_date' => $request->approve_date . date(' H:i:s'),

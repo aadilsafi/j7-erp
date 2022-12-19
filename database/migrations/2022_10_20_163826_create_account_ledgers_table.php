@@ -31,11 +31,14 @@ return new class extends Migration
             $table->foreignId('rebate_incentive_id')->nullable();
             $table->foreignId('dealer_incentive_id')->nullable();
             $table->foreignId('payment_voucher_id')->nullable();
+            $table->foreignId('transfer_receipt_id')->nullable();
+            $table->foreignId('journal_voucher_id')->nullable();
             $table->double('credit')->default(0);
             $table->double('debit')->default(0);
             $table->double('balance')->default(0);
             $table->string('nature_of_account');
             $table->boolean('status')->default(true);
+            $table->boolean('manual_entry')->default(false);
             $table->timestamp('created_date')->nullable();
             $table->foreign('account_head_code')->references('code')->on('account_heads')->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();

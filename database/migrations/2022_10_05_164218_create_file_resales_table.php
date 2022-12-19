@@ -33,6 +33,8 @@ return new class extends Migration
             // $table->string('rebate_amount')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->string('serial_no')->nullable()->default('FRS-');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

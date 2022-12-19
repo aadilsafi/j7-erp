@@ -108,7 +108,7 @@ class ReceiptController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
         }
     }
 

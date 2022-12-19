@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class FileRefund extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity ,SoftDeletes;
 
 
     protected $fillable = [
@@ -27,6 +28,7 @@ class FileRefund extends Model
         'amount_remarks',
         'status',
         'comments',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -112,6 +112,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(UserBatch::class);
     }
+
     public function salesPlans()
     {
         return $this->hasMany(SalesPlan::class);
@@ -125,10 +126,17 @@ class User extends Authenticatable implements HasMedia
     public function city(){
         return $this->belongsTo(City::class);
     }
+
     public function state(){
         return $this->belongsTo(State::class);
     }
+
     public function country(){
         return $this->belongsTo(Country::class);
+    }
+
+    public function journalVouchers()
+    {
+        return $this->hasMany(JournalVoucher::class);
     }
 }

@@ -20,7 +20,7 @@ class JournalVoucherEntry extends Model
     protected $fillable = [
         'site_id',
         'user_id',
-        'account_head_id',
+        'account_head_code',
         'journal_voucher_id',
         'serial_number',
         'account_number',
@@ -37,6 +37,17 @@ class JournalVoucherEntry extends Model
         'total_amount',
         'checked_by',
         'checked_date',
+        'total_debit',
+        'total_credit',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function accountHead()
+    {
+        return $this->belongsTo(AccountHead::class, 'account_head_code', 'code');
+    }
 }

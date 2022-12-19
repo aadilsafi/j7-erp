@@ -139,7 +139,7 @@
                             <label class="form-label" style="font-size: 15px" for="floor">
                                 Discounted Amount
                             </label>
-                            <input min="0" type="text"
+                            <input type="text"
                                 class="form-control amountFormat @error('discounted_amount') is-invalid @enderror"
                                 name="discounted_amount" id="discounted_amount" placeholder="Discounted Amount "
                                 value="{{ isset($discounted_amount) ? $discounted_amount : null }}" />

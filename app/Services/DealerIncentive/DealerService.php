@@ -37,17 +37,25 @@ class DealerService implements DealerInterface
 
             $uids = $inputs['unit_ids'];
             // $uids = array_column($ids,'uid');
-
+            $serail_no  = $this->model()::all();
+            if (isset($serail_no) && count($serail_no) > 0) {
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            } else {
+                $serail_no = '001';
+            }
             $dealerIncentive = [
                 'site_id' => decryptParams($site_id),
                 'dealer_id' => $inputs['dealer_id'],
                 'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),
-                'dealer_incentive' => $inputs['dealer_incentive'],
-                'total_unit_area' => $inputs['total_unit_area'],
+                'dealer_incentive' => str_replace(',', '', $inputs['dealer_incentive']),
+                'total_unit_area' => str_replace(',', '', $inputs['total_unit_area']),
                 'total_dealer_incentive' => $inputs['total_dealer_incentive'],
                 'unit_IDs' => json_encode($uids),
                 'status' => 0,
                 'comments' => $inputs['comments'],
+                'serial_no' => 'DI-'.$serail_no,
             ];
 
             $dealer_incentive = $this->model()->create($dealerIncentive);

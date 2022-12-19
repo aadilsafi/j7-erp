@@ -61,6 +61,15 @@ class paymentService implements paymentInterface
                 }
             }
 
+            $serail_no  = $this->model()::all();
+            if (isset($serail_no) && count($serail_no) > 0) {
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            } else {
+                $serail_no = '001';
+            }
+
             $payment_voucher_data = [
                 'site_id' => 1,
                 'user_id' => auth()->user()->id,
@@ -78,9 +87,9 @@ class paymentService implements paymentInterface
                 "total_payable_amount" => str_replace(',', '', $inputs['total_payable_amount']),
                 "expense_account" => $inputs['expense_account'],
                 "advance_given" =>  str_replace(',', '', $inputs['advance_given']),
-                "discount_recevied" => str_replace(',', '', $inputs['discount_recevied']) ,
-                "remaining_payable" => str_replace(',', '', $inputs['remaining_payable']) ,
-                "net_payable" => str_replace(',', '', $inputs['net_payable']) ,
+                "discount_recevied" => str_replace(',', '', $inputs['discount_recevied']),
+                "remaining_payable" => str_replace(',', '', $inputs['remaining_payable']),
+                "net_payable" => str_replace(',', '', $inputs['net_payable']),
                 "payment_mode" => $inputs['mode_of_payment'],
                 "other_value" => $inputs['other_value'],
                 "online_instrument_no" => $inputs['online_instrument_no'],
@@ -90,6 +99,7 @@ class paymentService implements paymentInterface
                 "comments" => $inputs['comments'],
                 "amount_to_be_paid" => str_replace(',', '', $inputs['amount_to_be_paid']),
                 "receiving_date" => now(),
+                "serial_no" => $serail_no,
             ];
 
 
@@ -111,7 +121,7 @@ class paymentService implements paymentInterface
 
             $stakeholder_id = $inputs['stakeholder_id'];
             $payment_voucher = $this->model()->create($payment_voucher_data);
-            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher,$stakeholder_id);
+            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
         });
 
         return true;

@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class FileTitleTransfer extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity, SoftDeletes;
 
     protected $fillable = [
         'site_id',
@@ -30,6 +31,7 @@ class FileTitleTransfer extends Model
         'kin_data',
         'paid_status',
         'payment_date',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

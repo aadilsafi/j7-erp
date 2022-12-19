@@ -21,7 +21,7 @@ class JournalVoucher extends Model
         'site_id',
         'user_id',
         'name',
-        'account_head_id',
+        'account_head_code',
         'account_number',
         'serial_number',
         'voucher_date',
@@ -35,5 +35,12 @@ class JournalVoucher extends Model
         'approved_date',
         'checked_by',
         'checked_date',
+        'total_debit',
+        'total_credit',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

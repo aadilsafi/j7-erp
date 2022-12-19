@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\JournalVoucher;
+use App\Models\JournalVoucherEntry;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Str;
 
-class JournalVouchersDatatable extends DataTable
+class JournalVouchersEntriesDatatable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -24,39 +24,41 @@ class JournalVouchersDatatable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
-            ->editColumn('check', function ($JournalVoucher) {
-                return $JournalVoucher;
+            ->addIndexColumn()
+            ->editColumn('check', function ($JournalVoucherEntry) {
+                return $JournalVoucherEntry;
             })
-            ->editColumn('voucher_date', function ($JournalVoucher) {
-                return editDateColumn($JournalVoucher->voucher_Date);
+            ->editColumn('created_at', function ($JournalVoucherEntry) {
+                return editDateColumn($JournalVoucherEntry->created_at);
             })
-            ->editColumn('updated_at', function ($JournalVoucher) {
-                return editDateColumn($JournalVoucher->updated_at);
+            ->editColumn('updated_at', function ($JournalVoucherEntry) {
+                return editDateColumn($JournalVoucherEntry->updated_at);
             })
-            ->editColumn('user_id', function ($JournalVoucher) {
-                return $JournalVoucher->user->name;
+            ->editColumn('account_number', function ($JournalVoucherEntry) {
+                return account_number_format($JournalVoucherEntry->account_number);
             })
-            ->editColumn('total_debit', function ($JournalVoucher) {
-                return number_format($JournalVoucher->total_debit);
+            ->editColumn('account_head_id', function ($JournalVoucherEntry) {
+                return $JournalVoucherEntry->accountHead->name;
             })
-            ->editColumn('total_credit', function ($JournalVoucher) {
-                return number_format($JournalVoucher->total_credit);
+            ->editColumn('debit', function ($JournalVoucherEntry) {
+                return number_format($JournalVoucherEntry->debit);
             })
-            ->editColumn('status', function ($JournalVoucher) {
+            ->editColumn('credit', function ($JournalVoucherEntry) {
+                return number_format($JournalVoucherEntry->credit);
+            })
+            ->editColumn('status', function ($JournalVoucherEntry) {
 
-                if ($JournalVoucher->status == 'pending') {
+                if ($JournalVoucherEntry->status == 'pending') {
                     return '<span class="badge badge-glow bg-warning">Pending</span>';
-                } elseif ($JournalVoucher->status == 'checked') {
-                    return '<span class="badge badge-glow bg-secondary">Checked</span>';
-                } elseif ($JournalVoucher->status == 'posted') {
-                    return '<span class="badge badge-glow bg-success">Posted</span>';
+                } elseif ($JournalVoucherEntry->status == 'checked') {
+                    return '<span class="badge badge-glow bg-success">Checked</span>';
+                } elseif ($JournalVoucherEntry->status == 'post') {
+                    return '<span class="badge badge-glow bg-danger">Posted</span>';
                 } else {
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
             })
-            ->editColumn('actions', function ($JournalVoucher) {
-                return view('app.sites.journal-vouchers.actions', ['site_id' => $this->site_id, 'id' => $JournalVoucher->id , 'status' => $JournalVoucher->status]);
-            })
+
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['actions', 'check']));
         return $editColumns;
@@ -65,29 +67,18 @@ class JournalVouchersDatatable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\JournalVoucher $model
+     * @param \App\Models\JournalVoucherEntryEntry $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(JournalVoucher $model): QueryBuilder
+    public function query(JournalVoucherEntry $model): QueryBuilder
     {
-        return $model->newQuery()->whereSiteId($this->site_id)->orderBy('id', 'desc')->with('user');
+        return $model->newQuery()->whereSiteId($this->site_id)->where('journal_voucher_id',$this->id)->orderBy('id', 'desc');
     }
 
     public function html(): HtmlBuilder
     {
-        $createPermission = auth()->user()->can('sites.settings.journal-vouchers.create');
-        $selectedDeletePermission = auth()->user()->can('sites.settings.journal-vouchers.destroy-selected');
 
         $buttons = [];
-
-        if ($createPermission) {
-            $buttons[] = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-plus"></i> Add New')
-                ->attr([
-                    'onclick' => 'addNew()',
-                ]);
-        }
 
         $buttons = array_merge($buttons, [
             Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
@@ -101,17 +92,8 @@ class JournalVouchersDatatable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ]);
 
-        // if ($selectedDeletePermission) {
-        //     $buttons[] = Button::raw('delete-selected')
-        //         ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-        //         ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-        //         ->attr([
-        //             'onclick' => 'deleteSelected()',
-        //         ]);
-        // }
-
         return $this->builder()
-            ->setTableId('journal-vouchers-table')
+            ->setTableId('journal-vouchers-entries-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -122,7 +104,7 @@ class JournalVouchersDatatable extends DataTable
             ->lengthMenu([10, 20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            ->rowGroupDataSrc('status')
+            // ->rowGroupDataSrc('user_id')
             ->columnDefs([
                 // [
                 //     'targets' => 0,
@@ -141,7 +123,7 @@ class JournalVouchersDatatable extends DataTable
                 // ],
             ])
             ->orders([
-                [2, 'desc'],
+                [1, 'desc'],
             ]);
     }
 
@@ -154,18 +136,16 @@ class JournalVouchersDatatable extends DataTable
     {
         $columns = [
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('serial_number')->title('Voucher Number')->addClass('text-nowrap'),
-            Column::make('name')->title('Voucher Name')->addClass('text-nowrap'),
-            Column::make('user_id')->name('user.name')->title('Created By')->addClass('text-nowrap')->orderable(false)->searchable(false),
-            Column::make('total_debit')->title('Debit Amount')->addClass('text-nowrap'),
-            Column::make('total_credit')->title('Credit Amount')->addClass('text-nowrap'),
-            Column::make('status')->title('Status')->addClass('text-nowrap'),
-            Column::make('voucher_date')->title('Created At')->addClass('text-nowrap'),
+            // Column::computed('DT_RowIndex')->title('#'),
+            Column::make('account_number')->title('Account Number')->addClass('text-nowrap'),
+            Column::make('account_head_id')->name('accountHead.name')->title('Account Name')->addClass('text-nowrap')->orderable(false)->searchable(false),
+            Column::make('debit')->title('Debit')->addClass('text-nowrap'),
+            Column::make('credit')->title('Credit')->addClass('text-nowrap'),
+            Column::make('remarks')->title('Remarks'),
         ];
-        // $columns[] = Column::make('created_at')->addClass('text-nowrap');
+        $columns[] = Column::make('created_at')->addClass('text-nowrap');
         // $columns[] = Column::make('updated_at')->addClass('text-nowrap');
-        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
-
+        // $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
         return $columns;
     }
 
@@ -176,7 +156,7 @@ class JournalVouchersDatatable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Journal_Vouchers' . date('YmdHis');
+        return 'Journal_Vouchers_Entires' . date('YmdHis');
     }
 
     /**

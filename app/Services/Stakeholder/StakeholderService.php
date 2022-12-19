@@ -63,30 +63,56 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
-                    'ntn' => $inputs['ntn']['i'],
+                    'ntn' => $inputs['ntn'],
+                    'email' => $inputs['individual_email'],
+                    'office_email' => $inputs['office_email'],
+                    'mobile_contact' => $inputs['mobile_contact'],
+                    'mobileContactCountryDetails' => $inputs['mobileConatctCountryDetails'],
+                    'office_contact' => $inputs['office_contact'],
+                    'OfficeConatctCountryDetails' => $inputs['OfficeConatctCountryDetails'],
+                    'referred_by' => $inputs['referred_by'],
+                    'source' => $inputs['source'],
+                    'date_of_birth' => $inputs['dob'],
+                    'is_local' => $inputs['is_local'],
+                    'is_filer' => $inputs['is_filer'],
+                    'nationality' => $inputs['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['industry'],
+                    'industry' => $inputs['industry'],
+                    'office_contact' => $inputs['company_office_contact'],
+                    'OfficeConatctCountryDetails' => $inputs['CompanyOfficeConatctCountryDetails'],
+                    'mobile_contact' => $inputs['company_optional_contact'],
+                    'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
+                    'email' => $inputs['company_email'],
+                    'office_email' => $inputs['company_office_email'],
+                    'website' => $inputs['website'],
+                    'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['ntn']['c'],
+                    'ntn' => $inputs['strn'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = decryptParams($site_id);
-            $data['email'] = $inputs['email'];
-            $data['optional_email'] = $inputs['optional_email'];
-            $data['contact'] = $inputs['contact'];
-            $data['countryDetails'] = $inputs['countryDetails'];
-            $data['optional_contact'] = $inputs['optional_contact'];
-            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
-            $data['address'] = $inputs['address'];
+            // residential address fields
+            $data['residential_address_type'] = $inputs['residential_address_type'];
+            $data['residential_address'] = $inputs['residential_address'];
+            $data['residential_postal_code'] = $inputs['residential_postal_code'];
+            $data['residential_country_id'] = isset($inputs['residential_country']) && $inputs['residential_country'] > 0 ? $inputs['residential_country'] : 167;
+            $data['residential_state_id'] = isset($inputs['residential_state']) ? $inputs['residential_state'] : 0;
+            $data['residential_city_id'] = isset($inputs['residential_city']) ? $inputs['residential_city'] : 0;
+
+            //mailing address fields
+            $data['mailing_address_type'] = $inputs['mailing_address_type'];
             $data['mailing_address'] = $inputs['mailing_address'];
+            $data['mailing_postal_code'] = $inputs['mailing_postal_code'];
+            $data['mailing_country_id'] = isset($inputs['mailing_country']) && $inputs['mailing_country'] > 0 ? $inputs['mailing_country'] : 167;
+            $data['mailing_state_id'] = isset($inputs['mailing_state']) ? $inputs['mailing_state'] : 0;
+            $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
+
             $data['comments'] = $inputs['comments'];
-            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
-            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
-            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+
             $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
 
@@ -275,32 +301,58 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
-                    'ntn' => $inputs['ntn']['i'],
+                    'ntn' => $inputs['ntn'],
+                    'email' => $inputs['individual_email'],
+                    'office_email' => $inputs['office_email'],
+                    'mobile_contact' => $inputs['mobile_contact'],
+                    'mobileContactCountryDetails' => $inputs['mobileConatctCountryDetails'],
+                    'office_contact' => $inputs['office_contact'],
+                    'OfficeConatctCountryDetails' => $inputs['OfficeConatctCountryDetails'],
+                    'referred_by' => $inputs['referred_by'],
+                    'source' => $inputs['source'],
+                    'date_of_birth' => $inputs['dob'],
+                    'is_local' => $inputs['is_local'],
+                    'is_filer' => $inputs['is_filer'],
+                    'nationality' => $inputs['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['industry'],
+                    'industry' => $inputs['industry'],
+                    'office_contact' => $inputs['company_office_contact'],
+                    'OfficeConatctCountryDetails' => $inputs['CompanyOfficeConatctCountryDetails'],
+                    'mobile_contact' => $inputs['company_optional_contact'],
+                    'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
+                    'email' => $inputs['company_email'],
+                    'office_email' => $inputs['company_office_email'],
+                    'website' => $inputs['website'],
+                    'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['ntn']['c'],
+                    'ntn' => $inputs['strn'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = $site_id;
-            $data['email'] = $inputs['email'];
-            $data['optional_email'] = $inputs['optional_email'];
-            $data['contact'] = $inputs['contact'];
-            $data['countryDetails'] = $inputs['countryDetails'];
-            $data['optional_contact'] = $inputs['optional_contact'];
-            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
-            $data['address'] = $inputs['address'];
-            $data['mailing_address'] = $inputs['mailing_address'];
-            $data['comments'] = $inputs['comments'];
-            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
-            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
-            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
+            // residential address fields
+            $data['residential_address_type'] = $inputs['residential_address_type'];
+            $data['residential_address'] = $inputs['residential_address'];
+            $data['residential_postal_code'] = $inputs['residential_postal_code'];
+            $data['residential_country_id'] = isset($inputs['residential_country']) && $inputs['residential_country'] > 0 ? $inputs['residential_country'] : 167;
+            $data['residential_state_id'] = isset($inputs['residential_state']) ? $inputs['residential_state'] : 0;
+            $data['residential_city_id'] = isset($inputs['residential_city']) ? $inputs['residential_city'] : 0;
 
+            //mailing address fields
+            $data['mailing_address_type'] = $inputs['mailing_address_type'];
+            $data['mailing_address'] = $inputs['mailing_address'];
+            $data['mailing_postal_code'] = $inputs['mailing_postal_code'];
+            $data['mailing_country_id'] = isset($inputs['mailing_country']) && $inputs['mailing_country'] > 0 ? $inputs['mailing_country'] : 167;
+            $data['mailing_state_id'] = isset($inputs['mailing_state']) ? $inputs['mailing_state'] : 0;
+            $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
+
+            $data['comments'] = $inputs['comments'];
+
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
+            // dd($inputs);
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
                 $allNextOfKin = $this->model()->where(['parent_id' => $stakeholder->parent_id])->get();
 

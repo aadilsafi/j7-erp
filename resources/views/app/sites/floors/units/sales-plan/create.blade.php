@@ -391,27 +391,15 @@
                                 $('#individualForm').show();
 
                             }
-                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+                            intl.setCountry('pk');
 
-                            if (countryDetails == null) {
-                                intl.setCountry('pk');
-                            } else {
-                                intl.setCountry(countryDetails['iso2']);
-                            }
+                           
 
                             $('#countryDetails').val(JSON.stringify(intl
                                 .getSelectedCountryData()))
 
-                            var OptionalCountryDetails = JSON.parse(stakeholderData
-                                .OptionalCountryDetails);
-                            if (OptionalCountryDetails == null) {
                                 intlOptional.setCountry('pk');
-                            } else {
-                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                            }
 
-                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                                .getSelectedCountryData()))
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {

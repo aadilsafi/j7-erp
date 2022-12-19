@@ -16,6 +16,7 @@ use App\Jobs\ImportStakeholders;
 use App\Models\BacklistedStakeholder;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\LeadSource;
 use App\Models\Stakeholder;
 use App\Models\StakeholderNextOfKin;
 use App\Models\StakeholderType;
@@ -84,6 +85,7 @@ class StakeholderController extends Controller
                 'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,
                 'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),
+                'leadSources' => LeadSource::all(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
 
@@ -112,7 +114,7 @@ class StakeholderController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.stakeholders.create', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
     }
 
@@ -165,7 +167,7 @@ class StakeholderController extends Controller
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'customFields' => $customFields,
                     'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),
-
+                    'leadSources' => LeadSource::all(),
                 ];
                 unset($data['emptyRecord'][0]['stakeholder_types']);
                 // dd($data);
@@ -174,7 +176,7 @@ class StakeholderController extends Controller
 
             return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger($ex->getMessage());
         }
     }
 
@@ -202,7 +204,7 @@ class StakeholderController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withDanger($ex->getMessage());
         }
     }
 

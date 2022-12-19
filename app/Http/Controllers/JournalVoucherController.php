@@ -218,7 +218,7 @@ class JournalVoucherController extends Controller
                 $ledger->credit =  $credit;
                 $ledger->debit =  $debit;
                 $ledger->nature_of_account =  NatureOfAccountsEnum::MANUAL_ENTRY;
-                $ledger->origin_name =  NatureOfAccountsEnum::MANUAL_ENTRY->value. '-' . $origin_number;
+                $ledger->origin_name =  NatureOfAccountsEnum::MANUAL_ENTRY->value. '-' . $journalVoucher->serial_number;
                 $ledger->origin_number =  $origin_number;
                 $ledger->manual_entry =  true;
                 $ledger->created_date =  now();

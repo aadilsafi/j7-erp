@@ -35,7 +35,8 @@ class FileResale extends Model
         'premium_demand',
         'marketing_service_charges',
         'comments',
-        'created_date'
+        'created_date',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

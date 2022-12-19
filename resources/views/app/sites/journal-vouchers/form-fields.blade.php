@@ -40,7 +40,8 @@
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="name">Remarks <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('remarks') is-invalid @enderror"
-                    id="remarks"  @if (isset($JournalVoucher)) value="{{ $JournalVoucher->remarks }}" @endif name="remarks" placeholder="Journal Voucher Remarks" value="" />
+                    id="remarks" @if (isset($JournalVoucher)) value="{{ $JournalVoucher->remarks }}" @endif
+                    name="remarks" placeholder="Journal Voucher Remarks" value="" />
                 @error('remarks')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
@@ -90,79 +91,173 @@
         <div class="journal-voucher-entries-list">
             <div data-repeater-list="journal-voucher-entries">
                 <div data-repeater-item>
-                    <div class="card m-0">
+                    @if (isset($JournalVoucherEntries))
+                        @foreach (isset($JournalVoucherEntries) && count($JournalVoucherEntries) ? $JournalVoucherEntries : [] as $JournalVoucherEntry)
+                            <div class="card m-0">
 
-                        <div>
-                            <div>
-                                <table class="table table-hover table-striped table-borderless" id="installments_table"
-                                    style="position: relative;">
-
+                                <div>
                                     <div>
+                                        <table class="table table-hover table-striped table-borderless"
+                                            id="installments_table" style="position: relative;">
+
+                                            <div>
+                                                <div>
+                                                    <div>
+                                                        <tbody id="">
+
+                                                            <div class="row mb-1">
+
+                                                                <div class="col-3 position-relative">
+                                                                    <select class=" form-control selectClass"
+                                                                        name="account_number" id="fifth_level">
+                                                                        <option value="">Select Account Codes
+                                                                        </option>
+                                                                        @foreach ($fifthLevelAccount as $fifthLevel)
+                                                                            <option
+                                                                                @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->account_number == $fifthLevel->code) selected @endif
+                                                                                value="{{ $fifthLevel->code }}">
+                                                                                {{ $fifthLevel->name }}
+                                                                                ({{ $fifthLevel->code }})
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                </div>
+
+                                                                <div class="col-3  position-relative">
+                                                                    <input type="date"
+                                                                        class="form-control voucher_date form-control-md @error('voucher_name') is-invalid @enderror"
+                                                                        id="voucher_date" name="voucher_date"
+                                                                        value="" />
+                                                                </div>
+
+                                                                <div class="col position-relative">
+                                                                    <input type="number"
+                                                                        @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->debit }}" @endif
+                                                                        class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
+                                                                        id="debit" name="debit"
+                                                                        placeholder="Debit" value="" />
+
+                                                                </div>
+                                                                <div class="col position-relative">
+                                                                    <input type="number"
+                                                                        @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->credit }}" @endif
+                                                                        class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
+                                                                        id="credit" name="credit"
+                                                                        placeholder="Credit" value="" />
+
+                                                                </div>
+                                                                <div class="col-2 position-relative">
+                                                                    <input type="text"
+                                                                        @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->remarks }}" @endif
+                                                                        class="form-control form-control-md @error('remarks') is-invalid @enderror"
+                                                                        id="remarks" name="remarks"
+                                                                        placeholder="Remarks" value="" />
+                                                                </div>
+
+                                                                <div class="col-1 position-relative">
+                                                                    <button
+                                                                        class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                                                        data-repeater-delete
+                                                                        id="delete-journal-voucher-entries"
+                                                                        type="button">
+                                                                        <i data-feather="x" class="me-25"></i>
+                                                                        {{-- <span>Delete</span> --}}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </tbody>
+                                                    </div>
+                                                </div>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="card m-0">
+
+                            <div>
+                                <div>
+                                    <table class="table table-hover table-striped table-borderless"
+                                        id="installments_table" style="position: relative;">
+
                                         <div>
                                             <div>
-                                                <tbody id="">
+                                                <div>
+                                                    <tbody id="">
 
-                                                    <div class="row mb-1">
+                                                        <div class="row mb-1">
 
-                                                        <div class="col-3 position-relative">
-                                                            <select class=" form-control selectClass"
-                                                                name="account_number" id="fifth_level">
-                                                                <option value="">Select Account Codes</option>
-                                                                @foreach ($fifthLevelAccount as $fifthLevel)
-                                                                    <option value="{{ $fifthLevel->code }}">
-                                                                        {{ $fifthLevel->name }}
-                                                                        ({{ $fifthLevel->code }})
+                                                            <div class="col-3 position-relative">
+                                                                <select class=" form-control selectClass"
+                                                                    name="account_number" id="fifth_level">
+                                                                    <option value="">Select Account Codes
                                                                     </option>
-                                                                @endforeach
-                                                            </select>
+                                                                    @foreach ($fifthLevelAccount as $fifthLevel)
+                                                                        <option
+                                                                            @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->account_number == $fifthLevel->code) selected @endif
+                                                                            value="{{ $fifthLevel->code }}">
+                                                                            {{ $fifthLevel->name }}
+                                                                            ({{ $fifthLevel->code }})
+                                                                        </option>
+                                                                    @endforeach
+                                                                </select>
 
+                                                            </div>
+
+                                                            <div class="col-3  position-relative">
+                                                                <input type="date"
+                                                                    class="form-control voucher_date form-control-md @error('voucher_name') is-invalid @enderror"
+                                                                    id="voucher_date" name="voucher_date"
+                                                                    value="" />
+                                                            </div>
+
+                                                            <div class="col position-relative">
+                                                                <input type="number"
+                                                                    @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->debit }}" @endif
+                                                                    class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
+                                                                    id="debit" name="debit" placeholder="Debit"
+                                                                    value="" />
+
+                                                            </div>
+                                                            <div class="col position-relative">
+                                                                <input type="number"
+                                                                    @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->credit }}" @endif
+                                                                    class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
+                                                                    id="credit" name="credit"
+                                                                    placeholder="Credit" value="" />
+
+                                                            </div>
+                                                            <div class="col-2 position-relative">
+                                                                <input type="text"
+                                                                    @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->remarks }}" @endif
+                                                                    class="form-control form-control-md @error('remarks') is-invalid @enderror"
+                                                                    id="remarks" name="remarks"
+                                                                    placeholder="Remarks" value="" />
+                                                            </div>
+
+                                                            <div class="col-1 position-relative">
+                                                                <button
+                                                                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                                                    data-repeater-delete
+                                                                    id="delete-journal-voucher-entries"
+                                                                    type="button">
+                                                                    <i data-feather="x" class="me-25"></i>
+                                                                    {{-- <span>Delete</span> --}}
+                                                                </button>
+                                                            </div>
                                                         </div>
 
-                                                        <div class="col-3  position-relative">
-                                                            <input type="date"
-                                                                class="form-control voucher_date form-control-md @error('voucher_name') is-invalid @enderror"
-                                                                id="voucher_date" name="voucher_date" value="" />
-                                                        </div>
-
-                                                        <div class="col position-relative">
-                                                            <input type="number"
-                                                                class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
-                                                                id="debit" name="debit" placeholder="Debit"
-                                                                value="" />
-
-                                                        </div>
-                                                        <div class="col position-relative">
-                                                            <input type="number"
-                                                                class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
-                                                                id="credit" name="credit" placeholder="Credit"
-                                                                value="" />
-
-                                                        </div>
-                                                        <div class="col-2 position-relative">
-                                                            <input type="text"
-                                                                class="form-control form-control-md @error('remarks') is-invalid @enderror"
-                                                                id="remarks" name="remarks" placeholder="Remarks"
-                                                                value="" />
-                                                        </div>
-
-                                                        <div class="col-1 position-relative">
-                                                            <button
-                                                                class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
-                                                                data-repeater-delete
-                                                                id="delete-journal-voucher-entries" type="button">
-                                                                <i data-feather="x" class="me-25"></i>
-                                                                {{-- <span>Delete</span> --}}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                </tbody>
+                                                    </tbody>
+                                                </div>
                                             </div>
-                                        </div>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
             <table class="table table-hover table-striped table-borderless" id="installments_table"
@@ -180,13 +275,17 @@
                         <div class="col position-relative">
 
                             <input readonly id="total_debit" type="text" required placeholder=" Debit"
-                                name="total_debit"  @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit) }}" @else value="0"  @endif class="form-control form-control-md" />
+                                name="total_debit"
+                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit) }}" @else value="0" @endif
+                                class="form-control form-control-md" />
 
                         </div>
 
                         <div class="col position-relative">
-                            <input @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @else value="0" @endif readonly id="total_credit" type="text" required placeholder=" Credit"
-                                name="total_credit"  class="form-control form-control-md" />
+                            <input
+                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @else value="0" @endif
+                                readonly id="total_credit" type="text" required placeholder=" Credit"
+                                name="total_credit" class="form-control form-control-md" />
                         </div>
 
                         <div class="col-2 position-relative">

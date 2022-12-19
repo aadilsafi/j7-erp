@@ -179,6 +179,16 @@ class SalesPlanService implements SalesPlanInterface
                 $leadSource = (new LeadSource())->create($leadSourceData);
             }
 
+            $serail_no  = SalesPlan::all();
+            if(isset($serail_no) && count($serail_no) > 0){
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            }
+            else{
+                $serail_no = '001';
+            }
+
             $sales_plan_data = [
                 'unit_id' => $unit->id,
                 'user_id' => auth()->user()->id,
@@ -195,6 +205,7 @@ class SalesPlanService implements SalesPlanInterface
                 'comments' => $inputs['comments']['custom'],
                 'status' => false,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
+                'serial_no' => 'SI-'.$serail_no,
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 

@@ -37,7 +37,6 @@ class JournalVouchersService implements JournalVouchersInterface
                 'remarks' => $inputs['remarks'],
                 'voucher_date' => $inputs['created_date'],
                 'created_date' => $inputs['created_date'],
-
             ];
 
             $journal_voucher = $this->model()->create($voucher_data);

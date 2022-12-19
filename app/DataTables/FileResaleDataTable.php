@@ -149,6 +149,7 @@ class FileResaleDataTable extends DataTable
         }
         return [
             Column::computed('DT_RowIndex')->title('#'),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
             Column::make('unit_name')->name('unit.name')->title('Unit Name')->addClass('text-nowrap'),
             Column::make('unit_type')->name('unit.type.name')->title('Unit Type')->addClass('text-nowrap')->orderable(false),

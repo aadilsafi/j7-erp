@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('amount_received')->nullable();
             $table->boolean('is_for_dealer_incentive')->default(true);
             $table->timestamp('created_date')->nullable();
+            $table->string('serial_no')->nullable()->default('RI-');
             $table->timestamps();
         });
     }

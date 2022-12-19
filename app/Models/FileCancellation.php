@@ -29,6 +29,7 @@ class FileCancellation extends Model
         'amount_remarks',
         'status',
         'comments',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

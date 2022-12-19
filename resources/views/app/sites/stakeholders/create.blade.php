@@ -37,6 +37,10 @@
             display: none;
         }
 
+        #div_stakeholders {
+            display: none;
+        }
+
         #companyForm {
             display: none;
         }
@@ -621,7 +625,12 @@
             var data = e.params.data;
             if (data.id == 'C') {
                 $('#div-next-of-kin').show();
+                $('#div_stakeholders').hide();
+            } else if (data.id == 'K') {
+                $('#div-next-of-kin').hide();
+                $('#div_stakeholders').show();
             } else {
+                $('#div_stakeholders').hide();
                 $('#div-next-of-kin').hide();
             }
         });
@@ -639,6 +648,22 @@
             }
         });
 
+        $(".stakeholders-list").repeater({
+            initEmpty: true,
+            show: function() {
+                $(this).slideDown(function() {
+                    $(this).find('.selectStk').select2({
+                        placeholder: 'Select Stakeholder'
+                    });
+                }), feather && feather.replace({
+                    width: 14,
+                    height: 14
+                })
+            },
+            hide: function(e) {
+                $(this).slideUp(e)
+            }
+        });
 
         $(".contact-persons-list").repeater({
             // initEmpty: true,
@@ -745,9 +770,9 @@
         });
 
         $('#is_local').on('change', function() {
-            if($(this).is(':checked')){
+            if ($(this).is(':checked')) {
                 $('#nationality').val(167).change();
-            }else{
+            } else {
                 $('#nationality').val(0).change();
             }
         });

@@ -171,6 +171,11 @@ class Stakeholder extends Model implements HasMedia
         return $this->hasMany(StakeholderNextOfKin::class);
     }
 
+    public function KinStakeholders()
+    {
+        return $this->hasMany(StakeholderNextOfKin::class, 'kin_id');
+    }
+
     public function contacts()
     {
         return $this->hasMany(StakeholderContact::class);

@@ -149,6 +149,30 @@ class StakeholderService implements StakeholderInterface
                 }
             }
 
+            if (isset($inputs['stakeholder_type']) && $inputs['stakeholder_type'] == 'K') {
+                if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
+                    $stakeholders = [];
+                    foreach ($inputs['stakeholders'] as $nok) {
+                        if ($nok['stakeholder_id'] != 0) {
+                            $data = [
+                                'stakeholder_id' => $nok['stakeholder_id'],
+                                'kin_id' => $stakeholder->id,
+                                'relation' => $nok['relation'],
+                                'site_id' => decryptParams($site_id),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                          
+                            $nextOfKins[] =  StakeholderNextOfKin::create($data);
+
+                            StakeholderType::where('stakeholder_id', ($stakeholder->id))->where('type', 'K')->update([
+                                'status' => true,
+                            ]);
+                        }
+                    }
+                }
+            }
+
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
                 $contacts = [];
                 foreach ($inputs['contact-persons'] as $contact) {

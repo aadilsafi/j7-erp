@@ -30,6 +30,10 @@
             background-color: #e3e0fd;
         }
 
+        #div_stakeholders {
+            display: none;
+        }
+
         .iti {
             width: 100%;
         }
@@ -54,8 +58,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
     </style>
 @endsection
 
@@ -94,6 +98,7 @@
                     'customFields' => $customFields,
                     'contactStakeholders' => $contactStakeholders,
                     'leadSources' => $leadSources,
+                    'emtykinStakeholders' => $emtykinStakeholders,
                 ]) }}
             </div>
 
@@ -349,6 +354,23 @@
                 }
             })
 
+            $(".stakeholders-list").repeater({
+                initEmpty: true,
+                show: function() {
+                    $(this).slideDown(function() {
+                        $(this).find('.selectStk').select2({
+                            placeholder: 'Select Stakeholder'
+                        });
+                    }), feather && feather.replace({
+                        width: 14,
+                        height: 14
+                    })
+                },
+                hide: function(e) {
+                    $(this).slideUp(e)
+                }
+            });
+
             $(".contact-persons-list").repeater({
                 initEmpty: areStakeholderContactsExist,
                 show: function() {
@@ -445,19 +467,13 @@
             @forelse ($stakeholder->stakeholder_types as $type)
                 @if ($type->type == 'C' && $type->status)
                     $('#div-next-of-kin').show();
-                @else
+                @elseif ($type->type == 'K' && $type->status)
+                    $('#div_stakeholders').show();
                 @endif
             @empty
             @endforelse
 
-            function performAction(action) {
-                if (action == 'C') {
-                    // $('#div-next-of-kin').toggle('fast', 'linear');
-                    $('#div-next-of-kin').show();
-                } else {
-                    $('#div-next-of-kin').hide();
-                }
-            }
+
 
             var firstLoad = true;
 
@@ -774,10 +790,15 @@
         });
 
         function performAction(action) {
+            console.log(action);
             if (action == 'C') {
                 $('#div-next-of-kin').show();
+            }
+            if (action == 'K') {
+                $('#div_stakeholders').show();
             } else {
                 $('#div-next-of-kin').hide();
+                $('#div_stakeholders').hide();
             }
         }
 

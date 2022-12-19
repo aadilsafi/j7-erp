@@ -172,7 +172,7 @@ class TransferReceiptController extends Controller
         $fileOwner->city = $transferFiles->stakeholder->city->name ?? '';
 
         $transferOwner = json_decode($transferFiles->transfer_person_data);
-        $transferOwner->country = $transferFiles->transferStakeholder->country->name;
+        $transferOwner->country = $transferFiles->transferStakeholder->country->name ?? '';
         $transferOwner->state = $transferFiles->transferStakeholder->state->name ?? '';
         $transferOwner->city = $transferFiles->transferStakeholder->city->name ?? '';
 

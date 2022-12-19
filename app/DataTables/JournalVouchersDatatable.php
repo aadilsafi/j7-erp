@@ -154,7 +154,7 @@ class JournalVouchersDatatable extends DataTable
     {
         $columns = [
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('serial_number')->title('Serial Number')->addClass('text-nowrap'),
+            Column::make('serial_number')->title('Voucher Number')->addClass('text-nowrap'),
             Column::make('name')->title('Voucher Name')->addClass('text-nowrap'),
             Column::make('user_id')->name('user.name')->title('Created By')->addClass('text-nowrap')->orderable(false)->searchable(false),
             Column::make('total_debit')->title('Debit Amount')->addClass('text-nowrap'),

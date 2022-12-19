@@ -137,11 +137,12 @@ class PaymentVoucherDatatable extends DataTable
         // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.payment_vouchers.destroy-selected');
         $columns = [
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
-            Column::make('name')->title('Name'),
-            Column::make('identity_number')->title('Identity Number'),
-            Column::make('account_payable')->title('Account Payable'),
-            Column::make('amount_to_be_paid')->title('Paid Amount'),
-            Column::make('status')->title('Status'),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
+            Column::make('name')->title('Name')->addClass('text-nowrap'),
+            Column::make('identity_number')->title('Identity Number')->addClass('text-nowrap'),
+            Column::make('account_payable')->title('Account Payable')->addClass('text-nowrap'),
+            Column::make('amount_to_be_paid')->title('Paid Amount')->addClass('text-nowrap'),
+            Column::make('status')->title('Status')->addClass('text-nowrap'),
         ];
 
         $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');

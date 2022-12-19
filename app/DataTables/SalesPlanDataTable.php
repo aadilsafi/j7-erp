@@ -193,6 +193,7 @@ class SalesPlanDataTable extends DataTable
         $destroyPermission = 0;
 
         $columns = [
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::make('user_id')->title('Sales Person'),
             Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             // Column::computed('stakeholder_id')->title('Stakeholder'),

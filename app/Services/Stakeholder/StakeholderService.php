@@ -63,30 +63,58 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
-                    'ntn' => $inputs['ntn']['i'],
+                    'passport_no' => $inputs['passport_no'],
+                    'ntn' => $inputs['ntn'],
+                    'email' => $inputs['individual_email'],
+                    'office_email' => $inputs['office_email'],
+                    'mobile_contact' => $inputs['mobile_contact'],
+                    'mobileContactCountryDetails' => $inputs['mobileContactCountryDetails'],
+                    'office_contact' => $inputs['office_contact'],
+                    'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
+                    'referred_by' => $inputs['referred_by'],
+                    'source' => $inputs['source'],
+                    'date_of_birth' => $inputs['dob'],
+                    'is_local' => $inputs['is_local'],
+                    'nationality' => $inputs['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['industry'],
+                    'industry' => $inputs['industry'],
+                    'office_contact' => $inputs['company_office_contact'],
+                    'OfficeContactCountryDetails' => $inputs['CompanyOfficeContactCountryDetails'],
+                    'mobile_contact' => $inputs['company_optional_contact'],
+                    'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
+                    'email' => $inputs['company_email'],
+                    'office_email' => $inputs['company_office_email'],
+                    'website' => $inputs['website'],
+                    'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['ntn']['c'],
+                    'strn' => $inputs['strn'],
+                    'ntn' => $inputs['company_ntn'],
+                    'origin' => $inputs['origin'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = decryptParams($site_id);
-            $data['email'] = $inputs['email'];
-            $data['optional_email'] = $inputs['optional_email'];
-            $data['contact'] = $inputs['contact'];
-            $data['countryDetails'] = $inputs['countryDetails'];
-            $data['optional_contact'] = $inputs['optional_contact'];
-            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
-            $data['address'] = $inputs['address'];
+            // residential address fields
+            $data['residential_address_type'] = $inputs['residential_address_type'];
+            $data['residential_address'] = $inputs['residential_address'];
+            $data['residential_postal_code'] = $inputs['residential_postal_code'];
+            $data['residential_country_id'] = isset($inputs['residential_country']) && $inputs['residential_country'] > 0 ? $inputs['residential_country'] : 167;
+            $data['residential_state_id'] = isset($inputs['residential_state']) ? $inputs['residential_state'] : 0;
+            $data['residential_city_id'] = isset($inputs['residential_city']) ? $inputs['residential_city'] : 0;
+
+            //mailing address fields
+            $data['mailing_address_type'] = $inputs['mailing_address_type'];
             $data['mailing_address'] = $inputs['mailing_address'];
+            $data['mailing_postal_code'] = $inputs['mailing_postal_code'];
+            $data['mailing_country_id'] = isset($inputs['mailing_country']) && $inputs['mailing_country'] > 0 ? $inputs['mailing_country'] : 167;
+            $data['mailing_state_id'] = isset($inputs['mailing_state']) ? $inputs['mailing_state'] : 0;
+            $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
+
             $data['comments'] = $inputs['comments'];
-            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
-            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
-            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
+
             $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
 
@@ -121,6 +149,30 @@ class StakeholderService implements StakeholderInterface
                 }
             }
 
+            if (isset($inputs['stakeholder_type']) && $inputs['stakeholder_type'] == 'K') {
+                if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
+                    $stakeholders = [];
+                    foreach ($inputs['stakeholders'] as $nok) {
+                        if ($nok['stakeholder_id'] != 0) {
+                            $data = [
+                                'stakeholder_id' => $nok['stakeholder_id'],
+                                'kin_id' => $stakeholder->id,
+                                'relation' => $nok['relation'],
+                                'site_id' => decryptParams($site_id),
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                          
+                            $nextOfKins[] =  StakeholderNextOfKin::create($data);
+
+                            StakeholderType::where('stakeholder_id', ($stakeholder->id))->where('type', 'K')->update([
+                                'status' => true,
+                            ]);
+                        }
+                    }
+                }
+            }
+
             if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
                 $contacts = [];
                 foreach ($inputs['contact-persons'] as $contact) {
@@ -143,67 +195,9 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->contacts()->saveMany($contacts);
             }
 
-            // customer ar code 1020201001 for customer 1 receivable Customer Code
-            // customer ap code 2020101001 for customer 1 payable Customer Code
-
-            // $customerStakeholderType = StakeholderType::where('type','C')->get();
-            // $lastExistedCustomerCode = collect($customerStakeholderType)->last();
-
-            // // set payable customer code
-            // $payableCustomerCode = 0;    // payable customer code
-
-            // if(isset($lastExistedCustomerCode->payable_account)){
-            //     $payableCustomerCode = $lastExistedCustomerCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableCustomerCode = 2020101003;
-            // }
-
-            // // set receivable customer code
-            // $receivableCustomerCode = 0;    // receivable customer code
-
-            // if(isset($lastExistedCustomerCode->receivable_account)){
-            //     $receivableCustomerCode = $lastExistedCustomerCode->receivable_account + 1;
-            // }
-            // else{
-            //     $receivableCustomerCode = 1020201003;
-            // }
-
-
-            // // Vendor only payable code
-            // // vendor ap code 2020103001 for vendor 1 payable vendor code
-            // $vendorStakeholderType = StakeholderType::where('type','V')->get();
-            // $lastExistedVendorCode = collect($vendorStakeholderType)->last();
-
-            // $payableVendorCode = 0;
-
-            // if(isset($lastExistedVendorCode->payable_account)){
-            //     $payableVendorCode = $lastExistedVendorCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableVendorCode = 2020103003;
-            // }
-
-            //  // Dealer only payable code
-            // // dealer ap code 2020103001 for dealer 1 payable vendor code
-            // $dealerStakeholderType = StakeholderType::where('type','D')->get();
-            // $lastExistedDealerCode = collect($dealerStakeholderType)->last();
-
-            // $payableDealerCode = 0;
-
-            // if(isset($lastExistedDealerCode->payable_account)){
-            //     $payableDealerCode = $lastExistedDealerCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableDealerCode = 2020102003;
-            // }
-
             $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
             $stakeholderTypeData = [];
             foreach (StakeholderTypeEnum::array() as $key => $value) {
-
-
-
                 $stakeholderType = [
                     'stakeholder_id' => $stakeholder->id,
                     'type' => $value,
@@ -225,22 +219,6 @@ class StakeholderService implements StakeholderInterface
                         'status' => true,
                     ]);
                 }
-
-                //Add  Customer Account codes
-                // if($value == 'C'){
-                //     $stakeholderType['receivable_account'] = $receivableCustomerCode;
-                //     $stakeholderType['payable_account'] = $payableCustomerCode;
-                // }
-
-                // //Add  Vendor Account codes
-                // if($value == 'V'){
-                //     $stakeholderType['payable_account'] = $payableVendorCode;
-                // }
-
-                // //Add  Dealer Account codes
-                // if($value == 'D'){
-                //     $stakeholderType['payable_account'] = $payableDealerCode;
-                // }
 
                 $stakeholderTypeData[] = $stakeholderType;
             }
@@ -275,32 +253,61 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
-                    'ntn' => $inputs['ntn']['i'],
+                    'passport_no' => $inputs['passport_no'],
+                    'ntn' => $inputs['ntn'],
+                    'email' => $inputs['individual_email'],
+                    'office_email' => $inputs['office_email'],
+                    'mobile_contact' => $inputs['mobile_contact'],
+                    'mobileContactCountryDetails' => $inputs['mobileContactCountryDetails'],
+                    'office_contact' => $inputs['office_contact'],
+                    'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
+                    'referred_by' => $inputs['referred_by'],
+                    'source' => $inputs['source'],
+                    'date_of_birth' => $inputs['dob'],
+                    'is_local' => $inputs['is_local'],
+                    'nationality' => $inputs['nationality'],
+
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
-                    'occupation' => $inputs['industry'],
+                    'industry' => $inputs['industry'],
+                    'office_contact' => $inputs['company_office_contact'],
+                    'OfficeContactCountryDetails' => $inputs['CompanyOfficeContactCountryDetails'],
+                    'mobile_contact' => $inputs['company_optional_contact'],
+                    'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
+                    'email' => $inputs['company_email'],
+                    'office_email' => $inputs['company_office_email'],
+                    'website' => $inputs['website'],
+                    'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['ntn']['c'],
+                    'strn' => $inputs['strn'],
+                    'ntn' => $inputs['company_ntn'],
+                    'origin' => $inputs['origin'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
             $data['site_id'] = $site_id;
-            $data['email'] = $inputs['email'];
-            $data['optional_email'] = $inputs['optional_email'];
-            $data['contact'] = $inputs['contact'];
-            $data['countryDetails'] = $inputs['countryDetails'];
-            $data['optional_contact'] = $inputs['optional_contact'];
-            $data['OptionalCountryDetails'] = $inputs['OptionalCountryDetails'];
-            $data['address'] = $inputs['address'];
-            $data['mailing_address'] = $inputs['mailing_address'];
-            $data['comments'] = $inputs['comments'];
-            $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;
-            $data['state_id'] = isset($inputs['state_id']) ? $inputs['state_id'] : 0;
-            $data['city_id'] = isset($inputs['city_id']) ? $inputs['city_id'] : 0;
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
+            // residential address fields
+            $data['residential_address_type'] = $inputs['residential_address_type'];
+            $data['residential_address'] = $inputs['residential_address'];
+            $data['residential_postal_code'] = $inputs['residential_postal_code'];
+            $data['residential_country_id'] = isset($inputs['residential_country']) && $inputs['residential_country'] > 0 ? $inputs['residential_country'] : 167;
+            $data['residential_state_id'] = isset($inputs['residential_state']) ? $inputs['residential_state'] : 0;
+            $data['residential_city_id'] = isset($inputs['residential_city']) ? $inputs['residential_city'] : 0;
 
+            //mailing address fields
+            $data['mailing_address_type'] = $inputs['mailing_address_type'];
+            $data['mailing_address'] = $inputs['mailing_address'];
+            $data['mailing_postal_code'] = $inputs['mailing_postal_code'];
+            $data['mailing_country_id'] = isset($inputs['mailing_country']) && $inputs['mailing_country'] > 0 ? $inputs['mailing_country'] : 167;
+            $data['mailing_state_id'] = isset($inputs['mailing_state']) ? $inputs['mailing_state'] : 0;
+            $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
+
+            $data['comments'] = $inputs['comments'];
+
+            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
+            // dd($inputs);
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
                 $allNextOfKin = $this->model()->where(['parent_id' => $stakeholder->parent_id])->get();
 

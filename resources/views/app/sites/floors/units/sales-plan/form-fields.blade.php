@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-
+                                        
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -410,7 +410,7 @@
             </div>
 
             {{--  individual Form --}}
-            <div id="individualForm">
+            <div id="individualForm" style="display: none">
                 <div class="row mb-1">
                     {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
                     <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
@@ -462,7 +462,7 @@
             </div>
 
             {{-- company form --}}
-            <div id="companyForm">
+            <div id="companyForm" style="display: none">
                 <div class="row mb-1">
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label fs-5" for="company_name">Company Name <span
@@ -500,127 +500,132 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-1">
-                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="email">Email <span class="text-danger">*</span></label>
-                    <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror"
-                        id="stackholder_email" name="stackholder[email]" placeholder="Email" autocomplete="false"
-                        value="{{ old('stackholder.email') }}" />
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
 
-                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="optional_email">Optional Email</label>
-                    <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror"
-                        id="stackholder_optional_email" name="stackholder[optional_email]"
-                        placeholder="Optional Email" autocomplete="false"
-                        value="{{ old('stackholder.optional_email') }}" />
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            {{-- contact form --}}
+            <div style="display: none">
 
-                <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="stackholder_contact">Contact <span
-                            class="text-danger">*</span></label>
-                    <input type="tel" class="form-control form-control-lg ContactNoError"
-                        id="stackholder_contact" name="stackholder[contact]" placeholder=""
-                        value="{{ old('stackholder.contact') }}" />
-                </div>
-                <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+                <div class="row mb-1">
+                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="email">Email <span
+                                class="text-danger">*</span></label>
+                        <input type="email"
+                            class="form-control form-control-lg @error('email') is-invalid @enderror"
+                            id="stackholder_email" name="stackholder[email]" placeholder="Email"
+                            autocomplete="false" value="{{ old('stackholder.email') }}" />
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                <div class="col-lg-3 col-md-3 col-sm-12">
-                    <label class="form-label fs-5" for="contact">Optional Contact # </label>
-                    <input type="tel"
-                        class="form-control form-control-lg OPTContactNoError @error('contact') is-invalid @enderror"
-                        id="optional_contact" name="stackholder[optional_contact]" placeholder=""
-                        value="{{ old('stackholder.optional_contact') }}" />
-                    @error('optional_contact')
-                        <div class="invalid-feedback ">{{ $message }}</div>
-                    @enderror
+                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="optional_email">Optional Email</label>
+                        <input type="email"
+                            class="form-control form-control-lg @error('email') is-invalid @enderror"
+                            id="stackholder_optional_email" name="stackholder[optional_email]"
+                            placeholder="Optional Email" autocomplete="false"
+                            value="{{ old('stackholder.optional_email') }}" />
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="stackholder_contact">Contact <span
+                                class="text-danger">*</span></label>
+                        <input type="tel" class="form-control form-control-lg ContactNoError"
+                            id="stackholder_contact" name="stackholder[contact]" placeholder=""
+                            value="{{ old('stackholder.contact') }}" />
+                    </div>
+                    <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
+
+                    <div class="col-lg-3 col-md-3 col-sm-12">
+                        <label class="form-label fs-5" for="contact">Optional Contact # </label>
+                        <input type="tel"
+                            class="form-control form-control-lg OPTContactNoError @error('contact') is-invalid @enderror"
+                            id="optional_contact" name="stackholder[optional_contact]" placeholder=""
+                            value="{{ old('stackholder.optional_contact') }}" />
+                        @error('optional_contact')
+                            <div class="invalid-feedback ">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <input type="hidden" name="stackholder[OptionalCountryDetails]" id="OptionalCountryDetails">
                 </div>
-                <input type="hidden" name="stackholder[OptionalCountryDetails]" id="OptionalCountryDetails">
+                <div class="row mb-1">
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="parent_id">Select Country</label>
+                        <select class="select2 country_id" id="country_id" name="stackholder[country_id]">
+                            <option value="0" selected>Select Country</option>
+                            @foreach ($country as $data)
+                                <option value="{{ $data->id }}">{{ $data->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('country_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
+                        <select class="select2 state_id" id="state_id" name="stackholder[state_id]">
+                            <option value="0" selected>Select State</option>
+
+                        </select>
+                        @error('state_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                        <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
+                        <select class="select2 city_id" id="city_id" name="stackholder[city_id]">
+                            <option value="0" selected>Select City</option>
+
+                        </select>
+                        @error('city_id')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
+                        <label class="form-label fs-5" for="occupation">Nationality </label>
+                        <input type="text"
+                            class="form-control form-control-lg @error('occupation') is-invalid @enderror"
+                            id="nationality" name="nationality" placeholder="Nationality"
+                            value="{{ old('nationality') }}" />
+                        @error('nationality')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="stackholder_address">Address <span
+                                class="text-danger">*</span></label>
+                        <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
+                            placeholder="Address" rows="4"></textarea>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                                class="text-danger">*</span><span class="text-info">( Same as Permanent Address
+                                <input type="checkbox" id="cpyAddress" />
+                                )</span></label>
+                        <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
+                            placeholder="Mailing Address" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-lg- col-md- col-sm-12 position-relative">
+                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
+                        <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
+                            placeholder="Comments" rows="4"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="row mb-1">
-
-                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                    <label class="form-label" style="font-size: 15px" for="parent_id">Select Country</label>
-                    <select class="select2 country_id" id="country_id" name="stackholder[country_id]">
-                        <option value="0" selected>Select Country</option>
-                        @foreach ($country as $data)
-                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('country_id')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                    <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
-                    <select class="select2 state_id" id="state_id" name="stackholder[state_id]">
-                        <option value="0" selected>Select State</option>
-
-                    </select>
-                    @error('state_id')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-
-                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                    <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
-                    <select class="select2 city_id" id="city_id" name="stackholder[city_id]">
-                        <option value="0" selected>Select City</option>
-
-                    </select>
-                    @error('city_id')
-                        <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                    <label class="form-label fs-5" for="occupation">Nationality </label>
-                    <input type="text"
-                        class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                        id="nationality" name="nationality" placeholder="Nationality"
-                        value="{{ old('nationality') }}" />
-                    @error('nationality')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="stackholder_address">Address <span
-                            class="text-danger">*</span></label>
-                    <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                        placeholder="Address" rows="4"></textarea>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="mailing_address">Mailing Address <span
-                            class="text-danger">*</span><span class="text-info">( Same as Permanent Address
-                            <input type="checkbox" id="cpyAddress" />
-                            )</span></label>
-                    <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
-                        placeholder="Mailing Address" rows="4"></textarea>
-                </div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-lg- col-md- col-sm-12 position-relative">
-                    <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                    <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
-                        placeholder="Comments" rows="4"></textarea>
-                </div>
-            </div>
-
-
 
             <div class="row mb-1" id="stakeholderNextOfKin">
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
                     <select class="select2" multiple name="stackholder[next_of_kin][]" id="stackholder_next_of_kin">
-
                     </select>
                 </div>
             </div>

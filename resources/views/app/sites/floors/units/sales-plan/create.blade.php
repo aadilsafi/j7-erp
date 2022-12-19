@@ -353,65 +353,50 @@
                             if (response.data) {
                                 stakeholderData = response.data[0];
                             }
-                            country_id.val(stakeholderData.country_id);
-                            country_id.trigger('change');
-                            // $('#stackholder_id').val(stakeholderData.id);
-                            $('#stackholder_full_name').val(stakeholderData.full_name);
-                            $('#stackholder_father_name').val(stakeholderData.father_name);
-                            $('#stackholder_occupation').val(stakeholderData.occupation);
-                            $('#stackholder_designation').val(stakeholderData.designation);
-                            $('#stackholder_cnic').val(stakeholderData.cnic);
-                            $('#stackholder_ntn').val(stakeholderData.ntn);
-                            $('#stackholder_contact').val(stakeholderData.contact);
-                            $('#optional_contact').val(stakeholderData.optional_contact);
-                            $('#mailing_address').val(stakeholderData.mailing_address);
-                            $('#stackholder_address').text(stakeholderData.address);
-                            $('#stackholder_email').val(stakeholderData.email);
-                            $('#stackholder_optional_email').val(stakeholderData
-                                .optional_email);
-                            $('#nationality').val(stakeholderData.nationality);
+                            // country_id.val(stakeholderData.country_id);
+                            // country_id.trigger('change');
+                            // // $('#stackholder_id').val(stakeholderData.id);
+                            // $('#stackholder_full_name').val(stakeholderData.full_name);
+                            // $('#stackholder_father_name').val(stakeholderData.father_name);
+                            // $('#stackholder_occupation').val(stakeholderData.occupation);
+                            // $('#stackholder_designation').val(stakeholderData.designation);
+                            // $('#stackholder_cnic').val(stakeholderData.cnic);
+                            // $('#stackholder_ntn').val(stakeholderData.ntn);
+                            // $('#stackholder_contact').val(stakeholderData.contact);
+                            // $('#optional_contact').val(stakeholderData.optional_contact);
+                            // $('#mailing_address').val(stakeholderData.mailing_address);
+                            // $('#stackholder_address').text(stakeholderData.address);
+                            // $('#stackholder_email').val(stakeholderData.email);
+                            // $('#stackholder_optional_email').val(stakeholderData
+                            //     .optional_email);
+                            // $('#nationality').val(stakeholderData.nationality);
 
-                            selected_state_id = stakeholderData.state_id;
-                            selected_city_id = stakeholderData.city_id;
+                            // selected_state_id = stakeholderData.state_id;
+                            // selected_city_id = stakeholderData.city_id;
 
-                            $('#stackholder_comments').text(stakeholderData.comments);
+                            // $('#stackholder_comments').text(stakeholderData.comments);
 
-                            if (stakeholderData.stakeholder_as == 'c') {
-                                $('#company_name').val(stakeholderData.full_name);
-                                $('#industry').val(stakeholderData.occupation);
-                                $('#registration').val(stakeholderData.cnic);
-                                $('#ntn').val(stakeholderData.ntn);
-                                $('#companyForm').show();
-                                $('#individualForm').hide();
+                            // if (stakeholderData.stakeholder_as == 'c') {
+                            //     $('#company_name').val(stakeholderData.full_name);
+                            //     $('#industry').val(stakeholderData.occupation);
+                            //     $('#registration').val(stakeholderData.cnic);
+                            //     $('#ntn').val(stakeholderData.ntn);
+                            //     $('#companyForm').show();
+                            //     $('#individualForm').hide();
 
-                            }
-                            if (stakeholderData.stakeholder_as == 'i') {
+                            // }
+                            // if (stakeholderData.stakeholder_as == 'i') {
 
-                                $('#companyForm').hide();
-                                $('#individualForm').show();
+                            //     $('#companyForm').hide();
+                            //     $('#individualForm').show();
 
-                            }
-                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+                            // }
+                            // intl.setCountry('pk');
+                            // $('#countryDetails').val(JSON.stringify(intl
+                            //     .getSelectedCountryData()))
 
-                            if (countryDetails == null) {
-                                intl.setCountry('pk');
-                            } else {
-                                intl.setCountry(countryDetails['iso2']);
-                            }
+                            //     intlOptional.setCountry('pk');
 
-                            $('#countryDetails').val(JSON.stringify(intl
-                                .getSelectedCountryData()))
-
-                            var OptionalCountryDetails = JSON.parse(stakeholderData
-                                .OptionalCountryDetails);
-                            if (OptionalCountryDetails == null) {
-                                intlOptional.setCountry('pk');
-                            } else {
-                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                            }
-
-                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                                .getSelectedCountryData()))
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -890,29 +875,29 @@
                 },
 
                 // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                'stackholder[stackholder_id]': {
-                    required: true
-                },
-                'stackholder[full_name]': {
-                    required: true
-                },
-                'stackholder[father_name]': {
-                    required: true
-                },
-                'stackholder[contact]': {
-                    required: true
-                },
-                'stackholder[address]': {
-                    required: true
-                },
-                'stackholder[mailing_address]': {
-                    required: true
-                },
-                'stackholder[cnic]': {
-                    // minlength: 13,
-                    // maxlength: 13,
-                    required: true,
-                },
+                // 'stackholder[stackholder_id]': {
+                //     required: true
+                // },
+                // 'stackholder[full_name]': {
+                //     required: true
+                // },
+                // 'stackholder[father_name]': {
+                //     required: true
+                // },
+                // 'stackholder[contact]': {
+                //     required: true
+                // },
+                // 'stackholder[address]': {
+                //     required: true
+                // },
+                // 'stackholder[mailing_address]': {
+                //     required: true
+                // },
+                // 'stackholder[cnic]': {
+                //     // minlength: 13,
+                //     // maxlength: 13,
+                //     required: true,
+                // },
 
                 // 4. SALES SOURCE
                 'sales_source[sales_type]': {

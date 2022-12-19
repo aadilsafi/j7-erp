@@ -28,8 +28,10 @@ class updateRequest extends FormRequest
         $rules =  (new Stakeholder())->rules;
         $rules['cnic'] .= ',' . decryptParams($this->id);
         $rules['registration'] .= ',' . decryptParams($this->id);
-        $rules['email'] .= ',' . decryptParams($this->id);
-        // $rules['optional_email'] .= ',' . decryptParams($this->id);
+        $rules['individual_email'] .= ',' . decryptParams($this->id);
+        $rules['office_email'] .= ',' . decryptParams($this->id);
+        $rules['ntn'] .= ',' . decryptParams($this->id);
+        $rules['strn'] .= ',' . decryptParams($this->id);
 
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);

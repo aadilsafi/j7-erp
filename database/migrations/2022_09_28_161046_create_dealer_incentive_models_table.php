@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('total_dealer_incentive')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->string('serial_no')->nullable()->default('DI-');
             $table->timestamps();
         });
     }

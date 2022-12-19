@@ -41,6 +41,15 @@ class FileManagementService implements FileManagementInterface
             'unit_id' => $inputs['application_form']['unit_id'],
         ])->first();
 
+        $serail_no  = $this->model()::all();
+        if (isset($serail_no) && count($serail_no) > 0) {
+            $last_data = collect($serail_no)->last();
+            $serail_no = (float)$last_data->id + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
+        } else {
+            $serail_no = '001';
+        }
+
         $data = [
             'site_id' => decryptParams($site_id),
             'unit_id' => $inputs['application_form']['unit_id'],
@@ -52,7 +61,8 @@ class FileManagementService implements FileManagementInterface
             'deal_type' => $inputs['application_form']['deal_type'],
             'status' => 1,
             'file_action_id' => 1,
-            'sales_plan_id'=> $sales_plan->id,
+            'sales_plan_id' => $sales_plan->id,
+            'serial_no' => 'UF-' . $serail_no,
             // 'created_date' => $sales_plan->created_date,
         ];
         $file = $this->model()->create($data);

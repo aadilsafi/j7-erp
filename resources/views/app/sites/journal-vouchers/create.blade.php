@@ -30,6 +30,13 @@
 
         }
 
+        .custom_row div input {
+            margin: 0;
+            padding: 1rem;
+            font-weight: 700;
+
+        }
+
         .custom_row {
             background-color: #f3f2f7;
         }
@@ -78,7 +85,7 @@
                                     <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
                                         name="created_date" class="form-control form-control-md" />
                                 </div>
-                                <div class="d-block">
+                                {{-- <div class="d-block">
                                     <label class="form-label fs-5" for="created_date">Total Debit<span
                                             class="text-danger">*</span></label>
                                     <input readonly id="total_debit" type="text" required placeholder="Total Debit"
@@ -90,7 +97,7 @@
                                             class="text-danger">*</span></label>
                                     <input readonly id="total_credit" type="text" required placeholder="Total Credit"
                                         name="total_credit" class="form-control form-control-md" />
-                                </div>
+                                </div> --}}
 
                                 <hr>
                                 <div class="col-md-12">

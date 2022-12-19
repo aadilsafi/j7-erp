@@ -40,6 +40,15 @@ class RefundService implements RefundServiceRefundInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
             $file = FileManagement::find($inputs['file_id']);
+            $serail_no  = $this->model()::all();
+            if(isset($serail_no) && count($serail_no) > 0){
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            }
+            else{
+                $serail_no = '001';
+            }
             $data = [
                 'site_id' => decryptParams($site_id),
                 'file_id' => $file->id,
@@ -53,6 +62,7 @@ class RefundService implements RefundServiceRefundInterface
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
                 'comments' => $inputs['comments'],
+                'serail_no' => 'FRF-'.$serail_no,
             ];
 
             $unit_data = Unit::find($inputs['unit_id']);

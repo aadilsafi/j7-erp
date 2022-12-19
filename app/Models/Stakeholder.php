@@ -37,7 +37,7 @@ class Stakeholder extends Model implements HasMedia
         'mobile_contact',
         'mobileContactCountryDetails',
         'office_contact',
-        'OfficeConatctCountryDetails',
+        'OfficeContactCountryDetails',
         'residential_address',
         'residential_address_type',
         'residential_country_id',
@@ -57,6 +57,9 @@ class Stakeholder extends Model implements HasMedia
         'parent_company',
         'website',
         'relation',
+        'origin',
+        'strn',
+        'passport_no',
     ];
 
     public $rules = [
@@ -68,11 +71,10 @@ class Stakeholder extends Model implements HasMedia
         'designation' => 'exclude_if:stakeholder_as,c|nullable|string|max:50',
         'cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
         'dob' => 'exclude_if:stakeholder_as,c|required|date|before:today',
-        'is_filer' => 'exclude_if:stakeholder_as,c|boolean',
-        'ntn' => 'exclude_if:stakeholder_as,c|required_if:is_file,1|unique:stakeholders,ntn',
-        'nationality' => 'exclude_if:stakeholder_as,c|required|string|max:50',
-        'individual_email' => 'exclude_if:stakeholder_as,c|email|unique:stakeholders,email',
-        'office_email' => 'exclude_if:stakeholder_as,c|nullable|email|unique:stakeholders,office_email',
+        'ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
+        'nationality' => 'exclude_if:stakeholder_as,c|required',
+        'individual_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,email',
+        'office_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,office_email',
         'mobile_contact' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:20',
         'office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',
         'source' => 'exclude_if:stakeholder_as,c|sometimes',
@@ -81,8 +83,10 @@ class Stakeholder extends Model implements HasMedia
         // as company validations
         'company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
         'registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
-        'strn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
+        'strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        'company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
         'website' => 'exclude_if:stakeholder_as,i|nullable|string',
+        'origin' => 'exclude_if:stakeholder_as,i|nullable',
         'industry' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
         'parent_company' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
         'office_contact' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:20',
@@ -124,6 +128,8 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons.*.cnic.max' => 'CNIC may not be greater than 15 digits.',
         'next-of-kins.*.relation' => 'Kin Relation Field is Required.',
         'cnic.exists' => 'Cnic is Blacklisted.',
+        'ntn.required_if' => 'NTN is required if filer is checked.',
+        'dob.before' => 'Date of Birth must be a date before today.',
     ];
 
     protected $casts = [

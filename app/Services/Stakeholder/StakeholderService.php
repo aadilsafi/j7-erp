@@ -63,18 +63,18 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
+                    'passport_no' => $inputs['passport_no'],
                     'ntn' => $inputs['ntn'],
                     'email' => $inputs['individual_email'],
                     'office_email' => $inputs['office_email'],
                     'mobile_contact' => $inputs['mobile_contact'],
-                    'mobileContactCountryDetails' => $inputs['mobileConatctCountryDetails'],
+                    'mobileContactCountryDetails' => $inputs['mobileContactCountryDetails'],
                     'office_contact' => $inputs['office_contact'],
-                    'OfficeConatctCountryDetails' => $inputs['OfficeConatctCountryDetails'],
+                    'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
                     'referred_by' => $inputs['referred_by'],
                     'source' => $inputs['source'],
                     'date_of_birth' => $inputs['dob'],
                     'is_local' => $inputs['is_local'],
-                    'is_filer' => $inputs['is_filer'],
                     'nationality' => $inputs['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
@@ -82,7 +82,7 @@ class StakeholderService implements StakeholderInterface
                     'full_name' => $inputs['company_name'],
                     'industry' => $inputs['industry'],
                     'office_contact' => $inputs['company_office_contact'],
-                    'OfficeConatctCountryDetails' => $inputs['CompanyOfficeConatctCountryDetails'],
+                    'OfficeContactCountryDetails' => $inputs['CompanyOfficeContactCountryDetails'],
                     'mobile_contact' => $inputs['company_optional_contact'],
                     'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
                     'email' => $inputs['company_email'],
@@ -90,7 +90,9 @@ class StakeholderService implements StakeholderInterface
                     'website' => $inputs['website'],
                     'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['strn'],
+                    'strn' => $inputs['strn'],
+                    'ntn' => $inputs['company_ntn'],
+                    'origin' => $inputs['origin'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];
@@ -169,67 +171,9 @@ class StakeholderService implements StakeholderInterface
                 $stakeholder->contacts()->saveMany($contacts);
             }
 
-            // customer ar code 1020201001 for customer 1 receivable Customer Code
-            // customer ap code 2020101001 for customer 1 payable Customer Code
-
-            // $customerStakeholderType = StakeholderType::where('type','C')->get();
-            // $lastExistedCustomerCode = collect($customerStakeholderType)->last();
-
-            // // set payable customer code
-            // $payableCustomerCode = 0;    // payable customer code
-
-            // if(isset($lastExistedCustomerCode->payable_account)){
-            //     $payableCustomerCode = $lastExistedCustomerCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableCustomerCode = 2020101003;
-            // }
-
-            // // set receivable customer code
-            // $receivableCustomerCode = 0;    // receivable customer code
-
-            // if(isset($lastExistedCustomerCode->receivable_account)){
-            //     $receivableCustomerCode = $lastExistedCustomerCode->receivable_account + 1;
-            // }
-            // else{
-            //     $receivableCustomerCode = 1020201003;
-            // }
-
-
-            // // Vendor only payable code
-            // // vendor ap code 2020103001 for vendor 1 payable vendor code
-            // $vendorStakeholderType = StakeholderType::where('type','V')->get();
-            // $lastExistedVendorCode = collect($vendorStakeholderType)->last();
-
-            // $payableVendorCode = 0;
-
-            // if(isset($lastExistedVendorCode->payable_account)){
-            //     $payableVendorCode = $lastExistedVendorCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableVendorCode = 2020103003;
-            // }
-
-            //  // Dealer only payable code
-            // // dealer ap code 2020103001 for dealer 1 payable vendor code
-            // $dealerStakeholderType = StakeholderType::where('type','D')->get();
-            // $lastExistedDealerCode = collect($dealerStakeholderType)->last();
-
-            // $payableDealerCode = 0;
-
-            // if(isset($lastExistedDealerCode->payable_account)){
-            //     $payableDealerCode = $lastExistedDealerCode->payable_account + 1;
-            // }
-            // else{
-            //     $payableDealerCode = 2020102003;
-            // }
-
             $stakeholderId = Str::of($stakeholder->id)->padLeft(3, '0');
             $stakeholderTypeData = [];
             foreach (StakeholderTypeEnum::array() as $key => $value) {
-
-
-
                 $stakeholderType = [
                     'stakeholder_id' => $stakeholder->id,
                     'type' => $value,
@@ -251,22 +195,6 @@ class StakeholderService implements StakeholderInterface
                         'status' => true,
                     ]);
                 }
-
-                //Add  Customer Account codes
-                // if($value == 'C'){
-                //     $stakeholderType['receivable_account'] = $receivableCustomerCode;
-                //     $stakeholderType['payable_account'] = $payableCustomerCode;
-                // }
-
-                // //Add  Vendor Account codes
-                // if($value == 'V'){
-                //     $stakeholderType['payable_account'] = $payableVendorCode;
-                // }
-
-                // //Add  Dealer Account codes
-                // if($value == 'D'){
-                //     $stakeholderType['payable_account'] = $payableDealerCode;
-                // }
 
                 $stakeholderTypeData[] = $stakeholderType;
             }
@@ -301,26 +229,27 @@ class StakeholderService implements StakeholderInterface
                     'occupation' => $inputs['occupation'],
                     'designation' => $inputs['designation'],
                     'cnic' => $inputs['cnic'],
+                    'passport_no' => $inputs['passport_no'],
                     'ntn' => $inputs['ntn'],
                     'email' => $inputs['individual_email'],
                     'office_email' => $inputs['office_email'],
                     'mobile_contact' => $inputs['mobile_contact'],
-                    'mobileContactCountryDetails' => $inputs['mobileConatctCountryDetails'],
+                    'mobileContactCountryDetails' => $inputs['mobileContactCountryDetails'],
                     'office_contact' => $inputs['office_contact'],
-                    'OfficeConatctCountryDetails' => $inputs['OfficeConatctCountryDetails'],
+                    'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
                     'referred_by' => $inputs['referred_by'],
                     'source' => $inputs['source'],
                     'date_of_birth' => $inputs['dob'],
                     'is_local' => $inputs['is_local'],
-                    'is_filer' => $inputs['is_filer'],
                     'nationality' => $inputs['nationality'],
+
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
                 $data = [
                     'full_name' => $inputs['company_name'],
                     'industry' => $inputs['industry'],
                     'office_contact' => $inputs['company_office_contact'],
-                    'OfficeConatctCountryDetails' => $inputs['CompanyOfficeConatctCountryDetails'],
+                    'OfficeContactCountryDetails' => $inputs['CompanyOfficeContactCountryDetails'],
                     'mobile_contact' => $inputs['company_optional_contact'],
                     'mobileContactCountryDetails' => $inputs['companyMobileContactCountryDetails'],
                     'email' => $inputs['company_email'],
@@ -328,7 +257,9 @@ class StakeholderService implements StakeholderInterface
                     'website' => $inputs['website'],
                     'parent_company' => $inputs['parent_company'],
                     'cnic' => $inputs['registration'],
-                    'ntn' => $inputs['strn'],
+                    'strn' => $inputs['strn'],
+                    'ntn' => $inputs['company_ntn'],
+                    'origin' => $inputs['origin'],
                 ];
             }
             $data['stakeholder_as'] = $inputs['stakeholder_as'];

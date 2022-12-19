@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.journal-vouchers.create', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.journal-vouchers.edit', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Create Journal Voucher')
+@section('page-title', 'Edit Journal Voucher')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -30,13 +30,6 @@
 
         }
 
-        .custom_row div input {
-            margin: 0;
-            padding: 1rem;
-            font-weight: 700;
-
-        }
-
         .custom_row {
             background-color: #f3f2f7;
         }
@@ -47,9 +40,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create Journal Vouchers</h2>
+                <h2 class="content-header-title float-start mb-0">Edit Journal Vouchers</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.settings.journal-vouchers.create', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.settings.journal-vouchers.edit', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -58,9 +51,9 @@
 
 @section('content')
     <form class="form form-vertical"
-        action="{{ route('sites.settings.journal-vouchers.store', ['site_id' => encryptParams($site_id)]) }}" method="POST"
+        action="{{ route('sites.settings.journal-vouchers.update', ['site_id' => encryptParams($site_id) , 'id' => encryptParams($JournalVoucher->id)]) }}" method="POST"
         id="journalVouchers">
-
+        @method('put')
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
 
@@ -70,6 +63,8 @@
                     'fifthLevelAccount' => $fifthLevelAccount,
                     'stakeholders' => $stakeholders,
                     'journal_serial_number' => $journal_serial_number,
+                    'JournalVoucher' => $JournalVoucher,
+                    'JournalVoucherEntries' => $JournalVoucherEntries,
                 ]) }}
 
             </div>
@@ -82,21 +77,26 @@
                                 <div class="d-block">
                                     <label class="form-label fs-5" for="created_date">Creation Date<span
                                             class="text-danger">*</span></label>
-                                    <input id="created_date" type="date" required placeholder="YYYY-MM-DD"
+                                    <input id="created_date"
+                                    type="date" required placeholder="YYYY-MM-DD"
                                         name="created_date" class="form-control form-control-md" />
                                 </div>
                                 {{-- <div class="d-block">
                                     <label class="form-label fs-5" for="created_date">Total Debit<span
                                             class="text-danger">*</span></label>
-                                    <input readonly id="total_debit" type="text" required placeholder="Total Debit"
-                                        name="total_debit" class="form-control form-control-md" />
+                                    <input readonly id="total_debit" type="text"
+                                        @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit) }}" @endif
+                                        required placeholder="Total Debit" name="total_debit"
+                                        class="form-control form-control-md" />
                                 </div>
 
                                 <div class="d-block">
                                     <label class="form-label fs-5" for="created_date">Total Credit<span
                                             class="text-danger">*</span></label>
-                                    <input readonly id="total_credit" type="text" required placeholder="Total Credit"
-                                        name="total_credit" class="form-control form-control-md" />
+                                    <input readonly id="total_credit" type="text"
+                                        @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @endif
+                                        required placeholder="Total Credit" name="total_credit"
+                                        class="form-control form-control-md" />
                                 </div> --}}
 
                                 <hr>
@@ -104,7 +104,7 @@
                                     <a id="saveButton" href="#"
                                         class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                                         <i data-feather='save'></i>
-                                        Save
+                                        Update
                                     </a>
                                 </div>
                                 <div class="col-md-12">
@@ -135,7 +135,7 @@
     <script>
         $(document).ready(function() {
             $("#created_date").flatpickr({
-                defaultDate: "today",
+                defaultDate: "{{ $JournalVoucher->created_date }}",
                 // minDate: "today",
                 altInput: !0,
                 altFormat: "F j, Y",

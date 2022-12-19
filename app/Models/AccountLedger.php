@@ -36,6 +36,7 @@ class AccountLedger extends Model
         'created_date',
         'transfer_receipt_id',
         'manual_entry',
+        'journal_voucher_id',
     ];
 
     protected $casts = [

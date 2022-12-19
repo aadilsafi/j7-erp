@@ -63,7 +63,7 @@ class Receipt extends Model implements HasMedia
         parent::boot();
 
         static::created(function ($model) {
-            $model->serial_no = "REC-" . $model->serial_no;
+            $model->serial_no = "RV-" . $model->serial_no;
             $model->save();
         });
     }

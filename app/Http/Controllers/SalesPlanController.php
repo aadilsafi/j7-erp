@@ -263,7 +263,6 @@ class SalesPlanController extends Controller
             $salePlan->approved_date = $request->approve_date . date(' H:i:s');
             $salePlan->update();
         }
-
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
             'approved_date' => $request->approve_date . date(' H:i:s'),

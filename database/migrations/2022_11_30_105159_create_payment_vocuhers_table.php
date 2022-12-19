@@ -21,15 +21,6 @@ return new class extends Migration
             $table->foreignId('dealer_id')->nullable();
             $table->foreignId('vendor_id')->nullable();
             $table->foreignId('bank_id')->nullable();
-            // $table->foreignId('sales_plan_id')->nullable();
-            // $table->foreignId('receipt_id')->nullable();
-            // $table->foreignId('file_refund_id')->nullable();
-            // $table->foreignId('file_resale_id')->nullable();
-            // $table->foreignId('file_buyback_id')->nullable();
-            // $table->foreignId('file_cancellation_id')->nullable();
-            // $table->foreignId('file_title_transfer_id')->nullable();
-            // $table->foreignId('rebate_incentive_id')->nullable();
-            // $table->foreignId('dealer_incentive_id')->nullable();
             $table->string('stakeholder_type')->nullable();
             $table->string('customer_ap_account')->nullable();
             $table->string('dealer_ap_account')->nullable();
@@ -60,6 +51,7 @@ return new class extends Migration
             $table->string('comments')->nullable();
             $table->string('amount_to_be_paid')->nullable();
             $table->boolean('status')->default(0);
+            $table->string('serial_no')->nullable()->default('PV-');
             $table->timestamps();
         });
     }

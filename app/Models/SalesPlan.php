@@ -31,6 +31,7 @@ class SalesPlan extends Model
         'approved_date',
         'cancel',
         'created_date',
+        'serial_no',
     ];
 
     protected $casts = [

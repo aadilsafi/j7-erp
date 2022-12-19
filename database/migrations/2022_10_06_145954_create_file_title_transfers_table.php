@@ -33,6 +33,7 @@ return new class extends Migration
             $table->timestamp('payment_date')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->string('serial_no')->nullable()->default('FTT-');
             $table->softDeletes();
             $table->timestamps();
         });

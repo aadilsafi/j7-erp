@@ -180,6 +180,7 @@ class RebateIncentiveDataTable extends DataTable
         return [
 
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::computed('unit_id')->title('Unit Number')->addClass('text-nowrap text-center'),
             Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
             // Column::computed('unit_type')->title('Unit Type')->addClass('text-nowrap text-center'),

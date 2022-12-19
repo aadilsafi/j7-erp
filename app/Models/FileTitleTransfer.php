@@ -31,6 +31,7 @@ class FileTitleTransfer extends Model
         'kin_data',
         'paid_status',
         'payment_date',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

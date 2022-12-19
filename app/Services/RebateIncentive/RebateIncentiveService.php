@@ -47,6 +47,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
     {
         DB::transaction(function () use ($site_id, $inputs) {
             $dealer_id = $inputs['dealer_id'];
+
             if ($dealer_id == 0) {
                 $dealer_data = $inputs['dealer'];
 
@@ -146,7 +147,14 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 }
             }
 
-
+            $serail_no  = $this->model()::all();
+            if (isset($serail_no) && count($serail_no) > 0) {
+                $last_data = collect($serail_no)->last();
+                $serail_no = (float)$last_data->id + 1;
+                $serail_no =  sprintf('%03d', $serail_no);
+            } else {
+                $serail_no = '001';
+            }
             $rebatedata = [
                 'site_id' => $site_id,
                 'unit_id' => $inputs['unit_id'],
@@ -166,6 +174,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'cheque_no' => $inputs['cheque_no'],
                 'online_instrument_no' => $inputs['online_instrument_no'],
                 'transaction_date' => $inputs['transaction_date'],
+                'serail_no' => 'RI-'.$serail_no,
             ];
 
             $rebate = $this->model()->create($rebatedata);

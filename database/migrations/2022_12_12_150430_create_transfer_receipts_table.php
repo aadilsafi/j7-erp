@@ -30,7 +30,7 @@ return new class extends Migration
             $table->foreignId('bank_id')->nullable();
             $table->string('transaction_date')->nullable();
             $table->string('discounted_amount')->nullable();
-            $table->double('amount_in_numbers')->nullable();
+            $table->string('amount_in_words')->nullable();
             $table->string('attachment')->nullable();
             $table->string('amount')->nullable();
             $table->string('comments')->nullable();
@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('dealer_ap_account')->nullable();
             $table->string('vendor_ap_amount')->nullable();
             $table->string('vendor_ap_account')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

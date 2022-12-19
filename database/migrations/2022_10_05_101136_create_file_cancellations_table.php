@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('amount_remarks')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
+            $table->string('serial_no')->nullable()->default('FC-');
             $table->softDeletes();
             $table->timestamps();
         });

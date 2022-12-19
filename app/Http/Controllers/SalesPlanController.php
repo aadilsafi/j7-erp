@@ -91,7 +91,7 @@ class SalesPlanController extends Controller
             $data = [
                 'site' => (new Site())->find(decryptParams($site_id)),
                 // 'floor' => (new Floor())->find(decryptParams($floor_id)),
-                'unit' => (new Unit())->with('status', 'type')->where('status_id', '!=', 5)->get(),
+                'unit' => (new Unit())->with('status', 'type')->where('has_sub_units', false)->where('status_id',1)->orWhere('status_id',6)->get(),
                 'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
                 'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
                     'stakeholder_types',
@@ -263,7 +263,6 @@ class SalesPlanController extends Controller
             $salePlan->approved_date = $request->approve_date . date(' H:i:s');
             $salePlan->update();
         }
-
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
             'approved_date' => $request->approve_date . date(' H:i:s'),

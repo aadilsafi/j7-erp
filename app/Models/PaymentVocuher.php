@@ -57,6 +57,7 @@ class PaymentVocuher extends Model
         'amount_to_be_paid',
         'status',
         'bank_id',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -173,6 +173,7 @@ class DealerIncentiveDataTable extends DataTable
         return [
 
             Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
             Column::make('dealer_incentive')->title('Dealer Incentive')->addClass('text-nowrap text-center'),
             Column::make('total_unit_area')->title('Total Unit Area')->addClass('text-nowrap text-center'),

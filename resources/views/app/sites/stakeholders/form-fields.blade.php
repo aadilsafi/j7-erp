@@ -684,6 +684,7 @@
         </div>
     </div>
 </div>
+
 {{-- contacts --}}
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
@@ -821,6 +822,79 @@
                                             <textarea class="form-control @error('address') is-invalid @enderror"
                                                 name="contact-persons[{{ $key }}][address]" id="address_{{ $key }}" rows="3"
                                                 placeholder="Stakeholder Address">{{ $oldContactPersons['address'] }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-relief-outline-primary waves-effect waves-float waves-light"
+                        id="first-contact-person" type="button" data-repeater-create>
+                        <i data-feather="plus" class="me-25"></i>
+                        <span>Add New</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{--  stakeholders in case of kins --}}
+
+<div class="card" id="div-next-of-kin" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card-header">
+        <h3>Stakeholders</h3>
+    </div>
+    <div class="card-body">
+        <div class="next-of-kin-list">
+            <div data-repeater-list="next-of-kins">
+                @forelse ((isset($stakeholder) && count($stakeholder->kinStakeholders) > 0 ? $stakeholder->kinStakeholders : old('kinStakeholders')) ?? $emtykinStakeholders as $key => $stakeholderData)
+
+                    <div data-repeater-item>
+                        <div class="card m-0">
+                            <div class="card-header pt-0">
+
+                                <button
+                                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light text-nowrap px-1"
+                                    data-repeater-delete id="delete-next-of-kin" type="button">
+                                    <i data-feather="x" class="me-25"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label" style="font-size: 15px"
+                                                id="kin_{{ $key }}" for="stakeholder_type">Select
+                                                Stakeholder
+                                                <span class="text-danger">*</span></label>
+                                            <select class="form-control kinId uniqueKinId"
+                                                id="kin_{{ $key }}"
+                                                name="next_of_kin[{{ $key }}][stakeholder_id]">
+                                                <option value="0" selected>Select Next Of Kin</option>
+                                                @foreach ($stakeholders as $stakeholderssss)
+                                                    <option value="{{ $stakeholderssss->id }}"
+                                                        {{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? ($stakeholderssss->id == $KinData->kin_id ? 'selected' : '') : '' }}>
+                                                        {{ $stakeholderssss->full_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                                            <label class="form-label fs-5" id="relation_{{ $key }}"
+                                                for="father_name">Relation</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('relation') is-invalid @enderror"
+                                                id="relation_{{ $key }}"
+                                                value="{{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $KinData->relation : '' }}"
+                                                name="next_of_kin[{{ $key }}][relation]"
+                                                placeholder="Relation" value="" />
                                         </div>
                                     </div>
                                 </div>

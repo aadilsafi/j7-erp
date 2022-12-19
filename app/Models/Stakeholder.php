@@ -71,7 +71,7 @@ class Stakeholder extends Model implements HasMedia
         'is_filer' => 'exclude_if:stakeholder_as,c|boolean',
         'ntn' => 'exclude_if:stakeholder_as,c|required_if:is_file,1|unique:stakeholders,ntn',
         'nationality' => 'exclude_if:stakeholder_as,c|required|string|max:50',
-        'individual_email' => 'exclude_if:stakeholder_as,c|required|email|unique:stakeholders,email',
+        'individual_email' => 'exclude_if:stakeholder_as,c|email|unique:stakeholders,email',
         'office_email' => 'exclude_if:stakeholder_as,c|nullable|email|unique:stakeholders,office_email',
         'mobile_contact' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:20',
         'office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',

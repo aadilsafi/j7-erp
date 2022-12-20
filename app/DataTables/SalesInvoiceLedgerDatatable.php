@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\AccountAction;
 use App\Models\AccountLedger;
+use App\Models\JournalVoucher;
 use App\Models\SalesPlan;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
@@ -185,6 +186,16 @@ class SalesInvoiceLedgerDatatable extends DataTable
                         ->first();
                     if (isset($dealer)) {
                         return '<a href="' . route('sites.file-managements.dealer-incentive.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                                <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  (' . $ledger->origin_name . ')
+                            </a>';
+                    } else {
+                        return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
+                    }
+                } elseif ($ledger->account_action_id == 36) {
+                    $JournalVoucher = DB::table('journal_vouchers')->where('id', $ledger->journal_voucher_id)
+                        ->first();
+                    if (isset($JournalVoucher)) {
+                        return '<a href="' . route('sites.settings.journal-vouchers.show', ['site_id' => encryptParams($ledger->site_id), 'id' => encryptParams($JournalVoucher->id)]) . '">
                                 <span class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right" ></i></span>  (' . $ledger->origin_name . ')
                             </a>';
                     } else {

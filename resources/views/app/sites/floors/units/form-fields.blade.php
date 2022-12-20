@@ -8,7 +8,7 @@
                 <label class="form-label" style="font-size: 15px" for="type_id">Unit Type <span class="text-danger">*</span></label>
                 <select class="select2-size-lg form-select" id="type_id" name="type_id"
                     {{ $isSalesplanApproved ? 'disabled' : null }}>
-                    <option value="" selected>Unit Type</option>
+                    <option value="" selected>Select Unit Type</option>
                     @foreach ($types as $row)
                         <option value="{{ $row->id }}"
                             {{ (isset($unit) ? $unit->type_id : old('type_id')) == $row->id ? 'selected' : '' }}>
@@ -144,7 +144,7 @@
         <div class="row mb-2">
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="net_area">Net Area (sqft) <span class="text-danger">*</span></label>
-                <input type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
+                <input min="1" type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
                     id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" />
@@ -153,8 +153,8 @@
                 @enderror
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
-                <label class="form-label fs-5" for="gross_area">Gross Area (sqft)</label>
-                <input type="number" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
+                <label class="form-label fs-5" for="gross_area">Gross Area (sqft)<span class="text-danger">*</span></label>
+                <input min="1" type="number" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
                     id="gross_area" name="gross_area" placeholder="Gross Area (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" />
@@ -164,7 +164,7 @@
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="price_sqft">Price (sqft) <span class="text-danger">*</span></label>
-                <input type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
+                <input min="1" type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
                     id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" />

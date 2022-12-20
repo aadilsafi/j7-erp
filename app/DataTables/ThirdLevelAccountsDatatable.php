@@ -85,6 +85,7 @@ class ThirdLevelAccountsDatatable extends DataTable
             ->setTableId('third-level-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             // ->select()
             // ->selectClassName('bg-primary')
             ->serverSide()

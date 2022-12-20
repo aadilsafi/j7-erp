@@ -36,6 +36,20 @@ class JournalVouchersDatatable extends DataTable
             ->editColumn('user_id', function ($JournalVoucher) {
                 return $JournalVoucher->user->name;
             })
+            ->editColumn('checked_by', function ($JournalVoucher) {
+                if (isset($JournalVoucher->checkedBy)) {
+                    return $JournalVoucher->checkedBy->name;
+                } else {
+                    return '-';
+                }
+            })
+            ->editColumn('approved_by', function ($JournalVoucher) {
+                if (isset($JournalVoucher->postedBy)) {
+                    return $JournalVoucher->postedBy->name;
+                } else {
+                    return '-';
+                }
+            })
             ->editColumn('total_debit', function ($JournalVoucher) {
                 return number_format($JournalVoucher->total_debit);
             })
@@ -55,7 +69,7 @@ class JournalVouchersDatatable extends DataTable
                 }
             })
             ->editColumn('actions', function ($JournalVoucher) {
-                return view('app.sites.journal-vouchers.actions', ['site_id' => $this->site_id, 'id' => $JournalVoucher->id , 'status' => $JournalVoucher->status]);
+                return view('app.sites.journal-vouchers.actions', ['site_id' => $this->site_id, 'id' => $JournalVoucher->id, 'status' => $JournalVoucher->status]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['actions', 'check']));
@@ -70,7 +84,7 @@ class JournalVouchersDatatable extends DataTable
      */
     public function query(JournalVoucher $model): QueryBuilder
     {
-        return $model->newQuery()->whereSiteId($this->site_id)->orderBy('id', 'desc')->with('user');
+        return $model->newQuery()->whereSiteId($this->site_id)->orderBy('id', 'desc')->with('user', 'checkedBy', 'postedBy');
     }
 
     public function html(): HtmlBuilder
@@ -113,6 +127,7 @@ class JournalVouchersDatatable extends DataTable
         return $this->builder()
             ->setTableId('journal-vouchers-table')
             ->addTableClass(['table-hover'])
+            ->scrollX()
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->serverSide()
@@ -156,10 +171,12 @@ class JournalVouchersDatatable extends DataTable
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('serial_number')->title('Voucher Number')->addClass('text-nowrap'),
             Column::make('name')->title('Voucher Name')->addClass('text-nowrap'),
-            Column::make('user_id')->name('user.name')->title('Created By')->addClass('text-nowrap')->orderable(false)->searchable(false),
+            Column::computed('user_id')->name('user.name')->title('Created By')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('total_debit')->title('Debit Amount')->addClass('text-nowrap'),
             Column::make('total_credit')->title('Credit Amount')->addClass('text-nowrap'),
             Column::make('status')->title('Status')->addClass('text-nowrap'),
+            Column::computed('checked_by')->name('checkedBy.name')->title('Checked By')->addClass('text-nowrap')->orderable(false)->searchable(true),
+            Column::computed('approved_by')->name('postedBy.name')->title('Posted By')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('voucher_date')->title('Created At')->addClass('text-nowrap'),
         ];
         // $columns[] = Column::make('created_at')->addClass('text-nowrap');

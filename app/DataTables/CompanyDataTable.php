@@ -92,6 +92,7 @@ class CompanyDataTable extends DataTable
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             ->serverSide()
             ->processing()
             ->deferRender()

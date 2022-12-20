@@ -54,7 +54,7 @@
 {{-- Form Repeater --}}
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
-        <h3>Journal Voucher Entries</h3>
+        <h3>Journal Voucher Entries ( JVE-{{  $origin_number, }})</h3>
     </div>
 
     <div class="card-body">

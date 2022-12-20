@@ -6,9 +6,12 @@ use App\DataTables\PaymentVoucherDatatable;
 use App\Models\AccountHead;
 use App\Models\AccountLedger;
 use App\Models\Bank;
+use App\Models\PaymentVocuher;
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\PaymentVoucher\paymentInterface;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -20,11 +23,12 @@ class PaymentVocuherController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $PaymentVoucherInterface;
+    private $PaymentVoucherInterface,$financialTransactionInterface;
 
-    public function __construct(paymentInterface $PaymentVoucherInterface)
+    public function __construct(paymentInterface $PaymentVoucherInterface ,FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->PaymentVoucherInterface = $PaymentVoucherInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
 
     public function index(PaymentVoucherDatatable $dataTable, $site_id)
@@ -182,4 +186,40 @@ class PaymentVocuherController extends Controller
             'payable_amount' => number_format($payable_amount),
         ], 200);
     }
+
+    public function approvePaymentVoucher($site_id, $id)
+    {
+
+        DB::transaction(function () use ($site_id, $id) {
+
+            $payment_voucher = PaymentVocuher::find(decryptParams($id));
+
+            if ($payment_voucher->stakeholder_type == 'C') {
+                $stakeholder_id = $payment_voucher->customer_id;
+            }
+            if ($payment_voucher->stakeholder_type == 'D') {
+                $stakeholder_id = $payment_voucher->dealer_id;
+            }
+            if ($payment_voucher->stakeholder_type == 'V') {
+                $stakeholder_id = $payment_voucher->vendor_id;
+            }
+
+            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
+            $payment_voucher->status = 1;
+            $payment_voucher->update();
+        });
+        return redirect()->route('sites.payment-voucher.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function activeCheque($site_id, $id)
+    {
+        DB::transaction(function () use ($site_id, $id) {
+            $payment_voucher = PaymentVocuher::find(decryptParams($id));
+            $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
+            $payment_voucher->cheque_status = 1;
+            $payment_voucher->update();
+        });
+        return redirect()->route('sites.payment-voucher.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+    }
+
 }

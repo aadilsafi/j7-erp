@@ -28,13 +28,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 'additionalCosts'
             ])->find($sales_plan_id);
 
-            $expense = SalesPlanInstallments::where(['sales_plan_id'=>$salesPlan->id , 'type'=>'additional_expense'])->get();
+            $expense = SalesPlanInstallments::where(['sales_plan_id' => $salesPlan->id, 'type' => 'additional_expense'])->get();
 
-            if(isset($expense) && count($expense) > 0){
+            if (isset($expense) && count($expense) > 0) {
                 $expense_amount = collect($expense)->sum('amount');
                 $sales_plan_total = (float)$expense_amount + (float)$salesPlan->total_price;
-            }
-            else{
+            } else {
                 $sales_plan_total = $salesPlan->total_price;
             }
             $origin_number = AccountLedger::get();
@@ -83,13 +82,12 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
             $sales_plan = SalesPlan::find($sales_plan_id);
 
-            $expense = SalesPlanInstallments::where(['sales_plan_id'=>$sales_plan->id , 'type'=>'additional_expense'])->get();
+            $expense = SalesPlanInstallments::where(['sales_plan_id' => $sales_plan->id, 'type' => 'additional_expense'])->get();
 
-            if(isset($expense) && count($expense) > 0){
+            if (isset($expense) && count($expense) > 0) {
                 $expense_amount = collect($expense)->sum('amount');
                 $sales_plan_total = (float)$expense_amount + (float)$sales_plan->total_price;
-            }
-            else{
+            } else {
                 $sales_plan_total = $sales_plan->total_price;
             }
 
@@ -357,6 +355,9 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['created_date'] = now();
         }
 
+        if ($account_action == 36) {
+            $data['journal_voucher_id'] = $action_id;
+        }
         return (new AccountLedger())->create($data);
     }
 
@@ -1302,13 +1303,41 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $cashAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
         }
 
-        if ($payment_voucher->payment_mode == "Cheque" || $payment_voucher->payment_mode == "Online") {
+        if ($payment_voucher->payment_mode == "Online") {
             //Bank account credit
             // Bank Transaction
             $bank = Bank::find($payment_voucher->bank_id);
             $bankAccount = $bank->account_number;
             $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $bankAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
         }
+
+        if ($payment_voucher->payment_mode == "Cheque") {
+            // Cheuqe Clearance Transaction
+            $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+            $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $clearanceAccout, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
+        }
+    }
+
+    // Payment Voucher Cheque Active Transactions
+    public function makePaymentVoucherChequeActiveTransaction($payment_voucher)
+    {
+        $origin_number = AccountLedger::get();
+        if (isset($origin_number)) {
+            $origin_number = collect($origin_number)->last();
+            $origin_number = $origin_number->origin_number + 1;
+            $origin_number =  sprintf('%03d', $origin_number);
+        } else {
+            $origin_number = '001';
+        }
+
+
+        $clearanceAccout = AccountHead::where('name', 'Cheques Clearing Account')->first()->code;
+        $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $clearanceAccout, 4, null, 'debit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
+
+        $bank = Bank::find($payment_voucher->bank_id);
+        $bankAccount = $bank->account_number;
+
+        $this->makeFinancialTransaction($payment_voucher->site_id, $origin_number, $bankAccount, 4, null, 'credit', $payment_voucher->amount_to_be_paid, NatureOfAccountsEnum::PAYMENT_VOUCHER, $payment_voucher->id);
     }
 
 

@@ -74,8 +74,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                    width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                    } */
     </style>
 @endsection
 
@@ -403,7 +403,7 @@
                             $('#vendor_ap_amount_paid').attr('readonly', true);
                         }
 
-                        let  total_payable_amount = parseFloat(response.transferFile.amount_to_be_paid)
+                        let total_payable_amount = parseFloat(response.transferFile.amount_to_be_paid)
                         $('#total_payable_amount').val(total_payable_amount.toLocaleString())
                         $('#fileOwner').show()
                         $('#modeOfPaymentDiv').show();
@@ -473,14 +473,46 @@
                         '<span class="is-invalid text-danger errorClass">Other Payment Purpose is required!</span>'
                     );
                 }
-                if (sum_ap_amount != amount_toBe_paid) {
 
+                let invalid_amount_stauts = 0;
+
+                if (parseFloat(customer_ap_amount_paid) > parseFloat($('#customer_ap_amount').val().replace(/,/g,
+                        ''))) {
                     $('#customer_ap_amount_paid').addClass('is-invalid');
-                    $('#vendor_ap_amount_paid').addClass('is-invalid');
-                    $('#dealer_ap_amount_paid').addClass('is-invalid');
-                    $('#attachment').after(
-                        '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
+                    invalid_amount_stauts = 1;
+                    $('#customer_ap_amount_paid').after(
+                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Customer payable amount!</span>'
                     );
+                }
+
+                if (parseFloat(vendor_ap_amount_paid) > parseFloat($('#vendor_ap_amount').val().replace(/,/g,
+                        ''))) {
+                    $('#vendor_ap_amount_paid').addClass('is-invalid');
+                    invalid_amount_stauts = 1;
+                    $('#vendor_ap_amount_paid').after(
+                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Vendor payable amount!</span>'
+                    );
+                }
+
+                if (parseFloat(dealer_ap_amount_paid) > parseFloat($('#dealer_ap_amount').val().replace(/,/g,
+                        ''))) {
+                    $('#dealer_ap_amount_paid').addClass('is-invalid');
+                    invalid_amount_stauts = 1;
+                    $('#dealer_ap_amount_paid').after(
+                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Dealer payable amount!</span>'
+                    );
+
+                }
+
+                if (sum_ap_amount != amount_toBe_paid || invalid_amount_stauts == 1) {
+                    if (sum_ap_amount != amount_toBe_paid) {
+                        $('#customer_ap_amount_paid').addClass('is-invalid');
+                        $('#vendor_ap_amount_paid').addClass('is-invalid');
+                        $('#dealer_ap_amount_paid').addClass('is-invalid');
+                        $('#attachment').after(
+                            '<span class="is-invalid text-danger errorClass">Sum Of All Entered Payable Amount is not equal to Amount To Be Paid!</span>'
+                        );
+                    }
                 } else {
                     $("#receiptForm").submit();
                 }

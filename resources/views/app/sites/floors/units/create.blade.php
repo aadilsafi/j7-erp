@@ -306,8 +306,19 @@
 
         var validator = $("#units_form").validate({
             rules: {
-                'name': {
+                'type_id': {
                     required: true,
+                },
+                'name':{
+                    required: true,
+                },
+                'net_area':{
+                    required: true,
+                    digits:true,
+                },
+                'gross_area':{
+                    required: true,
+                    digits:true,
                 },
             },
             errorClass: 'is-invalid text-danger',

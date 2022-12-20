@@ -107,6 +107,7 @@ class LeadSourceDataTable extends DataTable
             ->setTableId('lead-source-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX()
             ->minifiedAjax()
             ->serverSide()
             ->processing()

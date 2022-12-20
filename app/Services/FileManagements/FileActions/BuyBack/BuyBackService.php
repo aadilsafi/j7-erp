@@ -62,7 +62,7 @@ class BuyBackService implements BuyBackInterface
                 'payment_due_date' => $inputs['payment_due_date'],
                 'amount_remarks' => $inputs['amount_remarks'],
                 'status' => 0,
-                'amount_profit' => $inputs['amount_profit'],
+                'amount_profit' => str_replace( ',', '', $inputs['amount_profit']),
                 'comments' => $inputs['comments'],
                 'serail_no' => 'FBB-'.$serail_no,
             ];

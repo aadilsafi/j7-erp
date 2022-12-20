@@ -114,8 +114,6 @@ class StakeholderService implements StakeholderInterface
             $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
 
             $data['comments'] = $inputs['comments'];
-
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
 
             $stakeholder = $this->model()->create($data);
@@ -131,7 +129,7 @@ class StakeholderService implements StakeholderInterface
             if (isset($inputs['next-of-kins']) && count($inputs['next-of-kins']) > 0) {
                 $nextOfKins = [];
                 foreach ($inputs['next-of-kins'] as $nok) {
-                    if ($nok['stakeholder_id'] != 0) {
+                    if (isset($nok['stakeholder_id']) && $nok['stakeholder_id'] != 0) {
                         $data = [
                             'stakeholder_id' => $stakeholder->id,
                             'kin_id' => $nok['stakeholder_id'],
@@ -162,12 +160,8 @@ class StakeholderService implements StakeholderInterface
                                 'created_at' => now(),
                                 'updated_at' => now(),
                             ];
-                          
-                            $nextOfKins[] =  StakeholderNextOfKin::create($data);
 
-                            StakeholderType::where('stakeholder_id', ($stakeholder->id))->where('type', 'K')->update([
-                                'status' => true,
-                            ]);
+                            $nextOfKins[] =  StakeholderNextOfKin::create($data);
                         }
                     }
                 }
@@ -306,7 +300,6 @@ class StakeholderService implements StakeholderInterface
 
             $data['comments'] = $inputs['comments'];
 
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
                 $allNextOfKin = $this->model()->where(['parent_id' => $stakeholder->parent_id])->get();
@@ -346,25 +339,6 @@ class StakeholderService implements StakeholderInterface
                 changeImageDirectoryPermission();
             }
 
-            if (isset($inputs['stakeholder_type'])) {
-                foreach ($inputs['stakeholder_type'] as $key => $value) {
-                    (new StakeholderType())->where([
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => $key,
-                    ])->update([
-                        'status' => true,
-                    ]);
-                }
-            }
-            // dd($inputs);
-            $stakeholder->contacts()->delete();
-            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
-                $contacts = [];
-                foreach ($inputs['contact-persons'] as $contact) {
-                    $contacts[] = new StakeholderContact($contact);
-                }
-                $stakeholder->contacts()->saveMany($contacts);
-            }
             $stakeholder->nextOfKin()->delete();
 
             if (isset($inputs['next-of-kins']) && count($inputs['next-of-kins']) > 0) {
@@ -384,6 +358,49 @@ class StakeholderService implements StakeholderInterface
                     }
                 }
             }
+
+            if (isset($inputs['stakeholder_type'])) {
+                foreach ($inputs['stakeholder_type'] as $key => $value) {
+                    (new StakeholderType())->where([
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => $key,
+                    ])->update([
+                        'status' => true,
+                    ]);
+
+                    if ($key == 'K') {
+                        if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
+                            $stakeholder->KinStakeholders()->detach();
+                            $stakeholders = [];
+                            foreach ($inputs['stakeholders'] as $nok) {
+                                if ($nok['stakeholder_id'] != 0) {
+                                    $data = [
+                                        'stakeholder_id' => $nok['stakeholder_id'],
+                                        'kin_id' => $stakeholder->id,
+                                        'relation' => $nok['relation'],
+                                        'site_id' => $site_id,
+                                        'created_at' => now(),
+                                        'updated_at' => now(),
+                                    ];
+
+                                    $nextOfKins[] =  StakeholderNextOfKin::create($data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            $stakeholder->contacts()->delete();
+            if (isset($inputs['contact-persons']) && count($inputs['contact-persons']) > 0) {
+                $contacts = [];
+                foreach ($inputs['contact-persons'] as $contact) {
+                    $contacts[] = new StakeholderContact($contact);
+                }
+                $stakeholder->contacts()->saveMany($contacts);
+            }
+
+
 
             foreach ($customFields as $key => $value) {
                 $stakeholder->CustomFieldValues()->updateOrCreate([

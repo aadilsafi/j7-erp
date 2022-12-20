@@ -719,11 +719,6 @@
 
         <div class="card-body">
             <div class="row mb-1 g-1">
-                {{-- <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="comments">Auto Generated Comments</label>
-                <textarea class="form-control form-control-lg" id="auto_generated_comments"
-                    name="comments[auto_generated]" placeholder="Auto Generated Comments" rows="5" readonly></textarea>
-            </div> --}}
 
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label fs-5" for="comments">Comments</label>

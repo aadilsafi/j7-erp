@@ -71,7 +71,7 @@ class Stakeholder extends Model implements HasMedia
         'designation' => 'exclude_if:stakeholder_as,c|nullable|string|max:50',
         'cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
         'dob' => 'exclude_if:stakeholder_as,c|required|date|before:today',
-        'ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
+        // 'ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
         'nationality' => 'exclude_if:stakeholder_as,c|required',
         'individual_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,email',
         'office_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,office_email',
@@ -79,11 +79,11 @@ class Stakeholder extends Model implements HasMedia
         'office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',
         'source' => 'exclude_if:stakeholder_as,c|sometimes',
         'referred_by' => 'exclude_if:stakeholder_as,c|sometimes',
-
         // as company validations
         'company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
         'registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
-        'strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        // 'strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        // 'ntn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,ntn',
         'company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
         'website' => 'exclude_if:stakeholder_as,i|nullable|string',
         'origin' => 'exclude_if:stakeholder_as,i|nullable',
@@ -112,10 +112,6 @@ class Stakeholder extends Model implements HasMedia
         'mailing_city' => 'required|numeric',
         'mailing_postal_code' => 'required|numeric',
         'mailing_address' => 'required|string',
-
-        'city_id' => 'nullable|numeric',
-        'state_id' => 'nullable|numeric',
-        'country_id' => 'nullable|numeric',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
 
@@ -173,7 +169,8 @@ class Stakeholder extends Model implements HasMedia
 
     public function KinStakeholders()
     {
-        return $this->hasMany(StakeholderNextOfKin::class, 'kin_id');
+        return $this->belongsToMany(Stakeholder::class, 'stakeholder_next_of_kin', 'kin_id')
+            ->withPivot('site_id', 'relation')->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
     public function contacts()
@@ -228,5 +225,10 @@ class Stakeholder extends Model implements HasMedia
     public function mailingCity()
     {
         return $this->belongsTo(City::class, 'mailing_city_id');
+    }
+
+    public function nationalityCountry()
+    {
+        return $this->belongsTo(Country::class, 'nationality');
     }
 }

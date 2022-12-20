@@ -45,23 +45,23 @@ class SalesPlanService implements SalesPlanInterface
     }
 
     // // Get
-    // public function getByAll($site_id)
-    // {
-    //     $site_id = decryptParams($site_id);
+    public function getByAll($site_id)
+    {
+        $site_id = decryptParams($site_id);
 
-    //     return $this->model()->where('site_id', $site_id)->get();
-    // }
+        return $this->model()->where('site_id', $site_id)->get();
+    }
 
-    // public function getById($site_id, $id)
-    // {
-    //     $site_id = decryptParams($site_id);
-    //     $id = decryptParams($id);
+    public function getById($site_id, $id)
+    {
+        $site_id = decryptParams($site_id);
+        $id = decryptParams($id);
 
-    //     return $this->model()->where([
-    //         'site_id' => $site_id,
-    //         'id' => $id,
-    //     ])->first();
-    // }
+        return $this->model()->where([
+            'site_id' => $site_id,
+            'id' => $id,
+        ])->first();
+    }
 
     // // Store
     public function store($site_id, $inputs)

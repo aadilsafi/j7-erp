@@ -49,8 +49,7 @@
                                             id="stakeholder_type_{{ $type->type }}"
                                             onchange="performAction('{{ $type->type }}')"
                                             name="stakeholder_type[{{ $type->type }}]" value="1"
-                                            {{ $type->status ? 'checked' : null }}
-                                            {{ $type->status || $type->type == 'K' ? 'disabled' : null }} />
+                                            {{ $type->status ? 'checked' : null }} />
                                         <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                             <span class="switch-icon-left"><i data-feather="check"></i></span>
                                             <span class="switch-icon-right"><i data-feather="x"></i></span>
@@ -493,7 +492,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_postal_code">Postal Code
-                            <span class="text-danger">*</span></label>
+                        </label>
                         <input type="number"
                             class="form-control form-control-md @error('residential_postal_code') is-invalid @enderror"
                             id="residential_postal_code" name="residential_postal_code" placeholder="Postal Code"
@@ -568,7 +567,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_postal_code">Postal Code
-                            <span class="text-danger">*</span></label>
+                        </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"
                             id="mailing_postal_code" name="mailing_postal_code" placeholder="mailing Postal Code"
@@ -702,7 +701,7 @@
     <div class="card-body">
         <div class="stakeholders-list">
             <div data-repeater-list="stakeholders">
-                @forelse ((isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? $stakeholder->KinStakeholders : old('stakeholders')) ?? $emtykinStakeholders as $key => $stakeholderData)
+                @forelse ((isset($stakeholder) && count($parentStakeholders) > 0 ? $parentStakeholders : old('stakeholders')) ?? $emtykinStakeholders as $key => $stakeholderData)
 
                     <div data-repeater-item>
                         <div class="card m-0">
@@ -710,13 +709,15 @@
                             <div class="card-body">
 
                                 <div class="row mb-1">
+                                    <input type="hidden" name="stakeholders[{{ $key }}][id]"
+                                        value="{{ isset($stakeholder) && count($parentStakeholders) > 0 ? $stakeholderData->id : 0 }}">
                                     <div class="col-lg-5 col-md-5 col-sm-5 position-relative">
                                         <label class="form-label" style="font-size: 15px"
                                             id="stakeholders_{{ $key }}" for="stakeholder_type">Select
                                             Stakeholder
                                             <span class="text-danger">*</span></label>
                                         <select class="form-control selectStk" id="stakeholders_{{ $key }}"
-                                            name="stakeholders_[{{ $key }}][stakeholder_id]">
+                                            name="stakeholders[{{ $key }}][stakeholder_id]">
                                             <option value="0" selected>Select Stakeholder</option>
                                             @foreach ($stakeholders as $stakeholderssss)
                                                 <option value="{{ $stakeholderssss->id }}"
@@ -733,7 +734,7 @@
                                             class="form-control form-control-md @error('relation') is-invalid @enderror"
                                             id="stakeholders_{{ $key }}[relation]"
                                             value="{{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? $stakeholderData->relation : '' }}"
-                                            name="stakeholders_[{{ $key }}][relation]"
+                                            name="stakeholders[{{ $key }}][relation]"
                                             placeholder="Relation" value="" />
                                     </div>
                                     <div class="col-lg-1 col-md-1 col-sm-1 position-relative text-center">

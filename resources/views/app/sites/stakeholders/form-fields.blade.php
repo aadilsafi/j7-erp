@@ -492,7 +492,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_postal_code">Postal Code
-                            <span class="text-danger">*</span></label>
+                        </label>
                         <input type="number"
                             class="form-control form-control-md @error('residential_postal_code') is-invalid @enderror"
                             id="residential_postal_code" name="residential_postal_code" placeholder="Postal Code"
@@ -567,7 +567,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_postal_code">Postal Code
-                            <span class="text-danger">*</span></label>
+                        </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"
                             id="mailing_postal_code" name="mailing_postal_code" placeholder="mailing Postal Code"
@@ -709,7 +709,8 @@
                             <div class="card-body">
 
                                 <div class="row mb-1">
-                                    <input type="hidden" name="stakeholders[{{$key}}][id]" value="{{ isset($stakeholder) && count($parentStakeholders) > 0 ? $stakeholderData->id : 0 }}">
+                                    <input type="hidden" name="stakeholders[{{ $key }}][id]"
+                                        value="{{ isset($stakeholder) && count($parentStakeholders) > 0 ? $stakeholderData->id : 0 }}">
                                     <div class="col-lg-5 col-md-5 col-sm-5 position-relative">
                                         <label class="form-label" style="font-size: 15px"
                                             id="stakeholders_{{ $key }}" for="stakeholder_type">Select

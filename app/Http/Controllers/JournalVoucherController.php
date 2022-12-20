@@ -143,9 +143,21 @@ class JournalVoucherController extends Controller
      * @param  \App\Models\JournalVoucher  $journalVoucher
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, JournalVoucher $journalVoucher)
+    public function update(Request $request, JournalVoucher $journalVoucher  ,$site_id,$id)
     {
         //
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+                $site_id = decryptParams($site_id);
+                $record = $this->journalVoucherInterface->update(decryptParams($site_id), decryptParams($id),$inputs);
+                return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.settings.journal-vouchers.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**

@@ -170,6 +170,7 @@
                     dateFormat: "Y-m-d",
                 });
 
+
             },
             hide: function(e) {
                 $(this).slideUp(e)

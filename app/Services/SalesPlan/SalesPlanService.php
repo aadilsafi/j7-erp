@@ -18,6 +18,7 @@ use App\Models\{
     SalesPlan,
     SalesPlanInstallments,
     Site,
+    Stakeholder,
     StakeholderType,
     Unit
 };
@@ -83,85 +84,85 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
 
-            if ($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
-                throw new GeneralException('Stakeholder CNIC already exists');
-            }
+            // if ($stakeholderInput['stackholder_id'] == 0 && $this->stakeholderInterface->model()->where('cnic', $stakeholderInput['cnic'])->exists()) {
+            //     throw new GeneralException('Stakeholder CNIC already exists');
+            // }
 
-            $stakeholderData = [
-                'site_id' => $site->id,
-                'full_name' => $stakeholderInput['full_name'],
-                'father_name' => $stakeholderInput['father_name'],
-                'occupation' => $stakeholderInput['occupation'],
-                'designation' => $stakeholderInput['designation'],
-                'ntn' => $stakeholderInput['ntn'],
-                'cnic' => $stakeholderInput['cnic'],
-                'contact' => $stakeholderInput['contact'],
-                'countryDetails' => $stakeholderInput['countryDetails'],
-                'optional_contact' => $stakeholderInput['optional_contact'],
-                'OptionalCountryDetails' => $stakeholderInput['OptionalCountryDetails'],
-                'address' => $stakeholderInput['address'],
-                'mailing_address' => $stakeholderInput['mailing_address'],
-                'comments' => $stakeholderInput['comments'],
-                'email' => $stakeholderInput['email'],
-                'optional_email' => $stakeholderInput['optional_email'],
-                'country_id' => $stakeholderInput['country_id'],
-                'state_id' => $stakeholderInput['state_id'],
-                'city_id' => $stakeholderInput['city_id'],
-            ];
+            // $stakeholderData = [
+            //     'site_id' => $site->id,
+            //     'full_name' => $stakeholderInput['full_name'],
+            //     'father_name' => $stakeholderInput['father_name'],
+            //     'occupation' => $stakeholderInput['occupation'],
+            //     'designation' => $stakeholderInput['designation'],
+            //     'ntn' => $stakeholderInput['ntn'],
+            //     'cnic' => $stakeholderInput['cnic'],
+            //     'contact' => $stakeholderInput['contact'],
+            //     'countryDetails' => $stakeholderInput['countryDetails'],
+            //     'optional_contact' => $stakeholderInput['optional_contact'],
+            //     'OptionalCountryDetails' => $stakeholderInput['OptionalCountryDetails'],
+            //     'address' => $stakeholderInput['address'],
+            //     'mailing_address' => $stakeholderInput['mailing_address'],
+            //     'comments' => $stakeholderInput['comments'],
+            //     'email' => $stakeholderInput['email'],
+            //     'optional_email' => $stakeholderInput['optional_email'],
+            //     'country_id' => $stakeholderInput['country_id'],
+            //     'state_id' => $stakeholderInput['state_id'],
+            //     'city_id' => $stakeholderInput['city_id'],
+            // ];
 
-            if ($stakeholderInput['stackholder_id'] == 0) {
-                $stakeholderData['stakeholder_as'] = 'i';
-            }
-            $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
-                'id' => $stakeholderInput['stackholder_id'],
-            ], $stakeholderData);
+            // if ($stakeholderInput['stackholder_id'] == 0) {
+            //     $stakeholderData['stakeholder_as'] = 'i';
+            // }
+            // $stakeholder = $this->stakeholderInterface->model()->updateOrCreate([
+            //     'id' => $stakeholderInput['stackholder_id'],
+            // ], $stakeholderData);
 
-            if ($stakeholderInput['stackholder_id'] == 0) {
-                $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
-                $stakeholderTypeData  = [
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => StakeholderTypeEnum::CUSTOMER->value,
-                        'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $stakeholderTypeCode,
-                        'status' => 0,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => StakeholderTypeEnum::VENDOR->value,
-                        'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $stakeholderTypeCode,
-                        'status' => 0,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => StakeholderTypeEnum::DEALER->value,
-                        'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $stakeholderTypeCode,
-                        'status' => 0,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
-                        'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $stakeholderTypeCode,
-                        'status' => 0,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ],
-                    [
-                        'stakeholder_id' => $stakeholder->id,
-                        'type' => StakeholderTypeEnum::LEAD->value,
-                        'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
-                        'status' => 1,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ],
-                ];
-                $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
-            }
+            // if ($stakeholderInput['stackholder_id'] == 0) {
+            //     $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
+            //     $stakeholderTypeData  = [
+            //         [
+            //             'stakeholder_id' => $stakeholder->id,
+            //             'type' => StakeholderTypeEnum::CUSTOMER->value,
+            //             'stakeholder_code' => StakeholderTypeEnum::CUSTOMER->value . '-' . $stakeholderTypeCode,
+            //             'status' => 0,
+            //             'created_at' => now(),
+            //             'updated_at' => now(),
+            //         ],
+            //         [
+            //             'stakeholder_id' => $stakeholder->id,
+            //             'type' => StakeholderTypeEnum::VENDOR->value,
+            //             'stakeholder_code' => StakeholderTypeEnum::VENDOR->value . '-' . $stakeholderTypeCode,
+            //             'status' => 0,
+            //             'created_at' => now(),
+            //             'updated_at' => now(),
+            //         ],
+            //         [
+            //             'stakeholder_id' => $stakeholder->id,
+            //             'type' => StakeholderTypeEnum::DEALER->value,
+            //             'stakeholder_code' => StakeholderTypeEnum::DEALER->value . '-' . $stakeholderTypeCode,
+            //             'status' => 0,
+            //             'created_at' => now(),
+            //             'updated_at' => now(),
+            //         ],
+            //         [
+            //             'stakeholder_id' => $stakeholder->id,
+            //             'type' => StakeholderTypeEnum::NEXT_OF_KIN->value,
+            //             'stakeholder_code' => StakeholderTypeEnum::NEXT_OF_KIN->value . '-' . $stakeholderTypeCode,
+            //             'status' => 0,
+            //             'created_at' => now(),
+            //             'updated_at' => now(),
+            //         ],
+            //         [
+            //             'stakeholder_id' => $stakeholder->id,
+            //             'type' => StakeholderTypeEnum::LEAD->value,
+            //             'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
+            //             'status' => 1,
+            //             'created_at' => now(),
+            //             'updated_at' => now(),
+            //         ],
+            //     ];
+            //     $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
+            // }
 
             // $unit = (new Unit())->where('floor_unit_number', $inputs['unit']['no'])->first();
 
@@ -192,8 +193,8 @@ class SalesPlanService implements SalesPlanInterface
             $sales_plan_data = [
                 'unit_id' => $unit->id,
                 'user_id' => auth()->user()->id,
-                'stakeholder_id' => $stakeholder->id,
-                'stakeholder_data' => json_encode($stakeholder),
+                'stakeholder_id' => $stakeholderInput['stackholder_id'],
+                'stakeholder_data' => json_encode(Stakeholder::find($stakeholderInput['stackholder_id'])),
                 'unit_price' => $unitInput['price']['unit'],
                 'total_price' => intval(str_replace(',', '', $unitInput['grand_total'])),
                 'discount_percentage' => $unitInput['discount']['percentage'],

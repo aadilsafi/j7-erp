@@ -108,7 +108,8 @@ class StakeholderController extends Controller
     public function store(stakeholderStoreRequest $request, $site_id)
     // public function store(Request $request, $site_id)
     {
-        try {
+       
+        // try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
                 $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
@@ -117,9 +118,9 @@ class StakeholderController extends Controller
             } else {
                 abort(403);
             }
-        } catch (Exception $ex) {
-            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
-        }
+        // } catch (Exception $ex) {
+        //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+        // }
     }
 
     /**
@@ -145,6 +146,10 @@ class StakeholderController extends Controller
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 
+        $emtykinStakeholders[0]['id'] = 0;
+        $emtykinStakeholders[0]['stakeholder_id'] = '';
+        $emtykinStakeholders[0]['relation'] = '';
+
         try {
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin']);
 
@@ -168,6 +173,7 @@ class StakeholderController extends Controller
                     'city' => [],
                     'state' => [],
                     'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
+                'emtykinStakeholders' => $emtykinStakeholders,
                     'emtyNextOfKin' => $emtyNextOfKin,
                     'customFields' => $customFields,
                     'contactStakeholders' => Stakeholder::where('stakeholder_as', 'i')->get(),

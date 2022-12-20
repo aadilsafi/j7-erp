@@ -178,10 +178,6 @@
                 $data = old();
             @endphp
 
-            // @if (!is_null(old('stakeholder_type')))
-            //     $('#stakeholderType').val({{ old('stakeholder_type') }}).change();
-            // @endif
-
             var cp_state = 0;
             var cp_city = 0;
 

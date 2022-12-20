@@ -79,11 +79,11 @@ class Stakeholder extends Model implements HasMedia
         'office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',
         'source' => 'exclude_if:stakeholder_as,c|sometimes',
         'referred_by' => 'exclude_if:stakeholder_as,c|sometimes',
-
         // as company validations
         'company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
         'registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
         'strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        'ntn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,ntn',
         'company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
         'website' => 'exclude_if:stakeholder_as,i|nullable|string',
         'origin' => 'exclude_if:stakeholder_as,i|nullable',
@@ -112,10 +112,6 @@ class Stakeholder extends Model implements HasMedia
         'mailing_city' => 'required|numeric',
         'mailing_postal_code' => 'required|numeric',
         'mailing_address' => 'required|string',
-
-        'city_id' => 'nullable|numeric',
-        'state_id' => 'nullable|numeric',
-        'country_id' => 'nullable|numeric',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
 

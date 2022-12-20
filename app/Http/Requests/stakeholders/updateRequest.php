@@ -30,7 +30,7 @@ class updateRequest extends FormRequest
         $rules['registration'] .= ',' . decryptParams($this->id);
         $rules['individual_email'] .= ',' . decryptParams($this->id);
         $rules['office_email'] .= ',' . decryptParams($this->id);
-        // $rules['ntn'] .= ',' . decryptParams($this->id);
+        $rules['company_ntn'] .= ',' . decryptParams($this->id);
         // $rules['strn'] .= ',' . decryptParams($this->id);
 
         $rules['stakeholder_type'] = 'array';

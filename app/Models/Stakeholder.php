@@ -173,7 +173,8 @@ class Stakeholder extends Model implements HasMedia
 
     public function KinStakeholders()
     {
-        return $this->hasMany(StakeholderNextOfKin::class, 'kin_id');
+        return $this->belongsToMany(Stakeholder::class, 'stakeholder_next_of_kin', 'kin_id')
+            ->withPivot('site_id', 'relation')->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
     public function contacts()

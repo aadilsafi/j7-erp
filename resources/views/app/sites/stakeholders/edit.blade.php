@@ -58,8 +58,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
     </style>
 @endsection
 
@@ -99,6 +99,7 @@
                     'contactStakeholders' => $contactStakeholders,
                     'leadSources' => $leadSources,
                     'emtykinStakeholders' => $emtykinStakeholders,
+                    'parentStakeholders' => $parentStakeholders,
                 ]) }}
             </div>
 
@@ -339,6 +340,7 @@
 
             var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
             var areStakeholderKinsExist = {{ count($stakeholder->nextOfKin) > 0 ? 'false' : 'true' }};
+            var KinStakeholdersExists = {{ count($stakeholder->KinStakeholders) > 0 ? 'false' : 'true' }};
 
             $(".next-of-kin-list").repeater({
 
@@ -355,7 +357,7 @@
             })
 
             $(".stakeholders-list").repeater({
-                initEmpty: true,
+                initEmpty: KinStakeholdersExists,
                 show: function() {
                     $(this).slideDown(function() {
                         $(this).find('.selectStk').select2({
@@ -472,8 +474,6 @@
                 @endif
             @empty
             @endforelse
-
-
 
             var firstLoad = true;
 
@@ -608,7 +608,6 @@
 
             residential_country.val('{{ $stakeholder->residential_country_id }}');
             residential_country.trigger('change');
-
 
             // mailing address
 

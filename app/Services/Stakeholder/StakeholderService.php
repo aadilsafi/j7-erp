@@ -114,7 +114,6 @@ class StakeholderService implements StakeholderInterface
             $data['mailing_city_id'] = isset($inputs['mailing_city']) ? $inputs['mailing_city'] : 0;
 
             $data['comments'] = $inputs['comments'];
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
 
             $stakeholder = $this->model()->create($data);
@@ -301,7 +300,6 @@ class StakeholderService implements StakeholderInterface
 
             $data['comments'] = $inputs['comments'];
 
-            $data['nationality'] = isset($inputs['nationality']) ? $inputs['nationality'] : 'pakistani';
             // dd($inputs);
             if ($nextOfKinId > 0 && $nextOfKinId != $inputs['parent_id']) {
                 $allNextOfKin = $this->model()->where(['parent_id' => $stakeholder->parent_id])->get();

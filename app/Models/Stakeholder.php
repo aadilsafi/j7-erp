@@ -230,4 +230,9 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->belongsTo(City::class, 'mailing_city_id');
     }
+
+    public function nationalityCountry()
+    {
+        return $this->belongsTo(Country::class, 'nationality');
+    }
 }

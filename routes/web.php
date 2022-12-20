@@ -258,9 +258,10 @@ Route::group([
                         Route::group(['prefix' => '/{id}'], function () {
                             Route::get('edit', [JournalVoucherController::class, 'edit'])->name('edit');
                             Route::put('update', [JournalVoucherController::class, 'update'])->name('update');
+                            Route::get('show', [JournalVoucherController::class, 'show'])->name('show');
 
                             Route::group(['prefix' => 'journal-vouchers-entries', 'as' => 'journal-vouchers-entries.'], function () {
-                                Route::get('show', [JournalVoucherEntriesController::class, 'show'])->name('show');
+
                                 Route::get('check-voucher', [JournalVoucherController::class, 'checkVoucher'])->name('check-voucher');
                                 Route::get('post-voucher', [JournalVoucherController::class, 'postVoucher'])->name('post-voucher');
                                 Route::get('dis-approve-voucher', [JournalVoucherController::class, 'disapproveVoucher'])->name('dis-approve-voucher');
@@ -754,6 +755,14 @@ Route::group([
 
                     Route::get('create', [PaymentVocuherController::class, 'create'])->name('create');
                     Route::post('store', [PaymentVocuherController::class, 'store'])->name('store');
+                    // Route::get('approve/{rebate_incentive_id}', [RebateIncentiveController::class, 'approve'])->name('approve');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('show', [PaymentVocuherController::class, 'show'])->name('show');
+                        Route::get('active-cheque', [PaymentVocuherController::class, 'activeCheque'])->name('active-cheque');
+                        Route::get('approve', [PaymentVocuherController::class, 'approvePaymentVoucher'])->name('approve');
+                    });
+
 
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                         Route::post('get-accounts-payable-data', [PaymentVocuherController::class, 'getAccountsPayableData'])->name('get-accounts-payable-data');

@@ -88,6 +88,7 @@ class FourthLevelAccountsDatatable extends DataTable
             // ->select()
             // ->selectClassName('bg-primary')
             ->serverSide()
+            ->scrollX(true)
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')

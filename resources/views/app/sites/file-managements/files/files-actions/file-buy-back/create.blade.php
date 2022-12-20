@@ -196,7 +196,6 @@
                 rules: {
                     'amount_profit': {
                         required: true,
-                        digits: true,
                     },
                     'payment_due_date': {
                         required: true

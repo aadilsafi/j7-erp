@@ -65,6 +65,7 @@
                     'journal_serial_number' => $journal_serial_number,
                     'JournalVoucher' => $JournalVoucher,
                     'JournalVoucherEntries' => $JournalVoucherEntries,
+                    'origin_number' => $origin_number,
                 ]) }}
 
             </div>

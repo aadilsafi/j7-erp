@@ -42,11 +42,17 @@ interface FinancialTransactionInterface
 
     public function makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
 
+    public function makePaymentVoucherChequeActiveTransaction($payment_voucher);
+
     // transfer Receipts Transactions
     public function makeTransferReceiptTransaction($receipt_id); // for cash
+
     public function makeTransferReceiptChequeTransaction($receipt_id); // for cheque
+
     public function makeTransferReceiptActiveTransaction($receipt_id); // for cheque Active
+
     public function makeTransferReceiptOnlineTransaction($receipt_id); // for online
+
     public function makeTransferReceiptOtherTransaction($receipt_id); // for other
 
 }

@@ -70,6 +70,7 @@
                     'fifthLevelAccount' => $fifthLevelAccount,
                     'stakeholders' => $stakeholders,
                     'journal_serial_number' => $journal_serial_number,
+                    'origin_number' => $origin_number,
                 ]) }}
 
             </div>

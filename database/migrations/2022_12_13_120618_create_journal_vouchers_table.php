@@ -34,6 +34,7 @@ return new class extends Migration
             $table->timestamp('checked_date')->nullable();
             $table->foreignId('approved_by')->nullable();
             $table->timestamp('approved_date')->nullable();
+            $table->string('jve_number')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

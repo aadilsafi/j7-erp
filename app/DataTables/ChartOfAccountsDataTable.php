@@ -79,6 +79,7 @@ class ChartOfAccountsDataTable extends DataTable
             ->setTableId('ledger-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             // ->select()
             // ->selectClassName('bg-primary')
             ->serverSide()

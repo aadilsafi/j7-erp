@@ -51,6 +51,7 @@ return new class extends Migration
             $table->string('comments')->nullable();
             $table->string('amount_to_be_paid')->nullable();
             $table->boolean('status')->default(0);
+            $table->boolean('cheque_status')->default(0);
             $table->string('serial_no')->nullable()->default('PV-');
             $table->timestamps();
         });

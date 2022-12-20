@@ -99,7 +99,7 @@ class paymentService implements paymentInterface
                 "comments" => $inputs['comments'],
                 "amount_to_be_paid" => str_replace(',', '', $inputs['amount_to_be_paid']),
                 "receiving_date" => now(),
-                "serial_no" => $serail_no,
+                "serial_no" => 'PV-'.$serail_no,
             ];
 
 
@@ -121,7 +121,7 @@ class paymentService implements paymentInterface
 
             $stakeholder_id = $inputs['stakeholder_id'];
             $payment_voucher = $this->model()->create($payment_voucher_data);
-            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
+            // $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
         });
 
         return true;

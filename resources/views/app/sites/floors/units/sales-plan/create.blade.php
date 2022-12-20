@@ -172,10 +172,10 @@
                                         <i data-feather='printer'></i>
                                         <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
                                     </button> --}}
-                                    {{-- <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
+                                    <a href="{{ url()->previous() }}"
                                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
-                                        {{ __('lang.commons.cancel') }} --}}
+                                        {{ __('lang.commons.cancel') }}
                                     </a>
                                 </div>
                             </div>

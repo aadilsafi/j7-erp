@@ -186,11 +186,11 @@
                                 .id + '">' + value.name + '</option>');
                         });
                         hideBlockUI('#common_form');
-                       
+
                         residential_state.val(ra_state);
                         residential_state.trigger('change');
-                        
-                        
+
+
 
                         @if (!is_null(old('residential.state')))
                             $('#residential_state').val({{ old('residential.state') }});

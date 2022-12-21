@@ -191,7 +191,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     } else {
                         return  '<span s class="badge rounded-pill bg-warning"><i class="bi bi-box-arrow-right"></i></span>  (' . $ledger->origin_name . ')';
                     }
-                } elseif ($ledger->account_action_id == 36) {
+                } elseif ($ledger->account_action_id == 36 || $ledger->account_action_id == 37 ) {
                     $JournalVoucher = DB::table('journal_vouchers')->where('id', $ledger->journal_voucher_id)
                         ->first();
                     if (isset($JournalVoucher)) {

@@ -264,6 +264,7 @@ Route::group([
 
                                 Route::get('check-voucher', [JournalVoucherController::class, 'checkVoucher'])->name('check-voucher');
                                 Route::get('post-voucher', [JournalVoucherController::class, 'postVoucher'])->name('post-voucher');
+                                Route::get('revert-voucher', [JournalVoucherController::class, 'revertVoucher'])->name('revert-voucher');
                                 Route::get('dis-approve-voucher', [JournalVoucherController::class, 'disapproveVoucher'])->name('dis-approve-voucher');
 
 

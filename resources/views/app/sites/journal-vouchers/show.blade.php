@@ -80,16 +80,16 @@
                                 <label class="form-label fs-5" for="name"> JVE Number </label>
                                 <input readonly type="text"
                                     class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
-                                    @if (isset($JournalVoucher)) value="{{ $JournalVoucher->jve_number }}" @else value="Not Posted" @endif />
+                                    @if (isset($JournalVoucher->jve_number)) value="{{ $JournalVoucher->jve_number }}" @else value="Not Posted" @endif />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                                <label class="form-label fs-5" for="name"> Voucher Name </label>
+                                <label class="form-label fs-5" for="name"> Status</label>
                                 <input type="text" readonly
                                     class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
                                     id="voucher_name" name="voucher_name" placeholder="Journal Voucher Name"
-                                    @if (isset($JournalVoucher)) value="{{ $JournalVoucher->name }}" @endif />
+                                    @if (isset($JournalVoucher)) value="{{ ucfirst($JournalVoucher->status) }}" @endif />
 
                             </div>
 
@@ -98,7 +98,7 @@
                                 <input type="text" readonly
                                     class="form-control form-control-md @error('remarks') is-invalid @enderror"
                                     id="remarks"
-                                    @if (isset($JournalVoucher)) value="{{ $JournalVoucher->remarks }}" @endif
+                                    @if (isset($JournalVoucher)) value="{{ ucfirst($JournalVoucher->remarks) }}" @endif
                                     name="remarks" placeholder="Journal Voucher Remarks" value="" />
 
                             </div>
@@ -231,7 +231,7 @@
                                                                                 </div>
                                                                                 <div class="col-3 position-relative">
                                                                                     <input type="text"
-                                                                                        @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->remarks }}"  @endif
+                                                                                        @if (isset($JournalVoucherEntry)) value="{{ ucfirst($JournalVoucherEntry->remarks) }}"  @endif
                                                                                         class="form-control form-control-md @error('remarks') is-invalid @enderror"
                                                                                         id="remarks" name="remarks" readonly
                                                                                         placeholder="Remarks" value="" />

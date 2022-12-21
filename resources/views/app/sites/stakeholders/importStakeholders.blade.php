@@ -77,7 +77,6 @@
                                     <td @if ($row->attribute() == $k) class="text-danger" @endif>{{ $value }}
                                     </td>
                                 @endforeach
-
                             </tr>
                         @endforeach
                     </tbody>
@@ -94,6 +93,24 @@
                     <div class="col position-relative">
                         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                             <div class="card-body">
+                                <div class="row mb-1">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                        <label class="form-label" style="font-size: 15px" for="stakeholder_as"><strong>Importing Stakeholder
+                                            As</strong>
+                                            <span class="text-danger">*</span></label>
+                                        <select class="form-select form-select-lg select2" id="stakeholder_as"
+                                            name="stakeholder_as">
+                                            <option value="0" selected>Select Stakeholder As</option>
+                                            <option value="i" {{ old('stakeholder_as') == 'i' ? 'selected' : '' }}>
+                                                Individual</option>
+                                            <option value="c" {{ old('stakeholder_as') == 'c' ? 'selected' : '' }}>
+                                                Company</option>
+                                        </select>
+                                        @error('stakeholder_as')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
                                 <div class="d-block mb-1">
                                     <label class="form-label fs-5" for="type_name">Import </label>
                                     <input id="attachment" type="file" class="filepond" name="attachment" />
@@ -114,12 +131,18 @@
                                 <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 1]) }}"
                                     class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
                                     <i data-feather='download'></i>
-                                    Download Sample
+                                    Download Sample for Individual Stakeholders
+                                </a>
+
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 0]) }}"
+                                    class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
+                                    <i data-feather='download'></i>
+                                    Download Sample for Company Stakeholders
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-9 col-md-9 col-sm-12 position-relative"></div>
+                    <div class="col-lg-8 col-md-8 col-sm-12 position-relative"></div>
                 </div>
             </form>
         </div>
@@ -134,7 +157,6 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jquery.dataTables.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.bootstrap5.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.responsive.min.js"></script>
@@ -142,17 +164,12 @@
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.checkboxes.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/datatables.buttons.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.select.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/jszip.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/pdfmake.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/vfs_fonts.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.html5.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.print.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.rowGroup.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
 @endsection
 
-@section('page-js')
-@endsection
 
 @section('custom-js')
 
@@ -189,7 +206,5 @@
             searching: false,
             lengthMenu: [50, 100, 500],
         });
-
-
     </script>
 @endsection

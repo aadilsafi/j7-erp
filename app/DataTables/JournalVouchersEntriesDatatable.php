@@ -96,6 +96,7 @@ class JournalVouchersEntriesDatatable extends DataTable
             ->setTableId('journal-vouchers-entries-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX(true)
             ->minifiedAjax()
             ->serverSide()
             ->processing()

@@ -148,5 +148,39 @@
 
 
         }
+
+        function revertJournalVoucher(id) {
+
+            showBlockUI('#journal-vouchers-table-form');
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure!!',
+                showCancelButton: true,
+                cancelButtonText: 'No, Cancel',
+                confirmButtonText: 'Yes',
+                confirmButtonClass: 'btn-success',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1'
+                },
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showBlockUI('#journal-vouchers-table-form');
+
+                    let url =
+                        '{{ route('sites.settings.journal-vouchers.journal-vouchers-entries.revert-voucher', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}'
+                        .replace(':id', id);
+                    location.href = url;
+                    hideBlockUI('#journal-vouchers-table-form');
+                }
+            });
+            hideBlockUI('#journal-vouchers-table-form');
+
+
+        }
     </script>
 @endsection

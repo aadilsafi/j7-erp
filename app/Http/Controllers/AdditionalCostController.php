@@ -146,8 +146,8 @@ class AdditionalCostController extends Controller
                 $inputs = $request->all();
                 // return [$site_id, $id, $inputs];
                 $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->additionalCostInterface->model()));
-       
-                $record = $this->additionalCostInterface->update($site_id, $inputs, $id, $customFields );
+
+                $record = $this->additionalCostInterface->update($site_id, $inputs, $id, $customFields);
                 return redirect()->route('sites.additional-costs.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_updated'));
             } else {
                 abort(403);
@@ -468,7 +468,8 @@ class AdditionalCostController extends Controller
     public function downloadSample($site_id, $order)
     {
         $names = [
-            'StakeholdersSample',
+            'CompanyStakeholdersImport',
+            'IndividualStakeholdersImport',
             'StakeholdersKinsImport',
             'FloorsSample',
             'UnitsTypesSample',
@@ -481,7 +482,7 @@ class AdditionalCostController extends Controller
             'ReceiptsImport'
         ];
 
-        $path = public_path('app-assets/ImportSamples/' . $order . '-' . $names[$order - 1] . '.xlsx');
+        $path = public_path('app-assets/ImportSamples/' . $order . '-' . $names[$order] . '.xlsx');
 
         return response()->download($path);
     }

@@ -12,8 +12,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Profit Charges <span
                                 class="text-danger">*</span></label>
-                        <input type="text" min="1" onchange="calculateRefundedAmount()" required
-                            name="amount_profit" class="form-control form-control-lg"
+                        <input type="text" onchange="calculateRefundedAmount()" required
+                            name="amount_profit" class="form-control amountFormat form-control-lg"
                             {{ isset($buy_back_file) ? 'disabled' : '' }} id="profit_charges"
                             placeholder=" Profit Charges"
                             value="{{ isset($buy_back_file) ? number_format($buy_back_file->amount_profit) : '' }}" />

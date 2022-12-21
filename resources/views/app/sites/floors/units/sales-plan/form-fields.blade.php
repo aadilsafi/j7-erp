@@ -409,218 +409,15 @@
                 </div>
             </div>
 
-            {{--  individual Form --}}
-            <div id="individualForm" style="display: none">
-                <div class="row mb-1">
-                    {{-- <input type="hidden" id="stackholder_id" name="stackholder[stackholder_id]" value="0" /> --}}
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_full_name"
-                            name="stackholder[full_name]" placeholder="Full Name"
-                            value="{{ old('stackholder.full_name') }}" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_father_name"
-                            name="stackholder[father_name]" placeholder="Father / Husband Name"
-                            value="{{ old('stackholder.father_name') }}" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_occupation"
-                            name="stackholder[occupation]" placeholder="Occupation"
-                            value="{{ old('stackholder.occupation') }}" />
-                    </div>
-
-
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_designation"
-                            name="stackholder[designation]" placeholder="Designation"
-                            value="{{ old('stackholder.designation') }}" />
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input type="number" class="form-control form-control-lg" id="stackholder_ntn"
-                            name="stackholder[ntn]" placeholder="NTN" value="{{ old('stackholder.ntn') }}" />
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
-                                class="text-danger">*</span></label>
-                        <input type="text" class="form-control form-control-lg" id="stackholder_cnic"
-                            name="stackholder[cnic]" placeholder="CNIC" value="{{ old('stackholder.cnic') }}" />
-                    </div>
-                </div>
+            <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                {{ view('app.sites.stakeholders.partials.stakeholder-form-fields', [
+                    'stakeholderTypes' => $stakeholderTypes,
+                    'country' => $country,
+                    'leadSources' => $leadSources,
+                    'hideBorders' => true,
+                ]) }}
             </div>
 
-            {{-- company form --}}
-            <div id="companyForm" style="display: none">
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="company_name">Company Name <span
-                                class="text-danger">*</span></label>
-                        <input type="text" readonly
-                            class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                            id="company_name" placeholder="Company Name" value="{{ old('full_name') }}" />
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="industry">Industry </label>
-                        <input type="text" readonly
-                            class="form-control form-control-lg @error('industry') is-invalid @enderror"
-                            id="industry" placeholder="Industry" value="{{ old('industry') }}" />
-
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="registration">Registration # <span
-                                class="text-danger">*</span></label>
-                        <input type="text" readonly
-                            class="cp_cnic form-control form-control-lg @error('registration') is-invalid @enderror"
-                            id="registration" placeholder="Registration Number" value="{{ old('registration') }}" />
-
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="ntn">NTN </label>
-                        <input type="number" readonly
-                            class="form-control form-control-lg @error('ntn') is-invalid @enderror" id="ntn"
-                            placeholder="NTN Number" value="{{ old('ntn') }}" />
-
-                    </div>
-                </div>
-            </div>
-
-            {{-- contact form --}}
-            <div style="display: none">
-
-                <div class="row mb-1">
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="email">Email <span
-                                class="text-danger">*</span></label>
-                        <input type="email"
-                            class="form-control form-control-lg @error('email') is-invalid @enderror"
-                            id="stackholder_email" name="stackholder[email]" placeholder="Email"
-                            autocomplete="false" value="{{ old('stackholder.email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="optional_email">Optional Email</label>
-                        <input type="email"
-                            class="form-control form-control-lg @error('email') is-invalid @enderror"
-                            id="stackholder_optional_email" name="stackholder[optional_email]"
-                            placeholder="Optional Email" autocomplete="false"
-                            value="{{ old('stackholder.optional_email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Contact <span
-                                class="text-danger">*</span></label>
-                        <input type="tel" class="form-control form-control-lg ContactNoError"
-                            id="stackholder_contact" name="stackholder[contact]" placeholder=""
-                            value="{{ old('stackholder.contact') }}" />
-                    </div>
-                    <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
-
-                    <div class="col-lg-3 col-md-3 col-sm-12">
-                        <label class="form-label fs-5" for="contact">Optional Contact # </label>
-                        <input type="tel"
-                            class="form-control form-control-lg OPTContactNoError @error('contact') is-invalid @enderror"
-                            id="optional_contact" name="stackholder[optional_contact]" placeholder=""
-                            value="{{ old('stackholder.optional_contact') }}" />
-                        @error('optional_contact')
-                            <div class="invalid-feedback ">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <input type="hidden" name="stackholder[OptionalCountryDetails]" id="OptionalCountryDetails">
-                </div>
-                <div class="row mb-1">
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="parent_id">Select Country</label>
-                        <select class="select2 country_id" id="country_id" name="stackholder[country_id]">
-                            <option value="0" selected>Select Country</option>
-                            @foreach ($country as $data)
-                                <option value="{{ $data->id }}">{{ $data->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('country_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="city_id">Select State</label>
-                        <select class="select2 state_id" id="state_id" name="stackholder[state_id]">
-                            <option value="0" selected>Select State</option>
-
-                        </select>
-                        @error('state_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="city_id">Select City</label>
-                        <select class="select2 city_id" id="city_id" name="stackholder[city_id]">
-                            <option value="0" selected>Select City</option>
-
-                        </select>
-                        @error('city_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="occupation">Nationality </label>
-                        <input type="text"
-                            class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                            id="nationality" name="nationality" placeholder="Nationality"
-                            value="{{ old('nationality') }}" />
-                        @error('nationality')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Address <span
-                                class="text-danger">*</span></label>
-                        <textarea class="form-control form-control-lg" id="stackholder_address" name="stackholder[address]"
-                            placeholder="Address" rows="4"></textarea>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="mailing_address">Mailing Address <span
-                                class="text-danger">*</span><span class="text-info">( Same as Permanent Address
-                                <input type="checkbox" id="cpyAddress" />
-                                )</span></label>
-                        <textarea class="form-control form-control-lg" id="mailing_address" name="stackholder[mailing_address]"
-                            placeholder="Mailing Address" rows="4"></textarea>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg- col-md- col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" id="stackholder_comments" name="stackholder[comments]"
-                            placeholder="Comments" rows="4"></textarea>
-                    </div>
-                </div>
-            </div>
 
             <div class="row mb-1" id="stakeholderNextOfKin">
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
@@ -719,16 +516,11 @@
 
         <div class="card-body">
             <div class="row mb-1 g-1">
-                {{-- <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                <label class="form-label fs-5" for="comments">Auto Generated Comments</label>
-                <textarea class="form-control form-control-lg" id="auto_generated_comments"
-                    name="comments[auto_generated]" placeholder="Auto Generated Comments" rows="5" readonly></textarea>
-            </div> --}}
 
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label fs-5" for="comments">Comments</label>
-                    <textarea class="form-control form-control-lg" id="custom_comments" name="comments[custom]" placeholder="Comments"
-                        rows="5"></textarea>
+                    <textarea class="form-control form-control-lg" id="custom_comments" name="sale_plan_comments" placeholder="Comments"
+                        rows="4"></textarea>
                 </div>
             </div>
         </div>

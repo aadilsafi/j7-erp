@@ -13,24 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('temp_stakeholders', function (Blueprint $table) {
+        Schema::create('temp_company_stakeholders', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name')->nullable();
-            $table->string('father_name')->nullable();
-            $table->string('occupation')->nullable();
-            $table->string('designation')->nullable();
-            $table->string('cnic')->nullable();
-            $table->string('passport_no')->nullable();
-            $table->boolean('is_local')->default(true);
-            $table->string('nationality')->default('Pakistan');
-            $table->date('date_of_birth')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('registration')->nullable();
+            $table->string('industry')->nullable();
+            $table->string('strn')->nullable();
+            $table->string('ntn')->nullable();
+            $table->string('origin')->nullable();
             $table->string('email')->nullable();
             $table->string('office_email')->nullable();
             $table->string('mobile_contact')->nullable();
             $table->string('office_contact')->nullable();
-            $table->string('ntn')->nullable();
-            $table->string('referred_by')->nullable();
-            $table->string('source')->nullable();
+            $table->string('website')->nullable();
+            $table->string('parent_company')->nullable();
             // residential_address
             $table->string('residential_address')->nullable();
             $table->string('residential_address_type')->nullable();
@@ -61,6 +57,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temp_stakeholders');
+        Schema::dropIfExists('temp_company_stakeholders');
     }
 };

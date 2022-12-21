@@ -43,7 +43,7 @@ class TypeController extends Controller
     public function index(TypesDataTable $dataTable, $site_id)
     {
         $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->unitTypeInterface->model()));
-        
+
         $data = [
             'site_id' => $site_id,
             'customFields' => $customFields->where('in_table', true),
@@ -434,6 +434,7 @@ class TypeController extends Controller
                 $types->modelable()->create([
                     'site_id' => decryptParams($site_id),
                     'code' => $accountCode,
+                    'account_type'=> 'debit',
                     'name' => 'Accounts Receviable - ' . $data[$key]['name'],
                     'level' => 3,
                 ]);

@@ -172,10 +172,10 @@
                                         <i data-feather='printer'></i>
                                         <span id="save_print_sales_plan_button_span">Save & Print Sales Plan</span>
                                     </button> --}}
-                                    {{-- <a href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site->id), 'floor_id' => encryptParams($floor->id), 'unit_id' => encryptParams($unit->id)]) }}"
+                                    <a href="{{ url()->previous() }}"
                                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
-                                        {{ __('lang.commons.cancel') }} --}}
+                                        {{ __('lang.commons.cancel') }}
                                     </a>
                                 </div>
                             </div>
@@ -217,10 +217,16 @@
 @endsection
 
 @section('custom-js')
+<script>
+    var cp_state = 0;
+            var cp_city = 0;
+            var ra_state = 0;
+            var ra_city = 0;
+            </script>
+    {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
+    
     <script>
         $('#companyForm').hide();
-        var selected_state_id = 0;
-        var selected_city_id = 0;
 
         window['moment-range'].extendMoment(moment);
 
@@ -289,35 +295,6 @@
 
             });
 
-            var input = document.querySelector("#stackholder_contact");
-            intl = window.intlTelInput(input, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-            input.addEventListener("countrychange", function() {
-                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            });
-            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            var inputOptional = document.querySelector("#optional_contact");
-            intlOptional = window.intlTelInput(inputOptional, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-
-            inputOptional.addEventListener("countrychange", function() {
-                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
-            });
-            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
-
-
             var e = $("#stackholders");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -353,50 +330,70 @@
                             if (response.data) {
                                 stakeholderData = response.data[0];
                             }
-                            // country_id.val(stakeholderData.country_id);
-                            // country_id.trigger('change');
-                            // // $('#stackholder_id').val(stakeholderData.id);
-                            // $('#stackholder_full_name').val(stakeholderData.full_name);
-                            // $('#stackholder_father_name').val(stakeholderData.father_name);
-                            // $('#stackholder_occupation').val(stakeholderData.occupation);
-                            // $('#stackholder_designation').val(stakeholderData.designation);
-                            // $('#stackholder_cnic').val(stakeholderData.cnic);
-                            // $('#stackholder_ntn').val(stakeholderData.ntn);
-                            // $('#stackholder_contact').val(stakeholderData.contact);
-                            // $('#optional_contact').val(stakeholderData.optional_contact);
-                            // $('#mailing_address').val(stakeholderData.mailing_address);
-                            // $('#stackholder_address').text(stakeholderData.address);
-                            // $('#stackholder_email').val(stakeholderData.email);
-                            // $('#stackholder_optional_email').val(stakeholderData
-                            //     .optional_email);
-                            // $('#nationality').val(stakeholderData.nationality);
+                            $('#stakeholder_as').val(stakeholderData.stakeholder_as).trigger(
+                                'change');
+                            if (stakeholderData.stakeholder_as == 'i') {
+                                $('#full_name').val(stakeholderData.full_name);
+                                $('#father_name').val(stakeholderData.father_name);
+                                $('#occupation').val(stakeholderData.occupation);
+                                $('#designation').val(stakeholderData.designation);
+                                $('#cnic').val(stakeholderData.cnic);
+                                $('#ntn').val(stakeholderData.ntn);
+                                $('#passport_no').val(stakeholderData.passport_no);
+                                $('#individual_email').val(stakeholderData.email);
+                                $('#office_email').val(stakeholderData.office_email);
+                                $('#mobile_contact').val(stakeholderData.mobile_contact);
+                                $('#office_contact').val(stakeholderData.office_contact);
+                                $('#dob').val(stakeholderData.dob).trigger('change');
+                                $('#referred_by').val(stakeholderData.referred_by);
+                                $('#source').val(stakeholderData.source).trigger('change');
+                                $('#is_local').val(stakeholderData.is_local).trigger('change');
+                                $('#nationality').val(stakeholderData.nationality).trigger(
+                                    'change');
+                            }
+                            if (stakeholderData.stakeholder_as == 'c') {
+                                $('#company_name').val(stakeholderData.full_name);
+                                $('#registration').val(stakeholderData.cnic);
+                                $('#industry').val(stakeholderData.industry);
+                                $('#company_office_contact').val(stakeholderData
+                                    .office_contact);
+                                $('#strn').val(stakeholderData.strn);
+                                $('#company_ntn').val(stakeholderData.ntn);
+                                $('#company_optional_contact').val(stakeholderData
+                                    .mobile_contact);
+                                $('#company_email').val(stakeholderData.email);
+                                $('#company_office_email').val(stakeholderData.office_email);
+                                $('#website').val(stakeholderData.website);
+                                $('#parent_company').val(stakeholderData.parent_company);
+                                $('#origin').val(stakeholderData.origin).trigger(
+                                    'change');
+                            }
 
-                            // selected_state_id = stakeholderData.state_id;
-                            // selected_city_id = stakeholderData.city_id;
+                            // residential address
+                            $('#residential_address_type').val(stakeholderData
+                                .residential_address_type);
+                            $('#residential_address').val(stakeholderData.residential_address);
+                            ra_state = stakeholderData.residential_state_id;
+                            ra_city = stakeholderData.residential_city_id;
 
-                            // $('#stackholder_comments').text(stakeholderData.comments);
+                            $('#residential_country').val(stakeholderData
+                                .residential_country_id).trigger(
+                                'change');
+                            $('#residential_postal_code').val(stakeholderData
+                                .residential_postal_code);
 
-                            // if (stakeholderData.stakeholder_as == 'c') {
-                            //     $('#company_name').val(stakeholderData.full_name);
-                            //     $('#industry').val(stakeholderData.occupation);
-                            //     $('#registration').val(stakeholderData.cnic);
-                            //     $('#ntn').val(stakeholderData.ntn);
-                            //     $('#companyForm').show();
-                            //     $('#individualForm').hide();
+                            // mailing address
+                            $('#mailing_address_type').val(stakeholderData
+                                .mailing_address_type);
+                            $('#mailing_address').val(stakeholderData.mailing_address);
+                            cp_state = stakeholderData.mailing_state_id;
+                            cp_city = stakeholderData.mailing_city_id;
 
-                            // }
-                            // if (stakeholderData.stakeholder_as == 'i') {
-
-                            //     $('#companyForm').hide();
-                            //     $('#individualForm').show();
-
-                            // }
-                            // intl.setCountry('pk');
-                            // $('#countryDetails').val(JSON.stringify(intl
-                            //     .getSelectedCountryData()))
-
-                            //     intlOptional.setCountry('pk');
-
+                            $('#mailing_country').val(stakeholderData
+                                .mailing_country_id).trigger(
+                                'change');
+                            $('#mailing_postal_code').val(stakeholderData
+                                .mailing_postal_code);
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -691,7 +688,7 @@
                         let InstallmentRows = '';
                         if (response.status) {
                             $('#installments_table tbody#dynamic_installment_rows').empty();
-
+                            console.log(response.data.installments)
                             for (let row of response.data.installments) {
                                 InstallmentRows += row.row;
                             }
@@ -800,22 +797,7 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
-        $.validator.addMethod("ContactNoError", function(value, element) {
-            // alert(intl.isValidNumber());
-            // return intl.getValidationError() == 0;
-            return intl.isValidNumber();
 
-        }, "In Valid number");
-        $.validator.addMethod("OPTContactNoError", function(value, element) {
-            // alert(intl.isValidNumber());
-            // return intl.getValidationError() == 0;
-            // if(value != '' )
-            if (value.length > 0) {
-                return intlOptional.isValidNumber();
-            } else {
-                return true;
-            }
-        }, "In Valid number");
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,
             rules: {
@@ -918,134 +900,6 @@
             }
         });
 
-        var country_id = $("#country_id");
-        country_id.wrap('<div class="position-relative"></div>');
-        country_id.select2({
-            dropdownAutoWidth: !0,
-            dropdownParent: country_id.parent(),
-            width: "100%",
-            containerCssClass: "select-lg",
-        }).change(function() {
-
-            $("#city_id").empty()
-            $('#state_id').empty();
-
-            $('#state_id').html('<option value=0>Select State</option>');
-            $('#city_id').html('<option value=0>Select City</option>');
-            var _token = '{{ csrf_token() }}';
-            let url =
-                "{{ route('ajax-get-states', ['countryId' => ':countryId']) }}"
-                .replace(':countryId', $(this).val());
-            if ($(this).val() > 0) {
-                showBlockUI('#create-sales-plan-form');
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        'stateId': $(this).val(),
-                        '_token': _token
-                    },
-                    success: function(response) {
-                        if (response.success) {
-
-                            $.each(response.states, function(key, value) {
-                                $("#state_id").append('<option value="' + value
-                                    .id + '">' + value.name + '</option>');
-                            });
-                            state_id.val(selected_state_id);
-                            state_id.trigger('change');
-                            hideBlockUI('#create-sales-plan-form');
-                        } else {
-                            hideBlockUI('#create-sales-plan-form');
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        hideBlockUI('#create-sales-plan-form');
-                    }
-                });
-            }
-        });
-
-
-        var state_id = $("#state_id");
-        state_id.wrap('<div class="position-relative"></div>');
-        state_id.select2({
-            dropdownAutoWidth: !0,
-            dropdownParent: state_id.parent(),
-            width: "100%",
-            containerCssClass: "select-lg",
-        }).change(function() {
-            $("#city_id").empty()
-            $('#city_id').html('<option value=0>Select City</option>');
-
-            // alert($(this).val());
-            showBlockUI('#create-sales-plan-form');
-
-            var _token = '{{ csrf_token() }}';
-            let url =
-                "{{ route('ajax-get-cities', ['stateId' => ':stateId']) }}"
-                .replace(':stateId', $(this).val());
-            if ($(this).val() > 0) {
-                showBlockUI('#create-sales-plan-form');
-                $.ajax({
-                    url: url,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {
-                        'stateId': $(this).val(),
-                        '_token': _token
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $.each(response.cities, function(key, value) {
-                                $("#city_id").append('<option value="' + value
-                                    .id + '">' + value.name + '</option>');
-                            });
-
-                            city_id.val(selected_city_id);
-                            city_id.trigger('change');
-
-                            hideBlockUI('#create-sales-plan-form');
-                        } else {
-                            hideBlockUI('#create-sales-plan-form');
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                            });
-                        }
-                    },
-                    error: function(error) {
-                        console.log(error);
-                        hideBlockUI('#create-sales-plan-form');
-                    }
-                });
-            }
-        });
-
-        var city_id = $("#city_id");
-        city_id.wrap('<div class="position-relative"></div>');
-        city_id.select2({
-            dropdownAutoWidth: !0,
-            dropdownParent: city_id.parent(),
-            width: "100%",
-            containerCssClass: "select-lg",
-        });
-
-        $('#cpyAddress').on('change', function() {
-            if ($(this).is(':checked')) {
-                $('#mailing_address').val($('#stackholder_address').val());
-            } else {
-                $('#mailing_address').val('')
-            }
-        })
         // validator.resetForm();
         // validator.showErrors({
         //     "firstname": "I know that your firstname is Pete, Pete!"

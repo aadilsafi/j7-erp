@@ -5,26 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TempStakeholder extends Model
+class TempCompanyStakeholder extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'full_name',
-        'father_name',
-        'cnic',
-        'passport_no',
+        'company_name',
+        'registration',
+        'industry',
+        'strn',
         'ntn',
-        'occupation',
-        'designation',
-        'is_local',
-        'nationality',
-        'date_of_birth',
+        'origin',
         'email',
         'office_email',
         'mobile_contact',
         'office_contact',
-        'referred_by',
-        'source',
+        'website',
+        'parent_company',
         'residential_address',
         'residential_address_type',
         'residential_country',
@@ -41,5 +38,6 @@ class TempStakeholder extends Model
         'is_dealer',
         'is_vendor',
         'is_customer',
+        
     ];
 }

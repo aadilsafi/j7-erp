@@ -56,19 +56,14 @@ class paymentService implements paymentInterface
                         'code' => $bank->account_number,
                         'name' => $bank->name,
                         'level' => 5,
+                        'account_type'=> 'debit',
                     ];
                     $accountHead =  AccountHead::create($acountHeadData);
                 }
             }
 
-            $serail_no  = $this->model()::all();
-            if (isset($serail_no) && count($serail_no) > 0) {
-                $last_data = collect($serail_no)->last();
-                $serail_no = (float)$last_data->id + 1;
-                $serail_no =  sprintf('%03d', $serail_no);
-            } else {
-                $serail_no = '001';
-            }
+            $serail_no = $this->model()::max('id') + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
 
             $payment_voucher_data = [
                 'site_id' => 1,
@@ -99,7 +94,7 @@ class paymentService implements paymentInterface
                 "comments" => $inputs['comments'],
                 "amount_to_be_paid" => str_replace(',', '', $inputs['amount_to_be_paid']),
                 "receiving_date" => now(),
-                "serial_no" => $serail_no,
+                "serial_no" => 'PV-'.$serail_no,
             ];
 
 
@@ -121,7 +116,7 @@ class paymentService implements paymentInterface
 
             $stakeholder_id = $inputs['stakeholder_id'];
             $payment_voucher = $this->model()->create($payment_voucher_data);
-            $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
+            // $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
         });
 
         return true;

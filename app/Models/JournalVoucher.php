@@ -37,10 +37,29 @@ class JournalVoucher extends Model
         'checked_date',
         'total_debit',
         'total_credit',
+        'jve_number',
+        'reverted_by',
+        'reverted_date',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function checkedBy()
+    {
+        return $this->belongsTo(User::class, 'checked_by', 'id');
+    }
+
+    public function postedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
+    public function revertedBy()
+    {
+        return $this->belongsTo(User::class, 'reverted_by', 'id');
+    }
+
 }

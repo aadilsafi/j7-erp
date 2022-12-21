@@ -65,32 +65,33 @@ class Stakeholder extends Model implements HasMedia
     public $rules = [
         'stakeholder_as' => 'required|in:i,c',
         // as individual validations
-        'full_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',
-        'father_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',
-        'occupation' => 'exclude_if:stakeholder_as,c|required|string|max:50',
-        'designation' => 'exclude_if:stakeholder_as,c|nullable|string|max:50',
-        'cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
-        'dob' => 'exclude_if:stakeholder_as,c|required|date|before:today',
-        'ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
-        'nationality' => 'exclude_if:stakeholder_as,c|required',
-        'individual_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,email',
-        'office_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,office_email',
-        'mobile_contact' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:20',
-        'office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',
-        'source' => 'exclude_if:stakeholder_as,c|sometimes',
-        'referred_by' => 'exclude_if:stakeholder_as,c|sometimes',
+        'individual.full_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',
+        'individual.father_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',
+        'individual.occupation' => 'exclude_if:stakeholder_as,c|required|string|max:50',
+        'individual.cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
+        'individual.passport_no' => 'exclude_if:stakeholder_as,c|sometimes|unique:stakeholders,passport_no',
+        'individual.ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
+        'individual.individual_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,email',
+        'individual.office_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,office_email',
+        'individual.mobile_contact' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:20',
+        'individual.office_contact' => 'exclude_if:stakeholder_as,c|nullable|string|min:1|max:20',
+        'individual.dob' => 'exclude_if:stakeholder_as,c|required|date|before:today',
+        'individual.designation' => 'exclude_if:stakeholder_as,c|nullable|string|max:50',
+        'individual.nationality' => 'exclude_if:stakeholder_as,c|required',
+        'individual.source' => 'exclude_if:stakeholder_as,c|sometimes',
+        'individual.referred_by' => 'exclude_if:stakeholder_as,c|sometimes',
 
         // as company validations
-        'company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
-        'registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
-        'strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
-        'company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
-        'website' => 'exclude_if:stakeholder_as,i|nullable|string',
-        'origin' => 'exclude_if:stakeholder_as,i|nullable',
-        'industry' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
-        'parent_company' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
-        'office_contact' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:20',
-        'office_email' => 'exclude_if:stakeholder_as,i|nullable|email|unique:stakeholders,office_email',
+        'company.company_name' => 'exclude_if:stakeholder_as,i|string|min:1|max:50',
+        'company.registration' => 'exclude_if:stakeholder_as,i|unique:stakeholders,cnic',
+        'company.industry' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
+        'company.origin' => 'exclude_if:stakeholder_as,i|nullable',
+        'company.company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
+        'company.strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        'company.office_contact' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:20',
+        'company.website' => 'exclude_if:stakeholder_as,i|nullable|string',
+        'company.parent_company' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
+        'company.office_email' => 'exclude_if:stakeholder_as,i|nullable|email|unique:stakeholders,office_email',
 
         // common validations
         'comments' => 'nullable|string',
@@ -99,23 +100,20 @@ class Stakeholder extends Model implements HasMedia
         'contact-persons' => 'nullable|array',
         'next-of-kins' => 'nullable|array',
 
-        'residential_address_type' => 'required|string',
-        'residential_country' => 'required|numeric',
-        'residential_state' => 'required|numeric',
-        'residential_city' => 'required|numeric',
-        'residential_postal_code' => 'required|numeric',
-        'residential_address' => 'required|string',
+        'residential.address_type' => 'required|string',
+        'residential.country' => 'required|numeric',
+        'residential.state' => 'required|numeric',
+        'residential.city' => 'required|numeric',
+        'residential.postal_code' => 'required|numeric',
+        'residential.address' => 'required|string',
 
-        'mailing_address_type' => 'required|string',
-        'mailing_country' => 'required|numeric',
-        'mailing_state' => 'required|numeric',
-        'mailing_city' => 'required|numeric',
-        'mailing_postal_code' => 'required|numeric',
-        'mailing_address' => 'required|string',
+        'mailing.address_type' => 'required|string',
+        'mailing.country' => 'required|numeric',
+        'mailing.state' => 'required|numeric',
+        'mailing.city' => 'required|numeric',
+        'mailing.postal_code' => 'required|numeric',
+        'mailing.address' => 'required|string',
 
-        'city_id' => 'nullable|numeric',
-        'state_id' => 'nullable|numeric',
-        'country_id' => 'nullable|numeric',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
         'next-of-kins.*.relation' => 'required_if:stakeholder_type,C',
 
@@ -173,7 +171,8 @@ class Stakeholder extends Model implements HasMedia
 
     public function KinStakeholders()
     {
-        return $this->hasMany(StakeholderNextOfKin::class, 'kin_id');
+        return $this->belongsToMany(Stakeholder::class, 'stakeholder_next_of_kin', 'kin_id')
+            ->withPivot('site_id', 'relation')->withTimestamps()->orderByPivot('created_at', 'desc');
     }
 
     public function contacts()
@@ -228,5 +227,20 @@ class Stakeholder extends Model implements HasMedia
     public function mailingCity()
     {
         return $this->belongsTo(City::class, 'mailing_city_id');
+    }
+
+    public function nationalityCountry()
+    {
+        return $this->belongsTo(Country::class, 'nationality');
+    }
+
+    public function originCountry()
+    {
+        return $this->belongsTo(Country::class, 'origin');
+    }
+
+    public function leadSource()
+    {
+        return $this->belongsTo(leadSource::class, 'source');
     }
 }

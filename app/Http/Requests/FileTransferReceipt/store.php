@@ -100,7 +100,7 @@ class store extends FormRequest
             $validator->after(function ($validator) {
                 $modeOfPayment = $this->input('mode_of_payment');
                 $attachment = $this->attachment;
-                if ($modeOfPayment != 'Cash' && $modeOfPayment != 'Other'  && $attachment == null) {
+                if ($modeOfPayment != 'Cash'  && $attachment == null) {
                     $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
                 }
             });

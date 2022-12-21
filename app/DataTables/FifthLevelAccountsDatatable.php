@@ -85,6 +85,7 @@ class FifthLevelAccountsDatatable extends DataTable
             ->setTableId('fifth-level-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             // ->select()
             // ->selectClassName('bg-primary')
             ->serverSide()

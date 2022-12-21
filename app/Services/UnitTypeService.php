@@ -58,6 +58,7 @@ class UnitTypeService implements UnitTypeInterface
             $type->modelable()->create([
                 'site_id' => decryptParams($site_id),
                 'code' => $accountCode,
+                'account_type'=> 'debit',
                 'name' => 'Accounts Receivable - ' . $inputs['type_name'],
                 'level' => 3,
             ]);

@@ -70,6 +70,7 @@
                     'fifthLevelAccount' => $fifthLevelAccount,
                     'stakeholders' => $stakeholders,
                     'journal_serial_number' => $journal_serial_number,
+                    'origin_number' => $origin_number,
                 ]) }}
 
             </div>
@@ -150,6 +151,8 @@
                 dateFormat: "Y-m-d",
             });
 
+
+
         });
     </script>
 
@@ -157,7 +160,11 @@
         $(".journal-voucher-entries-list").repeater({
             // initEmpty: true,
             show: function() {
-                $(this).slideDown(), feather && feather.replace({
+                $(this).slideDown(function() {
+                    $(this).find('.accountsSelect').select2({
+                        // placeholder: 'Select Stakeholder'
+                    });
+                }), feather && feather.replace({
                     width: 14,
                     height: 14
                 })
@@ -215,27 +222,27 @@
                 'remarks': {
                     required: true,
                 },
-                'voucher_name': {
-                    required: true,
-                },
+                // 'voucher_name': {
+                //     required: true,
+                // },
                 'total_debit': {
                     required: true,
                 },
                 'total_credit': {
                     required: true,
                 },
-                // 'journal-voucher-entries[0][account_number]': {
-                //     required: true
-                // },
+                'journal-voucher-entries[0][account_number]': {
+                    required: true
+                },
                 // 'journal-voucher-entries[0][debit]': {
                 //     required: true
                 // },
                 // 'journal-voucher-entries[0][credit]': {
                 //     required: true
                 // },
-                // 'journal-voucher-entries[0][voucher_date]': {
-                //     required: true
-                // },
+                'journal-voucher-entries[0][voucher_date]': {
+                    required: true
+                },
                 // 'journal-voucher-entries[0][remarks]': {
                 //     required: true
                 // },

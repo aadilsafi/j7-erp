@@ -2,12 +2,10 @@
 
 namespace App\DataTables;
 
-use App\Models\Stakeholder;
 use Illuminate\Support\Str;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Model;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -50,7 +48,7 @@ class StakeholderDataTable extends DataTable
                 }
             })
             ->editColumn('nationality', function ($stakeholder) {
-                return  $stakeholder->nationality  ? ucfirst($stakeholder->nationality)  : '-';
+                return  $stakeholder->nationalityCountry->name;
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
@@ -164,31 +162,12 @@ class StakeholderDataTable extends DataTable
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')
-            ->lengthMenu([10, 20, 30, 50, 70, 100])
+            ->lengthMenu([20, 30, 50, 70, 100, 200, 500, 1000])
             ->rowGroupDataSrc('satkeholderAs')
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
-            // ->rowGroupDataSrc('parent_id')
-            // ->columnDefs([
-            //     [
-            //         'targets' => 0,
-            //         'className' => 'text-center text-primary',
-            //         'width' => '10%',
-            //         'orderable' => false,
-            //         'searchable' => false,
-            //         'responsivePriority' => 3,
-            //         'render' => "function (data, type, full, setting) {
-            //             var role = JSON.parse(data);
-            //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-            //         }",
-            //         'checkboxes' => [
-            //             'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-            //         ]
-            //     ],
-            // ])
             ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
+                [8, 'desc'],
             ]);
     }
 
@@ -209,13 +188,10 @@ class StakeholderDataTable extends DataTable
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('CNIC / REGISTRATION #'),
             Column::computed('contact')->title('Contact'),
-            Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true),
-            Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true),
-            Column::make('nationality')->title('Nationality'),
+            Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
+            Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),
+            Column::make('nationality')->title('Nationality')->orderable(true),
             Column::computed('satkeholderAs')->visible(false),
-
-            // Column::make('parent_id')->title('Next Of Kin')->addClass('text-nowrap'),
-            // Column::make('relation')->title('Relation'),
         ];
         if (count($this->customFields) > 0) {
             foreach ($this->customFields as $customfields) {

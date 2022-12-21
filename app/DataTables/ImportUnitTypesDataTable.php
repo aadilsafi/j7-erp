@@ -70,6 +70,7 @@ class ImportUnitTypesDataTable extends DataTable
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
+            ->scrollX(true)
             ->ordering(false)
             ->searching(false)
             ->serverSide()

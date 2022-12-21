@@ -26,7 +26,7 @@ class storeRequest extends FormRequest
     public function rules()
     {
         $rules = (new Unit())->rules;
-        $rules['name'] = 'required';
+        // $rules['name'] = 'required';
         $rules['unit_number'] = [
             Rule::requiredIf(function () {
                 return $this->add_bulk_unit == 0;

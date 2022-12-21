@@ -13,7 +13,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Redirect;
 
-class StakeholdersImportControler extends Controller
+class StakeholderKinsImportControler extends Controller
 {
 
     public function ImportPreview(Request $request, $site_id)

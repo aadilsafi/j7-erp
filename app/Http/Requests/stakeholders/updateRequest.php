@@ -26,13 +26,14 @@ class updateRequest extends FormRequest
     public function rules()
     {
         $rules =  (new Stakeholder())->rules;
-        $rules['cnic'] .= ',' . decryptParams($this->id);
-        $rules['registration'] .= ',' . decryptParams($this->id);
-        $rules['individual_email'] .= ',' . decryptParams($this->id);
-        $rules['office_email'] .= ',' . decryptParams($this->id);
-        $rules['ntn'] .= ',' . decryptParams($this->id);
-        $rules['strn'] .= ',' . decryptParams($this->id);
-
+        $rules['company.registration'] .= ',' . decryptParams($this->id);
+        $rules['individual.individual_email'] .= ',' . decryptParams($this->id);
+        $rules['company.office_email'] .= ',' . decryptParams($this->id);
+        $rules['company.company_ntn'] .= ',' . decryptParams($this->id);
+        $rules['company.strn'] .= ',' . decryptParams($this->id);
+        $rules['individual.ntn'] .= ',' . decryptParams($this->id);
+        $rules['individual.passport_no'] .= ',' . decryptParams($this->id);
+        $rules['individual.cnic'] .= ',' . decryptParams($this->id);
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
 

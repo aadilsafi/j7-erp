@@ -2166,6 +2166,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.settings.journal-vouchers.show',
+                'show_name' => 'Can Preview Journal Vouchers with Entries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.settings.journal-vouchers.edit',
                 'show_name' => 'Can Edit Journal Vouchers',
                 'guard_name' => 'web',
@@ -2203,6 +2210,13 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.post-voucher',
                 'show_name' => 'Can Post Journal Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.revert-voucher',
+                'show_name' => 'Can Revert Journal Voucher Entries',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -2415,6 +2429,27 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.payment-voucher.store',
                 'show_name' => 'Can Store Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.approve',
+                'show_name' => 'Can Approve Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.active-cheque',
+                'show_name' => 'Can Active Cheque of Payment Vouchers',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.payment-voucher.show',
+                'show_name' => 'Can Preview Payment Vouchers',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

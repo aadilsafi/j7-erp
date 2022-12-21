@@ -39,7 +39,7 @@
                 @error('account_code')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <p class="m-0"><small class="text-muted">Enter four Digit Code.</small></p>
+                    <p class="m-0"><small class="text-muted">Enter Two Digit Code.</small></p>
                 @enderror
             </div>
         </div>

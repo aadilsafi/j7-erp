@@ -20,11 +20,18 @@ class AccountHead extends Model
         'code',
         'name',
         'level',
+        'account_type',
+        'opening_balance',
+        'closing_balance',
+        'opening_balance_date',
+        'closing_balance_date',
+        'status',
+        'show_in_vouchers',
     ];
 
     protected $casts = [
         'level' => 'integer',
-        'code'=> 'string',
+        'code' => 'string',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -38,7 +45,7 @@ class AccountHead extends Model
     }
     public function accountLedgersWithCreditAndDebit()
     {
-        return $this->HasMany(AccountLedger::class)->whereNot('debit',0)->whereNot('credit',0);
+        return $this->HasMany(AccountLedger::class)->whereNot('debit', 0)->whereNot('credit', 0);
     }
 
     public function modelable()

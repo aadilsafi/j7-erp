@@ -186,8 +186,9 @@ class FinancialTransactionService implements FinancialTransactionInterface
         ];
         $unit->unit_account = $arrUnitAccount;
         $unit->save();
+        $account_type = 'debit';
 
-        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receviable', (string)$accountHead, 4);
+        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receviable', (string)$accountHead, 4 , $account_type);
 
         return (string)$accountHead;
     }
@@ -241,19 +242,21 @@ class FinancialTransactionService implements FinancialTransactionInterface
         ];
         $stakeholderCustomerType->receivable_account = $arrStakeholderAccount;
         $stakeholderCustomerType->save();
+        $account_type = 'debit';
 
-        $this->saveAccountHead($stakeholderCustomerType->stakeholder->site->id, $stakeholderCustomerType, $stakeholderCustomerType->stakeholder->full_name . ' Customer A/R', (string)$accountHead, 5);
+        $this->saveAccountHead($stakeholderCustomerType->stakeholder->site->id, $stakeholderCustomerType, $stakeholderCustomerType->stakeholder->full_name . ' Customer A/R', (string)$accountHead, 5, $account_type);
 
         return (string)$accountHead;
     }
 
-    public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level)
+    public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level,$account_type)
     {
         $model->modelable()->create([
             'site_id' => $site_id,
             'code' => $accountCode,
             'name' => $accountName,
             'level' => $level,
+            'account_type'=>$account_type,
         ]);
         return true;
     }

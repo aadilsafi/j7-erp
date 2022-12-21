@@ -56,6 +56,7 @@ class paymentService implements paymentInterface
                         'code' => $bank->account_number,
                         'name' => $bank->name,
                         'level' => 5,
+                        'account_type'=> 'debit',
                     ];
                     $accountHead =  AccountHead::create($acountHeadData);
                 }

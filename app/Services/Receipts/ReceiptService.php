@@ -87,6 +87,7 @@ class ReceiptService implements ReceiptInterface
                             'modelable_type' => null,
                             'code' => $bank->account_number,
                             'name' => $bank->name,
+                            'account_type'=> 'debit',
                             'level' => 5,
                         ];
                         $accountHead =  AccountHead::create($acountHeadData);

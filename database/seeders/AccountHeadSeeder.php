@@ -29,6 +29,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -43,6 +44,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -57,92 +59,99 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
-            [
-                'site_id' => 1,
-                'modelable_id' => 1,
-                'modelable_type' => 'App\Models\Unit',
-                'code' => '1020200001',
-                'name' => 'GF-01 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
-            [
-                'site_id' => 1,
-                'modelable_id' => 2,
-                'modelable_type' => 'App\Models\Unit',
-                'code' => '1020200002',
-                'name' => 'GF-02 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
-            [
-                'site_id' => 1,
-                'modelable_id' => 3,
-                'modelable_type' => 'App\Models\Unit',
-                'code' => '1020200003',
-                'name' => 'GF-03 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
-            [
-                'site_id' => 1,
-                'modelable_id' => 4,
-                'modelable_type' => 'App\Models\Unit',
-                'code' => '1020200004',
-                'name' => 'GF-04 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 1,
+            //     'modelable_type' => 'App\Models\Unit',
+            //     'code' => '1020200001',
+            //     'name' => 'GF-01 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 2,
+            //     'modelable_type' => 'App\Models\Unit',
+            //     'code' => '1020200002',
+            //     'name' => 'GF-02 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 3,
+            //     'modelable_type' => 'App\Models\Unit',
+            //     'code' => '1020200003',
+            //     'name' => 'GF-03 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 4,
+            //     'modelable_type' => 'App\Models\Unit',
+            //     'code' => '1020200004',
+            //     'name' => 'GF-04 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
 
-            [
-                'site_id' => 1,
-                'modelable_id' => 5,
-                'modelable_type' => 'App\Models\Unit',
-                'code' => '1020200005',
-                'name' => 'GF-05 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
-            [
-                'site_id' => 1,
-                'modelable_id' => null,
-                'modelable_type' => null,
-                'code' => '1020210001',
-                'name' => '3F-01 Receivable',
-                'level' => 4,
-                'account_type' => 'debit',
-                'opening_balance' => null,
-                'status' => true,
-                'closing_balance' => null,
-                'opening_balance_date' => null,
-                'closing_balance_date' => null,
-            ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => 5,
+            //     'modelable_type' => 'App\Models\Unit',
+            //     'code' => '1020200005',
+            //     'name' => 'GF-05 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
+            // [
+            //     'site_id' => 1,
+            //     'modelable_id' => null,
+            //     'modelable_type' => null,
+            //     'code' => '1020210001',
+            //     'name' => '3F-01 Receivable',
+            //     'level' => 4,
+            //     'account_type' => 'debit',
+            //     'opening_balance' => null,
+            //     'status' => true,
+            //     'closing_balance' => null,
+            //     'opening_balance_date' => null,
+            //     'closing_balance_date' => null,
+            //     'show_in_vouchers'=> true,
+            // ],
             [
                 'site_id' => 1,
                 'modelable_id' => null,
@@ -156,6 +165,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -170,6 +180,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -184,6 +195,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -198,6 +210,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -212,6 +225,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -226,6 +240,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
 
@@ -242,6 +257,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -256,6 +272,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -270,6 +287,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -284,6 +302,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -298,6 +317,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -312,6 +332,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -326,6 +347,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
 
@@ -342,6 +364,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
 
@@ -358,6 +381,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
 
@@ -374,6 +398,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -388,6 +413,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -402,6 +428,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -416,6 +443,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -430,6 +458,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -444,6 +473,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -458,6 +488,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -472,6 +503,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -486,6 +518,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -500,6 +533,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -514,6 +548,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -528,6 +563,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -542,6 +578,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -556,6 +593,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
 
@@ -572,6 +610,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -586,6 +625,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -600,6 +640,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -614,6 +655,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -628,6 +670,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -642,6 +685,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -656,6 +700,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -670,6 +715,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -684,6 +730,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -698,6 +745,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -712,6 +760,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -726,6 +775,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -740,6 +790,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -754,6 +805,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -768,6 +820,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -782,6 +835,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -796,6 +850,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -810,6 +865,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -824,6 +880,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -838,6 +895,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -852,6 +910,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
             [
                 'site_id' => 1,
@@ -866,6 +925,7 @@ class AccountHeadSeeder extends Seeder
                 'closing_balance' => null,
                 'opening_balance_date' => null,
                 'closing_balance_date' => null,
+                'show_in_vouchers'=> true,
             ],
 
         ];

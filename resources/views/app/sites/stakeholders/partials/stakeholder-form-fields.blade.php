@@ -25,7 +25,7 @@
                                 <span class="text-danger">*</span></label>
                             <select class="form-select form-select-lg select2" id="stakeholder_type"
                                 name="stakeholder_type" {{ isset($stakeholder) ? 'disabled' : null }}>
-                                <option value="0">Select Stakeholder Type</option>
+                                <option value="0" selected>Select Stakeholder Type</option>
                                 @foreach ($stakeholderTypes as $key => $value)
                                     <option value="{{ $value }}"
                                         {{ old('stakeholder_type') == $value ? 'selected' : '' }}>

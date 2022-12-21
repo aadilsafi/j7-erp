@@ -217,8 +217,14 @@
 @endsection
 
 @section('custom-js')
+<script>
+    var cp_state = 0;
+            var cp_city = 0;
+            var ra_state = 0;
+            var ra_city = 0;
+            </script>
     {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
-
+    
     <script>
         $('#companyForm').hide();
 

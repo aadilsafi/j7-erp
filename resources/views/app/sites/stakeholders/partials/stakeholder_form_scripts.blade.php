@@ -1,9 +1,6 @@
 <script>
     $(document).ready(function() {
-        var cp_state = 0;
-        var cp_city = 0;
-        var ra_state = 0;
-        var ra_city = 0;
+
         $('#nationality').val(167).change();
         @php
             $data = old();
@@ -189,8 +186,11 @@
                                 .id + '">' + value.name + '</option>');
                         });
                         hideBlockUI('#common_form');
+                       
                         residential_state.val(ra_state);
                         residential_state.trigger('change');
+                        
+                        
 
                         @if (!is_null(old('residential.state')))
                             $('#residential_state').val({{ old('residential.state') }});

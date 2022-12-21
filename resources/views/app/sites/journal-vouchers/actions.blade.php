@@ -20,6 +20,16 @@
         @endcan
     @endif
 
+    @if ($status == 'posted')
+        @can('sites.settings.journal-vouchers.journal-vouchers-entries.revert-voucher')
+            <a onclick="revertJournalVoucher({{ $id }})" id="revertVoucher"
+                class="btn btn-relief-outline-danger waves-effect waves-float waves-light me-1" style="margin: 5px"
+                data-bs-toggle="tooltip" data-bs-placement="top" title="Revert Journal Voucher Entries" href="#">
+                <i class="bi bi-arrow-counterclockwise" style="font-size: 1.1rem" class="m-10"></i>
+            </a>
+        @endcan
+    @endif
+
 
     {{-- @can('sites.settings.journal-vouchers.edit')
         @if ($status == 'pending')

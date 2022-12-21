@@ -2215,6 +2215,13 @@ class PermissionTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.revert-voucher',
+                'show_name' => 'Can Revert Journal Voucher Entries',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.dis-approve-voucher',
                 'show_name' => 'Can Dis-Approve Journal Vouchers',
                 'guard_name' => 'web',

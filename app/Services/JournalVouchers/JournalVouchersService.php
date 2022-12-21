@@ -28,7 +28,7 @@ class JournalVouchersService implements JournalVouchersInterface
                 'user_id' => Auth::user()->id,
                 'serial_number' => $inputs['serial_number'],
                 'user_name' => $inputs['user_name'],
-                'name' =>  $inputs['voucher_name'],
+                // 'name' =>  $inputs['voucher_name'],
                 'voucher_amount' => $voucher_amount,
                 'total_debit'=> str_replace(',', '', $inputs['total_debit']),
                 'total_credit' => str_replace(',', '', $inputs['total_credit']),

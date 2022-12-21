@@ -167,6 +167,7 @@
                                                                         <th scope="col">Name</th>
                                                                         <th scope="col">ACCOUNT LEVEl</th>
                                                                         <th scope="col">ACCOUNT CODES</th>
+                                                                        <th scope="col">ACCOUNT NATURE</th>
                                                                         <th scope="col">Balance</th>
                                                                     </tr>
                                                                 </thead>
@@ -178,6 +179,9 @@
                                                                         </td>
                                                                         <td class="custom_td">
                                                                             {{ account_number_format($account_of_head->code) }}
+                                                                        </td>
+                                                                        <td class="custom_td">
+                                                                            {{ ucfirst($account_of_head->account_type) }}
                                                                         </td>
                                                                         @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
                                                                             @if (Str::length($account_of_head_3->code) == 6 and
@@ -239,6 +243,7 @@
                                                                                         </th>
                                                                                         <th scope="col">ACCOUNT CODES
                                                                                         </th>
+                                                                                        <th scope="col">ACCOUNT NATURE</th>
                                                                                         <th scope="col">Balance</th>
                                                                                     </tr>
                                                                                 </thead>
@@ -250,6 +255,9 @@
                                                                                         <td>{{ $account_of_head_full_array->level }}
                                                                                         </td>
                                                                                         <td>{{ account_number_format($account_of_head_full_array->code) }}
+                                                                                        </td>
+                                                                                        <td class="custom_td">
+                                                                                            {{ ucfirst($account_of_head->account_type) }}
                                                                                         </td>
                                                                                         @php
                                                                                             $value_44 = 0;
@@ -324,6 +332,7 @@
                                                                                                         <th scope="col">
                                                                                                             ACCOUNT CODES
                                                                                                         </th>
+                                                                                                        <th scope="col">ACCOUNT NATURE</th>
                                                                                                         <th scope="col">
                                                                                                             Balance</th>
                                                                                                     </tr>
@@ -341,6 +350,9 @@
                                                                                                         <td
                                                                                                             class="custom_td">
                                                                                                             {{ account_number_format($account_of_head_3->code) }}
+                                                                                                        </td>
+                                                                                                        <td class="custom_td">
+                                                                                                            {{ ucfirst($account_of_head->account_type) }}
                                                                                                         </td>
 
                                                                                                         @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
@@ -411,6 +423,7 @@
                                                                                                                             ACCOUNT
                                                                                                                             CODES
                                                                                                                         </th>
+                                                                                                                        <th scope="col">ACCOUNT NATURE</th>
                                                                                                                         <th
                                                                                                                             scope="col">
                                                                                                                             Balance
@@ -430,6 +443,9 @@
                                                                                                                         <td
                                                                                                                             class="custom_td">
                                                                                                                             {{ account_number_format($account_of_head_4->code) }}
+                                                                                                                        </td>
+                                                                                                                        <td class="custom_td">
+                                                                                                                            {{ ucfirst($account_of_head->account_type) }}
                                                                                                                         </td>
                                                                                                                         @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
                                                                                                                             @if (Str::length($account_of_head_5->code) > 10 and
@@ -477,6 +493,7 @@
                                                                                                                             ACCOUNT
                                                                                                                             CODES
                                                                                                                         </th>
+                                                                                                                        <th scope="col">ACCOUNT NATURE</th>
                                                                                                                         <th
                                                                                                                             scope="col">
                                                                                                                             Balance
@@ -501,9 +518,16 @@
                                                                                                                                     class="custom_td">
                                                                                                                                     {{ account_number_format($account_of_head_5->code) }}
                                                                                                                                 </td>
+                                                                                                                                <td class="custom_td">
+                                                                                                                                    {{ ucfirst($account_of_head->account_type) }}
+                                                                                                                                </td>
                                                                                                                                 <td
                                                                                                                                     class="custom_td">
+                                                                                                                                    @if($account_of_head->account_type == 'debit')
                                                                                                                                     {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum(),'-')) }}
+                                                                                                                                    @else
+                                                                                                                                    {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum(),'-')) }}
+                                                                                                                                    @endif
                                                                                                                                 </td>
 
                                                                                                                             </tr>

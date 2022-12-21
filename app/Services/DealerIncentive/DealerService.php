@@ -37,14 +37,8 @@ class DealerService implements DealerInterface
 
             $uids = $inputs['unit_ids'];
             // $uids = array_column($ids,'uid');
-            $serail_no  = $this->model()::all();
-            if (isset($serail_no) && count($serail_no) > 0) {
-                $last_data = collect($serail_no)->last();
-                $serail_no = (float)$last_data->id + 1;
-                $serail_no =  sprintf('%03d', $serail_no);
-            } else {
-                $serail_no = '001';
-            }
+            $serail_no = $this->model()::max('id') + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
             $dealerIncentive = [
                 'site_id' => decryptParams($site_id),
                 'dealer_id' => $inputs['dealer_id'],

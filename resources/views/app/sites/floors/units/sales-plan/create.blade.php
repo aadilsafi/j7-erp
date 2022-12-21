@@ -369,7 +369,7 @@
                                     'change');
                             }
 
-                            // residential address 
+                            // residential address
                             $('#residential_address_type').val(stakeholderData
                                 .residential_address_type);
                             $('#residential_address').val(stakeholderData.residential_address);
@@ -688,7 +688,7 @@
                         let InstallmentRows = '';
                         if (response.status) {
                             $('#installments_table tbody#dynamic_installment_rows').empty();
-
+                            console.log(response.data.installments)
                             for (let row of response.data.installments) {
                                 InstallmentRows += row.row;
                             }

@@ -23,9 +23,9 @@ class PaymentVocuherController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $PaymentVoucherInterface,$financialTransactionInterface;
+    private $PaymentVoucherInterface, $financialTransactionInterface;
 
-    public function __construct(paymentInterface $PaymentVoucherInterface ,FinancialTransactionInterface $financialTransactionInterface)
+    public function __construct(paymentInterface $PaymentVoucherInterface, FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->PaymentVoucherInterface = $PaymentVoucherInterface;
         $this->financialTransactionInterface = $financialTransactionInterface;
@@ -215,11 +215,12 @@ class PaymentVocuherController extends Controller
     {
         DB::transaction(function () use ($site_id, $id) {
             $payment_voucher = PaymentVocuher::find(decryptParams($id));
-            $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
-            $payment_voucher->cheque_status = 1;
-            $payment_voucher->update();
+            if ($payment_voucher->status == 1) {
+                $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
+                $payment_voucher->cheque_status = 1;
+                $payment_voucher->update();
+            }
         });
         return redirect()->route('sites.payment-voucher.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
     }
-
 }

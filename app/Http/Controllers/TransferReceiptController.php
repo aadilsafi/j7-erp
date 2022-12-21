@@ -167,7 +167,7 @@ class TransferReceiptController extends Controller
         $transferFiles = FileTitleTransfer::find($request->transfer_file_id);
 
         $fileOwner = json_decode($transferFiles->stakeholder_data);
-        $fileOwner->country = $transferFiles->stakeholder->country->name;
+        $fileOwner->country = $transferFiles->stakeholder->country->name ?? '';
         $fileOwner->state = $transferFiles->stakeholder->stae->name ?? '';
         $fileOwner->city = $transferFiles->stakeholder->city->name ?? '';
 

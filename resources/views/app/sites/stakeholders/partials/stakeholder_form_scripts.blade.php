@@ -21,11 +21,11 @@
         @endif
     });
 
-    var t = $("#stakeholder_as");
-    t.wrap('<div class="position-relative"></div>');
-    t.select2({
+    var stakeholder_as = $("#stakeholder_as");
+    stakeholder_as.wrap('<div class="position-relative"></div>');
+    stakeholder_as.select2({
         dropdownAutoWidth: !0,
-        dropdownParent: t.parent(),
+        dropdownParent: stakeholder_as.parent(),
         width: "100%",
         containerCssClass: "select-lg",
     }).change(function() {
@@ -54,6 +54,7 @@
         hideBlockUI('#stakeholder_as');
     });
 
+    stakeholder_as.trigger('change');
     // Individual Contact no fields
     var mobileContact = document.querySelector("#mobile_contact");
     intlMobileContact = window.intlTelInput(mobileContact, ({
@@ -186,11 +187,11 @@
                                 .id + '">' + value.name + '</option>');
                         });
                         hideBlockUI('#common_form');
-                       
+
                         residential_state.val(ra_state);
                         residential_state.trigger('change');
-                        
-                        
+
+
 
                         @if (!is_null(old('residential.state')))
                             $('#residential_state').val({{ old('residential.state') }});

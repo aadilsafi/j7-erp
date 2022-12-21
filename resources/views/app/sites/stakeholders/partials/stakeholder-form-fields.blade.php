@@ -25,7 +25,7 @@
                                 <span class="text-danger">*</span></label>
                             <select class="form-select form-select-lg select2" id="stakeholder_type"
                                 name="stakeholder_type" {{ isset($stakeholder) ? 'disabled' : null }}>
-                                <option value="0">Select Stakeholder Type</option>
+                                <option value="0" selected>Select Stakeholder Type</option>
                                 @foreach ($stakeholderTypes as $key => $value)
                                     <option value="{{ $value }}"
                                         {{ old('stakeholder_type') == $value ? 'selected' : '' }}>
@@ -157,7 +157,7 @@
                         class="text-danger">*</span></label>
                 <input type="tel"
                     class="form-control form-control-md ContactNoError optional_contact @error('company_office_contact') is-invalid @enderror"
-                    id="company_office_contact" name="company[company_office_contact]" placeholder="Office Contact"
+                    id="company_office_contact" name="company[company_office_contact]" placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('company.company_office_contact') }}" />
                 @error('company.company_office_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -172,7 +172,7 @@
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError contact @error('company_optional_contact') is-invalid @enderror"
                     id="company_optional_contact" name="company[company_optional_contact]"
-                    placeholder="Optional Contact"
+                    placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->mobile_contact : old('company.company_optional_contact') }}" />
                 @error('company.company_optional_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -430,7 +430,7 @@
                 <select class="select2" id="nationality" name="individual[nationality]">
                     <option value="0" selected>Select Nationality</option>
                     @foreach ($country as $countryRow)
-                        <option @if ((isset($stakeholder) && $stakeholder->nationality) || old('individual.nationality') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                        <option @if (isset($stakeholder) && $stakeholder->nationality || old('individual.nationality') == $countryRow->id) selected @endif value={{$countryRow->id}}>
                             {{ $countryRow->name }}</option>
                     @endforeach
                 </select>
@@ -590,7 +590,7 @@
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"
-                            id="mailing_postal_code" name="mailing[postal_code]" placeholder="mailing Postal Code"
+                            id="mailing_postal_code" name="mailing[postal_code]" placeholder="Mailing Postal Code"
                             value="{{ isset($stakeholder) ? $stakeholder->mailing_postal_code : old('mailing.postal_code') }}" />
                         @error('mailing.postal_code')
                             <span class="text-danger">{{ $message }}</span>

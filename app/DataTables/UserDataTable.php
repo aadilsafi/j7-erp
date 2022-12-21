@@ -96,6 +96,7 @@ class UserDataTable extends DataTable
             ->setTableId('user-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX()
             ->minifiedAjax()
             ->serverSide()
             ->processing()

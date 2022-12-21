@@ -58,8 +58,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
     </style>
 @endsection
 
@@ -99,6 +99,7 @@
                     'contactStakeholders' => $contactStakeholders,
                     'leadSources' => $leadSources,
                     'emtykinStakeholders' => $emtykinStakeholders,
+                    'parentStakeholders' => $parentStakeholders,
                 ]) }}
             </div>
 
@@ -156,6 +157,12 @@
 @endsection
 
 @section('custom-js')
+    <script>
+        var cp_state = 0;
+        var cp_city = 0;
+        var ra_state = 0;
+        var ra_city = 0;
+    </script>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -164,6 +171,8 @@
             $('#individualForm').hide();
             $('#common_form').hide()
             $('#stakeholderType').hide();
+
+            $('#nationality').val({{$stakeholder->nationality}}).trigger('change');
 
             var dob = $("#dob").flatpickr({
                 defaultDate: "{{ $stakeholder->date_of_birth }}",
@@ -176,10 +185,6 @@
             @php
                 $data = old();
             @endphp
-
-            @if (!is_null(old('stakeholder_type')))
-                $('#stakeholderType').val({{ old('stakeholder_type') }}).change();
-            @endif
 
             var cp_state = 0;
             var cp_city = 0;
@@ -217,8 +222,7 @@
                 hideBlockUI('#stakeholderForm');
             });
 
-            stakeholderAs.val('{{ $stakeholder->stakeholder_as }}');
-            stakeholderAs.trigger('change');
+            stakeholderAs.val('{{ $stakeholder->stakeholder_as }}').trigger('change');
 
             // Individual Contact no fields
             var mobileContact = document.querySelector("#mobile_contact");
@@ -321,24 +325,13 @@
                 intlcompanyOptionalContact.setCountry(OptselectdCountry['iso2']);
             @endif
 
-            $('#div-next-of-kin').hide();
-            var e = $("#parent_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            }).change(function() {
-                if ($(this).val() == 0) {
-                    $('#stakeholder_name').attr("readonly", true).val('');
-                } else {
-                    $('#stakeholder_name').removeAttr("readonly");
-                }
-            });
+            @if (!is_null(old('individual.dob')))
+                dob.setDate('{{ old('individual.dob') }}');
+            @endif
 
             var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
             var areStakeholderKinsExist = {{ count($stakeholder->nextOfKin) > 0 ? 'false' : 'true' }};
+            var KinStakeholdersExists = {{ count($stakeholder->KinStakeholders) > 0 ? 'false' : 'true' }};
 
             $(".next-of-kin-list").repeater({
 
@@ -355,7 +348,7 @@
             })
 
             $(".stakeholders-list").repeater({
-                initEmpty: true,
+                initEmpty: KinStakeholdersExists,
                 show: function() {
                     $(this).slideDown(function() {
                         $(this).find('.selectStk').select2({
@@ -384,86 +377,6 @@
                 }
             })
 
-            $.validator.addMethod("unique", function(value, element) {
-                var parentForm = $(element).closest('form');
-                var cnicRepeated = 0;
-                if (value != '') {
-                    $(parentForm.find('.cp_cnic')).each(function() {
-                        if ($(this).val() === value) {
-                            cnicRepeated++;
-                        }
-                    });
-                }
-                return cnicRepeated === 1 || cnicRepeated === 0;
-
-            }, "Contact Person CNIC can't be duplicated");
-
-            $.validator.addMethod("uniqueKinId", function(value, element) {
-                var parentForm = $(element).closest('form');
-                var cnicRepeated = 0;
-                if (value != '') {
-                    $(parentForm.find('.kinId')).each(function() {
-                        if ($(this).val() === value) {
-                            cnicRepeated++;
-                        }
-                    });
-                }
-                return cnicRepeated === 1 || cnicRepeated === 0;
-
-            }, "Kins can't be duplicated");
-
-            $.validator.addMethod("ContactNoError", function(value, element) {
-
-                return intl.isValidNumber();
-
-            }, "In Valid number");
-            $.validator.addMethod("OPTContactNoError", function(value, element) {
-
-                if (value.length > 0) {
-                    return intlOptional.isValidNumber();
-                } else {
-                    return true;
-                }
-            }, "In Valid number");
-
-
-            var validator = $("#stakeholderForm").validate({
-                rules: {
-                    'mailing_address': {
-                        required: true,
-                    },
-                    'address': {
-                        required: true,
-                    },
-                    'optional_contact': {
-                        required: false,
-                    },
-                    'full_name': {
-                        required: true,
-                    },
-                    'father_name': {
-                        required: true,
-                    },
-                    'cnic': {
-                        required: true,
-                    },
-                    'registration': {
-                        required: true,
-                    },
-                    'company_name': {
-                        required: true,
-                    },
-                    'email': {
-                        required: true,
-                    }
-                },
-                errorClass: 'is-invalid text-danger',
-                errorElement: "span",
-                wrapper: "div",
-                submitHandler: function(form) {
-                    form.submit();
-                }
-            });
             @forelse ($stakeholder->stakeholder_types as $type)
                 @if ($type->type == 'C' && $type->status)
                     $('#div-next-of-kin').show();
@@ -472,8 +385,6 @@
                 @endif
             @empty
             @endforelse
-
-
 
             var firstLoad = true;
 
@@ -608,7 +519,6 @@
 
             residential_country.val('{{ $stakeholder->residential_country_id }}');
             residential_country.trigger('change');
-
 
             // mailing address
 
@@ -755,20 +665,32 @@
                 var mbCountry = {!! old('mobileContactCountryDetails') !!}
                 $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
                 intlMobileContact.setCountry(mbCountry['iso2']);
-
-                var officeCountry = {!! old('OfficeContactCountryDetails') !!}
-                $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
-                intlOfficeContact.setCountry(officeCountry['iso2']);
-
-                var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
-                $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
-                intlCompanyMobileContact.setCountry(companyContact['iso2']);
-
-                var officeOptional = {!! old('OfficeContactCountryDetails') !!}
-                $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
-                intlcompanyOptionalContact.setCountry(officeOptional['iso2']);
+            @endif
+            @if (!is_null(old('OfficeContactCountryDetails')))
+                // var officeCountry = {!! old('OfficeContactCountryDetails') !!}
+                // $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
+                // intlOfficeContact.setCountry(officeCountry['iso2']);
+                intlOfficeContact.setCountry('pk');
+            @endif
+            @if (!is_null(old('CompanyOfficeContactCountryDetails')))
+                // var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
+                // $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
+                intlCompanyMobileContact.setCountry('pk');
+            @endif
+            @if (!is_null(old('companyMobileContactCountryDetails')))
+                // var officeOptional = {!! old('companyMobileContactCountryDetails') !!}
+                // $('#companyMobileContactCountryDetails').val({!! old('companyMobileContactCountryDetails') !!})
+                intlcompanyOptionalContact.setCountry('pk');
             @endif
 
+            $('#is_local').on('change', function() {
+            
+                if ($(this).is(':checked')) {
+                    $('#nationality').val(167).trigger('change');
+                } else {
+                    $('#nationality').val(0).change();
+                }
+            });
             $('#cpyAddress').on('change', function() {
                 if ($(this).is(':checked')) {
                     cp_state = $('#residential_state').val();
@@ -835,7 +757,7 @@
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 2,
-            minFiles: 2,
+            minFiles: 1,
             // required: true,
             checkValidity: true,
             credits: {
@@ -906,7 +828,97 @@
                 $('[name="contact-persons[' + index + '][contact]"]').val('');
                 $('[name="contact-persons[' + index + '][address]"]').val('');
             }
+        });
 
+        $.validator.addMethod("unique", function(value, element) {
+            var parentForm = $(element).closest('form');
+            var cnicRepeated = 0;
+            if (value != '') {
+                $(parentForm.find('.cp_cnic')).each(function() {
+                    if ($(this).val() === value) {
+                        cnicRepeated++;
+                    }
+                });
+            }
+            return cnicRepeated === 1 || cnicRepeated === 0;
+
+        }, "Contact Person CNIC can't be duplicated");
+
+        $.validator.addMethod("uniqueKinId", function(value, element) {
+            var parentForm = $(element).closest('form');
+            var cnicRepeated = 0;
+            if (value != '') {
+                $(parentForm.find('.kinId')).each(function() {
+                    if ($(this).val() === value) {
+                        cnicRepeated++;
+                    }
+                });
+            }
+            return cnicRepeated === 1 || cnicRepeated === 0;
+
+        }, "Kins can't be duplicated");
+
+        $.validator.addMethod("ContactNoError", function(value, element) {
+            // console.log(element.id)
+            if (element.id == 'mobile_contact') {
+                return intlMobileContact.isValidNumber();
+            }
+            if (element.id == 'company_office_contact') {
+                return intlCompanyMobileContact.isValidNumber();
+            }
+        }, "In Valid number");
+
+        $.validator.addMethod("OPTContactNoError", function(value, element) {
+
+            if (value.length > 0) {
+                if (element.name == 'office_contact') {
+                    return intlOfficeContact.isValidNumber();
+                }
+                if (element.name == 'company_optional_contact') {
+                    return intlcompanyOptionalContact.isValidNumber();
+                }
+            } else {
+                return true;
+            }
+        }, "In Valid number");
+
+
+        var validator = $("#stakeholderForm").validate({
+            rules: {
+                'mailing_address': {
+                    required: true,
+                },
+                'address': {
+                    required: true,
+                },
+                'optional_contact': {
+                    required: false,
+                },
+                'full_name': {
+                    required: true,
+                },
+                'father_name': {
+                    required: true,
+                },
+                'cnic': {
+                    required: true,
+                },
+                'registration': {
+                    required: true,
+                },
+                'company_name': {
+                    required: true,
+                },
+                'email': {
+                    required: true,
+                }
+            },
+            errorClass: 'is-invalid text-danger',
+            errorElement: "span",
+            wrapper: "div",
+            submitHandler: function(form) {
+                form.submit();
+            }
         });
     </script>
 @endsection

@@ -8,7 +8,7 @@ interface FinancialTransactionInterface
 
     public function makeDisapproveSalesPlanTransaction($sales_plan_id);
 
-    public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level);
+    public function saveAccountHead($site_id, $model, $accountName, $accountCode, $level,$account_type);
 
     public function makeFinancialTransaction($site_id, $origin_number, $account_code, $account_action, $sales_plan, $type, $amount, $nature_of_account, $balance = 0);
 
@@ -42,11 +42,17 @@ interface FinancialTransactionInterface
 
     public function makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
 
+    public function makePaymentVoucherChequeActiveTransaction($payment_voucher);
+
     // transfer Receipts Transactions
     public function makeTransferReceiptTransaction($receipt_id); // for cash
+
     public function makeTransferReceiptChequeTransaction($receipt_id); // for cheque
+
     public function makeTransferReceiptActiveTransaction($receipt_id); // for cheque Active
+
     public function makeTransferReceiptOnlineTransaction($receipt_id); // for online
+
     public function makeTransferReceiptOtherTransaction($receipt_id); // for other
 
 }

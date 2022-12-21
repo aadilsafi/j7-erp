@@ -1,7 +1,7 @@
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-body">
         <div class="row mb-1">
-            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="name">Voucher Number <span class="text-danger">*</span></label>
                 <input readonly type="text"
                     class="form-control form-control-md @error('serial_number') is-invalid @enderror" id="serial_number"
@@ -13,7 +13,7 @@
                 @enderror
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="name"> User Name <span class="text-danger">*</span></label>
                 <input readonly type="text"
                     class="form-control form-control-md @error('voucher_name') is-invalid @enderror" id="user_name"
@@ -25,36 +25,41 @@
                 @enderror
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                <label class="form-label fs-5" for="name"> Voucher Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
-                    id="voucher_name" name="voucher_name" placeholder="Journal Voucher Name"
-                    @if (isset($JournalVoucher)) value="{{ $JournalVoucher->name }}" @endif />
+            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                <label class="form-label fs-5" for="name"> JVE Number <span class="text-danger">*</span></label>
+                <input type="text" readonly class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
+                    id="voucher_name" name="" placeholder="JVE Number"
+                   value="JVE-{{  $origin_number }}"  />
                 @error('voucher_name')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
-                    <p class="m-0"><small class="text-muted">Enter Journal Voucher Name.</small></p>
+                    <p class="m-0"><small class="text-muted">JVE Number.</small></p>
                 @enderror
             </div>
 
-            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+        </div>
+
+        <div class="row mb-1">
+            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label fs-5" for="name">Remarks <span class="text-danger">*</span></label>
-                <input type="text" class="form-control form-control-md @error('remarks') is-invalid @enderror"
-                    id="remarks" @if (isset($JournalVoucher)) value="{{ $JournalVoucher->remarks }}" @endif
-                    name="remarks" placeholder="Journal Voucher Remarks" value="" />
+                <textarea class="form-control comments @error('remarks') is-invalid @enderror" id="remarks"
+                name="remarks" rows="3" placeholder="Remarks"></textarea>
                 @error('remarks')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
                     <p class="m-0"><small class="text-muted">Enter Journal Voucher Remarks.</small></p>
                 @enderror
+
             </div>
         </div>
+
+
     </div>
 </div>
 {{-- Form Repeater --}}
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-header">
-        <h3>Journal Voucher Entries</h3>
+        <h3>Journal Voucher Entries ( JVE-{{  $origin_number, }})</h3>
     </div>
 
     <div class="card-body">
@@ -113,6 +118,7 @@
                                                                         <option value="">Select Account Codes
                                                                         </option>
                                                                         @foreach ($fifthLevelAccount as $fifthLevel)
+
                                                                             <option
                                                                                 @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->account_number == $fifthLevel->code) selected @endif
                                                                                 value="{{ $fifthLevel->code }}">
@@ -191,16 +197,53 @@
                                                         <div class="row mb-1">
 
                                                             <div class="col-3 position-relative">
-                                                                <select class=" form-control selectClass"
+                                                                <select class=" form-control accountsSelect "
                                                                     name="account_number" id="fifth_level">
                                                                     <option value="">Select Account Codes
                                                                     </option>
+
                                                                     @foreach ($fifthLevelAccount as $fifthLevel)
+                                                                    {{-- Hide Customer AR Accounts  --}}
+                                                                    @php
+                                                                        $customer_ar_starting_code = '10202000000000';
+                                                                        $customer_ar_ending_code = '10209000000000';
+                                                                    @endphp
+                                                                    @if((float)$fifthLevel->code > (float)$customer_ar_starting_code &&  (float)$fifthLevel->code < (float)$customer_ar_ending_code)
+                                                                        @continue
+                                                                    @endif
+                                                                    {{-- Hide Customer AR Accounts  --}}
+
+                                                                    {{-- Hide Customer AP Accounts  --}}
+                                                                    @php
+                                                                        $customer_ap_starting_code = '20201010000000';
+                                                                        $customer_ap_ending_code = '20201020000000';
+                                                                    @endphp
+                                                                    @if((float)$fifthLevel->code > (float)$customer_ap_starting_code &&  (float)$fifthLevel->code < (float)$customer_ap_ending_code)
+                                                                        @continue
+                                                                    @endif
+                                                                    {{-- Hide Customer AP Accounts  --}}
+
+                                                                    {{-- Hide File Action Accounts  --}}
+                                                                    @php
+                                                                        $sales_plan_approval = '40101010001001'; //Revenue Sales
+                                                                        $sales_plan_dis_approval = '40201010001004';
+                                                                        $refund_account = '40201010001002';
+                                                                        $buyback_account = '40201010001001';
+                                                                        $cancellation_account = '40201010001003';
+                                                                        $revenue_cancel_charges = '40101010001002';
+                                                                        $revenue_transfer_fees = '40101010001003';
+                                                                        $revenue_other_income = '40101010001004';
+                                                                    @endphp
+                                                                    @if((float)$fifthLevel->code ==  (float)$sales_plan_approval || (float)$fifthLevel->code == (float)$sales_plan_dis_approval ||  (float)$fifthLevel->code == (float)$refund_account ||  (float)$fifthLevel->code == (float)$buyback_account
+                                                                        | (float)$fifthLevel->code == (float)$cancellation_account || (float)$fifthLevel->code == (float)$revenue_cancel_charges ||  (float)$fifthLevel->code == (float)$revenue_transfer_fees ||  (float)$fifthLevel->code == (float)$revenue_other_income)
+                                                                        @continue
+                                                                    @endif
+                                                                    {{-- Hide File Action Accounts  --}}
                                                                         <option
                                                                             @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->account_number == $fifthLevel->code) selected @endif
                                                                             value="{{ $fifthLevel->code }}">
                                                                             {{ $fifthLevel->name }}
-                                                                            ({{ $fifthLevel->code }})
+                                                                            ({{ account_number_format($fifthLevel->code) }})
                                                                         </option>
                                                                     @endforeach
                                                                 </select>

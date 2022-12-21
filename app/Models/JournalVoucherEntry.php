@@ -39,6 +39,7 @@ class JournalVoucherEntry extends Model
         'checked_date',
         'total_debit',
         'total_credit',
+        'jve_number',
     ];
 
     public function user()

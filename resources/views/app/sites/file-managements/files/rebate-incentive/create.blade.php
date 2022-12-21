@@ -220,27 +220,27 @@
                             $('#customer_occupation').val(response.stakeholder.occupation);
                             $('#customer_designation').val(response.stakeholder.designation);
 
-                            var countryDetails = JSON.parse(response.stakeholder.countryDetails);
+                            // var countryDetails = JSON.parse(response.stakeholder.countryDetails);
 
-                            if (countryDetails == null) {
-                                intl.setCountry('pk');
-                            } else {
-                                intl.setCountry(countryDetails['iso2']);
-                            }
+                            // if (countryDetails == null) {
+                            //     intl.setCountry('pk');
+                            // } else {
+                            //     intl.setCountry(countryDetails['iso2']);
+                            // }
 
-                            $('#countryDetails').val(JSON.stringify(intl
-                                .getSelectedCountryData()))
+                            // $('#countryDetails').val(JSON.stringify(intl
+                            //     .getSelectedCountryData()))
 
-                            var OptionalCountryDetails = JSON.parse(response.stakeholder
-                                .OptionalCountryDetails);
-                            if (OptionalCountryDetails == null) {
-                                intlOptional.setCountry('pk');
-                            } else {
-                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                            }
+                            // var OptionalCountryDetails = JSON.parse(response.stakeholder
+                            //     .OptionalCountryDetails);
+                            // if (OptionalCountryDetails == null) {
+                            //     intlOptional.setCountry('pk');
+                            // } else {
+                            //     intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            // }
 
-                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                                .getSelectedCountryData()))
+                            // $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                            //     .getSelectedCountryData()))
 
                             $('#td_unit_id').html(response.unit.unit_number);
                             $('#td_unit_area').html(response.unit.gross_area);

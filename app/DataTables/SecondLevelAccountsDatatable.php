@@ -87,6 +87,7 @@ class SecondLevelAccountsDatatable extends DataTable
             ->minifiedAjax()
             // ->select()
             // ->selectClassName('bg-primary')
+            ->scrollX()
             ->serverSide()
             ->processing()
             ->deferRender()

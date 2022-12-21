@@ -49,6 +49,16 @@ class JournalVoucherController extends Controller
         if (!request()->ajax()) {
 
             $JournalVoucher = JournalVoucher::get();
+            $origin_number = AccountLedger::get();
+
+            if (isset($origin_number) && count($origin_number) > 0) {
+
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
 
             if (isset($JournalVoucher) && count($JournalVoucher) > 0) {
 
@@ -65,6 +75,7 @@ class JournalVoucherController extends Controller
                 'fifthLevelAccount' => AccountHead::where('level', 5)->get(),
                 'stakeholders' => Stakeholder::all(),
                 'journal_serial_number' => $serial_number,
+                'origin_number' => $origin_number,
             ];
 
             return view('app.sites.journal-vouchers.create', $data);
@@ -102,9 +113,32 @@ class JournalVoucherController extends Controller
      * @param  \App\Models\JournalVoucher  $journalVoucher
      * @return \Illuminate\Http\Response
      */
-    public function show(JournalVoucher $journalVoucher)
+    public function show(JournalVoucher $journalVoucher, $site_id, $id)
     {
         //
+        if (!request()->ajax()) {
+            $JournalVoucher = JournalVoucher::find(decryptParams($id));
+            $JournalVoucherEntries = JournalVoucherEntry::where('journal_voucher_id', $JournalVoucher->id)->get();
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number) && count($origin_number) > 0) {
+
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'journal_serial_number' => $JournalVoucher->serial_number,
+                'JournalVoucher' => $JournalVoucher,
+                'JournalVoucherEntries' => $JournalVoucherEntries,
+                'origin_number' => $origin_number,
+            ];
+            return view('app.sites.journal-vouchers.show', $data);
+        } else {
+            abort(403);
+        }
     }
 
     /**
@@ -113,21 +147,30 @@ class JournalVoucherController extends Controller
      * @param  \App\Models\JournalVoucher  $journalVoucher
      * @return \Illuminate\Http\Response
      */
-    public function edit(JournalVoucher $journalVoucher ,$site_id,$id)
+    public function edit(JournalVoucher $journalVoucher, $site_id, $id)
     {
         //
         if (!request()->ajax()) {
 
             $JournalVoucher = JournalVoucher::find(decryptParams($id));
-            $JournalVoucherEntries = JournalVoucherEntry::where('journal_voucher_id',$JournalVoucher->id)->get();
+            $JournalVoucherEntries = JournalVoucherEntry::where('journal_voucher_id', $JournalVoucher->id)->get();
+            $origin_number = AccountLedger::get();
+            if (isset($origin_number) && count($origin_number) > 0) {
 
+                $origin_number = collect($origin_number)->last();
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
             $data = [
                 'site_id' => decryptParams($site_id),
                 'fifthLevelAccount' => AccountHead::where('level', 5)->get(),
                 'stakeholders' => Stakeholder::all(),
                 'journal_serial_number' => $JournalVoucher->serial_number,
                 'JournalVoucher' => $JournalVoucher,
-                'JournalVoucherEntries'=> $JournalVoucherEntries,
+                'JournalVoucherEntries' => $JournalVoucherEntries,
+                'origin_number' => $origin_number,
             ];
 
             return view('app.sites.journal-vouchers.edit', $data);
@@ -143,9 +186,22 @@ class JournalVoucherController extends Controller
      * @param  \App\Models\JournalVoucher  $journalVoucher
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, JournalVoucher $journalVoucher)
+    public function update(Request $request, JournalVoucher $journalVoucher, $site_id, $id)
     {
         //
+        abort(403);
+        try {
+            if (!request()->ajax()) {
+                $inputs = $request->all();
+                $site_id = decryptParams($site_id);
+                $record = $this->journalVoucherInterface->update(decryptParams($site_id), decryptParams($id), $inputs);
+                return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+            } else {
+                abort(403);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.settings.journal-vouchers.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**
@@ -175,12 +231,6 @@ class JournalVoucherController extends Controller
     {
         DB::transaction(function () use ($site_id, $id) {
             $journalVoucher = JournalVoucher::find($id);
-
-            $journalVoucher->status = 'posted';
-            $journalVoucher->approved_by = Auth::user()->id;
-            $journalVoucher->approved_date = now();
-            $journalVoucher->update();
-
             $JournalVoucherEntries  = JournalVoucherEntry::where('journal_voucher_id', $id)->get();
             $count = count($JournalVoucherEntries);
 
@@ -195,6 +245,12 @@ class JournalVoucherController extends Controller
             } else {
                 $origin_number = '001';
             }
+
+            $journalVoucher->status = 'posted';
+            $journalVoucher->approved_by = Auth::user()->id;
+            $journalVoucher->approved_date = now();
+            $journalVoucher->jve_number = 'JVE-'.$origin_number;
+            $journalVoucher->update();
 
             for ($i = 0; $i < $count; $i++) {
 
@@ -218,14 +274,75 @@ class JournalVoucherController extends Controller
                 $ledger->credit =  $credit;
                 $ledger->debit =  $debit;
                 $ledger->nature_of_account =  NatureOfAccountsEnum::MANUAL_ENTRY;
-                $ledger->origin_name =  NatureOfAccountsEnum::MANUAL_ENTRY->value. '-' . $journalVoucher->serial_number;
+                $ledger->origin_name =  NatureOfAccountsEnum::MANUAL_ENTRY->value . '-' . $journalVoucher->serial_number;
                 $ledger->origin_number =  $origin_number;
                 $ledger->manual_entry =  true;
                 $ledger->created_date =  now();
+                $ledger->journal_voucher_id =  $journalVoucher->id;
                 $ledger->save();
             }
         });
 
         return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
+
+    public function revertVoucher($site_id, $id){
+        DB::transaction(function () use ($site_id, $id) {
+            $journalVoucher = JournalVoucher::find($id);
+            $JournalVoucherEntries  = JournalVoucherEntry::where('journal_voucher_id', $id)->get();
+            $count = count($JournalVoucherEntries);
+
+            $origin_number = AccountLedger::get();
+
+            if (isset($origin_number) && count($origin_number) > 0) {
+
+                $origin_number = collect($origin_number)->last();
+
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+
+            $journalVoucher->status = 'reverted';
+            $journalVoucher->reverted_by = Auth::user()->id;
+            $journalVoucher->reverted_date = now();
+            $journalVoucher->jve_number = 'JVE-'.$origin_number;
+            $journalVoucher->update();
+
+            for ($i = 0; $i < $count; $i++) {
+
+                if ($JournalVoucherEntries[$i]['credit'] == null) {
+                    $credit = 0;
+                } else {
+                    $credit = $JournalVoucherEntries[$i]['credit'];
+                }
+
+                if ($JournalVoucherEntries[$i]['debit'] == null) {
+                    $debit = 0;
+                } else {
+                    $debit = $JournalVoucherEntries[$i]['debit'];
+                }
+
+
+                $ledger = new AccountLedger();
+                $ledger->site_id =  $JournalVoucherEntries[$i]['site_id'];
+                $ledger->account_head_code = $JournalVoucherEntries[$i]['account_number'];
+                $ledger->account_action_id = 37;
+                $ledger->credit =  $debit;
+                $ledger->debit =  $credit;
+                $ledger->nature_of_account =  NatureOfAccountsEnum::REVERTED_MANUAL_ENTRY;
+                $ledger->origin_name =  NatureOfAccountsEnum::REVERTED_MANUAL_ENTRY->value . '-' . $journalVoucher->serial_number;
+                $ledger->origin_number =  $origin_number;
+                $ledger->manual_entry =  true;
+                $ledger->created_date =  now();
+                $ledger->journal_voucher_id =  $journalVoucher->id;
+                $ledger->save();
+            }
+        });
+
+        return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+
+    }
+
 }

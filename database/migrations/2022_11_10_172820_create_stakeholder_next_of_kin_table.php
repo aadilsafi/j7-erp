@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('stakeholder_next_of_kin', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
-            $table->foreignId('kin_id')->constrained('stakeholders');
+            $table->bigInteger('stakeholder_id');
+            $table->bigInteger('kin_id');
             $table->string('relation');
             $table->boolean('is_imported')->default(false);
             $table->string('comments')->nullable();

@@ -69,6 +69,7 @@ class ImportFloorsDataTable extends DataTable
             ->setTableId('import-table')
             ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
+            ->scrollX(true)
             ->minifiedAjax()
             ->ordering(false)
             ->searching(false)

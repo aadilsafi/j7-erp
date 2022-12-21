@@ -145,6 +145,56 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             location.href = '{{ route('sites.payment-voucher.create', ['site_id' => $site_id]) }}';
         }
 
+        function ApproveModal() {
+            let payment_voucher_id = $('#approveID').attr('payment_voucher_id');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure You Want To Approve This Request?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Approve it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                        "{{ route('sites.payment-voucher.approve', ['site_id' => encryptParams($site_id), 'id' => ':payment_voucher_id']) }}"
+                        .replace(':payment_voucher_id', payment_voucher_id);
+                    location.href = url;
+                }
+            });
+        }
+
+        function ActiveCheque() {
+            let payment_voucher_id = $('#approveID').attr('payment_voucher_id');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure You Want To Approve This Request?',
+                showCancelButton: true,
+                cancelButtonText: '{{ __('lang.commons.no_cancel') }}',
+                confirmButtonText: 'Yes, Approve it!',
+                confirmButtonClass: 'btn-danger',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1'
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url =
+                        "{{ route('sites.payment-voucher.active-cheque', ['site_id' => encryptParams($site_id), 'id' => ':payment_voucher_id']) }}"
+                        .replace(':payment_voucher_id', payment_voucher_id);
+                    location.href = url;
+                }
+            });
+        }
+
 
     </script>
 @endsection

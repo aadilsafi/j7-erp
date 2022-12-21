@@ -38,6 +38,8 @@ class JournalVoucher extends Model
         'total_debit',
         'total_credit',
         'jve_number',
+        'reverted_by',
+        'reverted_date',
     ];
 
     public function user()
@@ -53,6 +55,11 @@ class JournalVoucher extends Model
     public function postedBy()
     {
         return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
+    public function revertedBy()
+    {
+        return $this->belongsTo(User::class, 'reverted_by', 'id');
     }
 
 }

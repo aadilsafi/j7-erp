@@ -22,14 +22,13 @@ class JournalVouchersService implements JournalVouchersInterface
         DB::transaction(function () use ($site_id, $inputs) {
 
             $voucher_amount = str_replace(',', '', $inputs['total_debit']) - str_replace(',', '', $inputs['total_credit']);
-            ;
 
             $voucher_data = [
                 'site_id' => $site_id,
                 'user_id' => Auth::user()->id,
                 'serial_number' => $inputs['serial_number'],
                 'user_name' => $inputs['user_name'],
-                'name' =>  $inputs['voucher_name'],
+                // 'name' =>  $inputs['voucher_name'],
                 'voucher_amount' => $voucher_amount,
                 'total_debit'=> str_replace(',', '', $inputs['total_debit']),
                 'total_credit' => str_replace(',', '', $inputs['total_credit']),

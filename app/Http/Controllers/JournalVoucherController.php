@@ -285,4 +285,64 @@ class JournalVoucherController extends Controller
 
         return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }
+
+    public function revertVoucher($site_id, $id){
+        DB::transaction(function () use ($site_id, $id) {
+            $journalVoucher = JournalVoucher::find($id);
+            $JournalVoucherEntries  = JournalVoucherEntry::where('journal_voucher_id', $id)->get();
+            $count = count($JournalVoucherEntries);
+
+            $origin_number = AccountLedger::get();
+
+            if (isset($origin_number) && count($origin_number) > 0) {
+
+                $origin_number = collect($origin_number)->last();
+
+                $origin_number = $origin_number->origin_number + 1;
+                $origin_number =  sprintf('%03d', $origin_number);
+            } else {
+                $origin_number = '001';
+            }
+
+            $journalVoucher->status = 'reverted';
+            $journalVoucher->reverted_by = Auth::user()->id;
+            $journalVoucher->reverted_date = now();
+            $journalVoucher->jve_number = 'JVE-'.$origin_number;
+            $journalVoucher->update();
+
+            for ($i = 0; $i < $count; $i++) {
+
+                if ($JournalVoucherEntries[$i]['credit'] == null) {
+                    $credit = 0;
+                } else {
+                    $credit = $JournalVoucherEntries[$i]['credit'];
+                }
+
+                if ($JournalVoucherEntries[$i]['debit'] == null) {
+                    $debit = 0;
+                } else {
+                    $debit = $JournalVoucherEntries[$i]['debit'];
+                }
+
+
+                $ledger = new AccountLedger();
+                $ledger->site_id =  $JournalVoucherEntries[$i]['site_id'];
+                $ledger->account_head_code = $JournalVoucherEntries[$i]['account_number'];
+                $ledger->account_action_id = 37;
+                $ledger->credit =  $debit;
+                $ledger->debit =  $credit;
+                $ledger->nature_of_account =  NatureOfAccountsEnum::REVERTED_MANUAL_ENTRY;
+                $ledger->origin_name =  NatureOfAccountsEnum::REVERTED_MANUAL_ENTRY->value . '-' . $journalVoucher->serial_number;
+                $ledger->origin_number =  $origin_number;
+                $ledger->manual_entry =  true;
+                $ledger->created_date =  now();
+                $ledger->journal_voucher_id =  $journalVoucher->id;
+                $ledger->save();
+            }
+        });
+
+        return redirect()->route('sites.settings.journal-vouchers.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+
+    }
+
 }

@@ -64,8 +64,11 @@ class JournalVouchersDatatable extends DataTable
                     return '<span class="badge badge-glow bg-secondary">Checked</span>';
                 } elseif ($JournalVoucher->status == 'posted') {
                     return '<span class="badge badge-glow bg-success">Posted</span>';
-                } else {
-                    return '<span class="badge badge-glow bg-danger">Disapproved</span>';
+                } elseif( $JournalVoucher->status == 'reverted') {
+                    return '<span class="badge badge-glow bg-danger">Reverted</span>';
+                }
+                else{
+                    return '<span class="badge badge-glow bg-danger">Dis-Approved</span>';
                 }
             })
             ->editColumn('actions', function ($JournalVoucher) {

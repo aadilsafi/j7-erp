@@ -222,14 +222,10 @@ class SalesPlanService implements SalesPlanInterface
                 $leadSource = (new LeadSource())->create($leadSourceData);
             }
 
-            $serail_no  = SalesPlan::all();
-            if (isset($serail_no) && count($serail_no) > 0) {
-                $last_data = collect($serail_no)->last();
-                $serail_no = (float)$last_data->id + 1;
-                $serail_no =  sprintf('%03d', $serail_no);
-            } else {
-                $serail_no = '001';
-            }
+
+            $serail_no = $this->model()::max('id') + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
+
 
             $sales_plan_data = [
                 'unit_id' => $unit->id,

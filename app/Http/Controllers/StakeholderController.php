@@ -79,11 +79,11 @@ class StakeholderController extends Controller
             $emtykinStakeholders[0]['relation'] = '';
             $data = [
                 'site_id' => decryptParams($site_id),
-                'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                'stakeholders' => Stakeholder::all(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'customFields' => $customFields,
-                'country' => Country::whereHas('cities')->get(),
+                'country' => Country::whereHas('cities')->whereHas('states')->get(),
                 'city' => [],
                 'state' => [],
                 'emtyNextOfKin' => $emtyNextOfKin,

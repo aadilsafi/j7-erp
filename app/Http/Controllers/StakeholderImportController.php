@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ImportCompanyStakeholdersDataTable;
 use App\DataTables\ImportStakeholdersDataTable;
+use App\Imports\CompanyStakeholdersImport;
+use App\Imports\IndividualStakeholdersImport;
 use Illuminate\Http\Request;
 use App\Imports\StakeholdersImport;
 use App\Jobs\ImportStakeholders;
 use App\Models\BacklistedStakeholder;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Stakeholder;
+use App\Models\StakeholderType;
+use App\Models\State;
+use App\Models\TempCompanyStakeholder;
 use App\Models\TempStakeholder;
+use DB;
 use Exception;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
@@ -23,6 +33,12 @@ class StakeholderImportController extends Controller
             $field = $request->get('field');
             $tempStakeholder = (new TempStakeholder())->find((int)$request->get('id'));
 
+            $response = view('app.components.unit-preview-cell', [
+                'field' => $field,
+                'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                'value' => $request->get('value')
+            ])->render();
+            return apiSuccessResponse($response);
             // $validator = \Validator::make($request->all(), [
             //     'value' => 'required',
             // ]);
@@ -446,21 +462,28 @@ class StakeholderImportController extends Controller
     public function ImportPreview(Request $request, $site_id)
     {
         try {
-            $model = new TempStakeholder();
 
             if ($request->hasfile('attachment')) {
                 $request->validate([
                     'attachment' => 'required|mimes:xlsx',
                     'stakeholder_as' => 'required|in:i,c'
                 ]);
-                $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
-                TempStakeholder::query()->truncate();
-                $import = new StakeholdersImport($model->getFillable());
-                $import->import($request->file('attachment'));
+                if ($request->get('stakeholder_as') == 'i') {
+                    $model = new TempStakeholder();
 
-                return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id]);
+                    TempStakeholder::query()->truncate();
+                    $import = new IndividualStakeholdersImport($model->getFillable());
+                    $import->import($request->file('attachment'));
+                } else {
+                    $model = new TempCompanyStakeholder();
+                    TempCompanyStakeholder::query()->truncate();
+                    $import = new CompanyStakeholdersImport($model->getFillable());
+                    $import->import($request->file('attachment'));
+                }
+                return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id, 'type' => $request->get('stakeholder_as')]);
             } else {
                 return Redirect::back()->withDanger('Select File to Import');
             }
@@ -477,14 +500,19 @@ class StakeholderImportController extends Controller
         }
     }
 
-    public function storePreview(Request $request, $site_id)
+    public function storePreview(Request $request, $site_id, $type)
     {
-        $model = new TempStakeholder();
+        if ($type == 'i') {
+            $model = new TempStakeholder();
+            $dataTable = new ImportStakeholdersDataTable($site_id);
+        } else {
+            $model = new TempCompanyStakeholder();
+            $dataTable = new ImportCompanyStakeholdersDataTable($site_id);
+        }
 
         if ($model->count() == 0) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+            return redirect()->route('sites.stakeholders.index', ['site_id' => $site_id])->withSuccess('No Data Found');
         } else {
-            $dataTable = new ImportStakeholdersDataTable($site_id);
 
             $required = [
                 'full_name',
@@ -509,23 +537,28 @@ class StakeholderImportController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        // try {
+        try {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
+            // $validator = \Validator::make($request->all(), [
+            //     'fields.*' => 'required',
+            // ], [
+            //     'fields.*.required' => 'Must Select all Fields',
+            //     'fields.*.distinct' => 'Field can not be duplicated',
 
-        ]);
+            // ]);
 
-        $validator->validate();
+            // $validator->validate();
 
-        ImportStakeholders::dispatch($site_id);
+            $stakeholder = [];
+            $parentsCnics = [];
+            $parentsRelations = [];
 
-        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
-        // }
+
+            ImportStakeholders::dispatch($site_id);
+
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
+        } catch (\Throwable $th) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
+        }
     }
 }

@@ -24,7 +24,6 @@ class Stakeholder extends Model implements HasMedia
         'father_name',
         'cnic',
         'ntn',
-        'contact',
         'date_of_birth',
         'is_filer',
         'is_local',

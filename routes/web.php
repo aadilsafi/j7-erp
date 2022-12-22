@@ -565,7 +565,7 @@ Route::group([
                     Route::group(['prefix' => 'import'], function () {
                         Route::view('/', 'app.sites.stakeholders.importStakeholders')->name('importStakeholders');
                         Route::post('preview', [StakeholderImportController::class, 'ImportPreview'])->name('importStakeholdersPreview');
-                        Route::get('storePreview', [StakeholderImportController::class, 'storePreview'])->name('storePreview');
+                        Route::get('storePreview/{type}', [StakeholderImportController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport', [StakeholderImportController::class, 'saveImport'])->name('saveImport');
 
                         Route::group(['prefix' => 'kins', 'as' => 'kins.'], function () {

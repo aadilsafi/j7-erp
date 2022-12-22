@@ -53,6 +53,16 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
             if ($data['bank_id'] == 0) {
 
                 if ($data['mode_of_payment'] == 'Cheque' || $data['mode_of_payment'] == 'Online') {
+
+                    $bank_last_account_head = Bank::get();
+                    $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+
+                    if ($bank_last_account_head_code == '10209010001010') {
+                        $account_head_code = (float)$bank_last_account_head_code + 1;
+                    } else {
+                        $account_head_code = '10209010001011';
+                    }
+
                     $bankData = [
                         'site_id' => decryptParams($site_id),
                         'name' => $data['bank_name'],
@@ -64,6 +74,7 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                         'contact_number' => $data['bank_contact_number'],
                         'status' => true,
                         'comments' => $data['bank_comments'],
+                        'account_head_code' => $account_head_code,
                     ];
                     $bank = Bank::create($bankData);
                     $data['bank_id'] = $bank->id;
@@ -73,9 +84,9 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
                         'site_id' => decryptParams($site_id),
                         'modelable_id' => null,
                         'modelable_type' => null,
-                        'code' => $bank->account_number,
+                        'code' => $bank->account_head_code,
                         'name' => $bank->name,
-                        'account_type'=> 'debit',
+                        'account_type' => 'debit',
                         'level' => 5,
                     ];
                     $accountHead =  AccountHead::create($acountHeadData);

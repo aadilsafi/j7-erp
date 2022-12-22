@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Bank extends Model
 {
-    use HasFactory ,SoftDeletes,LogsActivity;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -25,11 +25,12 @@ class Bank extends Model
         'status',
         'is_imported',
         'comments',
+        'account_head_code',
+        'contact_details',
     ];
 
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
-
 }

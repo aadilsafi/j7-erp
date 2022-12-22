@@ -65,6 +65,16 @@ class ReceiptService implements ReceiptInterface
                 if ($data[$i]['bank_id'] == 0) {
 
                     if ($data[$i]['mode_of_payment'] == 'Cheque' || $data[$i]['mode_of_payment'] == 'Online') {
+
+                        $bank_last_account_head = Bank::get();
+                        $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+
+                        if ($bank_last_account_head_code == '10209010001010') {
+                            $account_head_code = (float)$bank_last_account_head_code + 1;
+                        } else {
+                            $account_head_code = '10209010001011';
+                        }
+
                         $bankData = [
                             'site_id' => decryptParams($site_id),
                             'name' => $data[$i]['bank_name'],
@@ -76,6 +86,7 @@ class ReceiptService implements ReceiptInterface
                             'contact_number' => $data[$i]['bank_contact_number'],
                             'status' => true,
                             'comments' => $data[$i]['bank_comments'],
+                            'account_head_code' => (string)$account_head_code,
                         ];
                         $bank = Bank::create($bankData);
                         $data[$i]['bank_id'] = $bank->id;
@@ -85,9 +96,9 @@ class ReceiptService implements ReceiptInterface
                             'site_id' => decryptParams($site_id),
                             'modelable_id' => null,
                             'modelable_type' => null,
-                            'code' => $bank->account_number,
+                            'code' => $bank->account_head_code,
                             'name' => $bank->name,
-                            'account_type'=> 'debit',
+                            'account_type' => 'debit',
                             'level' => 5,
                         ];
                         $accountHead =  AccountHead::create($acountHeadData);

@@ -31,25 +31,29 @@ return new class extends Migration
             $table->string('ntn')->nullable();
             $table->string('referred_by')->nullable();
             $table->string('source')->nullable();
+
+            $table->boolean('same_address_for_mailing')->default(false);
+
             // residential_address
             $table->string('residential_address')->nullable();
             $table->string('residential_address_type')->nullable();
-            $table->foreignId('residential_country')->nullable();
-            $table->foreignId('residential_state')->nullable();
-            $table->foreignId('residential_city')->nullable();
+            $table->string('residential_country')->nullable();
+            $table->string('residential_state')->nullable();
+            $table->string('residential_city')->nullable();
             $table->string('residential_postal_code')->nullable();
             // mailing_address
             $table->string('mailing_address')->nullable();
             $table->string('mailing_address_type')->nullable();
-            $table->foreignId('mailing_country')->nullable();
-            $table->foreignId('mailing_state')->nullable();
-            $table->foreignId('mailing_city')->nullable();
+            $table->string('mailing_country')->nullable();
+            $table->string('mailing_state')->nullable();
+            $table->string('mailing_city')->nullable();
             $table->string('mailing_postal_code')->nullable();
 
             $table->string('comments')->nullable();
             $table->boolean('is_dealer')->default(false);
             $table->boolean('is_vendor')->default(false);
             $table->boolean('is_customer')->default(false);
+            $table->boolean('is_kin')->default(false);
             $table->timestamps();
         });
     }

@@ -26,6 +26,7 @@ class AccountHead extends Model
         'opening_balance_date',
         'closing_balance_date',
         'status',
+        'show_in_vouchers',
     ];
 
     protected $casts = [

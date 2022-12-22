@@ -177,6 +177,16 @@ class BankController extends Controller
 
             $stakeholder = [];
             foreach ($tempdata as $key => $items) {
+
+                $bank_last_account_head = Bank::get();
+                $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+
+                if ($bank_last_account_head_code == '10209010001010') {
+                    $account_head_code = (float)$bank_last_account_head_code + 1;
+                } else {
+                    $account_head_code = '10209010001011';
+                }
+
                 foreach ($tempCols as $k => $field) {
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
@@ -187,6 +197,7 @@ class BankController extends Controller
                 $data[$key]['branch'] = $data[$key]['address'];
                 $data[$key]['status'] = true;
                 $data[$key]['is_imported'] = true;
+                $data[$key]['account_head_code'] = (string)$account_head_code;
 
                 $bank = Bank::create($data[$key]);
 
@@ -194,8 +205,9 @@ class BankController extends Controller
                     'site_id' => decryptParams($site_id),
                     'modelable_id' => null,
                     'modelable_type' => null,
-                    'code' => $bank->account_number,
+                    'code' => $bank->account_head_code,
                     'name' => $bank->name,
+                    'account_type'=> 'debit',
                     'level' => 5,
                 ];
                 $accountHead =  AccountHead::create($acountHeadData);

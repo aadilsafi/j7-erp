@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('opening_balance')->nullable();
             $table->string('closing_balance')->nullable();
             $table->boolean('status')->default(1);
+            $table->boolean('show_in_vouchers')->default(1);
             $table->tinyInteger('level')->default(1);
             $table->timestamp('opening_balance_date')->nullable();
             $table->timestamp('closing_balance_date')->nullable();

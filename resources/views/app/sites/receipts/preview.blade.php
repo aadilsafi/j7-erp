@@ -129,7 +129,7 @@
                         </div>
                     </div> --}}
 
-                    <div class="row mb-1">
+                    {{-- <div class="row mb-1">
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="stackholder_address">Address</label>
                             <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
@@ -141,7 +141,7 @@
                             <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
                                 placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">

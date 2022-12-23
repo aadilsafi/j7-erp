@@ -187,6 +187,7 @@ class PaymentVocuherController extends Controller
             if (count($payment_voucher) > 0) {
                 $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
                 $debit = (float)$debit + (float)$debit_value;
+                dd($debit);
             }
         }
 

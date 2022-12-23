@@ -453,7 +453,7 @@
                         hideBlockUI('.bankDiv');
                     } else {
 
-                        $('#name').val('').removeAttr('readOnly');
+                        $('.name').val('').removeAttr('readOnly');
                         $('#account_number').val('').removeAttr('readOnly');
                         $('#contact_number').val('').removeAttr('readOnly');
                         $('#branch').val('').removeAttr('readOnly');

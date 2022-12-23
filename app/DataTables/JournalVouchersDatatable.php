@@ -27,8 +27,8 @@ class JournalVouchersDatatable extends DataTable
             ->editColumn('check', function ($JournalVoucher) {
                 return $JournalVoucher;
             })
-            ->editColumn('voucher_date', function ($JournalVoucher) {
-                return editDateColumn($JournalVoucher->voucher_Date);
+            ->editColumn('created_date', function ($JournalVoucher) {
+                return editDateColumn($JournalVoucher->created_date);
             })
             ->editColumn('updated_at', function ($JournalVoucher) {
                 return editDateColumn($JournalVoucher->updated_at);
@@ -180,7 +180,7 @@ class JournalVouchersDatatable extends DataTable
             Column::make('status')->title('Status')->addClass('text-nowrap'),
             Column::computed('checked_by')->name('checkedBy.name')->title('Checked By')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::computed('approved_by')->name('postedBy.name')->title('Posted By')->addClass('text-nowrap')->orderable(false)->searchable(true),
-            Column::make('voucher_date')->title('Created At')->addClass('text-nowrap'),
+            Column::computed('created_date')->title('Created At')->addClass('text-nowrap'),
         ];
         // $columns[] = Column::make('created_at')->addClass('text-nowrap');
         // $columns[] = Column::make('updated_at')->addClass('text-nowrap');

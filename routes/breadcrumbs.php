@@ -561,7 +561,7 @@ Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_i
 //Activity Logs Breadcrumbs
 Breadcrumbs::for('sites.settings.activity-logs.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Settings', route('sites.settings.activity-logs.index', ['site_id' => $site_id]));
+    $trail->push('Settings', route('sites.settings.activity-logs.index', ['site_id' => encryptParams($site_id)]));
     $trail->push('Activity Logs', route('sites.settings.activity-logs.index', ['site_id' => $site_id]));
 });
 

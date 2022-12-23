@@ -199,11 +199,12 @@
         });
 
         $('#kt_table_1').DataTable({
-            ordering: false,
-            sorting: false,
+            order: [
+                [0, "asc"]
+            ],
             scrollX: true,
             responsive: false,
-            searching: false,
+            searching: true,
             lengthMenu: [50, 100, 500],
         });
     </script>

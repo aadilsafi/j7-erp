@@ -541,6 +541,17 @@
                 </li>
             @endcan
 
+            {{-- Lead Sources Menu --}}
+            @can('sites.lead-sources.index')
+                <li
+                    class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    <a class="d-flex align-items-center"
+                        href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
+                        <i data-feather='trello'></i>
+                        <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
+                    </a>
+                </li>
+            @endcan
 
             {{-- Floors Menu --}}
             @can('sites.floors.index')
@@ -565,17 +576,7 @@
                     </a>
                 </li>
             @endcan
-            {{-- Lead Sources Menu --}}
-            @can('sites.lead-sources.index')
-                <li
-                    class="nav-item {{ request()->routeIs('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
-                    <a class="d-flex align-items-center"
-                        href="{{ route('sites.lead-sources.index', ['site_id' => encryptParams($site_id)]) }}">
-                        <i data-feather='trello'></i>
-                        <span class="menu-title text-truncate" data-i18n="Email">Lead Sources</span>
-                    </a>
-                </li>
-            @endcan
+
 
             {{-- File Management Menu --}}
             @canany(['sites.file-managements.view-files', 'sites.receipts.index', 'sites.payment-voucher.index',

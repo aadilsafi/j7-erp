@@ -31,6 +31,7 @@ class TempStakeholder extends Model
         'residential_state',
         'residential_city',
         'residential_postal_code',
+        'same_address_for_mailing',
         'mailing_address',
         'mailing_address_type',
         'mailing_country',
@@ -41,5 +42,6 @@ class TempStakeholder extends Model
         'is_dealer',
         'is_vendor',
         'is_customer',
+        'is_kin',
     ];
 }

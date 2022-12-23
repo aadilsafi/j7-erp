@@ -496,6 +496,8 @@ Route::group([
                                     Route::group(['prefix' => '/{id}'], function () {
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
+                                        Route::get('initail-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
+                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
                                     });
 
@@ -565,8 +567,8 @@ Route::group([
                     Route::group(['prefix' => 'import'], function () {
                         Route::view('/', 'app.sites.stakeholders.importStakeholders')->name('importStakeholders');
                         Route::post('preview', [StakeholderImportController::class, 'ImportPreview'])->name('importStakeholdersPreview');
-                        Route::get('storePreview', [StakeholderImportController::class, 'storePreview'])->name('storePreview');
-                        Route::post('saveImport', [StakeholderImportController::class, 'saveImport'])->name('saveImport');
+                        Route::get('storePreview/{type}', [StakeholderImportController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport/{type}', [StakeholderImportController::class, 'saveImport'])->name('saveImport');
 
                         Route::group(['prefix' => 'kins', 'as' => 'kins.'], function () {
                             Route::view('/', 'app.sites.stakeholders.importKins', ['preview' => false, 'final_preview' => false])->name('importStakeholders');

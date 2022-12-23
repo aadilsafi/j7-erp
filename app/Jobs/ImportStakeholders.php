@@ -54,35 +54,87 @@ class ImportStakeholders implements ShouldQueue
 
             DB::transaction(function () use ($site_id, $importData, $Importkey, $tempCols) {
                 foreach ($importData as $key => $items) {
+                    $data[$key]['site_id'] = decryptParams($site_id);
+                    $data[$key]['stakeholder_as'] = 'i';
 
                     foreach ($tempCols as $k => $field) {
                         $data[$key][$field] = $items[$tempCols[$k]];
                     }
-                    $data[$key]['site_id'] = decryptParams($site_id);
                     $data[$key]['is_imported'] = true;
 
-                    if ($data[$key]['country'] != "null") {
-                        $country = Country::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['country']))->first();
-                        if ($country) {
-                            $data[$key]['country_id'] = $country->id;
+                    if ($data[$key]['is_local'] == 'yes') {
+                        $data[$key]['nationality'] = 167;
+                    } else {
+                        $nationality = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['nationality'])])->first();
+                        if ($nationality) {
+                            $data[$key]['nationality'] = $nationality->id;
                         } else {
-                            $data[$key]['country_id'] = 1;
+                            $data[$key]['nationality'] = 167;
+                        }
+                    }
+                    // residential address 
+
+                    if ($data[$key]['residential_country'] != "null") {
+                        $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['residential_country'])])->first();
+                        if ($country) {
+                            $data[$key]['residential_country_id'] = $country->id;
+                        } else {
+                            $data[$key]['residential_country_id'] = 167;
                         }
                     }
 
-                    if ($data[$key]['city'] != "null") {
-                        $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['city']))->first();
-                        if ($city) {
-                            $data[$key]['city_id'] = $city->id;
-                        }
-                    }
-                    if ($data[$key]['state'] != "null") {
-                        $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['state']))->first();
+                    if ($data[$key]['residential_state'] != "null") {
+                        $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['residential_state']))->first();
                         if ($state) {
-                            $data[$key]['state_id'] = $state->id;
+                            $data[$key]['residential_state_id'] = $state->id;
+                        } else {
+                            $data[$key]['residential_state_id'] = 0;
                         }
                     }
-                    $data[$key]['stakeholder_as'] = 'i';
+
+                    if ($data[$key]['residential_city'] != "null") {
+                        $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['residential_city']))->first();
+                        if ($city) {
+                            $data[$key]['residential_city_id'] = $city->id;
+                        } else {
+                            $data[$key]['residential_city_id'] = 0;
+                        }
+                    }
+
+                    if ($data[$key]['same_address_for_mailing'] == 'yes') {
+                        $data[$key]['mailing_address'] = $data[$key]['residential_address'];
+                        $data[$key]['mailing_address_type'] = $data[$key]['residential_address_type'];
+                        $data[$key]['mailing_country_id'] = $data[$key]['residential_country_id'];
+                        $data[$key]['mailing_state_id'] = $data[$key]['residential_state_id'];
+                        $data[$key]['mailing_city_id'] = $data[$key]['residential_city_id'];
+                        $data[$key]['mailing_postal_code'] = $data[$key]['residential_postal_code'];
+                    } else {
+                        // mailing address 
+
+                        if ($data[$key]['mailing_country'] != "null") {
+                            $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['mailing_country'])])->first();
+                            if ($country) {
+                                $data[$key]['mailing_country_id'] = $country->id;
+                            } else {
+                                $data[$key]['mailing_country_id'] = 167;
+                            }
+                        }
+
+                        if ($data[$key]['mailing_state'] != "null") {
+                            $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['mailing_state']))->first();
+                            if ($state) {
+                                $data[$key]['mailing_state_id'] = $state->id;
+                            }
+                        }
+
+                        if ($data[$key]['mailing_city'] != "null") {
+                            $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['mailing_city']))->first();
+                            if ($city) {
+                                $data[$key]['mailing_city_id'] = $city->id;
+                            }
+                        }
+                    }
+
                     $data[$key]['created_at'] = $items->created_at;
                     $data[$key]['updated_at'] = $items->updated_at;
 
@@ -90,9 +142,13 @@ class ImportStakeholders implements ShouldQueue
                     unset($data[$key]['is_dealer']);
                     unset($data[$key]['is_vendor']);
                     unset($data[$key]['is_customer']);
-                    unset($data[$key]['country']);
-                    unset($data[$key]['state']);
-                    unset($data[$key]['city']);
+                    unset($data[$key]['residential_country']);
+                    unset($data[$key]['residential_state']);
+                    unset($data[$key]['residential_city']);
+                    unset($data[$key]['mailing_country']);
+                    unset($data[$key]['mailing_state']);
+                    unset($data[$key]['mailing_city']);
+                    unset($data[$key]['same_address_for_mailing']);
 
                     $stakeholder = Stakeholder::create($data[$key]);
 

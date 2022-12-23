@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ImportCompanyStakeholdersDataTable;
 use App\DataTables\ImportStakeholdersDataTable;
+use App\Imports\CompanyStakeholdersImport;
+use App\Imports\IndividualStakeholdersImport;
 use Illuminate\Http\Request;
 use App\Imports\StakeholdersImport;
 use App\Jobs\ImportStakeholders;
 use App\Models\BacklistedStakeholder;
+use App\Models\City;
+use App\Models\Country;
+use App\Models\Stakeholder;
+use App\Models\StakeholderType;
+use App\Models\State;
+use App\Models\TempCompanyStakeholder;
 use App\Models\TempStakeholder;
+use DB;
 use Exception;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
@@ -23,6 +33,12 @@ class StakeholderImportController extends Controller
             $field = $request->get('field');
             $tempStakeholder = (new TempStakeholder())->find((int)$request->get('id'));
 
+            $response = view('app.components.unit-preview-cell', [
+                'field' => $field,
+                'id' => $request->get('id'), 'input_type' => $request->get('inputtype'),
+                'value' => $request->get('value')
+            ])->render();
+            return apiSuccessResponse($response);
             // $validator = \Validator::make($request->all(), [
             //     'value' => 'required',
             // ]);
@@ -446,21 +462,28 @@ class StakeholderImportController extends Controller
     public function ImportPreview(Request $request, $site_id)
     {
         try {
-            $model = new TempStakeholder();
 
             if ($request->hasfile('attachment')) {
                 $request->validate([
                     'attachment' => 'required|mimes:xlsx',
                     'stakeholder_as' => 'required|in:i,c'
                 ]);
-                $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
                 // dd(array_intersect($model->getFillable(),$headings[0][0]));
                 //validate header row and return with error
-                TempStakeholder::query()->truncate();
-                $import = new StakeholdersImport($model->getFillable());
-                $import->import($request->file('attachment'));
+                if ($request->get('stakeholder_as') == 'i') {
+                    $model = new TempStakeholder();
 
-                return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id]);
+                    TempStakeholder::query()->truncate();
+                    $import = new IndividualStakeholdersImport($model->getFillable());
+                    $import->import($request->file('attachment'));
+                } else {
+                    $model = new TempCompanyStakeholder();
+                    TempCompanyStakeholder::query()->truncate();
+                    $import = new CompanyStakeholdersImport($model->getFillable());
+                    $import->import($request->file('attachment'));
+                }
+                return redirect()->route('sites.stakeholders.storePreview', ['site_id' => $site_id, 'type' => $request->get('stakeholder_as')]);
             } else {
                 return Redirect::back()->withDanger('Select File to Import');
             }
@@ -477,14 +500,19 @@ class StakeholderImportController extends Controller
         }
     }
 
-    public function storePreview(Request $request, $site_id)
+    public function storePreview(Request $request, $site_id, $type)
     {
-        $model = new TempStakeholder();
+        if ($type == 'i') {
+            $model = new TempStakeholder();
+            $dataTable = new ImportStakeholdersDataTable($site_id);
+        } else {
+            $model = new TempCompanyStakeholder();
+            $dataTable = new ImportCompanyStakeholdersDataTable($site_id);
+        }
 
         if ($model->count() == 0) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+            return redirect()->route('sites.stakeholders.index', ['site_id' => $site_id])->withSuccess('No Data Found');
         } else {
-            $dataTable = new ImportStakeholdersDataTable($site_id);
 
             $required = [
                 'full_name',
@@ -502,30 +530,197 @@ class StakeholderImportController extends Controller
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
                 'required_fields' => $required,
+                'type' => $type,
             ];
             return $dataTable->with($data)->render('app.sites.stakeholders.importFloorsPreview', $data);
         }
     }
 
-    public function saveImport(Request $request, $site_id)
+    public function saveImport(Request $request, $site_id, $type)
     {
-        // try {
+        try {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
+            // $validator = \Validator::make($request->all(), [
+            //     'fields.*' => 'required',
+            // ], [
+            //     'fields.*.required' => 'Must Select all Fields',
+            //     'fields.*.distinct' => 'Field can not be duplicated',
 
-        ]);
+            // ]);
 
-        $validator->validate();
+            // $validator->validate();
+            if ($type == 'c') {
+                $model = new TempCompanyStakeholder();
+                $tempdata = $model->cursor();
+                $tempCols = $model->getFillable();
 
-        ImportStakeholders::dispatch($site_id);
+                $stakeholder = [];
+                $parentsCnics = [];
+                $parentsRelations = [];
 
-        return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
-        // } catch (\Throwable $th) {
-        //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
-        // }
+                foreach ($tempdata->chunk(30) as $Importkey => $importData) {
+
+                    DB::transaction(function () use ($site_id, $importData, $Importkey, $tempCols) {
+                        foreach ($importData as $key => $items) {
+                            $data[$key]['site_id'] = decryptParams($site_id);
+                            $data[$key]['stakeholder_as'] = 'c';
+
+                            foreach ($tempCols as $k => $field) {
+                                $data[$key][$field] = $items[$tempCols[$k]];
+                            }
+                            $data[$key]['is_imported'] = true;
+                            $data[$key]['full_name'] = $data[$key]['company_name'];
+                            $data[$key]['cnic'] = $data[$key]['registration'];
+                            if ($data[$key]['origin'] != "null") {
+                                $data[$key]['origin'] = 167;
+                            } else {
+                                $nationality = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['origin'])])->first();
+                                if ($nationality) {
+                                    $data[$key]['origin'] = $nationality->id;
+                                } else {
+                                    $data[$key]['origin'] = 167;
+                                }
+                            }
+
+                            // residential address 
+
+                            if ($data[$key]['residential_country'] != "null") {
+                                $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['residential_country'])])->first();
+                                if ($country) {
+                                    $data[$key]['residential_country_id'] = $country->id;
+                                } else {
+                                    $data[$key]['residential_country_id'] = 167;
+                                }
+                            }
+
+                            if ($data[$key]['residential_state'] != "null") {
+                                $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['residential_state']))->first();
+                                if ($state) {
+                                    $data[$key]['residential_state_id'] = $state->id;
+                                } else {
+                                    $data[$key]['residential_state_id'] = 0;
+                                }
+                            }
+
+                            if ($data[$key]['residential_city'] != "null") {
+                                $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['residential_city']))->first();
+                                if ($city) {
+                                    $data[$key]['residential_city_id'] = $city->id;
+                                } else {
+                                    $data[$key]['residential_city_id'] = 0;
+                                }
+                            }
+
+                            if ($data[$key]['same_address_for_mailing'] == 'yes') {
+                                $data[$key]['mailing_address'] = $data[$key]['residential_address'];
+                                $data[$key]['mailing_address_type'] = $data[$key]['residential_address_type'];
+                                $data[$key]['mailing_country_id'] = $data[$key]['residential_country_id'];
+                                $data[$key]['mailing_state_id'] = $data[$key]['residential_state_id'];
+                                $data[$key]['mailing_city_id'] = $data[$key]['residential_city_id'];
+                                $data[$key]['mailing_postal_code'] = $data[$key]['residential_postal_code'];
+                            } else {
+                                // mailing address 
+
+                                if ($data[$key]['mailing_country'] != "null") {
+                                    $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['mailing_country'])])->first();
+                                    if ($country) {
+                                        $data[$key]['mailing_country_id'] = $country->id;
+                                    } else {
+                                        $data[$key]['mailing_country_id'] = 167;
+                                    }
+                                }
+
+                                if ($data[$key]['mailing_state'] != "null") {
+                                    $state = State::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['mailing_state']))->first();
+                                    if ($state) {
+                                        $data[$key]['mailing_state_id'] = $state->id;
+                                    }
+                                }
+
+                                if ($data[$key]['mailing_city'] != "null") {
+                                    $city = City::whereRaw('LOWER(name) = (?)', strtolower($data[$key]['mailing_city']))->first();
+                                    if ($city) {
+                                        $data[$key]['mailing_city_id'] = $city->id;
+                                    }
+                                }
+                            }
+
+
+                            $data[$key]['created_at'] = $items->created_at;
+                            $data[$key]['updated_at'] = $items->updated_at;
+
+                            unset($data[$key]['company_name']);
+                            unset($data[$key]['is_dealer']);
+                            unset($data[$key]['is_vendor']);
+                            unset($data[$key]['is_customer']);
+                            unset($data[$key]['is_kin']);
+                            unset($data[$key]['regsitration']);
+                            unset($data[$key]['residential_country']);
+                            unset($data[$key]['residential_state']);
+                            unset($data[$key]['residential_city']);
+                            unset($data[$key]['mailing_country']);
+                            unset($data[$key]['mailing_state']);
+                            unset($data[$key]['mailing_city']);
+                            unset($data[$key]['same_address_for_mailing']);
+
+                            $stakeholder = Stakeholder::create($data[$key]);
+
+                            $stakeholdertype = [
+                                [
+                                    'stakeholder_id' => $stakeholder->id,
+                                    'type' => 'C',
+                                    'stakeholder_code' => 'C-00' . $stakeholder->id,
+                                    'status' => $items['is_customer'] ? 1 : 0,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ],
+                                [
+                                    'stakeholder_id' => $stakeholder->id,
+                                    'type' => 'V',
+                                    'stakeholder_code' => 'V-00' . $stakeholder->id,
+                                    'status' => $items['is_vendor'] ? 1 : 0,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ],
+                                [
+                                    'stakeholder_id' => $stakeholder->id,
+                                    'type' => 'D',
+                                    'stakeholder_code' => 'D-00' . $stakeholder->id,
+                                    'status' => $items['is_dealer'] ? 1 : 0,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ],
+                                [
+                                    'stakeholder_id' => $stakeholder->id,
+                                    'type' => 'K',
+                                    'stakeholder_code' => 'K-00' . $stakeholder->id,
+                                    'status' => $items['is_kin'] ? 1 : 0,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ],
+                                [
+                                    'stakeholder_id' => $stakeholder->id,
+                                    'type' => 'L',
+                                    'stakeholder_code' => 'L-00' . $stakeholder->id,
+                                    'status' => 1,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]
+                            ];
+
+                            $stakeholder_type = StakeholderType::insert($stakeholdertype);
+                        }
+                    });
+                }
+            }
+
+            if ($type == 'i') {
+                ImportStakeholders::dispatch($site_id);
+            }
+
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data will be imported Shortly.');
+        } catch (\Throwable $th) {
+            return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger('Somethings Went wrong');
+        }
     }
 }

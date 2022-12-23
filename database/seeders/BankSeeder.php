@@ -28,6 +28,7 @@ class BankSeeder extends Seeder
                 'contact_number' => '12345678991',
                 'status' => true,
                 'comments' => 'This is a MCB bank',
+                'account_head_code'=> '10209010001001',
             ],
             [
                 'site_id' => 1,
@@ -40,6 +41,7 @@ class BankSeeder extends Seeder
                 'contact_number' => '12345678991',
                 'status' => true,
                 'comments' => 'This is a Meezan bank',
+                'account_head_code'=> '10209010001002',
             ],
             [
                 'site_id' => 1,
@@ -52,6 +54,7 @@ class BankSeeder extends Seeder
                 'contact_number' => '12345678991',
                 'status' => true,
                 'comments' => 'This is a Meezan bank',
+                'account_head_code'=> '10209010001003',
             ],
 
         ];

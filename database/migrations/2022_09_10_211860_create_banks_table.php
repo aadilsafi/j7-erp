@@ -16,15 +16,17 @@ return new class extends Migration
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('site_id')->constrained();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('account_number');
-            $table->string('branch');
-            $table->string('branch_code');
-            $table->string('address');
-            $table->string('contact_number');
+            $table->string('name')->nullable();
+            $table->string('slug')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('branch')->nullable();
+            $table->string('branch_code')->nullable();
+            $table->string('address')->nullable();
+            $table->string('contact_number')->nullable();
             $table->boolean('status')->default(true);
             $table->string('comments')->nullable();
+            $table->string('account_head_code')->nullable();
+            $table->json('contact_details')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

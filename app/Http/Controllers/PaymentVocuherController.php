@@ -173,6 +173,56 @@ class PaymentVocuherController extends Controller
         $debit = collect($ledger)->sum('debit');
         $credit = collect($ledger)->sum('credit');
 
+
+        if ($request->stakeholder_type == 'C') {
+            $payment_voucher = PaymentVocuher::where('customer_id', $request->stakeholder_id)->where('status', 0)->get();
+            if (count($payment_voucher) > 0) {
+                $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+                $debit = (float)$debit + (float)$debit_value;
+            }
+
+            // // For cheque inactive
+            // $payment_voucher = PaymentVocuher::where('customer_id', $request->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+            // if (count($payment_voucher) > 0) {
+            //     $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            //     $debit = (float)$debit + (float)$debit_value;
+            //     // dd($debit,$payment_voucher);
+            // }
+        }
+
+        if ($request->stakeholder_type == 'D') {
+            $payment_voucher = PaymentVocuher::where('dealer_id', $request->stakeholder_id)->where('status', 0)->get();
+            if (count($payment_voucher) > 0) {
+                $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+                $debit = (float)$debit + (float)$debit_value;
+            }
+
+            // // For cheque inactive
+            // $payment_voucher = PaymentVocuher::where('dealer_id', $request->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+            // if (count($payment_voucher) > 0) {
+            //     $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            //     $debit = (float)$debit + (float)$debit_value;
+            // }
+        }
+
+        if ($request->stakeholder_type == 'V') {
+            $payment_voucher = PaymentVocuher::where('vendor_id', $request->stakeholder_id)->where('status', 0)->get();
+            if (count($payment_voucher) > 0) {
+                $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+                $debit = (float)$debit + (float)$debit_value;
+            }
+
+            // // For cheque inactive
+            // $payment_voucher = PaymentVocuher::where('vendor_id', $request->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+            // if (count($payment_voucher) > 0) {
+            //     $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            //     $debit = (float)$debit + (float)$debit_value;
+            // }
+        }
+
         $payable_amount = $credit - $debit;
 
         return response()->json([

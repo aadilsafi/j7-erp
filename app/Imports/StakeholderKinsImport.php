@@ -31,7 +31,7 @@ class StakeholderKinsImport implements ToModel, WithChunkReading, WithBatchInser
     {
         return new TempKins(
             [
-                'stakeholder_cnic' => $row['stakeholder_cnic'],
+                'stakeholder_cnic' => $row['identity_number'],
                 'kin_cnic' => $row['kin_cnic'],
                 'relation' => $row['relation'],
             ]
@@ -40,19 +40,19 @@ class StakeholderKinsImport implements ToModel, WithChunkReading, WithBatchInser
 
     public function chunkSize(): int
     {
-        return 100;
+        return 50;
     }
 
     public function batchSize(): int
     {
-        return 100;
+        return 50;
     }
 
 
     public function rules(): array
     {
         return [
-            'stakeholder_cnic' => ['required', 'exists:App\Models\Stakeholder,cnic'],
+            'identity_number' => ['required', 'exists:App\Models\Stakeholder,cnic'],
             'kin_cnic' => ['required', 'exists:App\Models\Stakeholder,cnic'],
             'relation' => ['required'],
         ];
@@ -60,7 +60,7 @@ class StakeholderKinsImport implements ToModel, WithChunkReading, WithBatchInser
     public function customValidationMessages()
     {
         return [
-            'stakeholder_cnic.exists' => 'Parent Stakeholder CNIC not Exists.',
+            'identity_number.exists' => 'Parent Stakeholder CNIC / Registration No not Exists.',
             'kin_cnic.exists' => 'Kin CNIC not Exists.',
         ];
     }

@@ -55,4 +55,10 @@ interface FinancialTransactionInterface
 
     public function makeTransferReceiptOtherTransaction($receipt_id); // for other
 
+    public function makeCustomerApAccount($stakeholder_id);
+
+    public function makeDealerApAccount($stakeholder_id);
+
+    public function makeVendorApAccount($stakeholder_id);
+
 }

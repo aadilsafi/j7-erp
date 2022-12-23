@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.stakeholders.saveImport', ['site_id' => encryptParams($site_id), 'type' => $type]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}

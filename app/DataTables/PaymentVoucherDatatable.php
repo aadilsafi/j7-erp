@@ -39,6 +39,9 @@ class PaymentVoucherDatatable extends DataTable
             ->editColumn('updated_at', function ($payment_voucher) {
                 return editDateColumn($payment_voucher->updated_at);
             })
+            ->editColumn('amount_to_be_paid', function ($payment_voucher) {
+                return number_format($payment_voucher->amount_to_be_paid);
+            })
             ->editColumn('status', function ($payment_voucher) {
                 // $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');
                 $status = $payment_voucher->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';

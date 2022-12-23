@@ -296,7 +296,7 @@
             showBlockUI('#paymentVoucher');
             let formated_amount = $(this).val().replace(/,/g, "");
             let amount_to_be_paid = $(this).val();
-            if ($.isNumeric(formated_amount)) {
+            if ($.isNumeric(formated_amount) && formated_amount > 0) {
 
                 let total_payable_amount = $('#total_payable_amount').val().replace(/,/g, "");
                 if (parseFloat(formated_amount) > parseFloat(total_payable_amount)) {
@@ -453,7 +453,7 @@
                         hideBlockUI('.bankDiv');
                     } else {
 
-                        $('#name').val('').removeAttr('readOnly');
+                        $('.name').val('').removeAttr('readOnly');
                         $('#account_number').val('').removeAttr('readOnly');
                         $('#contact_number').val('').removeAttr('readOnly');
                         $('#branch').val('').removeAttr('readOnly');

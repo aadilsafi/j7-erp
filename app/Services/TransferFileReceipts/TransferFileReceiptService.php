@@ -56,11 +56,12 @@ class TransferFileReceiptService implements TransferFileReceiptInterface
 
                     $bank_last_account_head = Bank::get();
                     $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+                    $bank_starting_code = '10209010001010';
 
-                    if ($bank_last_account_head_code == '10209010001010') {
+                    if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
                         $account_head_code = (float)$bank_last_account_head_code + 1;
                     } else {
-                        $account_head_code = '10209010001011';
+                        $account_head_code =  (float)$bank_starting_code + 1;
                     }
 
                     $bankData = [

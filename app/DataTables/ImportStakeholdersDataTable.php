@@ -240,12 +240,25 @@ class ImportStakeholdersDataTable extends DataTable
                 'required_fields' => $this->required_fields,
                 'name' => 'ntn'
             ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('contact')->title(view('app.components.select-fields', [
+            Column::computed('mobile_contact')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
                 'name' => 'contact'
             ])->render())->addClass('removeTolltip'),
+            Column::computed('office_contact')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'required_fields' => $this->required_fields,
+                'name' => 'office_contact'
+            ])->render())->addClass('removeTolltip'),
+            Column::computed('email')->title(view('app.components.select-fields', [
+                'db_fields' => $this->db_fields,
+                'is_disable' => false,
+                'required_fields' => $this->required_fields,
+                'name' => 'email'
+            ])->render())->addClass('removeTolltip'),
+
             Column::computed('state')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,

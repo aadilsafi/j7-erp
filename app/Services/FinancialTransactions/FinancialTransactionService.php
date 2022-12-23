@@ -1557,17 +1557,21 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
     public function makeCustomerApAccount($stakeholder_id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
 
             if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where(['type' => 'C'])->get();
-                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                $stakeholderAllType = StakeholderType::where('type', 'C')->where('payable_account', '!=', null)->get();
 
-                if (isset($stakeholderTypeLastCode->payable_account)) {
-                    $customer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                if (count($stakeholderAllType) > 0) {
+                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                    if (isset($stakeholderTypeLastCode->payable_account)) {
+                        $customer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                    } else {
+                        $customer_payable_account_code = '20201010000001';
+                    }
                 } else {
                     $customer_payable_account_code = '20201010000001';
                 }
@@ -1582,7 +1586,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
                     'account_type' => 'credit',
                 ];
 
-                $code = (new AccountHead())->create($accountCodeData);
+                (new AccountHead())->create($accountCodeData);
 
                 // add payable code to stakeholder type
                 $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
@@ -1590,25 +1594,29 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $stakeholderType->status = true;
                 $stakeholderType->update();
             }
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            return $ex;
-        }
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 
     public function makeDealerApAccount($stakeholder_id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
 
             if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where(['type' => 'D'])->get();
-                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                $stakeholderAllType = StakeholderType::where('type', 'D')->where('payable_account', '!=', null)->get();
 
-                if (isset($stakeholderTypeLastCode->payable_account)) {
-                    $dealer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                if (count($stakeholderAllType) > 0) {
+                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                    if (isset($stakeholderTypeLastCode->payable_account)) {
+                        $dealer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                    } else {
+                        $dealer_payable_account_code = '20201020000001';
+                    }
                 } else {
                     $dealer_payable_account_code = '20201020000001';
                 }
@@ -1631,25 +1639,29 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $stakeholderType->status = true;
                 $stakeholderType->update();
             }
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            return $ex;
-        }
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 
     public function makeVendorApAccount($stakeholder_id)
     {
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
 
             if ($stakeholderType->payable_account == null) {
-                $stakeholderAllType = StakeholderType::where(['type' => 'V'])->get();
-                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                $stakeholderAllType = StakeholderType::where('type', 'V')->where('payable_account', '!=', null)->get();
 
-                if (isset($stakeholderTypeLastCode->payable_account)) {
-                    $vendor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                if (count($stakeholderAllType) > 0) {
+                    $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+                    if (isset($stakeholderTypeLastCode->payable_account)) {
+                        $vendor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                    } else {
+                        $vendor_payable_account_code = '20201030000001';
+                    }
                 } else {
                     $vendor_payable_account_code = '20201030000001';
                 }
@@ -1672,9 +1684,9 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 $stakeholderType->status = true;
                 $stakeholderType->update();
             }
-        } catch (GeneralException | Exception $ex) {
-            DB::rollBack();
-            return $ex;
-        }
+        // } catch (GeneralException | Exception $ex) {
+        //     DB::rollBack();
+        //     return $ex;
+        // }
     }
 }

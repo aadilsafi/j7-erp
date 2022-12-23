@@ -118,18 +118,16 @@ class RebateIncentiveService implements RebateIncentiveInterface
 
             if ($inputs['bank_id'] == 0) {
 
-                $bank_last_account_head = Bank::get();
-                $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
-                $bank_starting_code = '10209010001010';
-
-                if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
-                    $account_head_code = (float)$bank_last_account_head_code + 1;
-                } else {
-                    $account_head_code =  (float)$bank_starting_code + 1;
-                }
-
-
                 if ($inputs['mode_of_payment'] == 'Cheque' || $inputs['mode_of_payment'] == 'Online') {
+                    $bank_last_account_head = Bank::get();
+                    $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+                    $bank_starting_code = '10209010001010';
+
+                    if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
+                        $account_head_code = (float)$bank_last_account_head_code + 1;
+                    } else {
+                        $account_head_code =  (float)$bank_starting_code + 1;
+                    }
                     $bankData = [
                         'site_id' => decryptParams($site_id),
                         'name' => $inputs['bank_name'],

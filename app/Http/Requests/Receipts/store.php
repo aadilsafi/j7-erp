@@ -85,7 +85,7 @@ class store extends FormRequest
             "receipts.*.bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
+            // "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
         ];
     }

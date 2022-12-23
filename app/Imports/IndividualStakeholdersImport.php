@@ -100,7 +100,7 @@ class IndividualStakeholdersImport implements ToModel, WithChunkReading, WithBat
             'father_name' => ['required'],
             'cnic' => ['required', 'unique:App\Models\Stakeholder,cnic', 'distinct'],
             'passport_no' => ['sometimes', 'nullable', 'unique:App\Models\Stakeholder,passport_no', 'distinct'],
-            'ntn' => ['required', 'unique:App\Models\Stakeholder,ntn', 'distinct'],
+            'ntn' => ['sometimes', 'nullable','unique:App\Models\Stakeholder,ntn', 'distinct'],
             'occupation' => ['required'],
             'designation' => ['required'],
             'is_local'  => ['required'],

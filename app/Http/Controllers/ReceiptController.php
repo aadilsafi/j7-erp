@@ -135,7 +135,7 @@ class ReceiptController extends Controller
 
         $unpaid_installments = SalesPlanInstallments::where('id', '>', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
         $paid_installments = SalesPlanInstallments::where('id', '<=', $last_paid_installment_id)->where('sales_plan_id', $receipt->sales_plan_id)->orderBy('installment_order', 'asc')->get();
-        // $stakeholder_data = Stakeholder::with('country:id,name', 'state:id,name', 'city:id,name')->where('cnic', $receipt->cnic)->first();
+        $stakeholder_data = Stakeholder::where('cnic', $receipt->cnic)->first();
         // if($lastIntsalmentStatus == 'paid'){
         //     $paid_installments = SalesPlanInstallments::all();
         //     $unpadid_installments = null;
@@ -150,7 +150,7 @@ class ReceiptController extends Controller
             'unit_data' => $unit_data,
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,
-            // 'stakeholder_data' => $stakeholder_data,
+            'stakeholder_data' => $stakeholder_data,
             'sales_plan' => $sales_plan,
         ]);
     }

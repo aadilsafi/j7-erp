@@ -34,6 +34,7 @@ class CompanyStakeholdersImport implements ToModel, WithChunkReading, WithBatchI
             [
                 'company_name' => $row['company_name'],
                 'registration' => $row['registration'],
+                'industry' => $row['industry'], 
                 'strn' => $row['strn'],
                 'ntn ' => $row['ntn'],
                 'origin' => $row['origin'],
@@ -81,13 +82,13 @@ class CompanyStakeholdersImport implements ToModel, WithChunkReading, WithBatchI
     {
         return [
             'company_name' => ['required'],
-            'registration' => ['required'],
+            'registration' => ['required', 'unique:stakeholders,cnic'],
             'industry' => ['required'],
-            'strn' => ['required'],
-            'ntn' => ['required'],
+            'strn' => ['required', 'unique:stakeholders,strn'],
+            'ntn' => ['required', 'unique:stakeholders,ntn'],
             'origin' => ['required'],
-            'email' => ['sometimes', 'nullable', 'email:rfc,dns', 'distinct'],
-            'office_email' => ['sometimes', 'nullable', 'email:rfc,dns', 'distinct'],
+            'email' => ['sometimes', 'nullable', 'email:rfc,dns', 'distinct', 'unique:stakeholders,email'],
+            'office_email' => ['sometimes', 'nullable', 'email:rfc,dns', 'distinct', 'unique:stakeholders,office_email'],
             'mobile_contact' => ['required'],
             'office_contact' => ['sometimes', 'nullable'],
             'website' => ['sometimes'],

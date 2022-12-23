@@ -259,17 +259,17 @@
 
                                                             <div class="col position-relative">
                                                                 <input type="number"
-                                                                    @if (isset($JournalVoucherEntry))  min="1" value="{{ $JournalVoucherEntry->debit }}" @endif
+                                                                    @if (isset($JournalVoucherEntry))   value="{{ $JournalVoucherEntry->debit }}" @endif
                                                                     class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
-                                                                    id="debit" name="debit" placeholder="Debit"
+                                                                    id="debit"  min="1"  name="debit" placeholder="Debit"
                                                                     value="" />
 
                                                             </div>
                                                             <div class="col position-relative">
                                                                 <input type="number"
-                                                                    @if (isset($JournalVoucherEntry)) min="1" value="{{ $JournalVoucherEntry->credit }}" @endif
+                                                                    @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->credit }}" @endif
                                                                     class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
-                                                                    id="credit" name="credit"
+                                                                    id="credit"  min="1"  name="credit"
                                                                     placeholder="Credit" value="" />
 
                                                             </div>

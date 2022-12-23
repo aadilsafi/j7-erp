@@ -7,6 +7,7 @@ use App\Http\Requests\FileTransferReceipt\store;
 use App\Models\AccountLedger;
 use App\Models\Bank;
 use App\Models\FileTitleTransfer;
+use App\Models\PaymentVocuher;
 use App\Models\ReceiptTemplate;
 use App\Models\SalesPlan;
 use App\Models\Site;
@@ -211,6 +212,57 @@ class TransferReceiptController extends Controller
         } else {
             $vendorPayableAmount = 0;
         }
+
+        // If payable created but entries not hit
+        // For Customer
+        $payment_voucher = PaymentVocuher::where('customer_id', $transferFiles->stakeholder_id)->where('status', 0)->get();
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $customerPayableAmount = (float)$customerPayableAmount - (float)$debit_value;
+        }
+
+        // For cheque inactive
+        $payment_voucher = PaymentVocuher::where('customer_id', $transferFiles->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $customerPayableAmount = (float)$customerPayableAmount - (float)$debit_value;
+        }
+        //End For Customer
+
+        // For Dealer
+        $payment_voucher = PaymentVocuher::where('dealer_id', $transferFiles->stakeholder_id)->where('status', 0)->get();
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $dealerPayableAmount = (float)$dealerPayableAmount - (float)$debit_value;
+        }
+
+        // For cheque inactive
+        $payment_voucher = PaymentVocuher::where('dealer_id', $transferFiles->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $dealerPayableAmount = (float)$dealerPayableAmount - (float)$debit_value;
+        }
+        //End For Dealer
+
+        // For Dealer
+        $payment_voucher = PaymentVocuher::where('vendor_id', $transferFiles->stakeholder_id)->where('status', 0)->get();
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $vendorPayableAmount = (float)$vendorPayableAmount - (float)$debit_value;
+        }
+
+        // For cheque inactive
+        $payment_voucher = PaymentVocuher::where('vendor_id', $transferFiles->stakeholder_id)->where('status', 1)->where('cheque_status', 0)->get();
+
+        if (count($payment_voucher) > 0) {
+            $debit_value = collect($payment_voucher)->sum('amount_to_be_paid');
+            $vendorPayableAmount = (float)$vendorPayableAmount - (float)$debit_value;
+        }
+        //End For Dealer
+
+        // End of payment voucher details
 
         $total_payable_amount  = $customerPayableAmount  +  $dealerPayableAmount + $vendorPayableAmount;
 

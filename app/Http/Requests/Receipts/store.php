@@ -41,7 +41,7 @@ class store extends FormRequest
             $rules['receipts.*.bank_contact_number'] = ['required'];
             if ($this->input('receipts.*.bank_id')[0] == 0) {
                 $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')];
-                $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
+                // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
             }
             $rules['receipts.*.cheque_no'] = ['required'];
             $rules['attachment'] = ['required'];
@@ -54,7 +54,7 @@ class store extends FormRequest
             $rules['receipts.*.bank_contact_number'] = ['required'];
             if ($this->input('receipts.*.bank_id')[0] == 0) {
                 $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')];
-                $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
+                // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
             }
             $rules['receipts.*.transaction_date'] = ['required'];
             $rules['receipts.*.online_instrument_no'] = ['required'];
@@ -85,7 +85,7 @@ class store extends FormRequest
             "receipts.*.bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
+            // "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
             "receipts.*.bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
         ];
     }

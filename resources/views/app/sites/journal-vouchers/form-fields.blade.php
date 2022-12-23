@@ -234,8 +234,8 @@
                                                                         $revenue_transfer_fees = '40101010001003';
                                                                         $revenue_other_income = '40101010001004';
                                                                     @endphp
-                                                                    @if((float)$fifthLevel->code ==  (float)$sales_plan_approval || (float)$fifthLevel->code == (float)$sales_plan_dis_approval ||  (float)$fifthLevel->code == (float)$refund_account ||  (float)$fifthLevel->code == (float)$buyback_account
-                                                                        | (float)$fifthLevel->code == (float)$cancellation_account || (float)$fifthLevel->code == (float)$revenue_cancel_charges ||  (float)$fifthLevel->code == (float)$revenue_transfer_fees ||  (float)$fifthLevel->code == (float)$revenue_other_income)
+                                                                    @if((float)$fifthLevel->code ==  (float)$sales_plan_approval || (float)$fifthLevel->code == (float)$sales_plan_dis_approval ||  (float)$fifthLevel->code == (float)$refund_account ||  (float)$fifthLevel->code == (float)$buyback_account ||
+                                                                         (float)$fifthLevel->code == (float)$cancellation_account || (float)$fifthLevel->code == (float)$revenue_cancel_charges ||  (float)$fifthLevel->code == (float)$revenue_transfer_fees ||  (float)$fifthLevel->code == (float)$revenue_other_income)
                                                                         @continue
                                                                     @endif
                                                                     {{-- Hide File Action Accounts  --}}
@@ -259,9 +259,9 @@
 
                                                             <div class="col position-relative">
                                                                 <input type="number"
-                                                                    @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->debit }}" @endif
+                                                                    @if (isset($JournalVoucherEntry))   value="{{ $JournalVoucherEntry->debit }}" @endif
                                                                     class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
-                                                                    id="debit" name="debit" placeholder="Debit"
+                                                                    id="debit"  min="1"  name="debit" placeholder="Debit"
                                                                     value="" />
 
                                                             </div>
@@ -269,7 +269,7 @@
                                                                 <input type="number"
                                                                     @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->credit }}" @endif
                                                                     class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
-                                                                    id="credit" name="credit"
+                                                                    id="credit"  min="1"  name="credit"
                                                                     placeholder="Credit" value="" />
 
                                                             </div>

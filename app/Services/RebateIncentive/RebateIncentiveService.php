@@ -119,8 +119,17 @@ class RebateIncentiveService implements RebateIncentiveInterface
             if ($inputs['bank_id'] == 0) {
 
                 if ($inputs['mode_of_payment'] == 'Cheque' || $inputs['mode_of_payment'] == 'Online') {
+                    $bank_last_account_head = Bank::get();
+                    $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+                    $bank_starting_code = '10209010001010';
+
+                    if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
+                        $account_head_code = (float)$bank_last_account_head_code + 1;
+                    } else {
+                        $account_head_code =  (float)$bank_starting_code + 1;
+                    }
                     $bankData = [
-                        'site_id' => $site_id,
+                        'site_id' => decryptParams($site_id),
                         'name' => $inputs['bank_name'],
                         'slug' => Str::slug($inputs['bank_name']),
                         'account_number' => $inputs['bank_account_number'],
@@ -130,6 +139,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                         'contact_number' => $inputs['bank_contact_number'],
                         'status' => true,
                         'comments' => $inputs['bank_comments'],
+                        'account_head_code' => (string)$account_head_code,
                     ];
                     $bank = Bank::create($bankData);
                     $inputs['bank_id'] = $bank->id;
@@ -139,8 +149,9 @@ class RebateIncentiveService implements RebateIncentiveInterface
                         'site_id' => $site_id,
                         'modelable_id' => null,
                         'modelable_type' => null,
-                        'code' => $bank->account_number,
+                        'code' => $bank->account_head_code,
                         'name' => $bank->name,
+                        'account_type' => 'debit',
                         'level' => 5,
                     ];
                     $accountHead =  AccountHead::create($acountHeadData);
@@ -168,7 +179,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'cheque_no' => $inputs['cheque_no'],
                 'online_instrument_no' => $inputs['online_instrument_no'],
                 'transaction_date' => $inputs['transaction_date'],
-                'serail_no' => 'RI-'.$serail_no,
+                'serail_no' => 'RI-' . $serail_no,
             ];
 
             $rebate = $this->model()->create($rebatedata);

@@ -41,7 +41,7 @@ class paymentService implements paymentInterface
                     if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
                         $account_head_code = (float)$bank_last_account_head_code + 1;
                     } else {
-                        $account_head_code =  $bank_starting_code;
+                        $account_head_code =  (float)$bank_starting_code + 1;
                     }
 
                     $bankData = [

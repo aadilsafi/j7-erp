@@ -1180,7 +1180,6 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
         // Dealer AP account entry Debit
         $this->makeFinancialTransaction($rebate->site_id, $origin_number, $dealer_payable_account_code, 25, null, 'credit', $rebate->commision_total, NatureOfAccountsEnum::Rebate_Incentive, $rebate->id);
-
     }
 
     public function makeDealerIncentiveTransaction($dealer_incentive_id)
@@ -1561,33 +1560,36 @@ class FinancialTransactionService implements FinancialTransactionInterface
         try {
             DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['type' => 'C'])->where('payable_account', '!=', null)->get();
-            $stakeholderType = collect($stakeholderType)->last();
-            if ($stakeholderType == null) {
-                $customer_payable_account_code = '20201010001001';
-            } else {
-                $customer_payable_account_code = (float)$stakeholderType->payable_account + 1;
-            }
-
-            $accountCodeData = [
-                'site_id' => 1,
-                'modelable_id' => 1,
-                'modelable_type' => 'App\Models\StakeholderType',
-                'code' => (string)$customer_payable_account_code,
-                'name' =>  $stakeholder->full_name . ' Customer A/P',
-                'level' => 5,
-                'account_type' => 'credit',
-            ];
-
-            (new AccountHead())->create($accountCodeData);
-
-            // add payable code to stakeholder type
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
-            $stakeholderType->payable_account = (string)$customer_payable_account_code;
-            $stakeholderType->status = true;
-            $stakeholderType->update();
-            DB::commit();
-            return 'Account Created';
+
+            if ($stakeholderType->payable_account == null) {
+                $stakeholderAllType = StakeholderType::where(['type' => 'C'])->get();
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $customer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                } else {
+                    $customer_payable_account_code = '20201010000001';
+                }
+
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => (string)$customer_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Customer A/P',
+                    'level' => 5,
+                    'account_type' => 'credit',
+                ];
+
+                $code = (new AccountHead())->create($accountCodeData);
+
+                // add payable code to stakeholder type
+                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'C'])->first();
+                $stakeholderType->payable_account = (string)$customer_payable_account_code;
+                $stakeholderType->status = true;
+                $stakeholderType->update();
+            }
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
             return $ex;
@@ -1599,32 +1601,36 @@ class FinancialTransactionService implements FinancialTransactionInterface
         try {
             DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['type' => 'D'])->where('payable_account', '!=', null)->get();
-            $stakeholderType = collect($stakeholderType)->last();
-            if ($stakeholderType == null) {
-                $dealer_payable_account_code = '20201020000001';
-            } else {
-                $dealer_payable_account_code = (float)$stakeholderType->payable_account + 1;
-            }
-
-            $accountCodeData = [
-                'site_id' => 1,
-                'modelable_id' => 1,
-                'modelable_type' => 'App\Models\StakeholderType',
-                'code' => (string)$dealer_payable_account_code,
-                'name' =>  $stakeholder->full_name . ' Dealer A/P',
-                'level' => 5,
-                'account_type' => 'credit',
-            ];
-
-            (new AccountHead())->create($accountCodeData);
-
-            // add payable code to stakeholder type
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
-            $stakeholderType->payable_account = (string)$dealer_payable_account_code;
-            $stakeholderType->status = true;
-            $stakeholderType->update();
-            return 'Account Created';
+
+            if ($stakeholderType->payable_account == null) {
+                $stakeholderAllType = StakeholderType::where(['type' => 'D'])->get();
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $dealer_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                } else {
+                    $dealer_payable_account_code = '20201020000001';
+                }
+
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => (string)$dealer_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Dealer A/P',
+                    'level' => 5,
+                    'account_type' => 'credit',
+                ];
+
+                $code = (new AccountHead())->create($accountCodeData);
+
+                // add payable code to stakeholder type
+                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'D'])->first();
+                $stakeholderType->payable_account = (string)$dealer_payable_account_code;
+                $stakeholderType->status = true;
+                $stakeholderType->update();
+            }
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
             return $ex;
@@ -1636,32 +1642,36 @@ class FinancialTransactionService implements FinancialTransactionInterface
         try {
             DB::beginTransaction();
             $stakeholder = Stakeholder::find($stakeholder_id);
-            $stakeholderType = StakeholderType::where(['type' => 'V'])->where('payable_account', '!=', null)->get();
-            $stakeholderType = collect($stakeholderType)->last();
-            if ($stakeholderType == null) {
-                $vendor_payable_account_code = '20201030000001';
-            } else {
-                $vendor_payable_account_code = (float)$stakeholderType->payable_account + 1;
-            }
-
-            $accountCodeData = [
-                'site_id' => 1,
-                'modelable_id' => 1,
-                'modelable_type' => 'App\Models\StakeholderType',
-                'code' => (string)$vendor_payable_account_code,
-                'name' =>  $stakeholder->full_name . ' Supplier A/P',
-                'level' => 5,
-                'account_type' => 'credit',
-            ];
-
-            (new AccountHead())->create($accountCodeData);
-
-            // add payable code to stakeholder type
             $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
-            $stakeholderType->payable_account = (string)$vendor_payable_account_code;
-            $stakeholderType->status = true;
-            $stakeholderType->update();
-            return 'Account Created';
+
+            if ($stakeholderType->payable_account == null) {
+                $stakeholderAllType = StakeholderType::where(['type' => 'V'])->get();
+                $stakeholderTypeLastCode = collect($stakeholderAllType)->last();
+
+                if (isset($stakeholderTypeLastCode->payable_account)) {
+                    $vendor_payable_account_code = (float)$stakeholderTypeLastCode->payable_account + 1;
+                } else {
+                    $vendor_payable_account_code = '20201030000001';
+                }
+
+                $accountCodeData = [
+                    'site_id' => 1,
+                    'modelable_id' => 1,
+                    'modelable_type' => 'App\Models\StakeholderType',
+                    'code' => (string)$vendor_payable_account_code,
+                    'name' =>  $stakeholder->full_name . ' Supplier A/P',
+                    'level' => 5,
+                    'account_type' => 'credit',
+                ];
+
+                $code = (new AccountHead())->create($accountCodeData);
+
+                // add payable code to stakeholder type
+                $stakeholderType = StakeholderType::where(['stakeholder_id' => $stakeholder_id, 'type' => 'V'])->first();
+                $stakeholderType->payable_account = (string)$vendor_payable_account_code;
+                $stakeholderType->status = true;
+                $stakeholderType->update();
+            }
         } catch (GeneralException | Exception $ex) {
             DB::rollBack();
             return $ex;

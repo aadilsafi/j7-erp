@@ -11,6 +11,7 @@ use App\Models\{
     StakeholderNextOfKin,
     StakeholderType,
 };
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use Illuminate\Support\Facades\Storage;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
@@ -21,6 +22,14 @@ use Illuminate\Support\Str;
 
 class StakeholderService implements StakeholderInterface
 {
+
+    private $financialTransactionInterface;
+
+    public function __construct(
+        FinancialTransactionInterface $financialTransactionInterface
+    ) {
+        $this->financialTransactionInterface = $financialTransactionInterface;
+    }
 
     public function model()
     {
@@ -214,7 +223,10 @@ class StakeholderService implements StakeholderInterface
             }
             // dd($stakeholderTypeData);
             $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
+            if ($inputs['stakeholder_type'] == 'V') {
+                $vendor_ap_account = $this->financialTransactionInterface->makeVendorApAccount($stakeholder->id);
 
+            }
             //save custom fields
 
             foreach ($customFields as $key => $value) {

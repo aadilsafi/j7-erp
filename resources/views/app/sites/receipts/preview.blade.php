@@ -109,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-1">
+                    {{-- <div class="row mb-1">
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="country">Country</label>
                             <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
@@ -127,7 +127,7 @@
                             <input type="text" readonly value="{{ $stakeholder_data->city ? $stakeholder_data->city->name : '-' }}"
                                 class="form-control form-control-lg" id="city" placeholder="City" />
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="row mb-1">
                         <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
@@ -142,7 +142,7 @@
                                 placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
                         </div>
                     </div>
-                    
+
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                             <label class="form-label fs-5" for="stackholder_comments">Comments</label>

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('stakeholder_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('stakeholder_id')->constrained();
+            $table->bigInteger('stakeholder_id');
             $table->string('type')->nullable();
             $table->unique(['stakeholder_id', 'type']);
             $table->string('stakeholder_code')->nullable();

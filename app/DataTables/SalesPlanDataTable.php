@@ -52,6 +52,9 @@ class SalesPlanDataTable extends DataTable
                     return '<span class="badge badge-glow bg-danger">Disapproved</span>';
                 }
             })
+            ->editColumn('unit_id', function ($salesPlan) {
+                return $salesPlan->unit->floor_unit_number;
+            })
             ->editColumn('stakeholder_id', function ($salesPlan) {
 
                 // $staleholder = json_decode($salesPlan->stakeholder_data);
@@ -69,7 +72,7 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id]);
+                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id, 'sales_plan_id'=>$salesPlan->id]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -84,10 +87,10 @@ class SalesPlanDataTable extends DataTable
     public function query(SalesPlan $model): QueryBuilder
     {
         if (Route::current()->getName() != 'sites.sales_plan.show') {
-            return $model->newQuery()->with('stakeholder')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+            return $model->newQuery()->with('stakeholder','unit')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
         }
         else{
-            return $model->newQuery()->with('stakeholder')->orderBy('status', 'asc');
+            return $model->newQuery()->with('stakeholder','unit')->orderBy('status', 'asc');
         }
 
     }
@@ -194,9 +197,9 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
-            Column::make('user_id')->title('Sales Person'),
-            Column::make('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
-            // Column::computed('stakeholder_id')->title('Stakeholder'),
+            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number'),
+            Column::computed('user_id')->name('user.name')->title('Sales Person'),
+            Column::computed('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),

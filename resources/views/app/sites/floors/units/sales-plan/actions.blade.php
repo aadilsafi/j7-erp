@@ -40,6 +40,14 @@
         @endcan
     @endif
 
+
+    @can('sites.floors.units.sales-plans.initail-sales-plan')
+        <a href="{{ route('sites.floors.units.sales-plans.initail-sales-plan', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'id' => encryptParams($sales_plan_id)]) }}" class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1"
+            style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top" title="Preview Inital Sales Plan">
+            <i class="bi bi-printer" style="font-size: 1.1rem" class="m-10"></i>
+        </a>
+    @endcan
+
     @can('sites.floors.units.sales-plans.show')
         <a href="javascript:void(0);" class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1"
             style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top" title="Print Sales Plan"

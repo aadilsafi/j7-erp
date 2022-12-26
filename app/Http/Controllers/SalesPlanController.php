@@ -150,9 +150,18 @@ class SalesPlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $floor_id = null, $unit_id = null ,$id)
     {
         //
+        $salePlan = SalesPlan::find(decryptParams($id));
+        $installments = $salePlan->installments;
+        $data = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'salePlan'=>$salePlan,
+            'additionalCosts' => $salePlan->additionalCosts,
+            'installments'=>$installments,
+        ];
+        return view('app.sites.floors.units.sales-plan.preview', $data);
     }
 
     /**

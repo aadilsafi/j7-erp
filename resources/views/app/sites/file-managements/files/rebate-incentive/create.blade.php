@@ -301,9 +301,10 @@
         $(document).on('blur', '#rebate_percentage', function() {
 
             showBlockUI('#rebate');
+            let rebate_percentage_value = $('#rebate_percentage').val();
 
-            if ($('#rebate_percentage').val() > 0) {
-                let rebate_percentage = parseInt($('#rebate_percentage').val());
+            if ( $.isNumeric(rebate_percentage_value) &&  rebate_percentage_value > 0  &&  rebate_percentage_value <= 100) {
+                let rebate_percentage = parseFloat($('#rebate_percentage').val());
 
                 rebate_percentage = (rebate_percentage > 100) ? 100 : rebate_percentage;
 
@@ -322,9 +323,12 @@
                 if (unit_total > 0) {
                     $('.hideDiv').show();
                 }
+                $('.check').remove();
             } else {
+                $('.check').remove();
+                $('#rebate_percentage').val('');
+                $('#rebate_percentage').after('<span class="text-danger check">Please Enter Numeric Value From 1 to 100</span>');
                 $('.hideDiv').hide();
-
             }
 
 
@@ -428,27 +432,27 @@
                                 $('#individualForm').show();
 
                             }
-                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
+                            // var countryDetails = JSON.parse(stakeholderData.countryDetails);
 
-                            if (countryDetails == null) {
-                                intl.setCountry('pk');
-                            } else {
-                                intl.setCountry(countryDetails['iso2']);
-                            }
+                            // if (countryDetails == null) {
+                            //     intl.setCountry('pk');
+                            // } else {
+                            //     intl.setCountry(countryDetails['iso2']);
+                            // }
 
-                            $('#countryDetails').val(JSON.stringify(intl
-                                .getSelectedCountryData()))
+                            // $('#countryDetails').val(JSON.stringify(intl
+                            //     .getSelectedCountryData()))
 
-                            var OptionalCountryDetails = JSON.parse(stakeholderData
-                                .OptionalCountryDetails);
-                            if (OptionalCountryDetails == null) {
-                                intlOptional.setCountry('pk');
-                            } else {
-                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                            }
+                            // var OptionalCountryDetails = JSON.parse(stakeholderData
+                            //     .OptionalCountryDetails);
+                            // if (OptionalCountryDetails == null) {
+                            //     intlOptional.setCountry('pk');
+                            // } else {
+                            //     intlOptional.setCountry(OptionalCountryDetails['iso2']);
+                            // }
 
-                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                                .getSelectedCountryData()))
+                            // $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
+                            //     .getSelectedCountryData()))
 
                         }
                     }
@@ -474,7 +478,6 @@
             rules: {
                 'rebate_percentage': {
                     required: true,
-                    digits: true,
                 },
                 'dealer[full_name]': {
                     required: true

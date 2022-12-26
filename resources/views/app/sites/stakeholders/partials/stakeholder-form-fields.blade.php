@@ -289,7 +289,7 @@
                 <label class="form-label fs-5" for="passport_no">Passport No</label>
                 <input type="text"
                     class="cp_cnic form-control form-control-md @error('passport_no') is-invalid @enderror"
-                    id="passport_no" name="individual[passport_no]" placeholder="Passport No Without Dashes"
+                    id="passport_no" name="individual[passport_no]" placeholder="Passport No"
                     value="{{ isset($stakeholder) ? $stakeholder->passport_no : old('individual.passport_no') }}" />
                 @error('individual.passport_no')
                     <div class="invalid-feedback">{{ $message }}</div>

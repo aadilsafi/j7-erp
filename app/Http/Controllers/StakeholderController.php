@@ -202,7 +202,6 @@ class StakeholderController extends Controller
      */
     public function update(stakeholderUpdateRequest $request, $site_id, $id)
     {
-        dd($request->all());
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 

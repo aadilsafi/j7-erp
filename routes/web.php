@@ -241,9 +241,6 @@ Route::group([
                                 Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
-
-
-
                     });
 
                     // Journal Voucher Routes
@@ -267,15 +264,11 @@ Route::group([
                                 Route::get('post-voucher', [JournalVoucherController::class, 'postVoucher'])->name('post-voucher');
                                 Route::get('revert-voucher', [JournalVoucherController::class, 'revertVoucher'])->name('revert-voucher');
                                 Route::get('dis-approve-voucher', [JournalVoucherController::class, 'disapproveVoucher'])->name('dis-approve-voucher');
-
-
                             });
                         });
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-
                         });
-
                     });
 
 

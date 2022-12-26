@@ -25,39 +25,36 @@ class store extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'receipts' => 'required|array',
-            'receipts.*.unit_id' => 'required|numeric',
-            'receipts.*.mode_of_payment' => 'required',
-            'receipts.*.amount_in_numbers' => 'required',
-            'amount_received' => 'required',
-            'comments' => 'sometimes',
-        ];
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Cheque") {
-            $rules['receipts.*.bank_name'] = ['required'];
-            $rules['receipts.*.bank_branch'] = ['required'];
-            $rules['receipts.*.bank_address'] = ['required'];
-            $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
-            // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
-            $rules['receipts.*.cheque_no'] = ['required'];
+
+        if ($this->input('payment_mode') == "Cheque") {
+            $rules['bank_name'] = ['required'];
+            $rules['bank_branch'] = ['required'];
+            $rules['bank_address'] = ['required'];
+            $rules['bank_contact_number'] = ['required'];
+            if ($this->input('bank_id') == 0) {
+                $rules['bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('bank_id'))];
+                // $rules['bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('bank_id'))];
+            }
+            $rules['cheque_no'] = ['required'];
             $rules['attachment'] = ['required'];
         }
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Online") {
-            $rules['receipts.*.bank_name'] = ['required'];
-            $rules['receipts.*.bank_branch'] = ['required'];
-            $rules['receipts.*.bank_address'] = ['required'];
-            $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
-            // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
-            $rules['receipts.*.transaction_date'] = ['required'];
-            $rules['receipts.*.online_instrument_no'] = ['required'];
+        if ($this->input('payment_mode') == "Online") {
+            $rules['bank_name'] = ['required'];
+            $rules['bank_branch'] = ['required'];
+            $rules['bank_address'] = ['required'];
+            $rules['bank_contact_number'] = ['required'];
+            if ($this->input('bank_id') == 0) {
+                $rules['bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('bank_id'))];
+                // $rules['bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('bank_id'))];
+            }
+            $rules['transaction_date'] = ['required'];
+            $rules['online_instrument_no'] = ['required'];
             $rules['attachment'] = ['required'];
         }
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Other") {
+        if ($this->input('receipts.*.payment_mode') == "Other") {
             $rules['receipts.*.other_value'] = ['required'];
         }
 

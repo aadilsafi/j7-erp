@@ -87,10 +87,10 @@ class SalesPlanService implements SalesPlanInterface
 
             $company = $inputs['company'];
 
-            if ($stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
+            if (isset($individual['cnic']) && $stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
                 throw new GeneralException('Stakeholder CNIC already exists');
             }
-            if ($stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
+            if (isset($company['cnic']) && $stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $company['cnic'])->exists()) {
                 throw new GeneralException('Company Registration No already exists');
             }
 

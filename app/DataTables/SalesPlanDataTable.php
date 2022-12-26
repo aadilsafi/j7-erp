@@ -181,7 +181,7 @@ class SalesPlanDataTable extends DataTable
             //     ],
             // ])
             ->orders([
-                [3, 'desc'],
+                [0, 'desc'],
             ]);
     }
 

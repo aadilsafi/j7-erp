@@ -227,6 +227,9 @@
 
     <script>
         $('#companyForm').hide();
+        $("#stakeholder_as").val('i');
+
+        $("#stakeholder_as").trigger('change');
 
         window['moment-range'].extendMoment(moment);
 
@@ -330,66 +333,171 @@
                             if (response.data) {
                                 stakeholderData = response.data[0];
                             }
+                            isDisable = parseFloat(stakeholder_id) > 0 ? true : false;
+
                             $('#stakeholder_as').val(stakeholderData.stakeholder_as).trigger(
                                 'change');
+                            $("#stakeholder_as").select2({
+                                disabled: isDisable
+                            });
                             if (stakeholderData.stakeholder_as == 'i') {
-                                $('#full_name').val(stakeholderData.full_name);
-                                $('#father_name').val(stakeholderData.father_name);
-                                $('#occupation').val(stakeholderData.occupation);
-                                $('#designation').val(stakeholderData.designation);
-                                $('#cnic').val(stakeholderData.cnic);
-                                $('#ntn').val(stakeholderData.ntn);
-                                $('#passport_no').val(stakeholderData.passport_no);
-                                $('#individual_email').val(stakeholderData.email);
-                                $('#office_email').val(stakeholderData.office_email);
-                                $('#mobile_contact').val(stakeholderData.mobile_contact);
-                                if (stakeholderData.mobile_contact != null) {
+                                $('#full_name').val(stakeholderData.full_name).attr('readonly',
+                                    isDisable && stakeholderData.full_name != null ? true :
+                                    false);
+                                $('#father_name').val(stakeholderData.father_name).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.father_name != null ?
+                                    true :
+                                    false);
+                                $('#occupation').val(stakeholderData.occupation).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.occupation != null ? true :
+                                    false);
+                                $('#designation').val(stakeholderData.designation).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.designation != null ?
+                                    true :
+                                    false);
+                                $('#cnic').val(stakeholderData.cnic).attr('readonly',
+                                    isDisable && stakeholderData.cnic != null ? true :
+                                    false);
+                                $('#ntn').val(stakeholderData.ntn).attr('readonly',
+                                    isDisable && stakeholderData.ntn != null ? true :
+                                    false);
+                                $('#passport_no').val(stakeholderData.passport_no).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.passport_no != null ?
+                                    true :
+                                    false);
+                                $('#individual_email').val(stakeholderData.email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.email != null ? true :
+                                    false);
+                                $('#office_email').val(stakeholderData.office_email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_email != null ?
+                                    true :
+                                    false);
+                                $('#mobile_contact').val(stakeholderData.mobile_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.mobile_contact != null ?
+                                    true :
+                                    false);
 
-                                    intlMobileContact.setNumber(stakeholderData.mobile_contact)
-                                }
-                                $('#office_contact').val(stakeholderData.office_contact);
+                                $('#office_contact').val(stakeholderData.office_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_contact != null ?
+                                    true :
+                                    false);
                                 if (stakeholderData.office_contact != null) {
                                     intlOfficeContact.setNumber(stakeholderData.office_contact)
                                 }
-                                $('#dob').val(stakeholderData.dob).trigger('change');
-                                $('#referred_by').val(stakeholderData.referred_by);
+
+                                $("#dob").flatpickr({
+                                    defaultDate: stakeholderData.date_of_birth,
+                                })
+                                $("#dob").attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.date_of_birth != null ?
+                                    true :
+                                    false);
+                                $('#referred_by').val(stakeholderData.referred_by).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.referred_by != null ?
+                                    true :
+                                    false);
                                 $('#source').val(stakeholderData.source).trigger('change');
                                 $('#is_local').val(stakeholderData.is_local).trigger('change');
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
                             }
                             if (stakeholderData.stakeholder_as == 'c') {
-                                $('#company_name').val(stakeholderData.full_name);
-                                $('#registration').val(stakeholderData.cnic);
-                                $('#industry').val(stakeholderData.industry);
+                                $('#company_name').val(stakeholderData.full_name).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.full_name != null ?
+                                    true :
+                                    false);
+                                $('#registration').val(stakeholderData.cnic).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.cnic != null ?
+                                    true :
+                                    false);
+                                $('#industry').val(stakeholderData.industry).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.industry != null ?
+                                    true :
+                                    false);
                                 $('#company_office_contact').val(stakeholderData
-                                    .office_contact);
+                                    .office_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_contact != null ?
+                                    true :
+                                    false);
                                 if (stakeholderData.office_contact != null) {
 
                                     intlCompanyMobileContact.setNumber(stakeholderData
                                         .office_contact)
                                 }
-                                $('#strn').val(stakeholderData.strn);
-                                $('#company_ntn').val(stakeholderData.ntn);
+                                $('#strn').val(stakeholderData.strn).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.strn != null ?
+                                    true :
+                                    false);
+                                $('#company_ntn').val(stakeholderData.ntn).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.ntn != null ?
+                                    true :
+                                    false);
                                 $('#company_optional_contact').val(stakeholderData
-                                    .mobile_contact);
+                                    .mobile_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.mobile_contact != null ?
+                                    true :
+                                    false);
                                 if (stakeholderData.mobile_contact != null) {
 
                                     intlcompanyOptionalContact.setNumber(stakeholderData
                                         .mobile_contact)
                                 }
-                                $('#company_email').val(stakeholderData.email);
-                                $('#company_office_email').val(stakeholderData.office_email);
-                                $('#website').val(stakeholderData.website);
-                                $('#parent_company').val(stakeholderData.parent_company);
+                                $('#company_email').val(stakeholderData.email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.referred_by != null ?
+                                    true :
+                                    false);
+                                $('#company_office_email').val(stakeholderData.email)
+                                    .attr(
+                                        'readonly',
+                                        isDisable && stakeholderData.referred_by != null ?
+                                        true :
+                                        false);
+                                $('#website').val(stakeholderData.website).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.website != null ?
+                                    true :
+                                    false);
+                                $('#parent_company').val(stakeholderData.parent_company).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.parent_company != null ?
+                                    true :
+                                    false);
                                 $('#origin').val(stakeholderData.origin).trigger(
                                     'change');
                             }
 
                             // residential address
                             $('#residential_address_type').val(stakeholderData
-                                .residential_address_type);
-                            $('#residential_address').val(stakeholderData.residential_address);
+                                .residential_address_type).attr(
+                                'readonly',
+                                isDisable && stakeholderData.residential_address_type !=
+                                null ?
+                                true :
+                                false);
+                            $('#residential_address').val(stakeholderData.residential_address)
+                                .attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.residential_address != null ?
+                                    true :
+                                    false);
                             ra_state = stakeholderData.residential_state_id;
                             ra_city = stakeholderData.residential_city_id;
 
@@ -397,12 +505,25 @@
                                 .residential_country_id).trigger(
                                 'change');
                             $('#residential_postal_code').val(stakeholderData
-                                .residential_postal_code);
+                                .residential_postal_code).attr(
+                                'readonly',
+                                isDisable && stakeholderData.residential_postal_code !=
+                                null ?
+                                true :
+                                false);
 
                             // mailing address
                             $('#mailing_address_type').val(stakeholderData
-                                .mailing_address_type);
-                            $('#mailing_address').val(stakeholderData.mailing_address);
+                                .mailing_address_type).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_address_type != null ?
+                                true :
+                                false);
+                            $('#mailing_address').val(stakeholderData.mailing_address).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_address != null ?
+                                true :
+                                false);
                             cp_state = stakeholderData.mailing_state_id;
                             cp_city = stakeholderData.mailing_city_id;
 
@@ -410,7 +531,11 @@
                                 .mailing_country_id).trigger(
                                 'change');
                             $('#mailing_postal_code').val(stakeholderData
-                                .mailing_postal_code);
+                                .mailing_postal_code).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_postal_code != null ?
+                                true :
+                                false);
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
@@ -705,7 +830,7 @@
                         let InstallmentRows = '';
                         if (response.status) {
                             $('#installments_table tbody#dynamic_installment_rows').empty();
-                            console.log(response.data.installments)
+                            // console.log(response.data.installments)
                             for (let row of response.data.installments) {
                                 InstallmentRows += row.row;
                             }
@@ -849,7 +974,7 @@
 
                 //// Unit Grand Total
                 'unit[grand_total]': {
-                    required: true
+                    required: true!= 'i' || $("#stakeholder_as").val() != 'c'
                 },
 
                 //// Unit Down Payment
@@ -874,29 +999,31 @@
                 },
 
                 // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                'stackholder[stackholder_id]': {
-                    required: true,
+                'stakeholder_as': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 0;
+                    }
                 },
-                // 'stackholder[full_name]': {
-                //     required: true
-                // },
-                // 'stackholder[father_name]': {
-                //     required: true
-                // },
-                // 'stackholder[contact]': {
-                //     required: true
-                // },
-                // 'stackholder[address]': {
-                //     required: true
-                // },
-                // 'stackholder[mailing_address]': {
-                //     required: true
-                // },
-                // 'stackholder[cnic]': {
-                //     // minlength: 13,
-                //     // maxlength: 13,
-                //     required: true,
-                // },
+                'company[company_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[company_office_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'individual[full_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[mobile_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
 
                 // 4. SALES SOURCE
                 'sales_source[sales_type]': {

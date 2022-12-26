@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams(1), encryptParams(1)) }}
 @endsection
 
 @section('page-title', 'Create Sales Plan')
@@ -75,7 +75,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{-- {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams(1), encryptParams(1)) }}
                 </div>
             </div>
         </div>
@@ -224,7 +224,7 @@
             var ra_city = 0;
             </script>
     {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
-    
+
     <script>
         $('#companyForm').hide();
 

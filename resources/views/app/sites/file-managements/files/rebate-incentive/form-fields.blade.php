@@ -36,7 +36,7 @@
                         <label class="form-label" style="font-size: 15px" for="floor">
                             <h6 class="mb-1">Rebate %</h6>
                         </label>
-                        <input min="0" max="100" id="rebate_percentage" type="number"
+                        <input id="rebate_percentage" type="text"
                             value="{{ isset($rebate_data) ? $rebate_data->commision_percentage : '' }}"
                             class="form-control rebate_percentage  @error('rebate_percentage') is-invalid @enderror"
                             name="rebate_percentage" placeholder="Rebate Percentage">

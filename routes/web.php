@@ -497,7 +497,7 @@ Route::group([
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
                                         Route::get('initail-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
-                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
+                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('updated-sales-plan');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
                                     });
 

@@ -14,6 +14,7 @@ use App\Services\PaymentVoucher\paymentInterface;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Requests\PaymentVoucher\store;
 
 class PaymentVocuherController extends Controller
 {
@@ -66,7 +67,7 @@ class PaymentVocuherController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $site_id)
+    public function store(store $request, $site_id)
     {
         //
         try {

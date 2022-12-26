@@ -484,8 +484,9 @@ class StakeholderImportController extends Controller
                     $import = new IndividualStakeholdersImport($model->getFillable());
                     $import->import($request->file('attachment'));
                 } else {
-                    $model = new TempCompanyStakeholder();
                     TempCompanyStakeholder::query()->truncate();
+
+                    $model = new TempCompanyStakeholder();
                     $import = new CompanyStakeholdersImport($model->getFillable());
                     $import->import($request->file('attachment'));
                 }

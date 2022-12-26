@@ -58,8 +58,7 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                        } */
     </style>
 @endsection
 
@@ -172,7 +171,7 @@
             $('#common_form').hide()
             $('#stakeholderType').hide();
 
-            $('#nationality').val({{$stakeholder->nationality}}).trigger('change');
+            $('#nationality').val({{ $stakeholder->nationality }}).trigger('change');
 
             var dob = $("#dob").flatpickr({
                 defaultDate: "{{ $stakeholder->date_of_birth }}",
@@ -250,6 +249,8 @@
                 $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
             @endif
 
+            intlMobileContact.setNumber('{{ $stakeholder->mobile_contact }}');
+
             // Individual office contact no
             var officeContact = document.querySelector("#office_contact");
             intlOfficeContact = window.intlTelInput(officeContact, ({
@@ -273,6 +274,8 @@
                 var OptionalselectdCountry = {!! $stakeholder->OfficeContactCountryDetails != null ? $stakeholder->OfficeContactCountryDetails : null !!}
                 intlOfficeContact.setCountry(OptionalselectdCountry['iso2']);
             @endif
+
+            intlOfficeContact.setNumber('{{ $stakeholder->office_contact }}');
 
             // Company Contact no fields
             var companyOfficeContact = document.querySelector("#company_office_contact");
@@ -662,29 +665,29 @@
             mailing_country.trigger('change');
 
             @if (!is_null(old('mobileContactCountryDetails')))
-                var mbCountry = {!! old('mobileContactCountryDetails') !!}
-                $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
-                intlMobileContact.setCountry(mbCountry['iso2']);
+                // var mbCountry = {!! old('mobileContactCountryDetails') !!}
+                // $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
+                intlMobileContact.setNumber('{{ old('individual.mobile_contact') }}');
             @endif
             @if (!is_null(old('OfficeContactCountryDetails')))
                 // var officeCountry = {!! old('OfficeContactCountryDetails') !!}
                 // $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
                 // intlOfficeContact.setCountry(officeCountry['iso2']);
-                intlOfficeContact.setCountry('pk');
+                intlOfficeContact.setNumber('{{ old('individual.office_contact') }}');
             @endif
             @if (!is_null(old('CompanyOfficeContactCountryDetails')))
                 // var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
                 // $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
-                intlCompanyMobileContact.setCountry('pk');
+                intlCompanyMobileContact.setNumber('{{ old('company.company_office_contact') }}');
             @endif
             @if (!is_null(old('companyMobileContactCountryDetails')))
                 // var officeOptional = {!! old('companyMobileContactCountryDetails') !!}
                 // $('#companyMobileContactCountryDetails').val({!! old('companyMobileContactCountryDetails') !!})
-                intlcompanyOptionalContact.setCountry('pk');
+                intlcompanyOptionalContact.setNumber('{{ old('company.company_optional_contact') }}');
             @endif
 
             $('#is_local').on('change', function() {
-            
+
                 if ($(this).is(':checked')) {
                     $('#nationality').val(167).trigger('change');
                 } else {
@@ -712,7 +715,7 @@
         });
 
         function performAction(action) {
-            console.log(action);
+
             if (action == 'C') {
                 $('#div-next-of-kin').show();
             }
@@ -809,7 +812,7 @@
 
                             $('[name="contact-persons[' + index + '][address]"]').val(stakeholderData
                                 .address);
-                            console.log($('[name="contact-persons[' + index + '][address]"]'))
+
                         }
                         hideBlockUI('#stakeholderForm');
                     },
@@ -859,7 +862,7 @@
         }, "Kins can't be duplicated");
 
         $.validator.addMethod("ContactNoError", function(value, element) {
-            // console.log(element.id)
+
             if (element.id == 'mobile_contact') {
                 return intlMobileContact.isValidNumber();
             }
@@ -871,10 +874,11 @@
         $.validator.addMethod("OPTContactNoError", function(value, element) {
 
             if (value.length > 0) {
-                if (element.name == 'office_contact') {
+                if (element.id == 'office_contact') {
                     return intlOfficeContact.isValidNumber();
                 }
-                if (element.name == 'company_optional_contact') {
+                if (element.id == 'company_optional_contact') {
+
                     return intlcompanyOptionalContact.isValidNumber();
                 }
             } else {

@@ -68,7 +68,7 @@ class Stakeholder extends Model implements HasMedia
         'individual.father_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',
         'individual.occupation' => 'exclude_if:stakeholder_as,c|required|string|max:50',
         'individual.cnic' => 'exclude_if:stakeholder_as,c|unique:stakeholders,cnic',
-        'individual.passport_no' => 'exclude_if:stakeholder_as,c|sometimes|unique:stakeholders,passport_no',
+        'individual.passport_no' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,passport_no',
         'individual.ntn' => 'exclude_if:stakeholder_as,c|sometimes|nullable|unique:stakeholders,ntn',
         'individual.individual_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,email',
         // 'individual.office_email' => 'exclude_if:stakeholder_as,c|nullable|sometimes|email|unique:stakeholders,office_email',
@@ -86,11 +86,11 @@ class Stakeholder extends Model implements HasMedia
         'company.industry' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
         'company.origin' => 'exclude_if:stakeholder_as,i|nullable',
         'company.company_ntn' => 'exclude_if:stakeholder_as,i|required|unique:stakeholders,ntn',
-        'company.strn' => 'exclude_if:stakeholder_as,i|sometimes|unique:stakeholders,strn',
+        'company.strn' => 'exclude_if:stakeholder_as,i|sometimes|nullable|unique:stakeholders,strn',
         'company.office_contact' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:20',
         'company.website' => 'exclude_if:stakeholder_as,i|nullable|string',
         'company.parent_company' => 'exclude_if:stakeholder_as,i|nullable|string|min:1|max:50',
-        // 'company.office_email' => 'exclude_if:stakeholder_as,i|nullable|email|unique:stakeholders,office_email',
+        'company.office_email' => 'exclude_if:stakeholder_as,i|nullable|email|unique:stakeholders,office_email',
 
         // common validations
         'comments' => 'nullable|string',

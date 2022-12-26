@@ -425,7 +425,7 @@
     @endif
 
     $.validator.addMethod("ContactNoError", function(value, element) {
-        // console.log(element.id)
+      
         if (element.id == 'mobile_contact') {
             return intlMobileContact.isValidNumber();
         }
@@ -437,10 +437,10 @@
     $.validator.addMethod("OPTContactNoError", function(value, element) {
 
         if (value.length > 0) {
-            if (element.name == 'office_contact') {
+            if (element.id == 'office_contact') {
                 return intlOfficeContact.isValidNumber();
             }
-            if (element.name == 'company_optional_contact') {
+            if (element.id == 'company_optional_contact') {
                 return intlcompanyOptionalContact.isValidNumber();
             }
         } else {

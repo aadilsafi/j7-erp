@@ -168,13 +168,13 @@
 @endsection
 
 @section('custom-js')
-<script>
-var cp_state = 0;
+    <script>
+        var cp_state = 0;
         var cp_city = 0;
         var ra_state = 0;
         var ra_city = 0;
-        </script>
-{{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
+    </script>
+    {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
 
     <script>
         showBlockUI('#stakeholderForm');
@@ -202,7 +202,6 @@ var cp_state = 0;
                 url: ''
             }
         });
-
     </script>
 
     <script type="text/javascript">
@@ -296,46 +295,209 @@ var cp_state = 0;
             return cnicRepeated === 1 || cnicRepeated === 0;
 
         }, "Contact Person CNIC can't be duplicated");
-       
+
 
 
         var validator = $("#stakeholderForm").validate({
             rules: {
-                'mailing_address': {
-                    required: true,
-                },
-                'address': {
-                    required: true,
-                },
-                'optional_contact': {
-                    required: false,
-                },
-                'full_name': {
-                    required: true,
-                },
-                'father_name': {
-                    required: true,
-                },
-                'cnic': {
-                    required: true,
-                },
-                'registration': {
-                    required: true,
-                },
-                'company_name': {
+                'stakeholder_as': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'i'
+                        return $("#stakeholder_as").val() != 'i' || $("#stakeholder_as").val() != 'c';
                     },
                 },
-                'email': {
+                'residential[address_type]': {
                     required: true,
+                },
+                'residential[country]': {
+                    required: true,
+                    min: 1
+                },
+                'residential[state]': {
+                    required: true,
+                    min: 1
+                },
+                'residential[city]': {
+                    required: true,
+                    min: 1
+                },
+                'residential[address]': {
+                    required: true,
+                },
+                'residential[postal_code]': {
+                    required: true,
+                },
+                'mailing[address_type]': {
+                    required: true,
+                },
+                'mailing[country]': {
+                    required: true,
+                    min: 1
+                },
+                'mailing[state]': {
+                    required: true,
+                    min: 1
+                },
+                'mailing[city]': {
+                    required: true,
+                    min: 1
+                },
+                'mailing[address]': {
+                    required: true,
+                },
+                'mailing[postal_code]': {
+                    required: true,
+                },
+                'company[company_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[registration]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[industry]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[company_ntn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[strn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[company_office_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'individual[full_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[father_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[occupation]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[cnic]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[mobile_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[dob]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[nationality]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(':checked');
+                    },
+                    min: 1,
+                },
+            },
+            messages: {
+                'individual[nationality]': {
+                    min: "Please select Nationality"
+                },
+                'stakeholder_as': {
+                    required: "Please select stakeholder as",
+                },
+                'residential[address_type]': {
+                    required: "Please select address type",
+                },
+                'residential[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'residential[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'residential[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'residential[address]': {
+                    required: "Please enter address",
+                },
+                'residential[postal_code]': {
+                    required: "Please enter postal code",
+                },
+                'mailing[address_type]': {
+                    required: "Please select address type",
+                },
+                'mailing[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'mailing[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'mailing[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'mailing[address]': {
+                    required: "Please enter address",
+                },
+                'mailing[postal_code]': {
+                    required: "Please enter postal code",
+                },
+                'mailing_address': {
+                    required: "Please enter mailing address",
+                },
+                'address': {
+                    required: "Please enter address",
+                },
+                'optional_contact': {
+                    required: "Please enter optional contact",
+                },
+                'full_name': {
+                    required: "Please enter full name",
+                },
+                'father_name': {
+                    required: "Please enter father name",
+                },
+                'cnic': {
+                    required: "Please enter cnic",
+                },
+                'registration': {
+                    required: "Please enter registration",
+                },
+                'company_name': {
+                    required: "Please enter company name",
+                },
+                'email': {
+                    required: "Please enter email",
                 }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
             wrapper: "div",
             submitHandler: function(form) {
-                form.submit();
+                if ($("#stakeholder_as").val() == 'i' || $("#stakeholder_as").val() == 'c') {
+                    form.submit();
+                }
             }
         });
 

@@ -77,7 +77,7 @@
 <div class="card" id="companyForm"
     @if (!isset($hideBorders)) style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" @endif>
     <div class="card-header">
-        <h3><strong>Company informations: </strong></h3>
+        <h3><strong>Company Informations: </strong></h3>
     </div>
     <div class="card-body">
 
@@ -171,8 +171,7 @@
                 <label class="form-label fs-5" for="company_optional_contact">Optional Contact </label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError contact @error('company_optional_contact') is-invalid @enderror"
-                    id="company_optional_contact" name="company[company_optional_contact]"
-                    placeholder=""
+                    id="company_optional_contact" name="company[company_optional_contact]" placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->mobile_contact : old('company.company_optional_contact') }}" />
                 @error('company.company_optional_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -240,7 +239,7 @@
 <div class="card" id="individualForm"
     @if (!isset($hideBorders)) style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" @endif>
     <div class="card-header">
-        <h3><strong>Individual informations :</strong></h3>
+        <h3><strong>Individual Informations :</strong></h3>
     </div>
     <div class="card-body">
 
@@ -290,7 +289,7 @@
                 <label class="form-label fs-5" for="passport_no">Passport No</label>
                 <input type="text"
                     class="cp_cnic form-control form-control-md @error('passport_no') is-invalid @enderror"
-                    id="passport_no" name="individual[passport_no]" placeholder="Passport No Without Dashes"
+                    id="passport_no" name="individual[passport_no]" placeholder="Passport No"
                     value="{{ isset($stakeholder) ? $stakeholder->passport_no : old('individual.passport_no') }}" />
                 @error('individual.passport_no')
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -346,7 +345,7 @@
                         class="text-danger">*</span></label>
                 <input type="tel"
                     class="form-control form-control-md ContactNoError contact @error('mobile_contact') is-invalid @enderror"
-                    id="mobile_contact" name="individual[mobile_contact]" placeholder="Mobile Contact"
+                    id="mobile_contact" name="individual[mobile_contact]" placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->mobile_contact : old('individual.mobile_contact') }}" />
                 @error('individual.mobile_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -358,7 +357,7 @@
                 <label class="form-label fs-5" for="office_contact">Office Contact</label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError optional_contact @error('office_contact') is-invalid @enderror"
-                    id="office_contact" name="individual[office_contact]" placeholder="Office Contact"
+                    id="office_contact" name="individual[office_contact]" placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('individual.office_contact') }}" />
                 @error('individual.office_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
@@ -430,7 +429,7 @@
                 <select class="select2" id="nationality" name="individual[nationality]">
                     <option value="0" selected>Select Nationality</option>
                     @foreach ($country as $countryRow)
-                        <option @if (isset($stakeholder) && $stakeholder->nationality || old('individual.nationality') == $countryRow->id) selected @endif value={{$countryRow->id}}>
+                        <option @if ((isset($stakeholder) && $stakeholder->nationality) || old('individual.nationality') == $countryRow->id) selected @endif value={{ $countryRow->id }}>
                             {{ $countryRow->name }}</option>
                     @endforeach
                 </select>
@@ -510,6 +509,7 @@
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_postal_code">Postal Code
+                            <span class="text-danger">*</span>
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('residential_postal_code') is-invalid @enderror"
@@ -586,7 +586,8 @@
                         @enderror
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
-                        <label class="form-label" style="font-size: 15px" for="mailing_postal_code">Postal Code
+                        <label class="form-label" style="font-size: 15px" for="mailing_postal_code">Postal Code <span
+                                class="text-danger">*</span>
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"

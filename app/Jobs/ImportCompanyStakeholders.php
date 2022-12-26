@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Stakeholder;
 use App\Models\StakeholderType;
 use App\Models\State;
+use App\Models\TempCompanyStakeholder;
 use App\Models\TempStakeholder;
 use DB;
 use Illuminate\Bus\Batchable;
@@ -17,7 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ImportStakeholders implements ShouldQueue
+class ImportCompanyStakeholders implements ShouldQueue
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable;
 
@@ -45,7 +46,7 @@ class ImportStakeholders implements ShouldQueue
      */
     public function handle()
     {
-        $model = new TempStakeholder();
+        $model = new TempCompanyStakeholder();
         $tempCols = $model->getFillable();
 
         $stakeholder = [];
@@ -58,25 +59,26 @@ class ImportStakeholders implements ShouldQueue
 
 
         foreach ($importData as $key => $items) {
-
             $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['stakeholder_as'] = 'i';
+            $data[$key]['stakeholder_as'] = 'c';
 
             foreach ($tempCols as $k => $field) {
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
             $data[$key]['is_imported'] = true;
-
-            if ($data[$key]['is_local'] == 'yes') {
-                $data[$key]['nationality'] = 167;
+            $data[$key]['full_name'] = $data[$key]['company_name'];
+            $data[$key]['cnic'] = $data[$key]['registration'];
+            if ($data[$key]['origin'] != "null") {
+                $data[$key]['origin'] = 167;
             } else {
-                $nationality = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['nationality'])])->first();
+                $nationality = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['origin'])])->first();
                 if ($nationality) {
-                    $data[$key]['nationality'] = $nationality->id;
+                    $data[$key]['origin'] = $nationality->id;
                 } else {
-                    $data[$key]['nationality'] = 167;
+                    $data[$key]['origin'] = 167;
                 }
             }
+
             // residential address 
 
             if ($data[$key]['residential_country'] != "null") {
@@ -140,13 +142,16 @@ class ImportStakeholders implements ShouldQueue
                 }
             }
 
+
             $data[$key]['created_at'] = $items->created_at;
             $data[$key]['updated_at'] = $items->updated_at;
 
-            unset($data[$key]['parent_cnic']);
+            unset($data[$key]['company_name']);
             unset($data[$key]['is_dealer']);
             unset($data[$key]['is_vendor']);
             unset($data[$key]['is_customer']);
+            unset($data[$key]['is_kin']);
+            unset($data[$key]['regsitration']);
             unset($data[$key]['residential_country']);
             unset($data[$key]['residential_state']);
             unset($data[$key]['residential_city']);

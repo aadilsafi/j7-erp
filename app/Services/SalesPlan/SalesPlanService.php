@@ -84,6 +84,7 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
             $individual = $inputs['individual'];
+
             $company = $inputs['company'];
 
             if ($stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
@@ -109,7 +110,7 @@ class SalesPlanService implements SalesPlanInterface
                     'office_contact' => $individual['office_contact'],
                     'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
                     'referred_by' => $individual['referred_by'],
-                    'source' => $individual['source'],
+                    'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
                     'is_local' => $individual['is_local'],
                     'nationality' => $individual['nationality'],

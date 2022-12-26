@@ -4,8 +4,9 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="unit_id">Unit</label>
                 <select class="select2-size-lg form-select" id="unit_id" name="unit_id">
-                    <option value="0" selected>Unit</option>
+                    <option value="0" selected>Select Unit</option>
                     @foreach ($units as $row)
+                    @continue(count($row->salesPlan) > 0)
                     <option value="{{ $row->id }}" {{ (isset($unit) ? $unit->id : old('unit_id')) == $row->id ?
                         'selected' : '' }}>
                         {{ $loop->index + 1 }} - {{ $row->name }} - {{$row->floor_unit_number}}</option>

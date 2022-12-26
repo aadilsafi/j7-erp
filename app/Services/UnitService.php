@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Jobs\units\MainUnitJob;
 use App\Models\{
     Floor,
+    SalesPlan,
     Unit,
     UserBatch,
 };
@@ -89,47 +90,54 @@ class UnitService implements UnitInterface
     {
         DB::transaction(function () use ($site_id, $floor_id, $inputs) {
 
-        $site_id = decryptParams($site_id);
-        $floor = (new Floor())->find($floor_id);
-        $unit = (new Unit())->find($inputs['unit_id']);
-        $unit_number = filter_strip_tags($inputs['unit_number']);
-        $unitNumberDigits = (new Floor())->find($floor_id)->site->siteConfiguration->unit_number_digits;
+            $site_id = decryptParams($site_id);
+            $floor = (new Floor())->find($floor_id);
+            $unit = (new Unit())->find($inputs['unit_id']);
+            $unit_number = filter_strip_tags($inputs['unit_number']);
+            $unitNumberDigits = (new Floor())->find($floor_id)->site->siteConfiguration->unit_number_digits;
 
-        foreach ($inputs['fab-units'] as $input) {
-            $totalPrice = floatval($input['gross_area']) * floatval($input['price_sqft']);
+            foreach ($inputs['fab-units'] as $input) {
+                $totalPrice = floatval($input['gross_area']) * floatval($input['price_sqft']);
 
-            $data = [
-                'parent_id' => $unit->id,
-                'floor_id' => $floor_id,
-                'name' => filter_strip_tags($input['name'] ?? ''),
-                'width' => 0,
-                'length' => 0,
-                'unit_number' => $unit_number,
-                'floor_unit_number' => $unit->floor_unit_number . '-FAB-' . Str::padLeft($unit_number, $unitNumberDigits, '0'),
-                'net_area' => filter_strip_tags($input['net_area']),
-                'gross_area' => filter_strip_tags($input['gross_area']),
-                'price_sqft' => filter_strip_tags($input['price_sqft']),
-                'total_price' => $totalPrice,
-                'is_corner' =>  false ,
-                'corner_id' => null,
-                'is_facing' => false,
-                'facing_id' => null,
-                'status_id' => 1,
-                'type_id' => $unit->type_id,
-                'active' => true,
-            ];
+                $data = [
+                    'parent_id' => $unit->id,
+                    'floor_id' => $floor_id,
+                    'name' => filter_strip_tags($input['name'] ?? ''),
+                    'width' => 0,
+                    'length' => 0,
+                    'unit_number' => $unit_number,
+                    'floor_unit_number' => $unit->floor_unit_number . '-FAB-' . Str::padLeft($unit_number, $unitNumberDigits, '0'),
+                    'net_area' => filter_strip_tags($input['net_area']),
+                    'gross_area' => filter_strip_tags($input['gross_area']),
+                    'price_sqft' => filter_strip_tags($input['price_sqft']),
+                    'total_price' => $totalPrice,
+                    'is_corner' =>  false,
+                    'corner_id' => null,
+                    'is_facing' => false,
+                    'facing_id' => null,
+                    'status_id' => 1,
+                    'type_id' => $unit->type_id,
+                    'active' => true,
+                ];
 
-            // dd($data);
+                // dd($data);
 
-            $floor = $this->model()->create($data);
-            $unit_number++;
-        }
+                $floor = $this->model()->create($data);
+                $unit_number++;
+            }
 
-        $unit->has_sub_units = true;
-        $unit->save();
+            $unit->has_sub_units = true;
+            $unit->save();
 
-        return $floor;
-    });
+            $salesPlan = (new SalesPlan())->where('status', 0)->where('unit_id', $unit->id)->get();
+            if ($salesPlan->count() > 0) {
+                foreach ($salesPlan as $plan) {
+                    $plan->status = 3;
+                    $plan->save();
+                }
+            }
+            return $floor;
+        });
     }
 
 
@@ -195,7 +203,7 @@ class UnitService implements UnitInterface
             'floor_id' => $floor_id,
             'id' => $id,
         ])->first();
-        
+
         $unit->update($data);
 
 
@@ -218,17 +226,17 @@ class UnitService implements UnitInterface
     public function getEmptyInstance()
     {
         $unit = [
-        [
-            'name' => '',
-            'width' => 0,
-            'length' => 0,
-            'net_area' => 0,
-            'gross_area' => 0,
-            'price_sqft' => 0,
-            'total_price' => 0,
-            'total_price1' => 0,
-           
-        ]
+            [
+                'name' => '',
+                'width' => 0,
+                'length' => 0,
+                'net_area' => 0,
+                'gross_area' => 0,
+                'price_sqft' => 0,
+                'total_price' => 0,
+                'total_price1' => 0,
+
+            ]
         ];
         return $unit;
     }

@@ -28,6 +28,7 @@ class updateRequest extends FormRequest
         $rules =  (new Stakeholder())->rules;
         $rules['company.registration'] .= ',' . decryptParams($this->id);
         $rules['individual.individual_email'] .= ',' . decryptParams($this->id);
+        $rules['individual.office_email'] .= ',' . decryptParams($this->id);
         $rules['company.office_email'] .= ',' . decryptParams($this->id);
         $rules['company.company_ntn'] .= ',' . decryptParams($this->id);
         $rules['company.strn'] .= ',' . decryptParams($this->id);

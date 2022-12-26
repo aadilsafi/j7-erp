@@ -217,14 +217,14 @@
 @endsection
 
 @section('custom-js')
-<script>
-    var cp_state = 0;
-            var cp_city = 0;
-            var ra_state = 0;
-            var ra_city = 0;
-            </script>
+    <script>
+        var cp_state = 0;
+        var cp_city = 0;
+        var ra_state = 0;
+        var ra_city = 0;
+    </script>
     {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
-    
+
     <script>
         $('#companyForm').hide();
 
@@ -343,7 +343,14 @@
                                 $('#individual_email').val(stakeholderData.email);
                                 $('#office_email').val(stakeholderData.office_email);
                                 $('#mobile_contact').val(stakeholderData.mobile_contact);
+                                if (stakeholderData.mobile_contact != null) {
+
+                                    intlMobileContact.setNumber(stakeholderData.mobile_contact)
+                                }
                                 $('#office_contact').val(stakeholderData.office_contact);
+                                if (stakeholderData.office_contact != null) {
+                                    intlOfficeContact.setNumber(stakeholderData.office_contact)
+                                }
                                 $('#dob').val(stakeholderData.dob).trigger('change');
                                 $('#referred_by').val(stakeholderData.referred_by);
                                 $('#source').val(stakeholderData.source).trigger('change');
@@ -357,10 +364,20 @@
                                 $('#industry').val(stakeholderData.industry);
                                 $('#company_office_contact').val(stakeholderData
                                     .office_contact);
+                                if (stakeholderData.office_contact != null) {
+
+                                    intlCompanyMobileContact.setNumber(stakeholderData
+                                        .office_contact)
+                                }
                                 $('#strn').val(stakeholderData.strn);
                                 $('#company_ntn').val(stakeholderData.ntn);
                                 $('#company_optional_contact').val(stakeholderData
                                     .mobile_contact);
+                                if (stakeholderData.mobile_contact != null) {
+
+                                    intlcompanyOptionalContact.setNumber(stakeholderData
+                                        .mobile_contact)
+                                }
                                 $('#company_email').val(stakeholderData.email);
                                 $('#company_office_email').val(stakeholderData.office_email);
                                 $('#website').val(stakeholderData.website);
@@ -857,9 +874,9 @@
                 },
 
                 // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                // 'stackholder[stackholder_id]': {
-                //     required: true
-                // },
+                'stackholder[stackholder_id]': {
+                    required: true,
+                },
                 // 'stackholder[full_name]': {
                 //     required: true
                 // },

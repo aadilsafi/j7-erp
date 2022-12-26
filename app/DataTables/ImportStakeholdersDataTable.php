@@ -337,11 +337,11 @@ class ImportStakeholdersDataTable extends DataTable
                 'required_fields' => $this->required_fields,
                 'name' => 'nationality'
             ])->render())->addClass('removeTolltip'),
-            Column::computed('refered_by')->title(view('app.components.select-fields', [
+            Column::computed('referred_by')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,
                 'is_disable' => false,
                 'required_fields' => $this->required_fields,
-                'name' => 'refered_by'
+                'name' => 'referred_by'
             ])->render())->addClass('removeTolltip'),
             Column::computed('source')->title(view('app.components.select-fields', [
                 'db_fields' => $this->db_fields,

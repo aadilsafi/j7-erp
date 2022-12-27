@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('site_status', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('status_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('status_id')->nullable();
             $table->float('percentage')->default(0);
             $table->timestamps();
         });

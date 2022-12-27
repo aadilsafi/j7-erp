@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('user_batches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
             $table->string('job_batch_id')->nullable();
             $table->string('batch_status')->nullable();
             $table->string('actions')->nullable();

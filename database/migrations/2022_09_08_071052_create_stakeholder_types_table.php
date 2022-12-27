@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('stakeholder_types', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('stakeholder_id');
+            $table->bigInteger('stakeholder_id')->nullable();
             $table->string('type')->nullable();
-            $table->unique(['stakeholder_id', 'type']);
+            $table->unique(['stakeholder_id', 'type'])->nullable();
             $table->string('stakeholder_code')->nullable();
             $table->json('receivable_account')->nullable();
             $table->string('payable_account')->nullable();

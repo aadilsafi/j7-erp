@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('additional_costs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->unique();
             $table->integer('parent_id')->default(0);

@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('file_title_transfers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('file_id')->constrained('file_management');
-            $table->foreignId('unit_id')->constrained('units');
-            $table->foreignId('sales_plan_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('file_id')->nullable();
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('sales_plan_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable();
             $table->longText('stakeholder_data')->nullable();
-            $table->foreignId('transfer_person_id')->constrained('stakeholders');
+            $table->bigInteger('transfer_person_id')->nullable();
             $table->longText('transfer_person_data')->nullable();
             $table->json('kin_data')->nullable();
             $table->longText('unit_data')->nullable();

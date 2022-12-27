@@ -414,13 +414,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'sites.floors.destroy-selected',
-                'show_name' => 'Can Destroy Selected Sites Floors',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.floors.destroy-selected',
+            //     'show_name' => 'Can Destroy Selected Sites Floors',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'sites.floors.copyView',
                 'show_name' => 'Can View Sites Copy Floors',

@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('model_templates', function (Blueprint $table) {
             $table->id();
-            $table->string('model_type');
-            $table->integer('template_id');
+            $table->string('model_type')->nullable();
+            $table->integer('template_id')->nullable();
             $table->integer('parent_id')->default(0);
-            $table->boolean('default');
+            $table->boolean('default')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

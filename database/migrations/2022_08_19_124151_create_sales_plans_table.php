@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('sales_plans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('unit_id')->constrained();
-            $table->bigInteger('user_id');
-            $table->bigInteger('stakeholder_id');
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable();
             $table->json('kin_data')->nullable();
             $table->text('stakeholder_data')->nullable();
             $table->double('unit_price')->default(0);
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->double('discount_total')->default(0);
             $table->double('down_payment_percentage')->default(0);
             $table->double('down_payment_total')->default(0);
-            $table->bigInteger('lead_source_id');
+            $table->bigInteger('lead_source_id')->nullable();
             $table->dateTime('validity')->nullable();
             $table->double('status')->default(0);
             $table->text('comments')->nullable();

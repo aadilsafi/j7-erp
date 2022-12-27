@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('journal_voucher_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('user_id');
-            $table->foreignId('account_head_code')->nullable();
-            $table->foreignId('journal_voucher_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('account_head_code')->nullable();
+            $table->bigInteger('journal_voucher_id')->nullable();
             $table->string('account_number')->nullable();
             $table->string('serial_number')->nullable();
             $table->string('credit')->nullable();
@@ -32,11 +32,11 @@ return new class extends Migration
             $table->string('status')->default('pending');
             $table->longText('comments')->nullable();
             $table->timestamp('created_date')->nullable();
-            $table->foreignId('checked_by')->nullable();
+            $table->bigInteger('checked_by')->nullable();
             $table->timestamp('checked_date')->nullable();
-            $table->foreignId('approved_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
             $table->timestamp('approved_date')->nullable();
-            $table->foreignId('reverted_by')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
             $table->timestamp('reverted_date')->nullable();
             $table->string('jve_number')->nullable();
             $table->timestamps();

@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('transfer_receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('serial_no')->nullable()->default('FT-REC-');
-            $table->bigInteger('unit_id')->constrained();
-            $table->bigInteger('file_id');
-            $table->bigInteger('file_title_transfer_id');
-            $table->bigInteger('stakeholder_id');
-            $table->string('mode_of_payment');
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('file_id')->nullable();
+            $table->bigInteger('file_title_transfer_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable();
+            $table->string('mode_of_payment')->nullable();
             $table->string('other_value')->nullable();
             $table->string('pay_order')->nullable();
             $table->string('cheque_no')->nullable();

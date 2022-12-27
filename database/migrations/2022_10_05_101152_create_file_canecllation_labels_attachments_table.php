@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('file_cancellation_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('file_cancellation_id');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('file_cancellation_id')->nullable();
             $table->string('label');
             $table->timestamps();
         });

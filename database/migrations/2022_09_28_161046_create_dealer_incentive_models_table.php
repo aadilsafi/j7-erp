@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('dealer_incentive_models', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('dealer_id')->constrained('stakeholders');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('dealer_id')->nullable();
             $table->longText('dealer_data')->nullable();
             $table->string('dealer_incentive')->nullable();
             $table->string('total_unit_area')->nullable();

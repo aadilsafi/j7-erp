@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('backlisted_stakeholders', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('fatherName');
-            $table->string('cnic');
-            $table->string('province');
-            $table->string('district');
+            $table->string('name')->nullable();
+            $table->string('fatherName')->nullable();
+            $table->string('cnic')->nullable();
+            $table->string('province')->nullable();
+            $table->string('district')->nullable();
             $table->timestamps();
         });
     }

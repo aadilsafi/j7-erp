@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('payment_vocuhers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->nullable();
-            $table->foreignId('user_id')->nullable();
-            $table->foreignId('customer_id')->nullable();
-            $table->foreignId('dealer_id')->nullable();
-            $table->foreignId('vendor_id')->nullable();
-            $table->foreignId('bank_id')->nullable();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('customer_id')->nullable();
+            $table->bigInteger('dealer_id')->nullable();
+            $table->bigInteger('vendor_id')->nullable();
+            $table->bigInteger('bank_id')->nullable();
             $table->string('stakeholder_type')->nullable();
             $table->string('customer_ap_account')->nullable();
             $table->string('dealer_ap_account')->nullable();
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->string('account_number')->nullable();
             $table->timestamp('receiving_date')->nullable();
             $table->timestamp('approved_date')->nullable();
-            $table->foreignId('approved_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
             $table->string('comments')->nullable();
             $table->string('amount_to_be_paid')->nullable();
             $table->boolean('status')->default(0);

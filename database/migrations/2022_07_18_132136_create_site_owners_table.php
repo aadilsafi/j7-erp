@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('site_owners', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('owner_id')->constrained('users');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('owner_id')->constrained('users');
             $table->timestamps();
             $table->softDeletes();
 

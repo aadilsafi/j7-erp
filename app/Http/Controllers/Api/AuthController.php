@@ -34,9 +34,11 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->user()->tokens()->delete();
-        return [
-            'message' => 'Tokens Revoked'
-        ];
+        return response()->json([
+            'status' => true,
+            'message' => 'Session Expire'
+        ], 200);
+       
     }
 
     public function checkAuth()

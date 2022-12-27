@@ -94,7 +94,14 @@ class SalesPlanService implements SalesPlanInterface
                 throw new GeneralException('Company Registration No already exists');
             }
 
-            if ($inputs['stakeholder_as'] == 'i') {
+
+            if (!isset($inputs['stakeholder_as'])) {
+                $leadStakeholder = Stakeholder::find($stakeholderInput['stackholder_id']);
+                $stakeholder_as = $leadStakeholder->stakeholder_as;
+            } else {
+                $stakeholder_as = $inputs['stakeholder_as'];
+            }
+            if ($stakeholder_as == 'i') {
                 $stakeholderData = [
                     'full_name' => $individual['full_name'],
                     'father_name' => $individual['father_name'],
@@ -115,7 +122,7 @@ class SalesPlanService implements SalesPlanInterface
                     'is_local' => $individual['is_local'],
                     'nationality' => $individual['nationality'],
                 ];
-            } else if ($inputs['stakeholder_as'] == 'c') {
+            } else if ($stakeholder_as == 'c') {
                 $stakeholderData = [
                     'full_name' => $company['company_name'],
                     'industry' => $company['industry'],
@@ -133,7 +140,7 @@ class SalesPlanService implements SalesPlanInterface
                     'origin' => $company['origin'],
                 ];
             }
-            $stakeholderData['stakeholder_as'] = $inputs['stakeholder_as'];
+            $stakeholderData['stakeholder_as'] = $stakeholder_as;
             $stakeholderData['site_id'] = $site_id;
 
             // residential address fields

@@ -556,9 +556,9 @@
             @endcan
 
             {{-- Sales Plan  --}}
-            @can('sites.sales_plan.show')
+            @canany(['sites.sales_plan.show', 'sites.sales_plan.create'])
                 <li
-                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) }}">
                         <i class="bi bi-clipboard-data"></i>
@@ -776,7 +776,8 @@
 
             {{-- Accounts Menu --}}
             @canany(['sites.accounts.recovery.inventory-aging', 'sites.accounts.charts-of-accounts.index',
-                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index' ,'sites.settings.journal-vouchers.index'])
+                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index',
+                'sites.settings.journal-vouchers.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
@@ -799,7 +800,8 @@
                                 <a class="d-flex align-items-center"
                                     href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='dollar-sign'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Journal Vouchers">Journal Vouchers</span>
+                                    <span class="menu-title text-truncate" data-i18n="Journal Vouchers">Journal
+                                        Vouchers</span>
                                 </a>
                             </li>
                         @endcan

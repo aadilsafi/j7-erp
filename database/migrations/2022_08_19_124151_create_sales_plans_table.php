@@ -34,6 +34,7 @@ return new class extends Migration
             $table->dateTime('created_date')->nullable();
             $table->boolean('cancel')->default(0);
             $table->string('serial_no')->nullable()->default('SI-');
+            $table->boolean('is_from_crm')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

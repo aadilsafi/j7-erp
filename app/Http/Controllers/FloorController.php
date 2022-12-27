@@ -445,14 +445,14 @@ class FloorController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required|distinct',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-        ]);
+        // $validator = \Validator::make($request->all(), [
+        //     'fields.*' => 'required|distinct',
+        // ], [
+        //     'fields.*.required' => 'Must Select all Fields',
+        //     'fields.*.distinct' => 'Field can not be duplicated',
+        // ]);
 
-        $validator->validate();
+        // $validator->validate();
 
         $model = new TempFloor();
         $tempdata = $model->cursor();

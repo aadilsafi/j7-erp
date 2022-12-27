@@ -59,6 +59,8 @@ class Stakeholder extends Model implements HasMedia
         'origin',
         'strn',
         'passport_no',
+        'crm_id',
+        'pin_code',
     ];
 
     public $rules = [

@@ -3,7 +3,6 @@
 namespace App\Services\Api;
 
 use Illuminate\Support\Facades\Auth;
-use App\Exceptions\FailException;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Validator;
@@ -13,26 +12,38 @@ class ApiAuthService
 
     public function login($data)
     {
-        $validation = Validator::make($data, [
-            'email' => 'required|email|string',
-            'password' => 'required|string'
-        ]);
+        try {
+            $validation = Validator::make($data, [
+                'email' => 'required|email|string',
+                'password' => 'required|string'
+            ]);
 
-        if ($validation->fails()) {
+            if ($validation->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'error' => $validation->getMessageBag()
+                ], 401);
+            }
+            if (!Auth::attempt($data)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email & Password does not match with our record.'
+                ], 401);
+            }
+            $user = User::find(Auth::user()->id);
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->plainTextToken;
+
             return response()->json([
-            'error' => $validation->getMessageBag()], 404);
+                'accessToken' => $token,
+                'token_type' => 'Bearer',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
         }
-        if (!Auth::attempt($data)) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-        $user = User::find(Auth::user()->id);
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->plainTextToken;
-
-        return response()->json([
-            'accessToken' => $token,
-            'token_type' => 'Bearer',
-        ]);
     }
 
     public function register($data)

@@ -157,12 +157,7 @@
                 },
                 scrollX: true,
                 columns: [
-                    // @can('sites.floors.destroy-selected')
-                    //     {
-                    //         data: 'check',
-                    //         name: 'check',
-                    //     },
-                    // @endcan
+
                     {
                         data: 'name',
                         name: 'name',

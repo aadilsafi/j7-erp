@@ -22,6 +22,7 @@ use App\Models\FileRefund;
 use App\Models\FileResale;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\Models\FileTitleTransferAttachment;
+use App\Models\LeadSource;
 use App\Models\ModelTemplate;
 use App\Models\Template;
 use App\Models\Type;
@@ -89,13 +90,14 @@ class FileTitleTransferController extends Controller
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
 
+
             $data = [
                 'site_id' => decryptParams($site_id),
                 'unit' => Unit::find(decryptParams($unit_id)),
                 'customer' => Stakeholder::find(decryptParams($customer_id)),
                 'file' => FileManagement::where('id', decryptParams($file_id))->first(),
                 'total_paid_amount' => $total_paid_amount,
-                'stakeholders' => $this->stakeholderInterface->getAllWithTree(),
+                'stakeholders' => Stakeholder::where('id','!=',decryptParams($customer_id))->get(),
                 'stakeholderTypes' => StakeholderTypeEnum::array(),
                 'emptyRecord' => [$this->stakeholderInterface->getEmptyInstance()],
                 'rebate_incentive' => $rebate_incentive,
@@ -103,6 +105,7 @@ class FileTitleTransferController extends Controller
                 'salesPlan' => $salesPlan,
                 'customFields' => $customFields,
                 'country' => Country::all(),
+                'leadSources' => LeadSource::where('site_id',decryptParams($site_id))->get(),
             ];
             unset($data['emptyRecord'][0]['stakeholder_types']);
             return view('app.sites.file-managements.files.files-actions.file-title-transfer.create', $data);

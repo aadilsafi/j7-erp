@@ -396,7 +396,7 @@
         $('.amountToBePaid').on('focusout', function() {
             var amount = $(this).val().replace(/,/g, "")
             var formatAmount = amount;
-            if ($.isNumeric(amount)) {
+            if ($.isNumeric(amount) && amount > 0) {
 
                 var unit_id = $(this).attr('unit_id');
                 var discounted_amount = $('#discounted_amount').val();

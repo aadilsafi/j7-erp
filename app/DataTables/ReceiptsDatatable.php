@@ -182,8 +182,8 @@ class ReceiptsDatatable extends DataTable
             ->rowGroupDataSrc('unit_id')
 
             ->orders([
-                [2, 'asc'],
-                [4, 'desc'],
+                [0, 'desc'],
+                // [4, 'desc'],
             ]);
 
         if ($selectedActivePermission) {

@@ -670,7 +670,7 @@
 
             var installmentDate = $("#installments_start_date").flatpickr({
                 defaultDate: "{{ now()->addDays($site->siteConfiguration->salesplan_installment_days) }}",
-                // minDate: "today",
+                minDate: $("#created_date").val(),
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

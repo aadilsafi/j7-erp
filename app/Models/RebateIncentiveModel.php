@@ -31,6 +31,7 @@ class RebateIncentiveModel extends Model
         'online_instrument_no',
         'transaction_date',
         'created_date',
+        'serail_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

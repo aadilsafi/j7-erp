@@ -29,6 +29,7 @@ class FileManagement extends Model implements HasMedia
         'file_action_id',
         'created_date',
         'serial_no',
+        'note_serial_number',
     ];
 
     public $rules = [

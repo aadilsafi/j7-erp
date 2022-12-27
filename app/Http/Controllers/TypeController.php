@@ -390,7 +390,7 @@ class TypeController extends Controller
         $accountCode = addAccountCodes(get_class(new Type()));
 
         foreach ($tempdata as $key => $items) {
-            foreach ($request->fields as $k => $field) {
+            foreach ($tempCols as $k => $field) {
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
 

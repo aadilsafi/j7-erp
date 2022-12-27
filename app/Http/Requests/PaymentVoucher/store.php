@@ -27,7 +27,7 @@ class store extends FormRequest
     {
 
 
-        if ($this->input('payment_mode') == "Cheque") {
+        if ($this->input('mode_of_payment') == "Cheque") {
             $rules['bank_name'] = ['required'];
             $rules['bank_branch'] = ['required'];
             $rules['bank_address'] = ['required'];
@@ -37,10 +37,10 @@ class store extends FormRequest
                 // $rules['bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('bank_id'))];
             }
             $rules['cheque_no'] = ['required'];
-            $rules['attachment'] = ['required'];
+            // $rules['attachment'] = ['required'];
         }
 
-        if ($this->input('payment_mode') == "Online") {
+        if ($this->input('mode_of_payment') == "Online") {
             $rules['bank_name'] = ['required'];
             $rules['bank_branch'] = ['required'];
             $rules['bank_address'] = ['required'];
@@ -51,13 +51,12 @@ class store extends FormRequest
             }
             $rules['transaction_date'] = ['required'];
             $rules['online_instrument_no'] = ['required'];
-            $rules['attachment'] = ['required'];
+            // $rules['attachment'] = ['required'];
         }
 
-        if ($this->input('receipts.*.payment_mode') == "Other") {
+        if ($this->input('mode_of_payment') == "Other") {
             $rules['receipts.*.other_value'] = ['required'];
         }
-
         return  $rules;
     }
 

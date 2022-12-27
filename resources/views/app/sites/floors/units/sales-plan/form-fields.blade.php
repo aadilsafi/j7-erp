@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                        
+
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -148,7 +148,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="percentage-discount">Discount (%)<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" min="0" max="100" step="0.1"
+                                    <input type="number" min="0" max="100" step="0.01"
                                         class="form-control form-control-lg" id="percentage-discount"
                                         name="unit[discount][percentage]" placeholder="Discount %" value="0" />
                                 </div>
@@ -184,7 +184,7 @@
                                         id="unit_downpayment_percentage" name="unit[downpayment][percentage]"
                                         placeholder="Down Payment %" min="0" max="100"
                                         value="{{ $site->siteConfiguration->site_down_payment_percentage }}.0"
-                                        step="0.1" />
+                                        step="0.01" />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

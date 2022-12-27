@@ -26,6 +26,7 @@ class store extends FormRequest
         return [
             'application_form.registration_no' => 'required||unique:file_management,registration_no',
             'application_form.application_no' => 'required||unique:file_management,application_no',
+            'application_form.note_serial_number' => 'required||unique:file_management,note_serial_number',
             'application_form.photo' => 'required',
         ];
     }

@@ -89,7 +89,7 @@
             aria-labelledby="applicaiton-form-trigger">
             <div class="card-body">
                 <div class="row g-1 mb-2">
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="registration_no">Registration No <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-lg" id="registration_no"
@@ -98,7 +98,7 @@
                             @endisset
                             name="application_form[registration_no]" placeholder="Registration No" />
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="application_no">Application No <span
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-lg" id="application_no"
@@ -106,6 +106,15 @@
                              value="{{ $customer_file->application_no }}" readonly
                             @endisset
                             name="application_form[application_no]" placeholder="Application No" />
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+                        <label class="form-label fs-5" for="application_no">Note Serial Number <span
+                                class="text-danger">*</span></label>
+                        <input type="text" class="form-control form-control-lg" id="note_serial_number"
+                            @isset($customer_file)
+                             value="{{ $customer_file->note_serial_number }}" readonly
+                            @endisset
+                            name="application_form[note_serial_number]" placeholder="Note Serial Number" />
                     </div>
                 </div>
 

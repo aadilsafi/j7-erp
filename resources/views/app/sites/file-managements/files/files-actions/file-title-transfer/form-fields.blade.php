@@ -158,31 +158,28 @@
         </div>
     </div>
 
-    <div id="titleTransferPersonInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
-            id="stakeholders_card">
-            <div class="card-header justify-content-between">
-                <h3> Transfer Owner Information</h3>
-                {{-- <div id="div_stakeholder_type">
-                    @forelse ($stakeholderTypes as $stakeholderType)
-                        <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
-                    @empty
-                    @endforelse
-                </div> --}}
-            </div>
+    @if (Route::current()->getName() != 'sites.file-managements.file-title-transfer.preview')
+        <div id="titleTransferPersonInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="stakeholders_card">
+                <div class="card-header justify-content-between">
+                    <h3>3. STAKEHOLDER DATA (LEAD'S DATA)</h3>
+                    <div id="div_stakeholder_type">
+                        @forelse ($stakeholderTypes as $stakeholderType)
+                            <p class="badge badge-light-danger fs-5 ms-auto me-1">{{ $stakeholderType }}-000</p>
+                        @empty
+                        @endforelse
+                    </div>
+                </div>
 
-            <div class="card-body">
-                @if (isset($stakeholders))
+                <div class="card-body">
+
                     <div class="row mb-1">
                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders <span
-                                    class="text-danger">*</span></label>
+                            <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
                             <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                                 <option value="0">Create new Stakeholder...</option>
                                 @forelse ($stakeholders as $stakeholder)
-                                    @if ($customer->id == $stakeholder->id)
-                                        @continue;
-                                    @endif
                                     <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
                                         {{ $stakeholder->father_name }} {{ $stakeholder->cnic }},
                                         {{ $stakeholder->contact }}
@@ -192,260 +189,29 @@
                             </select>
                         </div>
                     </div>
-                @endif
 
-                {{--  individual Form --}}
-                <div id="individualForm">
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_full_name">Full Name <span
-                                    class="text-danger">*</span></label>
-                            <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                                class="form-control form-control-lg" id="stackholder_full_name"
-                                name="stackholder[full_name]" placeholder="Full Name"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->full_name : '' }}" />
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name
-                                <span class="text-danger">*</span></label>
-                            <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                                class="form-control form-control-lg" id="stackholder_father_name"
-                                name="stackholder[father_name]" placeholder="Father / Husband Name"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->father_name : '' }}" />
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_occupation">Occupation </label>
-                            <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                                class="form-control form-control-lg" id="stackholder_occupation"
-                                name="stackholder[occupation]" placeholder="Occupation"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->occupation : '' }}" />
-                        </div>
+                    <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
+                        {{ view('app.sites.stakeholders.partials.stakeholder-form-fields', [
+                            'stakeholderTypes' => $stakeholderTypes,
+                            'country' => $country,
+                            'leadSources' => $leadSources,
+                            'hideBorders' => true,
+                        ]) }}
                     </div>
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                            <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                                class="form-control form-control-lg" id="stackholder_designation"
-                                name="stackholder[designation]" placeholder="Designation"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->designation : '' }}" />
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_ntn">NTN </label>
-                            <input @if (isset($titleTransferPerson)) disabled   @else type="text" @endif
-                                name="stackholder[ntn]" class="form-control form-control-lg" id="stackholder_ntn"
-                                placeholder="NTN"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : '' }}" />
-                        </div>
 
-                        <div class="col-lg-4 col-md-4 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_cnic">CNIC <span
-                                    class="text-danger">*</span></label>
-                            <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                                class="form-control form-control-lg" id="stackholder_cnic" name="stackholder[cnic]"
-                                placeholder="CNIC"
-                                value="{{ isset($titleTransferPerson) ? cnicFormat($titleTransferPerson->cnic) : '' }}" />
+
+                    <div class="row mb-1" id="stakeholderNextOfKin">
+                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                            <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
+                            <select class="select2" multiple name="stackholder[next_of_kin][]"
+                                id="stackholder_next_of_kin">
+                            </select>
                         </div>
                     </div>
                 </div>
-
-
-                {{-- company form --}}
-                <div id="companyForm">
-                    <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="company_name">Company Name <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" @if (isset($titleTransferPerson)) disabled @endif
-                                class="form-control form-control-lg @error('full_name') is-invalid @enderror"
-                                id="company_name" placeholder="Company Name"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->full_name : old('full_name') }}" />
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="industry">Industry </label>
-                            <input type="text" @if (isset($titleTransferPerson)) disabled @endif
-                                class="form-control form-control-lg @error('industry') is-invalid @enderror"
-                                id="industry" placeholder="Industry"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->occupation : old('industry') }}" />
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="registration">Registration # <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" @if (isset($titleTransferPerson)) disabled @endif
-                                class="cp_cnic form-control form-control-lg @error('registration') is-invalid @enderror"
-                                id="registration" placeholder="Registration Number"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->cnic : old('registration') }}" />
-
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                            <label class="form-label fs-5" for="ntn">NTN </label>
-                            <input type="number" @if (isset($titleTransferPerson)) disabled @endif
-                                class="form-control form-control-lg @error('ntn') is-invalid @enderror"
-                                id="ntn" placeholder="NTN Number"
-                                value="{{ isset($titleTransferPerson) ? $titleTransferPerson->ntn : old('ntn') }}" />
-
-                        </div>
-                    </div>
-                </div>
-
-                {{-- common form  --}}
-                <div class="row mb-1">
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_email">Email <span
-                                class="text-danger">*</span></label>
-                        <input type="email" @if (isset($titleTransferPerson)) disabled @endif
-                            class="form-control form-control-md @error('email') is-invalid @enderror"
-                            id="stackholder_email" name="stackholder[email]" placeholder="Email"
-                            autocomplete="false"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->email : old('email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_optional_email">Optional Email</label>
-                        <input type="email" @if (isset($titleTransferPerson)) disabled @endif
-                            class="form-control form-control-md @error('email') is-invalid @enderror"
-                            id="stackholder_optional_email" name="stackholder[optional_email]"
-                            placeholder="Optional Email" autocomplete="false"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_email : old('email') }}" />
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Contact <span
-                                class="text-danger">*</span></label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                            class="form-control form-control-lg ContactNoError" id="stackholder_contact" name="stackholder[contact]"
-                            placeholder="Contact"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->contact : '' }}" />
-                    </div>
-                    <input type="hidden" name="stackholder[countryDetails]" id="countryDetails">
-
-                    <div class="col-lg-3 col-md-3 col-sm-12">
-                        <label class="form-label fs-5" for="stackholder_optional_contact">Optional Contact</label>
-                        <input @if (isset($titleTransferPerson)) disabled @endif type="text"
-                            class="form-control form-control-lg OPTContactNoError" id="stackholder_optional_contact"
-                            name="stackholder[optional_contact]" placeholder="Optional Contact"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->optional_contact : '' }}" />
-
-                    </div>
-                    <input type="hidden" name="stackholder[OptionalCountryDetails]" id="OptionalCountryDetails">
-                </div>
-                <div class="row mb-1">
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="parent_id">Select
-                            Country</label>
-                        <select class="select2 country_id" id="country_id" name="stackholder[country_id]"
-                            @if (isset($titleTransferPerson)) disabled @endif>
-                            @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->country->name ?? '' }}</option>
-                            @else
-                                <option value="0" selected>Select Country</option>
-
-                                @foreach ($country as $data)
-                                    <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                        @error('country_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="city_id">Select
-                            State</label>
-                        <select class="select2 state_id" id="state_id" name="stackholder[state_id]"
-                            @if (isset($titleTransferPerson)) disabled @endif>
-                            @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->state->name ?? '' }}</option>
-                            @else
-                                <option value="0" selected>Select State</option>
-                            @endif
-                        </select>
-                        @error('state_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label" style="font-size: 15px" for="city_id">Select
-                            City</label>
-                        <select class="select2 city_id" id="city_id" name="stackholder[city_id]"
-                            @if (isset($titleTransferPerson)) disabled @endif>
-
-                            @if (isset($titleTransferPerson))
-                                <option selected>{{ $titleTransferPerson->city->name ?? '' }}</option>
-                            @else
-                                <option value="0" selected>Select City</option>
-                            @endif
-                        </select>
-                        @error('city_id')
-                            <span class="text-danger">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5" for="occupation">Nationality </label>
-                        <input type="text" @if (isset($titleTransferPerson)) disabled @endif
-                            class="form-control form-control-lg @error('occupation') is-invalid @enderror"
-                            id="nationality" name="nationality" placeholder="Nationality"
-                            value="{{ isset($titleTransferPerson) ? $titleTransferPerson->nationality : old('nationality') }}" />
-                        @error('nationality')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Address <span
-                                class="text-danger">*</span></label>
-                        <textarea @if (isset($titleTransferPerson)) disabled @endif class="form-control form-control-lg"
-                            id="stackholder_address" name="stackholder[address]" placeholder="Address" rows="4"> {{ isset($titleTransferPerson) ? $titleTransferPerson->address : '' }}</textarea>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="mailing_address">Mailing Address <span
-                                class="text-danger">*</span><span class="text-info">
-                                @if (!isset($titleTransferPerson))
-                                    ( Same as Permanent
-                                    Address
-                                    <input type="checkbox" id="cpyAddress" />
-                                    )
-                            </span>
-                            @endif
-                        </label>
-                        <textarea @if (isset($titleTransferPerson)) disabled @endif class="form-control form-control-lg"
-                            id="mailing_address" name="stackholder[mailing_address]" placeholder="Mailing Address" rows="4">{{ isset($titleTransferPerson) ? $titleTransferPerson->mailing_address : '' }}</textarea>
-                    </div>
-                </div>
-                <div class="row mb-1">
-                    <div class="col-lg- col-md- col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea @if (isset($titleTransferPerson)) disabled @endif class="form-control form-control-lg"
-                            id="stackholder_comments" name="stackholder[comments]" placeholder="Comments" rows="5">{{ isset($titleTransferPerson) ? $titleTransferPerson->comments : '' }}</textarea>
-                    </div>
-                </div>
-
-                <div class="row mb-1" id="stakeholderNextOfKin">
-                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_next_of_kin">Select Next Of Kin</label>
-                        <select class="select2" multiple name="stackholder[next_of_kin][]"
-                            id="stackholder_next_of_kin">
-
-                        </select>
-                    </div>
-                </div>
-
             </div>
         </div>
-    </div>
+    @endif
 
     <div id="sellerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"

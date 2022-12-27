@@ -202,7 +202,7 @@
         }
         $('.amountFormat').on('focusout', function() {
             var val = $(this).val().replace(/,/g, "")
-            if ($.isNumeric(val)) {
+            if ($.isNumeric(val) && val > 0) {
                 var formated = parseFloat(val).toLocaleString('en');
                 $(this).val(formated)
             } else {

@@ -58,6 +58,7 @@ class FileManagementService implements FileManagementInterface
             'file_action_id' => 1,
             'sales_plan_id' => $sales_plan->id,
             'serial_no' => 'UF-' . $serail_no,
+            'note_serial_number' => $inputs['application_form']['note_serial_number'],
             // 'created_date' => $sales_plan->created_date,
         ];
         $file = $this->model()->create($data);

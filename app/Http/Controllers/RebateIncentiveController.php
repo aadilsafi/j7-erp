@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests\Rebateincentive\storeRequest;
 use App\Models\Bank;
 use App\Models\Country;
+use App\Models\LeadSource;
 use App\Models\SalesPlan;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use App\Utils\Enums\StakeholderTypeEnum;
 use Redirect;
 use Validator;
 use DB;
@@ -72,7 +74,8 @@ class RebateIncentiveController extends Controller
                 'customFields' => $customFields,
                 'banks' => Bank::all(),
                 'country' => Country::all(),
-
+                'leadSources' => LeadSource::where('site_id',decryptParams($site_id))->get(),
+                'stakeholderTypes' => StakeholderTypeEnum::array(),
             ];
 
             return view('app.sites.file-managements.files.rebate-incentive.create', $data);

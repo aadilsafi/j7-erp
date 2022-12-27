@@ -261,9 +261,10 @@
                             $('#td_unit_downpayment').html(response.salesPlan.down_payment_percentage + '%');
 
                             if (response.facing != null) {
-                                let facing_value = response.salesPlan.discount_percentage * response.salesPlan
-                                    .total_price;
-                                $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
+                                // let facing_value = response.salesPlan.discount_percentage * response.salesPlan
+                                //     .total_price;
+                                // $('#td_unit_facing_charges_value').html(facing_value.toLocaleString())
+                                $('#td_unit_facing_charges_value').html(0);
                             } else {
                                 $('#td_unit_facing_charges_value').html(0);
                             }

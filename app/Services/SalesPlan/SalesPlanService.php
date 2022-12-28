@@ -73,8 +73,6 @@ class SalesPlanService implements SalesPlanInterface
             $site = (new Site())->find($site_id);
             $unit = (new Unit())->find($inputs['unit_id']);
 
-            // dd($unit);
-
             $authRoleId = auth()->user()->roles->pluck('id')->first();
 
             $approveSalesPlanPermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
@@ -255,6 +253,9 @@ class SalesPlanService implements SalesPlanInterface
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 
+            if(Auth::user()->hasRole('CRM')){
+                $sales_plan_data['is_from_crm'] = true;
+            }
             if (isset($stakeholderInput['next_of_kin'])) {
 
                 $sales_plan_data['kin_data'] = json_encode($stakeholderInput['next_of_kin']);

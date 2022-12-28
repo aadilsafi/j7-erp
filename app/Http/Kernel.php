@@ -75,5 +75,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
 
         'permission' => \App\Http\Middleware\Permissions::class,
+        'crm_api' => \App\Http\Middleware\CrmApiMiddleware::class,
     ];
 }

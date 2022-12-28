@@ -947,13 +947,13 @@
 
         function calculateTransferAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
-            paid_amount =  paid_amount.replace(/,/g, "");
-            console.log(paid_amount)
+            paid_amount = paid_amount.replace(/,/g, "");
+
             let transfer_rate = $('#transfer_rate').val().replace(/,/g, "");
             let unit_gross_area = '{{ $unit->gross_area }}';
-            console.log(unit_gross_area)
+            console.log(transfer_rate)
             let amount_paid = 0.0;
-            let profitCharges = $('#profit_charges').val().replace(/,/g, "");
+            // let profitCharges = $('#profit_charges').val().replace(/,/g, "");
             amount_paid = parseFloat(transfer_rate) * parseFloat(unit_gross_area);
             console.log(amount_paid)
             $('#amount_to_be_paid').val(amount_paid.toLocaleString());

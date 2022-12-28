@@ -11,7 +11,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges <span
                                 class="text-danger">*</span></label>
-                        <input type="text" min="1" onchange="calculateTransferAmount()" required
+                        <input type="text"  onchange="calculateTransferAmount()" required
                             name="transfer_rate" class="form-control amountFormat form-control-lg"
                             {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate"
                             placeholder="Transfer Charges"

@@ -265,7 +265,7 @@
                                                                 name="unit[downpayment][percentage]"
                                                                 placeholder="Down Payment %" min="0"
                                                                 max="100"
-                                                                value="{{ number_format($salePlan->down_payment_percentage) }}" />
+                                                                value="{{ $salePlan->down_payment_percentage }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

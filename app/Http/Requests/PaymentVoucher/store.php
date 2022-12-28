@@ -25,8 +25,7 @@ class store extends FormRequest
      */
     public function rules()
     {
-
-
+        $rules['mode_of_payment'] =  ['required'];
         if ($this->input('mode_of_payment') == "Cheque") {
             $rules['bank_name'] = ['required'];
             $rules['bank_branch'] = ['required'];
@@ -60,9 +59,9 @@ class store extends FormRequest
 
         if ($this->input('mode_of_payment') == "Other") {
             $rules['other_value'] = ['required'];
-
             return  $rules;
         }
+        return  $rules;
     }
 
     public function messages()
@@ -96,19 +95,19 @@ class store extends FormRequest
 
     public function withValidator($validator)
     {
-        if (!$validator->fails()) {
-            $validator->after(function ($validator) {
-                $modeOfPayment = $this->input('mode_of_payment');
-                $attachment = $this->attachment;
-                $amount_received = $this->input('amount_received');
-                $amount_in_numbers = $this->input('amount_in_numbers');
-                if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
-                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
-                }
-                if ($amount_in_numbers[0] >  $amount_received) {
-                    $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
-                }
-            });
-        }
+        // if (!$validator->fails()) {
+        //     $validator->after(function ($validator) {
+        //         $modeOfPayment = $this->input('mode_of_payment');
+        //         $attachment = $this->attachment;
+        //         $amount_received = $this->input('amount_received');
+        //         $amount_in_numbers = $this->input('amount_in_numbers');
+        //         if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
+        //             $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
+        //         }
+        //         if ($amount_in_numbers[0] >  $amount_received) {
+        //             $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
+        //         }
+        //     });
+        // }
     }
 }

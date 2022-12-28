@@ -59,31 +59,32 @@ class store extends FormRequest
         }
 
         if ($this->input('mode_of_payment') == "Other") {
-            $rules['receipts.*.other_value'] = ['required'];
+            $rules['other_value'] = ['required'];
 
             return  $rules;
         }
+        dd
     }
 
     public function messages()
     {
         return [
-            "receipts.*.unit_id.required" => "Unit id is required.",
-            "receipts.*.unit_id.numeric" => "Unit id is required.",
-            "receipts.*.mode_of_payment.required" => "Mode of Payment is Required.",
-            "receipts.*.amount_in_numbers.required" => "Amount is Required.",
+            "unit_id.required" => "Unit id is required.",
+            "unit_id.numeric" => "Unit id is required.",
+            "mode_of_payment.required" => "Mode of Payment is Required.",
+            "amount_in_numbers.required" => "Amount is Required.",
             "amount_received.required" => "Total Amount Received is Required.",
-            'receipts.*.other_value' => "Other value is required when Other mode of payment is selected.",
-            'receipts.*.cheque_no' => "Cheque number is required when Cheque mode of payment is selected.",
-            'receipts.*.transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
-            'receipts.*.online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
+            'other_value' => "Other value is required when Other mode of payment is selected.",
+            'cheque_no' => "Cheque number is required when Cheque mode of payment is selected.",
+            'transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
+            'online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
             "attachment" => "Attachment is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_name" => "Bank Name is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
+            "bank_name" => "Bank Name is Required if mode of payment is Cheque or Online.",
+            "bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
+            "bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
+            "bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
+            "bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
+            "bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
         ];
     }
 
@@ -98,10 +99,10 @@ class store extends FormRequest
     {
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
-                $modeOfPayment = $this->input('receipts.*.mode_of_payment');
+                $modeOfPayment = $this->input('mode_of_payment');
                 $attachment = $this->attachment;
                 $amount_received = $this->input('amount_received');
-                $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
+                $amount_in_numbers = $this->input('amount_in_numbers');
                 if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
                     $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
                 }

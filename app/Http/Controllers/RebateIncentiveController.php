@@ -65,6 +65,7 @@ class RebateIncentiveController extends Controller
             $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->rebateIncentive->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields);
+            $stakeholder_dealers = StakeholderType::where('type', 'D')->where('status', 1)->with('stakeholder')->get();
 
             $data = [
                 'site_id' => decryptParams($site_id),

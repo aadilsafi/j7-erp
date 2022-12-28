@@ -86,7 +86,7 @@ class StakeholderService implements StakeholderInterface
                     'referred_by' => $individual['referred_by'],
                     'source' => $individual['source'],
                     'date_of_birth' => $individual['dob'],
-                    'is_local' => $individual['is_local'],
+                    'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
                     'nationality' => $individual['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
@@ -225,7 +225,6 @@ class StakeholderService implements StakeholderInterface
             $stakeholder_type = StakeholderType::insert($stakeholderTypeData);
             if ($inputs['stakeholder_type'] == 'V') {
                 $vendor_ap_account = $this->financialTransactionInterface->makeVendorApAccount($stakeholder->id);
-
             }
             //save custom fields
 
@@ -267,7 +266,7 @@ class StakeholderService implements StakeholderInterface
                     'referred_by' => $individual['referred_by'],
                     'source' => $individual['source'],
                     'date_of_birth' => $individual['dob'],
-                    'is_local' => $individual['is_local'],
+                    'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
                     'nationality' => $individual['nationality'],
                 ];
             } else if ($inputs['stakeholder_as'] == 'c') {
@@ -353,7 +352,7 @@ class StakeholderService implements StakeholderInterface
                         'status' => true,
                     ]);
 
-                    if($key=='V'){
+                    if ($key == 'V') {
                         $vendor_ap_account = $this->financialTransactionInterface->makeVendorApAccount($stakeholder->id);
                     }
 

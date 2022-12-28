@@ -492,6 +492,7 @@ Route::group([
 
                                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                                         Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
+                                        Route::post('/check-stakeholder', [SalesPlanController::class, 'checkStakeholder'])->name('check-stakeholder');
                                     });
 
                                     Route::group(['prefix' => '/{id}'], function () {

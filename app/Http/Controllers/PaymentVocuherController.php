@@ -69,7 +69,6 @@ class PaymentVocuherController extends Controller
      */
     public function store(store $request, $site_id)
     {
-        dd($request->all());
         //
         try {
             if (!request()->ajax()) {

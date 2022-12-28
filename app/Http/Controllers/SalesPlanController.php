@@ -284,6 +284,110 @@ class SalesPlanController extends Controller
         return apiSuccessResponse($installments);
     }
 
+    public function checkStakeholder(Request $request, $site_id, $floor_id, $unit_id)
+    {
+        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $unit_id =  $salesPlan->unit->id;
+        $stakeholder = Stakeholder::find($salesPlan->stakeholder_id);
+
+        $residential_address_type = $stakeholder->residential_address_type;
+        $residential_country_id = $stakeholder->residential_country_id;
+        $residential_state_id = $stakeholder->residential_state_id;
+        $residential_city_id = $stakeholder->residential_city_id;
+        $residential_postal_code = $stakeholder->residential_postal_code;
+        $residential_address = $stakeholder->residential_address;
+
+        $mailing_address_type = $stakeholder->mailing_address_type;
+        $mailing_country_id = $stakeholder->mailing_country_id;
+        $mailing_state_id = $stakeholder->mailing_state_id;
+        $mailing_city_id = $stakeholder->mailing_city_id;
+        $mailing_postal_code = $stakeholder->mailing_postal_code;
+        $mailing_address = $stakeholder->mailing_address;
+
+
+        if ($stakeholder->stakeholder_as = 'i') {
+
+            $full_name = $stakeholder->full_name;
+            $father_name = $stakeholder->father_name;
+            $occupation = $stakeholder->occupation;
+            $cnic = $stakeholder->cnic;
+            $mobile_contact = $stakeholder->mobile_contact;
+            $date_of_birth = $stakeholder->date_of_birth;
+            $nationality = $stakeholder->nationality;
+
+            if (
+                isset($full_name) &&
+                isset($father_name) &&
+                isset($occupation) &&
+                isset($cnic) &&
+                isset($mobile_contact) &&
+                isset($date_of_birth) &&
+                isset($nationality) &&
+
+                isset($residential_address_type) &&
+                isset($residential_country_id) &&
+                isset($residential_state_id) &&
+                isset($residential_city_id) &&
+                isset($residential_postal_code) &&
+                isset($residential_address)
+
+            ) {
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Please Fill Stakeholder All Required Fields First!!!",
+                    'type' => "Individual",
+                    'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
+                ], 200);
+            }
+        } else {
+            $company_name = $stakeholder->full_name;
+            $ntn = $stakeholder->ntn;
+            $reg_no = $stakeholder->cnic;
+            $strn = $stakeholder->strn;
+            $mobile_contact = $stakeholder->mobile_contact;
+            $industry = $stakeholder->industry;
+
+            if (
+                isset($company_name) &&
+                isset($ntn) &&
+                isset($reg_no) &&
+                isset($strn) &&
+                isset($mobile_contact) &&
+                isset($industry) &&
+
+                isset($residential_address_type) &&
+                isset($residential_country_id) &&
+                isset($residential_state_id) &&
+                isset($residential_city_id) &&
+                isset($residential_postal_code) &&
+                isset($residential_address) &&
+
+                isset($mailing_address_type) &&
+                isset($mailing_country_id) &&
+                isset($mailing_state_id) &&
+                isset($mailing_city_id) &&
+                isset($mailing_postal_code) &&
+                isset($mailing_address)
+
+            ) {
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Please Fill Stakeholder All Required Fields First!!!",
+                    'type' => "Company",
+                    'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
+                ], 200);
+            }
+        }
+    }
+
     public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
@@ -310,7 +414,7 @@ class SalesPlanController extends Controller
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
 
-        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+        if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');
         }
 
@@ -823,7 +927,7 @@ class SalesPlanController extends Controller
 
             if ($data[$key]['status'] == '1') {
                 $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
-                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
                     return apiErrorResponse('invalid_amout');
                 }
             }

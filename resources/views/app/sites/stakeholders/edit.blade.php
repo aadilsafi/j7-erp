@@ -889,39 +889,247 @@
 
         var validator = $("#stakeholderForm").validate({
             rules: {
+                'stakeholder_as': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 0;
+                    }
+                },
+                'stakeholder_type': {
+                    required: function() {
+                        return $("#stakeholder_type").val() == 0;
+                    }
+                },
+                'residential[address_type]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'residential[country]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[state]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[city]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[address]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'residential[postal_code]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[address_type]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[country]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[state]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[city]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[address]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[postal_code]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'company[company_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[registration]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[industry]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[company_ntn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[strn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[company_office_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'individual[full_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[father_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[occupation]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[cnic]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[mobile_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[dob]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[nationality]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(
+                            ':checked') && $(
+                                '#stakeholder_type').val() != 'L';
+                    },
+                    min: 1,
+                },
+            },
+            messages: {
+                'individual[nationality]': {
+                    min: "Please select Nationality"
+                },
+                'stakeholder_as': {
+                    required: "Please select stakeholder as",
+                },
+                'residential[address_type]': {
+                    required: "Please select address type",
+                },
+                'residential[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'residential[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'residential[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'residential[address]': {
+                    required: "Please enter address",
+                },
+                'residential[postal_code]': {
+                    required: "Please enter postal code",
+                },
+                'mailing[address_type]': {
+                    required: "Please select address type",
+                },
+                'mailing[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'mailing[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'mailing[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'mailing[address]': {
+                    required: "Please enter address",
+                },
+                'mailing[postal_code]': {
+                    required: "Please enter postal code",
+                },
                 'mailing_address': {
-                    required: true,
+                    required: "Please enter mailing address",
                 },
                 'address': {
-                    required: true,
+                    required: "Please enter address",
                 },
                 'optional_contact': {
-                    required: false,
+                    required: "Please enter optional contact",
                 },
                 'full_name': {
-                    required: true,
+                    required: "Please enter full name",
                 },
                 'father_name': {
-                    required: true,
+                    required: "Please enter father name",
                 },
                 'cnic': {
-                    required: true,
+                    required: "Please enter cnic",
                 },
                 'registration': {
-                    required: true,
+                    required: "Please enter registration",
                 },
                 'company_name': {
-                    required: true,
+                    required: "Please enter company name",
                 },
                 'email': {
-                    required: true,
+                    required: "Please enter email",
                 }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
             wrapper: "div",
             submitHandler: function(form) {
-                form.submit();
+                if ($("#stakeholder_as").val() == 'i' || $("#stakeholder_as").val() == 'c') {
+                    form.submit();
+                }
             }
         });
     </script>

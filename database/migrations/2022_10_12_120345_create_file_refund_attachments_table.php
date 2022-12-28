@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('file_refund_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('file_refund_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('file_refund_id')->nullable();
             $table->string('label');
             $table->timestamps();
             $table->softDeletes();

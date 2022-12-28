@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('accounting_starting_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('model');
             $table->string('level_code');
             $table->string('starting_code');

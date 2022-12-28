@@ -15,16 +15,17 @@ return new class extends Migration
     {
         Schema::create('file_management', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('unit_id')->constrained('units');
-            $table->foreignId('sales_plan_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
-            $table->foreignId('file_action_id')->constrained('file_actions');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('sales_plan_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable('stakeholders');
+            $table->bigInteger('file_action_id')->nullable('file_actions');
             $table->longText('stakeholder_data')->nullable();
             $table->longText('unit_data')->nullable();
-            $table->string('registration_no');
-            $table->string('application_no');
-            $table->string('deal_type');
+            $table->string('registration_no')->nullable();
+            $table->string('application_no')->nullable();
+            $table->string('deal_type')->nullable();
+            $table->string('note_serial_number')->nullable();
             $table->boolean('status')->default(0);
             $table->string('comments')->nullable();
             $table->dateTime('created_date')->nullable();

@@ -212,8 +212,9 @@
 
         function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
+            paid_amount = paid_amount.replace(/,/g, "");
             let amount_refunded = 0.0;
-            let cancellationCharges = $('#cancellation_charges').val();
+            let cancellationCharges = $('#cancellation_charges').val().replace(/,/g, "");
             if (cancellationCharges < parseFloat(paid_amount)) {
                 amount_refunded = parseFloat(paid_amount) - cancellationCharges;
                 $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());

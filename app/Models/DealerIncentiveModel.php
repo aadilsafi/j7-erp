@@ -21,6 +21,7 @@ class DealerIncentiveModel extends Model
         'status',
         'unit_IDs',
         'comments',
+        'serial_no',
     ];
 
     public function getActivitylogOptions(): LogOptions

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-            $table->foreignId('state_id')->constrained();
+            $table->bigInteger('state_id')->nullable();
             $table->string('state_code')->nullable();
             $table->unsignedInteger('country_id')->index()->nullable();
             $table->string('country_code')->nullable();

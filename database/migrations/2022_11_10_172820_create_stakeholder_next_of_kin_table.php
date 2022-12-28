@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('stakeholder_next_of_kin', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->bigInteger('stakeholder_id');
-            $table->bigInteger('kin_id');
-            $table->string('relation');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable();
+            $table->bigInteger('kin_id')->nullable();
+            $table->string('relation')->nullable();
             $table->boolean('is_imported')->default(false);
             $table->string('comments')->nullable();
             $table->timestamps();

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('units', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('floor_id')->constrained();
+            $table->bigInteger('floor_id')->nullable();
             $table->string('name')->nullable();
             $table->float('width')->default(0);
             $table->float('length')->default(0);
@@ -32,8 +32,8 @@ return new class extends Migration
             $table->float('gross_area')->default(0);
             $table->float('price_sqft')->default(0);
             $table->double('total_price')->default(0);
-            $table->foreignId('type_id')->constrained();
-            $table->foreignId('status_id')->constrained();
+            $table->bigInteger('type_id')->nullable();
+            $table->bigInteger('status_id')->nullable();
             $table->boolean('is_for_rebate')->default(false);
             $table->boolean('active')->default(false);
             $table->json('unit_account')->nullable();

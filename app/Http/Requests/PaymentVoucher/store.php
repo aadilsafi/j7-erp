@@ -25,64 +25,64 @@ class store extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'receipts' => 'required|array',
-            'receipts.*.unit_id' => 'required|numeric',
-            'receipts.*.mode_of_payment' => 'required',
-            'receipts.*.amount_in_numbers' => 'required',
-            'amount_received' => 'required',
-            'comments' => 'sometimes',
-        ];
+        $rules['mode_of_payment'] =  ['required'];
+        if ($this->input('mode_of_payment') == "Cheque") {
+            $rules['bank_name'] = ['required'];
+            $rules['bank_branch'] = ['required'];
+            $rules['bank_address'] = ['required'];
+            $rules['bank_contact_number'] = ['required'];
+            if ($this->input('bank_id') == 0) {
+                $rules['bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('bank_id'))];
+                // $rules['bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('bank_id'))];
+            }
+            $rules['cheque_no'] = ['required'];
+            // $rules['attachment'] = ['required'];
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Cheque") {
-            $rules['receipts.*.bank_name'] = ['required'];
-            $rules['receipts.*.bank_branch'] = ['required'];
-            $rules['receipts.*.bank_address'] = ['required'];
-            $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
-            // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
-            $rules['receipts.*.cheque_no'] = ['required'];
-            $rules['attachment'] = ['required'];
+            return  $rules;
         }
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Online") {
-            $rules['receipts.*.bank_name'] = ['required'];
-            $rules['receipts.*.bank_branch'] = ['required'];
-            $rules['receipts.*.bank_address'] = ['required'];
-            $rules['receipts.*.bank_contact_number'] = ['required'];
-            $rules['receipts.*.bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('receipts.*.bank_id')[0])];
-            // $rules['receipts.*.bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('receipts.*.bank_id')[0])];
-            $rules['receipts.*.transaction_date'] = ['required'];
-            $rules['receipts.*.online_instrument_no'] = ['required'];
-            $rules['attachment'] = ['required'];
+        if ($this->input('mode_of_payment') == "Online") {
+            $rules['bank_name'] = ['required'];
+            $rules['bank_branch'] = ['required'];
+            $rules['bank_address'] = ['required'];
+            $rules['bank_contact_number'] = ['required'];
+            if ($this->input('bank_id') == 0) {
+                $rules['bank_account_number'] = ['required', 'numeric', Rule::unique('account_heads', 'code')->ignore($this->input('bank_id'))];
+                // $rules['bank_branch_code'] = ['required', 'numeric', Rule::unique('banks', 'branch_code')->ignore($this->input('bank_id'))];
+            }
+            $rules['transaction_date'] = ['required'];
+            $rules['online_instrument_no'] = ['required'];
+            // $rules['attachment'] = ['required'];
+
+            return  $rules;
         }
 
-        if ($this->input('receipts.*.mode_of_payment')[0] == "Other") {
-            $rules['receipts.*.other_value'] = ['required'];
+        if ($this->input('mode_of_payment') == "Other") {
+            $rules['other_value'] = ['required'];
+            return  $rules;
         }
-
         return  $rules;
     }
 
     public function messages()
     {
         return [
-            "receipts.*.unit_id.required" => "Unit id is required.",
-            "receipts.*.unit_id.numeric" => "Unit id is required.",
-            "receipts.*.mode_of_payment.required" => "Mode of Payment is Required.",
-            "receipts.*.amount_in_numbers.required" => "Amount is Required.",
+            "unit_id.required" => "Unit id is required.",
+            "unit_id.numeric" => "Unit id is required.",
+            "mode_of_payment.required" => "Mode of Payment is Required.",
+            "amount_in_numbers.required" => "Amount is Required.",
             "amount_received.required" => "Total Amount Received is Required.",
-            'receipts.*.other_value' => "Other value is required when Other mode of payment is selected.",
-            'receipts.*.cheque_no' => "Cheque number is required when Cheque mode of payment is selected.",
-            'receipts.*.transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
-            'receipts.*.online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
+            'other_value' => "Other value is required when Other mode of payment is selected.",
+            'cheque_no' => "Cheque number is required when Cheque mode of payment is selected.",
+            'transaction_date' => "Transaction Date is required when Online mode of payment is selected.",
+            'online_instrument_no' => "Transaction Number is required when Online mode of payment is selected.",
             "attachment" => "Attachment is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_name" => "Bank Name is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
-            "receipts.*.bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
+            "bank_name" => "Bank Name is Required if mode of payment is Cheque or Online.",
+            "bank_branch" => "Bank Branch is Required if mode of payment is Cheque or Online.",
+            "bank_account_number" => "Bank Account Number is Uniquely Required if mode of payment is Cheque or Online.",
+            "bank_contact_number" => "Bank Contact Number is Required if mode of payment is Cheque or Online.",
+            "bank_branch_code" => "Bank Branch Code is Uniquely Required if mode of payment is Cheque or Online.",
+            "bank_address" => "Bank Address is Required if mode of payment is Cheque or Online.",
         ];
     }
 
@@ -95,19 +95,19 @@ class store extends FormRequest
 
     public function withValidator($validator)
     {
-        if (!$validator->fails()) {
-            $validator->after(function ($validator) {
-                $modeOfPayment = $this->input('receipts.*.mode_of_payment');
-                $attachment = $this->attachment;
-                $amount_received = $this->input('amount_received');
-                $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
-                if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
-                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
-                }
-                if ($amount_in_numbers[0] >  $amount_received) {
-                    $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
-                }
-            });
-        }
+        // if (!$validator->fails()) {
+        //     $validator->after(function ($validator) {
+        //         $modeOfPayment = $this->input('mode_of_payment');
+        //         $attachment = $this->attachment;
+        //         $amount_received = $this->input('amount_received');
+        //         $amount_in_numbers = $this->input('amount_in_numbers');
+        //         if ($modeOfPayment[0] != 'Cash' && $modeOfPayment[0] != 'Other'  && $attachment == null) {
+        //             $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
+        //         }
+        //         if ($amount_in_numbers[0] >  $amount_received) {
+        //             $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
+        //         }
+        //     });
+        // }
     }
 }

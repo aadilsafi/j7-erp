@@ -78,7 +78,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                                 <i class="bi bi-box-arrow-right" ></i>
                                 </span> (' . $ledger->origin_name . ')
                             </a>';
-                } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11 || $ledger->account_action_id == 12 || $ledger->account_action_id == 27) {
+                } else if ($ledger->account_action_id == 2 || $ledger->account_action_id == 9 || $ledger->account_action_id == 10 || $ledger->account_action_id == 11 || $ledger->account_action_id == 12 || $ledger->account_action_id == 27 || $ledger->account_action_id == 29) {
                     $receipt = $file = DB::table('receipts')
                         ->where('id', $ledger->receipt_id)
                         ->first();

@@ -168,13 +168,13 @@
 @endsection
 
 @section('custom-js')
-<script>
-var cp_state = 0;
+    <script>
+        var cp_state = 0;
         var cp_city = 0;
         var ra_state = 0;
         var ra_city = 0;
-        </script>
-{{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
+    </script>
+    {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
 
     <script>
         showBlockUI('#stakeholderForm');
@@ -202,7 +202,6 @@ var cp_state = 0;
                 url: ''
             }
         });
-
     </script>
 
     <script type="text/javascript">
@@ -296,48 +295,6 @@ var cp_state = 0;
             return cnicRepeated === 1 || cnicRepeated === 0;
 
         }, "Contact Person CNIC can't be duplicated");
-       
-
-
-        var validator = $("#stakeholderForm").validate({
-            rules: {
-                'mailing_address': {
-                    required: true,
-                },
-                'address': {
-                    required: true,
-                },
-                'optional_contact': {
-                    required: false,
-                },
-                'full_name': {
-                    required: true,
-                },
-                'father_name': {
-                    required: true,
-                },
-                'cnic': {
-                    required: true,
-                },
-                'registration': {
-                    required: true,
-                },
-                'company_name': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 'i'
-                    },
-                },
-                'email': {
-                    required: true,
-                }
-            },
-            errorClass: 'is-invalid text-danger',
-            errorElement: "span",
-            wrapper: "div",
-            submitHandler: function(form) {
-                form.submit();
-            }
-        });
 
         @if (!isset($data['contact-persons']))
             $('#delete-contact-person').trigger('click');

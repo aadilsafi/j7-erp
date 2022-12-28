@@ -162,15 +162,15 @@ class BankController extends Controller
     public function saveImport(Request $request, $site_id)
     {
         DB::transaction(function () use ($request, $site_id) {
-            $validator = \Validator::make($request->all(), [
-                'fields.*' => 'required',
-            ], [
-                'fields.*.required' => 'Must Select all Fields',
-                'fields.*.distinct' => 'Field can not be duplicated',
+            // $validator = \Validator::make($request->all(), [
+            //     'fields.*' => 'required',
+            // ], [
+            //     'fields.*.required' => 'Must Select all Fields',
+            //     'fields.*.distinct' => 'Field can not be duplicated',
 
-            ]);
+            // ]);
 
-            $validator->validate();
+            // $validator->validate();
             $model = new TempBank();
             $tempdata = $model->cursor();
             $tempCols = $model->getFillable();

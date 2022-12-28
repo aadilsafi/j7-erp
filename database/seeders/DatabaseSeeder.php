@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             CitiesTableChunkThreeSeeder::class,
             CitiesTableChunkFourSeeder::class,
             CitiesTableChunkFiveSeeder::class,
-
+            CitiesChunkSixSeeder::class,
             RoleTableSeeder::class,
             PermissionTableSeeder::class,
             StatusTableSeeder::class,

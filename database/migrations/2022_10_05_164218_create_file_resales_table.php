@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('file_resales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('file_id')->constrained('file_management');
-            $table->foreignId('unit_id')->constrained('units');
-            $table->foreignId('sales_plan_id')->constrained();
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('file_id')->nullable();
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('sales_plan_id')->nullable();
+            $table->bigInteger('stakeholder_id')->nullable();
             $table->longText('stakeholder_data')->nullable();
             $table->longText('unit_data')->nullable();
             $table->string('amount_to_be_refunded')->nullable();

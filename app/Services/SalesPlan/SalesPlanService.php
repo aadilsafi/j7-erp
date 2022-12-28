@@ -73,8 +73,6 @@ class SalesPlanService implements SalesPlanInterface
             $site = (new Site())->find($site_id);
             $unit = (new Unit())->find($inputs['unit_id']);
 
-            // dd($unit);
-
             $authRoleId = auth()->user()->roles->pluck('id')->first();
 
             $approveSalesPlanPermission = (new Role())->find($authRoleId)->hasPermissionTo('sites.floors.units.sales-plans.approve-sales-plan');
@@ -84,16 +82,24 @@ class SalesPlanService implements SalesPlanInterface
 
             $stakeholderInput = $inputs['stackholder'];
             $individual = $inputs['individual'];
+
             $company = $inputs['company'];
 
-            if ($stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
+            if (isset($individual['cnic']) && $stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
                 throw new GeneralException('Stakeholder CNIC already exists');
             }
-            if ($stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
+            if (isset($company['cnic']) && $stakeholderInput['stackholder_id'] == 0 && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $company['cnic'])->exists()) {
                 throw new GeneralException('Company Registration No already exists');
             }
 
-            if ($inputs['stakeholder_as'] == 'i') {
+
+            if (!isset($inputs['stakeholder_as'])) {
+                $leadStakeholder = Stakeholder::find($stakeholderInput['stackholder_id']);
+                $stakeholder_as = $leadStakeholder->stakeholder_as;
+            } else {
+                $stakeholder_as = $inputs['stakeholder_as'];
+            }
+            if ($stakeholder_as == 'i') {
                 $stakeholderData = [
                     'full_name' => $individual['full_name'],
                     'father_name' => $individual['father_name'],
@@ -109,12 +115,12 @@ class SalesPlanService implements SalesPlanInterface
                     'office_contact' => $individual['office_contact'],
                     'OfficeContactCountryDetails' => $inputs['OfficeContactCountryDetails'],
                     'referred_by' => $individual['referred_by'],
-                    'source' => $individual['source'],
+                    'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
                     'is_local' => $individual['is_local'],
                     'nationality' => $individual['nationality'],
                 ];
-            } else if ($inputs['stakeholder_as'] == 'c') {
+            } else if ($stakeholder_as == 'c') {
                 $stakeholderData = [
                     'full_name' => $company['company_name'],
                     'industry' => $company['industry'],
@@ -132,7 +138,7 @@ class SalesPlanService implements SalesPlanInterface
                     'origin' => $company['origin'],
                 ];
             }
-            $stakeholderData['stakeholder_as'] = $inputs['stakeholder_as'];
+            $stakeholderData['stakeholder_as'] = $stakeholder_as;
             $stakeholderData['site_id'] = $site_id;
 
             // residential address fields
@@ -247,6 +253,9 @@ class SalesPlanService implements SalesPlanInterface
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 
+            if(Auth::user()->hasRole('CRM')){
+                $sales_plan_data['is_from_crm'] = true;
+            }
             if (isset($stakeholderInput['next_of_kin'])) {
 
                 $sales_plan_data['kin_data'] = json_encode($stakeholderInput['next_of_kin']);
@@ -321,7 +330,7 @@ class SalesPlanService implements SalesPlanInterface
                         'amount' => floatval($expense['amount']),
                         'type' => 'additional_expense',
                         'paid_amount' => 0,
-                        'remaining_amount' => floatval($expense['expense_label']),
+                        'remaining_amount' => floatval($expense['amount']),
                         'remarks' => $expense['remarks'],
                         'installment_order' => $count,
                         'status' => 'unpaid',

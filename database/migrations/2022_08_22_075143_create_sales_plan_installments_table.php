@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sales_plan_installments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sales_plan_id')->constrained();
+            $table->bigInteger('sales_plan_id')->nullable();
             $table->string('details')->nullable();
             $table->datetime('date')->nullable();
             $table->string('type')->nullable();

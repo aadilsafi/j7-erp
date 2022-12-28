@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('account_actions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->unique();
             $table->timestamps();

@@ -84,7 +84,15 @@ Route::group([
     Route::get('/', function () {
         return redirect()->route('login.view');
     });
-
+    Route::group(['middleware' => ['crm_api']], function () {
+        Route::group(['prefix' => 'sites', 'as' => 'sites.'], function () {
+            Route::group(['prefix' => '/{site_id}'], function () {
+                Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+                    Route::get('{user_id}/generate/{crm_lead}', [SalesPlanController::class, 'generateSalesPlan'])->name('generateSalesPlan');
+                });
+            });
+        });
+    });
 
     // Route::group(['middleware' => ['auth', ]], function () {
     Route::group(['middleware' => ['auth', 'permission']], function () {
@@ -241,9 +249,6 @@ Route::group([
                                 Route::put('update', [FifthLevelAccountController::class, 'update'])->name('update');
                             });
                         });
-
-
-
                     });
 
                     // Journal Voucher Routes
@@ -267,15 +272,11 @@ Route::group([
                                 Route::get('post-voucher', [JournalVoucherController::class, 'postVoucher'])->name('post-voucher');
                                 Route::get('revert-voucher', [JournalVoucherController::class, 'revertVoucher'])->name('revert-voucher');
                                 Route::get('dis-approve-voucher', [JournalVoucherController::class, 'disapproveVoucher'])->name('dis-approve-voucher');
-
-
                             });
                         });
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-
                         });
-
                     });
 
 
@@ -491,13 +492,14 @@ Route::group([
 
                                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                                         Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
+                                        Route::post('/check-stakeholder', [SalesPlanController::class, 'checkStakeholder'])->name('check-stakeholder');
                                     });
 
                                     Route::group(['prefix' => '/{id}'], function () {
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
                                         Route::get('initail-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
-                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
+                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('updated-sales-plan');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
                                     });
 
@@ -522,7 +524,7 @@ Route::group([
                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                        Route::get('generate/installments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generate-installments');
+                        Route::get('generateInstallments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generateInstallments');
                     });
                 });
 

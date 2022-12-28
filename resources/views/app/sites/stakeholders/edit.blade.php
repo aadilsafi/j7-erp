@@ -58,8 +58,7 @@
         }
 
         /* .filepond--item {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: calc(20% - 0.5em);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                        } */
     </style>
 @endsection
 
@@ -172,7 +171,7 @@
             $('#common_form').hide()
             $('#stakeholderType').hide();
 
-            $('#nationality').val({{$stakeholder->nationality}}).trigger('change');
+            $('#nationality').val({{ $stakeholder->nationality }}).trigger('change');
 
             var dob = $("#dob").flatpickr({
                 defaultDate: "{{ $stakeholder->date_of_birth }}",
@@ -250,6 +249,8 @@
                 $('#mobileContactCountryDetails').val(JSON.stringify(intlMobileContact.getSelectedCountryData()));
             @endif
 
+            intlMobileContact.setNumber('{{ $stakeholder->mobile_contact }}');
+
             // Individual office contact no
             var officeContact = document.querySelector("#office_contact");
             intlOfficeContact = window.intlTelInput(officeContact, ({
@@ -273,6 +274,8 @@
                 var OptionalselectdCountry = {!! $stakeholder->OfficeContactCountryDetails != null ? $stakeholder->OfficeContactCountryDetails : null !!}
                 intlOfficeContact.setCountry(OptionalselectdCountry['iso2']);
             @endif
+
+            intlOfficeContact.setNumber('{{ $stakeholder->office_contact }}');
 
             // Company Contact no fields
             var companyOfficeContact = document.querySelector("#company_office_contact");
@@ -662,29 +665,29 @@
             mailing_country.trigger('change');
 
             @if (!is_null(old('mobileContactCountryDetails')))
-                var mbCountry = {!! old('mobileContactCountryDetails') !!}
-                $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
-                intlMobileContact.setCountry(mbCountry['iso2']);
+                // var mbCountry = {!! old('mobileContactCountryDetails') !!}
+                // $('#mobileContactCountryDetails').val({!! old('mobileContactCountryDetails') !!})
+                intlMobileContact.setNumber('{{ old('individual.mobile_contact') }}');
             @endif
             @if (!is_null(old('OfficeContactCountryDetails')))
                 // var officeCountry = {!! old('OfficeContactCountryDetails') !!}
                 // $('#OfficeContactCountryDetails').val({!! old('OfficeContactCountryDetails') !!})
                 // intlOfficeContact.setCountry(officeCountry['iso2']);
-                intlOfficeContact.setCountry('pk');
+                intlOfficeContact.setNumber('{{ old('individual.office_contact') }}');
             @endif
             @if (!is_null(old('CompanyOfficeContactCountryDetails')))
                 // var companyContact = {!! old('CompanyOfficeContactCountryDetails') !!}
                 // $('#CompanyOfficeContactCountryDetails').val({!! old('CompanyOfficeContactCountryDetails') !!})
-                intlCompanyMobileContact.setCountry('pk');
+                intlCompanyMobileContact.setNumber('{{ old('company.company_office_contact') }}');
             @endif
             @if (!is_null(old('companyMobileContactCountryDetails')))
                 // var officeOptional = {!! old('companyMobileContactCountryDetails') !!}
                 // $('#companyMobileContactCountryDetails').val({!! old('companyMobileContactCountryDetails') !!})
-                intlcompanyOptionalContact.setCountry('pk');
+                intlcompanyOptionalContact.setNumber('{{ old('company.company_optional_contact') }}');
             @endif
 
             $('#is_local').on('change', function() {
-            
+
                 if ($(this).is(':checked')) {
                     $('#nationality').val(167).trigger('change');
                 } else {
@@ -712,7 +715,7 @@
         });
 
         function performAction(action) {
-            console.log(action);
+
             if (action == 'C') {
                 $('#div-next-of-kin').show();
             }
@@ -809,7 +812,7 @@
 
                             $('[name="contact-persons[' + index + '][address]"]').val(stakeholderData
                                 .address);
-                            console.log($('[name="contact-persons[' + index + '][address]"]'))
+
                         }
                         hideBlockUI('#stakeholderForm');
                     },
@@ -859,7 +862,7 @@
         }, "Kins can't be duplicated");
 
         $.validator.addMethod("ContactNoError", function(value, element) {
-            // console.log(element.id)
+
             if (element.id == 'mobile_contact') {
                 return intlMobileContact.isValidNumber();
             }
@@ -871,10 +874,11 @@
         $.validator.addMethod("OPTContactNoError", function(value, element) {
 
             if (value.length > 0) {
-                if (element.name == 'office_contact') {
+                if (element.id == 'office_contact') {
                     return intlOfficeContact.isValidNumber();
                 }
-                if (element.name == 'company_optional_contact') {
+                if (element.id == 'company_optional_contact') {
+
                     return intlcompanyOptionalContact.isValidNumber();
                 }
             } else {
@@ -885,39 +889,247 @@
 
         var validator = $("#stakeholderForm").validate({
             rules: {
+                'stakeholder_as': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 0;
+                    }
+                },
+                'stakeholder_type': {
+                    required: function() {
+                        return $("#stakeholder_type").val() == 0;
+                    }
+                },
+                'residential[address_type]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'residential[country]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[state]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[city]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'residential[address]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'residential[postal_code]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[address_type]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[country]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[state]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[city]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                    min: function() {
+                        return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                    },
+                },
+                'mailing[address]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'mailing[postal_code]': {
+                    required: function() {
+                        return $('#stakeholder_type').val() != 'L';
+                    },
+                },
+                'company[company_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'company[registration]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[industry]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[company_ntn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[strn]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c' ;
+                    },
+                },
+                'company[company_office_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'c';
+                    },
+                },
+                'individual[full_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[father_name]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[occupation]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[cnic]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[mobile_contact]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i';
+                    },
+                },
+                'individual[dob]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' ;
+                    },
+                },
+                'individual[nationality]': {
+                    required: function() {
+                        return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(
+                            ':checked') && $(
+                                '#stakeholder_type').val() != 'L';
+                    },
+                    min: 1,
+                },
+            },
+            messages: {
+                'individual[nationality]': {
+                    min: "Please select Nationality"
+                },
+                'stakeholder_as': {
+                    required: "Please select stakeholder as",
+                },
+                'residential[address_type]': {
+                    required: "Please select address type",
+                },
+                'residential[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'residential[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'residential[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'residential[address]': {
+                    required: "Please enter address",
+                },
+                'residential[postal_code]': {
+                    required: "Please enter postal code",
+                },
+                'mailing[address_type]': {
+                    required: "Please select address type",
+                },
+                'mailing[country]': {
+                    required: "Please select country",
+                    min: "Please select country"
+                },
+                'mailing[state]': {
+                    required: "Please select state",
+                    min: "Please select state"
+                },
+                'mailing[city]': {
+                    required: "Please select city",
+                    min: "Please select city"
+                },
+                'mailing[address]': {
+                    required: "Please enter address",
+                },
+                'mailing[postal_code]': {
+                    required: "Please enter postal code",
+                },
                 'mailing_address': {
-                    required: true,
+                    required: "Please enter mailing address",
                 },
                 'address': {
-                    required: true,
+                    required: "Please enter address",
                 },
                 'optional_contact': {
-                    required: false,
+                    required: "Please enter optional contact",
                 },
                 'full_name': {
-                    required: true,
+                    required: "Please enter full name",
                 },
                 'father_name': {
-                    required: true,
+                    required: "Please enter father name",
                 },
                 'cnic': {
-                    required: true,
+                    required: "Please enter cnic",
                 },
                 'registration': {
-                    required: true,
+                    required: "Please enter registration",
                 },
                 'company_name': {
-                    required: true,
+                    required: "Please enter company name",
                 },
                 'email': {
-                    required: true,
+                    required: "Please enter email",
                 }
             },
             errorClass: 'is-invalid text-danger',
             errorElement: "span",
             wrapper: "div",
             submitHandler: function(form) {
-                form.submit();
+                if ($("#stakeholder_as").val() == 'i' || $("#stakeholder_as").val() == 'c') {
+                    form.submit();
+                }
             }
         });
     </script>

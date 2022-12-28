@@ -17,44 +17,60 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = (new User())->create([
-            'name' => 'Syed Aizaz Haider Shah',
+        $user = (new User())->updateOrCreate([
+            'site_id' => 1,
             'email' => 'admin@erp.com',
             'contact' => '03100177771',
-            'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            'remember_token' => Str::random(10),
+        ], [
+            'name' => 'Syed Aizaz Haider Shah',
+            'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
-            'site_id' => 1,
+            'remember_token' => Str::random(10),
         ]);
         $user->assignRole([1]);
 
-        $user = (new User())->create([
+        $user = (new User())->updateOrCreate([
+            'site_id' => 1,
             'name' => 'Admin1',
             'email' => 'admin1@erp.com',
             'contact' => '03100177771',
-            'email_verified_at' => now(),
             'password' => Hash::make('password'),
+        ], [
             'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
-            'site_id' => 1,
         ]);
         $user->assignRole([1]);
 
-        $user = (new User())->create([
+        $user = (new User())->updateOrCreate([
+            'site_id' => 1,
             'name' => 'Gm Sales',
             'email' => 'gmsales@erp.com',
             'contact' => '03100177771',
-            'email_verified_at' => now(),
             'password' => Hash::make('password'),
+        ], [
             'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
-            'site_id' => 1,
         ]);
 
-        $user->assignRole([2]);
+        $user = (new User())->updateOrCreate([
+            'site_id' => 1,
+            'name' => 'CRM',
+            'email' => 'admin@crm.com',
+            'contact' => '+923000000000',
+            'password' => Hash::make('password'),
+        ], [
+            'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        $user->assignRole([10]);
+        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.sales_plan.show']);
     }
 }

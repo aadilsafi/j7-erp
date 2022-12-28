@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('rebate_incentive_models', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('unit_id')->constrained('units');
-            $table->foreignId('stakeholder_id')->constrained('stakeholders');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('stakeholder_id')->constrained('stakeholders');
             $table->longText('stakeholder_data')->nullable();
             $table->longText('unit_data')->nullable();
             $table->string('deal_type')->nullable();
@@ -25,8 +25,8 @@ return new class extends Migration
             $table->string('commision_total')->nullable();
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
-            $table->foreignId('dealer_id')->constrained('stakeholders');
-            $table->foreignId('bank_id')->nullable();
+            $table->bigInteger('dealer_id')->nullable();
+            $table->bigInteger('bank_id')->nullable();
             $table->string('mode_of_payment')->nullable();
             $table->string('other_value')->nullable();
             $table->string('cheque_no')->nullable();

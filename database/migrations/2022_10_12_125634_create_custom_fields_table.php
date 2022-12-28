@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('custom_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('name', 120)->nullable();
             $table->string('slug', 55)->unique();
             $table->string('type', 50)->nullable();

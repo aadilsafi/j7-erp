@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('temp_kins', function (Blueprint $table) {
             $table->id();
-            $table->string('stakeholder_cnic');
-            $table->string('kin_cnic');
-            $table->string('relation');
+            $table->string('stakeholder_cnic')->nullable();
+            $table->string('kin_cnic')->nullable();
+            $table->string('relation')->nullable();
             $table->timestamps();
         });
     }

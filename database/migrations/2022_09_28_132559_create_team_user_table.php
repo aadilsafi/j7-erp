@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('team_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('team_id')->constrained('teams');
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->bigInteger('team_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

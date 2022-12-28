@@ -64,8 +64,8 @@
                                         <th rowspan="2" class="text-nowrap">SHORT LABEL</th>
                                         <th rowspan="2">UNITS</th>
                                         <th colspan="6">STATUSES</th>
-                                        @if (count($customFields) > 0) 
-                                            @foreach ($customFields as $customfields) 
+                                        @if (count($customFields) > 0)
+                                            @foreach ($customFields as $customfields)
                                             <th rowspan="2" class="text-nowrap">{{$customfields->name}}</th>
                                             @endforeach
                                        @endif
@@ -98,8 +98,8 @@
                                         <th>TOKEN</th>
                                         <th>HOLD</th>
                                         <th class="text-nowrap">Partial Paid</th>
-                                        @if (count($customFields) > 0) 
-                                            @foreach ($customFields as $customfields) 
+                                        @if (count($customFields) > 0)
+                                            @foreach ($customFields as $customfields)
                                             <th rowspan="2" class="text-nowrap">{{$customfields->name}}</th>
                                             @endforeach
                                         @endif
@@ -157,12 +157,7 @@
                 },
                 scrollX: true,
                 columns: [
-                    // @can('sites.floors.destroy-selected')
-                    //     {
-                    //         data: 'check',
-                    //         name: 'check',
-                    //     },
-                    // @endcan 
+
                     {
                         data: 'name',
                         name: 'name',
@@ -235,8 +230,8 @@
                         searchable: false,
                         orderable: false,
                     },
-                    @if (count($customFields) > 0) 
-                                            @foreach ($customFields as $customfields) 
+                    @if (count($customFields) > 0)
+                                            @foreach ($customFields as $customfields)
                                             {
                         data: '{{$customfields->slug}}',
                         name: '{{$customfields->name}}',

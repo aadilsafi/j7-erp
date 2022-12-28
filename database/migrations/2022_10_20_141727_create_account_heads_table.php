@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('account_heads', function (Blueprint $table) {
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->nullableMorphs('modelable');
             $table->string('code')->primary();
             $table->string('name')->nullable();

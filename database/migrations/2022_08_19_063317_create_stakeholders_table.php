@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('stakeholders', function (Blueprint $table) {
             $table->id();
+            $table->string('crm_id')->nullable();
+            $table->string('pin_code')->nullable();
             $table->foreignId('site_id')->constrained();
             $table->string('full_name')->nullable();
             $table->string('father_name')->nullable();

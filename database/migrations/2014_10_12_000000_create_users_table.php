@@ -27,11 +27,11 @@ return new class extends Migration
             $table->string('nationality', 50)->default('pakistani');
             $table->string('designation', 50)->nullable();
             $table->string('cnic')->nullable();
-            $table->json('countryDetails')->after('contact')->nullable();
-            $table->string('optional_contact')->after('contact')->nullable();
-            $table->json('OptionalCountryDetails')->after('optional_contact')->nullable();
+            $table->json('countryDetails')->nullable();
+            $table->string('optional_contact')->nullable();
+            $table->json('OptionalCountryDetails')->nullable();
             $table->string('address')->nullable();
-            $table->string('mailing_address')->after('address')->nullable();
+            $table->string('mailing_address')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

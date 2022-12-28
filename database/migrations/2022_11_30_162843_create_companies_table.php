@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('contact_no');
             $table->string('address');
             $table->string('email');
-            $table->json('countryDetails')->after('contact')->nullable();
+            $table->json('countryDetails')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

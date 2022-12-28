@@ -62,7 +62,7 @@ class UserTableSeeder extends Seeder
             'site_id' => 1,
             'name' => 'CRM',
             'email' => 'admin@crm.com',
-            'contact' => '+923000000000',sites.sales_plan.show
+            'contact' => '+923000000000',
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),

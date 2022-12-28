@@ -46,7 +46,7 @@ class UserTableSeeder extends Seeder
         $user->assignRole([1]);
 
         $user = (new User())->updateOrCreate([
-            'site_id' => 1,sites.sales_plan.show
+            'site_id' => 1,
             'name' => 'Gm Sales',
             'email' => 'gmsales@erp.com',
             'contact' => '03100177771',

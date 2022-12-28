@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('stakeholder_contacts', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('stakeholder_id');
+            $table->bigInteger('stakeholder_id')->nullable();
             $table->integer('stakeholder_contact_id')->nullable();
             $table->bigInteger('country_id')->default(167)->nullable();
             $table->bigInteger('state_id')->default(0)->nullable();

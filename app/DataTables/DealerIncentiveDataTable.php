@@ -39,6 +39,12 @@ class DealerIncentiveDataTable extends DataTable
             ->editColumn('dealer_id', function ($dealerIncentive) {
                 return $dealerIncentive->dealer->full_name;
             })
+            ->editColumn('dealer_incentive', function ($dealerIncentive) {
+                return number_format($dealerIncentive->dealer_incentive);
+            })
+            ->editColumn('total_unit_area', function ($dealerIncentive) {
+                return number_format($dealerIncentive->total_unit_area);
+            })
             ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
                 return number_format($dealerIncentive->total_dealer_incentive);
             })
@@ -139,21 +145,21 @@ class DealerIncentiveDataTable extends DataTable
             )
             ->rowGroupDataSrc('dealer_id')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '',
-                    ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 3,
+                //     'render' => "function (data, type, full, setting) {
+                //         var role = JSON.parse(data);
+                //         return '';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '',
+                //     ]
+                // ],
             ])
             ->orders([
                 [2, 'asc'],
@@ -172,7 +178,7 @@ class DealerIncentiveDataTable extends DataTable
         // $editPermission =  Auth::user()->hasPermissionTo('sites.receipts.show');
         return [
 
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            // Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
             Column::make('dealer_incentive')->title('Dealer Incentive')->addClass('text-nowrap text-center'),

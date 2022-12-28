@@ -1,11 +1,9 @@
-
 @include('app.sites.stakeholders.partials.stakeholder-form-fields')
-    
-    {{-- custom fields --}}
+
+{{-- custom fields --}}
 @if (isset($customFields) && count($customFields) > 0)
 
-    <div class="card" id="custom_fields"
-        style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+    <div class="card" id="custom_fields" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
         <div class="card-header">
             <h3> Custom Fields</h3>
         </div>
@@ -50,11 +48,12 @@
                                             <label class="form-label" style="font-size: 15px"
                                                 id="kin_{{ $key }}" for="stakeholder_type">Select Next Of
                                                 Kin <span class="text-danger">*</span></label>
-                                            <select class="form-control kinId uniqueKinId"
-                                                id="kin_{{ $key }}"
+                                            <select class="form-control kinId uniqueKinId" id="kin_{{ $key }}"
                                                 name="next_of_kin[{{ $key }}][stakeholder_id]">
                                                 <option value="0" selected>Select Next Of Kin</option>
                                                 @foreach ($stakeholders as $stakeholderssss)
+                                                    @continue(isset($stakeholder) && $stakeholderssss->id == $stakeholder->id)
+
                                                     <option value="{{ $stakeholderssss->id }}"
                                                         {{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? ($stakeholderssss->id == $KinData->kin_id ? 'selected' : '') : '' }}>
                                                         {{ $stakeholderssss->full_name }}</option>
@@ -69,8 +68,8 @@
                                                 class="form-control form-control-md @error('relation') is-invalid @enderror"
                                                 id="relation_{{ $key }}"
                                                 value="{{ isset($stakeholder) && count($stakeholder->nextOfKin) > 0 ? $KinData->relation : '' }}"
-                                                name="next_of_kin[{{ $key }}][relation]"
-                                                placeholder="Relation" value="" />
+                                                name="next_of_kin[{{ $key }}][relation]" placeholder="Relation"
+                                                value="" />
                                         </div>
                                     </div>
                                 </div>
@@ -121,6 +120,8 @@
                                             name="stakeholders[{{ $key }}][stakeholder_id]">
                                             <option value="0" selected>Select Stakeholder</option>
                                             @foreach ($stakeholders as $stakeholderssss)
+                                                @continue(isset($stakeholder) && $stakeholderssss->id == $stakeholder->id)
+
                                                 <option value="{{ $stakeholderssss->id }}"
                                                     {{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? ($stakeholderssss->id == $stakeholderData->stakeholder_id ? 'selected' : '') : '' }}>
                                                     {{ $stakeholderssss->full_name }}</option>
@@ -135,8 +136,8 @@
                                             class="form-control form-control-md @error('relation') is-invalid @enderror"
                                             id="stakeholders_{{ $key }}[relation]"
                                             value="{{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? $stakeholderData->relation : '' }}"
-                                            name="stakeholders[{{ $key }}][relation]"
-                                            placeholder="Relation" value="" />
+                                            name="stakeholders[{{ $key }}][relation]" placeholder="Relation"
+                                            value="" />
                                     </div>
                                     <div class="col-lg-1 col-md-1 col-sm-1 position-relative text-center">
                                         <button

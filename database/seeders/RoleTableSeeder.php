@@ -79,6 +79,13 @@ class RoleTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'CRM',
+                'guard_name' => 'web',
+                'parent_id'=> 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

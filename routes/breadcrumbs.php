@@ -163,8 +163,13 @@ Breadcrumbs::for('sites.floors.units.sales-plans.index', function (BreadcrumbTra
 });
 
 Breadcrumbs::for('sites.floors.units.sales-plans.create', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
-    $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
+    $trail->parent('sites.sales_plan.show', $site_id);
     $trail->push('Sales Plan Create');
+});
+
+Breadcrumbs::for('sites.floors.units.sales-plans.initail-sales-plan', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
+    $trail->parent('sites.sales_plan.show', $site_id);
+    $trail->push('Sales Plan Preview ');
 });
 
 //Stakholders Breadcrumbs

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sites', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('city_id')->constrained();
+            $table->bigInteger('city_id')->nullable();
             $table->string('address');
             $table->float('area_width');
             $table->float('area_length');

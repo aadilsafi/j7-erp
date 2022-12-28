@@ -34,9 +34,7 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('parent_id', function ($stakeholder) {
-                return Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() != 'Nill' ? Str::of(getStakeholderParentByParentId($stakeholder->parent_id))->ucfirst() : '-';
-            })
+          
             ->editColumn('cnic', function ($stakeholder) {
                 return cnicFormat($stakeholder->cnic);
             })

@@ -70,6 +70,7 @@
                     'salesPlan' => $salesPlan,
                     'customFields' => $customFields,
                     'country' => $country,
+                    'leadSources' => $leadSources,
                 ]) }}
             </div>
 
@@ -138,6 +139,14 @@
 @section('custom-js')
 
     <script>
+        var cp_state = 0;
+        var cp_city = 0;
+        var ra_state = 0;
+        var ra_city = 0;
+    </script>
+    {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
+
+    <script>
         // FilePond.registerPlugin(
         //     FilePondPluginImagePreview,
         //     FilePondPluginFileValidateType,
@@ -167,35 +176,11 @@
         $('#companyForm').hide();
         var selected_state_id = 0;
         var selected_city_id = 0;
+        $("#stakeholder_as").val('i');
+
+        $("#stakeholder_as").trigger('change');
 
         $(document).ready(function() {
-            var input = document.querySelector("#stackholder_contact");
-            intl = window.intlTelInput(input, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-            input.addEventListener("countrychange", function() {
-                $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            });
-            $('#countryDetails').val(JSON.stringify(intl.getSelectedCountryData()))
-            var inputOptional = document.querySelector("#stackholder_optional_contact");
-            intlOptional = window.intlTelInput(inputOptional, ({
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-                preferredCountries: ["pk"],
-                separateDialCode: true,
-                autoPlaceholder: 'polite',
-                formatOnDisplay: true,
-                nationalMode: true
-            }));
-
-            inputOptional.addEventListener("countrychange", function() {
-                $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
-            });
-            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional.getSelectedCountryData()))
 
             $("#payment_due_date").flatpickr({
                 defaultDate: "today",
@@ -215,8 +200,7 @@
             }).on("change", function(e) {
 
                 showBlockUI('#stakeholders_card');
-                $('#companyForm').hide();
-                $('#individualForm').show();
+
                 let stakeholder_id = $(this).val();
 
                 let stakeholderData = {
@@ -228,7 +212,6 @@
                     cnic: '',
                     contact: '',
                     address: '',
-                    email: ''
                 }
                 let div_stakeholder_type = $('#div_stakeholder_type');
                 div_stakeholder_type.hide();
@@ -238,85 +221,230 @@
                     type: 'GET',
                     data: {},
                     success: function(response) {
-
                         if (response.status) {
                             if (response.data) {
                                 stakeholderData = response.data[0];
                             }
-                            country_id.val(stakeholderData.country_id);
-                            country_id.trigger('change');
+                            isDisable = parseFloat(stakeholder_id) > 0 ? true : false;
+
+                            $('#stakeholder_as').val(stakeholderData.stakeholder_as).trigger(
+                                'change');
+                            $("#stakeholder_as").select2({
+                                disabled: isDisable
+                            });
+                            if (stakeholderData.stakeholder_as == 'i') {
+                                $('#full_name').val(stakeholderData.full_name).attr('readonly',
+                                    isDisable && stakeholderData.full_name != null ? true :
+                                    false);
+                                $('#father_name').val(stakeholderData.father_name).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.father_name != null ?
+                                    true :
+                                    false);
+                                $('#occupation').val(stakeholderData.occupation).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.occupation != null ? true :
+                                    false);
+                                $('#designation').val(stakeholderData.designation).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.designation != null ?
+                                    true :
+                                    false);
+                                $('#cnic').val(stakeholderData.cnic).attr('readonly',
+                                    isDisable && stakeholderData.cnic != null ? true :
+                                    false);
+                                $('#ntn').val(stakeholderData.ntn).attr('readonly',
+                                    isDisable && stakeholderData.ntn != null ? true :
+                                    false);
+                                $('#passport_no').val(stakeholderData.passport_no).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.passport_no != null ?
+                                    true :
+                                    false);
+                                $('#individual_email').val(stakeholderData.email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.email != null ? true :
+                                    false);
+                                $('#office_email').val(stakeholderData.office_email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_email != null ?
+                                    true :
+                                    false);
+                                $('#mobile_contact').val(stakeholderData.mobile_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.mobile_contact != null ?
+                                    true :
+                                    false);
+
+                                $('#office_contact').val(stakeholderData.office_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_contact != null ?
+                                    true :
+                                    false);
+                                if (stakeholderData.office_contact != null) {
+                                    intlOfficeContact.setNumber(stakeholderData.office_contact)
+                                }
+
+                                $("#dob").flatpickr({
+                                    defaultDate: stakeholderData.date_of_birth,
+                                })
+                                $("#dob").attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.date_of_birth != null ?
+                                    true :
+                                    false);
+                                $('#referred_by').val(stakeholderData.referred_by).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.referred_by != null ?
+                                    true :
+                                    false);
+                                $('#source').val(stakeholderData.source).trigger('change');
+                                $('#is_local').val(stakeholderData.is_local).trigger('change');
+                                $('#nationality').val(stakeholderData.nationality).trigger(
+                                    'change');
+                            }
+                            if (stakeholderData.stakeholder_as == 'c') {
+                                $('#company_name').val(stakeholderData.full_name).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.full_name != null ?
+                                    true :
+                                    false);
+                                $('#registration').val(stakeholderData.cnic).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.cnic != null ?
+                                    true :
+                                    false);
+                                $('#industry').val(stakeholderData.industry).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.industry != null ?
+                                    true :
+                                    false);
+                                $('#company_office_contact').val(stakeholderData
+                                    .office_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.office_contact != null ?
+                                    true :
+                                    false);
+                                if (stakeholderData.office_contact != null) {
+
+                                    intlCompanyMobileContact.setNumber(stakeholderData
+                                        .office_contact)
+                                }
+                                $('#strn').val(stakeholderData.strn).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.strn != null ?
+                                    true :
+                                    false);
+                                $('#company_ntn').val(stakeholderData.ntn).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.ntn != null ?
+                                    true :
+                                    false);
+                                $('#company_optional_contact').val(stakeholderData
+                                    .mobile_contact).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.mobile_contact != null ?
+                                    true :
+                                    false);
+                                if (stakeholderData.mobile_contact != null) {
+
+                                    intlcompanyOptionalContact.setNumber(stakeholderData
+                                        .mobile_contact)
+                                }
+                                $('#company_email').val(stakeholderData.email).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.referred_by != null ?
+                                    true :
+                                    false);
+                                $('#company_office_email').val(stakeholderData.email)
+                                    .attr(
+                                        'readonly',
+                                        isDisable && stakeholderData.referred_by != null ?
+                                        true :
+                                        false);
+                                $('#website').val(stakeholderData.website).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.website != null ?
+                                    true :
+                                    false);
+                                $('#parent_company').val(stakeholderData.parent_company).attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.parent_company != null ?
+                                    true :
+                                    false);
+                                $('#origin').val(stakeholderData.origin).trigger(
+                                    'change');
+                            }
+
+                            // residential address
+                            $('#residential_address_type').val(stakeholderData
+                                .residential_address_type).attr(
+                                'readonly',
+                                isDisable && stakeholderData.residential_address_type !=
+                                null ?
+                                true :
+                                false);
+                            $('#residential_address').val(stakeholderData.residential_address)
+                                .attr(
+                                    'readonly',
+                                    isDisable && stakeholderData.residential_address != null ?
+                                    true :
+                                    false);
+                            ra_state = stakeholderData.residential_state_id;
+                            ra_city = stakeholderData.residential_city_id;
+
+                            $('#residential_country').val(stakeholderData
+                                .residential_country_id).trigger(
+                                'change');
+                            $('#residential_postal_code').val(stakeholderData
+                                .residential_postal_code).attr(
+                                'readonly',
+                                isDisable && stakeholderData.residential_postal_code !=
+                                null ?
+                                true :
+                                false);
+
+                            // mailing address
+                            $('#mailing_address_type').val(stakeholderData
+                                .mailing_address_type).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_address_type != null ?
+                                true :
+                                false);
+                            $('#mailing_address').val(stakeholderData.mailing_address).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_address != null ?
+                                true :
+                                false);
+                            cp_state = stakeholderData.mailing_state_id;
+                            cp_city = stakeholderData.mailing_city_id;
+
+                            $('#mailing_country').val(stakeholderData
+                                .mailing_country_id).trigger(
+                                'change');
+                            $('#mailing_postal_code').val(stakeholderData
+                                .mailing_postal_code).attr(
+                                'readonly',
+                                isDisable && stakeholderData.mailing_postal_code != null ?
+                                true :
+                                false);
 
                             $('#stackholder_next_of_kin').empty();
                             if (response.data[1].length > 0) {
                                 $('#stakeholderNextOfKin').show();
                                 $.each(response.data[1], function(i, item) {
+
                                     $('#stackholder_next_of_kin').append($('<option>', {
                                         value: item.id,
                                         text: item.full_name + ' s/o ' +
                                             item.father_name + ' ,' + item
                                             .cnic,
                                     }));
+
                                 });
                             } else {
                                 $('#stakeholderNextOfKin').hide();
                             }
-
-                            $('#stackholder_full_name').val(stakeholderData.full_name);
-                            $('#stackholder_father_name').val(stakeholderData.father_name);
-                            $('#stackholder_cnic').val(stakeholderData.cnic);
-                            $('#stackholder_contact').val(stakeholderData.contact);
-                            $('#stackholder_email').val(stakeholderData.email);
-                            $('#stackholder_address').text(stakeholderData.address);
-                            $('#stackholder_occupation').val(stakeholderData.occupation);
-                            $('#stackholder_designation').val(stakeholderData.designation);
-                            $('#stackholder_ntn').val(stakeholderData.ntn);
-                            $('#stackholder_optional_contact').val(stakeholderData
-                                .optional_contact);
-                            $('#stackholder_optional_email').val(stakeholderData
-                                .optional_email);
-                            $('#stackholder_comments').text(stakeholderData.comments);
-                            $('#mailing_address').val(stakeholderData.mailing_address);
-                            $('#nationality').val(stakeholderData.nationality);
-
-                            selected_state_id = stakeholderData.state_id;
-                            selected_city_id = stakeholderData.city_id;
-
-                            if (stakeholderData.stakeholder_as == 'c') {
-                                $('#company_name').val(stakeholderData.full_name);
-                                $('#industry').val(stakeholderData.occupation);
-                                $('#registration').val(stakeholderData.cnic);
-                                $('#ntn').val(stakeholderData.ntn);
-                                $('#companyForm').show();
-                                $('#individualForm').hide();
-
-                            }
-                            if (stakeholderData.stakeholder_as == 'i') {
-
-                                $('#companyForm').hide();
-                                $('#individualForm').show();
-
-                            }
-                            var countryDetails = JSON.parse(stakeholderData.countryDetails);
-
-                            if (countryDetails == null) {
-                                intl.setCountry('pk');
-                            } else {
-                                intl.setCountry(countryDetails['iso2']);
-                            }
-
-                            $('#countryDetails').val(JSON.stringify(intl
-                                .getSelectedCountryData()))
-
-                            var OptionalCountryDetails = JSON.parse(stakeholderData
-                                .OptionalCountryDetails);
-                            if (OptionalCountryDetails == null) {
-                                intlOptional.setCountry('pk');
-                            } else {
-                                intlOptional.setCountry(OptionalCountryDetails['iso2']);
-                            }
-
-                            $('#OptionalCountryDetails').val(JSON.stringify(intlOptional
-                                .getSelectedCountryData()))
 
                             let stakeholderType = '';
                             (stakeholderData.stakeholder_types).forEach(types => {
@@ -330,12 +458,13 @@
                                         types.stakeholder_code + '</p>';
                                 }
                             });
-                            hideBlockUI('#stakeholders_card');
 
                             div_stakeholder_type.html(stakeholderType);
                             div_stakeholder_type.show();
-                        }
 
+
+                        }
+                        hideBlockUI('#stakeholders_card');
                     },
                     error: function(errors) {
                         console.error(errors);
@@ -531,7 +660,6 @@
                 rules: {
                     'transfer_rate': {
                         required: true,
-                        digits: true,
                     },
                     'payment_due_date': {
                         required: true
@@ -548,40 +676,248 @@
                             return checkbtn;
                         }
                     },
-                    'attachment[0][image]': {
+                    'stakeholder_as': {
                         required: function() {
-                            return checkbtn;
+                            return $("#stakeholder_as").val() == 0;
                         }
                     },
-                    'stackholder[full_name]': {
-                        required: true
+                    'stakeholder_type': {
+                        required: function() {
+                            return $("#stakeholder_type").val() == 0;
+                        }
                     },
-                    // 'stackholder[father_name]': {
-                    //     required: true
-                    // },
-
-                    'stackholder[cnic]': {
-                        required: true,
-                        // digits: true,
-                        // maxlength: 13,
-                        // minlength: 13
+                    'residential[address_type]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
                     },
-                    'stackholder[contact]': {
-                        required: true
+                    'residential[country]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
                     },
-                    'stackholder[address]': {
-                        required: true
+                    'residential[state]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
                     },
-                    'stackholder[mailing_address]': {
-                        required: true
+                    'residential[city]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
+                    },
+                    'residential[address]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                    },
+                    'residential[postal_code]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                    },
+                    'mailing[address_type]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                    },
+                    'mailing[country]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
+                    },
+                    'mailing[state]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
+                    },
+                    'mailing[city]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                        min: function() {
+                            return $('#stakeholder_type').val() != 'L' ? 1 : 0;
+                        },
+                    },
+                    'mailing[address]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                    },
+                    'mailing[postal_code]': {
+                        required: function() {
+                            return $('#stakeholder_type').val() != 'L';
+                        },
+                    },
+                    'company[company_name]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c';
+                        },
+                    },
+                    'company[registration]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'company[industry]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'company[company_ntn]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'company[strn]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'company[company_office_contact]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'c';
+                        },
+                    },
+                    'individual[full_name]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i';
+                        },
+                    },
+                    'individual[father_name]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'individual[occupation]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'individual[cnic]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'individual[mobile_contact]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i';
+                        },
+                    },
+                    'individual[dob]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i' && $('#stakeholder_type').val() !=
+                                'L';
+                        },
+                    },
+                    'individual[nationality]': {
+                        required: function() {
+                            return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(
+                                ':checked') && $(
+                                '#stakeholder_type').val() != 'L';
+                        },
+                        min: 1,
                     },
                 },
-                // messages: {
-                //     'stackholder[cnic]': {
-                //         maxlength: "Cnic can't be greater then {0} digits without dashes",
-                //         minlength: "Cnic can't be less then {0} digits without dashes",
-                //     }
-                // },
+                messages: {
+                    'individual[nationality]': {
+                        min: "Please select Nationality"
+                    },
+                    'stakeholder_as': {
+                        required: "Please select stakeholder as",
+                    },
+                    'residential[address_type]': {
+                        required: "Please select address type",
+                    },
+                    'residential[country]': {
+                        required: "Please select country",
+                        min: "Please select country"
+                    },
+                    'residential[state]': {
+                        required: "Please select state",
+                        min: "Please select state"
+                    },
+                    'residential[city]': {
+                        required: "Please select city",
+                        min: "Please select city"
+                    },
+                    'residential[address]': {
+                        required: "Please enter address",
+                    },
+                    'residential[postal_code]': {
+                        required: "Please enter postal code",
+                    },
+                    'mailing[address_type]': {
+                        required: "Please select address type",
+                    },
+                    'mailing[country]': {
+                        required: "Please select country",
+                        min: "Please select country"
+                    },
+                    'mailing[state]': {
+                        required: "Please select state",
+                        min: "Please select state"
+                    },
+                    'mailing[city]': {
+                        required: "Please select city",
+                        min: "Please select city"
+                    },
+                    'mailing[address]': {
+                        required: "Please enter address",
+                    },
+                    'mailing[postal_code]': {
+                        required: "Please enter postal code",
+                    },
+                    'mailing_address': {
+                        required: "Please enter mailing address",
+                    },
+                    'address': {
+                        required: "Please enter address",
+                    },
+                    'optional_contact': {
+                        required: "Please enter optional contact",
+                    },
+                    'full_name': {
+                        required: "Please enter full name",
+                    },
+                    'father_name': {
+                        required: "Please enter father name",
+                    },
+                    'cnic': {
+                        required: "Please enter cnic",
+                    },
+                    'registration': {
+                        required: "Please enter registration",
+                    },
+                    'company_name': {
+                        required: "Please enter company name",
+                    },
+                    'email': {
+                        required: "Please enter email",
+                    }
+                },
                 errorClass: 'is-invalid text-danger',
                 errorElement: "span",
                 wrapper: "div",
@@ -592,31 +928,34 @@
         }
 
         $.validator.addMethod("ContactNoError", function(value, element) {
-                // alert(intl.isValidNumber());
-                // return intl.getValidationError() == 0;
-                return intl.isValidNumber();
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            return intl.isValidNumber();
 
-            }, "In Valid number");
+        }, "In Valid number");
 
-            $.validator.addMethod("OPTContactNoError", function(value, element) {
-                // alert(intl.isValidNumber());
-                // return intl.getValidationError() == 0;
-                // if(value != '' )
-                if (value.length > 0) {
-                    return intlOptional.isValidNumber();
-                } else {
-                    return true;
-                }
-            }, "In Valid number");
+        $.validator.addMethod("OPTContactNoError", function(value, element) {
+            // alert(intl.isValidNumber());
+            // return intl.getValidationError() == 0;
+            // if(value != '' )
+            if (value.length > 0) {
+                return intlOptional.isValidNumber();
+            } else {
+                return true;
+            }
+        }, "In Valid number");
 
         function calculateTransferAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
-            let transfer_rate = $('#transfer_rate').val();
-            let unit_gross_area = '{{ $unit->gross_area }}';
+            paid_amount = paid_amount.replace(/,/g, "");
 
+            let transfer_rate = $('#transfer_rate').val().replace(/,/g, "");
+            let unit_gross_area = '{{ $unit->gross_area }}';
+            console.log(transfer_rate)
             let amount_paid = 0.0;
-            let profitCharges = $('#profit_charges').val();
+            // let profitCharges = $('#profit_charges').val().replace(/,/g, "");
             amount_paid = parseFloat(transfer_rate) * parseFloat(unit_gross_area);
+            console.log(amount_paid)
             $('#amount_to_be_paid').val(amount_paid.toLocaleString());
         }
 

@@ -75,6 +75,31 @@ class SalesPlanController extends Controller
         return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
     }
 
+    public function generateSalesPlan(Request $request, $site_id, $stakeholder_id, $crm_lead)
+    {
+        $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->salesPlanInterface->model()));
+        $customFields = collect($customFields)->sortBy('order');
+        $customFields = generateCustomFields($customFields);
+
+        $crm_lead = Stakeholder::where('crm_id',decryptParams($crm_lead))->first();
+
+        $data = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'unit' => (new Unit())->with('status', 'type')->where('has_sub_units', false)->where('status_id', 1)->orWhere('status_id', 6)->get(),
+            'additionalCosts' => $this->additionalCostInterface->getAllWithTree($site_id),
+            'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
+                'stakeholder_types',
+            ]),
+            'stakeholderTypes' => StakeholderTypeEnum::values(),
+            'leadSources' => $this->leadSourceInterface->getByAll(decryptParams($site_id)),
+            'user' => auth()->user(),
+            'country' => Country::all(),
+            'customFields' => $customFields,
+            'crm_lead' => $crm_lead,
+
+        ];
+        return view('app.sites.floors.units.sales-plan.create', $data);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -118,7 +143,7 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-        // dd($request->all());
+      
         try {
             $validator = Validator::make($request->all(), [
                 'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
@@ -134,7 +159,7 @@ class SalesPlanController extends Controller
             $unit_id = encryptParams($inputs['unit_id']);
 
             $record = $this->salesPlanInterface->store(decryptParams($site_id), $inputs);
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withSuccess('Sales Plan Saved!');
+            return redirect()->route('sites.sales_plan.show', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Sales Plan Saved!');
         } catch (GeneralException $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage());
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
@@ -150,9 +175,18 @@ class SalesPlanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($site_id, $floor_id = null, $unit_id = null, $id)
     {
         //
+        $salePlan = SalesPlan::find(decryptParams($id));
+        $installments = $salePlan->installments;
+        $data = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'salePlan' => $salePlan,
+            'additionalCosts' => $salePlan->additionalCosts,
+            'installments' => $installments,
+        ];
+        return view('app.sites.floors.units.sales-plan.preview', $data);
     }
 
     /**
@@ -250,6 +284,110 @@ class SalesPlanController extends Controller
         return apiSuccessResponse($installments);
     }
 
+    public function checkStakeholder(Request $request, $site_id, $floor_id, $unit_id)
+    {
+        $salesPlan = SalesPlan::find($request->salesPlanID);
+        $unit_id =  $salesPlan->unit->id;
+        $stakeholder = Stakeholder::find($salesPlan->stakeholder_id);
+
+        $residential_address_type = $stakeholder->residential_address_type;
+        $residential_country_id = $stakeholder->residential_country_id;
+        $residential_state_id = $stakeholder->residential_state_id;
+        $residential_city_id = $stakeholder->residential_city_id;
+        $residential_postal_code = $stakeholder->residential_postal_code;
+        $residential_address = $stakeholder->residential_address;
+
+        $mailing_address_type = $stakeholder->mailing_address_type;
+        $mailing_country_id = $stakeholder->mailing_country_id;
+        $mailing_state_id = $stakeholder->mailing_state_id;
+        $mailing_city_id = $stakeholder->mailing_city_id;
+        $mailing_postal_code = $stakeholder->mailing_postal_code;
+        $mailing_address = $stakeholder->mailing_address;
+
+
+        if ($stakeholder->stakeholder_as = 'i') {
+
+            $full_name = $stakeholder->full_name;
+            $father_name = $stakeholder->father_name;
+            $occupation = $stakeholder->occupation;
+            $cnic = $stakeholder->cnic;
+            $mobile_contact = $stakeholder->mobile_contact;
+            $date_of_birth = $stakeholder->date_of_birth;
+            $nationality = $stakeholder->nationality;
+
+            if (
+                isset($full_name) &&
+                isset($father_name) &&
+                isset($occupation) &&
+                isset($cnic) &&
+                isset($mobile_contact) &&
+                isset($date_of_birth) &&
+                isset($nationality) &&
+
+                isset($residential_address_type) &&
+                isset($residential_country_id) &&
+                isset($residential_state_id) &&
+                isset($residential_city_id) &&
+                isset($residential_postal_code) &&
+                isset($residential_address)
+
+            ) {
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Please Fill Stakeholder All Required Fields First!!!",
+                    'type' => "Individual",
+                    'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
+                ], 200);
+            }
+        } else {
+            $company_name = $stakeholder->full_name;
+            $ntn = $stakeholder->ntn;
+            $reg_no = $stakeholder->cnic;
+            $strn = $stakeholder->strn;
+            $mobile_contact = $stakeholder->mobile_contact;
+            $industry = $stakeholder->industry;
+
+            if (
+                isset($company_name) &&
+                isset($ntn) &&
+                isset($reg_no) &&
+                isset($strn) &&
+                isset($mobile_contact) &&
+                isset($industry) &&
+
+                isset($residential_address_type) &&
+                isset($residential_country_id) &&
+                isset($residential_state_id) &&
+                isset($residential_city_id) &&
+                isset($residential_postal_code) &&
+                isset($residential_address) &&
+
+                isset($mailing_address_type) &&
+                isset($mailing_country_id) &&
+                isset($mailing_state_id) &&
+                isset($mailing_city_id) &&
+                isset($mailing_postal_code) &&
+                isset($mailing_address)
+
+            ) {
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Please Fill Stakeholder All Required Fields First!!!",
+                    'type' => "Company",
+                    'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
+                ], 200);
+            }
+        }
+    }
+
     public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
     {
         $salesPlan = SalesPlan::find($request->salesPlanID);
@@ -276,7 +414,7 @@ class SalesPlanController extends Controller
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
 
-        if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+        if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');
         }
 
@@ -789,7 +927,7 @@ class SalesPlanController extends Controller
 
             if ($data[$key]['status'] == '1') {
                 $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
-                if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
                     return apiErrorResponse('invalid_amout');
                 }
             }

@@ -142,16 +142,30 @@
         }
 
         function approveSalesPlan(id, created_date, unit_status) {
-            if (unit_status == 6) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Please Do File Buy Back OR File Refund Action First!!',
-                });
 
-            } else {
-                showBlockUI('#salesPlan');
+if (unit_status == 6) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please Do File Buy Back OR File Refund Action First!!',
+    });
 
+} else {
+    showBlockUI('#salesPlan');
+
+    var _token = '{{ csrf_token() }}';
+    let url =
+        "{{ route('sites.floors.units.sales-plans.ajax-check-stakeholder', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
+    $.ajax({
+        url: url,
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'salesPlanID': id,
+            '_token': _token,
+        },
+        success: function(response) {
+            if (response.success) {
                 swal.fire({
                     title: "Select Sale Plan Approval Date",
                     html: '<input id="approve_date" type="date" required placeholder="YYYY-MM-DD" name="approve_date" class="form-control form-control-md" />',
@@ -178,7 +192,7 @@
                         var _token = '{{ csrf_token() }}';
                         var approve_date = $('#approve_date').val();
                         let url =
-                            "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+                            "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
                         $.ajax({
                             url: url,
                             type: 'post',
@@ -198,13 +212,15 @@
                                             closeButton: !0,
                                             tapToDismiss: !1,
                                         });
-                                    $('#sales-plan-table').DataTable().ajax.reload();
+                                    $('#sales-plan-table').DataTable().ajax
+                                        .reload();
                                     location.reload(true);
                                 } else {
                                     Swal.fire({
                                         icon: 'error',
                                         title: 'Error',
                                         text: 'Something Went Wrong!!',
+
                                     });
                                     hideBlockUI('#salesPlan');
                                 }
@@ -216,10 +232,40 @@
                         });
                     }
                 });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: response.message,
+                    confirmButtonText: 'Edit Stakeholder',
+                    buttonsStyling: false,
+                    customClass: {
+                        confirmButton: 'btn btn-relief-outline-primary waves-effect waves-float waves-light me-1',
+                    },
+                }).then((result) => {
+                    showBlockUI('#salesPlan');
+                    if (result.isConfirmed) {
+                        window.location.href = response.url;
+                    }
+                    else{
+                        hideBlockUI('#salesPlan');
+                    }
+                });
                 hideBlockUI('#salesPlan');
             }
-
+        },
+        error: function(error) {
+            console.log(error);
+            hideBlockUI('#salesPlan');
         }
+    });
+
+
+
+    hideBlockUI('#salesPlan');
+}
+
+}
 
         function disapproveSalesPlan(id) {
             showBlockUI('#salesPlan');

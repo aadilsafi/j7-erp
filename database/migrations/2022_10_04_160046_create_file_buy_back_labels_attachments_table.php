@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('file_buy_back_labels_attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
-            $table->foreignId('file_buy_back_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
+            $table->bigInteger('file_buy_back_id')->nullable();
             $table->string('label');
             $table->timestamps();
         });

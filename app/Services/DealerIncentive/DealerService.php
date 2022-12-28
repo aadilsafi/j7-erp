@@ -45,7 +45,7 @@ class DealerService implements DealerInterface
                 'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),
                 'dealer_incentive' => str_replace(',', '', $inputs['dealer_incentive']),
                 'total_unit_area' => str_replace(',', '', $inputs['total_unit_area']),
-                'total_dealer_incentive' => $inputs['total_dealer_incentive'],
+                'total_dealer_incentive' => str_replace(',', '', $inputs['total_dealer_incentive']),
                 'unit_IDs' => json_encode($uids),
                 'status' => 0,
                 'comments' => $inputs['comments'],

@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->string('serial_no')->nullable()->default('REC-');
-            $table->foreignId('unit_id')->constrained();
-            $table->foreignId('sales_plan_id')->constrained();
-            $table->foreignId('bank_id')->nullable();
+            $table->bigInteger('unit_id')->nullable();
+            $table->bigInteger('sales_plan_id')->nullable();
+            $table->bigInteger('bank_id')->nullable();
             $table->string('name');
             $table->string('cnic');
             $table->string('phone_no')->nullable();

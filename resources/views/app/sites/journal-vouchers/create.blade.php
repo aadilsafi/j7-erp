@@ -151,7 +151,8 @@
                 dateFormat: "Y-m-d",
             });
 
-
+            $(this).find('.accountsSelect').select2({
+                    });
 
         });
     </script>
@@ -162,7 +163,6 @@
             show: function() {
                 $(this).slideDown(function() {
                     $(this).find('.accountsSelect').select2({
-                        // placeholder: 'Select Stakeholder'
                     });
                 }), feather && feather.replace({
                     width: 14,

@@ -133,7 +133,7 @@
                 'sites.stakeholders.kins.importStakeholders', 'sites.floors.importFloors', 'sites.types.importTypes',
                 'sites.additional-costs.importAdcosts', 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks',
                 'sites.settings.import.images.index', 'sites.settings.countries.index', 'sites.settings.states.index',
-                'sites.settings.cities.index', 'sites.settings.journal-vouchers.index'])
+                'sites.settings.cities.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
@@ -157,16 +157,6 @@
                                     href="{{ route('sites.settings.custom-fields.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='list'></i>
                                     <span class="menu-title text-truncate" data-i18n="Custom Fields">Custom Fields</span>
-                                </a>
-                            </li>
-                        @endcan
-                        @can('sites.settings.journal-vouchers.index')
-                            <li
-                                class="nav-item {{ request()->routeIs('sites.settings.journal-vouchers.index') ? 'active' : null }}">
-                                <a class="d-flex align-items-center"
-                                    href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}">
-                                    <i data-feather='list'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Journal Vouchers">Journal Vouchers</span>
                                 </a>
                             </li>
                         @endcan
@@ -566,9 +556,9 @@
             @endcan
 
             {{-- Sales Plan  --}}
-            @can('sites.sales_plan.show')
+            @canany(['sites.sales_plan.show', 'sites.sales_plan.create'])
                 <li
-                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) }}">
                         <i class="bi bi-clipboard-data"></i>
@@ -786,7 +776,8 @@
 
             {{-- Accounts Menu --}}
             @canany(['sites.accounts.recovery.inventory-aging', 'sites.accounts.charts-of-accounts.index',
-                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index'])
+                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index',
+                'sites.settings.journal-vouchers.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
                         <i data-feather='dollar-sign'></i>
@@ -800,6 +791,17 @@
                                     href="{{ route('sites.accounts.charts-of-accounts.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='dollar-sign'></i>
                                     <span class="menu-title text-truncate" data-i18n="Email">Charts of Accounts</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('sites.settings.journal-vouchers.index')
+                            <li
+                                class="nav-item {{ request()->routeIs('sites.settings.journal-vouchers.index') ? 'active' : null }}">
+                                <a class="d-flex align-items-center"
+                                    href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    <i data-feather='dollar-sign'></i>
+                                    <span class="menu-title text-truncate" data-i18n="Journal Vouchers">Journal
+                                        Vouchers</span>
                                 </a>
                             </li>
                         @endcan

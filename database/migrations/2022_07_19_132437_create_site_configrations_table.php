@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('site_configrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('site_id')->constrained();
+            $table->bigInteger('site_id')->nullable();
             $table->tinyInteger('site_max_floors')->default(0);
             $table->tinyInteger('site_token_percentage')->default(5);
             $table->tinyInteger('site_down_payment_percentage')->default(25);

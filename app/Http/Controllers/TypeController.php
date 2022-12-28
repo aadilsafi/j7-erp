@@ -374,15 +374,15 @@ class TypeController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required|distinct',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
+        // $validator = \Validator::make($request->all(), [
+        //     'fields.*' => 'required|distinct',
+        // ], [
+        //     'fields.*.required' => 'Must Select all Fields',
+        //     'fields.*.distinct' => 'Field can not be duplicated',
 
-        ]);
+        // ]);
 
-        $validator->validate();
+        // $validator->validate();
 
         $model = new TempUnitType();
         $tempdata = $model->cursor();
@@ -390,7 +390,7 @@ class TypeController extends Controller
         $accountCode = addAccountCodes(get_class(new Type()));
 
         foreach ($tempdata as $key => $items) {
-            foreach ($request->fields as $k => $field) {
+            foreach ($tempCols as $k => $field) {
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
 

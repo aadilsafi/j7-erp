@@ -293,7 +293,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $data['created_date'] = now();
         }
 
-        if ($account_action == 2 || $account_action == 9 || $account_action == 10 || $account_action == 11 || $account_action == 12 || $account_action == 27) {
+        if ($account_action == 2 || $account_action == 9 || $account_action == 10 || $account_action == 11 || $account_action == 12 || $account_action == 27 || $account_action == 29) {
             $receipt = Receipt::find($action_id);
             $data['receipt_id'] = $action_id;
             $data['created_date'] = $receipt->created_date;
@@ -627,6 +627,13 @@ class FinancialTransactionService implements FinancialTransactionInterface
             }
 
             $this->makeFinancialTransaction($receipt->site_id, $origin_number, $vendorPayableAccount, 29, $receipt->sales_plan_id, 'debit', $receipt->vendor_ap_amount, NatureOfAccountsEnum::Vendor_AP_Account, $receipt->id);
+        }
+
+         // if disocunt amount availaibe
+         if (isset($receipt->discounted_amount) && $receipt->discounted_amount > 0) {
+            $cashDiscountAccount = AccountHead::where('name', 'Cash Discount')->where('level', 5)->first()->code;
+            // Discount Transaction
+            $this->makeFinancialTransaction($receipt->site_id, $origin_number, $cashDiscountAccount, 12, $receipt->sales_plan_id, 'debit', $receipt->discounted_amount, NatureOfAccountsEnum::RECEIPT_VOUCHER, $receipt->id);
         }
 
 

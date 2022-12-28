@@ -16,4 +16,6 @@ enum UserBatchActionsEnum: int
     case SMS_NOTIFICATIONS = 4;
     case PUSH_NOTIFICATIONS = 5;
     case QUEUE_NOTIFICATIONS = 6;
+    case IMPORT_INDIVIDUAL_STAKEHOLDERS = 7;
+    case IMPORT_COMPANY_STAKEHOLDERS = 8;
 }

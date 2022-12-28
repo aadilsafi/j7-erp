@@ -259,7 +259,7 @@
                                                                 for="unit_downpayment_percentage">Down
                                                                 Payment
                                                                 (%)</label>
-                                                            <input readonly type="number"
+                                                            <input readonly type="text"
                                                                 class="form-control form-control-lg"
                                                                 id="unit_downpayment_percentage"
                                                                 name="unit[downpayment][percentage]"

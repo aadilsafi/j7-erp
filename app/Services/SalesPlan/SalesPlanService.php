@@ -329,7 +329,7 @@ class SalesPlanService implements SalesPlanInterface
                         'amount' => floatval($expense['amount']),
                         'type' => 'additional_expense',
                         'paid_amount' => 0,
-                        'remaining_amount' => floatval($expense['expense_label']),
+                        'remaining_amount' => floatval($expense['amount']),
                         'remarks' => $expense['remarks'],
                         'installment_order' => $count,
                         'status' => 'unpaid',

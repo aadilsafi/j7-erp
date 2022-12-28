@@ -273,7 +273,7 @@ class TitleTransferService implements TitleTransferInterface
                 'amount_to_be_paid' => str_replace(',', '', $inputs['amount_to_be_paid']),
                 'payment_due_date' => $inputs['payment_due_date'],
                 'amount_remarks' => $inputs['amount_remarks'],
-                'transfer_rate' => $inputs['transfer_rate'],
+                'transfer_rate' => str_replace(',', '', $inputs['transfer_rate']),
                 'status' => 0,
                 'comments' => $inputs['comments'],
                 'serial_no'=>'FTT-'.$serail_no,

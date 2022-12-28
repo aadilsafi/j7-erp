@@ -232,8 +232,9 @@
 
         function calculateRefundedAmount() {
             let paid_amount = '{{ $total_paid_amount }}';
+            paid_amount = paid_amount.replace(/,/g, "");
             let amount_refunded = 0.0;
-            let profitCharges = $('#profit_charges').val();
+            let profitCharges = $('#profit_charges').val().replace(/,/g, "");
             amount_refunded = parseFloat(paid_amount) + parseFloat(profitCharges);
             $('#amount_to_be_refunded').val(amount_refunded.toLocaleString());
         }

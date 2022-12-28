@@ -46,7 +46,7 @@ class UserTableSeeder extends Seeder
         $user->assignRole([1]);
 
         $user = (new User())->updateOrCreate([
-            'site_id' => 1,
+            'site_id' => 1,sites.sales_plan.show
             'name' => 'Gm Sales',
             'email' => 'gmsales@erp.com',
             'contact' => '03100177771',
@@ -62,15 +62,12 @@ class UserTableSeeder extends Seeder
             'site_id' => 1,
             'name' => 'CRM',
             'email' => 'admin@crm.com',
-            'contact' => '+923000000000',
-            'password' => Hash::make('password'),
-        ], [
-            'remember_token' => Str::random(10),
+            'contact' => '+923000000000',sites.sales_plan.show
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         $user->assignRole([10]);
-        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store']);
+        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.sales_plan.show']);
     }
 }

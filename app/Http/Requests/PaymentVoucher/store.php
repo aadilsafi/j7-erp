@@ -38,6 +38,8 @@ class store extends FormRequest
             }
             $rules['cheque_no'] = ['required'];
             // $rules['attachment'] = ['required'];
+
+            return  $rules;
         }
 
         if ($this->input('mode_of_payment') == "Online") {
@@ -52,12 +54,15 @@ class store extends FormRequest
             $rules['transaction_date'] = ['required'];
             $rules['online_instrument_no'] = ['required'];
             // $rules['attachment'] = ['required'];
+
+            return  $rules;
         }
 
         if ($this->input('mode_of_payment') == "Other") {
             $rules['receipts.*.other_value'] = ['required'];
+
+            return  $rules;
         }
-        return  $rules;
     }
 
     public function messages()

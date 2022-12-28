@@ -19,11 +19,11 @@ class UserTableSeeder extends Seeder
     {
         $user = (new User())->updateOrCreate([
             'site_id' => 1,
-            'name' => 'Syed Aizaz Haider Shah',
             'email' => 'admin@erp.com',
             'contact' => '03100177771',
             'password' => Hash::make('password'),
         ], [
+            'name' => 'Syed Aizaz Haider Shah',
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
@@ -63,6 +63,9 @@ class UserTableSeeder extends Seeder
             'name' => 'CRM',
             'email' => 'admin@crm.com',
             'contact' => '+923000000000',
+            'password' => Hash::make('password'),
+        ], [
+            'remember_token' => Str::random(10),
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),

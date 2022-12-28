@@ -63,7 +63,6 @@ class store extends FormRequest
 
             return  $rules;
         }
-        dd
     }
 
     public function messages()

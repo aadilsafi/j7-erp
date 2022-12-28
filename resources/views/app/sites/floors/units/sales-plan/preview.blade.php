@@ -144,7 +144,7 @@
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                             <label class="form-label fs-5" for="unit_price">Unit
                                                                 Price (Rs)</label>
-                                                            <input type="number" min="0"
+                                                            <input type="text" min="0"
                                                                 class="form-control form-control-lg" id="unit_price"
                                                                 name="unit[price][unit]" placeholder="Unit Price" readonly
                                                                 value="{{ number_format($salePlan->unit_price) }}" />
@@ -219,7 +219,7 @@
                                                                 class="form-control form-control-lg"
                                                                 id="percentage-discount" name="unit[discount][percentage]"
                                                                 placeholder="Discount %"
-                                                                value="{{ number_format($salePlan->discount_percentage) }}" />
+                                                                value="{{ $salePlan->discount_percentage }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

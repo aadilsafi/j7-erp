@@ -44,7 +44,6 @@ class ReceiptService implements ReceiptInterface
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
 
-
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
@@ -142,6 +141,7 @@ class ReceiptService implements ReceiptInterface
                     $receiptData['discounted_amount'] = $discounted_amount;
                 }
 
+                dd($requested_data['amount_received'] , $data[$i]['amount_in_numbers']);
                 if (str_replace(',', '', $requested_data['amount_received']) > str_replace(',', '', $data[$i]['amount_in_numbers'])) {
                     $receipt = ReceiptDraftModel::create($receiptData);
 
@@ -371,7 +371,7 @@ class ReceiptService implements ReceiptInterface
             if($unit->status_id <= 3){
                 $unit->is_for_rebate = true;
             }
-            
+
             $unit->status_id = 5;
 
             $unitStakeholderData = [

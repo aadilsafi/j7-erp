@@ -36,7 +36,7 @@
                         <label class="form-label" style="font-size: 15px" for="floor">
                             <h6 class="mb-1">Rebate %</h6>
                         </label>
-                        <input id="rebate_percentage" type="text"
+                        <input id="rebate_percentage" type="number" min="1" max="100" step="0.01"
                             value="{{ isset($rebate_data) ? $rebate_data->commision_percentage : '' }}"
                             class="form-control rebate_percentage  @error('rebate_percentage') is-invalid @enderror"
                             name="rebate_percentage" placeholder="Rebate Percentage">
@@ -127,7 +127,6 @@
                                 <option value="{{ $dealer->stakeholder->id }}"
                                     {{ isset($rebate_data) && $rebate_data->dealer_id == $dealer->stakeholder->id ? 'selected' : '' }}>
                                     {{ $dealer->stakeholder->full_name }} ( {{ $dealer->stakeholder->cnic }} )
-                                    - {{ $dealer->stakeholder->designation }}
                                 </option>
                             @empty
                             @endforelse
@@ -318,7 +317,7 @@
 </div>
 
 
-<div class="col-lg-12 col-md-12 col-sm-12 position-relative hideDiv mb-2" id="modeOfPaymentDiv">
+{{-- <div class="col-lg-12 col-md-12 col-sm-12 position-relative hideDiv mb-2" id="modeOfPaymentDiv">
 
     <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
         <div class="card-header justify-content-between">
@@ -332,7 +331,7 @@
                     <input class="custom-option-item-check checkClass mode-of-payment" type="radio" checked
                         name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon1" value="Cash">
                     <label class="custom-option-item text-center p-1" for="customOptionsCheckableRadiosWithIcon1">
-                        {{-- <i data-feather='dollar-sign'></i> --}}
+
                         <i class="bi bi-cash-coin" style="font-size: 20px"></i>
                         <span class="custom-option-item-title h4 d-block">Cash</span>
                     </label>
@@ -353,15 +352,7 @@
                         <span class="custom-option-item-title h4 d-block">Online</span>
                     </label>
                 </div>
-                {{-- <div class="col-md-3">
-                    <input class="custom-option-item-check other-mode-of-payment" type="radio"
-                        name="mode_of_payment" id="customOptionsCheckableRadiosWithIcon4" value="Other">
-                    <label class="custom-option-item text-center text-center p-1"
-                        for="customOptionsCheckableRadiosWithIcon4">
-                        <i class="bi bi-wallet" style="font-size: 20px"></i>
-                        <span class="custom-option-item-title h4 d-block">Other</span>
-                    </label>
-                </div> --}}
+
             </div>
 
             <div class="row mb-2 g-1" id="otherValueDiv" style="display: none;">
@@ -444,7 +435,7 @@
                             @foreach ($chequebanks as $banks)
                                 <option value="{{ $banks->id }}">{{ $banks->name }} -
                                     {{ $banks->branch_code }}</option>
-                                {{-- @empty --}}
+
                             @endforeach
                         </select>
                     </div>
@@ -539,7 +530,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 
 <div class="card hideDiv" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"

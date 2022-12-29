@@ -185,52 +185,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 ];
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }
-            if (!isset($inputs['bank_name'])) {
-                $inputs['bank_id'] =  null;
-                $inputs['bank_name'] = null;
-            }
 
-            if ($inputs['bank_id'] == 0) {
-
-                if ($inputs['mode_of_payment'] == 'Cheque' || $inputs['mode_of_payment'] == 'Online') {
-                    $bank_last_account_head = Bank::get();
-                    $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
-                    $bank_starting_code = '10209010001010';
-
-                    if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
-                        $account_head_code = (float)$bank_last_account_head_code + 1;
-                    } else {
-                        $account_head_code =  (float)$bank_starting_code + 1;
-                    }
-                    $bankData = [
-                        'site_id' => decryptParams($site_id),
-                        'name' => $inputs['bank_name'],
-                        'slug' => Str::slug($inputs['bank_name']),
-                        'account_number' => $inputs['bank_account_number'],
-                        'branch' => $inputs['bank_branch'],
-                        'branch_code' => $inputs['bank_branch_code'],
-                        'address' => $inputs['bank_address'],
-                        'contact_number' => $inputs['bank_contact_number'],
-                        'status' => true,
-                        'comments' => $inputs['bank_comments'],
-                        'account_head_code' => (string)$account_head_code,
-                    ];
-                    $bank = Bank::create($bankData);
-                    $inputs['bank_id'] = $bank->id;
-                    $inputs['bank_name'] = $bank->name;
-                    // added in accound heads
-                    $acountHeadData = [
-                        'site_id' => $site_id,
-                        'modelable_id' => null,
-                        'modelable_type' => null,
-                        'code' => $bank->account_head_code,
-                        'name' => $bank->name,
-                        'account_type' => 'debit',
-                        'level' => 5,
-                    ];
-                    $accountHead =  AccountHead::create($acountHeadData);
-                }
-            }
 
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
@@ -247,12 +202,12 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'comments' => $inputs['comments'],
                 'dealer_id' => $stakeholder->id,
                 'is_for_dealer_incentive' => true,
-                'bank_id' => $inputs['bank_id'],
-                'mode_of_payment' => $inputs['mode_of_payment'],
-                'other_value' => $inputs['other_value'],
-                'cheque_no' => $inputs['cheque_no'],
-                'online_instrument_no' => $inputs['online_instrument_no'],
-                'transaction_date' => $inputs['transaction_date'],
+                // 'bank_id' => $inputs['bank_id'],
+                // 'mode_of_payment' => $inputs['mode_of_payment'],
+                // 'other_value' => $inputs['other_value'],
+                // 'cheque_no' => $inputs['cheque_no'],
+                // 'online_instrument_no' => $inputs['online_instrument_no'],
+                // 'transaction_date' => $inputs['transaction_date'],
                 'serial_no' => 'RI-' . $serail_no,
             ];
             $rebate = $this->model()->create($rebatedata);

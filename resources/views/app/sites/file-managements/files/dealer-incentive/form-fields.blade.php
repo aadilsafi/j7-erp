@@ -13,7 +13,7 @@
                             <option value="0">Select Dealer</option>
                             @foreach ($stakeholders as $row)
                                 <option value="{{ $row->stakeholder->id }}">
-                                    {{ $row->stakeholder->full_name }} ( {{ cnicFormat($row->stakeholder->cnic) }})
+                                    {{ $row->stakeholder->full_name }} ( {{ $row->stakeholder->cnic }})
                                 </option>
                             @endforeach
                         </select>

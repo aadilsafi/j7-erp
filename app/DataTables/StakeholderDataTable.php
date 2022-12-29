@@ -34,9 +34,9 @@ class StakeholderDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
             ->addIndexColumn()
-          
+
             ->editColumn('cnic', function ($stakeholder) {
-                return cnicFormat($stakeholder->cnic);
+                return $stakeholder->cnic;
             })
             ->editColumn('contact', function ($stakeholder) {
                 if ($stakeholder->stakeholder_as == 'i') {
@@ -184,7 +184,7 @@ class StakeholderDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC / REGISTRATION #'),
+            Column::make('cnic')->title('Identity Number'),
             Column::computed('contact')->title('Contact'),
             Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),

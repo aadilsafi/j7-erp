@@ -42,11 +42,14 @@ class RebateIncentiveDataTable extends DataTable
             ->editColumn('unit_name', function ($rebateIncentive) {
                 return $rebateIncentive->unit->name;
             })
+            ->editColumn('unit_area', function ($rebateIncentive) {
+                return $rebateIncentive->unit->gross_area;
+            })
             ->editColumn('stakeholder_id', function ($rebateIncentive) {
                 return $rebateIncentive->stakeholder->full_name;
             })
             ->editColumn('stakeholder_cnic', function ($rebateIncentive) {
-                return cnicFormat($rebateIncentive->stakeholder->cnic);
+                return $rebateIncentive->stakeholder->cnic;
             })
             ->editColumn('stakeholder_contact', function ($rebateIncentive) {
                 return $rebateIncentive->stakeholder->contact;
@@ -95,7 +98,7 @@ class RebateIncentiveDataTable extends DataTable
      */
     public function query(RebateIncentiveModel $model): QueryBuilder
     {
-        return $model->newQuery()->where('site_id', $this->site_id);
+        return $model->newQuery()->where('site_id', $this->site_id)->orderBy('serial_no', 'desc');
     }
 
     public function html(): HtmlBuilder
@@ -181,22 +184,18 @@ class RebateIncentiveDataTable extends DataTable
 
             // Column::computed('check')->exportable(false)->printable(false)->width(60),
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
-            Column::computed('unit_id')->title('Unit Number')->addClass('text-nowrap text-center'),
-            Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
-            // Column::computed('unit_type')->title('Unit Type')->addClass('text-nowrap text-center'),
-
-            Column::computed('stakeholder_id')->title('Full Name')->addClass('text-nowrap text-center'),
-            Column::computed('stakeholder_cnic')->title('Cnic')->addClass('text-nowrap '),
-            Column::computed('stakeholder_contact')->title('Contact')->addClass('text-nowrap text-center'),
-            Column::make('dealer_id')->title('Dealer')->addClass('text-nowrap text-center'),
+            Column::computed('stakeholder_id')->title('Stakeholder Name')->addClass('text-nowrap text-center'),
+            Column::make('dealer_id')->title('Dealer Name')->addClass('text-nowrap text-center'),// Column::computed('stakeholder_cnic')->title('Cnic / Reg No')->addClass('text-nowrap '),
+            // Column::computed('stakeholder_contact')->title('Contact')->addClass('text-nowrap text-center'),
+            Column::computed('unit_id')->title('Unit NO#')->addClass('text-nowrap text-center'),
+            // Column::computed('unit_name')->title('Unit Name')->addClass('text-nowrap text-center'),
+            Column::computed('unit_area')->title('Unit Area')->addClass('text-nowrap text-center'),
             Column::make('deal_type')->title('Deal Type')->addClass('text-nowrap text-center'),
-            Column::computed('commision_percentage')->title('Commision Percentage')->addClass('text-nowrap text-center'),
+            Column::computed('commision_percentage')->title('Commision %')->addClass('text-nowrap text-center'),
             Column::computed('commision_total')->title('Commision Total')->addClass('text-nowrap text-center'),
             Column::computed('status')->title('Status')->addClass('text-nowrap text-center'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap text-center'),
             // Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center'),
-
-
         ];
     }
 

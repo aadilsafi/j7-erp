@@ -58,7 +58,7 @@ class PaymentVoucherDatatable extends DataTable
             ->editColumn('cheque_status', function ($payment_voucher) {
                 // $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');
                 $status = $payment_voucher->cheque_status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
-                if ($payment_voucher->cheque_status == 0 && $payment_voucher->status == 1) {
+                if ($payment_voucher->payment_mode == "Cheque" && $payment_voucher->cheque_status == 0 && $payment_voucher->status == 1) {
                     $status .= '  <a onClick="ActiveCheque()" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Active Cheque"
                     href="#" >

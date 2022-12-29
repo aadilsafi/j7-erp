@@ -131,10 +131,19 @@
 
 
     <script type="text/javascript">
+
+        $("#transaction_date").flatpickr({
+            defaultDate: "today",
+            // minDate: 'today',
+            altInput: !0,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+        });
+
         $('#companyForm').hide();
         $("#stakeholder_as").val('i');
 
-$("#stakeholder_as").trigger('change');
+    $("#stakeholder_as").trigger('change');
         var selected_state_id = 0;
         var selected_city_id = 0;
 

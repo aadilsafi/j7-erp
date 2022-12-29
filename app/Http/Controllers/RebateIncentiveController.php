@@ -100,7 +100,7 @@ class RebateIncentiveController extends Controller
             return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Data Saved!');
         } catch (Exception $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage());
-            return redirect()->route('sites.file-managements.rebate-incentive.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
+            return redirect()->route('sites.file-managements.rebate-incentive.create', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
         }
     }
 

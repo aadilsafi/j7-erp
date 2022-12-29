@@ -549,7 +549,7 @@
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
                                     id="fileOwner_nationality" placeholder="Nationality"
-                                    value="{{ $fileOwner->nationalityCountry->name }}" />
+                                    value="{{ $fileOwner->nationalityCountry->name ?? ''}}" />
 
                             </div>
                         </div>

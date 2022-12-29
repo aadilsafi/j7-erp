@@ -125,7 +125,7 @@
                                             <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
                                             <input type="text" class="form-control form-control-lg" id="unit_size"
                                                 name="unit[size]" placeholder="Unit Size(sq.ft)"
-                                                value="{{ number_format($salePlan->unit->gross_area) }}" readonly />
+                                                value="{{ $salePlan->unit->gross_area }}" readonly />
                                         </div>
                                     </div>
 

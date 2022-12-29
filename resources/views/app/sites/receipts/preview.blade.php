@@ -260,7 +260,7 @@
                                 </div>
                                 @if ($receipt->mode_of_payment == 'Cheque')
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                        <label class="form-label fs-5" for="unit_type">Check Number</label>
+                                        <label class="form-label fs-5" for="unit_type">Cheque Number</label>
                                         <input type="text" class="form-control form-control-lg" id="unit_type"
                                             name="unit[type]" placeholder="Check Number"
                                             value="{{ $receipt->cheque_no }}" readonly />
@@ -364,7 +364,7 @@
                                                         <td>{{ $paidIntsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
+                                                        <td>{{ $paidIntsallment->amount }}</td>
                                                         <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
                                                         <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}

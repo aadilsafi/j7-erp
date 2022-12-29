@@ -244,7 +244,7 @@ class PaymentVocuherController extends Controller
 
         DB::transaction(function () use ($site_id, $id) {
 
-            $payment_voucher = PaymentVocuher::find(decryptParams($id));
+            $payment_voucher = PaymentVocuher::find($id);
 
             if ($payment_voucher->stakeholder_type == 'C') {
                 $stakeholder_id = $payment_voucher->customer_id;

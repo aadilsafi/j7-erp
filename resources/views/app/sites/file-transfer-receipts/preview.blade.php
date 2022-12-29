@@ -346,21 +346,21 @@
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_country" placeholder="Country"
-                                    value="{{ $transferOwner->country }}" />
+                                    value="" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_state" placeholder="State" value="{{ $transferOwner->state }}" />
+                                    id="transferOwner_state" placeholder="State" value="" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_city" placeholder="City" value="{{ $transferOwner->city }}" />
+                                    id="transferOwner_city" placeholder="City" value="" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
@@ -377,7 +377,7 @@
                                 <label class="form-label fs-5" for="transferOwner_address">Address <span
                                         class="text-danger">*</span></label>
                                 <textarea readonly class="form-control form-control-lg" id="transferOwner_address" placeholder="Address"
-                                    rows="3"> {{ $transferOwner->address }} </textarea>
+                                    rows="3"> </textarea>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_mailing_address">Mailing Address <span

@@ -91,7 +91,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                     'referred_by' => $individual['referred_by'],
                     'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
-                    'is_local' => $individual['is_local'],
+                    'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
                     'nationality' => $individual['nationality'],
                 ];
             } else if ($stakeholder_as == 'c') {

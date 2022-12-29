@@ -259,7 +259,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->contact }}
+                                {{ $customer->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -272,7 +272,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->address }}
+                                {{ $customer->residential_address }}
                             </div>
                         </div>
                     </td>
@@ -348,7 +348,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $titleTransferPerson->contact }}
+                                {{ $titleTransferPerson->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -361,7 +361,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $titleTransferPerson->address }}
+                                {{ $titleTransferPerson->residential_address }}
                             </div>
                         </div>
                     </td>

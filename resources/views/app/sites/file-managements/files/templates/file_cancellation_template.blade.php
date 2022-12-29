@@ -267,7 +267,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->contact }}
+                                {{ $customer->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -282,7 +282,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->address }}
+                                {{ $customer->residential_address }}
                             </div>
                         </div>
                     </td>

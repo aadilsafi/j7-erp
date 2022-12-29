@@ -108,8 +108,6 @@ class store extends FormRequest
                 $amount_in_numbers = (float)str_replace(',', '', $amount_in_numbers[0]);
                 $amount_received = (float)str_replace(',', '', $amount_received);
 
-                dd($amount_in_numbers ,$amount_received);
-
                 if ($amount_in_numbers >  $amount_received) {
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
                 }

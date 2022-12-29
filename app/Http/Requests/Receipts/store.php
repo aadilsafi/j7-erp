@@ -106,6 +106,7 @@ class store extends FormRequest
                     $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
                 }
                 if ($amount_in_numbers[0] >  $amount_received) {
+                    dd($amount_in_numbers[0] ,$amount_received);
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
                 }
             });

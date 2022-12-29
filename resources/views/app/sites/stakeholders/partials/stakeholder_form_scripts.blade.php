@@ -412,9 +412,9 @@
         });
 
         var dob = $("#dob").flatpickr({
-            defaultDate: "today",
+            defaultDate: new Date(1995, 01, 01),
             minDate: '',
-            altInput: !0,
+            maxDate: new Date().fp_incr(-750),
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
         });

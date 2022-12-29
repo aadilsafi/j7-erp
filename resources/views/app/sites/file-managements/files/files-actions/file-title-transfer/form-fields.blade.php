@@ -265,14 +265,14 @@
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">Contact</label>
-                        <input type="text" readonly value="{{ $customer->contact }}"
+                        <label class="form-label fs-5">Mobile Contact</label>
+                        <input type="text" readonly value="{{ $customer->mobile_contact }}"
                             class="form-control form-control-lg" id="" placeholder="Contact" />
                     </div>
 
                     <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
-                        <label class="form-label fs-5">Optional Contact</label>
-                        <input type="text" readonly value="{{ $customer->optional_contact }}"
+                        <label class="form-label fs-5">Office Contact</label>
+                        <input type="text" readonly value="{{ $customer->office_contact }}"
                             class="form-control form-control-lg" placeholder="Optional Contact" />
                     </div>
                 </div>
@@ -291,11 +291,11 @@
                     </div>
 
                     <div class="col-lg-6 col-md-6 position-relative">
-                        <label class="form-label fs-5" for="optional_email">Optional Email</label>
+                        <label class="form-label fs-5" for="optional_email">Office Email</label>
                         <input type="email"
                             class="form-control form-control-lg @error('email') is-invalid @enderror"
                             name="optional_email" placeholder="Optional Email" autocomplete="false" readonly
-                            value="{{ isset($customer) ? $customer->optional_email : old('email') }}" />
+                            value="{{ isset($customer) ? $customer->office_email : old('email') }}" />
                         @error('email')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -305,7 +305,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                         <label class="form-label fs-5" for="stackholder_address">Address</label>
                         <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="4">{{ $customer->address }}</textarea>
+                            rows="4">{{ $customer->residential_address }}</textarea>
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-12 position-relative">

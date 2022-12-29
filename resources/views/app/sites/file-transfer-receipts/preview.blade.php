@@ -346,21 +346,21 @@
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_country" placeholder="Country"
-                                    value="{{$transferOwner->residentialCountry->name}}" />
+                                    value="{{$transferOwner->residentialCountry->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_state" placeholder="State" value="{{$transferOwner->residentialState->name}}" />
+                                    id="transferOwner_state" placeholder="State" value="{{$transferOwner->residentialState->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_city" placeholder="City" value="{{$transferOwner->residentialCity->name}}" />
+                                    id="transferOwner_city" placeholder="City" value="{{$transferOwner->residentialCity->name ?? ''}}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
@@ -368,7 +368,7 @@
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
                                     id="transferOwner_nationality" placeholder="Nationality"
-                                    value="{{ $transferOwner->nationalityCountry->name }}" />
+                                    value="{{ $transferOwner->nationalityCountry->name ?? '' }}" />
 
                             </div>
                         </div>
@@ -527,21 +527,21 @@
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_country" placeholder="Country" value="{{ $fileOwner->residentialCountry->name }}" />
+                                    id="fileOwner_country" placeholder="Country" value="{{ $fileOwner->residentialCountry->name ?? '' }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_state"
-                                    placeholder="State" value="{{ $fileOwner->residentialState->name }}" />
+                                    placeholder="State" value="{{ $fileOwner->residentialState->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_city"
-                                    placeholder="City" value="{{ $fileOwner->residentialCity->name }}" />
+                                    placeholder="City" value="{{ $fileOwner->residentialCity->name ?? ''}}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">

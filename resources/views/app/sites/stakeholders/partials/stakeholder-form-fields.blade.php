@@ -51,7 +51,7 @@
                                                 id="stakeholder_type_{{ $type->type }}"
                                                 onchange="performAction('{{ $type->type }}')"
                                                 name="stakeholder_type[{{ $type->type }}]" value="1"
-                                                {{ $type->status ? 'checked' : null }} />
+                                                {{ $type->status ? 'checked' : null }} {{$type->status ? 'disabled' : null}}/>
                                             <label class="form-check-label" for="stakeholder_type_{{ $type->type }}">
                                                 <span class="switch-icon-left"><i data-feather="check"></i></span>
                                                 <span class="switch-icon-right"><i data-feather="x"></i></span>

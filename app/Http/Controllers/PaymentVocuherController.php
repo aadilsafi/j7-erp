@@ -265,7 +265,7 @@ class PaymentVocuherController extends Controller
     public function activeCheque($site_id, $id)
     {
         DB::transaction(function () use ($site_id, $id) {
-            $payment_voucher = PaymentVocuher::find(decryptParams($id));
+            $payment_voucher = PaymentVocuher::find($id);
             if ($payment_voucher->status == 1) {
                 $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
                 $payment_voucher->cheque_status = 1;

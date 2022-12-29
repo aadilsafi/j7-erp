@@ -47,7 +47,7 @@ class PaymentVoucherDatatable extends DataTable
                 $status = $payment_voucher->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
                 if ($payment_voucher->status == 0) {
                     $status .= '  <a onClick="ApproveModal()" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
-                    title="Approve'. encryptParams($payment_voucher->id) . '"
+                    title="Approve'. $payment_voucher->id . '"
                     href="#" >
                     <i class="bi bi-check" style="font-size: 1.1rem" class="m-10"></i>
                 </a>';

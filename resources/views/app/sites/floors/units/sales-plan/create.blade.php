@@ -121,15 +121,15 @@
                                     <label class="custom-option-item p-1"
                                         for="checkbox-{{ $additionalCost->slug }}-{{ $key }}">
                                         <span class="d-flex justify-content-between flex-wrap">
-                                            <span class="fw-bolder">{{ $key }}.
+                                            <span class="fw-bolder">{{ $key + 1 }}.
                                                 {{ $additionalCost->name }}</span>
                                         </span>
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder"></span>
                                             @if ($additionalCost->applicable_on_unit)
                                                 <span class="fw-bolder">{{ $additionalCost->unit_percentage }} %</span>
-                                            @else
-                                                <span class="fw-bolder">0 %</span>
+                                                {{-- @else
+                                                <span class="fw-bolder">0 %</span> --}}
                                             @endif
                                         </span>
                                     </label>
@@ -586,11 +586,10 @@
                 stackholders.trigger('change')
 
                 stackholders.prop('disabled', true);
-                
             @endif
 
-            @if(Auth::user()->hasRole('CRM'))
-                    $('#stakeholder_id').val('{{ $crm_lead->id }}')
+            @if (Auth::user()->hasRole('CRM'))
+                $('#stakeholder_id').val('{{ $crm_lead->id }}')
             @endif
 
 

@@ -57,12 +57,12 @@
                             <i class="bi bi-receipt font-medium-3 me-50"></i>
                             <span class="fw-bold">Sales Plan</span></a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" id="othersTab" data-bs-toggle="tab" href="#othersData" aria-controls="others"
                             role="tab" aria-selected="false">
                             <i class="bi bi-receipt font-medium-3 me-50"></i>
                             <span class="fw-bold">Others</span></a>
-                    </li>
+                    </li> --}}
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="siteCongifData" aria-labelledby="site-congif-tab" role="tabpanel">

@@ -166,6 +166,20 @@ class CitiesChunkSixSeeder extends Seeder
                 'flag' => 1,
                 'wikiDataId' => null,
             ],
+            [
+                'id' => 1462236,
+                'name' => 'Bagh',
+                'state_id' => 3176,
+                'state_code' => 'PA',
+                'country_id' => 167,
+                'country_code' => 'PK',
+                'latitude' => null,
+                'longitude' =>null,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'flag' => 1,
+                'wikiDataId' => null,
+            ],
 
         ];
 

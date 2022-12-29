@@ -157,6 +157,9 @@ class StakeholderService implements StakeholderInterface
                         StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
                             'status' => true,
                         ]);
+                        StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'L')->update([
+                            'status' => true,
+                        ]);
                     }
                 }
             }
@@ -339,6 +342,9 @@ class StakeholderService implements StakeholderInterface
                         StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'K')->update([
                             'status' => true,
                         ]);
+                        StakeholderType::where('stakeholder_id', ($nok['stakeholder_id']))->where('type', 'L')->update([
+                            'status' => true,
+                        ]);
                     }
                 }
             }
@@ -361,7 +367,7 @@ class StakeholderService implements StakeholderInterface
                         $stakeholder->KinStakeholders()->detach();
                         if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
                             $stakeholders = [];
-                           
+
                             foreach ($inputs['stakeholders'] as $nok) {
                                 if ($nok['stakeholder_id'] != 0) {
                                     $data = [

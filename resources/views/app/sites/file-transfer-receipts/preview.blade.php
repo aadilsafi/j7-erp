@@ -314,7 +314,7 @@
                                         class="text-danger">*</span></label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="transferOwner_email" placeholder="Email" autocomplete="false"
-                                    value="{{ $transferOwner->email }}" />
+                                    value="" />
 
                             </div>
 
@@ -322,7 +322,7 @@
                                 <label class="form-label fs-5" for="transferOwner_optional_email">Optional Email</label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="transferOwner_optional_email" placeholder="Optional Email" autocomplete="false"
-                                    value="{{ $transferOwner->optional_email }}" />
+                                    value="" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
@@ -330,14 +330,14 @@
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_contact" placeholder="Contact"
-                                    value="{{ $transferOwner->contact }}" />
+                                    value="" />
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label class="form-label fs-5" for="transferOwner_optional_contact">Optional Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_optional_contact" placeholder="Optional Contact"
-                                    value="{{ $transferOwner->optional_contact }}" />
+                                    value="" />
                             </div>
                         </div>
 

@@ -86,8 +86,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function query(SalesPlan $model): QueryBuilder
     {
-        if (Route::current()->getName() != 'sites.sales_plan.show') {
-
+        if ($this->floor > 0) {
             return $model->newQuery()->with('stakeholder', 'unit')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
         } else {
             if (Auth::user()->hasRole('CRM')) {
@@ -105,10 +104,7 @@ class SalesPlanDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        if (Route::current()->getName() != 'sites.sales_plan.show') {
-            $unitStatus = Unit::find($this->unit->id)->status_id;
-        }
-        $createPermission =  Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.create');
+        $createPermission =  Auth::user()->can('sites.sales_plan.create');
         // $selectedDeletePermission = Auth::user()->hasPermissionTo('sites.floors.units.sales-plans.destroy-selected');
         $selectedDeletePermission = 0;
 
@@ -125,26 +121,24 @@ class SalesPlanDataTable extends DataTable
         ];
 
         if ($createPermission) {
-            if (Route::current()->getName() != 'sites.sales_plan.show') {
-                if ($unitStatus == 1 || $unitStatus == 6) {
-                    $addNewButton = Button::raw('add-new')
-                        ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                        ->text('<i class="bi bi-plus"></i> Add New')
-                        ->attr([
-                            'onclick' => 'addNew()',
-                        ]);
-                    array_unshift($buttons, $addNewButton);
-                }
-            } else {
-                $addNewButton = Button::raw('add-new')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-plus"></i> Add New')
-                    ->attr([
-                        'onclick' => 'addNew()',
-                    ]);
-                array_unshift($buttons, $addNewButton);
-            }
+
+            $addNewButton = Button::raw('add-new')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+            array_unshift($buttons, $addNewButton);
+        } else {
+            $addNewButton = Button::raw('add-new')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-plus"></i> Add New')
+                ->attr([
+                    'onclick' => 'addNew()',
+                ]);
+            array_unshift($buttons, $addNewButton);
         }
+
 
         if ($selectedDeletePermission) {
             $buttons[] =  Button::raw('delete-selected')

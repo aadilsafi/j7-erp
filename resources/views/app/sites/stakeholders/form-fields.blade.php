@@ -119,11 +119,11 @@
                                         <select class="form-control selectStk" id="stakeholders_{{ $key }}"
                                             name="stakeholders[{{ $key }}][stakeholder_id]">
                                             <option value="0" selected>Select Stakeholder</option>
-                                            @foreach ($stakeholders as $stakeholderssss)
+                                            @foreach ($stakeholders as $k => $stakeholderssss)
                                                 @continue(isset($stakeholder) && $stakeholderssss->id == $stakeholder->id)
 
                                                 <option value="{{ $stakeholderssss->id }}"
-                                                    {{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? ($stakeholderssss->id == $stakeholderData->stakeholder_id ? 'selected' : '') : '' }}>
+                                                    {{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? ($stakeholderssss->id == $stakeholderData['stakeholder_id'] ? 'selected' : '') : '' }}>
                                                     {{ $stakeholderssss->full_name }}</option>
                                             @endforeach
                                         </select>
@@ -135,7 +135,7 @@
                                         <input type="text"
                                             class="form-control form-control-md @error('relation') is-invalid @enderror"
                                             id="stakeholders_{{ $key }}[relation]"
-                                            value="{{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? $stakeholderData->relation : '' }}"
+                                            value="{{ isset($stakeholder) && count($stakeholder->KinStakeholders) > 0 ? $stakeholderData['relation'] : '' }}"
                                             name="stakeholders[{{ $key }}][relation]" placeholder="Relation"
                                             value="" />
                                     </div>

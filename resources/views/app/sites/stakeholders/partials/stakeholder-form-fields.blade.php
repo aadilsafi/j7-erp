@@ -454,7 +454,8 @@
 
         <div class="row mb-1">
             <div class="col">
-                <h4 class="mb-1" id="change_residential_txt"><u>Residential Address</u></h4>
+                <h4 class="mb-1" id="change_residential_txt" class="change_residential_txt"><u>Residential
+                        Address</u></h4>
                 <span>‎</span>
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -520,7 +521,7 @@
                         @enderror
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="residential_address">Residential Address <span
+                        <label class="form-label fs-5" for="residential_address">Address <span
                                 class="text-danger">*</span></label>
                         <textarea class="form-control @error('residential_address') is-invalid @enderror" name="residential[address]"
                             id="residential_address" rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->residential_address : old('residential_address') }}</textarea>
@@ -532,9 +533,9 @@
             </div>
             <div class="col">
 
-                <h4 class="mb-1" id="change_mailing_txt"><u>Mailing Address</u></h4>
-                <span class="text-info">( Same as Residential Address <input type="checkbox" id="cpyAddress" />
-                    )</span>
+                <h4 class="mb-1" id="change_mailing_txt" class="change_mailing_txt"><u>Mailing Address</u></h4>
+                ( <span class="text-info" id="change_mailing_btn">Same as Residential Address </span> ) <input
+                    type="checkbox" id="cpyAddress" />
 
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -542,7 +543,7 @@
                             Type <span class="text-danger">*</span></label>
                         <input type="text"
                             class="form-control form-control-md @error('occupation') is-invalid @enderror"
-                            id="mailing_address_type" name="mailing[address_type]" placeholder="Mailing Address Type"
+                            id="mailing_address_type" name="mailing[address_type]" placeholder="Address Type"
                             value="{{ isset($stakeholder) ? $stakeholder->mailing_address_type : old('mailing.address_type') }}" />
                         @error('mailing_address_type')
                             <span class="text-danger">{{ $message }}</span>
@@ -591,17 +592,17 @@
                         </label>
                         <input type="number"
                             class="form-control form-control-md @error('mailing_postal_code') is-invalid @enderror"
-                            id="mailing_postal_code" name="mailing[postal_code]" placeholder="Mailing Postal Code"
+                            id="mailing_postal_code" name="mailing[postal_code]" placeholder="Postal Code"
                             value="{{ isset($stakeholder) ? $stakeholder->mailing_postal_code : old('mailing.postal_code') }}" />
                         @error('mailing.postal_code')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                        <label class="form-label fs-5" for="mailing_address">Address <span
                                 class="text-danger">*</span></label>
                         <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing[address]"
-                            id="mailing_address" rows="3" placeholder="Stakeholder Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
+                            id="mailing_address" rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>
                         @error('mailing.address')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

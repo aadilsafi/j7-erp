@@ -358,9 +358,10 @@ class StakeholderService implements StakeholderInterface
 
 
                     if ($key == 'K') {
+                        $stakeholder->KinStakeholders()->detach();
                         if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
-                            $stakeholder->KinStakeholders()->detach();
                             $stakeholders = [];
+                           
                             foreach ($inputs['stakeholders'] as $nok) {
                                 if ($nok['stakeholder_id'] != 0) {
                                     $data = [

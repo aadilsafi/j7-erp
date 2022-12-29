@@ -30,7 +30,7 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label" style="font-size: 15px" for="floor">
-                            Incentive Amount
+                            Incentive Amount (Per Unit Area)
                         </label>
                         <input min="0" onchange="CalculateTotalDealerIncentive()" id="dealer_incentive"
                             type="number" class="form-control @error('dealer_incentive') is-invalid @enderror"

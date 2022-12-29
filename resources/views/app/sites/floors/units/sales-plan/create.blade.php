@@ -298,11 +298,11 @@
 
             });
 
-            var e = $("#stackholders");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
+            var stackholders = $("#stackholders");
+            stackholders.wrap('<div class="position-relative"></div>');
+            stackholders.select2({
                 dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
+                dropdownParent: stackholders.parent(),
                 width: "100%",
                 containerCssClass: "select-lg",
             }).on("change", function(e) {
@@ -581,6 +581,19 @@
                 });
             });
 
+            @if (isset($crm_lead))
+                stackholders.val('{{ $crm_lead->id }}')
+                stackholders.trigger('change')
+
+                stackholders.prop('disabled', true);
+                
+            @endif
+
+            @if(Auth::user()->hasRole('CRM'))
+                    $('#stakeholder_id').val('{{ $crm_lead->id }}')
+            @endif
+
+
             var e = $("#sales_source_lead_source");
             e.wrap('<div class="position-relative"></div>');
             e.select2({
@@ -822,7 +835,7 @@
 
             if ($('#unit_id').val() > 0) {
                 $.ajax({
-                    url: "{{ route('sites.sales_plan.ajax-generate-installments', ['site_id' => encryptParams($site->id)]) }}",
+                    url: "{{ route('sites.sales_plan.ajax-generateInstallments', ['site_id' => encryptParams($site->id)]) }}",
 
                     type: 'GET',
                     data: data,
@@ -974,7 +987,7 @@
 
                 //// Unit Grand Total
                 'unit[grand_total]': {
-                    required: true!= 'i' || $("#stakeholder_as").val() != 'c'
+                    required: true != 'i' || $("#stakeholder_as").val() != 'c'
                 },
 
                 //// Unit Down Payment

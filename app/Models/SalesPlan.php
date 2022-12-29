@@ -32,6 +32,7 @@ class SalesPlan extends Model
         'cancel',
         'created_date',
         'serial_no',
+        'is_from_crm'
     ];
 
     protected $casts = [

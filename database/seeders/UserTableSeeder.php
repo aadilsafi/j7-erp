@@ -19,11 +19,11 @@ class UserTableSeeder extends Seeder
     {
         $user = (new User())->updateOrCreate([
             'site_id' => 1,
-            'name' => 'Syed Aizaz Haider Shah',
             'email' => 'admin@erp.com',
             'contact' => '03100177771',
             'password' => Hash::make('password'),
         ], [
+            'name' => 'Syed Aizaz Haider Shah',
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
@@ -71,6 +71,6 @@ class UserTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $user->assignRole([10]);
-        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store']);
+        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.sales_plan.show']);
     }
 }

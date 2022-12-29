@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-
+                                        
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -408,6 +408,10 @@
                     </select>
                 </div>
             </div>
+
+            @if(Auth::user()->hasRole('CRM'))
+                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id">
+            @endif
 
             <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                 {{ view('app.sites.stakeholders.partials.stakeholder-form-fields', [

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LeadController;
+use App\Http\Controllers\Api\SalesPlanApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::group(['prefix' => '/auth'], function () {
         // save lead as stakeholder in erp
         Route::post('saveLead', [LeadController::class, 'saveLead']);
-
+        Route::post('generateSalesPlan', [SalesPlanApiController::class,'generateSalesPlan']);
         // Route::get('logout', [AuthController::class, 'logout']);
     });
 });

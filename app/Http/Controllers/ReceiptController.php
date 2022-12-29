@@ -96,6 +96,7 @@ class ReceiptController extends Controller
         try {
             if (!request()->ajax()) {
                 $data = $request->all();
+                dd($data);
                 $record = $this->receiptInterface->store($site_id, $data);
                 // if (is_a($record, 'GeneralException')  || is_a($record, 'Exception')) {
                 //     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess($record->getMessage());

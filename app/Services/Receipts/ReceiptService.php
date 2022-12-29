@@ -43,7 +43,6 @@ class ReceiptService implements ReceiptInterface
     {
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
-            dd($data);
 
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);

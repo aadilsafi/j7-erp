@@ -274,7 +274,7 @@
                                                                 (Rs)</label>
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="unit_downpayment_total"
-                                                                value="{{ number_format($salePlan->down_payment_total) }}"
+                                                                value="{{$salePlan->down_payment_total }}"
                                                                 name="unit[downpayment][total]" placeholder="Amount" />
                                                         </div>
                                                     </div>

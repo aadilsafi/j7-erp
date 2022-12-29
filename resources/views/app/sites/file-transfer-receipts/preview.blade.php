@@ -283,7 +283,7 @@
                                         <label class="form-label fs-5" for="industry">Industry </label>
                                         <input type="text" readonly class="form-control form-control-lg"
                                             id="transferOwner_industry" placeholder="Industry"
-                                            value="{{ $transferOwner->occupation }}" />
+                                            value="{{ $transferOwner->industry }}" />
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -314,7 +314,7 @@
                                         class="text-danger">*</span></label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="transferOwner_email" placeholder="Email" autocomplete="false"
-                                    value="" />
+                                    value="{{$transferOwner->email}}" />
 
                             </div>
 
@@ -322,7 +322,7 @@
                                 <label class="form-label fs-5" for="transferOwner_optional_email">Optional Email</label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="transferOwner_optional_email" placeholder="Optional Email" autocomplete="false"
-                                    value="" />
+                                    value="{{$transferOwner->office_email}}" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
@@ -330,14 +330,14 @@
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_contact" placeholder="Contact"
-                                    value="" />
+                                    value="{{$transferOwner->mobile_contact}}" />
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label class="form-label fs-5" for="transferOwner_optional_contact">Optional Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_optional_contact" placeholder="Optional Contact"
-                                    value="" />
+                                    value="{{$transferOwner->office_contact}}" />
                             </div>
                         </div>
 
@@ -346,21 +346,21 @@
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="transferOwner_country" placeholder="Country"
-                                    value="" />
+                                    value="{{$transferOwner->residentialCountry->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_state" placeholder="State" value="" />
+                                    id="transferOwner_state" placeholder="State" value="{{$transferOwner->residentialState->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="transferOwner_city" placeholder="City" value="" />
+                                    id="transferOwner_city" placeholder="City" value="{{$transferOwner->residentialCity->name ?? ''}}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
@@ -368,7 +368,7 @@
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
                                     id="transferOwner_nationality" placeholder="Nationality"
-                                    value="{{ $transferOwner->nationality }}" />
+                                    value="{{ $transferOwner->nationalityCountry->name ?? '' }}" />
 
                             </div>
                         </div>
@@ -377,7 +377,7 @@
                                 <label class="form-label fs-5" for="transferOwner_address">Address <span
                                         class="text-danger">*</span></label>
                                 <textarea readonly class="form-control form-control-lg" id="transferOwner_address" placeholder="Address"
-                                    rows="3"> </textarea>
+                                    rows="3"> {{ $transferOwner->residential_address }}</textarea>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="transferOwner_mailing_address">Mailing Address <span
@@ -470,7 +470,7 @@
                                         <label class="form-label fs-5" for="industry">Industry </label>
                                         <input type="text" readonly class="form-control form-control-lg"
                                             id="fileOwner_industry" placeholder="Industry"
-                                            value="{{ $fileOwner->occupation }}" />
+                                            value="{{ $fileOwner->industry }}" />
                                     </div>
                                 </div>
                                 <div class="row mb-1">
@@ -505,21 +505,21 @@
                                 <label class="form-label fs-5" for="fileOwner_optional_email">Optional Email</label>
                                 <input type="email" readonly class="form-control form-control-md"
                                     id="fileOwner_optional_email" placeholder="Optional Email" autocomplete="false"
-                                    value="{{ $fileOwner->optional_email }}" />
+                                    value="{{ $fileOwner->office_email }}" />
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_contact">Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_contact" placeholder="Contact" value="{{ $fileOwner->contact }}" />
+                                    id="fileOwner_contact" placeholder="Contact" value="{{ $fileOwner->mobile_contact }}" />
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-12">
                                 <label class="form-label fs-5" for="fileOwner_optional_contact">Optional Contact <span
                                         class="text-danger">*</span></label>
                                 <input readonly type="text" class="form-control form-control-lg"
                                     id="fileOwner_optional_contact" placeholder="Optional Contact"
-                                    value="{{ $fileOwner->optional_contact }}" />
+                                    value="{{ $fileOwner->office_contact }}" />
                             </div>
                         </div>
 
@@ -527,21 +527,21 @@
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="parent_id">Country</label>
                                 <input readonly type="text" class="form-control form-control-lg"
-                                    id="fileOwner_country" placeholder="Country" value="{{ $fileOwner->country }}" />
+                                    id="fileOwner_country" placeholder="Country" value="{{ $fileOwner->residentialCountry->name ?? '' }}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">State</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_state"
-                                    placeholder="State" value="{{ $fileOwner->state }}" />
+                                    placeholder="State" value="{{ $fileOwner->residentialState->name ?? ''}}" />
 
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
                                 <label class="form-label" style="font-size: 15px" for="city_id">City</label>
                                 <input readonly type="text" class="form-control form-control-lg" id="fileOwner_city"
-                                    placeholder="City" value="{{ $fileOwner->city }}" />
+                                    placeholder="City" value="{{ $fileOwner->residentialCity->name ?? ''}}" />
 
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6 position-relative">
@@ -549,7 +549,7 @@
                                 <input type="text" readonly
                                     class="form-control form-control-lg @error('occupation') is-invalid @enderror"
                                     id="fileOwner_nationality" placeholder="Nationality"
-                                    value="{{ $fileOwner->nationality }}" />
+                                    value="{{ $fileOwner->nationalityCountry->name ?? ''}}" />
 
                             </div>
                         </div>
@@ -557,7 +557,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_address">Address <span
                                         class="text-danger">*</span></label>
-                                <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3"> {{ $fileOwner->address }}</textarea>
+                                <textarea readonly class="form-control form-control-lg" id="fileOwner_address" placeholder="Address" rows="3"> {{ $fileOwner->residential_address }}</textarea>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="fileOwner_mailing_address">Mailing Address <span

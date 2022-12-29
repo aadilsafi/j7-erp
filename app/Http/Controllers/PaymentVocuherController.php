@@ -240,7 +240,7 @@ class PaymentVocuherController extends Controller
 
     public function approvePaymentVoucher($site_id, $id)
     {
-        dd(decryptParams($id));
+        dd($id);
 
         DB::transaction(function () use ($site_id, $id) {
 

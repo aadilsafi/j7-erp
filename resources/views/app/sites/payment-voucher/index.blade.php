@@ -147,6 +147,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
 
         function ApproveModal() {
             let payment_voucher_id = $('#approveID').attr('payment_voucher_id');
+            alert(payment_voucher_id)
             Swal.fire({
                 icon: 'warning',
                 title: 'Warning',

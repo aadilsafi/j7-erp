@@ -71,6 +71,6 @@ class UserTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $user->assignRole([10]);
-        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.sales_plan.show']);
+        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.floors.units.sales-plans.index']);
     }
 }

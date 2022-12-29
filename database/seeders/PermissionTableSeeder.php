@@ -629,20 +629,20 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'name' => 'sites.floors.units.sales-plans.create',
-                'show_name' => 'Can Create Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'name' => 'sites.floors.units.sales-plans.store',
-                'show_name' => 'Can Store Sales Plan',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.create',
+            //     'show_name' => 'Can Create Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
+            // [
+            //     'name' => 'sites.floors.units.sales-plans.store',
+            //     'show_name' => 'Can Store Sales Plan',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             [
                 'name' => 'sites.floors.units.sales-plans.initail-sales-plan',
                 'show_name' => 'Can Preview Initial Sales Plan',
@@ -686,6 +686,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // [
+            //     'name' => 'sites.sales_plan.show',
+            //     'show_name' => 'Can View Sales Plans ',
+            //     'guard_name' => 'web',
+            //     'created_at' => now(),
+            //     'updated_at' => now(),
+            // ],
             //sales Plan Import
             // [
             //     'name' => 'sites.floors.SalesPlanImport.importSalesPlan',
@@ -2449,13 +2456,7 @@ class PermissionTableSeeder extends Seeder
             ],
 
             // Outside Sales Plan Permission
-            [
-                'name' => 'sites.sales_plan.show',
-                'show_name' => 'Can View Sales Plans ',
-                'guard_name' => 'web',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
+            
 
             //  Company permissions
             // [

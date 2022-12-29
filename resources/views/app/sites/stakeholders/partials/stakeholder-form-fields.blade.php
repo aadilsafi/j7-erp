@@ -599,7 +599,7 @@
                         @enderror
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="mailing_address">Mailing Address <span
+                        <label class="form-label fs-5" for="mailing_address">Address <span
                                 class="text-danger">*</span></label>
                         <textarea class="form-control @error('mailing_address') is-invalid @enderror" name="mailing[address]"
                             id="mailing_address" rows="3" placeholder="Address">{{ isset($stakeholder) ? $stakeholder->mailing_address : old('mailing_address') }}</textarea>

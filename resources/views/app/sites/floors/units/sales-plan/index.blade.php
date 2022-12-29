@@ -120,7 +120,7 @@
 
         function addNew() {
             location.href =
-                "{{ route('sites.floors.units.sales-plans.create', ['site_id' => encryptParams($site), 'floor_id' => encryptParams($floor), 'unit_id' => encryptParams($unit->id)]) }}";
+                "{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site),])  }}";
         }
 
         function openTemplatesModal(sales_plan_id) {

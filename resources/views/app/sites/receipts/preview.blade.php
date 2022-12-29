@@ -364,7 +364,7 @@
                                                         <td>{{ $paidIntsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ $paidIntsallment->amount }}</td>
+                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
                                                         <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
                                                         <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}

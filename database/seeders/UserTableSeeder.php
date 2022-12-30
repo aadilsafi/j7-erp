@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -94,6 +95,6 @@ class UserTableSeeder extends Seeder
             'updated_at' => now(),
         ]);
         $user->assignRole([10]);
-        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.floors.units.sales-plans.index', 'sites.floors.units.sales-plans.templates.print']);
+        (new Role())->find(10)->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.floors.units.sales-plans.index', 'sites.floors.units.sales-plans.templates.print']);
     }
 }

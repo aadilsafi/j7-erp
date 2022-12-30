@@ -35,10 +35,7 @@ class FloorsPreviewDataTable extends DataTable
                 );
             })
             ->editColumn('status_id', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'status_id', 'inputtype' => 'select', 'value' => $unit->status->name]
-                );
+                return $unit->status->name;
             })
             ->editColumn('name', function ($unit) {
                 return view(

@@ -267,7 +267,7 @@
                 <tr height="20px">
                     <td colspan="2">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-2">
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">

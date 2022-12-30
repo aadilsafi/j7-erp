@@ -84,30 +84,18 @@
                             <div class="col-6 text-nowrap">
                                 <strong>Amount To Be Refunded</strong>
                             </div>
-                            <div class="col">
+                            <div class="col text-center">
                                 {{ number_format($total_paid_amount) }}
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr height="25px">
-                    <td width="60%">
+                    <td colspan="2">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col">
                                 <strong>Amount Remarks</strong>
-                            </div>
-                            <div class="col">
-                                {{ $refund_file->amount_remarks }}
-                            </div>
-                        </div>
-                    </td>
-                    <td width="40%">
-                        <div class="row">
-                            <div class="col-7">
-
-                            </div>
-                            <div class="col">
-
+                                <p>{{ $refund_file->amount_remarks }}</p>
                             </div>
                         </div>
                     </td>
@@ -267,7 +255,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->contact }}
+                                {{ $customer->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -282,7 +270,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->address }}
+                                {{ $customer->residential_address }}
                             </div>
                         </div>
                     </td>

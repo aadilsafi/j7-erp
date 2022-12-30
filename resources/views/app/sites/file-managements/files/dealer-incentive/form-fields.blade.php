@@ -13,7 +13,7 @@
                             <option value="0">Select Dealer</option>
                             @foreach ($stakeholders as $row)
                                 <option value="{{ $row->stakeholder->id }}">
-                                    {{ $row->stakeholder->full_name }} ( {{ cnicFormat($row->stakeholder->cnic) }})
+                                    {{ $row->stakeholder->full_name }} ( {{ $row->stakeholder->cnic }})
                                 </option>
                             @endforeach
                         </select>
@@ -30,7 +30,7 @@
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                         <label class="form-label" style="font-size: 15px" for="floor">
-                            Incentive Amount
+                            Incentive Amount (Per Unit Area)
                         </label>
                         <input min="0" onchange="CalculateTotalDealerIncentive()" id="dealer_incentive"
                             type="number" class="form-control @error('dealer_incentive') is-invalid @enderror"

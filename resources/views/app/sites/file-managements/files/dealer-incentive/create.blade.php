@@ -139,7 +139,7 @@
                                         response.units[i]['gross_area'] + '" value="' +
                                          response.units[i]['id'] +
                                           '" id="unit_'+ response.units[i]['id'] +'" /><label class="form-check-label" for="unit_'+
-                                           response.units[i]['id'] +'"><span class="switch-icon-left"><i data-feather="check"></i></span><span class="switch-icon-right"><i data-feather="x"></i></span></label></div></div></td>',
+                                           response.units[i]['id'] +'"></label></div></div></td>',
                                         '<td class="text-nowrap text-center">' + response
                                         .units[i]['name'] + '</td>',
                                         // '<td class="text-nowrap text-center">'+response.total_calculated_installments[i]['date']+'</td>',

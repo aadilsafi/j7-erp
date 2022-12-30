@@ -203,182 +203,35 @@ class ImportStakeholdersDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('full_name')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'full_name'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('father_name')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'father_name'
-
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('occupation')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'occupation'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('designation')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'designation'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('cnic')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'cnic'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('passport_no')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'passport_no'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('ntn')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'ntn'
-            ])->render())->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('mobile_contact')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mobile_contact'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('office_contact')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'office_contact'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('email')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'email'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('office_email')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'office_email'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('residential_city')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'residential_city'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('residential_state')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'residential_state'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('residential_country')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'residential_country'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('residential_postal_code')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'residential_postal_code'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('residential_address')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'residential_address'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('mailing_city')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mailing_city'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('mailing_state')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mailing_state'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('mailing_country')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mailing_country'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('mailing_postal_code')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mailing_postal_code'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('mailing_address')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'mailing_address'
-            ])->render())->addClass('removeTolltip'),
-
-            Column::computed('nationality')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'nationality'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('referred_by')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'referred_by'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('source')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'source'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('comments')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'comments'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('is_dealer')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'is_dealer'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('is_vendor')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'is_vendor'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('is_customer')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'is_customer'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('is_kin')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'required_fields' => $this->required_fields,
-                'name' => 'is_kin'
-            ])->render())->addClass('removeTolltip'),
+            Column::computed('full_name')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('father_name')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('occupation')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('designation')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('cnic')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('passport_no')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('ntn')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::computed('mobile_contact')->addClass('removeTolltip'),
+            Column::computed('office_contact')->addClass('removeTolltip'),
+            Column::computed('email')->addClass('removeTolltip'),
+            Column::computed('office_email')->addClass('removeTolltip'),
+            Column::computed('residential_city')->addClass('removeTolltip'),
+            Column::computed('residential_state')->addClass('removeTolltip'),
+            Column::computed('residential_country')->addClass('removeTolltip'),
+            Column::computed('residential_postal_code')->addClass('removeTolltip'),
+            Column::computed('residential_address')->addClass('removeTolltip'),
+            Column::computed('mailing_city')->addClass('removeTolltip'),
+            Column::computed('mailing_state')->addClass('removeTolltip'),
+            Column::computed('mailing_country')->addClass('removeTolltip'),
+            Column::computed('mailing_postal_code')->addClass('removeTolltip'),
+            Column::computed('mailing_address')->addClass('removeTolltip'),
+            Column::computed('nationality')->addClass('removeTolltip'),
+            Column::computed('referred_by')->addClass('removeTolltip'),
+            Column::computed('source')->addClass('removeTolltip'),
+            Column::computed('comments')->addClass('removeTolltip'),
+            Column::computed('is_dealer')->addClass('removeTolltip'),
+            Column::computed('is_vendor')->addClass('removeTolltip'),
+            Column::computed('is_customer')->addClass('removeTolltip'),
+            Column::computed('is_kin')->addClass('removeTolltip'),
 
         ];
     }

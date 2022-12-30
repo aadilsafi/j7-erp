@@ -16,6 +16,7 @@ use App\Models\FileCancellationAttachment;
 use Illuminate\Support\Facades\Notification;
 
 use App\Notifications\FileRefundNotification;
+use Str;
 
 class CancellationService implements CancellationInterface
 {
@@ -53,7 +54,7 @@ class CancellationService implements CancellationInterface
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
                 'amount_to_be_refunded' => str_replace( ',', '', $inputs['amount_to_be_refunded']) ,
                 'payment_due_date' => $inputs['payment_due_date'],
-                'amount_remarks' => $inputs['amount_remarks'],
+                'amount_remarks' => Str::limit($inputs['amount_remarks'],200,''),
                 'status' => 0,
                 'cancellation_charges' =>str_replace( ',', '', $inputs['cancellation_charges']),
                 'comments' => $inputs['comments'],

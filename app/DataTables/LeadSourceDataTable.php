@@ -69,7 +69,7 @@ class LeadSourceDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission = auth()->user()->can('sites.lead-sources.create');
-        $selectedDeletePermission = auth()->user()->can('sites.lead-sources.destroy-selected');
+        $selectedDeletePermission = 0;
 
         $buttons = [];
 

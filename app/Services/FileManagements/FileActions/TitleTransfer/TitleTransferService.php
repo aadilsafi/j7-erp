@@ -161,7 +161,7 @@ class TitleTransferService implements TitleTransferInterface
                     'referred_by' => $individual['referred_by'],
                     'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
-                    'is_local' => $individual['is_local'],
+                    'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
                     'nationality' => $individual['nationality'],
                 ];
             } else if ($stakeholder_as == 'c') {
@@ -272,7 +272,7 @@ class TitleTransferService implements TitleTransferInterface
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
                 'amount_to_be_paid' => str_replace(',', '', $inputs['amount_to_be_paid']),
                 'payment_due_date' => $inputs['payment_due_date'],
-                'amount_remarks' => $inputs['amount_remarks'],
+                'amount_remarks' => Str::limit($inputs['amount_remarks'],200,''),
                 'transfer_rate' => str_replace(',', '', $inputs['transfer_rate']),
                 'status' => 0,
                 'comments' => $inputs['comments'],

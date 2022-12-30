@@ -60,10 +60,10 @@ class SalesPlanController extends Controller
         $data = [
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
-            'unit' => (new Unit())->find(decryptParams($unit_id)),
+            'unit' => decryptParams($unit_id) > 0 ? (new Unit())->find(decryptParams($unit_id)) : [],
             'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
-        return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.index', $data);
+        return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
     }
 
     public function inLeftbar(Request $request, SalesPlanDataTable $dataTable, $site_id)
@@ -143,7 +143,7 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-      
+        
         try {
             $validator = Validator::make($request->all(), [
                 'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
@@ -159,13 +159,14 @@ class SalesPlanController extends Controller
             $unit_id = encryptParams($inputs['unit_id']);
 
             $record = $this->salesPlanInterface->store(decryptParams($site_id), $inputs);
-            return redirect()->route('sites.sales_plan.show', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess('Sales Plan Saved!');
+            
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Saved!');
         } catch (GeneralException $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage());
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
         } catch (Exception $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage());
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger(__('lang.commons.something_went_wrong'));
+            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
         }
     }
 

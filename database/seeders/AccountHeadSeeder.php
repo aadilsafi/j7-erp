@@ -3357,7 +3357,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '60100110001001',
-                'name' => 'Sales, General Admin - Expense',
+                'name' => 'Cash Discount',
                 'level' => 5,
                 'account_type' => 'debit',
                 'opening_balance' => null,

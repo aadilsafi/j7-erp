@@ -122,7 +122,7 @@
         <div class="row mb-1">
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="width">Width (sqft)</label>
-                <input type="number" class="form-control form-control-lg @error('width') is-invalid @enderror"
+                <input type="number" step="0.01" class="form-control form-control-lg @error('width') is-invalid @enderror"
                     id="width" name="width" placeholder="Width (sqft)"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->width : old('width') ?? 0 }}" />
@@ -132,7 +132,7 @@
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                 <label class="form-label fs-5" for="length">Length (sqft)</label>
-                <input type="number" class="form-control form-control-lg @error('length') is-invalid @enderror"
+                <input type="number" step="0.01" class="form-control form-control-lg @error('length') is-invalid @enderror"
                     id="length" name="length" placeholder="Length (sqft)"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->length : old('length') ?? 0 }}" />
@@ -144,7 +144,7 @@
         <div class="row mb-2">
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="net_area">Net Area (sqft) <span class="text-danger">*</span></label>
-                <input min="1" type="number" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
+                <input min="1" type="number" step="0.01" class="form-control form-control-lg @error('net_area') is-invalid @enderror"
                     id="net_area" name="net_area" placeholder="Net Area (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->net_area : old('net_area') ?? 0 }}" />
@@ -154,7 +154,7 @@
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="gross_area">Gross Area (sqft)<span class="text-danger">*</span></label>
-                <input min="1" type="number" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
+                <input min="1" type="number" step="0.01" class="form-control form-control-lg @error('gross_area') is-invalid @enderror"
                     id="gross_area" name="gross_area" placeholder="Gross Area (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->gross_area : old('gross_area') ?? 0 }}" />
@@ -164,7 +164,7 @@
             </div>
             <div class="col-lg-3 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="price_sqft">Price (sqft) <span class="text-danger">*</span></label>
-                <input min="1" type="number" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
+                <input min="1" type="number" min="1" step="0.01" class="form-control form-control-lg @error('price_sqft') is-invalid @enderror"
                     id="price_sqft" name="price_sqft" placeholder="Price (sqft)" min="0"
                     {{ $isSalesplanApproved ? 'readonly' : '' }}
                     value="{{ isset($unit) ? $unit->price_sqft : old('price_sqft') ?? 0 }}" />
@@ -185,10 +185,10 @@
         </div>
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
-                    <div class="card-body">
+                {{-- <div class="card m-0" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"> --}}
+                    {{-- <div class="card-body"> --}}
                         {{-- Is Corner --}}
-                        <div class="row mb-2">
+                        {{-- <div class="row mb-2">
                             <div class="col-xl-3 col-lg-3">
                                 <div class="d-flex align-items-center h-100">
                                     <div class="form-check form-check-primary">
@@ -200,9 +200,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- Floor --}}
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-xl-3 col-lg-3">
                                 <div class="d-flex align-items-center h-100">
                                     <div class="form-check form-check-primary">
@@ -231,9 +231,9 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </div> --}}
+                    {{-- </div> --}}
+                {{-- </div> --}}
             </div>
         </div>
 

@@ -104,7 +104,7 @@
                 <tr height="20px">
                     <td colspan="2">
                         <div class="row">
-                            <div class="col">
+                            <div class="col text-wrap">
                                 <strong>Amount Remarks</strong>
                                 {{ $buy_back_file->amount_remarks }}
                             </div>

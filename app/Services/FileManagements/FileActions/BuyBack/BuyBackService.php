@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Notification;
 
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface as BuyBackInterface;
+use Str;
 
 class BuyBackService implements BuyBackInterface
 {
@@ -53,7 +54,7 @@ class BuyBackService implements BuyBackInterface
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
                 'amount_to_be_refunded' => str_replace(',', '', $inputs['amount_to_be_refunded']),
                 'payment_due_date' => $inputs['payment_due_date'],
-                'amount_remarks' => $inputs['amount_remarks'],
+                'amount_remarks' => Str::limit($inputs['amount_remarks'],200,''),
                 'status' => 0,
                 'amount_profit' => str_replace( ',', '', $inputs['amount_profit']),
                 'comments' => $inputs['comments'],

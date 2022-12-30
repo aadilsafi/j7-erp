@@ -19,6 +19,7 @@ use App\Models\FileBuyBackLabelsAttachment;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\FileRefundNotification;
 use App\Services\FileManagements\FileActions\Resale\ResaleInterface as ResaleInterface;
+use Str;
 
 class ResaleService implements ResaleInterface
 {
@@ -56,7 +57,7 @@ class ResaleService implements ResaleInterface
                 'new_resale_rate' => str_replace(',', '', $inputs['new_resale_rate']),
                 'premium_demand' => str_replace(',', '', $inputs['premium_demand']),
                 'marketing_service_charges' => str_replace(',', '', $inputs['marketing_service_charges']),
-                'amount_remarks' => $inputs['amount_remarks'],
+                'amount_remarks' => Str::limit($inputs['amount_remarks'],200,''),
                 'status' => 0,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'comments' => $inputs['comments'],

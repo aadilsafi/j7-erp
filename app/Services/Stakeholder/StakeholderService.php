@@ -377,6 +377,7 @@ class StakeholderService implements StakeholderInterface
                                         'created_at' => now(),
                                         'updated_at' => now(),
                                     ];
+                                    dd($data);
 
                                     $nextOfKins[] =  StakeholderNextOfKin::create($data);
                                 }

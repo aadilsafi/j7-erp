@@ -101,7 +101,8 @@
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
+                <tr height="20px">
+                    <td colspan="2">
                         <div class="row">
                             <div class="col">
                                 <strong>Amount Remarks</strong>

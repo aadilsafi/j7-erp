@@ -143,7 +143,8 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-        try {
+        dd($request->all());
+        // try {
             $validator = Validator::make($request->all(), [
                 'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
             ], [
@@ -160,13 +161,13 @@ class SalesPlanController extends Controller
             $record = $this->salesPlanInterface->store(decryptParams($site_id), $inputs);
             
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Saved!');
-        } catch (GeneralException $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
-        } catch (Exception $ex) {
-            Log::error($ex->getLine() . " Message => " . $ex->getMessage());
-            return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
-        }
+        // } catch (GeneralException $ex) {
+        //     Log::error($ex->getLine() . " Message => " . $ex->getMessage());
+        //     return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
+        // } catch (Exception $ex) {
+        //     Log::error($ex->getLine() . " Message => " . $ex->getMessage());
+        //     return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(decryptParams($floor_id)), 'unit_id' => encryptParams(decryptParams($unit_id))])->withDanger($ex->getMessage());
+        // }
     }
 
     /**

@@ -590,7 +590,7 @@
             @endif
 
             @if (Auth::user()->hasRole('CRM'))
-                $('#stakeholder_id').val('{{ $crm_lead-> ?? 0 }}')
+                $('#stakeholder_id').val('{{ $crm_lead ?? 0 }}')
             @endif
 
 

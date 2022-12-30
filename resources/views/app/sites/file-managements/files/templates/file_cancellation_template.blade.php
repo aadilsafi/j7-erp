@@ -95,7 +95,7 @@
                         <div class="row">
                             <div class="col">
                                 <strong>Amount Remarks</strong>
-                                <p>{{ $refund_file->amount_remarks }}</p>
+                                <p>{{ $file_cancel->amount_remarks }}</p>
                             </div>
                             
                         </div>

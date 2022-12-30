@@ -361,8 +361,9 @@ class StakeholderService implements StakeholderInterface
                         $vendor_ap_account = $this->financialTransactionInterface->makeVendorApAccount($stakeholder->id);
                     }
 
-
+                    
                     if ($key == 'K') {
+                        dd($inputs['stakeholders']);
                         $stakeholder->KinStakeholders()->detach();
                         if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
                             $stakeholders = [];

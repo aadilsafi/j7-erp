@@ -361,30 +361,25 @@ class StakeholderService implements StakeholderInterface
                     if ($key == 'V') {
                         $vendor_ap_account = $this->financialTransactionInterface->makeVendorApAccount($stakeholder->id);
                     }
+                }
+            }
 
-                    
-                    if ($key == 'K') {
-                        dd($inputs['stakeholders']);
-                        $stakeholder->KinStakeholders()->detach();
-                        if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
-                            $stakeholders = [];
+            $stakeholder->KinStakeholders()->detach();
+            if (isset($inputs['stakeholders']) && count($inputs['stakeholders']) > 0) {
+                $stakeholders = [];
 
-                            foreach ($inputs['stakeholders'] as $nok) {
-                                if (isset($nok['stakeholder_id']) && $nok['stakeholder_id'] != 0) {
-                                    $data = [
-                                        'stakeholder_id' => $nok['stakeholder_id'],
-                                        'kin_id' => $stakeholder->id,
-                                        'relation' => $nok['relation'],
-                                        'site_id' => $site_id,
-                                        'created_at' => now(),
-                                        'updated_at' => now(),
-                                    ];
-                                    dd($data);
-
-                                    $nextOfKins[] =  StakeholderNextOfKin::create($data);
-                                }
-                            }
-                        }
+                foreach ($inputs['stakeholders'] as $nok) {
+                    if (isset($nok['stakeholder_id']) && $nok['stakeholder_id'] != 0) {
+                        $data = [
+                            'stakeholder_id' => $nok['stakeholder_id'],
+                            'kin_id' => $stakeholder->id,
+                            'relation' => $nok['relation'],
+                            'site_id' => $site_id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                       
+                        $nextOfKins[] =  StakeholderNextOfKin::create($data);
                     }
                 }
             }

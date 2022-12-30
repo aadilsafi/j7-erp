@@ -93,11 +93,9 @@
                 <tr height="25px">
                     <td colspan="2">
                         <div class="row">
-                            <div class="col-4">
-                                <strong>Amount Remarks</strong>
-                            </div>
                             <div class="col">
-                                {{ $refund_file->amount_remarks }}
+                                <strong>Amount Remarks</strong>
+                                <p>{{ $refund_file->amount_remarks }}</p>
                             </div>
                         </div>
                     </td>

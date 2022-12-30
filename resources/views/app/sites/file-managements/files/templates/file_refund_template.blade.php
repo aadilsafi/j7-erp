@@ -91,9 +91,9 @@
                     </td>
                 </tr>
                 <tr height="25px">
-                    <td width="100%">
+                    <td colspan="2">
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-4">
                                 <strong>Amount Remarks</strong>
                             </div>
                             <div class="col">
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                     </td>
-                  
+                    
                 </tr>
             </table>
 

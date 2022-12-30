@@ -587,12 +587,16 @@
                 stackholders.trigger('change')
 
                 stackholders.prop('disabled', true);
+
+                $('#stakeholder_id').val('{{ $crm_lead->id ?? 0 }}')
+
             @endif
+
 
             @if (Auth::user()->hasRole('CRM'))
-                $('#stakeholder_id').val('{{ $crm_lead ?? 0 }}')
-            @endif
+            stackholders.prop('disabled', true);
 
+            @endif
 
             var e = $("#sales_source_lead_source");
             e.wrap('<div class="position-relative"></div>');

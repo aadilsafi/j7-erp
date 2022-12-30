@@ -272,13 +272,14 @@ class TitleTransferService implements TitleTransferInterface
                 'stakeholder_data' => json_encode(Stakeholder::find($inputs['customer_id'])),
                 'amount_to_be_paid' => str_replace(',', '', $inputs['amount_to_be_paid']),
                 'payment_due_date' => $inputs['payment_due_date'],
-                'amount_remarks' => Str::limit($inputs['amount_remarks'],255),
+                'amount_remarks' => Str::limit($inputs['amount_remarks'],250),
                 'transfer_rate' => str_replace(',', '', $inputs['transfer_rate']),
                 'status' => 0,
                 'comments' => $inputs['comments'],
                 'serial_no'=>'FTT-'.$serail_no,
             ];
 
+            dd(Str::limit($inputs['amount_remarks'],250));
             if (isset($inputs['stackholder']['next_of_kin'])) {
                 $data['kin_data'] = json_encode($inputs['stackholder']['next_of_kin']);
             }

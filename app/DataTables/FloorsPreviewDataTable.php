@@ -71,22 +71,13 @@ class FloorsPreviewDataTable extends DataTable
                 );
             })
             ->editColumn('net_area', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'net_area', 'inputtype' => 'number', 'value' => $unit->net_area]
-                );
+                return $unit->net_area;
             })
             ->editColumn('gross_area', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'gross_area', 'inputtype' => 'number', 'value' => $unit->gross_area]
-                );
+                return $unit->gross_area;
             })
             ->editColumn('price_sqft', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'price_sqft', 'inputtype' => 'number', 'value' => $unit->price_sqft]
-                );
+                return $unit->price_sqft;
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));

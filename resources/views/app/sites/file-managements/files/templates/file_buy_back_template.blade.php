@@ -103,10 +103,8 @@
                     </td>
                     <td width="40%">
                         <div class="row">
-                            <div class="col-6">
-                                <strong>Amount Remarks</strong>
-                            </div>
                             <div class="col">
+                                <strong>Amount Remarks</strong>
                                 {{ $buy_back_file->amount_remarks }}
                             </div>
                         </div>

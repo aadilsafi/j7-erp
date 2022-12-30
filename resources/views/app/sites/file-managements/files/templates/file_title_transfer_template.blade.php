@@ -104,10 +104,8 @@
 
                     <td width="40%">
                         <div class="row">
-                            <div class="col-7">
-                                <strong>Amount Remarks</strong>
-                            </div>
                             <div class="col">
+                                <strong>Amount Remarks</strong>
                                 {{ $transfer_file->amount_remarks }}
                             </div>
                         </div>

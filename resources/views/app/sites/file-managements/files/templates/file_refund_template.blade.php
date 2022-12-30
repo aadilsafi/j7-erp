@@ -84,16 +84,16 @@
                             <div class="col-6 text-nowrap">
                                 <strong>Amount To Be Refunded</strong>
                             </div>
-                            <div class="col">
+                            <div class="col text-center">
                                 {{ number_format($total_paid_amount) }}
                             </div>
                         </div>
                     </td>
                 </tr>
                 <tr height="25px">
-                    <td width="60%">
+                    <td width="100%">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-5">
                                 <strong>Amount Remarks</strong>
                             </div>
                             <div class="col">
@@ -101,16 +101,7 @@
                             </div>
                         </div>
                     </td>
-                    <td width="40%">
-                        <div class="row">
-                            <div class="col-7">
-
-                            </div>
-                            <div class="col">
-
-                            </div>
-                        </div>
-                    </td>
+                  
                 </tr>
             </table>
 

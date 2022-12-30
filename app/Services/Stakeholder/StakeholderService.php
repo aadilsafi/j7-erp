@@ -349,7 +349,7 @@ class StakeholderService implements StakeholderInterface
             }
 
             if (isset($inputs['stakeholder_type'])) {
-                dd($inputs['stakeholder_type']);
+
                 foreach ($inputs['stakeholder_type'] as $key => $value) {
                     (new StakeholderType())->where([
                         'stakeholder_id' => $stakeholder->id,

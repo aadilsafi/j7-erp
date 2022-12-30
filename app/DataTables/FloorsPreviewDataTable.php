@@ -38,38 +38,29 @@ class FloorsPreviewDataTable extends DataTable
                 return $unit->status->name;
             })
             ->editColumn('name', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'name', 'inputtype' => 'text', 'value' => $unit->name]
-                );
+                return $unit->name;
             })
             ->editColumn('created_at', function ($unit) {
                 return editDateColumn($unit->created_at);
             })
             ->editColumn('width', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'width', 'inputtype' => 'number', 'value' => $unit->width]
-                );
+                return $unit->width;
             })
             ->editColumn('length', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'length', 'inputtype' => 'number', 'value' => $unit->length]
-                );
+                return $unit->length;
             })
-            ->editColumn('is_corner', function ($unit) {
-                return view(
-                    'app.components.checkbox',
-                    ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
-                );
-            })
-            ->editColumn('is_facing', function ($unit) {
-                return view(
-                    'app.components.checkbox',
-                    ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
-                );
-            })
+            // ->editColumn('is_corner', function ($unit) {
+            //     return view(
+            //         'app.components.checkbox',
+            //         ['id' => $unit->id, 'data' => 'null', 'field' => 'is_corner', 'is_true' => $unit->is_corner]
+            //     );
+            // })
+            // ->editColumn('is_facing', function ($unit) {
+            //     return view(
+            //         'app.components.checkbox',
+            //         ['id' => $unit->id, 'data' => $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]
+            //     );
+            // })
             ->editColumn('net_area', function ($unit) {
                 return $unit->net_area;
             })
@@ -173,12 +164,12 @@ class FloorsPreviewDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('name')->addClass('text-nowrap'),
+            Column::computed('name')->searchable(true)->addClass('text-nowrap'),
             Column::computed('created_at')->addClass('text-nowrap'),
             Column::computed('width')->addClass('text-nowrap'),
             Column::computed('length')->addClass('text-nowrap'),
-            Column::computed('is_corner')->addClass('text-nowrap'),
-            Column::computed('is_facing')->addClass('text-nowrap'),
+            // Column::computed('is_corner')->addClass('text-nowrap'),
+            // Column::computed('is_facing')->addClass('text-nowrap'),
             Column::computed('type_id')->addClass('text-nowrap'),
             Column::computed('status_id')->addClass('text-nowrap'),
             Column::computed('net_area')->addClass('text-nowrap'),

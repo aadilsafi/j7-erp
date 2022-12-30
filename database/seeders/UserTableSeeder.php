@@ -18,10 +18,8 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        $user = (new User())->updateOrCreate([
-            'id' => 1,
+        $user = (new User())->create([
             'email' => 'salah@erp.com',
-        ], [
             'name' => 'Salah Uddin',
             'contact' => '03100177771',
             'site_id' => 1,
@@ -33,10 +31,8 @@ class UserTableSeeder extends Seeder
         ]);
         $user->assignRole([1]);
 
-        $user = (new User())->updateOrCreate([
-            'id' => 2,
+        $user = (new User())->create([
             'email' => 'admin@erp.com',
-        ], [
             'name' => 'Syed Aizaz Haider Shah',
             'site_id' => 1,
             'contact' => '03100177771',
@@ -48,10 +44,8 @@ class UserTableSeeder extends Seeder
         ]);
         $user->assignRole([1]);
 
-        $user = (new User())->updateOrCreate([
-            'id' => 3,
+        $user = (new User())->create([
             'email' => 'gmsales@erp.com',
-        ], [
             'site_id' => 1,
             'name' => 'Gm Sales',
             'contact' => '03100177771',
@@ -64,11 +58,8 @@ class UserTableSeeder extends Seeder
 
         $user->assignRole([2]);
 
-        $user = (new User())->updateOrCreate([
-            'id' => 4,
+        $user = (new User())->create([
             'email' => 'abqayyum@erp.com',
-
-        ], [
             'site_id' => 1,
             'name' => 'Sardar Abdul Quyyum',
             'contact' => '03100177771',
@@ -80,11 +71,8 @@ class UserTableSeeder extends Seeder
         ]);
 
         $user->assignRole([5]);
-        $user = (new User())->updateOrCreate([
-            'id' => 5,
+        $user = (new User())->create([
             'email' => 'admin@crm.com',
-
-        ], [
             'site_id' => 1,
             'name' => 'CRM',
             'contact' => '+923000000000',

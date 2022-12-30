@@ -216,11 +216,10 @@ class StakeholderService implements StakeholderInterface
                     'status' => $inputs['stakeholder_type'] == $value ? 1 : 0,
                 ];
 
-                if ($inputs['stakeholder_type'] == 'C') {
-                    if (in_array($value, ['C', 'L'])) {
-                        $stakeholderType['status'] = 1;
-                    }
+                if (in_array($value, ['L'])) {
+                    $stakeholderType['status'] = 1;
                 }
+
 
                 $stakeholderTypeData[] = $stakeholderType;
             }

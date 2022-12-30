@@ -18,26 +18,28 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $user = (new User())->updateOrCreate([
-            'site_id' => 1,
-            'email' => 'admin@erp.com',
+            'id' => 1,
+            'email' => 'salah@erp.com',
+        ], [
+            'name' => 'Salah Uddin',
             'contact' => '03100177771',
+            'site_id' => 1,
             'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+            'remember_token' => Str::random(10),
+        ]);
+        $user->assignRole([1]);
+
+        $user = (new User())->updateOrCreate([
+            'id' => 2,
+            'email' => 'admin@erp.com',
         ], [
             'name' => 'Syed Aizaz Haider Shah',
-            'email_verified_at' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
-            'remember_token' => Str::random(10),
-        ]);
-        $user->assignRole([1]);
-
-        $user = (new User())->updateOrCreate([
             'site_id' => 1,
-            'name' => 'Admin1',
-            'email' => 'admin1@erp.com',
             'contact' => '03100177771',
             'password' => Hash::make('password'),
-        ], [
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
             'created_at' => now(),
@@ -46,31 +48,52 @@ class UserTableSeeder extends Seeder
         $user->assignRole([1]);
 
         $user = (new User())->updateOrCreate([
+            'id' => 3,
+            'email' => 'gmsales@erp.com',
+        ], [
             'site_id' => 1,
             'name' => 'Gm Sales',
-            'email' => 'gmsales@erp.com',
             'contact' => '03100177771',
             'password' => Hash::make('password'),
-        ], [
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
+        $user->assignRole([2]);
+
         $user = (new User())->updateOrCreate([
+            'id' => 4,
+            'email' => 'abqayyum@erp.com',
+
+        ], [
+            'site_id' => 1,
+            'name' => 'Sardar Abdul Quyyum',
+            'contact' => '03100177771',
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'email_verified_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $user->assignRole([5]);
+        $user = (new User())->updateOrCreate([
+            'id' => 5,
+            'email' => 'admin@crm.com',
+
+        ], [
             'site_id' => 1,
             'name' => 'CRM',
-            'email' => 'admin@crm.com',
             'contact' => '+923000000000',
             'password' => Hash::make('password'),
-        ], [
             'remember_token' => Str::random(10),
             'email_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
         $user->assignRole([10]);
-        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.floors.units.sales-plans.index']);
+        $user->givePermissionTo(['sites.sales_plan.create', 'sites.sales_plan.store', 'sites.floors.units.sales-plans.index', 'sites.floors.units.sales-plans.templates.print']);
     }
 }

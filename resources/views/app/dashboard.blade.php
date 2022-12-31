@@ -11,8 +11,7 @@
 @endsection
 
 @section('page-css')
-<link rel="stylesheet" type="text/css"
-        href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/core/menu/menu-types/vertical-menu.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/css/plugins/extensions/ext-component-sweet-alerts.min.css">
     <link rel="stylesheet" type="text/css"
@@ -33,6 +32,13 @@
             width: 80%;
             margin: 15px auto;
         }
+
+        .centered {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     </style>
 @endsection
 
@@ -41,8 +47,15 @@
 @endsection
 
 @section('content')
+    <div class="centered p-2 m-3">
+        <div class="d-none d-lg-flex col align-items-center">
+            <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
+                    src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /></div>
+        </div>
+    </div>
+
     <!-- Dashboard Ecommerce Starts -->
-    <section id="dashboard-ecommerce">
+    {{-- <section id="dashboard-ecommerce">
         <div class="row match-height">
             <!-- Medal Card -->
             <div class="col-xl-4 col-md-6 col-12">
@@ -799,7 +812,7 @@
                     </div>
                 </div>
             </div>
-    </section>
+    </section> --}}
     <!-- Dashboard Ecommerce ends -->
 @endsection
 

@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                        
+
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -400,8 +400,7 @@
                     <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                         <option value="0">Create new Stakeholder...</option>
                         @forelse ($stakeholders as $stakeholder)
-                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} s/o
-                                {{ $stakeholder->father_name }} {{ $stakeholder->cnic }}, {{ $stakeholder->contact }}
+                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->contact }}
                             </option>
                         @empty
                         @endforelse

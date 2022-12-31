@@ -84,15 +84,15 @@ Route::group([
     Route::get('/', function () {
         return redirect()->route('login.view');
     });
-    Route::group(['middleware' => ['crm_api']], function () {
-        Route::group(['prefix' => 'sites', 'as' => 'sites.'], function () {
-            Route::group(['prefix' => '/{site_id}'], function () {
-                Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
-                    Route::get('{user_id}/generate/{crm_lead}', [SalesPlanController::class, 'generateSalesPlan'])->name('generateSalesPlan');
-                });
-            });
-        });
-    });
+    // Route::group(['middleware' => ['crm_api']], function () {
+    //     Route::group(['prefix' => 'sites', 'as' => 'sites.'], function () {
+    //         Route::group(['prefix' => '/{site_id}'], function () {
+    //             Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
+    //                 // Route::get('{user_id}/generate/{crm_lead}', [SalesPlanController::class, 'generateSalesPlan'])->name('generateSalesPlan');
+    //             });
+    //         });
+    //     });
+    // });
 
     // Route::group(['middleware' => ['auth', ]], function () {
     Route::group(['middleware' => ['auth', 'permission']], function () {
@@ -522,6 +522,7 @@ Route::group([
                 Route::group(['prefix' => 'sales_plan', 'as' => 'sales_plan.'], function () {
                     // Route::get('/', [SalesPlanController::class, 'inLeftbar'])->name('show');
                     Route::get('create', [SalesPlanController::class, 'create'])->name('create');
+                    Route::get('{user_id}/generate/{crm_lead}', [SalesPlanController::class, 'generateSalesPlan'])->name('generateSalesPlan');
                     Route::post('store', [SalesPlanController::class, 'store'])->name('store');
                     Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                         Route::get('generateInstallments', [SalesPlanController::class, 'ajaxGenerateInstallments'])->name('generateInstallments');

@@ -100,6 +100,7 @@
                     'user' => $user,
                     'country' => $country,
                     'customFields' => $customFields,
+                    'crm_lead' => $crm_lead,
                 ]) }}
 
             </div>
@@ -378,17 +379,9 @@
                                     isDisable && stakeholderData.office_email != null ?
                                     true :
                                     false);
-                                $('#mobile_contact').val(stakeholderData.mobile_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.mobile_contact != null ?
-                                    true :
-                                    false);
+                                $('#mobile_contact').val(stakeholderData.mobile_contact);
 
-                                $('#office_contact').val(stakeholderData.office_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.office_contact != null ?
-                                    true :
-                                    false);
+                                $('#office_contact').val(stakeholderData.office_contact);
                                 if (stakeholderData.office_contact != null) {
                                     intlOfficeContact.setNumber(stakeholderData.office_contact)
                                 }
@@ -429,11 +422,7 @@
                                     true :
                                     false);
                                 $('#company_office_contact').val(stakeholderData
-                                    .office_contact).attr(
-                                    'readonly',
-                                    isDisable && stakeholderData.office_contact != null ?
-                                    true :
-                                    false);
+                                    .office_contact);
                                 if (stakeholderData.office_contact != null) {
 
                                     intlCompanyMobileContact.setNumber(stakeholderData

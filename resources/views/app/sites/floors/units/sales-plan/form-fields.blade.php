@@ -394,6 +394,10 @@
 
         <div class="card-body">
 
+            @if (isset($crm_lead))
+                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id"
+                    value="{{ $crm_lead->id }}">
+            @endif
             <div class="row mb-1">
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
@@ -409,9 +413,7 @@
                 </div>
             </div>
 
-            @if(Auth::user()->hasRole('CRM'))
-                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id">
-            @endif
+
 
             <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                 {{ view('app.sites.stakeholders.partials.stakeholder-form-fields', [

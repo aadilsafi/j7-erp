@@ -81,7 +81,7 @@ class SalesPlanController extends Controller
         $customFields = collect($customFields)->sortBy('order');
         $customFields = generateCustomFields($customFields);
 
-        $crm_lead = Stakeholder::where('crm_id',decryptParams($crm_lead))->first();
+        $crm_lead = Stakeholder::where('crm_id', decryptParams($crm_lead))->first();
 
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
@@ -143,7 +143,7 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-        
+
         try {
             $validator = Validator::make($request->all(), [
                 'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
@@ -159,7 +159,7 @@ class SalesPlanController extends Controller
             $unit_id = encryptParams($inputs['unit_id']);
 
             $record = $this->salesPlanInterface->store(decryptParams($site_id), $inputs);
-            
+
             return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Saved!');
         } catch (GeneralException $ex) {
             Log::error($ex->getLine() . " Message => " . $ex->getMessage());

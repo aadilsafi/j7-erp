@@ -558,7 +558,7 @@
             {{-- Sales Plan  --}}
             @canany(['sites.floors.units.sales-plans.index', 'sites.sales_plan.create'])
                 <li
-                    class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                    class="nav-item {{ request()->routeIs('sites.floors.units.sales-plans.index') || request()->routeIs('sites.sales_plan.create') || request()->routeIs('sites.sales_plan.generateSalesPlan') ? 'active' : null }}">
                     <a class="d-flex align-items-center"
                         href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)]) }}">
                         <i class="bi bi-clipboard-data"></i>

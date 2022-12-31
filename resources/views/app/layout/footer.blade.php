@@ -11,7 +11,6 @@
         </span>
         <span class="float-md-end d-none d-md-block">
             Powered by <a href="https://islootech.com/" target="_blank"> ISLOO TECH</a> 
-            
         </span>
     </p>
 </footer>

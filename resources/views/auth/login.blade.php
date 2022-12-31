@@ -91,6 +91,9 @@
                         </div>
                         <button class="btn btn-primary w-100" tabindex="4">Sign in</button>
                     </form>
+                    <span class="text-center mt-5 d-none d-md-block">
+                        Powered by <a href="https://islootech.com/" target="_blank"> ISLOO TECH</a> 
+                    </span>
                     {{-- <p class="text-center mt-2">
                         <span>New on our platform?</span>
                         <a href="auth-register-cover.html">

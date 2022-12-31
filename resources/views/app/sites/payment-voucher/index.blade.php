@@ -145,8 +145,8 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
             location.href = '{{ route('sites.payment-voucher.create', ['site_id' => $site_id]) }}';
         }
 
-        function ApproveModal() {
-            let payment_voucher_id = $('#approveID').attr('payment_voucher_id');
+        function ApproveModal(id) {
+            let payment_voucher_id = $('#approveStatusID').attr('payment_voucher_id');
             Swal.fire({
                 icon: 'warning',
                 title: 'Warning',
@@ -164,13 +164,13 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                 if (result.isConfirmed) {
                     let url =
                         "{{ route('sites.payment-voucher.approve', ['site_id' => encryptParams($site_id), 'id' => ':payment_voucher_id']) }}"
-                        .replace(':payment_voucher_id', payment_voucher_id);
+                        .replace(':payment_voucher_id', id);
                     location.href = url;
                 }
             });
         }
 
-        function ActiveCheque() {
+        function ActiveCheque(id) {
             let payment_voucher_id = $('#approveID').attr('payment_voucher_id');
             Swal.fire({
                 icon: 'warning',
@@ -189,7 +189,7 @@ href="{{ asset('app-assets') }}/vendors/css/tables/datatable/buttons.bootstrap5.
                 if (result.isConfirmed) {
                     let url =
                         "{{ route('sites.payment-voucher.active-cheque', ['site_id' => encryptParams($site_id), 'id' => ':payment_voucher_id']) }}"
-                        .replace(':payment_voucher_id', payment_voucher_id);
+                        .replace(':payment_voucher_id', id);
                     location.href = url;
                 }
             });

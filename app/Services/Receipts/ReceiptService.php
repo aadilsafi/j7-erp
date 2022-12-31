@@ -44,7 +44,6 @@ class ReceiptService implements ReceiptInterface
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
 
-
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
@@ -149,7 +148,12 @@ class ReceiptService implements ReceiptInterface
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
 
-                    $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
+                    if($data[$i]['mode_of_payment'] != 'Cheque'){
+                        $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
+                    }
+                    else{
+                        $remaining_amount = str_replace(',', '', $requested_data['amount_received']);
+                    }
 
                     $data = [
                         'unit_name'  => $unit->name,
@@ -192,22 +196,26 @@ class ReceiptService implements ReceiptInterface
                             ];
                             //create receipt from drafts
                             $receipt_Draft = Receipt::create($receiptDraftData);
-                            // if ($receipt_Draft->mode_of_payment == "Cash") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Cash") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptTransaction($receipt_Draft->id);
+                            }
 
-                            // if ($receipt_Draft->mode_of_payment == "Cheque") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Cheque") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt_Draft->id);
+                            }
 
-                            // if ($receipt_Draft->mode_of_payment == "Online") {
-                            //     $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Online") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt_Draft->id);
+                            }
 
-                            // if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
-                            //     Log::info(json_encode($transaction));
-                            //     // return apiErrorResponse('invalid_transaction');
-                            // }
+                            if ($receipt_Draft->mode_of_payment == "Other") {
+                                $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt_Draft->id);
+                            }
+
+                            if (is_a($transaction, 'Exception') || is_a($transaction, 'GeneralException')) {
+                                Log::info(json_encode($transaction));
+                                // return apiErrorResponse('invalid_transaction');
+                            }
 
                             $update_installments =  $this->updateInstallments($receipt_Draft);
                         }
@@ -368,9 +376,11 @@ class ReceiptService implements ReceiptInterface
         }
 
         if ($total_paid_amount >= $total_committed_amount) {
+            if($unit->status_id <= 3){
+                $unit->is_for_rebate = true;
+            }
 
             $unit->status_id = 5;
-            $unit->is_for_rebate = true;
 
             $unitStakeholderData = [
                 'site_id' => $receipt->site_id,

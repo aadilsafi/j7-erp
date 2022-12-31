@@ -38,8 +38,6 @@ class UserService implements UserInterface
                 'OptionalCountryDetails' => $inputs['OptionalCountryDetails'],
                 'address' => $inputs['address'],
                 'mailing_address' => $inputs['mailing_address'],
-
-
             ];
 
             $data['country_id'] = isset($inputs['country_id']) && $inputs['country_id'] > 0 ? $inputs['country_id'] : 167;

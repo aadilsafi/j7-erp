@@ -41,7 +41,7 @@ class TransferReceiptsDatatable extends DataTable
                 return $receipt->serial_no != null ? $receipt->serial_no : 'REC-';
             })
             ->editColumn('cnic', function ($receipt) {
-                return  cnicFormat($receipt->stakeholder->cnic);
+                return  $receipt->stakeholder->cnic;
             })
             ->editColumn('name', function ($receipt) {
                 return $receipt->stakeholder->full_name;
@@ -64,7 +64,7 @@ class TransferReceiptsDatatable extends DataTable
             ->editColumn('created_date', function ($receipt) {
                 return editDateColumn($receipt->created_date);
             })
-         
+
             ->editColumn('actions', function ($receipt) {
                 return view('app.sites.file-transfer-receipts.actions', ['site_id' => decryptParams($this->site_id), 'id' => $receipt->id]);
             })
@@ -188,7 +188,7 @@ class TransferReceiptsDatatable extends DataTable
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::computed('name')->title('Name')->addClass('text-nowrap'),
-            Column::computed('cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::computed('cnic')->title('Identity Number')->addClass('text-nowrap'),
             Column::make('amount')->title('Amount Received')->addClass('text-nowrap'),
             Column::computed('status')->title('Status'),
             Column::make('created_date')->title('Created At')->addClass('text-nowrap'),

@@ -556,11 +556,11 @@
             @endcan
 
             {{-- Sales Plan  --}}
-            @canany(['sites.sales_plan.show', 'sites.sales_plan.create'])
+            @canany(['sites.floors.units.sales-plans.index', 'sites.sales_plan.create'])
                 <li
                     class="nav-item {{ request()->routeIs('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) || request()->routeIs('sites.sales_plan.create', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                     <a class="d-flex align-items-center"
-                        href="{{ route('sites.sales_plan.show', ['site_id' => encryptParams($site_id)]) }}">
+                        href="{{ route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)]) }}">
                         <i class="bi bi-clipboard-data"></i>
                         <span class="menu-title text-truncate" data-i18n="Email">Sales Plan</span>
                     </a>

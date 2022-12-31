@@ -221,6 +221,14 @@
                                                                     @if((float)$fifthLevel->code > (float)$customer_ap_starting_code &&  (float)$fifthLevel->code < (float)$customer_ap_ending_code)
                                                                         @continue
                                                                     @endif
+
+                                                                    @php
+                                                                        $dealer_ap_starting_code = '20201020000000';
+                                                                        $dealer_ap_ending_code = '20201030000000';
+                                                                    @endphp
+                                                                    @if((float)$fifthLevel->code > (float)$dealer_ap_starting_code &&  (float)$fifthLevel->code < (float)$dealer_ap_ending_code)
+                                                                        @continue
+                                                                    @endif
                                                                     {{-- Hide Customer AP Accounts  --}}
 
                                                                     {{-- Hide File Action Accounts  --}}

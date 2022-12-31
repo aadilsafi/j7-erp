@@ -45,7 +45,7 @@ class ViewFilesDatatable extends DataTable
                 return strlen($fileManagement->stakeholder->father_name) > 0 ? $fileManagement->stakeholder->father_name : '-';
             })
             ->editColumn('stakeholder_cnic', function ($fileManagement) {
-                return strlen($fileManagement->stakeholder->cnic) > 0 ? cnicFormat($fileManagement->stakeholder->cnic) : '-';
+                return strlen($fileManagement->stakeholder->cnic) > 0 ? $fileManagement->stakeholder->cnic: '-';
             })
             ->editColumn('stakeholder_contact', function ($fileManagement) {
                 return strlen($fileManagement->stakeholder->contact) > 0 ? $fileManagement->stakeholder->contact : '-';
@@ -132,7 +132,7 @@ class ViewFilesDatatable extends DataTable
             Column::make('unit_status')->name('unit.status.name')->title('Unit Status')->addClass('text-nowrap text-center'),
             Column::make('stakeholder_full_name')->name('stakeholder.full_name')->title('Customer Name')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Fateher / Husband')->addClass('text-nowrap')->orderable(false),
-            Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('CNIC')->addClass('text-nowrap')->orderable(false),
+            Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('Identity Number')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap')->orderable(false),
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center')->orderable(false),
             // // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),

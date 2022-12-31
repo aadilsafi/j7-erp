@@ -314,11 +314,12 @@
                 },
                 'net_area':{
                     required: true,
-                    digits:true,
                 },
                 'gross_area':{
                     required: true,
-                    digits:true,
+                },
+                'price_sqft':{
+                    required: true,
                 },
             },
             errorClass: 'is-invalid text-danger',

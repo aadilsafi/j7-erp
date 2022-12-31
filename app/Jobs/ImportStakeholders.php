@@ -59,7 +59,7 @@ class ImportStakeholders implements ShouldQueue
 
         foreach ($importData as $key => $items) {
 
-            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['site_id'] = 1;
             $data[$key]['stakeholder_as'] = 'i';
 
             foreach ($tempCols as $k => $field) {

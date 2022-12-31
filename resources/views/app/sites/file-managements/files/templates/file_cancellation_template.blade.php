@@ -90,25 +90,14 @@
                         </div>
                     </td>
                 </tr>
-                <tr height="20px">
-                    <td width="60%">
+                <tr height="25px">
+                    <td colspan="2">
                         <div class="row">
-                            <div class="col-4">
-                                <strong>Paid Amount</strong>
-                            </div>
                             <div class="col">
-                                {{ number_format($total_paid_amount) }}
-                            </div>
-                        </div>
-                    </td>
-                    <td width="40%">
-                        <div class="row">
-                            <div class="col-7">
                                 <strong>Amount Remarks</strong>
+                                <p>{{ $file_cancel->amount_remarks }}</p>
                             </div>
-                            <div class="col">
-                                {{ $file_cancel->amount_remarks }}
-                            </div>
+                            
                         </div>
                     </td>
                 </tr>
@@ -267,7 +256,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->contact }}
+                                {{ $customer->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -282,7 +271,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->address }}
+                                {{ $customer->residential_address }}
                             </div>
                         </div>
                     </td>

@@ -75,7 +75,7 @@
                             </label>
                             <input type="text"
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
-                                name="amount_to_be_paid" id="amount_to_be_paid" placeholder="Amount Received" />
+                                name="amount_to_be_paid" id="amount_to_be_paid" placeholder="Amount To be Paid" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

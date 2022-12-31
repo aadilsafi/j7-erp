@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams(1), encryptParams(1)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', $site->id, encryptParams(1), encryptParams(1)) }}
 @endsection
 
 @section('page-title', 'Create Sales Plan')
@@ -75,7 +75,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Create Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams(1), encryptParams(1)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.create', $site->id, encryptParams(1), encryptParams(1)) }}
                 </div>
             </div>
         </div>
@@ -121,15 +121,15 @@
                                     <label class="custom-option-item p-1"
                                         for="checkbox-{{ $additionalCost->slug }}-{{ $key }}">
                                         <span class="d-flex justify-content-between flex-wrap">
-                                            <span class="fw-bolder">{{ $key }}.
+                                            <span class="fw-bolder">{{ $key + 1 }}.
                                                 {{ $additionalCost->name }}</span>
                                         </span>
                                         <span class="d-flex justify-content-between flex-wrap">
                                             <span class="fw-bolder"></span>
                                             @if ($additionalCost->applicable_on_unit)
                                                 <span class="fw-bolder">{{ $additionalCost->unit_percentage }} %</span>
-                                            @else
-                                                <span class="fw-bolder">0 %</span>
+                                                {{-- @else
+                                                <span class="fw-bolder">0 %</span> --}}
                                             @endif
                                         </span>
                                     </label>
@@ -407,7 +407,8 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                $('#is_local').val(stakeholderData.is_local).trigger('change');
+                                
+                                $('#is_local').prop( "checked", stakeholderData.is_local );
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
                             }
@@ -586,13 +587,16 @@
                 stackholders.trigger('change')
 
                 stackholders.prop('disabled', true);
-                
+
+                $('#stakeholder_id').val('{{ $crm_lead->id ?? 0 }}')
+
             @endif
 
-            @if(Auth::user()->hasRole('CRM'))
-                    $('#stakeholder_id').val('{{ $crm_lead->id }}')
-            @endif
 
+            @if (Auth::user()->hasRole('CRM'))
+            stackholders.prop('disabled', true);
+
+            @endif
 
             var e = $("#sales_source_lead_source");
             e.wrap('<div class="position-relative"></div>');

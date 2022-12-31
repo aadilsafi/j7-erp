@@ -32,6 +32,7 @@ class RebateIncentiveModel extends Model
         'transaction_date',
         'created_date',
         'serial_no',
+        // 'cheque_status',
     ];
 
     public function getActivitylogOptions(): LogOptions

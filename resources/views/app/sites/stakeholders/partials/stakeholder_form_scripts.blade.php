@@ -42,6 +42,7 @@
                 $('#common_form').show();
                 $('#change_residential_txt').html('<u>Billing Address</u>')
                 $('#change_mailing_txt').html('<u>Shipping Address</u>')
+                $('#change_mailing_btn').html('Same as Billing Address')
             } else if ($(this).val() == 'i') {
                 $('#stakeholderType').show();
                 $('#companyForm').hide();
@@ -49,6 +50,7 @@
                 $('#common_form').show();
                 $('#change_residential_txt').html('<u>Residential Address</u>')
                 $('#change_mailing_txt').html('<u>Mailing Address</u>')
+                $('#change_mailing_btn').html('Same as Residential Address')
             }
             hideBlockUI('#stakeholder_as');
         });
@@ -412,9 +414,9 @@
         });
 
         var dob = $("#dob").flatpickr({
-            defaultDate: "today",
+            defaultDate: new Date(1995, 01, 01),
             minDate: '',
-            altInput: !0,
+            maxDate: new Date().fp_incr(-750),
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
         });
@@ -636,7 +638,7 @@
                     required: function() {
                         return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(
                             ':checked') && $(
-                                '#stakeholder_type').val() != 'L';
+                            '#stakeholder_type').val() != 'L';
                     },
                     min: 1,
                 },

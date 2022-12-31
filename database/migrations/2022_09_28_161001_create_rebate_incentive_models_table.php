@@ -36,6 +36,7 @@ return new class extends Migration
             $table->boolean('is_for_dealer_incentive')->default(true);
             $table->timestamp('created_date')->nullable();
             $table->string('serial_no')->nullable()->default('RI-');
+            $table->boolean('cheque_status')->default(0);
             $table->timestamps();
         });
     }

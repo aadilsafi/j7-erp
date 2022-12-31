@@ -304,7 +304,7 @@
                 data: data,
                 success: function(response) {
                     if (response['status']) {
-                        toastr.success(response['message']);
+                        toastr.success('Data Updated');
                         if (response['data']['facing'] == 'yes' || response['data']['facing'] == 'no') {
                             $.ajax({
                                 url: "{{ route('ajax-facing.field.draw') }}",

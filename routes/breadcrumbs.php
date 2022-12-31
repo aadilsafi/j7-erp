@@ -606,7 +606,7 @@ Breadcrumbs::for('sites.companies.edit', function (BreadcrumbTrail $trail, $site
 Breadcrumbs::for('sites.settings.journal-vouchers.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Journal Vouchers', route('sites.settings.journal-vouchers.index', ['site_id' => $site_id]));
-    });
+});
 
 Breadcrumbs::for('sites.settings.journal-vouchers.create', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('sites.settings.journal-vouchers.index', $site_id);
@@ -648,5 +648,5 @@ Breadcrumbs::for('sites.file-transfer-receipts.show', function (BreadcrumbTrail 
 
 Breadcrumbs::for('sites.sales_plan.show', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Sales Plans', route('sites.sales_plan.show', ['site_id' => $site_id]));
+    $trail->push('Sales Plans', route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)]));
 });

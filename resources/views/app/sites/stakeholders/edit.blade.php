@@ -58,7 +58,7 @@
         }
 
         /* .filepond--item {
-                        } */
+                            } */
     </style>
 @endsection
 
@@ -210,6 +210,7 @@
                     $('#common_form').show();
                     $('#change_residential_txt').html('<u>Billing Address</u>')
                     $('#change_mailing_txt').html('<u>Shipping Address</u>')
+                    $('#change_mailing_btn').html('Same as Billing Address')
                 } else if ($(this).val() == 'i') {
                     $('#stakeholderType').show();
                     $('#companyForm').hide();
@@ -217,6 +218,8 @@
                     $('#common_form').show();
                     $('#change_residential_txt').html('<u>Residential Address</u>')
                     $('#change_mailing_txt').html('<u>Mailing Address</u>')
+                    $('#change_mailing_btn').html('Same as Residential Address')
+
                 }
                 hideBlockUI('#stakeholderForm');
             });
@@ -334,7 +337,7 @@
 
             var areStakeholderContactsExist = {{ isset($stakeholder->contacts[0]) ? 'false' : 'true' }};
             var areStakeholderKinsExist = {{ count($stakeholder->nextOfKin) > 0 ? 'false' : 'true' }};
-            var KinStakeholdersExists = {{ count($stakeholder->KinStakeholders) > 0 ? 'false' : 'true' }};
+            var KinStakeholdersExists = {{ count($parentStakeholders) > 0 ? 'false' : 'true' }};
 
             $(".next-of-kin-list").repeater({
 
@@ -984,22 +987,22 @@
                 },
                 'company[registration]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'c' ;
+                        return $("#stakeholder_as").val() == 'c';
                     },
                 },
                 'company[industry]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'c' ;
+                        return $("#stakeholder_as").val() == 'c';
                     },
                 },
                 'company[company_ntn]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'c' ;
+                        return $("#stakeholder_as").val() == 'c';
                     },
                 },
                 'company[strn]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'c' ;
+                        return $("#stakeholder_as").val() == 'c';
                     },
                 },
                 'company[company_office_contact]': {
@@ -1014,17 +1017,17 @@
                 },
                 'individual[father_name]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'i' ;
+                        return $("#stakeholder_as").val() == 'i';
                     },
                 },
                 'individual[occupation]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'i' ;
+                        return $("#stakeholder_as").val() == 'i';
                     },
                 },
                 'individual[cnic]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'i' ;
+                        return $("#stakeholder_as").val() == 'i';
                     },
                 },
                 'individual[mobile_contact]': {
@@ -1034,14 +1037,14 @@
                 },
                 'individual[dob]': {
                     required: function() {
-                        return $("#stakeholder_as").val() == 'i' ;
+                        return $("#stakeholder_as").val() == 'i';
                     },
                 },
                 'individual[nationality]': {
                     required: function() {
                         return $("#stakeholder_as").val() == 'i' && !$('#is_local').is(
                             ':checked') && $(
-                                '#stakeholder_type').val() != 'L';
+                            '#stakeholder_type').val() != 'L';
                     },
                     min: 1,
                 },

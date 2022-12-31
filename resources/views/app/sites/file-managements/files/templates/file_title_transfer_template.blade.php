@@ -101,13 +101,11 @@
                             </div>
                         </div>
                     </td>
-
-                    <td width="40%">
+                <tr height="20px">
+                    <td colspan="2">
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col text-wrap">
                                 <strong>Amount Remarks</strong>
-                            </div>
-                            <div class="col">
                                 {{ $transfer_file->amount_remarks }}
                             </div>
                         </div>
@@ -259,7 +257,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->contact }}
+                                {{ $customer->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -272,7 +270,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $customer->address }}
+                                {{ $customer->residential_address }}
                             </div>
                         </div>
                     </td>
@@ -348,7 +346,7 @@
                                 <strong> Contact</strong>
                             </div>
                             <div class="col">
-                                {{ $titleTransferPerson->contact }}
+                                {{ $titleTransferPerson->mobile_contact }}
                             </div>
                         </div>
                     </td>
@@ -361,7 +359,7 @@
                                 <strong> Address:</strong>
                             </div>
                             <div class="col">
-                                {{ $titleTransferPerson->address }}
+                                {{ $titleTransferPerson->residential_address }}
                             </div>
                         </div>
                     </td>

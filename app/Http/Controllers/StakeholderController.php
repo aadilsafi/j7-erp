@@ -75,7 +75,7 @@ class StakeholderController extends Controller
             $emtyNextOfKin[0]['relation'] = '';
 
             $emtykinStakeholders[0]['id'] = 0;
-            $emtykinStakeholders[0]['stakeholder_id'] = '';
+            $emtykinStakeholders[0]['stakeholder_id'] = 0;
             $emtykinStakeholders[0]['relation'] = '';
             $data = [
                 'site_id' => decryptParams($site_id),
@@ -147,7 +147,7 @@ class StakeholderController extends Controller
         $id = decryptParams($id);
 
         $emtykinStakeholders[0]['id'] = 0;
-        $emtykinStakeholders[0]['stakeholder_id'] = '';
+        $emtykinStakeholders[0]['stakeholder_id'] = 0;
         $emtykinStakeholders[0]['relation'] = '';
 
         try {

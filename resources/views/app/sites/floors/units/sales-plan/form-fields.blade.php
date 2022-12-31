@@ -404,7 +404,7 @@
                     <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                         <option value="0">Create new Stakeholder...</option>
                         @forelse ($stakeholders as $stakeholder)
-                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->contact }}
+                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->stakeholder_as == 'i' ? $stakeholder->mobile_contact : $stakeholder->office_contact }}
                             </option>
                         @empty
                         @endforelse

@@ -67,7 +67,15 @@ class StakeholderDataTable extends DataTable
                     return 'Company';
                 }
             })
+            ->editColumn('crm_lead', function ($stakeholder) {
+                if ($stakeholder->crm_id > 0) {
+                    return '<span class="badge badge-glow bg-success">Yes</span>';
+                } else {
+                    return '<span class="badge badge-glow bg-warning">No</span>';
+                }
+            })
             ->setRowId('id')
+
             ->rawColumns(array_merge($columns, ['action', 'check']))
             ->editColumn('residential_country_id', function ($stakeholder) {
                 return  $stakeholder->residentialCountry != null ? $stakeholder->residentialCountry->name : '-';
@@ -160,7 +168,7 @@ class StakeholderDataTable extends DataTable
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')
-            ->lengthMenu([20, 30, 50, 70, 100, 200, 500, 1000])
+            ->lengthMenu([30, 50, 70, 100, 200, 500, 1000])
             ->rowGroupDataSrc('satkeholderAs')
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
@@ -189,6 +197,7 @@ class StakeholderDataTable extends DataTable
             Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),
             Column::make('nationality')->title('Nationality')->orderable(true),
+            Column::computed('crm_lead')->title('CRM Lead')->addClass('text-nowrap'),
             Column::computed('satkeholderAs')->visible(false),
         ];
         if (count($this->customFields) > 0) {

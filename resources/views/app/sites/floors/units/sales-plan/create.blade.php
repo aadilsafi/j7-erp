@@ -100,7 +100,7 @@
                     'user' => $user,
                     'country' => $country,
                     'customFields' => $customFields,
-                    'crm_lead' => $crm_lead,
+                    'crm_lead' => isset($crm_lead) ? $crm_lead : null,
                 ]) }}
 
             </div>

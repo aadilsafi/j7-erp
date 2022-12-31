@@ -19,7 +19,7 @@ class LeadController extends Controller
             $validation = Validator::make($request->all(), [
                 'crm_id' => 'required',
                 'name' => 'required|string',
-                'contact_no' => 'required',
+                'contact_no' => 'required|unique:stakeholders,mobile_contact',
                 'lead_as' => 'required|string'
             ]);
 
@@ -36,6 +36,9 @@ class LeadController extends Controller
                 'full_name' => $request->name,
                 'mobile_contact' => $request->contact_no,
                 'stakeholder_as' => $request->lead_as,
+                'residential_country_id' => $request->country_id,
+                'residential_state_id' => $request->state_id,
+                'residential_city_id' => $request->city_id,
             ]);
             $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
 

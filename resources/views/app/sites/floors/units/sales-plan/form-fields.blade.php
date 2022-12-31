@@ -394,13 +394,17 @@
 
         <div class="card-body">
 
+            @if (isset($crm_lead))
+                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id"
+                    value="{{ $crm_lead->id }}">
+            @endif
             <div class="row mb-1">
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
                     <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
                         <option value="0">Create new Stakeholder...</option>
                         @forelse ($stakeholders as $stakeholder)
-                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->contact }}
+                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->stakeholder_as == 'i' ? $stakeholder->mobile_contact : $stakeholder->office_contact }}
                             </option>
                         @empty
                         @endforelse
@@ -408,9 +412,7 @@
                 </div>
             </div>
 
-            @if(Auth::user()->hasRole('CRM'))
-                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id">
-            @endif
+
 
             <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">
                 {{ view('app.sites.stakeholders.partials.stakeholder-form-fields', [

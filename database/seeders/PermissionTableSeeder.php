@@ -686,6 +686,13 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'sites.sales_plan.generateSalesPlan',
+                'show_name' => 'Can Generate Sales Plan',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // [
             //     'name' => 'sites.sales_plan.show',
             //     'show_name' => 'Can View Sales Plans ',

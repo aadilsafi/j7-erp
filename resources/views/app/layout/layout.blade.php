@@ -189,17 +189,17 @@
     {{-- @vite('resources/js/app.js') --}}
 
     <script>
-        if ({{ App::environment('production') ? 'true' : 'false' }}) {
-            let offlineErrorMessage = 'You are offline. Please check your internet connection.';
-            window.addEventListener('online', () => hideBlockUI());
-            window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
+        // if ({{ App::environment('production') ? 'true' : 'false' }}) {
+        //     let offlineErrorMessage = 'You are offline. Please check your internet connection.';
+        //     window.addEventListener('online', () => hideBlockUI());
+        //     window.addEventListener('offline', () => showBlockUI(null, offlineErrorMessage));
 
-            if (navigator.onLine) {
-                hideBlockUI()
-            } else {
-                showBlockUI(null, offlineErrorMessage);
-            }
-        }
+        //     if (navigator.onLine) {
+        //         hideBlockUI()
+        //     } else {
+        //         showBlockUI(null, offlineErrorMessage);
+        //     }
+        // }
         $('.amountFormat').on('focusout', function() {
             var val = $(this).val().replace(/,/g, "")
             if ($.isNumeric(val) && val > 0) {

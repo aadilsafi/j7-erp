@@ -15,7 +15,7 @@ class SalesPlanTemplatesSeeder extends Seeder
      */
     public function run()
     {
-        //
+        SalesPlanTemplate::truncate();
         (new SalesPlanTemplate())->insert([
             [
                 'name' => 'Sales Plan Template 01',
@@ -24,13 +24,6 @@ class SalesPlanTemplatesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'J7-Global Sales Plan',
-            //     'slug' => 'j7-global-sales-plan',
-            //     'image' => '/images/SalesTemplate/j7global.png',
-            //     'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
             [
                 'name' => 'Sales Plan Template 02',
                 'slug' => 'j7-global-payment-plan',

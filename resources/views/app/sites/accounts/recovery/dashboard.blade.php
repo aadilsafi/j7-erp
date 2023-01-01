@@ -49,12 +49,30 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
 @endsection
 
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="float-start mb-0">Dashboard</h2>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('content')
     <!-- Dashboard Analytics Start -->
-    <div class="centered p-2 m-3">
-        <div class="d-none d-lg-flex col align-items-center">
-            <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
-                    src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /></div>
+    <p class="mb-2">
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="p-2 m-3">
+                <div class="col align-items-center">
+                    <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                        <img class="img-fluid" src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" />
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

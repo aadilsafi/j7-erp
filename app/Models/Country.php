@@ -11,10 +11,18 @@ class Country extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected $fillable = [
+        'name',
+        'capital',
+        'iso3',
+        'phonecode'
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
+
 
     public function cities()
     {

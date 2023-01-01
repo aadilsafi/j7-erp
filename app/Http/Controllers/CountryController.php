@@ -18,6 +18,27 @@ class CountryController extends Controller
 
         return $dataTable->with($data)->render('app.sites.countries.index', $data);
     }
+
+    public function create($site_id)
+    {
+        $data = [
+            'site_id' => $site_id,
+        ];
+        return view('app.sites.countries.create', $data);
+    }
+
+    public function store(Request $request, $site_id)
+    {
+        $country = Country::create(
+            [
+                'name' => $request->name,
+                'capital' => $request->capital,
+                'iso3' => $request->short_label,
+                'phonecode' => $request->phone_code,
+            ]
+        );
+        return redirect()->route('sites.settings.countries.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+    }
     public function getCities(Request $request)
     {
         // dd(Site::find(1)->country);

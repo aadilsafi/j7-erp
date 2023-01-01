@@ -67,8 +67,8 @@ class CountryDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.users.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
+        $createPermission =  Auth::user()->hasPermissionTo('sites.settings.countries.create');
+        $selectedDeletePermission =  0;
 
         return $this->builder()
             ->setTableId('countries-table')
@@ -83,20 +83,20 @@ class CountryDataTable extends DataTable
             ->lengthMenu([20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                // ($createPermission  ?
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
-                //     :
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
+                ($createPermission  ?
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
 
-                // ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),

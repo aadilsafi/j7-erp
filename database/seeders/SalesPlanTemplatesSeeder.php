@@ -18,7 +18,7 @@ class SalesPlanTemplatesSeeder extends Seeder
         //
         (new SalesPlanTemplate())->insert([
             [
-                'name' => 'Signature Sales Plan',
+                'name' => 'Sales Plan Template 01',
                 'slug' => 'signature-sales-plan',
                 'image' => '/images/SalesTemplate/signature.png',
                 'created_at' => now(),
@@ -32,7 +32,7 @@ class SalesPlanTemplatesSeeder extends Seeder
             //     'updated_at' => now(),
             // ],
             [
-                'name' => 'J7-Global Payment Plan',
+                'name' => 'Sales Plan Template 02',
                 'slug' => 'j7-global-payment-plan',
                 'image' => '/images/SalesTemplate/j7globalpaymentPlan.png',
                 'created_at' => now(),

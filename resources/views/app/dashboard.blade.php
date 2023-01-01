@@ -48,7 +48,7 @@
 
 @section('content')
     <div class="centered p-2 m-3">
-        <div class="d-none d-lg-flex col align-items-center">
+        <div class="col align-items-center">
             <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
                     src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /></div>
         </div>

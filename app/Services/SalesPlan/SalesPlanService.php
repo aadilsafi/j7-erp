@@ -146,18 +146,18 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderData['residential_address_type'] = $residential['address_type'];
             $stakeholderData['residential_address'] = $residential['address'];
             $stakeholderData['residential_postal_code'] = $residential['postal_code'];
-            $stakeholderData['residential_country_id'] = $residential['country'] > 0 ? $residential['country'] : 167;
-            $stakeholderData['residential_state_id'] =  $residential['state'];
-            $stakeholderData['residential_city_id'] =  $residential['city'];
+            $stakeholderData['residential_country_id'] = isset($residential['country']) && $residential['country'] > 0 ? $residential['country'] : 167;
+            $stakeholderData['residential_state_id'] =  isset($residential['state']) ? $residential['state'] : 0;
+            $stakeholderData['residential_city_id'] =  isset($residential['city']) ? $residential['city'] : 0;
 
             //mailing address fields
             $mailing = $inputs['mailing'];
             $stakeholderData['mailing_address_type'] = $mailing['address_type'];
             $stakeholderData['mailing_address'] = $mailing['address'];
             $stakeholderData['mailing_postal_code'] = $mailing['postal_code'];
-            $stakeholderData['mailing_country_id'] = $mailing['country'] > 0 ? $mailing['country'] : 167;
-            $stakeholderData['mailing_state_id'] = $mailing['state'];
-            $stakeholderData['mailing_city_id'] = $mailing['city'];
+            $stakeholderData['mailing_country_id'] = isset($mailing['country']) && $mailing['country'] > 0 ? $mailing['country'] : 167;
+            $stakeholderData['mailing_state_id'] = isset($mailing['state']) ? $mailing['state'] : 0;
+            $stakeholderData['mailing_city_id'] = isset($mailing['city']) ? $mailing['city'] : 0;
 
             $stakeholderData['comments'] = $inputs['comments'];
 
@@ -253,7 +253,7 @@ class SalesPlanService implements SalesPlanInterface
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 
-            if(Auth::user()->hasRole('CRM')){
+            if (Auth::user()->hasRole('CRM')) {
                 $sales_plan_data['is_from_crm'] = true;
             }
             if (isset($stakeholderInput['next_of_kin'])) {

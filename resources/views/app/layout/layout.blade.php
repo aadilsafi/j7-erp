@@ -109,7 +109,7 @@
             {{ view('app.layout.alerts') }}
 
 
-            @if (!request()->routeIs('dashboard'))
+           
                 <div class="content-header row">
                     @yield('breadcrumbs')
 
@@ -142,7 +142,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+          
 
             <div class="content-header row">
             </div>

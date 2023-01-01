@@ -20,6 +20,10 @@
         href="{{ asset('app-assets') }}/css/plugins/forms/pickers/form-flat-pickr.min.css">
 @endsection
 
+@section('seo-breadcrumb')
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
+@endsection
+
 @section('custom-css')
     <style>
         .chart-container {
@@ -42,17 +46,37 @@
     </style>
 @endsection
 
-@section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'dashboard') }}
-@endsection
 
+@section('breadcrumbs')
+    <div class="content-header-left col-md-9 col-12 mb-2">
+        <div class="row breadcrumbs-top">
+            <div class="col-12">
+                <h2 class="content-header-title float-start mb-0">Dashboard</h2>
+            </div>
+        </div>
+    </div>
+@endsection
 @section('content')
-    <div class="centered p-2 m-3">
+    <p class="mb-2">
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="p-2 m-3">
+                <div class="col align-items-center">
+                    <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                        <img class="img-fluid" src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- <div class="centered p-2 m-3">
         <div class="col align-items-center">
             <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
                     src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /></div>
         </div>
-    </div>
+    </div> --}}
 
     <!-- Dashboard Ecommerce Starts -->
     {{-- <section id="dashboard-ecommerce">

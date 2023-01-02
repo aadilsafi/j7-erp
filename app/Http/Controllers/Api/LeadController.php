@@ -21,8 +21,9 @@ class LeadController extends Controller
                 'name' => 'required|string',
                 'contact_no' => 'required|unique:stakeholders,mobile_contact',
                 'lead_as' => 'required|string',
-                'country_id' => 'sometimes|nullable|exists:countries',
-                'state_id'  => 'sometimes|nullable|exists:countries',
+                'country_id' => 'sometimes|nullable|exists:countries,id',
+                'state_id'  => 'sometimes|nullable|exists:states,id',
+                'city_id'   => 'sometimes|nullable|exists:cities,id',
             ]);
 
             if ($validation->fails()) {

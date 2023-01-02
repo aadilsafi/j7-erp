@@ -75,7 +75,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Preview Sales Plan</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.initail-sales-plan', encryptParams($site->id), encryptParams(1), encryptParams(1), encryptParams(1)) }}
+                    {{ Breadcrumbs::render('sites.floors.units.sales-plans.initail-sales-plan', $site->id, encryptParams(1), encryptParams(1), encryptParams(1)) }}
                 </div>
             </div>
         </div>

@@ -35,6 +35,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/custom.css">
 
 
     @yield('page-vendor')

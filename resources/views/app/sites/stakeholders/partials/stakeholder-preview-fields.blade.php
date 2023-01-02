@@ -280,7 +280,7 @@
                             Country <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_country"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialCountry->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialCountry->name ?? '': '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -288,7 +288,7 @@
                             State <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_state"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialState->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialState->name ?? '': '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -296,7 +296,7 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_city"
                             placeholder="City" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialCity->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialCity->name ?? '': '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_address_type">Address
@@ -340,7 +340,7 @@
                             Country <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_country"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailingCountry->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailingCountry->name ?? '' : '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -348,7 +348,7 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_state"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailingState->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailingState->name ?? '' : '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -356,14 +356,14 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_city"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailingCountry->name : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailingCountry->name ?? '': '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_address_type">Address
                             Type <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_address_type"
                             placeholder="Mailing Address Type" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailing_address_type : '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailing_address_type ?? '' : '' }}" />
 
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">

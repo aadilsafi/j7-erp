@@ -163,11 +163,9 @@
                                                     <div id="div_additional_cost">
                                                         {{-- Additional Cost Rows --}}
                                                         @foreach ($additionalCosts as $key => $additionalCost)
-
-
                                                             @php
                                                                 $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-
+                                                                
                                                                 $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                                             @endphp
 
@@ -182,8 +180,8 @@
                                                                         (%)
                                                                     </label>
 
-                                                                    <input readonly type="number" min="0" max="100"
-                                                                        step="0.1"
+                                                                    <input readonly type="number" min="0"
+                                                                        max="100" step="0.1"
                                                                         class="form-control form-control-lg additional-cost-percentage"
                                                                         id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
@@ -201,8 +199,7 @@
                                                                         class="form-control form-control-lg additional-cost-total-price"
                                                                         id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
-                                                                        readonly placeholder="Amount"
-                                                                        value="" />
+                                                                        readonly placeholder="Amount" value="" />
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -274,7 +271,7 @@
                                                                 (Rs)</label>
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="unit_downpayment_total"
-                                                                value="{{$salePlan->down_payment_total }}"
+                                                                value="{{ $salePlan->down_payment_total }}"
                                                                 name="unit[downpayment][total]" placeholder="Amount" />
                                                         </div>
                                                     </div>
@@ -349,7 +346,14 @@
 
                 {{-- Stakeholder Data Div --}}
 
-
+                <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                    <div class="card-header">
+                        <h3>3. STAKEHOLDER</h3>
+                    </div>
+                    <div class="card-body">
+                        {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $salePlan->stakeholder, 'hideBorders' => true]) }}
+                    </div>
+                </div>
 
                 {{-- Stakeholder Data Div --}}
 
@@ -363,8 +367,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                 <label class="form-label fs-5" for="sales_source_full_name">Sales Person</label>
                                 <input type="text" class="form-control form-control-lg" id="sales_source_full_name"
-                                    name="sales_source[full_name]" placeholder="Sales Person" value="{{ $salePlan->user->name }}"
-                                    disabled />
+                                    name="sales_source[full_name]" placeholder="Sales Person"
+                                    value="{{ $salePlan->user->name }}" disabled />
                             </div>
 
                             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -376,14 +380,15 @@
 
                                 <label class="form-label fs-5" for="sales_source_status">Status</label>
                                 <input type="text" class="form-control form-control-lg" id="sales_source_status"
-                                    name="sales_source[status]" placeholder="Status" value="{{ $roles }}" disabled />
+                                    name="sales_source[status]" placeholder="Status" value="{{ $roles }}"
+                                    disabled />
                             </div>
 
                             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                                 <label class="form-label fs-5" for="sales_source_contact_no">Contact No</label>
                                 <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
-                                    name="sales_source[contact_no]" placeholder="Contact No" value="{{ $salePlan->user->contact }}"
-                                    disabled />
+                                    name="sales_source[contact_no]" placeholder="Contact No"
+                                    value="{{ $salePlan->user->contact }}" disabled />
                             </div>
                         </div>
 
@@ -392,9 +397,9 @@
                             <div class="col-lg-12 col-md-12 col-sm-6 position-relative">
                                 <div id="div_sales_source_lead_source">
                                     <label class="form-label fs-5" for="sales_source_new">Lead Source </label>
-                                    <input readonly type="text" class="form-control form-control-lg" id="sales_source_new"
-                                        name="sales_source[new]" placeholder="Lead Source"
-                                        value="{{ $salePlan->leadSource->name}}" />
+                                    <input readonly type="text" class="form-control form-control-lg"
+                                        id="sales_source_new" name="sales_source[new]" placeholder="Lead Source"
+                                        value="{{ $salePlan->leadSource->name }}" />
                                 </div>
                             </div>
                         </div>
@@ -412,8 +417,8 @@
 
                             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                                 <label class="form-label fs-5" for="comments">Comments</label>
-                                <textarea disabled class="form-control form-control-lg" id="custom_comments" name="sale_plan_comments" placeholder="Comments"
-                                    rows="4">{{ $salePlan->comments }}</textarea>
+                                <textarea disabled class="form-control form-control-lg" id="custom_comments" name="sale_plan_comments"
+                                    placeholder="Comments" rows="4">{{ $salePlan->comments }}</textarea>
                             </div>
                         </div>
                     </div>

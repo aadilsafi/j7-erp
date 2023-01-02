@@ -85,7 +85,7 @@
             </div>
         @endif
         <div class="col">
-            <form class="form form-vertical"
+            <form class="form form-vertical" id="importPreviewForm"
                 action="{{ route('sites.stakeholders.importStakeholdersPreview', ['site_id' => $site_id]) }}"
                 enctype="multipart/form-data" method="POST">
                 @csrf
@@ -95,8 +95,9 @@
                             <div class="card-body">
                                 <div class="row mb-1">
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                        <label class="form-label" style="font-size: 15px" for="stakeholder_as"><strong>Importing Stakeholder
-                                            As</strong>
+                                        <label class="form-label" style="font-size: 15px"
+                                            for="stakeholder_as"><strong>Importing Stakeholder
+                                                As</strong>
                                             <span class="text-danger">*</span></label>
                                         <select class="form-select form-select-lg select2" id="stakeholder_as"
                                             name="stakeholder_as">
@@ -174,10 +175,9 @@
 @section('custom-js')
 
     <script>
-        showBlockUI();
-
         $(document).ready(function() {
             hideBlockUI();
+
         });
 
         FilePond.registerPlugin(

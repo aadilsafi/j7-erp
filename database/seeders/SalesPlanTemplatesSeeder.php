@@ -18,14 +18,14 @@ class SalesPlanTemplatesSeeder extends Seeder
         SalesPlanTemplate::truncate();
         (new SalesPlanTemplate())->insert([
             [
-                'name' => 'Sales Plan Template 01',
+                'name' => 'Template 01',
                 'slug' => 'signature-sales-plan',
                 'image' => '/images/SalesTemplate/signature.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Sales Plan Template 02',
+                'name' => 'Template 02',
                 'slug' => 'j7-global-payment-plan',
                 'image' => '/images/SalesTemplate/j7globalpaymentPlan.png',
                 'created_at' => now(),

@@ -356,7 +356,7 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_city"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailingCountry->name ?? '': '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailingCity->name ?? '': '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_address_type">Address

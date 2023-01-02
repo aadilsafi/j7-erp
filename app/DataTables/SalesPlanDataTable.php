@@ -74,6 +74,9 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('investment_plan_serial_id', function ($salesPlan) {
               return  $salesPlan->investment_plan_serial_id != null ? $salesPlan->investment_plan_serial_id : '-';
             })
+            ->editColumn('payment_plan_serial_id', function ($salesPlan) {
+                return  $salesPlan->payment_plan_serial_id != null ? $salesPlan->payment_plan_serial_id : '-';
+              })
             ->editColumn('actions', function ($salesPlan) {
                 return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id, 'sales_plan_id' => $salesPlan->id]);
             })

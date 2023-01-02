@@ -40,16 +40,16 @@ class SalesInvoiceLedgerDatatable extends DataTable
             })
             ->setRowId('id')
             ->editColumn('debit', function ($ledger) {
-                return number_format($ledger->debit);
+                return number_format($ledger->debit,2);
             })
             // ->editColumn('unit', function ($ledger) {
             //     return $ledger->salesPlan->unit->floor_unit_number;
             // })
             ->editColumn('credit', function ($ledger) {
-                return number_format($ledger->credit);
+                return number_format($ledger->credit,2);
             })
             ->editColumn('balance', function ($ledger) {
-                return number_format($ledger->balance);
+                return number_format($ledger->balance,2);
             })
             ->editColumn('account_action_id', function ($ledger) {
                 return $ledger->accountActions->name;

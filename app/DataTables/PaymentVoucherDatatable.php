@@ -40,7 +40,7 @@ class PaymentVoucherDatatable extends DataTable
                 return editDateColumn($payment_voucher->updated_at);
             })
             ->editColumn('amount_to_be_paid', function ($payment_voucher) {
-                return number_format($payment_voucher->amount_to_be_paid);
+                return number_format($payment_voucher->amount_to_be_paid,2);
             })
             ->editColumn('status', function ($payment_voucher) {
                 // $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');

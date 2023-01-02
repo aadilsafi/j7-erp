@@ -47,7 +47,7 @@ class TransferReceiptsDatatable extends DataTable
                 return $receipt->stakeholder->full_name;
             })
             ->editColumn('amount', function ($receipt) {
-                return  number_format($receipt->amount);
+                return  number_format($receipt->amount,2);
             })
             ->editColumn('status', function ($receipt) {
                 if ($receipt->status == 1) {

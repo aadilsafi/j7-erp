@@ -185,20 +185,20 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_no">Unit Area(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
-                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
+                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no"
                                 name="unit[floor_no]" placeholder="Floor No"
-                                value="{{ number_format($sales_plan->unit_price) }}" readonly />
+                                value="{{ number_format($sales_plan->unit_price,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price) }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price,2) }}" readonly />
                         </div>
 
                     </div>
@@ -219,13 +219,13 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Amount Received</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ number_format($receipt->amount_received) }}" readonly />
+                                        placeholder="" value="{{ number_format($receipt->amount_received,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0}}"
+                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount,2) : 0}}"
                                         readonly />
                                 </div>
 
@@ -233,14 +233,14 @@
                                     <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                                        value="{{ number_format($receipt->amount_in_numbers,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="floor_no">Amount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers,2)) }} Only."
                                         readonly />
                                 </div>
 
@@ -364,9 +364,9 @@
                                                         <td>{{ $paidIntsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->paid_amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->remaining_amount,2) }}</td>
                                                         <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -417,7 +417,7 @@
                                                             <td>{{ $unPaidIntsallment->details }}</td>
                                                             <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
                                                             </td>
-                                                            <td>{{ number_format($unPaidIntsallment->amount) }}</td>
+                                                            <td>{{ number_format($unPaidIntsallment->amount,2) }}</td>
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>Unpaid</td>

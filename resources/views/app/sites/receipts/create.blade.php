@@ -672,7 +672,7 @@
                     $('#customer_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#customer_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Customer payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Customer payable amount!</span>'
                     );
                 }
 
@@ -681,7 +681,7 @@
                     $('#vendor_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#vendor_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Vendor payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Vendor payable amount!</span>'
                     );
                 }
 
@@ -690,7 +690,7 @@
                     $('#dealer_ap_amount_paid').addClass('is-invalid');
                     invalid_amount_stauts = 1;
                     $('#dealer_ap_amount_paid').after(
-                        '<span class="is-invalid text-danger errorClass">Entered Amount shold not be greater than existing Dealer payable amount!</span>'
+                        '<span class="is-invalid text-danger errorClass">Entered Amount should not be greater than existing Dealer payable amount!</span>'
                     );
 
                 }

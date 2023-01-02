@@ -184,7 +184,7 @@ class SalesPlanController extends Controller
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'salePlan' => $salePlan,
-            'additionalCosts' => $salePlan->additionalCosts,
+            'additional_costs' => $salePlan->additionalCosts,
             'installments' => $installments,
         ];
         return view('app.sites.floors.units.sales-plan.preview', $data);

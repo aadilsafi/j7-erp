@@ -125,7 +125,7 @@
                                             <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
                                             <input type="text" class="form-control form-control-lg" id="unit_size"
                                                 name="unit[size]" placeholder="Unit Size(sq.ft)"
-                                                value="{{ $salePlan->unit->gross_area }}" readonly />
+                                                value="{{ number_format($salePlan->unit->gross_area,2) }}" readonly />
                                         </div>
                                     </div>
 
@@ -147,7 +147,7 @@
                                                             <input type="text" min="0"
                                                                 class="form-control form-control-lg" id="unit_price"
                                                                 name="unit[price][unit]" placeholder="Unit Price" readonly
-                                                                value="{{ number_format($salePlan->unit_price) }}" />
+                                                                value="{{ number_format($salePlan->unit_price,2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -156,16 +156,16 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="total-price-unit" name="unit[price][total]"
                                                                 placeholder="Amount"
-                                                                value="{{ number_format($salePlan->unit_price * $salePlan->unit->gross_area) }}" />
+                                                                value="{{ number_format($salePlan->unit_price * $salePlan->unit->gross_area ,2) }}" />
                                                         </div>
                                                     </div>
 
                                                     <div id="div_additional_cost">
                                                         {{-- Additional Cost Rows --}}
-                                                        @foreach ($additionalCosts as $key => $additionalCost)
+                                                        @foreach ($additional_costs as $key => $additionalCost)
                                                             @php
                                                                 $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                                                
+
                                                                 $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                                             @endphp
 
@@ -186,7 +186,7 @@
                                                                         id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
                                                                         placeholder="{{ $additionalCost->name }}"
-                                                                        value="" />
+                                                                        value="{{ number_format($additionalCost->pivot->percentage,2) }}" />
 
                                                                 </div>
 
@@ -199,7 +199,7 @@
                                                                         class="form-control form-control-lg additional-cost-total-price"
                                                                         id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
-                                                                        readonly placeholder="Amount" value="" />
+                                                                        readonly placeholder="Amount" value="{{ number_format($additionalCost->pivot->amount,2) }}" />
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -216,7 +216,7 @@
                                                                 class="form-control form-control-lg"
                                                                 id="percentage-discount" name="unit[discount][percentage]"
                                                                 placeholder="Discount %"
-                                                                value="{{ $salePlan->discount_percentage }}" />
+                                                                value="{{ number_format($salePlan->discount_percentage,2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -226,7 +226,7 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="total-price-discount"
                                                                 name="unit[discount][total]" placeholder="Discount"
-                                                                value="{{ number_format($salePlan->discount_total) }}" />
+                                                                value="{{ number_format($salePlan->discount_total,2) }}" />
                                                         </div>
                                                     </div>
 
@@ -244,7 +244,7 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 id="unit_rate_total" name="unit[grand_total]"
                                                                 placeholder="Total"
-                                                                value="{{ number_format($salePlan->total_price) }}"
+                                                                value="{{ number_format($salePlan->total_price,2) }}"
                                                                 readonly />
                                                         </div>
                                                     </div>
@@ -262,7 +262,7 @@
                                                                 name="unit[downpayment][percentage]"
                                                                 placeholder="Down Payment %" min="0"
                                                                 max="100"
-                                                                value="{{ $salePlan->down_payment_percentage }}" />
+                                                                value="{{ number_format($salePlan->down_payment_percentage,2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -271,7 +271,7 @@
                                                                 (Rs)</label>
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="unit_downpayment_total"
-                                                                value="{{ $salePlan->down_payment_total }}"
+                                                                value="{{ number_format($salePlan->down_payment_total,2) }}"
                                                                 name="unit[downpayment][total]" placeholder="Amount" />
                                                         </div>
                                                     </div>
@@ -323,10 +323,10 @@
                                                                     <td>{{ $installment->details }}</td>
                                                                     <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
                                                                     </td>
-                                                                    <td>{{ number_format($installment->amount) }}</td>
-                                                                    <td>{{ number_format($installment->paid_amount) }}
+                                                                    <td>{{ number_format($installment->amount,2) }}</td>
+                                                                    <td>{{ number_format($installment->paid_amount,2) }}
                                                                     </td>
-                                                                    <td>{{ number_format($installment->remaining_amount) }}
+                                                                    <td>{{ number_format($installment->remaining_amount,2) }}
                                                                     </td>
                                                                     <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
                                                                     </td>

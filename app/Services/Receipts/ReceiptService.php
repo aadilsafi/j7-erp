@@ -148,7 +148,7 @@ class ReceiptService implements ReceiptInterface
                         $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
                     }
 
-                    if($data[$i]['mode_of_payment'] != 'Cheque'){
+                    if($data[$i]['mode_of_payment'] != 'Other'){
                         $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
                     }
                     else{

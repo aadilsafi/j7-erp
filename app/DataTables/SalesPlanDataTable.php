@@ -200,7 +200,7 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
-            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number'),
+            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
             Column::computed('user_id')->name('user.name')->title('Sales Person'),
             Column::computed('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),

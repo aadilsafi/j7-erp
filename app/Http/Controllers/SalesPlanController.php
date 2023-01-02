@@ -394,6 +394,25 @@ class SalesPlanController extends Controller
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $unit_id =  $salesPlan->unit->id;
 
+        $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
+        $payment_plan = collect($payment_plan)->last();
+
+        if(isset($payment_plan)){
+            if ($payment_plan->payment_plan_serial_id == null) {
+                $payment_serial_number = 001;
+                $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+            } else {
+                $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
+                $payment_serial_number = (int)$payment_serial_number + 1;
+                $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+            }
+        }else{
+            $payment_serial_number = 001;
+            $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+        }
+
+
+
         $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', $unit_id)->get();
         foreach ($salesPlan as $salesPlan) {
             $salePlan = SalesPlan::find($salesPlan->id);
@@ -401,12 +420,13 @@ class SalesPlanController extends Controller
                 $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
             }
             $salePlan->status = 2;
-            $salePlan->approved_date = $request->approve_date . date(' H:i:s');
+            // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
             $salePlan->update();
         }
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
             'approved_date' => $request->approve_date . date(' H:i:s'),
+            'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);

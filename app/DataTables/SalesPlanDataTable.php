@@ -71,6 +71,12 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('salesplanstatus', function ($salesPlan) use ($data) {
                 return $data[$salesPlan->status];
             })
+            ->editColumn('investment_plan_serial_id', function ($salesPlan) {
+              return  $salesPlan->investment_plan_serial_id != null ? $salesPlan->investment_plan_serial_id : '-';
+            })
+            ->editColumn('payment_plan_serial_id', function ($salesPlan) {
+                return  $salesPlan->payment_plan_serial_id != null ? $salesPlan->payment_plan_serial_id : '-';
+              })
             ->editColumn('actions', function ($salesPlan) {
                 return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id, 'sales_plan_id' => $salesPlan->id]);
             })
@@ -194,11 +200,13 @@ class SalesPlanDataTable extends DataTable
 
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
-            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number'),
+            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
             Column::computed('user_id')->name('user.name')->title('Sales Person'),
             Column::computed('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),
             Column::make('status')->title('Status')->addClass('text-center'),
+            Column::make('investment_plan_serial_id')->title('Investment Plan#')->addClass('text-nowrap'),
+            Column::make('payment_plan_serial_id')->title('Payment Plan#')->addClass('text-nowrap'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
         ];
 

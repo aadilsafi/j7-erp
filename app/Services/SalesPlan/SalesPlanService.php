@@ -232,7 +232,6 @@ class SalesPlanService implements SalesPlanInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
 
-
             $sales_plan_data = [
                 'unit_id' => $unit->id,
                 'user_id' => auth()->user()->id,
@@ -250,6 +249,7 @@ class SalesPlanService implements SalesPlanInterface
                 'status' => false,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'serial_no' => 'SI-' . $serail_no,
+                'investment_plan_serial_id' => 'IP-'.$serail_no,
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 

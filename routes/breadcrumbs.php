@@ -555,6 +555,11 @@ Breadcrumbs::for('sites.countries.create', function (BreadcrumbTrail $trail, $si
     $trail->parent('sites.countries.index',$site_id);
     $trail->push('Create Country');
 });
+//Countries Breedcrumbs
+Breadcrumbs::for('sites.countries.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.countries.index',$site_id);
+    $trail->push('Edit Country');
+});
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.states.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

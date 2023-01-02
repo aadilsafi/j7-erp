@@ -49,7 +49,7 @@
 @endsection
 
 @section('content')
-<form id="userForm" class="form form-vertical" enctype="multipart/form-data"
+<form id="countryForm" class="form form-vertical" enctype="multipart/form-data"
     action="{{ route('sites.settings.countries.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
     <div class="row">

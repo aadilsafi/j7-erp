@@ -39,6 +39,28 @@ class CountryController extends Controller
         );
         return redirect()->route('sites.settings.countries.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
+
+    public function edit($site_id, $id)
+    {
+        $data = [
+            'site_id' => $site_id,
+            'country' => Country::find($id)
+        ];
+        return view('app.sites.countries.edit', $data);
+    }
+    public function update(Request $request, $site_id, $id)
+    {
+
+        (new Country())->find(decryptParams($id))->update([
+            'name' => $request->name,
+            'capital' => $request->capital,
+            'iso3' => $request->short_label,
+            'phonecode' => $request->phone_code,
+        ]);
+
+        return redirect()->route('sites.settings.countries.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+    }
+
     public function getCities(Request $request)
     {
         // dd(Site::find(1)->country);

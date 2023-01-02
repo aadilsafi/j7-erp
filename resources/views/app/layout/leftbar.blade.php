@@ -5,9 +5,10 @@
             <li class="nav-item me-auto">
                 <a class="navbar-brand" href="{{ route('dashboard') }}">
                     <span class="brand-logo">
-                        <img class="img-fluid" src="{{ asset('app-assets') }}/images/logo.png" />
+                        <img class="img-fluid custom_side_full_logo" src="{{ asset('app-assets') }}//images/logo/j7 logo_s.png" />
                     </span>
-                    <h2 class="brand-text">{{ env('APP_NAME') }}</h2>
+                    {{-- <h2 class="brand-text">{{ env('APP_NAME') }}</h2> --}}
+                    <img class="img-fluid custom_side_icon" src="{{ asset('app-assets') }}/images/logo/logo icon.png" />
                 </a>
             </li>
             <li class="nav-item nav-toggle">

@@ -119,15 +119,30 @@ class TransferReceiptController extends Controller
         $image = $receipt->getFirstMediaUrl('file_transfer_receipt_attachments');
 
         $fileOwner = json_decode($receipt->TransferFile->stakeholder_data);
-        $fileOwner->country = $receipt->TransferFile->stakeholder->country->name ?? '';
-        $fileOwner->state = $receipt->TransferFile->stakeholder->state->name ?? '';
-        $fileOwner->city = $receipt->TransferFile->stakeholder->city->name ?? '';
+        $fileOwner->residentialCountry = $receipt->TransferFile->stakeholder->residentialCountry ?? [];
+        $fileOwner->residentialState = $receipt->TransferFile->stakeholder->residentialState ?? [];
+        $fileOwner->residentialCity = $receipt->TransferFile->stakeholder->residentialCity ?? [];
+
+        $fileOwner->mailingCountry = $receipt->TransferFile->stakeholder->mailingCountry ?? [];
+        $fileOwner->mailingState = $receipt->TransferFile->stakeholder->mailingState ?? [];
+        $fileOwner->mailingCity = $receipt->TransferFile->stakeholder->mailingCity ?? [];
+
+        $fileOwner->nationalityCountry = $receipt->TransferFile->stakeholder->nationalityCountry ?? [];
 
         $transferOwner = json_decode($receipt->TransferFile->transfer_person_data);
         $transferOwner->country = $receipt->TransferFile->transferStakeholder->country->name ?? '';
         $transferOwner->state = $receipt->TransferFile->transferStakeholder->state->name ?? '';
         $transferOwner->city = $receipt->TransferFile->transferStakeholder->city->name ?? '';
 
+        $transferOwner->residentialCountry = $receipt->TransferFile->transferStakeholder->residentialCountry ?? [];
+        $transferOwner->residentialState = $receipt->TransferFile->transferStakeholder->residentialState ?? [];
+        $transferOwner->residentialCity = $receipt->TransferFile->transferStakeholder->residentialCity ?? [];
+
+        $transferOwner->mailingCountry = $receipt->TransferFile->transferStakeholder->mailingCountry ?? [];
+        $transferOwner->mailingState = $receipt->TransferFile->transferStakeholder->mailingState ?? [];
+        $transferOwner->mailingCity = $receipt->TransferFile->transferStakeholder->mailingCity ?? [];
+
+        $transferOwner->nationalityCountry = $receipt->TransferFile->transferStakeholder->nationalityCountry ?? [];
         $sales_plan = SalesPlan::find($receipt->TransferFile->sales_plan_id);
 
         return view('app.sites.file-transfer-receipts.preview', [

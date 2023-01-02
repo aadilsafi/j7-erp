@@ -30,8 +30,8 @@
         }
 
         /* .filepond--item {
-                                                width: calc(20% - 0.5em);
-                                            } */
+                                                    width: calc(20% - 0.5em);
+                                                } */
     </style>
 @endsection
 
@@ -60,97 +60,9 @@
                 </div>
 
                 <div class="card-body">
-
-                    <div class="row mb-1">
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->full_name }}"
-                                class="form-control form-control-lg" id="stackholder_full_name" placeholder="Full Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->father_name }}"
-                                class="form-control form-control-lg" id="stackholder_father_name"
-                                placeholder="Father / Husband Name" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->occupation }}"
-                                class="form-control form-control-lg" id="stackholder_occupation" placeholder="Occupation" />
-                        </div>
-
-                        <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                            <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->designation }}"
-                                class="form-control form-control-lg" id="stackholder_designation"
-                                placeholder="Designation" />
-                        </div>
-                    </div>
-
-                    <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->ntn }}"
-                                class="form-control form-control-lg" id="stackholder_ntn" placeholder="NTN" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                            <input type="text" readonly value="{{ cnicFormat($stakeholder_data->cnic) }}"
-                                class="form-control form-control-lg" id="stackholder_cnic" placeholder="CNIC" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->contact }}"
-                                class="form-control form-control-lg" id="stackholder_contact" placeholder="Contact" />
-                        </div>
-                    </div>
-
-                    {{-- <div class="row mb-1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="country">Country</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->country ? $stakeholder_data->country->name : '-' }}"
-                                class="form-control form-control-lg" id="country" placeholder="Country" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="state">State</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->state ? $stakeholder_data->state->name : '-' }}"
-                                class="form-control form-control-lg" id="state" placeholder="State" />
-                        </div>
-
-                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                            <label class="form-label fs-5" for="city">City</label>
-                            <input type="text" readonly value="{{ $stakeholder_data->city ? $stakeholder_data->city->name : '-' }}"
-                                class="form-control form-control-lg" id="city" placeholder="City" />
-                        </div>
-                    </div> --}}
-
-                    {{-- <div class="row mb-1">
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_address">Address</label>
-                            <textarea class="form-control  form-control-lg" readonly id="stackholder_address" name="stackholder[address]"
-                                placeholder="Address" rows="5">{{ $stakeholder_data->address }}</textarea>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="mailing_address">Mailing Address</label>
-                            <textarea class="form-control form-control-lg" readonly id="mailing_address" name="stackholder[mailing_address]"
-                                placeholder="Mailing Address" rows="5">{{ $stakeholder_data->mailing_address }}</textarea>
-                        </div>
-                    </div> --}}
-
-                    <div class="row mb-1">
-                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                            <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                            <textarea class="form-control form-control-lg" readonly id="stackholder_comments" name="stackholder[comments]"
-                                placeholder="Comments" rows="5">{{ $stakeholder_data->comments }}</textarea>
-                        </div>
-                    </div>
+                    {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $stakeholder_data, 'hideBorders' => true]) }}
                 </div>
+
             </div>
 
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
@@ -168,9 +80,8 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Floor No</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                name="unit[floor_no]" placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}"
-                                readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
+                                placeholder="Floor No" value="{{ $unit_data->floor_unit_number }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
@@ -262,7 +173,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                         <label class="form-label fs-5" for="unit_type">Cheque Number</label>
                                         <input type="text" class="form-control form-control-lg" id="unit_type"
-                                            name="unit[type]" placeholder="Check Number"
+                                            name="unit[type]" placeholder="Cheque Number"
                                             value="{{ $receipt->cheque_no }}" readonly />
                                     </div>
 
@@ -301,8 +212,8 @@
 
                                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                     <label class="form-label fs-5" for="installments">Installments</label>
-                                    <input type="text" class="form-control form-control-lg text-wrap" id="installments"
-                                        name="installments" placeholder="installments"
+                                    <input type="text" class="form-control form-control-lg text-wrap"
+                                        id="installments" name="installments" placeholder="installments"
                                         value="@foreach (json_decode($receipt->installment_number) as $values){{ trim($values) }}{{ !$loop->last ? ' , ' : null }} @endforeach"
                                         readonly />
                                 </div>

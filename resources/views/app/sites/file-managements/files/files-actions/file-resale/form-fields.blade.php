@@ -55,76 +55,10 @@
             <div class="card-header justify-content-between">
                 <h3> Owner Information </h3>
             </div>
-
             <div class="card-body">
-
-                <div class="row mb-1">
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_full_name">Full Name</label>
-                        <input type="text" readonly value="{{ $customer->full_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Full Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_father_name">Father / Husband Name</label>
-                        <input type="text" readonly value="{{ $customer->father_name }}"
-                            class="form-control form-control-lg" id="" placeholder="Father / Husband Name" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_occupation">Occupation</label>
-                        <input type="text" readonly value="{{ $customer->occupation }}"
-                            class="form-control form-control-lg" id="" placeholder="Occupation" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_designation">Designation</label>
-                        <input type="text" readonly value="{{ $customer->designation }}"
-                            class="form-control form-control-lg" id="" placeholder="Designation" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_ntn">NTN</label>
-                        <input type="text" readonly value="{{ $customer->ntn }}"
-                            class="form-control form-control-lg" id="" placeholder="NTN" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_cnic">CNIC</label>
-                        <input type="text" readonly value="{{ cnicFormat($customer->cnic) }}"
-                            class="form-control form-control-lg" id="" placeholder="CNIC" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Contact</label>
-                        <input type="text" readonly value="{{ $customer->contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Contact" />
-                    </div>
-
-                    <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
-                        <label class="form-label fs-5" for="stackholder_contact">Optional Contact</label>
-                        <input type="number" readonly value="{{ $customer->optional_contact }}"
-                            class="form-control form-control-lg" id="" placeholder="Optional Contact" />
-                    </div>
-                </div>
-
-                <div class="row mb-1">
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_address">Address</label>
-                        <textarea class="form-control  form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="5">{{ $customer->address }}</textarea>
-                    </div>
-
-                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                        <label class="form-label fs-5" for="stackholder_comments">Comments</label>
-                        <textarea class="form-control form-control-lg" readonly id="" name="" placeholder="Address"
-                            rows="5">{{ $customer->comments }}</textarea>
-                    </div>
-                </div>
+                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
             </div>
+
         </div>
     </div>
 
@@ -148,16 +82,14 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Unit Name</label>
-                        <input type="text" readonly value="{{ $unit->name }}"
-                            class="form-control form-control-lg" id="stackholder_full_name"
-                            placeholder="Unit Name" />
+                        <input type="text" readonly value="{{ $unit->name }}" class="form-control form-control-lg"
+                            id="stackholder_full_name" placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Unit Type</label>
                         <input type="text" readonly value="{{ $unit->type->name }}"
-                            class="form-control form-control-lg" id="stackholder_father_name"
-                            placeholder="Unit Type" />
+                            class="form-control form-control-lg" id="stackholder_father_name" placeholder="Unit Type" />
                     </div>
 
                 </div>

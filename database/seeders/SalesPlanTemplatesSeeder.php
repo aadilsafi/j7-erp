@@ -19,15 +19,15 @@ class SalesPlanTemplatesSeeder extends Seeder
         (new SalesPlanTemplate())->insert([
             [
                 'name' => 'Template 01',
-                'slug' => 'signature-sales-plan',
-                'image' => '/images/SalesTemplate/signature.png',
+                'slug' => 'template-01',
+                'image' => '/images/SalesTemplate/template01.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'name' => 'Template 02',
-                'slug' => 'j7-global-payment-plan',
-                'image' => '/images/SalesTemplate/j7globalpaymentPlan.png',
+                'slug' => 'template-02',
+                'image' => '/images/SalesTemplate/template02.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

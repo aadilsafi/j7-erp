@@ -318,23 +318,23 @@
             @endphp
             @foreach ($data['instalments'] as $key => $instalment)
                 <tr>
-                    <th style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
+                    <th style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
                         {{ $loop->index + 1 }}
                     </th>
-                    <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 8px;">
+                    <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
                         {{ date_format(new DateTime($instalment->date), 'd/m/Y') }}
                     </td>
-                    <td style=" white-space: nowrap; border: 1px solid black;text-align: center; padding: 8px;">
+                    <td style=" white-space: nowrap; border: 1px solid black;text-align: center; padding: 6px;">
                         @if ($instalment->details)
                             {{ $instalment->details }}
                         @else
                             -
                         @endif
                     </td>
-                    <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 8px;">
+                    <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
                         {{ number_format($instalment->amount) }}
                     </td>
-                    <td style="border: 1px solid black;text-align: center; padding: 8px;">
+                    <td style="border: 1px solid black;text-align: center; padding: 6px;">
                         @if ($instalment->remarks)
                             {{ $instalment->remarks }}
                         @else

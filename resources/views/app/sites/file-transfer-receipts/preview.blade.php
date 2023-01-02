@@ -145,9 +145,9 @@
                                 </div>
                                 @if ($receipt->mode_of_payment == 'Cheque')
                                     <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
-                                        <label class="form-label fs-5" for="unit_type">Check Number</label>
+                                        <label class="form-label fs-5" for="unit_type">Cheque Number</label>
                                         <input type="text" class="form-control form-control-lg" id="unit_type"
-                                            name="unit[type]" placeholder="Check Number"
+                                            name="unit[type]" placeholder="Cheque Number"
                                             value="{{ $receipt->cheque_no }}" readonly />
                                     </div>
 

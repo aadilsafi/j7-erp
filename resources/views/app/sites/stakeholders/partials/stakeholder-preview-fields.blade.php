@@ -234,7 +234,7 @@
                         Source</label>
                     <input type="text" readonly class="form-control form-control-md" id="source"
                         name="individual[source]" placeholder="Refered By" autocomplete="false"
-                        value="{{ isset($stakeholder) ? $stakeholder->leadSource->name : '' }}" />
+                        value="{{ isset($stakeholder) ? $stakeholder->leadSource->name ?? '' : '' }}" />
                 </div>
 
                 <div class="col-lg-3 col-md-3 col-sm-3 position-relative">

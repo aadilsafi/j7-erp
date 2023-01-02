@@ -348,7 +348,7 @@
 
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-header">
-                        <h3>3. STAKEHOLDER</h3>
+                        <h3>3. STAKEHOLDER DETAILS</h3>
                     </div>
                     <div class="card-body">
                         {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $salePlan->stakeholder, 'hideBorders' => true]) }}

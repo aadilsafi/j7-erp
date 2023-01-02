@@ -1,11 +1,11 @@
 {{-- Company Form --}}
 @if (isset($stakeholder) && $stakeholder->stakeholder_as == 'c')
-    <div class="card" id="companyForm"
+    <div class="" id="companyForm"
         @if (!isset($hideBorders)) style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" @endif>
-        <div class="card-header">
-            <h3><strong>Company Informations: </strong></h3>
-        </div>
-        <div class="card-body">
+
+        <h3><strong>Company Informations: </strong></h3>
+
+        <div class="">
 
             <div class="row mb-1">
                 <div class="col-lg-6 col-md-6 position-relative">
@@ -124,12 +124,12 @@
 {{-- Individual Form --}}
 @if (isset($stakeholder) && $stakeholder->stakeholder_as == 'i')
 
-    <div class="card" id="individualForm"
+    <div class="" id="individualForm"
         @if (!isset($hideBorders)) style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" @endif>
-        <div class="card-header">
+        <div class="">
             <h3><strong>Individual Informations :</strong></h3>
         </div>
-        <div class="card-body">
+        <div class="">
 
             <div class="row mb-1">
                 <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
@@ -258,12 +258,12 @@
     </div>
 @endif
 {{-- Address fields --}}
-<div class="card" id="common_form"
+<div class="" id="common_form"
     @if (!isset($hideBorders)) style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;" @endif>
-    <div class="card-header">
+    <div class="">
         <h3><strong>Address:</strong></h3>
     </div>
-    <div class="card-body">
+    <div class="">
 
         <div class="row mb-1">
             <div class="col">
@@ -280,7 +280,7 @@
                             Country <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_country"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialCountry->name ?? '': '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialCountry->name ?? '' : '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -288,7 +288,7 @@
                             State <span class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_state"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialState->name ?? '': '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialState->name ?? '' : '' }}" />
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mb-1">
@@ -296,7 +296,7 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="residential_city"
                             placeholder="City" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->residentialCity->name ?? '': '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->residentialCity->name ?? '' : '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="residential_address_type">Address
@@ -356,7 +356,7 @@
                                 class="text-danger">*</span></label>
                         <input type="text" class="form-control form-control-md" id="mailing_city"
                             placeholder="Country" readonly
-                            value="{{ isset($stakeholder) ? $stakeholder->mailingCity->name ?? '': '' }}" />
+                            value="{{ isset($stakeholder) ? $stakeholder->mailingCity->name ?? '' : '' }}" />
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                         <label class="form-label" style="font-size: 15px" for="mailing_address_type">Address

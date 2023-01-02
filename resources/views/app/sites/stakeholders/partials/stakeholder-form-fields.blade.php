@@ -373,7 +373,7 @@
                 value="{{ old('OfficeContactCountryDetails') }}">
             <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                 <label class="form-label fs-5" for="dob">Date of Birth <span
-                        class="text-danger">*</span></label>
+                        class="text-danger showRequired">*</span></label>
                 <input id="dob" type="date" required placeholder="YYYY-MM-DD" name="individual[dob]"
                     class="form-control form-control-md"
                     value="{{ isset($stakeholder) ? $stakeholder->date_of_birth : old('individual.dob') }}" />

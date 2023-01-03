@@ -10,8 +10,6 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -27,10 +25,6 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                                        width: calc(20% - 0.5em);
-                                    } */
     </style>
 @endsection
 
@@ -66,15 +60,7 @@
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
-                        {{-- <div class="d-block mb-1">
-                        <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
-                        <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                            name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
-                        @error('attachment')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <hr> --}}
+
                         <button type="submit"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
@@ -93,13 +79,6 @@
 @endsection
 
 @section('vendor-js')
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
-
 @endsection
 
 @section('page-js')

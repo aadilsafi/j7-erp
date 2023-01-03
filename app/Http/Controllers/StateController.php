@@ -48,9 +48,9 @@ class StateController extends Controller
     public function edit($site_id, $id)
     {
         $data = [
-            'site_id' => $site_id,
+            'site_id' => decryptParams($site_id),
             'country' => Country::all(),
-            'state' => State::find($id)
+            'state' => State::find(decryptParams($id))
         ];
         return view('app.sites.states.edit', $data);
     }

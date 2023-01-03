@@ -4,7 +4,7 @@
                 class="text-danger">*</span></label>
         <select class="form-select select2 form-select-lg" id="country_id" name="country_id" placeholder="Select Country"
             required>
-            <option disabled>Select Country</option>
+            <option selected>Select Country</option>
             @foreach ($country as $value)
                 <option value="{{ $value->id }}"
                     {{ isset($state) && $state->country_id == $value->id ? 'selected' : null }}>
@@ -22,7 +22,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="name">State<span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
-            name="name" placeholder="Name" value="{{ isset($state) ? $state->name : old('name') }}" />
+            name="name" placeholder="State" value="{{ isset($state) ? $state->name : old('name') }}" />
         @error('name')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
@@ -39,14 +39,3 @@
     </div>
 </div>
 
-{{-- <input type="hidden" name="Userid" value="{{ isset($state) ? $state->id : '' }}"> --}}
-
-{{-- @if (isset($customFields) && count($customFields) > 0)
-    <hr>
-    <div class="row mb-1 g-1">
-        @forelse ($customFields as $field)
-            {!! $field !!}
-        @empty
-        @endforelse
-    </div>
-@endif --}}

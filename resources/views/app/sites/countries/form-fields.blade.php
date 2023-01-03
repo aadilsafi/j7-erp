@@ -2,7 +2,7 @@
     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
         <label class="form-label fs-5" for="name">Country Name <span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
-            name="name" placeholder="Name" value="{{ isset($country) ? $country->name : old('name') }}" />
+            name="name" placeholder="Country" value="{{ isset($country) ? $country->name : old('name') }}" />
         @error('name')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror

@@ -21,8 +21,9 @@ class LeadController extends Controller
                 'name' => 'required|string',
                 'contact_no' => 'required|unique:stakeholders,mobile_contact',
                 'lead_as' => 'required|string',
-                'country_id' => 'sometimes|nullable|exists:countries',
-                'state_id'  => 'sometimes|nullable|exists:countries',
+                'country_id' => 'sometimes|nullable|exists:countries,id',
+                'state_id'  => 'sometimes|nullable|exists:states,id',
+                'city_id'   => 'sometimes|nullable|exists:cities,id',
             ]);
 
             if ($validation->fails()) {
@@ -36,7 +37,7 @@ class LeadController extends Controller
                 'site_id' => '1',
                 'crm_id' => $request->crm_id,
                 'full_name' => $request->name,
-                'mobile_contact' => '+'.$request->contact_no,
+                'mobile_contact' => strpos($request->contact_no, '+') == 0 ?  $request->contact_no : '+' . $request->contact_no,
                 'stakeholder_as' => $request->lead_as,
                 'residential_country_id' => $request->country_id,
                 'residential_state_id' => $request->state_id,

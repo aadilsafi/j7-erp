@@ -60,17 +60,35 @@
     <p class="mb-2">
     </p>
 
-    <div class="card">
-        <div class="card-body">
-            <div class="p-2 m-3">
+    {{-- <div class="card">
+        <div class="card-body"> --}}
+            {{-- <div class="p-2 m-3"> --}}
                 <div class="col align-items-center">
                     <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
-                        <img class="img-fluid" src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" />
+                        <ul class="ps-0 text-center">
+                            <li class="d-block"><h2 class="mb-1 mx-2">We are launching soon</h2></li>
+                            <li class="d-block"><p class="mb-4 mx-2">We're creating something awesome. Please subscribe to get notified when it's ready!</p></li>
+                            <li class="d-block text-center justify-content-center d-flex">
+                                <form onsubmit="return false" class="mb-4 w-50">
+                                    <div class="mb-0">
+                                      <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="email" autofocus="">
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light">Notify</button>
+                                      </div>
+                                    </div>
+                                  </form>
+                            </li>
+                            <li class="d-block">
+                                <img class="img-fluid" src="{{ asset('app-assets') }}/images/comming-soon/page-misc-launching-soon.png" alt="Login V2" />
+                            </li>
+                        </ul>
+
+                        {{-- <img class="img-fluid" src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" /> --}}
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
+            {{-- </div> --}}
+        {{-- </div>
+    </div> --}}
     {{-- <div class="centered p-2 m-3">
         <div class="col align-items-center">
             <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"

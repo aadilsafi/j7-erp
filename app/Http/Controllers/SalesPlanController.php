@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Notification;
 use Redirect;
 use Str;
 use Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalesPlanController extends Controller
 {
@@ -181,11 +182,14 @@ class SalesPlanController extends Controller
         //
         $salePlan = SalesPlan::find(decryptParams($id));
         $installments = $salePlan->installments;
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $salePlan->unit->id . '-' . $salePlan->id . '-' .  $salePlan->stakeholder->id . '.png';
+
         $data = [
             'site' => (new Site())->find(decryptParams($site_id)),
             'salePlan' => $salePlan,
-            'additionalCosts' => $salePlan->additionalCosts,
+            'additional_costs' => $salePlan->additionalCosts,
             'installments' => $installments,
+            'qrCodeimg' => $qrCodeimg,
         ];
         return view('app.sites.floors.units.sales-plan.preview', $data);
     }
@@ -239,6 +243,7 @@ class SalesPlanController extends Controller
 
         $role = Auth::user()->roles->pluck('name');
 
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
         $data = [
             'unit_no' => $salesPlan->unit->floor_unit_number,
             'floor_short_label' => $salesPlan->unit->floor->short_label,
@@ -262,6 +267,7 @@ class SalesPlanController extends Controller
             'validity' =>  $salesPlan->validity,
             'contact' => $salesPlan->stakeholder->contact,
             'amount' => $salesPlan->total_price,
+            'qrCodeimg' => $qrCodeimg,
         ];
 
         actionLog(get_class($salesPlan), auth()->user(), $template, 'print', [
@@ -394,6 +400,25 @@ class SalesPlanController extends Controller
         $salesPlan = SalesPlan::find($request->salesPlanID);
         $unit_id =  $salesPlan->unit->id;
 
+        $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
+        $payment_plan = collect($payment_plan)->last();
+
+        if (isset($payment_plan)) {
+            if ($payment_plan->payment_plan_serial_id == null) {
+                $payment_serial_number = 001;
+                $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+            } else {
+                $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
+                $payment_serial_number = (int)$payment_serial_number + 1;
+                $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+            }
+        } else {
+            $payment_serial_number = 001;
+            $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+        }
+
+
+
         $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', $unit_id)->get();
         foreach ($salesPlan as $salesPlan) {
             $salePlan = SalesPlan::find($salesPlan->id);
@@ -401,12 +426,13 @@ class SalesPlanController extends Controller
                 $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
             }
             $salePlan->status = 2;
-            $salePlan->approved_date = $request->approve_date . date(' H:i:s');
+            // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
             $salePlan->update();
         }
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
             'approved_date' => $request->approve_date . date(' H:i:s'),
+            'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
@@ -937,5 +963,12 @@ class SalesPlanController extends Controller
         TempSalePlan::query()->truncate();
 
         return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function downloadInvestmentPlan($file_name)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/investment-plan');
+        $file_path = $path . '/' . $file_name;
+        return response()->download($file_path);
     }
 }

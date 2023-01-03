@@ -15,7 +15,7 @@
         <table class="table table-bordered" style="border-color: #fff;">
             <tr>
                 <td class="text-start">
-                    <img src="{{ asset('app-assets') }}/images/logo/signature-logo.png" width="200" alt="asdasdasd">
+                    <img src="{{ asset('app-assets') }}/images/logo/j7global-logo.png" width="200" alt="asdasdasd">
                 </td>
                 <td class="text-center">
                     <h1>PAYMENT PLAN</h1>

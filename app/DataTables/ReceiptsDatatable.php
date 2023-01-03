@@ -46,16 +46,16 @@ class ReceiptsDatatable extends DataTable
                 return  $receipt->unit->name;
             })
             ->editColumn('cnic', function ($receipt) {
-                return  cnicFormat($receipt->cnic);
+                return  $receipt->cnic;
             })
             ->editColumn('installment_number', function ($receipt) {
                 return  str_replace(str_split('[]"'), '', $receipt->installment_number);
             })
             ->editColumn('amount_in_numbers', function ($receipt) {
-                return  number_format($receipt->amount_in_numbers);
+                return  number_format((float)$receipt->amount_in_numbers, 2);
             })
             ->editColumn('amount_received', function ($receipt) {
-                return  number_format($receipt->amount_received);
+                return  number_format((float)$receipt->amount_received, 2);
             })
             ->editColumn('discounted_amount', function ($receipt) {
                 return  number_format($receipt->discounted_amount > 0 ? $receipt->discounted_amount : 0);
@@ -221,7 +221,7 @@ class ReceiptsDatatable extends DataTable
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::make('cnic')->title('Identity Number')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),
             Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
             Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),

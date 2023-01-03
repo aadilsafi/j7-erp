@@ -35,6 +35,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/css/extensions/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css"
         href="{{ asset('app-assets') }}/vendors/css/pickers/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/css/custom.css">
 
 
     @yield('page-vendor')
@@ -109,13 +111,13 @@
             {{ view('app.layout.alerts') }}
 
 
-           
-                <div class="content-header row">
-                    @yield('breadcrumbs')
 
-                    <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
-                        <div class="mb-1 breadcrumb-right">
-                            {{-- <div class="dropdown">
+            <div class="content-header row">
+                @yield('breadcrumbs')
+
+                <div class="content-header-right text-md-end col-md-3 col-12 d-md-block d-none">
+                    <div class="mb-1 breadcrumb-right">
+                        {{-- <div class="dropdown">
                                 <button class="btn-icon btn btn-primary btn-round btn-sm dropdown-toggle" type="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i data-feather="grid"></i>
@@ -139,10 +141,10 @@
                                     </a>
                                 </div>
                             </div> --}}
-                        </div>
                     </div>
                 </div>
-          
+            </div>
+
 
             <div class="content-header row">
             </div>
@@ -328,11 +330,14 @@
         // });
 
         $('form').on('submit', function() {
+
             showBlockUI();
 
-            setTimeout(function() {
-                hideBlockUI();
-            }, 3000);
+            if (this.id != 'importPreviewForm' || this.id != 'importSaveForm') {
+                setTimeout(function() {
+                    hideBlockUI();
+                }, 3000);
+            }
         });
 
         function numberFormat(number) {

@@ -45,8 +45,9 @@
             <!-- /Brand logo-->
             <!-- Left Text-->
             <div class="d-none d-lg-flex col-lg-8 align-items-center p-5">
-                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5"><img class="img-fluid"
-                        src="{{ asset('app-assets') }}/images/j9.png" alt="Login V2" /></div>
+                <div class="w-100 d-lg-flex align-items-center justify-content-center px-5">
+                    <img class="img-fluid" src="{{ asset('app-assets') }}/images/j9.png" alt="Login V2" width="65%"/>
+                </div>
             </div>
             <!-- /Left Text-->
             <!-- Login-->
@@ -92,7 +93,7 @@
                         <button class="btn btn-primary w-100" tabindex="4">Sign in</button>
                     </form>
                     <span class="text-center mt-5 d-none d-md-block">
-                        Powered by <a href="https://islootech.com/" target="_blank"> ISLOO TECH</a> 
+                        Powered by <a href="https://islootech.com/" target="_blank"> ISLOO TECH</a>
                     </span>
                     {{-- <p class="text-center mt-2">
                         <span>New on our platform?</span>

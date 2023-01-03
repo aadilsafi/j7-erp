@@ -43,7 +43,7 @@
     }
 
     .header-navbar .navbar-container ul.navbar-nav li>a.nav-link {
-        padding: 0 0.5rem !important;
+        padding: 0 0.5rem;
     }
 </style>
 <!-- BEGIN: Header-->

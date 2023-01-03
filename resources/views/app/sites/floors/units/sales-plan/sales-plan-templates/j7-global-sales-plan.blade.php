@@ -59,7 +59,7 @@
         <tr>
             <th style="width:33%; text-align:start;" >
                 <br>
-                <img width="60%" height="50px" src="{{ asset('app-assets') }}/images/logo/signature-logo.png" alt="logo">
+                <img width="60%" height="50px" src="{{ asset('app-assets') }}/images/logo/j7global-logo.png" alt="logo">
             </th>
             <th style="width:33%; ">
                 <h1 >Sales Plan</h1>

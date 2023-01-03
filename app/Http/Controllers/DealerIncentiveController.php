@@ -154,7 +154,7 @@ class DealerIncentiveController extends Controller
         // }
 
         $rebate_units = RebateIncentiveModel::with('unit')->where('dealer_id', $request->dealer_id)
-            ->where('is_for_dealer_incentive', true)->distinct()->get();
+            ->where(['is_for_dealer_incentive'=>true , 'status'=>true])->distinct()->get();
         $units = [];
 
         if ($rebate_units) {

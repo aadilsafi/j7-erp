@@ -20,6 +20,25 @@
             $('#mailing_country').trigger('change')
         @endif
 
+        var stakeholder_type = $("#stakeholder_type");
+        stakeholder_type.wrap('<div class="position-relative"></div>');
+        stakeholder_type.select2({
+            dropdownAutoWidth: !0,
+            dropdownParent: stakeholder_type.parent(),
+            width: "100%",
+            containerCssClass: "select-lg",
+        }).change(function() {
+            showBlockUI('#stakeholder_as');
+
+            if ($(this).val() == 'L') {
+                $('.showRequired').hide();
+            }  else {
+                $('.showRequired').show();
+
+            }
+            hideBlockUI('#stakeholder_as');
+        });
+
         var stakeholder_as = $("#stakeholder_as");
         stakeholder_as.wrap('<div class="position-relative"></div>');
         stakeholder_as.select2({

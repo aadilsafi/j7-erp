@@ -254,6 +254,6 @@ class Stakeholder extends Model implements HasMedia
 
     public function leadSource()
     {
-        return $this->belongsTo(leadSource::class, 'source');
+        return $this->belongsTo(LeadSource::class, 'source');
     }
 }

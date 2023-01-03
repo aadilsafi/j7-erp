@@ -203,69 +203,12 @@
                             <div class="card-header">
                                 <h3>Customer</h3>
                             </div>
-
                             <div class="card-body">
-
-                                <div class="row g-1 mb-1">
-                                    <input type="hidden" name="application_form[stakeholder_id]"
-                                        value="{{ $customer->id }}">
-
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_name">Name</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_name"
-                                            placeholder="Name" value="{{ $customer->full_name }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_father_name">Father/Husband
-                                            Name</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_father_name" value="{{ $customer->father_name }}"
-                                            placeholder="Father/Husband Name" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ cnicFormat($customer->cnic) ?? '-' }}" disabled />
-                                    </div>
-                                </div>
-
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_ntn">NTN Number</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
-                                            placeholder="NTN Number" value="{{ $customer->ntn ?? '-' }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_phone">Cell</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_phone" placeholder="Cell"
-                                            value="{{ $customer->contact ?? '-' }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_occupation">Occupation</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_occupation" placeholder="Occupation"
-                                            value="{{ $customer->occupation ?? '-' }}" disabled />
-                                    </div>
-                                </div>
-
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Address</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Address"
-                                            value="{{ $customer->address ?? '-' }}" disabled />
-                                    </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_comments">Comments</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_comments" placeholder="Comments"
-                                            value="{{ $customer->comments ?? '-' }}" disabled />
-                                    </div>
-                                </div>
+                                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
                             </div>
+                            <input type="hidden" name="application_form[stakeholder_id]"
+                                value="{{ $customer->id }}">
+
                         </div>
                     </div>
                 </div>
@@ -1549,7 +1492,7 @@
                                             No</label>
                                         <input type="text" class="form-control form-control-lg"
                                             id="sales_source_contact_no" name="sales_source[contact_no]"
-                                            placeholder="Contact No" value="{{ $user->phone_no }}" disabled />
+                                            placeholder="Contact No" value="{{ $user->contact }}" disabled />
                                         {{-- invalid-tooltip">{{ $message }}
                                     </div> --}}
                                     </div>
@@ -1576,68 +1519,10 @@
                             <div class="card-header">
                                 <h3>Customer</h3>
                             </div>
-
+                            <input type="hidden" name="application_form[stakeholder_id]"
+                            value="{{ $customer->id }}">
                             <div class="card-body">
-
-                                <div class="row g-1 mb-1">
-                                    <input type="hidden" name="application_form[stakeholder_id]"
-                                        value="{{ $customer->id }}">
-
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_name">Name</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_name"
-                                            placeholder="Name" value="{{ $customer->full_name }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_father_name">Father/Husband
-                                            Name</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_father_name" value="{{ $customer->father_name }}"
-                                            placeholder="Father/Husband Name" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_cnic">CNIC/Passport</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_cnic"
-                                            placeholder="CNIC/Passport"
-                                            value="{{ cnicFormat($customer->cnic) ?? '-' }}" disabled />
-                                    </div>
-                                </div>
-
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_ntn">NTN Number</label>
-                                        <input type="text" class="form-control form-control-lg" id="customer_ntn"
-                                            placeholder="NTN Number" value="{{ $customer->ntn ?? '-' }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_phone">Cell</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_phone" placeholder="Cell"
-                                            value="{{ $customer->contact ?? '-' }}" disabled />
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                        <label class="form-label fs-5" for="customer_occupation">Occupation</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_occupation" placeholder="Occupation"
-                                            value="{{ $customer->occupation ?? '-' }}" disabled />
-                                    </div>
-                                </div>
-
-                                <div class="row g-1 mb-1">
-                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_address">Address</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_address" placeholder="Address"
-                                            value="{{ $customer->address ?? '-' }}" disabled />
-                                    </div>
-
-                                    <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                        <label class="form-label fs-5" for="customer_comments">Comments</label>
-                                        <input type="text" class="form-control form-control-lg"
-                                            id="customer_comments" placeholder="Comments"
-                                            value="{{ $customer->comments ?? '-' }}" disabled />
-                                    </div>
-                                </div>
+                                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
                             </div>
                         </div>
                     </div>

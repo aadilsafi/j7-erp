@@ -10,28 +10,11 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+
 @endsection
 
 @section('custom-css')
-    <style>
-        .filepond--drop-label {
-            color: #7367F0 !important;
-        }
 
-        .filepond--item-panel {
-            background-color: #7367F0;
-        }
-
-        .filepond--panel-root {
-            background-color: #e3e0fd;
-        }
-
-        /* .filepond--item {
-                                                        width: calc(20% - 0.5em);
-                                                    } */
-    </style>
 @endsection
 
 @section('breadcrumbs')
@@ -93,64 +76,9 @@
 @endsection
 
 @section('vendor-js')
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
-
 @endsection
 
 @section('page-js')
-
-    <script type="text/javascript">
-        $(document).ready(function() {
-
-            var e = $("#role_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            });
-
-            $("#saveButton").click(function() {
-                var name = $("#name").val();
-                var email = $("#country_id").val();
-                var phone_no = $("#iso2").val();
-                $('.allErrors').empty();
-
-
-                if (name == '') {
-                    $('#name').after(
-                        '<span class="error allErrors text-danger">Name is Required</span>');
-                }
-
-                if (email == '') {
-                    $('#email').after(
-                        '<span class="error allErrors text-danger">Email is Required</span>');
-                }
-
-                if (phone_no == '') {
-                    $('#phone_no').after(
-                        '<span class="error allErrors text-danger">Phone Number is Required</span>');
-                }
-
-                if (phone_no.toString().length != 11) {
-                    $('#phone_no').after(
-                        '<span class="error allErrors text-danger">Enter 11 Digits Phone Number</span>');
-                }
-
-                if (phone_no.toString().length = 11 && name != '' &&
-                    email != '') {
-                    $("#stateForm").submit();
-                }
-            });
-        });
-    </script>
-    
 @endsection
 
 @section('custom-js')

@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                width: calc(20% - 0.5em);
-                                                                                                                            } */
+                                                                                                                                    width: calc(20% - 0.5em);
+                                                                                                                                } */
     </style>
 @endsection
 
@@ -183,8 +183,10 @@
 
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
-                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment" accept="image/png, image/jpeg, image/gif, application/pdf" />
+                            <input id="attachment" data-pdf-preview-height="320"
+                                data-pdf-component-extra-params="toolbar=0&navpanes=0&scrollbar=0&view=fitH" type="file"
+                                class="filepond @error('attachment') is-invalid @enderror" name="attachment"
+                                accept="image/png, image/jpeg, image/gif, application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -246,6 +248,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
@@ -264,22 +267,29 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
             maxFiles: 1,
             checkValidity: true,
+            allowPdfPreview: true,
             credits: {
                 label: '',
                 url: ''
             }
+        });
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            pdfPreviewHeight: 320,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
 

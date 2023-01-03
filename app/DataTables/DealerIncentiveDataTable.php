@@ -40,13 +40,13 @@ class DealerIncentiveDataTable extends DataTable
                 return $dealerIncentive->dealer->full_name;
             })
             ->editColumn('dealer_incentive', function ($dealerIncentive) {
-                return number_format($dealerIncentive->dealer_incentive);
+                return number_format($dealerIncentive->dealer_incentive,2);
             })
             ->editColumn('total_unit_area', function ($dealerIncentive) {
-                return number_format($dealerIncentive->total_unit_area);
+                return number_format($dealerIncentive->total_unit_area,2);
             })
             ->editColumn('total_dealer_incentive', function ($dealerIncentive) {
-                return number_format($dealerIncentive->total_dealer_incentive);
+                return number_format($dealerIncentive->total_dealer_incentive,2);
             })
             ->editColumn('created_at', function ($dealerIncentive) {
                 return editDateColumn($dealerIncentive->created_at);

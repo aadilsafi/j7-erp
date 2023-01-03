@@ -46,7 +46,7 @@ class ReceiptsDatatable extends DataTable
                 return  $receipt->unit->name;
             })
             ->editColumn('cnic', function ($receipt) {
-                return  cnicFormat($receipt->cnic);
+                return  $receipt->cnic;
             })
             ->editColumn('installment_number', function ($receipt) {
                 return  str_replace(str_split('[]"'), '', $receipt->installment_number);
@@ -221,7 +221,7 @@ class ReceiptsDatatable extends DataTable
         $columns = [
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('CNIC')->addClass('text-nowrap'),
+            Column::make('cnic')->title('Identity Number')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),
             Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
             Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),

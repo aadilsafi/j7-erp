@@ -267,14 +267,14 @@
 
                                             <input readonly id="total_debit" type="text" required placeholder=" Debit"
                                                 name="total_debit"
-                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit) }}" @else value="0" @endif
+                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit,2) }}" @else value="0" @endif
                                                 class="form-control form-control-md" />
 
                                         </div>
 
                                         <div class="col position-relative">
                                             <input
-                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit) }}" @else value="0" @endif
+                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit,2) }}" @else value="0" @endif
                                                 readonly id="total_credit" type="text" required placeholder=" Credit"
                                                 name="total_credit" class="form-control form-control-md" />
                                         </div>

@@ -1015,6 +1015,8 @@ Route::group([
             Route::get('/{command}', [ArtisanCommandController::class, 'commands'])->name('command');
         });
     });
+
+    Route::get('download-investment-plan/{file_name}', [SalesPlanController::class, 'downloadInvestmentPlan'])->name('download-investment-plan');
 });
 
 Route::group(['prefix' => 'tests'], function () {

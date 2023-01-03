@@ -12,6 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link href="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.css" rel="stylesheet">
 @endsection
 
 
@@ -96,19 +97,20 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_no">Unit Area(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
-                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
+                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
-                            <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
-                                placeholder="Floor No" value="{{ number_format($sales_plan->unit_price) }}" readonly />
+                            <input type="text" class="form-control form-control-lg" id="floor_no"
+                                name="unit[floor_no]" placeholder="Floor No"
+                                value="{{ number_format($sales_plan->unit_price,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price) }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price,2) }}" readonly />
                         </div>
 
                     </div>
@@ -128,14 +130,14 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Amount Received</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_no" placeholder=""
-                                        value="{{ number_format($receipt->amount_received) }}" readonly />
+                                    <input type="text" class="form-control form-control-lg" id="unit_no"
+                                        placeholder="" value="{{ number_format($receipt->amount_received,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Discounted Amount</label>
-                                    <input type="text" class="form-control form-control-lg" id="unit_no" placeholder=""
-                                        value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount) : 0 }}"
+                                    <input type="text" class="form-control form-control-lg" id="unit_no"
+                                        placeholder="" value="{{ $receipt->discounted_amount > 0 ? number_format($receipt->discounted_amount,2) : 0}}"
                                         readonly />
                                 </div>
 
@@ -143,14 +145,14 @@
                                     <label class="form-label fs-5" for="unit_no">Total Paid Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
                                         name="unit[no]" placeholder=""
-                                        value="{{ number_format($receipt->amount_in_numbers) }}" readonly />
+                                        value="{{ number_format($receipt->amount_in_numbers,2) }}" readonly />
                                 </div>
 
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="floor_no">Amount In Words</label>
                                     <input type="text" class="form-control form-control-lg" id="floor_no"
                                         name="unit[floor_no]" placeholder=""
-                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers)) }} Only."
+                                        value="{{ \Str::title(numberToWords($receipt->amount_in_numbers,2)) }} Only."
                                         readonly />
                                 </div>
 
@@ -230,7 +232,7 @@
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input disabled id="attachment" type="file"
                                 class="filepond @error('attachment') is-invalid @enderror" name="attachment"
-                                accept="image/png, image/jpeg, image/gif" />
+                                accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -274,9 +276,9 @@
                                                         <td>{{ $paidIntsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($paidIntsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($paidIntsallment->amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($paidIntsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->paid_amount,2) }}</td>
+                                                        <td>{{ number_format($paidIntsallment->remaining_amount,2) }}</td>
                                                         <td>{{ Str::of($paidIntsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -327,7 +329,7 @@
                                                             <td>{{ $unPaidIntsallment->details }}</td>
                                                             <td>{{ \Carbon\Carbon::parse($unPaidIntsallment->date)->format('F j, Y') }}
                                                             </td>
-                                                            <td>{{ number_format($unPaidIntsallment->amount) }}</td>
+                                                            <td>{{ number_format($unPaidIntsallment->amount,2) }}</td>
                                                             <td>-</td>
                                                             <td>-</td>
                                                             <td>Unpaid</td>
@@ -356,6 +358,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
@@ -372,6 +375,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         var files = [];
@@ -384,8 +388,8 @@
         FilePond.create(document.getElementById('attachment'), {
             files: files,
             styleButtonRemoveItemPosition: 'right',
-            imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            // imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
@@ -393,10 +397,18 @@
             maxFiles: 2,
             minFiles: 2,
             checkValidity: true,
+            allowPdfPreview: true,
             credits: {
                 label: '',
                 url: ''
             }
+        });
+
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            imagePreviewHeight: 440,
+            pdfPreviewHeight: 540,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
 @endsection

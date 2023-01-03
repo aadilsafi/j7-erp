@@ -44,8 +44,14 @@ class ChartsOfAccountsController extends Controller
                     'account_of_heads' => $account_of_heads,
                     'account_of_heads_codes' => $account_of_heads_codes,
                     'account_balances' => $account_balances,
-                    'accountLedgers_all' => $accountLedgers_all
+                    'accountLedgers_all' => $accountLedgers_all,
+                    'first_level' => AccountHead::where('level',1)->get(),
+                    'second_level' => AccountHead::where('level',2)->get(),
+                    'third_level' => AccountHead::where('level',3)->get(),
+                    'fourth_level' => AccountHead::where('level',4)->get(),
+                    'fifth_level' => AccountHead::where('level',5)->get(),
                 ];
+                // dd($data);
                 return view('app.sites.accounts.chart_of_accounts.index', $data);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));

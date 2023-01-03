@@ -84,19 +84,19 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_no">Unit Area(sq.ft)</label>
                             <input type="text" class="form-control form-control-lg" id="unit_no" name="unit[no]"
-                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area) }}" readonly />
+                                placeholder="Unit No" value="{{ number_format($unit_data->gross_area,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="floor_no">Unit Price</label>
                             <input type="text" class="form-control form-control-lg" id="floor_no" name="unit[floor_no]"
-                                placeholder="Floor No" value="{{ number_format($sales_plan->unit_price) }}" readonly />
+                                placeholder="Floor No" value="{{ number_format($sales_plan->unit_price,2) }}" readonly />
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                             <label class="form-label fs-5" for="unit_type">Total Price</label>
                             <input type="text" class="form-control form-control-lg" id="unit_type" name="unit[type]"
-                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price) }}" readonly />
+                                placeholder="Unit Type" value="{{ number_format($sales_plan->total_price,2) }}" readonly />
                         </div>
 
                     </div>
@@ -118,7 +118,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-12 mb-2 position-relative">
                                     <label class="form-label fs-5" for="unit_no">Total Amount</label>
                                     <input type="text" class="form-control form-control-lg" id="unit_no"
-                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount) }}"
+                                        name="unit[no]" placeholder="" value="{{ number_format($receipt->amount,2) }}"
                                         readonly />
                                 </div>
 

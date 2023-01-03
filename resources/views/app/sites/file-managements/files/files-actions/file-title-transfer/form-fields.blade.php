@@ -265,20 +265,20 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Gross Area</label>
-                        <input type="text" readonly value="{{ number_format($unit->gross_area) }}"
+                        <input type="text" readonly value="{{ number_format($unit->gross_area,2) }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -331,9 +331,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount,2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -351,9 +351,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount) }}</td>
+                                                        <td>{{ number_format($intsallment->amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount,2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>

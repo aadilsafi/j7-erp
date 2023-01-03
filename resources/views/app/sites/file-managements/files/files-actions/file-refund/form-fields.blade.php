@@ -15,7 +15,7 @@
                         <label class="form-label fs-5" for="amount_to_be_refunded">Paid Amount</label>
                         <input type="text" disabled required name="paid_amount" class="form-control form-control-lg"
                             id="paid_amount" placeholder=" Paid Amount"
-                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount,2) : '' }}" />
                     </div>
 
                     <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -23,7 +23,7 @@
                         <input type="text" readonly required name="amount_to_be_refunded"
                             class="form-control form-control-lg" {{ isset($refund_file) ? 'disabled' : '' }}
                             id="amount_to_be_refunded" placeholder="Amount to be refunded"
-                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount) : '' }}" />
+                            value="{{ isset($total_paid_amount) && (float)$total_paid_amount > 0 ? number_format($total_paid_amount,2) : '' }}" />
                     </div>
 
                 </div>
@@ -227,20 +227,20 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Gross Area</label>
-                        <input type="text" readonly value="{{ number_format($unit->gross_area) }}"
+                        <input type="text" readonly value="{{ number_format($unit->gross_area,2) }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->total_price) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price,2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>

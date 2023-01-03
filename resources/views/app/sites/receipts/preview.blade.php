@@ -12,6 +12,7 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link href="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.css" rel="stylesheet">
 @endsection
 
 
@@ -231,7 +232,7 @@
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input disabled id="attachment" type="file"
                                 class="filepond @error('attachment') is-invalid @enderror" name="attachment"
-                                accept="image/png, image/jpeg, image/gif" />
+                                accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -357,6 +358,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
@@ -373,6 +375,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         var files = [];
@@ -385,8 +388,8 @@
         FilePond.create(document.getElementById('attachment'), {
             files: files,
             styleButtonRemoveItemPosition: 'right',
-            imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            // imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
@@ -394,10 +397,18 @@
             maxFiles: 2,
             minFiles: 2,
             checkValidity: true,
+            allowPdfPreview: true,
             credits: {
                 label: '',
                 url: ''
             }
+        });
+
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            imagePreviewHeight: 440,
+            pdfPreviewHeight: 540,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
 @endsection

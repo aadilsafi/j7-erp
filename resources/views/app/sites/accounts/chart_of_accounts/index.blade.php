@@ -492,7 +492,7 @@
                                                                                                             aria-labelledby="flush-{{ $key_forth }}"
                                                                                                             data-bs-parent="#flush-collapseOne-{{ $key }}">
                                                                                                             <div
-                                                                                                                class="accordion-body pb-0 pe-0 pt-0">
+                                                                                                                class="accordion-body ps-5 pt-0 pb-0 pe-0">
                                                                                                                 @php
                                                                                                                     $value_4 = 0;
                                                                                                                     $value_5 = 0;
@@ -578,7 +578,7 @@
                                                                                                                         </tr>
                                                                                                                     </tbody>
                                                                                                                 </table>
-
+                                                                                                               <div class="ps-5">
                                                                                                                 <table
                                                                                                                     class="table table-primary table-striped ms-0">
                                                                                                                     <thead>
@@ -652,6 +652,7 @@
                                                                                                                         @endforeach
                                                                                                                     </tbody>
                                                                                                                 </table>
+                                                                                                               </div>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                     </div>

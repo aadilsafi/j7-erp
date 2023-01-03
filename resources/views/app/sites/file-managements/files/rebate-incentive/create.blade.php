@@ -204,7 +204,7 @@
                             $('#customer_comments').val(response.stakeholder.comments);
                             $('#customer_address').val(response.stakeholder.address);
                             $('#customer_mailing_address').val(response.stakeholder.mailing_address);
-                            $('#customer_phone').val(response.stakeholder.contact);
+                            $('#customer_phone').val(response.stakeholder.mobile_contact);
                             $('#optional_customer_phone').val(response.stakeholder.optional_contact);
                             $('#customer_occupation').val(response.stakeholder.occupation);
                             $('#customer_designation').val(response.stakeholder.designation);

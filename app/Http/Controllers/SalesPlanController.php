@@ -968,7 +968,7 @@ class SalesPlanController extends Controller
     public function downloadInvestmentPlan($file_name)
     {
         $path = public_path('app-assets/pdf/sales-plans/investment-plan');
-        $file_path = $path . '/' . decryptParams($file_name);
+        $file_path = $path . '/' . $file_name;
         return response()->download($file_path);
     }
 }

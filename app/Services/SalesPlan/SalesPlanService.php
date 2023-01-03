@@ -372,9 +372,9 @@ class SalesPlanService implements SalesPlanInterface
     public function generatePDF($salesPlan)
     {
         $path = public_path('app-assets/pdf/sales-plans/investment-plan');
-        $fileName =  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
+        $fileName =  'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
 
-        $link = route('download-investment-plan', ['file_name' => encryptParams($fileName)]);
+        $link = route('download-investment-plan', ['file_name' => $fileName]);
         QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png'));
 
         $role = Auth::user()->roles->pluck('name');

@@ -130,7 +130,7 @@
                                             </div>
                                         </div>
                                         <div class="col-6 text-center">
-                                            <img src="{{ $qrCodeimg }}" alt="qr code">
+                                            <img width="90px" height="90px" src="{{ $qrCodeimg }}" alt="qr code">
                                         </div>
                                     </div>
 

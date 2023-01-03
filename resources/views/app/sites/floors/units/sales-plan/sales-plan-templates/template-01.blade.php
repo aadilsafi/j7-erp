@@ -76,7 +76,7 @@
                 <h1>Sales Plan</h1>
             </th>
             <th  style="width:33%; text-align:end;">
-                <img src="{{ $data['qrCodeimg']}}"
+                <img width="70px" height="70px" src="{{ $data['qrCodeimg']}}"
                     alt="qr code">
                 <br>
                 Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}

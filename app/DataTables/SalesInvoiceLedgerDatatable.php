@@ -73,9 +73,8 @@ class SalesInvoiceLedgerDatatable extends DataTable
             })
             ->editColumn('origin', function ($ledger) {
                 if ($ledger->account_action_id == 1 || $ledger->account_action_id == 8) {
-                    return '<a href="' . route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id)]) . '">
+                    return '<a href="' . route('sites.floors.units.sales-plans.initail-sales-plan', ['site_id' => encryptParams($ledger->site_id), 'floor_id' => encryptParams($ledger->salesPlan->unit->floor->id), 'unit_id' => encryptParams($ledger->salesPlan->unit->id) , 'id' => encryptParams($ledger->salesPlan->id)]) . '">
                                 <span class="badge rounded-pill ">
-                                //   <img class="custom_y_arrow" src= "'. asset('app-assets') . '/svg/Vector.svg">
                                  <img class="custom_y_arrow" src= "'. asset('app-assets') . '/svg/Vector.svg">
                                 </span> (' . $ledger->origin_name . ')
                             </a>';

@@ -29,6 +29,11 @@ class CountryController extends Controller
 
     public function store(Request $request, $site_id)
     {
+        $request->validate([
+            'name' => 'required|unique:countries,name',
+            'capital' => 'required|unique:countries,capital',
+            'short_label' => 'required|unique:countries,iso3',
+        ]);
         $country = Country::create(
             [
                 'name' => $request->name,
@@ -42,6 +47,7 @@ class CountryController extends Controller
 
     public function edit($site_id, $id)
     {
+
         $data = [
             'site_id' => $site_id,
             'country' => Country::find($id)
@@ -50,6 +56,11 @@ class CountryController extends Controller
     }
     public function update(Request $request, $site_id, $id)
     {
+        $request->validate([
+            'name' => 'required|unique:countries,name,' .  decryptParams($id),
+            'capital' => 'required|unique:countries,capital,' . decryptParams($id),
+            'short_label' => 'required|unique:countries,iso3,' .  decryptParams($id),
+        ]);
 
         (new Country())->find(decryptParams($id))->update([
             'name' => $request->name,

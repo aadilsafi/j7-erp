@@ -552,12 +552,12 @@ Breadcrumbs::for('sites.countries.index', function (BreadcrumbTrail $trail, $sit
 });
 //Countries Breedcrumbs
 Breadcrumbs::for('sites.countries.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.countries.index',$site_id);
+    $trail->parent('sites.countries.index', $site_id);
     $trail->push('Create Country');
 });
 //Countries Breedcrumbs
 Breadcrumbs::for('sites.countries.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.countries.index',$site_id);
+    $trail->parent('sites.countries.index', $site_id);
     $trail->push('Edit Country');
 });
 //Countries Breadcrumbs
@@ -565,11 +565,32 @@ Breadcrumbs::for('sites.states.index', function (BreadcrumbTrail $trail, $site_i
     $trail->parent('dashboard');
     $trail->push('States', route('sites.settings.states.index', ['site_id' => $site_id]));
 });
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.states.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.states.index', $site_id);
+    $trail->push('Create State');
+});
+
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.states.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.states.index', $site_id);
+    $trail->push('Edit State');
+});
 
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
     $trail->push('Cities', route('sites.settings.cities.index', ['site_id' => $site_id]));
+});
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.cities.create', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.cities.index', $site_id);
+    $trail->push('Create City');
+});
+//Countries Breadcrumbs
+Breadcrumbs::for('sites.cities.edit', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('sites.cities.index', $site_id);
+    $trail->push('Edit City');
 });
 
 //Activity Logs Breadcrumbs

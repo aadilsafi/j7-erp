@@ -45,7 +45,6 @@
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
-
                         <button type="submit"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
@@ -67,4 +66,10 @@
 @endsection
 
 @section('vendor-js')
+@endsection
+
+@section('page-js')
+@endsection
+
+@section('custom-js')
 @endsection

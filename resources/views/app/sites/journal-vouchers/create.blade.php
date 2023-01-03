@@ -101,13 +101,15 @@
                                 </div> --}}
 
                                 <hr>
-                                <div class="col-md-12">
-                                    <a id="saveButton" href="#"
-                                        class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
-                                        <i data-feather='save'></i>
-                                        Save
-                                    </a>
-                                </div>
+                                @can('sites.settings.journal-vouchers.store')
+                                    <div class="col-md-12">
+                                        <a id="saveButton" href="#"
+                                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
+                                            <i data-feather='save'></i>
+                                            Save
+                                        </a>
+                                    </div>
+                                @endcan
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.settings.journal-vouchers.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
@@ -151,8 +153,7 @@
                 dateFormat: "Y-m-d",
             });
 
-            $(this).find('.accountsSelect').select2({
-                    });
+            $(this).find('.accountsSelect').select2({});
 
         });
     </script>
@@ -162,8 +163,7 @@
             // initEmpty: true,
             show: function() {
                 $(this).slideDown(function() {
-                    $(this).find('.accountsSelect').select2({
-                    });
+                    $(this).find('.accountsSelect').select2({});
                 }), feather && feather.replace({
                     width: 14,
                     height: 14

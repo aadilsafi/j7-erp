@@ -186,7 +186,6 @@
                                             $value_frist = [];
                                             $value_frist_value = 0;
                                         @endphp
-                                         <div id="jstree-basic">
                                         <div class="accordion-item ">
                                             <h2 class="accordion-header" id="flush-{{ $key_first }}">
                                                 <button class="new_according_bg accordion-button collapsed" type="button"
@@ -201,8 +200,6 @@
                                                 aria-labelledby="flush-{{ $key_first }}"
                                                 data-bs-parent="#accordionFlushExample">
                                                 <div class="accordion-body ps-0 pt-0 pb-0 pe-0">
-                                                    <ul>
-                                                        <li data-jstree='{"icon" : "far fa-folder"}'>
                                                     <table id="first_level"
                                                         class="table table-primary table-striped check_hide">
                                                         <thead>
@@ -265,8 +262,6 @@
                                                             </tr>
                                                         </tbody>
                                                     </table>
-                                                        </li>
-                                                    </ul>
 
                                                     {{-- secend level --}}
                                                     @foreach ($account_of_heads as $key => $account_of_head_full_array)
@@ -652,7 +647,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                         </div>
                                     @endforeach
                                 </div>
                             </div>
@@ -678,13 +672,6 @@
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/buttons.print.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/tables/datatable/dataTables.rowGroup.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/pickers/flatpickr/flatpickr.min.js"></script>
-      <!-- BEGIN: Page Vendor JS-->
-      <script src="{{ asset('app-assets') }}/vendors/js/extensions/jstree.min.js"></script>
-      <!-- END: Page Vendor JS-->
-     <!-- BEGIN: Page JS-->
-     <script src="{{ asset('app-assets') }}/vendors/js/extensions/ext-component-tree.min.js"></script>
-     {{-- <script src="../../../app-assets/js/scripts/extensions/ext-component-tree.min.js"></script> --}}
-     <!-- END: Page JS-->
 @endsection
 
 @section('page-js')

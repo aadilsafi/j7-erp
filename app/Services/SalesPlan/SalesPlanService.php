@@ -25,6 +25,8 @@ use App\Models\{
 use App\Notifications\DefaultNotification;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Facades\LogBatch;
 use Spatie\Activitylog\Models\Activity;
@@ -249,7 +251,7 @@ class SalesPlanService implements SalesPlanInterface
                 'status' => false,
                 'created_date' => $inputs['created_date'] . date(' H:i:s'),
                 'serial_no' => 'SI-' . $serail_no,
-                'investment_plan_serial_id' => 'IP-'.$serail_no,
+                'investment_plan_serial_id' => 'IP-' . $serail_no,
             ];
             // dd(json_encode($stakeholderInput['next_of_kin']));
 
@@ -361,11 +363,54 @@ class SalesPlanService implements SalesPlanInterface
             ];
 
             // Notification::send($specificUsers, new DefaultNotification($notificaionData));
+            $this->generatePDF($salesPlan);
             LogBatch::endBatch();
             return $salesPlan;
         });
     }
 
+    public function generatePDF($salesPlan)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/investment-plan');
+        $fileName =  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
+
+        $link = route('download-investment-plan', ['file_name' => encryptParams($fileName)]);
+        QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png'));
+
+        $role = Auth::user()->roles->pluck('name');
+
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
+            'rate' => $salesPlan->unit_price,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'total' => $salesPlan->total_price,
+            'sales_person_name' => Auth::user()->name,
+            'sales_person_contact' => $salesPlan->stakeholder->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => Auth::user()->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->contact,
+            'amount' => $salesPlan->total_price,
+        ];
+        $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
+        $qrCodeImg = base64_encode(file_get_contents(public_path('app-assets/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png')));
+        $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image', 'qrCodeImg'));
+
+
+        $pdf->save($path . '/' . $fileName);
+    }
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs)
     {
         try {

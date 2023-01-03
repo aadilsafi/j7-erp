@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Print Sales Plan</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    {{-- <script src="{{ asset('app-assets') }}/js/scripts/pages/app-invoice-print.min.js"></script> --}}
+    <script src="{{ asset('app-assets') }}/js/scripts/pages/app-invoice-print.min.js"></script>
     <script>
         $(document).ready(function() {
             var today = new Date();
@@ -18,68 +18,54 @@
             $('#date').empty();
             $('#date').append('Date : ' + today + '');
             $('#btn').hide();
-            window.print();
-
-            $("#btn").click(function() {
-                $('#btn').hide();
-                window.print();
-                $('#btn').show();
-            });
         });
     </script>
     <style>
-        @media print {
+        /* * { margin: 0 !important; padding: 0 !important; } */
+        html,
+        body {
+            height: auto;
+            overflow: hidden;
+            background: #FFF;
+            font-size: 8.5pt;
+        }
 
-            /* * { margin: 0 !important; padding: 0 !important; } */
-            html,
-            body {
-                height: auto;
-                overflow: hidden;
-                background: #FFF;
-                font-size: 8.5pt;
-            }
+        .template {
+            width: auto;
+            left: 0;
+            top: 0;
+            page-break-after: avoid;
+        }
 
-            .template {
-                width: auto;
-                left: 0;
-                top: 0;
-                page-break-after: avoid;
-            }
+        .page-break {
+            page-break-inside: always;
+        }
 
-            .page-break {
-                page-break-inside: always;
-            }
+        .installmenttable {
+            page-break-inside: auto;
+        }
 
-            .installmenttable {
-                page-break-inside: auto;
-            }
-
-            .installmenttable tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
+        .installmenttable tr {
+            page-break-inside: avoid;
+            page-break-after: auto;
         }
     </style>
 </head>
 
 <body>
-    <a href="#" id="btn">Print</a>
-
     <table style="width:100%;" class="template">
         <tr>
             <th style="width:33%; text-align:start;">
                 <br>
-                <img width="60%" height="50px" src="{{ asset('app-assets') }}/images/logo/j7global-logo.png"
-                    alt="logo">
+                <img width="60%" height="50px" src="data:image/png;base64,{{ $image }}" alt="logo">
+
             </th>
             <th style="width:33%; ">
                 <h1>Sales Plan</h1>
             </th>
-            <th  style="width:33%; text-align:end;">
-                <img src="{{ $data['qrCodeimg']}}"
-                    alt="qr code">
-                <br>
-                Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
+            <th style="width:33%; text-align:end;">
+               
+
             </th>
         </tr>
     </table>
@@ -134,9 +120,13 @@
                         -
                     @endif
                 </td>
-                <th style=" white-space: nowrap;" colspan="2">Unit Orientation </th>
-                <td style="text-align: start; border-bottom: 1px solid black;" colspan="2">
-
+                <th style=" white-space: nowrap;" colspan="2">Client Number</th>
+                <td style="text-align: center; border-bottom: 1px solid black;" colspan="2">
+                    @if ($data['client_number'])
+                        {{ $data['client_number'] }}
+                    @else
+                        -
+                    @endif
                 </td>
             </tr>
         </table>
@@ -145,13 +135,13 @@
             2 . Pricing
         </h3>
 
-        <table style="width:100%;text-transform: uppercase;text-align: start; float:left;">
+        <table style="width:100%;text-transform: uppercase;text-align: start;">
             <tr style="text-align: start;">
                 <th style="text-align: start;">Rate </th>
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     @if ($data['rate'])
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        {{ number_format($data['rate']) }}
+                        {{ number_format($data['rate'], 2) }}
                         &nbsp;&nbsp;
                     @else
                         -
@@ -174,19 +164,19 @@
                     @isset($additionalCost->unit_percentage)
                         @php
                             $totalAdditionalCost += ($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']);
-
+                            
                         @endphp
                     @endisset
 
                     <tr style="text-align: start;">
                         <th style="text-align: start; white-space: nowrap;">
-                            @isset ($additionalCost->name)
+                            @isset($additionalCost->name)
                                 {{ $additionalCost->name }}
                             @endisset
 
                         </th>
                         <td style="text-align: end; border-bottom: 1px solid black;">
-                            @if ( isset($additionalCost->unit_percentage))
+                            @if (isset($additionalCost->unit_percentage))
                                 {{ $additionalCost->unit_percentage }} %
                             @else
                                 -
@@ -196,7 +186,7 @@
                         <th style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                         <td style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
-                            @if (isset($additionalCost->unit_percentage) )
+                            @if (isset($additionalCost->unit_percentage))
                                 {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size'])) }}
                             @else
                                 -

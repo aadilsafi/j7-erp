@@ -3,6 +3,7 @@
 /public/hot
 /public/storage
 /public/app-assets/server-uploads
+/public/app-assets/pdf/sales-plans/
 /storage/*.key
 /vendor
 .env

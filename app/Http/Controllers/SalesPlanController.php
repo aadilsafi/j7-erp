@@ -392,6 +392,7 @@ class SalesPlanController extends Controller
         }
         elseif($stakeholder->stakeholder_as == 'c')
         {
+            dd('asd');
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
@@ -399,24 +400,24 @@ class SalesPlanController extends Controller
             $mobile_contact = $stakeholder->mobile_contact;
             $industry = $stakeholder->industry;
 
-            dd($company_name,$ntn,
-                $reg_no ,
-                $strn ,
-                $mobile_contact ,
-                $industry,
-                $residential_address_type,
-                $residential_country_id ,
-                $residential_state_id ,
-                $residential_city_id,
-                $residential_postal_code,
-                $residential_address ,
-                $mailing_address_type,
-                $mailing_country_id,
-                $mailing_state_id ,
-                $mailing_city_id,
-                $mailing_postal_code,
-                $mailing_address
-            );
+            // dd($company_name,$ntn,
+            //     $reg_no ,
+            //     $strn ,
+            //     $mobile_contact ,
+            //     $industry,
+            //     $residential_address_type,
+            //     $residential_country_id ,
+            //     $residential_state_id ,
+            //     $residential_city_id,
+            //     $residential_postal_code,
+            //     $residential_address ,
+            //     $mailing_address_type,
+            //     $mailing_country_id,
+            //     $mailing_state_id ,
+            //     $mailing_city_id,
+            //     $mailing_postal_code,
+            //     $mailing_address
+            // );
 
             if (
                 isset($company_name) &&

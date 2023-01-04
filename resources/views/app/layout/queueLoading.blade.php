@@ -5,6 +5,15 @@
             <div class="accordion-item border-primary" style="border-radius: 10px 10px 0 0 !important; overflow: hidden;"
                 id="accordian-queue">
                 <h2 class="accordion-header" id="headingMarginOne">
+                    <div class="d-flex justify-content-end align-items-center" id="clear-all-queues-div"
+                        style="display: none !important;">
+                        <a href="{{ route('batches.clear-all') }}"
+                            class="btn btn-sm btn-relief-outline-danger waves-effect waves-float waves-light"
+                            id="clear-all-queues-button">
+                            <i data-feather='x-circle'></i>
+                            Clear all
+                        </a>
+                    </div>
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#accordionMarginOne" aria-expanded="false" aria-controls="accordionMarginOne">
                         <span id="cup-svg">

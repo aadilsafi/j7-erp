@@ -402,26 +402,23 @@ class SalesPlanController extends Controller
             $mobile_contact = $stakeholder->mobile_contact;
             $industry = $stakeholder->industry;
 
-            dd(isset($company_name) , isset($ntn) ,
-                isset($reg_no) ,
-                isset($strn) ,
-                isset($mobile_contact) ,
-                isset($industry) ,
-
-                isset($residential_address_type) ,
-                isset($residential_country_id) ,
-                isset($residential_state_id) ,
-                isset($residential_city_id) ,
-                isset($residential_postal_code) ,
-                isset($residential_address) ,
-
-                isset($mailing_address_type) ,
-                isset($mailing_country_id) ,
-                isset($mailing_state_id) ,
-                isset($mailing_city_id) ,
-                isset($mailing_postal_code) ,
-                isset($mailing_address)
-
+            dd($company_name,$ntn,
+                $reg_no ,
+                $strn ,
+                $mobile_contact ,
+                $industry,
+                $residential_address_type,
+                $residential_country_id ,
+                $residential_state_id ,
+                $residential_city_id,
+                $residential_postal_code,
+                $residential_address ,
+                $mailing_address_type,
+                $mailing_country_id,
+                $mailing_state_id ,
+                $mailing_city_id,
+                $mailing_postal_code,
+                $mailing_address
             );
 
             if (

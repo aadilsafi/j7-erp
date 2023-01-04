@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.users.create', $site_id) }}
+{{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.countries.create', $site_id) }}
 @endsection
 
-@section('page-title', 'Create User')
+@section('page-title', 'Create Country')
 
 @section('page-vendor')
 @endsection
@@ -39,9 +39,9 @@
 <div class="content-header-left col-md-9 col-12 mb-2">
     <div class="row breadcrumbs-top">
         <div class="col-12">
-            <h2 class="content-header-title float-start mb-0">Create User</h2>
+            <h2 class="content-header-title float-start mb-0">Create Country</h2>
             <div class="breadcrumb-wrapper">
-                {{ Breadcrumbs::render('sites.users.create', $site_id) }}
+                {{ Breadcrumbs::render('sites.countries.create', $site_id) }}
             </div>
         </div>
     </div>
@@ -49,15 +49,15 @@
 @endsection
 
 @section('content')
-<form id="userForm" class="form form-vertical" enctype="multipart/form-data"
-    action="{{ route('sites.users.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
+<form id="countryForm" class="form form-vertical" enctype="multipart/form-data"
+    action="{{ route('sites.settings.countries.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-12 position-relative">
             <div class="card">
                 <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     @csrf
-                    {{ view('app.sites.users.form-fields',['roles'=> $role, 'customFields' => $customFields]) }}
+                    {{ view('app.sites.countries.form-fields') }}
                 </div>
             </div>
         </div>
@@ -79,10 +79,10 @@
                     <button type="submit"
                         class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                         <i data-feather='save'></i>
-                        Save User
+                        Save Country
                     </button>
 
-                    <a href="{{ route('sites.users.index', ['site_id' => encryptParams($site_id)]) }}"
+                    <a href="{{ route('sites.settings.countries.index', ['site_id' => encryptParams($site_id)]) }}"
                         class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                         <i data-feather='x'></i>
                         {{ __('lang.commons.cancel') }}

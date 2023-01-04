@@ -112,7 +112,7 @@
         }
 
         function addNew() {
-            // location.href = '{{ route('sites.users.create', ['site_id' => $site_id]) }}';
+            location.href = '{{ route('sites.settings.cities.create', ['site_id' => $site_id]) }}';
         }
 
     </script>

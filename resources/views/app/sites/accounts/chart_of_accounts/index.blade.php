@@ -546,7 +546,7 @@
                         for (let index = 0; index < fifth_level_accounts.length; index++) {
                             const account_data = fifth_level_accounts[index];
                             console.log(account_data.name)
-                            $('.fifthLevelAccounts').append('<ul><li class="alreadyExistFifthLevelAccount">\
+                            $('.fifthLevelAccounts').append('<li class="alreadyExistFifthLevelAccount">\
                                     <table class="table">\
                                             <thead>\
                                             <tr>\

@@ -352,7 +352,7 @@ class SalesPlanController extends Controller
 
 
         if ($stakeholder->stakeholder_as == 'i') {
-            dd('i');
+
             $full_name = $stakeholder->full_name;
             $father_name = $stakeholder->father_name;
             $occupation = $stakeholder->occupation;
@@ -391,7 +391,7 @@ class SalesPlanController extends Controller
             }
         }
         elseif($stakeholder->stakeholder_as == 'c') {
-            dd('c');
+
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;

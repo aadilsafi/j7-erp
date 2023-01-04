@@ -4,6 +4,7 @@
 /public/storage
 /public/app-assets/server-uploads
 /public/app-assets/pdf/sales-plans/investment-plan/
+# /public/app-assets/pdf/sales-plans/payment-plan/
 /public/app-assets/pdf/sales-plans/qrcodes/
 /storage/*.key
 /vendor

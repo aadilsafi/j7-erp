@@ -151,7 +151,7 @@
                 <th style="text-align: start;">&nbsp;&nbsp;&nbsp;Amount </th>
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ number_format($data['rate'] * $data['size']) }}
+                    {{ number_format($data['rate'] * $data['size'], 2) }}
                     &nbsp;&nbsp;
                 </td>
             </tr>
@@ -187,7 +187,7 @@
                         <td style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
                             @if (isset($additionalCost->unit_percentage))
-                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size'])) }}
+                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']) ,2) }}
                             @else
                                 -
                             @endif
@@ -210,7 +210,7 @@
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
                     @if ($data['discount_total'])
-                        {{ number_format($data['discount_total']) }}
+                        {{ number_format($data['discount_total'], 2) }}
                     @else
                         -
                     @endif
@@ -223,7 +223,7 @@
                 <th style="text-align: start;">&nbsp;&nbsp;&nbsp;Total </th>
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
-                    {{ number_format($data['amount']) }}
+                    {{ number_format($data['amount'], 2) }}
                     &nbsp;&nbsp;
                 </td>
             </tr>
@@ -241,7 +241,7 @@
                 <td style="text-align: end; border-bottom: 1px solid black;">
                     &nbsp;&nbsp;
                     @if ($data['down_payment_total'])
-                        {{ number_format($data['down_payment_total']) }}
+                        {{ number_format($data['down_payment_total'], 2) }}
                     @else
                         -
                     @endif
@@ -325,7 +325,7 @@
                         @endif
                     </td>
                     <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
-                        {{ number_format($instalment->amount) }}
+                        {{ number_format($instalment->amount ,2) }}
                     </td>
                     <td style="border: 1px solid black;text-align: center; padding: 6px;">
                         @if ($instalment->remarks)
@@ -344,7 +344,7 @@
                 <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                 <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
                 <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">
-                    {{ number_format($totalInstallmentAmount) }}</th>
+                    {{ number_format($totalInstallmentAmount, 2) }}</th>
                 <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
             </tr>
         </table>

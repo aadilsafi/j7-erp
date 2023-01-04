@@ -191,9 +191,48 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
         ];
-        return view('app.sites.floors.units.sales-plan.preview', $data);
+        return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
     }
 
+    public function initialPreview($site_id, $floor_id = null, $unit_id = null, $id)
+    {
+        //
+        $salePlan = SalesPlan::find(decryptParams($id));
+        $installments = $salePlan->installments;
+        $qrCodeName = 'Investment-Plan-' . $salePlan->unit->id . '-' . $salePlan->id . '-' .  $salePlan->stakeholder->id . '.png';
+
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $qrCodeName;
+
+        $data = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'salePlan' => $salePlan,
+            'additional_costs' => $salePlan->additionalCosts,
+            'installments' => $installments,
+            'qrCodeimg' => $qrCodeimg,
+            'preview' => 'initial',
+        ];
+        return view('app.sites.floors.units.sales-plan.investment-plan-preview', $data);
+    }
+
+    public function updatedPreview($site_id, $floor_id = null, $unit_id = null, $id)
+    {
+        //
+        $salePlan = SalesPlan::find(decryptParams($id));
+        $installments = $salePlan->installments;
+        $qrCodeName = 'Payment-Plan-' .  $salePlan->unit->id . '-' . $salePlan->id . '-' .  $salePlan->stakeholder->id . '.png';
+
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' .  $qrCodeName;
+
+        $data = [
+            'site' => (new Site())->find(decryptParams($site_id)),
+            'salePlan' => $salePlan,
+            'additional_costs' => $salePlan->additionalCosts,
+            'installments' => $installments,
+            'qrCodeimg' => $qrCodeimg,
+            'preview' => 'updated',
+        ];
+        return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -434,6 +473,8 @@ class SalesPlanController extends Controller
             'approved_date' => $request->approve_date . date(' H:i:s'),
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
+
+        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
@@ -969,6 +1010,13 @@ class SalesPlanController extends Controller
     {
         $path = public_path('app-assets/pdf/sales-plans/investment-plan');
         $file_path = $path . '/' . $file_name;
+        return response()->download($file_path);
+    }
+
+    public function downloadPaymentPlan($file_name)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+        $file_path = $path . '/' . decryptParams($file_name);
         return response()->download($file_path);
     }
 }

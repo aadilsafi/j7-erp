@@ -4,7 +4,7 @@
     {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
 @endsection
 
-@section('page-title', 'Preview Sales Plan')
+@section('page-title', 'Investment Plan Preview')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -73,7 +73,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Preview Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Investment Plan Preview</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.floors.units.sales-plans.initail-sales-plan', $site->id, encryptParams(1), encryptParams(1), encryptParams(1)) }}
                 </div>
@@ -98,7 +98,7 @@
 
                                 <div class="card-body">
                                     <div class="row mb-1">
-                                        <div class="col-6">
+                                        <div class="col-10">
                                             <div class="row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
                                                     <label class="form-label fs-5" for="unit_no">Unit No</label>
@@ -129,8 +129,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-6 text-center">
-                                            <img width="90px" height="90px" src="{{ $qrCodeimg }}" alt="qr code">
+                                        <div class="col-2 text-center">
+                                            <div class="mt-2">
+                                                <img width="120px" height="120px" src="{{ $qrCodeimg }}"
+                                                    alt="qr code">
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -317,9 +321,9 @@
                                                                 <th scope="col">Installments</th>
                                                                 <th scope="col">Due Date</th>
                                                                 <th scope="col">Total Amount</th>
-                                                                <th scope="col">Paid Amount</th>
-                                                                <th scope="col">Remaining Amount</th>
-                                                                <th scope="col">Status</th>
+                                                                {{-- <th scope="col">Paid Amount</th>
+                                                                <th scope="col">Remaining Amount</th> --}}
+                                                                <th scope="col">Remarks</th>
                                                             </tr>
                                                         </thead>
 
@@ -331,11 +335,11 @@
                                                                     <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
                                                                     </td>
                                                                     <td>{{ number_format($installment->amount, 2) }}</td>
-                                                                    <td>{{ number_format($installment->paid_amount, 2) }}
+                                                                    {{-- <td>{{ number_format($installment->paid_amount, 2) }}
                                                                     </td>
                                                                     <td>{{ number_format($installment->remaining_amount, 2) }}
-                                                                    </td>
-                                                                    <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
+                                                                    </td> --}}
+                                                                    <td>{{ Str::of($installment->remarks)->replace('_', ' ')->title() }}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach

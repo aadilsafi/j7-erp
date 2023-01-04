@@ -389,11 +389,9 @@ class SalesPlanController extends Controller
                     'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
                 ], 200);
             }
-        } else {
-
-
-
-
+        }
+        elseif($stakeholder->stakeholder_as = 'c')
+        {
 
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;

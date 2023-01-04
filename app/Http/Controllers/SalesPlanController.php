@@ -396,30 +396,30 @@ class SalesPlanController extends Controller
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
             $strn = $stakeholder->strn;
-            $mobile_contact = $stakeholder->mobile_contact;
+            $mobile_contact = $stakeholder->office_contact;
             $industry = $stakeholder->industry;
 
-            dd(
+            // dd(
 
-                isset($company_name) ,
-                isset($ntn) ,
-                isset($reg_no) ,
-                isset($strn) ,
-                isset($mobile_contact) ,
-                isset($industry) ,
-                isset($residential_address_type) ,
-                isset($residential_country_id) ,
-                isset($residential_state_id) ,
-                isset($residential_city_id) ,
-                isset($residential_postal_code) ,
-                isset($residential_address) ,
-                isset($mailing_address_type) ,
-                isset($mailing_country_id) ,
-                isset($mailing_state_id) ,
-                isset($mailing_city_id) ,
-                isset($mailing_postal_code) ,
-                isset($mailing_address)
-            );
+            //     isset($company_name) ,
+            //     isset($ntn) ,
+            //     isset($reg_no) ,
+            //     isset($strn) ,
+            //     isset($mobile_contact) ,
+            //     isset($industry) ,
+            //     isset($residential_address_type) ,
+            //     isset($residential_country_id) ,
+            //     isset($residential_state_id) ,
+            //     isset($residential_city_id) ,
+            //     isset($residential_postal_code) ,
+            //     isset($residential_address) ,
+            //     isset($mailing_address_type) ,
+            //     isset($mailing_country_id) ,
+            //     isset($mailing_state_id) ,
+            //     isset($mailing_city_id) ,
+            //     isset($mailing_postal_code) ,
+            //     isset($mailing_address)
+            // );
 
             if (
                 isset($company_name) &&

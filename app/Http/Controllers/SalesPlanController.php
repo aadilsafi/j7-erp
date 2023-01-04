@@ -351,8 +351,8 @@ class SalesPlanController extends Controller
         $mailing_address = $stakeholder->mailing_address;
 
 
-        if ($stakeholder->stakeholder_as = 'i') {
-dd('i');
+        if ($stakeholder->stakeholder_as == 'i') {
+
             $full_name = $stakeholder->full_name;
             $father_name = $stakeholder->father_name;
             $occupation = $stakeholder->occupation;
@@ -390,34 +390,15 @@ dd('i');
                 ], 200);
             }
         }
-        elseif($stakeholder->stakeholder_as == 'c')
+        else
         {
-            dd('c');
+
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
             $strn = $stakeholder->strn;
             $mobile_contact = $stakeholder->mobile_contact;
             $industry = $stakeholder->industry;
-
-            // dd($company_name,$ntn,
-            //     $reg_no ,
-            //     $strn ,
-            //     $mobile_contact ,
-            //     $industry,
-            //     $residential_address_type,
-            //     $residential_country_id ,
-            //     $residential_state_id ,
-            //     $residential_city_id,
-            //     $residential_postal_code,
-            //     $residential_address ,
-            //     $mailing_address_type,
-            //     $mailing_country_id,
-            //     $mailing_state_id ,
-            //     $mailing_city_id,
-            //     $mailing_postal_code,
-            //     $mailing_address
-            // );
 
             if (
                 isset($company_name) &&

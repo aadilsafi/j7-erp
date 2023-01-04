@@ -165,7 +165,7 @@ class SalesInvoiceLedgerDatatable extends DataTable
                     $payment_voucher = DB::table('payment_vocuhers')->where('id', $ledger->payment_voucher_id)
                         ->first();
                     if (isset($payment_voucher)) {
-                        return '<a href="' . route('sites.payment-voucher.index', ['site_id' => encryptParams($ledger->site_id)]) . '">
+                        return '<a href="' . route('sites.payment-voucher.show', ['site_id' => encryptParams($ledger->site_id),'id'=>encryptParams($payment_voucher->id)]) . '">
                                 <span class="badge rounded-pill ">  <img class="custom_y_arrow" src= "'. asset('app-assets') . '/svg/Vector.svg"></span>  (' . $ledger->origin_name . ')
                             </a>';
                     } else {

@@ -84,6 +84,53 @@
 @section('custom-js')
     {{ $dataTable->scripts() }}
     <script>
+        const inputOptions = {
+            'investment_plan': 'Investment Plan',
+            'payment_plan': 'Payment Plan',
+        }
+
+        function selectPreview(id, initialLink, updatedLink) {
+            Swal.fire({
+                title: 'Select Sales Plan Preview',
+                input: 'radio',
+                inputOptions: inputOptions,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to choose something!'
+                    } else {
+                        console.log(value);
+                        if (value == "investment_plan") {
+                            window.location.href = initialLink;
+                        } else {
+                            window.location.href = updatedLink;
+                        }
+                    }
+                }
+            })
+            $('.swal2-radio').empty();
+            var radioInput = '<div class="card-body">\
+                                                 <div class="row custom-options-checkable g-1">\
+                                                    <div class="col-md-6">\
+                                                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
+                                                            <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <span class="fw-bolder">Investment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
+                                                                <div class="col-md-6">\
+                                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
+                                                                    <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <span class="fw-bolder">Payment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
+                                                            </div>\
+                                                        </div>'
+            $('.swal2-radio').append(radioInput)
+        }
+
         function deleteSelected() {
             var selectedCheckboxes = $('.dt-checkboxes:checked').length;
             if (selectedCheckboxes > 0) {
@@ -120,7 +167,7 @@
 
         function addNew() {
             location.href =
-                "{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site),])  }}";
+                "{{ route('sites.sales_plan.create', ['site_id' => encryptParams($site)]) }}";
         }
 
         function openTemplatesModal(sales_plan_id) {
@@ -143,129 +190,128 @@
 
         function approveSalesPlan(id, created_date, unit_status) {
 
-if (unit_status == 6) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Please Do File Buy Back OR File Refund Action First!!',
-    });
-
-} else {
-    showBlockUI('#salesPlan');
-
-    var _token = '{{ csrf_token() }}';
-    let url =
-        "{{ route('sites.floors.units.sales-plans.ajax-check-stakeholder', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
-    $.ajax({
-        url: url,
-        type: 'post',
-        dataType: 'json',
-        data: {
-            'salesPlanID': id,
-            '_token': _token,
-        },
-        success: function(response) {
-            if (response.success) {
-                swal.fire({
-                    title: "Select Sale Plan Approval Date",
-                    html: '<input id="approve_date" type="date" required placeholder="YYYY-MM-DD" name="approve_date" class="form-control form-control-md" />',
-                    icon: 'question',
-                    confirmButtonText: 'Approve',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
-                    },
-                    showLoaderOnConfirm: true,
-                    didOpen: function() {
-                        $("#approve_date").flatpickr({
-                            defaultDate: "today",
-                            minDate: created_date,
-                            altInput: !0,
-                            altFormat: "F j, Y",
-                            dateFormat: "Y-m-d",
-                        });
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#teams-table-form').submit();
-
-                        var _token = '{{ csrf_token() }}';
-                        var approve_date = $('#approve_date').val();
-                        let url =
-                            "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
-                        $.ajax({
-                            url: url,
-                            type: 'post',
-                            dataType: 'json',
-                            data: {
-                                'salesPlanID': id,
-                                '_token': _token,
-                                'approve_date': approve_date
-                            },
-                            success: function(response) {
-                                if (response.success) {
-                                    toastr.success(response.message,
-                                        "Success!", {
-                                            showMethod: "slideDown",
-                                            hideMethod: "slideUp",
-                                            timeOut: 2e3,
-                                            closeButton: !0,
-                                            tapToDismiss: !1,
-                                        });
-                                    $('#sales-plan-table').DataTable().ajax
-                                        .reload();
-                                    location.reload(true);
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Error',
-                                        text: 'Something Went Wrong!!',
-
-                                    });
-                                    hideBlockUI('#salesPlan');
-                                }
-                            },
-                            error: function(error) {
-                                console.log(error);
-                                hideBlockUI('#salesPlan');
-                            }
-                        });
-                    }
-                });
-            } else {
+            if (unit_status == 6) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: response.message,
-                    confirmButtonText: 'Edit Stakeholder',
-                    buttonsStyling: false,
-                    customClass: {
-                        confirmButton: 'btn btn-relief-outline-primary waves-effect waves-float waves-light me-1',
+                    text: 'Please Do File Buy Back OR File Refund Action First!!',
+                });
+
+            } else {
+                showBlockUI('#salesPlan');
+
+                var _token = '{{ csrf_token() }}';
+                let url =
+                    "{{ route('sites.floors.units.sales-plans.ajax-check-stakeholder', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
+                $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'salesPlanID': id,
+                        '_token': _token,
                     },
-                }).then((result) => {
-                    showBlockUI('#salesPlan');
-                    if (result.isConfirmed) {
-                        window.location.href = response.url;
-                    }
-                    else{
+                    success: function(response) {
+                        if (response.success) {
+                            swal.fire({
+                                title: "Select Sale Plan Approval Date",
+                                html: '<input id="approve_date" type="date" required placeholder="YYYY-MM-DD" name="approve_date" class="form-control form-control-md" />',
+                                icon: 'question',
+                                confirmButtonText: 'Approve',
+                                buttonsStyling: false,
+                                customClass: {
+                                    confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
+                                },
+                                showLoaderOnConfirm: true,
+                                didOpen: function() {
+                                    $("#approve_date").flatpickr({
+                                        defaultDate: "today",
+                                        minDate: created_date,
+                                        altInput: !0,
+                                        altFormat: "F j, Y",
+                                        dateFormat: "Y-m-d",
+                                    });
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $('#teams-table-form').submit();
+
+                                    var _token = '{{ csrf_token() }}';
+                                    var approve_date = $('#approve_date').val();
+                                    let url =
+                                        "{{ route('sites.floors.units.sales-plans.approve-sales-plan', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1)]) }}";
+                                    $.ajax({
+                                        url: url,
+                                        type: 'post',
+                                        dataType: 'json',
+                                        data: {
+                                            'salesPlanID': id,
+                                            '_token': _token,
+                                            'approve_date': approve_date
+                                        },
+                                        success: function(response) {
+                                            if (response.success) {
+                                                toastr.success(response.message,
+                                                    "Success!", {
+                                                        showMethod: "slideDown",
+                                                        hideMethod: "slideUp",
+                                                        timeOut: 2e3,
+                                                        closeButton: !0,
+                                                        tapToDismiss: !1,
+                                                    });
+                                                $('#sales-plan-table').DataTable().ajax
+                                                    .reload();
+                                                location.reload(true);
+                                            } else {
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Error',
+                                                    text: 'Something Went Wrong!!',
+
+                                                });
+                                                hideBlockUI('#salesPlan');
+                                            }
+                                        },
+                                        error: function(error) {
+                                            console.log(error);
+                                            hideBlockUI('#salesPlan');
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message,
+                                confirmButtonText: 'Edit Stakeholder',
+                                buttonsStyling: false,
+                                customClass: {
+                                    confirmButton: 'btn btn-relief-outline-primary waves-effect waves-float waves-light me-1',
+                                },
+                            }).then((result) => {
+                                showBlockUI('#salesPlan');
+                                if (result.isConfirmed) {
+                                    window.location.href = response.url;
+                                } else {
+                                    hideBlockUI('#salesPlan');
+                                }
+                            });
+                            hideBlockUI('#salesPlan');
+                        }
+                    },
+                    error: function(error) {
+                        console.log(error);
                         hideBlockUI('#salesPlan');
                     }
                 });
+
+
+
                 hideBlockUI('#salesPlan');
             }
-        },
-        error: function(error) {
-            console.log(error);
-            hideBlockUI('#salesPlan');
+
         }
-    });
-
-
-
-    hideBlockUI('#salesPlan');
-}
-
-}
 
         function disapproveSalesPlan(id) {
             showBlockUI('#salesPlan');

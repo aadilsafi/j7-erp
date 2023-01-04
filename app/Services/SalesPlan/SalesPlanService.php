@@ -414,7 +414,7 @@ class SalesPlanService implements SalesPlanInterface
                 'amount' => $salesPlan->total_price,
             ];
             $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
-            $pdf = Pdf::setOptions(['dpi' => 140, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image'));
+            $pdf = Pdf::setOptions(['dpi' => 160, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image'));
 
             $pdf->save($path . '/' . $fileName);
         } elseif ($type = 'payment_plan') {

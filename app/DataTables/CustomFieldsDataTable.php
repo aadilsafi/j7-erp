@@ -59,7 +59,7 @@ class CustomFieldsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission = auth()->user()->can('sites.settings.custom-fields.index');
-        $selectedDeletePermission = auth()->user()->can('sites.settings.custom-fields.destroy-selected');
+        $selectedDeletePermission = 0;
 
         $buttons = [];
 
@@ -84,14 +84,6 @@ class CustomFieldsDataTable extends DataTable
             Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
         ]);
 
-        if ($selectedDeletePermission) {
-            $buttons[] = Button::raw('delete-selected')
-                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                ->attr([
-                    'onclick' => 'deleteSelected()',
-                ]);
-        }
 
         return $this->builder()
             ->addTableClass(['table-striped', 'table-hover'])
@@ -104,23 +96,6 @@ class CustomFieldsDataTable extends DataTable
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             ->rowGroupDataSrc('custom_field_model')
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 0,
-                    'render' => "function (data, type, full, setting) {
-                    var tableRow = JSON.parse(data);
-                    return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + tableRow.id + '\" name=\"chkTableRow[]\" id=\"chkTableRow_' + tableRow.id + '\" /><label class=\"form-check-label\" for=\"chkTableRow_' + tableRow.id + '\"></label></div>';
-                }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
             ->orders([
                 [1, 'desc'],
             ]);
@@ -133,13 +108,10 @@ class CustomFieldsDataTable extends DataTable
      */
     protected function getColumns(): array
     {
-        $destroyPermission = auth()->user()->can('sites.settings.custom-fields.destroy');
+        $destroyPermission = 0;
 
         $columns = [];
 
-        if ($destroyPermission) {
-            $columns[] = Column::computed('check')->exportable(false)->printable(false)->width(60);
-        }
 
         $columns = array_merge($columns, [
             Column::make('name')->addClass('text-nowrap'),

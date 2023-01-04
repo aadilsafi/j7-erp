@@ -31,7 +31,7 @@
             <tr>
                 <td style="border: 0px solid #eee!important;">
                     <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
-                    <p class="m-0">Customer ID : 00000084</p>
+                    
                     <p class="m-0">Contact #: {{ $data['contact'] }}</p>
                     <p class="m-0">Plan Effected From:{{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}
                     </p>
@@ -57,7 +57,7 @@
             </tr>
         </table>
 
-        <table class="table table-bordered text-center">
+        <table class="table table-bordered text-center" style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
             <thead>
                 <tr>
                     <th>Sr. No.</th>

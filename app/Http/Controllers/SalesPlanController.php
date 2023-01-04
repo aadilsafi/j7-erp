@@ -281,8 +281,13 @@ class SalesPlanController extends Controller
         $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 
         $role = Auth::user()->roles->pluck('name');
-
-        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        if($template->id ==1){
+            $qrCodeName = 'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        }
+        else{
+            $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        }
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $qrCodeName;
         $data = [
             'unit_no' => $salesPlan->unit->floor_unit_number,
             'floor_short_label' => $salesPlan->unit->floor->short_label,

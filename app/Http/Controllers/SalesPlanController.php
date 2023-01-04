@@ -312,7 +312,6 @@ class SalesPlanController extends Controller
         $mailing_address = $stakeholder->mailing_address;
 
 
-        dd($stakeholder->stakeholder_as);
         if ($stakeholder->stakeholder_as = 'i') {
 
             $full_name = $stakeholder->full_name;
@@ -352,6 +351,11 @@ class SalesPlanController extends Controller
                 ], 200);
             }
         } else {
+
+
+
+
+
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
@@ -359,29 +363,27 @@ class SalesPlanController extends Controller
             $mobile_contact = $stakeholder->mobile_contact;
             $industry = $stakeholder->industry;
 
-            // dd(
-            //     isset($company_name) ,
-            //     isset($ntn) ,
-            //     isset($reg_no) ,
-            //     isset($strn) ,
-            //     isset($mobile_contact) ,
-            //     isset($industry) ,
+            dd(isset($company_name) , isset($ntn) ,
+                isset($reg_no) ,
+                isset($strn) ,
+                isset($mobile_contact) ,
+                isset($industry) ,
 
-            //     isset($residential_address_type) ,
-            //     isset($residential_country_id) ,
-            //     isset($residential_state_id) ,
-            //     isset($residential_city_id) ,
-            //     isset($residential_postal_code) ,
-            //     isset($residential_address) ,
+                isset($residential_address_type) ,
+                isset($residential_country_id) ,
+                isset($residential_state_id) ,
+                isset($residential_city_id) ,
+                isset($residential_postal_code) ,
+                isset($residential_address) ,
 
-            //     isset($mailing_address_type) ,
-            //     isset($mailing_country_id) ,
-            //     isset($mailing_state_id) ,
-            //     isset($mailing_city_id) ,
-            //     isset($mailing_postal_code) ,
-            //     isset($mailing_address)
+                isset($mailing_address_type) ,
+                isset($mailing_country_id) ,
+                isset($mailing_state_id) ,
+                isset($mailing_city_id) ,
+                isset($mailing_postal_code) ,
+                isset($mailing_address)
 
-            // );
+            );
 
             if (
                 isset($company_name) &&
@@ -405,11 +407,13 @@ class SalesPlanController extends Controller
                 isset($mailing_postal_code) &&
                 isset($mailing_address)
 
-            ) {
+            )
+            {
                 return response()->json([
                     'success' => true,
                 ], 200);
             } else {
+
                 return response()->json([
                     'success' => false,
                     'message' => "Please Fill Stakeholder All Required Fields First!!!",

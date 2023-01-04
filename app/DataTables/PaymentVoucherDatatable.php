@@ -40,13 +40,13 @@ class PaymentVoucherDatatable extends DataTable
                 return editDateColumn($payment_voucher->updated_at);
             })
             ->editColumn('amount_to_be_paid', function ($payment_voucher) {
-                return number_format($payment_voucher->amount_to_be_paid,2);
+                return number_format($payment_voucher->amount_to_be_paid, 2);
             })
             ->editColumn('status', function ($payment_voucher) {
                 // $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');
                 $status = $payment_voucher->status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
                 if ($payment_voucher->status == 0 && Auth::user()->hasPermissionTo('sites.payment-voucher.approve')) {
-                    $status .= '  <a onClick="ApproveModal( '. $payment_voucher->id . ')" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
+                    $status .= '  <a onClick="ApproveModal( ' . $payment_voucher->id . ')" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Approve"
                     href="#" >
                     <i class="bi bi-check" style="font-size: 1.1rem" class="m-10"></i>
@@ -54,12 +54,11 @@ class PaymentVoucherDatatable extends DataTable
                 }
                 return $status;
             })
-
             ->editColumn('cheque_status', function ($payment_voucher) {
                 // $approvePermission =  Auth::user()->hasPermissionTo('sites.file-managements.rebate-incentive.approve');
                 $status = $payment_voucher->cheque_status == 1 ? '<span class="badge badge-glow bg-success">Active</span>' : '<span class="badge badge-glow bg-warning">InActive</span>';
-                if ( Auth::user()->hasPermissionTo('sites.payment-voucher.active-cheque') && $payment_voucher->payment_mode == "Cheque" && $payment_voucher->cheque_status == 0 && $payment_voucher->status == 1) {
-                    $status .= '  <a onClick="ActiveCheque('. $payment_voucher->id . ')" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
+                if (Auth::user()->hasPermissionTo('sites.payment-voucher.active-cheque') && $payment_voucher->payment_mode == "Cheque" && $payment_voucher->cheque_status == 0 && $payment_voucher->status == 1) {
+                    $status .= '  <a onClick="ActiveCheque(' . $payment_voucher->id . ')" id="approveID" payment_voucher_id="' . encryptParams($payment_voucher->id) . '" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1" style="margin: 5px" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="Active Cheque"
                     href="#" >
                     <i class="bi bi-check" style="font-size: 1.1rem" class="m-10"></i>
@@ -70,6 +69,9 @@ class PaymentVoucherDatatable extends DataTable
                 } else {
                     return  '-';
                 }
+            })
+            ->editColumn('actions', function ($payment_voucher) {
+                return view('app.sites.payment-voucher.actions', ['site_id' => decryptParams($this->site_id), 'id' => $payment_voucher->id]);
             })
 
             ->setRowId('id')
@@ -176,6 +178,7 @@ class PaymentVoucherDatatable extends DataTable
             Column::make('payment_mode')->title('Payment Mode')->addClass('text-nowrap'),
             Column::make('cheque_status')->title('Cheque Status')->addClass('text-nowrap'),
             Column::make('status')->title('Voucher Status')->addClass('text-nowrap'),
+            Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
         ];
 
         $columns[] = Column::make('created_at')->title('Created At')->addClass('text-nowrap');

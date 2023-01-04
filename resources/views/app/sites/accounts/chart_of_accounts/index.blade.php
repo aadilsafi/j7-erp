@@ -92,6 +92,22 @@
             transform: rotate(90deg);
         }
 
+        .glyphicon-minus-sign::after {
+            content: "−";
+        }
+
+        .glyphicon-plus-sign::before {
+            content: "\2b";
+            font-style: initial;
+        }
+
+        .custom_folder_icon{
+            color: #ff9f43;
+        }
+         .custom_accets:hover .custom_accets_link{
+            background: gainsboro;
+         }
+
         .custom_plus_th {
             position: absolute !important;
             right: 0;
@@ -225,16 +241,13 @@
         <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
             <div class="modal-dialog sidebar-lg">
                 <div class="modal-content p-0">
-                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate
-                        onsubmit="return false">
+                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false">
                         <div class="modal-header align-items-center mb-1">
                             <h5 class="modal-title">Add Task</h5>
-                            <div
-                                class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
-                                <span class="todo-item-favorite cursor-pointer me-75"><i
-                                        data-feather="star" class="font-medium-2"></i></span>
-                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal"
-                                    stroke-width="3"></i>
+                            <div class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
+                                <span class="todo-item-favorite cursor-pointer me-75"><i data-feather="star"
+                                        class="font-medium-2"></i></span>
+                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal" stroke-width="3"></i>
                             </div>
                         </div>
                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
@@ -248,10 +261,10 @@
         </div>
         <ul id="tree1">
             </p>
+
             @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
                 <li>
-
-                    <a href="#">{{ $account_of_head->name }}</a>
+                   <i class="fa-regular fa-folder custom_folder_icon custom_accets"></i> <a class="custom_accets_link" href="#">{{ $account_of_head->name }}</a>
                     <ul>
                         <li id="{{ $account_of_head->id }}">
                             <table class="table">
@@ -333,10 +346,11 @@
                                             @if (Str::length($account_of_head_3->code) == 6 and
                                                 $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
                                                 <li>
-                                                    <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})" href="#">{{ $account_of_head_3->name }}</a>
+                                                    <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})"
+                                                        href="#">{{ $account_of_head_3->name }}</a>
                                                     <ul>
 
-                                                        <li class="fourth_level_account"  id="{{ $account_of_head_3->id }}">
+                                                        <li class="fourth_level_account" id="{{ $account_of_head_3->id }}">
                                                             <table class="table">
                                                                 <thead>
                                                                     <tr>
@@ -353,9 +367,11 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class="custom_td">{{ $account_of_head_3->name }}
+                                                                        <td class="custom_td">
+                                                                            {{ $account_of_head_3->name }}
                                                                         </td>
-                                                                        <td class="custom_td">{{ $account_of_head_3->level }}
+                                                                        <td class="custom_td">
+                                                                            {{ $account_of_head_3->level }}
                                                                         </td>
                                                                         <td class="custom_td">
                                                                             {{ account_number_format($account_of_head_3->code) }}
@@ -370,7 +386,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </li>
-                                                         {{-- <li >
+                                                        {{-- <li >
                                                             <a href="#">4 Level</a>
                                                             <ul>
                                                                 <li>
@@ -459,40 +475,40 @@
 
 @section('custom-js')
 
-<script>
-    function getFourthLevelAccounts(code) {
-        // alert(code);
-        showBlockUI('#loader');
-        let url =
+    <script>
+        function getFourthLevelAccounts(code) {
+            // alert(code);
+            showBlockUI('#loader');
+            let url =
                 "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
-        var _token = '{{ csrf_token() }}';
-        $.ajax({
-            url: url,
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'code': code,
-                '_token': _token
-            },
-            success: function(data) {
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
-                let fourth_level_accounts = data.fourth_level_accounts;
+                    let fourth_level_accounts = data.fourth_level_accounts;
 
-                for (let index = 0; index < fourth_level_accounts.length; index++) {
-                    const account_data = fourth_level_accounts[index];
-                    $('.fourth_level_account').append('<li><a href="#">'+account_data.name+'</a></li>');
+                    for (let index = 0; index < fourth_level_accounts.length; index++) {
+                        const account_data = fourth_level_accounts[index];
+                        $('.fourth_level_account').append('<li><a href="#">' + account_data.name + '</a></li>');
+                    }
+
+                    hideBlockUI('#loader');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#loader');
                 }
-
-                hideBlockUI('#loader');
-            },
-            error: function(error) {
-                console.log(error);
-                hideBlockUI('#loader');
-            }
-        });
-        hideBlockUI('#loader');
-    }
-</script>
+            });
+            hideBlockUI('#loader');
+        }
+    </script>
 
     <script>
         $.fn.extend({

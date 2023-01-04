@@ -356,7 +356,7 @@ class SalesPlanController extends Controller
         $mailing_address = $stakeholder->mailing_address;
 
 
-        if ($stakeholder->stakeholder_as = 'i') {
+        if ($stakeholder->stakeholder_as == 'i') {
 
             $full_name = $stakeholder->full_name;
             $father_name = $stakeholder->father_name;
@@ -394,37 +394,15 @@ class SalesPlanController extends Controller
                     'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
                 ], 200);
             }
-        } else {
+        }
+        elseif($stakeholder->stakeholder_as == 'c') {
+
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
             $strn = $stakeholder->strn;
             $mobile_contact = $stakeholder->mobile_contact;
             $industry = $stakeholder->industry;
-
-            dd(
-                isset($company_name) ,
-                isset($ntn) ,
-                isset($reg_no) ,
-                isset($strn) ,
-                isset($mobile_contact) ,
-                isset($industry) ,
-
-                isset($residential_address_type) ,
-                isset($residential_country_id) ,
-                isset($residential_state_id) ,
-                isset($residential_city_id) ,
-                isset($residential_postal_code) ,
-                isset($residential_address) ,
-
-                isset($mailing_address_type) ,
-                isset($mailing_country_id) ,
-                isset($mailing_state_id) ,
-                isset($mailing_city_id) ,
-                isset($mailing_postal_code) ,
-                isset($mailing_address)
-
-            );
 
             if (
                 isset($company_name) &&
@@ -448,11 +426,13 @@ class SalesPlanController extends Controller
                 isset($mailing_postal_code) &&
                 isset($mailing_address)
 
-            ) {
+            )
+            {
                 return response()->json([
                     'success' => true,
                 ], 200);
             } else {
+
                 return response()->json([
                     'success' => false,
                     'message' => "Please Fill Stakeholder All Required Fields First!!!",

@@ -30,23 +30,12 @@
 <div class="row mb-1">
 
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-        <label class="form-label fs-5" for="type_name">Name<span class="text-danger">*</span></label>
+        <label class="form-label fs-5" for="type_name">City Name<span class="text-danger">*</span></label>
         <input type="text" class="form-control form-control-lg @error('name') is-invalid @enderror" id="name"
-            name="name" placeholder="Name" value="{{ isset($city) ? $city->name : old('name') }}" required>
+            name="name" placeholder="City" value="{{ isset($city) ? $city->name : old('name') }}" required>
         @error('name')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
 </div>
 
-{{-- <input type="hidden" name="Userid" value="{{ isset($state) ? $state->id : '' }}"> --}}
-
-{{-- @if (isset($customFields) && count($customFields) > 0)
-    <hr>
-    <div class="row mb-1 g-1">
-        @forelse ($customFields as $field)
-            {!! $field !!}
-        @empty
-        @endforelse
-    </div>
-@endif --}}

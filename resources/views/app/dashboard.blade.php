@@ -79,7 +79,7 @@
                                   </form>
                             </li>
                             <li class="d-block">
-                                <img class="img-fluid" src="{{ asset('app-assets') }}/images/comming-soon/page-misc-launching-soon.png" alt="Login V2" />
+                                <img width="134" class="img-fluid" src="{{ asset('app-assets') }}/images/comming-soon/page-misc-launching-soon.png" alt="Login V2" />
                             </li>
                         </ul> --}}
 

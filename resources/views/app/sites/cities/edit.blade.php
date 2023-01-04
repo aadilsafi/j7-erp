@@ -10,8 +10,6 @@
 @endsection
 
 @section('page-css')
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -27,10 +25,6 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                                                                                width: calc(20% - 0.5em);
-                                                                            } */
     </style>
 @endsection
 
@@ -66,21 +60,13 @@
             <div class="col-lg-3 col-md-3 col-sm-12 position-relative">
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-body">
-                        {{-- <div class="d-block mb-1">
-                        <label class="form-label fs-5" for="type_name">CNIC Attachment</label>
-                        <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                            name="attachment[]" multiple accept="image/png, image/jpeg, image/gif" />
-                        @error('attachment')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <hr> --}}
+
                         <button type="submit"
                             class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light buttonToBlockUI mb-1">
                             <i data-feather='save'></i>
                             Update City
                         </button>
-                        <a href="{{ route('sites.users.index', ['site_id' => encryptParams($site_id)]) }}"
+                        <a href="{{ route('sites.settings.cities.index', ['site_id' => encryptParams($site_id)]) }}"
                             class="btn w-100 btn-relief-outline-danger waves-effect waves-float waves-light">
                             <i data-feather='x'></i>
                             {{ __('lang.commons.cancel') }}
@@ -93,75 +79,11 @@
 @endsection
 
 @section('vendor-js')
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
-    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
-
 @endsection
 
 @section('page-js')
 
     <script type="text/javascript">
-        $(document).ready(function() {
-
-            var e = $("#role_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            });
-
-            $("#saveButton").click(function() {
-                var name = $("#name").val();
-                var email = $("#email").val();
-                var phone_no = $("#phone_no").val();
-                $('.allErrors').empty();
-
-
-                if (name == '') {
-                    $('#name').after(
-                        '<span class="error allErrors text-danger">Name is Required</span>');
-                }
-
-                if (email == '') {
-                    $('#email').after(
-                        '<span class="error allErrors text-danger">Email is Required</span>');
-                }
-
-                if (phone_no == '') {
-                    $('#phone_no').after(
-                        '<span class="error allErrors text-danger">Phone Number is Required</span>');
-                }
-
-                if (phone_no.toString().length != 11) {
-                    $('#phone_no').after(
-                        '<span class="error allErrors text-danger">Enter 11 Digits Phone Number</span>');
-                }
-
-                if (phone_no.toString().length = 11 && name != '' &&
-                    email != '') {
-                    $("#userForm").submit();
-                }
-            });
-        });
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            var e = $("#role_id");
-            e.wrap('<div class="position-relative"></div>');
-            e.select2({
-                dropdownAutoWidth: !0,
-                dropdownParent: e.parent(),
-                width: "100%",
-                containerCssClass: "select-lg",
-            });
-
-        });
         var firstLoad = 0;
         var country = $("#country_id");
         country.wrap('<div class="position-relative"></div>');

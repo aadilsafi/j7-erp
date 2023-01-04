@@ -35,7 +35,7 @@ class CityController extends Controller
             'state_id' => 'required|exists:states,id'
 
         ]);
-        // dd($request->all());
+
         $city = City::create(
             [
                 'name' => $request->name,
@@ -44,15 +44,15 @@ class CityController extends Controller
             ]
 
         );
-        // dd($city);
+
         return redirect()->route('sites.settings.cities.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }
     public function edit($site_id, $id)
     {
         $data = [
-            'site_id' => $site_id,
+            'site_id' => decryptParams($site_id),
             'country' => Country::all(),
-            'city' => City::find($id)
+            'city' => City::find(decryptParams($id))
         ];
         return view('app.sites.cities.edit', $data);
     }
@@ -64,7 +64,7 @@ class CityController extends Controller
             'state_id' => 'required|exists:states,id'
 
         ]);
-        // dd($request->all());
+
         (new City())->find(decryptParams($id))->update([
             'name' => $request->name,
             'country_id' => $request->country_id,

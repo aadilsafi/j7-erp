@@ -47,10 +47,9 @@ class CountryController extends Controller
 
     public function edit($site_id, $id)
     {
-
         $data = [
-            'site_id' => $site_id,
-            'country' => Country::find($id)
+            'site_id' => decryptParams($site_id),
+            'country' => Country::find(decryptParams($id))
         ];
         return view('app.sites.countries.edit', $data);
     }

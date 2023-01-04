@@ -148,6 +148,8 @@
                                 }
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    showBlockUI('#salesPlan');
+
                                     $('#teams-table-form').submit();
 
                                     var _token = '{{ csrf_token() }}';
@@ -207,8 +209,7 @@
                                 showBlockUI('#salesPlan');
                                 if (result.isConfirmed) {
                                     window.location.href = response.url;
-                                }
-                                else{
+                                } else {
                                     hideBlockUI('#salesPlan');
                                 }
                             });
@@ -267,6 +268,53 @@
                     hideBlockUI('#salesPlan');
                 }
             });
+        }
+        const inputOptions = {
+            'investment_plan': 'Investment Plan',
+            'payment_plan': 'Payment Plan',
+        }
+
+        function selectPreview(id, initialLink, updatedLink) {
+            Swal.fire({
+                title: 'Select Sales Plan Preview',
+                input: 'radio',
+                inputOptions: inputOptions,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'You need to choose something!'
+                    } else {
+                        console.log(value);
+                        if (value == "investment_plan") {
+                            window.location.href = initialLink;
+                        } else {
+                            window.location.href = updatedLink;
+                        }
+                    }
+                }
+            })
+            $('.swal2-radio').empty();
+            var radioInput = '<div class="card-body">\
+                                             <div class="row custom-options-checkable g-1">\
+                                                <div class="col-md-6">\
+                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
+                                                        <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
+                                                                    <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                        <span class="fw-bolder">Investment Plan</span>\
+                                                                    </span>\
+                                                                </label>\
+                                                            </div>\
+                                                            <div class="col-md-6">\
+                                                                <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
+                                                                <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
+                                                                    <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                        <span class="fw-bolder">Payment Plan</span>\
+                                                                    </span>\
+                                                                </label>\
+                                                            </div>\
+                                                        </div>\
+                                                    </div>'
+            $('.swal2-radio').append(radioInput)
+
         }
     </script>
 @endsection

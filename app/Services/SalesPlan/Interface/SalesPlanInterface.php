@@ -14,5 +14,6 @@ interface SalesPlanInterface
 
     // public function destroy($site_id, $id);
 
+    public function generatePDF($salesPlan, $type);
     public function generateInstallments($site_id, $floor_id, $unit_id, $inputs);
 }

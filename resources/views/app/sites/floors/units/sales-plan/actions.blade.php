@@ -39,15 +39,22 @@
             </a>
         @endcan
     @endif
+    @php
+        $initialLink = route('sites.floors.units.sales-plans.initail-sales-plan', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'id' => encryptParams($sales_plan_id)]);
+        $updatedLink = route('sites.floors.units.sales-plans.updated-sales-plan', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'id' => encryptParams($sales_plan_id)]);
+    @endphp
 
 
-    @can('sites.floors.units.sales-plans.initail-sales-plan')
-        <a href="{{ route('sites.floors.units.sales-plans.initail-sales-plan', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'id' => encryptParams($sales_plan_id)]) }}"
+    @canany('sites.floors.units.sales-plans.initail-sales-plan', 'sites.floors.units.sales-plans.updated-sales-plan')
+        <a id="selectPreview" data-id="{{ $id }}"
+            @if ($status != 1) href="{{ $initialLink }}"
+            @else 
+            onclick="selectPreview({{ $id }}, '{{ $initialLink }}','{{ $updatedLink }}')" @endif
             class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1" style="margin: 5px"
             data-bs-toggle="tooltip" data-bs-placement="top" title="Preview Sales Plan">
             <i class="bi bi-eye-fill"></i>
         </a>
-    @endcan
+    @endcanany
 
     @can('sites.floors.units.sales-plans.show')
         <a href="javascript:void(0);" class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1"

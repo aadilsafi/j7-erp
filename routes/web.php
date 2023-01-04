@@ -498,8 +498,8 @@ Route::group([
                                     Route::group(['prefix' => '/{id}'], function () {
 
                                         Route::get('edit', [SalesPlanController::class, 'edit'])->name('edit');
-                                        Route::get('initail-sales-plan', [SalesPlanController::class, 'show'])->name('initail-sales-plan');
-                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'show'])->name('updated-sales-plan');
+                                        Route::get('initail-sales-plan', [SalesPlanController::class, 'initialPreview'])->name('initail-sales-plan');
+                                        Route::get('updated-sales-plan', [SalesPlanController::class, 'updatedPreview'])->name('updated-sales-plan');
                                         Route::put('update', [SalesPlanController::class, 'update'])->name('update');
                                     });
 
@@ -1019,8 +1019,13 @@ Route::group([
             Route::get('/{command}', [ArtisanCommandController::class, 'commands'])->name('command');
         });
     });
-
     Route::get('download-investment-plan/{file_name}', [SalesPlanController::class, 'downloadInvestmentPlan'])->name('download-investment-plan');
+
+    Route::get('download-payment-plan/{file_name}', [SalesPlanController::class, 'downloadPaymentPlan'])->name('download-payment-plan');
+
+    // authorize Stakeholder
+    Route::get('authorize-stakeholder/{file_name}', [StakeholderController::class, 'authorizeStakeholder'])->name('authorize-stakeholder');
+    Route::post('authorize-stakeholder/{file_name}/{stakeholder_id}', [StakeholderController::class, 'verifyPin'])->name('verifyPin');
 });
 
 Route::group(['prefix' => 'tests'], function () {

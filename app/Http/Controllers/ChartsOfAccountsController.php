@@ -8,6 +8,7 @@ use App\Models\AccountLedger;
 use App\Models\Site;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Action;
 
 class ChartsOfAccountsController extends Controller
 {
@@ -125,4 +126,23 @@ class ChartsOfAccountsController extends Controller
     {
         //
     }
+
+    public function getFourthLevelAccounts(Request $request , $site_id)
+    {
+
+        $starting_code = $request->code.'0000';
+        $ending_code = (int)$request->code + 1;
+        $ending_code = (string)$ending_code.'0000';
+        $fourth_level_accounts = AccountHead::where('level',4)->whereBetween('code', [$starting_code, $ending_code])->get();
+
+        return response()->json([
+            'success' => true,
+            'site_id' => $site_id,
+            'starting_code'=>$starting_code,
+            'ending_code' => $ending_code,
+            'fourth_level_accounts'=> $fourth_level_accounts,
+        ], 200);
+
+    }
+
 }

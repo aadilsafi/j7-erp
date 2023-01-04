@@ -185,7 +185,7 @@
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input id="attachment" data-pdf-preview-height="320"
                                 data-pdf-component-extra-params="toolbar=0&navpanes=0&scrollbar=0&view=fitH" type="file"
-                                class="filepond @error('attachment') is-invalid @enderror" name="attachment"
+                                class="filepond @error('attachment') is-invalid @enderror" name="attachment" multiple
                                 accept="image/png, image/jpeg, image/gif, application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>

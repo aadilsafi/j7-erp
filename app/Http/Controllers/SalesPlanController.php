@@ -390,9 +390,8 @@ class SalesPlanController extends Controller
                 ], 200);
             }
         }
-        elseif($stakeholder->stakeholder_as = 'c')
+        elseif($stakeholder->stakeholder_as == 'c')
         {
-
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;

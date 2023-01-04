@@ -943,6 +943,9 @@ Route::group([
                     // Charts Of accounts
                     Route::group(['prefix' => 'charts-of-accounts', 'as' => 'charts-of-accounts.'], function () {
                         Route::get('/', [ChartsOfAccountsController::class, 'index'])->name('index');
+                        Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                            Route::post('get-fourth-level-accounts', [ChartsOfAccountsController::class, 'getFourthLevelAccounts'])->name('get-fourth-level-accounts');
+                        });
                     });
                     //trial-balance
                     Route::group(['prefix' => 'trial-balance', 'as' => 'trial-balance.'], function () {

@@ -219,630 +219,220 @@
     </div>
 @endsection
 
-
-
-
-
-
-
-
-
-
-
-
 @section('content')
-    <section class="app-user-view-connections">
-
-
-        <ul id="tree1">
-            </p>
-            <li>
-                <a href="#">1 Asset</a>
-                <ul>
-                    <li>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </li>
-
-                    <li class="ps-2"><a href="#">2 Non-current Asset</a>
-
-                        <ul>
-
-                            <li>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-
-                            </li>
-                            <li>
-                                <a href="#">3 TECH</a>
-                                <ul>
-                                    <li>
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">#</th>
-                                                    <th scope="col">First</th>
-                                                    <th scope="col">Last</th>
-                                                    <th scope="col">Handle</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-
-                                    </li>
-                                    <li>
-                                        <a href="#">4 Level</a>
-                                        <ul>
-                                            <li>
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">First</th>
-                                                            <th scope="col">Last</th>
-                                                            <th scope="col">Handle</th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-
-                                            </li>
-                                            <li>
-                                                <table class="table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">First</th>
-                                                            <th scope="col">Last</th>
-                                                            <th scope="col">Handle</th>
-                                                        </tr>
-                                                    </thead>
-                                                </table>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-
-
-
-
-
-                        </ul>
-
-                    </li>
-                </ul>
-            </li>
-
-        </ul>
-
-        <div class="row removeInvalidMessages">
-            <div class="col-xl-12 col-lg-12">
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="salesPlanData" aria-labelledby="salesPlanData" role="tabpanel">
-                        <div class="card">
-                            <div class="card-body">
-                                {{-- <section> --}}
-
-                                <!-- Right Sidebar starts -->
-                                <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
-                                    <div class="modal-dialog sidebar-lg">
-                                        <div class="modal-content p-0">
-                                            <form id="form-modal-todo" class="todo-modal needs-validation" novalidate
-                                                onsubmit="return false">
-                                                <div class="modal-header align-items-center mb-1">
-                                                    <h5 class="modal-title">Add Task</h5>
-                                                    <div
-                                                        class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
-                                                        <span class="todo-item-favorite cursor-pointer me-75"><i
-                                                                data-feather="star" class="font-medium-2"></i></span>
-                                                        <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal"
-                                                            stroke-width="3"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                                                    <div class="action-tags">
-                                                        Create Account
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Right Sidebar ends -->
-                                {{-- example according  --}}
-                                <div class="accordion accordion-flush" id="accordionFlushExample">
-                                    @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
-                                        @php
-                                            $value_44 = 0;
-                                            $value_55 = 0;
-                                            $value_frist = [];
-                                            $value_frist_value = 0;
-                                        @endphp
-                                        <div class="accordion-item ">
-
-                                            <h2 class="accordion-header" id="flush-{{ $key_first }}">
-                                                <button class="new_according_bg accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#flush-collapseOne-{{ $key_first }}"
-                                                    aria-expanded="false" aria-controls="flush-collapseOne">
-                                                    {{ $account_of_head->name }}
-                                                </button>
-                                            </h2>
-                                            <div id="flush-collapseOne-{{ $key_first }}"
-                                                class="accordion-collapse collapse"
-                                                aria-labelledby="flush-{{ $key_first }}"
-                                                data-bs-parent="#accordionFlushExample">
-                                                <div class="accordion-body ps-0 pt-0 pb-0 pe-0">
-                                                    <table id="first_level"
-                                                        class="table table-primary table-striped check_hide">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Name</th>
-                                                                <th scope="col">ACCOUNT LEVEl</th>
-                                                                <th scope="col">ACCOUNT CODES</th>
-                                                                <th scope="col">ACCOUNT NATURE</th>
-                                                                <th scope="col">Balance</th>
-                                                                <th class="custom_plus_th" scope="col">
-                                                                    <i data-feather='plus' data-bs-toggle="modal"
-                                                                        data-bs-target="#new-task-modal"></i>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td class="custom_td">{{ $account_of_head->name }}
-                                                                </td>
-                                                                <td class="custom_td">{{ $account_of_head->level }}
-                                                                </td>
-                                                                <td class="custom_td">
-                                                                    {{ account_number_format($account_of_head->code) }}
-                                                                </td>
-                                                                <td class="custom_td">
-                                                                    {{ ucfirst($account_of_head->account_type) }}
-                                                                </td>
-                                                                {{-- @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                    @if (Str::length($account_of_head_3->code) == 6 and $account_of_head->code == substr($account_of_head_3->code, 0, 2))
-                                                                        @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                            @if (Str::length($account_of_head_4->code) == 10 and $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                    @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                        @php
-                                                                                            $value_frist_value = 0;
-                                                                                            $value_frist_value += intval(
-                                                                                                trim(
-                                                                                                    $accountLedgers_all
-                                                                                                        ->where('account_head_code', $account_of_head_5->code)
-                                                                                                        ->pluck('debit')
-                                                                                                        ->sum() -
-                                                                                                        $accountLedgers_all
-                                                                                                            ->where('account_head_code', $account_of_head_5->code)
-                                                                                                            ->pluck('credit')
-                                                                                                            ->sum(),
-                                                                                                    '-',
-                                                                                                ),
-                                                                                            );
-                                                                                        @endphp
-                                                                                    @endif
-                                                                                @endforeach
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endif
-                                                                @endforeach --}}
-
-                                                                <td class="custom_td">
-                                                                    {{ number_format($value_frist_value) ?? 0 }}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                    {{-- secend level --}}
-                                                    @foreach ($account_of_heads as $key => $account_of_head_full_array)
-                                                        @if (Str::length($account_of_head_full_array->code) == 4 and
-                                                            $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
-                                                            <div class="accordion-item">
-                                                                <h2 class="accordion-header"
-                                                                    id="flush-{{ $key }}">
-                                                                    <button class="accordion-button collapsed ps-3"
-                                                                        type="button" data-bs-toggle="collapse"
-                                                                        data-bs-target="#flush-collapseOne-{{ $key }}"
-                                                                        aria-expanded="false"
-                                                                        aria-controls="flush-collapseOne">
-                                                                        <i
-                                                                            class="bi bi-arrow-bar-right"></i><span>{{ $account_of_head_full_array->name }}</span>
-                                                                    </button>
-                                                                </h2>
-                                                                <div id="flush-collapseOne-{{ $key }}"
-                                                                    class="accordion-collapse collapse"
-                                                                    aria-labelledby="flush-{{ $key }}"
-                                                                    data-bs-parent="#flush-collapseOne-{{ $key_first }}">
-                                                                    <div class="accordion-body ps-4 pt-0 pb-0 pe-0">
-                                                                        <table id="second_level"
-                                                                            class="table table-primary table-striped">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th scope="col">Name</th>
-                                                                                    <th scope="col">ACCOUNT LEVEl
-                                                                                    </th>
-                                                                                    <th scope="col">ACCOUNT CODES
-                                                                                    </th>
-                                                                                    <th scope="col">ACCOUNT NATURE
-                                                                                    </th>
-                                                                                    <th scope="col">Balance</th>
-                                                                                    <th class="custom_plus_th"
-                                                                                        scope="col">
-                                                                                        <i data-feather='plus'
-                                                                                            data-bs-toggle="modal"
-                                                                                            data-bs-target="#new-task-modal"></i>
-                                                                                    </th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody>
-                                                                                <tr>
-                                                                                    <td class="custom_td">
-                                                                                        {{ $account_of_head_full_array->name }}
-                                                                                    </td>
-                                                                                    <td>{{ $account_of_head_full_array->level }}
-                                                                                    </td>
-                                                                                    <td>{{ account_number_format($account_of_head_full_array->code) }}
-                                                                                    </td>
-                                                                                    <td class="custom_td">
-                                                                                        {{ ucfirst($account_of_head_full_array->account_type) }}
-                                                                                    </td>
-                                                                                    @php
-                                                                                        $value_44 = 0;
-                                                                                    @endphp
-                                                                                    {{-- @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                                        @if (Str::length($account_of_head_3->code) == 6 and $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
-                                                                                            @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                                @if (Str::length($account_of_head_4->code) == 10 and $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                                    @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                        @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                            @php
-                                                                                                                $value_44 += intval(
-                                                                                                                    trim(
-                                                                                                                        $accountLedgers_all
-                                                                                                                            ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                            ->pluck('debit')
-                                                                                                                            ->sum() -
-                                                                                                                            $accountLedgers_all
-                                                                                                                                ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                ->pluck('credit')
-                                                                                                                                ->sum(),
-                                                                                                                        '-',
-                                                                                                                    ),
-                                                                                                                );
-                                                                                                            @endphp
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                        @endif
-                                                                                    @endforeach --}}
-
-                                                                                    <td class="custom_td">
-                                                                                        {{ number_format($value_44) }}
-                                                                                    </td>
-
-                                                                                </tr>
-                                                                            </tbody>
-                                                                        </table>
-
-                                                                        {{-- Third level --}}
-                                                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
-                                                                            @if (Str::length($account_of_head_3->code) == 6 and
-                                                                                $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
-                                                                                <div class="accordion-item">
-                                                                                    <h2 class="accordion-header"
-                                                                                        id="flush-{{ $key_second }}">
-                                                                                        <button
-                                                                                            class="accordion-button collapsed ps-3"
-                                                                                            type="button"
-                                                                                            data-bs-toggle="collapse"
-                                                                                            data-bs-target="#flush-collapseOne-{{ $key_second }}"
-                                                                                            aria-expanded="false"
-                                                                                            aria-controls="flush-collapseOne">
-                                                                                            <i
-                                                                                                class="bi bi-arrow-bar-right ms-2"></i><span>
-                                                                                                {{ $account_of_head_3->name }}</span>
-                                                                                        </button>
-                                                                                    </h2>
-                                                                                    <div id="flush-collapseOne-{{ $key_second }}"
-                                                                                        class="accordion-collapse collapse"
-                                                                                        aria-labelledby="flush-{{ $key_second }}"
-                                                                                        data-bs-parent="#flush-collapseOne-{{ $key }}">
-                                                                                        <div
-                                                                                            class="accordion-body ps-5 pt-0 pb-0 pe-0">
-                                                                                            @php
-                                                                                                $value_4 = 0;
-                                                                                                $value_5 = 0;
-                                                                                                $value_33 = 0;
-                                                                                            @endphp
-
-                                                                                            <table id="third-level"
-                                                                                                class="table table-primary table-striped">
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th scope="col">
-                                                                                                            Name</th>
-                                                                                                        <th scope="col">
-                                                                                                            ACCOUNT LEVEl
-                                                                                                        </th>
-                                                                                                        <th scope="col">
-                                                                                                            ACCOUNT CODES
-                                                                                                        </th>
-                                                                                                        <th scope="col">
-                                                                                                            ACCOUNT NATURE
-                                                                                                        </th>
-                                                                                                        <th scope="col">
-                                                                                                            Balance</th>
-                                                                                                        <th class="custom_plus_th"
-                                                                                                            scope="col">
-                                                                                                            <i data-feather='plus'
-                                                                                                                data-bs-toggle="modal"
-                                                                                                                data-bs-target="#new-task-modal"></i>
-                                                                                                        </th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ $account_of_head_3->name }}
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ $account_of_head_3->level }}
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ account_number_format($account_of_head_3->code) }}
-                                                                                                        </td>
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ ucfirst($account_of_head_3->account_type) }}
-                                                                                                        </td>
-
-                                                                                                        {{-- @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                                                            @if (Str::length($account_of_head_4->code) == 10 and $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                                                                @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                                                    @if ($account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-
-                                                                                                                        @php
-                                                                                                                            $value_33 += intval(
-                                                                                                                                trim(
-                                                                                                                                    $accountLedgers_all
-                                                                                                                                        ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                        ->pluck('debit')
-                                                                                                                                        ->sum() -
-                                                                                                                                        $accountLedgers_all
-                                                                                                                                            ->where('account_head_code', $account_of_head_5->code)
-                                                                                                                                            ->pluck('credit')
-                                                                                                                                            ->sum(),
-                                                                                                                                    '-',
-                                                                                                                                ),
-                                                                                                                            );
-                                                                                                                        @endphp
-                                                                                                                    @endif
-                                                                                                                @endforeach
-                                                                                                            @endif
-                                                                                                        @endforeach --}}
-                                                                                                        <td
-                                                                                                            class="custom_td">
-                                                                                                            {{ number_format($value_33) }}
-                                                                                                        </td>
-
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-
-                                                                                            {{-- fourth level --}}
-
-
-                                                                                            <div class="accordion-item">
-                                                                                                <h2 class="accordion-header"
-                                                                                                    id="flush-">
-                                                                                                    <button
-                                                                                                        class="accordion-button collapsed ps-3"
-                                                                                                        type="button"
-                                                                                                        data-bs-toggle="collapse"
-                                                                                                        data-bs-target="#flush-collapseOne-"
-                                                                                                        aria-expanded="false"
-                                                                                                        aria-controls="flush-collapseOne">
-                                                                                                        <i
-                                                                                                            class="bi bi-arrow-bar-right"></i><span>Name
-                                                                                                            Of
-                                                                                                            Account</span>
-                                                                                                    </button>
-                                                                                                </h2>
-                                                                                                <div id="flush-collapseOne-"
-                                                                                                    class="accordion-collapse collapse"
-                                                                                                    aria-labelledby="flush-"
-                                                                                                    data-bs-parent="#flush-collapseOne-">
-                                                                                                    <div
-                                                                                                        class="accordion-body pb-0 pe-0 pt-0">
-                                                                                                        @php
-                                                                                                            $value_4 = 0;
-                                                                                                            $value_5 = 0;
-                                                                                                            $value_33 = 0;
-                                                                                                        @endphp
-                                                                                                        <table
-                                                                                                            class="table table-primary table-striped">
-                                                                                                            <thead>
-                                                                                                                <tr>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        Name
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        LEVEl
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        CODES
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        NATURE
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        Balance
-                                                                                                                    </th>
-                                                                                                                    <th class="custom_plus_th"
-                                                                                                                        scope="col">
-                                                                                                                        <i data-feather='plus'
-                                                                                                                            data-bs-toggle="modal"
-                                                                                                                            data-bs-target="#new-task-modal"></i>
-                                                                                                                    </th>
-                                                                                                                </tr>
-                                                                                                            </thead>
-                                                                                                            <tbody>
-                                                                                                                <tr>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        name
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        level
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        level4
-                                                                                                                        code
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        account
-                                                                                                                        type
-                                                                                                                    </td>
-
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        balance
-                                                                                                                        00
-                                                                                                                    </td>
-                                                                                                                </tr>
-                                                                                                            </tbody>
-                                                                                                        </table>
-
-                                                                                                        <table
-                                                                                                            class="table table-primary table-striped ms-0">
-                                                                                                            <thead>
-                                                                                                                <tr>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        Name
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        LEVEl
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        CODES
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        ACCOUNT
-                                                                                                                        NATURE
-                                                                                                                    </th>
-                                                                                                                    <th
-                                                                                                                        scope="col">
-                                                                                                                        Balance
-                                                                                                                    </th>
-                                                                                                                    <th class="custom_plus_th"
-                                                                                                                        scope="col">
-                                                                                                                        <i data-feather='plus'
-                                                                                                                            data-bs-toggle="modal"
-                                                                                                                            data-bs-target="#new-task-modal"></i>
-                                                                                                                    </th>
-                                                                                                                </tr>
-                                                                                                            </thead>
-
-                                                                                                            <tbody>
-
-                                                                                                                {{-- fifth level --}}
-
-                                                                                                                <tr>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        name
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        level
-                                                                                                                        5
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        level5
-                                                                                                                        code
-                                                                                                                    </td>
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        account
-                                                                                                                        type
-                                                                                                                    </td>
-
-                                                                                                                    <td
-                                                                                                                        class="custom_td">
-                                                                                                                        balance
-                                                                                                                        00
-                                                                                                                    </td>
-                                                                                                                </tr>
-
-                                                                                                            </tbody>
-                                                                                                        </table>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            @endif
-                                                                        @endforeach
-
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+    <section id="loader" class="app-user-view-connections">
+        <!-- Right Sidebar starts -->
+        <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
+            <div class="modal-dialog sidebar-lg">
+                <div class="modal-content p-0">
+                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate
+                        onsubmit="return false">
+                        <div class="modal-header align-items-center mb-1">
+                            <h5 class="modal-title">Add Task</h5>
+                            <div
+                                class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
+                                <span class="todo-item-favorite cursor-pointer me-75"><i
+                                        data-feather="star" class="font-medium-2"></i></span>
+                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal"
+                                    stroke-width="3"></i>
                             </div>
                         </div>
-                    </div>
+                        <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
+                            <div class="action-tags">
+                                Create Account
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
+        <ul id="tree1">
+            </p>
+            @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
+                <li>
+
+                    <a href="#">{{ $account_of_head->name }}</a>
+                    <ul>
+                        <li id="{{ $account_of_head->id }}">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">ACCOUNT LEVEl</th>
+                                        <th scope="col">ACCOUNT CODES</th>
+                                        <th scope="col">ACCOUNT NATURE</th>
+                                        <th scope="col">Balance</th>
+                                        <th class="custom_plus_th" scope="col">
+                                            <i data-feather='plus' data-bs-toggle="modal"
+                                                data-bs-target="#new-task-modal"></i>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="custom_td">{{ $account_of_head->name }}
+                                        </td>
+                                        <td class="custom_td">{{ $account_of_head->level }}
+                                        </td>
+                                        <td class="custom_td">
+                                            {{ account_number_format($account_of_head->code) }}
+                                        </td>
+                                        <td class="custom_td">
+                                            {{ ucfirst($account_of_head->account_type) }}
+                                        </td>
+                                        <td class="custom_td">
+                                            0
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        {{-- second level --}}
+                        @foreach ($account_of_heads as $key => $account_of_head_full_array)
+                            @if (Str::length($account_of_head_full_array->code) == 4 and
+                                $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
+                                <li class="ps-2"><a href="#">{{ $account_of_head_full_array->name }}</a>
+                                    <ul>
+                                        <li id="{{ $account_of_head_full_array->id }}">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">ACCOUNT LEVEl</th>
+                                                        <th scope="col">ACCOUNT CODES</th>
+                                                        <th scope="col">ACCOUNT NATURE</th>
+                                                        <th scope="col">Balance</th>
+                                                        <th class="custom_plus_th" scope="col">
+                                                            <i data-feather='plus' data-bs-toggle="modal"
+                                                                data-bs-target="#new-task-modal"></i>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="custom_td">{{ $account_of_head_full_array->name }}
+                                                        </td>
+                                                        <td class="custom_td">{{ $account_of_head_full_array->level }}
+                                                        </td>
+                                                        <td class="custom_td">
+                                                            {{ account_number_format($account_of_head_full_array->code) }}
+                                                        </td>
+                                                        <td class="custom_td">
+                                                            {{ ucfirst($account_of_head_full_array->account_type) }}
+                                                        </td>
+                                                        <td class="custom_td">
+                                                            0
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </li>
+                                        {{-- third level --}}
+                                        @foreach ($account_of_heads->where('level', 3) as $key_second => $account_of_head_3)
+                                            @if (Str::length($account_of_head_3->code) == 6 and
+                                                $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
+                                                <li>
+                                                    <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})" href="#">{{ $account_of_head_3->name }}</a>
+                                                    <ul>
+
+                                                        <li class="fourth_level_account"  id="{{ $account_of_head_3->id }}">
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col">Name</th>
+                                                                        <th scope="col">ACCOUNT LEVEl</th>
+                                                                        <th scope="col">ACCOUNT CODES</th>
+                                                                        <th scope="col">ACCOUNT NATURE</th>
+                                                                        <th scope="col">Balance</th>
+                                                                        <th class="custom_plus_th" scope="col">
+                                                                            <i data-feather='plus' data-bs-toggle="modal"
+                                                                                data-bs-target="#new-task-modal"></i>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="custom_td">{{ $account_of_head_3->name }}
+                                                                        </td>
+                                                                        <td class="custom_td">{{ $account_of_head_3->level }}
+                                                                        </td>
+                                                                        <td class="custom_td">
+                                                                            {{ account_number_format($account_of_head_3->code) }}
+                                                                        </td>
+                                                                        <td class="custom_td">
+                                                                            {{ ucfirst($account_of_head_3->account_type) }}
+                                                                        </td>
+                                                                        <td class="custom_td">
+                                                                            0
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </li>
+                                                         {{-- <li >
+                                                            <a href="#">4 Level</a>
+                                                            <ul>
+                                                                <li>
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody >
+
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </li>
+
+
+
+                                                                <li id="fifth-level-accounts">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody id="fifth-level-accounts">
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </li>
+                                                            </ul>
+                                                        </li> --}}
+                                                    </ul>
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </li>
+            @endforeach
+        </ul>
+
+
     </section>
 @endsection
 
@@ -868,6 +458,41 @@
 @endsection
 
 @section('custom-js')
+
+<script>
+    function getFourthLevelAccounts(code) {
+        // alert(code);
+        showBlockUI('#loader');
+        let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+        var _token = '{{ csrf_token() }}';
+        $.ajax({
+            url: url,
+            type: 'post',
+            dataType: 'json',
+            data: {
+                'code': code,
+                '_token': _token
+            },
+            success: function(data) {
+
+                let fourth_level_accounts = data.fourth_level_accounts;
+
+                for (let index = 0; index < fourth_level_accounts.length; index++) {
+                    const account_data = fourth_level_accounts[index];
+                    $('.fourth_level_account').append('<li><a href="#">'+account_data.name+'</a></li>');
+                }
+
+                hideBlockUI('#loader');
+            },
+            error: function(error) {
+                console.log(error);
+                hideBlockUI('#loader');
+            }
+        });
+        hideBlockUI('#loader');
+    }
+</script>
 
     <script>
         $.fn.extend({

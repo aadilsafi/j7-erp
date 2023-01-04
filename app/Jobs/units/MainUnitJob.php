@@ -49,6 +49,7 @@ class MainUnitJob implements ShouldQueue
         $floor = (new Floor())->find($this->floor_id);
 
         $unitNumberDigits = $floor->site->siteConfiguration->unit_number_digits;
+        dd($this->inputs);
 
         for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
             $job = [
@@ -62,10 +63,10 @@ class MainUnitJob implements ShouldQueue
                 'gross_area' => $this->inputs['gross_area'],
                 'price_sqft' => $this->inputs['price_sqft'],
                 'total_price' => $this->inputs['total_price'],
-                'is_corner' => $this->inputs['is_corner'],
-                'corner_id' => isset($this->inputs['corner_id']) ? $this->inputs['corner_id'] : null,
-                'is_facing' => $this->inputs['is_facing'],
-                'facing_id' => isset($this->inputs['facing_id']) ? $this->inputs['facing_id'] : null,
+                // 'is_corner' => $this->inputs['is_corner'],
+                // 'corner_id' => isset($this->inputs['corner_id']) ? $this->inputs['corner_id'] : null,
+                // 'is_facing' => $this->inputs['is_facing'],
+                // 'facing_id' => isset($this->inputs['facing_id']) ? $this->inputs['facing_id'] : null,
                 'type_id' => $this->inputs['type_id'],
                 'status_id' => $this->inputs['status_id'],
                 'active' => $this->isUnitActive,

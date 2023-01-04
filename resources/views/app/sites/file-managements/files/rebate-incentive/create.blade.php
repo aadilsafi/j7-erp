@@ -301,7 +301,7 @@
 
                 rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
-                let unit_total = parseFloat($('#td_unit_total_value').val());
+                let unit_total = parseFloat($('#unit_total').val());
 
                 let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
 

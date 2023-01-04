@@ -337,14 +337,14 @@
                                                                     <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
                                                                     </td>
                                                                     <td>{{ number_format($installment->amount, 2) }}</td>
-                                                                 
-                                                                @if ($salePlan->payment_plan_serial_id != null)
-                                                                <td>{{ number_format($installment->paid_amount, 2) }}
-                                                                </td>
-                                                                    <td>{{ number_format($installment->remaining_amount, 2) }}
-                                                                    </td>
-                                                                    <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
-                                                                    </td>
+
+                                                                    @if ($salePlan->payment_plan_serial_id != null)
+                                                                        <td>{{ number_format($installment->paid_amount, 2) }}
+                                                                        </td>
+                                                                        <td>{{ number_format($installment->remaining_amount, 2) }}
+                                                                        </td>
+                                                                        <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
+                                                                        </td>
                                                                     @endif
                                                                 </tr>
                                                             @endforeach
@@ -367,6 +367,7 @@
                         <h3>3. STAKEHOLDER DETAILS</h3>
                     </div>
                     <div class="card-body">
+                        <p>{{ $salePlan->stakeholder->pin_code }}</p>
                         {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $salePlan->stakeholder, 'hideBorders' => true]) }}
                     </div>
                 </div>

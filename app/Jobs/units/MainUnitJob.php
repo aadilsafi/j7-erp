@@ -49,9 +49,8 @@ class MainUnitJob implements ShouldQueue
         $floor = (new Floor())->find($this->floor_id);
 
         $unitNumberDigits = $floor->site->siteConfiguration->unit_number_digits;
-        dd($this->inputs);
 
-        for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
+        // for ($i = $this->inputs['slider_input_1']; $i <= $this->inputs['slider_input_2']; $i++) {
             $job = [
                 'floor_id' => $this->floor_id,
                 'name' => 'Unit ' . $i,
@@ -76,6 +75,6 @@ class MainUnitJob implements ShouldQueue
                 'updated_at' => now()
             ];
             $this->batch()->add(new CreateUnitJob($job));
-        }
+        // }
     }
 }

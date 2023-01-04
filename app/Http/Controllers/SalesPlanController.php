@@ -390,8 +390,7 @@ class SalesPlanController extends Controller
                 ], 200);
             }
         }
-        else
-        {
+        else {
 
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;

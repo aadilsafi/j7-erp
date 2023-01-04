@@ -220,21 +220,18 @@
 @endsection
 
 @section('content')
-    <section id="loader" class="app-user-view-connections">
+    <section class="app-user-view-connections">
         <!-- Right Sidebar starts -->
         <div class="modal modal-slide-in sidebar-todo-modal fade" id="new-task-modal">
             <div class="modal-dialog sidebar-lg">
                 <div class="modal-content p-0">
-                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate
-                        onsubmit="return false">
+                    <form id="form-modal-todo" class="todo-modal needs-validation" novalidate onsubmit="return false">
                         <div class="modal-header align-items-center mb-1">
                             <h5 class="modal-title">Add Task</h5>
-                            <div
-                                class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
-                                <span class="todo-item-favorite cursor-pointer me-75"><i
-                                        data-feather="star" class="font-medium-2"></i></span>
-                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal"
-                                    stroke-width="3"></i>
+                            <div class="todo-item-action d-flex align-items-center justify-content-between ms-auto">
+                                <span class="todo-item-favorite cursor-pointer me-75"><i data-feather="star"
+                                        class="font-medium-2"></i></span>
+                                <i data-feather="x" class="cursor-pointer" data-bs-dismiss="modal" stroke-width="3"></i>
                             </div>
                         </div>
                         <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
@@ -333,10 +330,11 @@
                                             @if (Str::length($account_of_head_3->code) == 6 and
                                                 $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
                                                 <li>
-                                                    <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})" href="#">{{ $account_of_head_3->name }}</a>
+                                                    <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})"
+                                                        href="#">{{ $account_of_head_3->name }}</a>
                                                     <ul>
 
-                                                        <li class="fourth_level_account"  id="{{ $account_of_head_3->id }}">
+                                                        <li class="fourth_level_account" id="{{ $account_of_head_3->id }}">
                                                             <table class="table">
                                                                 <thead>
                                                                     <tr>
@@ -353,9 +351,11 @@
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class="custom_td">{{ $account_of_head_3->name }}
+                                                                        <td class="custom_td">
+                                                                            {{ $account_of_head_3->name }}
                                                                         </td>
-                                                                        <td class="custom_td">{{ $account_of_head_3->level }}
+                                                                        <td class="custom_td">
+                                                                            {{ $account_of_head_3->level }}
                                                                         </td>
                                                                         <td class="custom_td">
                                                                             {{ account_number_format($account_of_head_3->code) }}
@@ -370,7 +370,7 @@
                                                                 </tbody>
                                                             </table>
                                                         </li>
-                                                         {{-- <li >
+                                                        {{-- <li >
                                                             <a href="#">4 Level</a>
                                                             <ul>
                                                                 <li>
@@ -459,40 +459,138 @@
 
 @section('custom-js')
 
-<script>
-    function getFourthLevelAccounts(code) {
-        // alert(code);
-        showBlockUI('#loader');
-        let url =
+    <script>
+        function getFourthLevelAccounts(code) {
+            // alert(code);
+            showBlockUI('#tree1');
+            let url =
                 "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
-        var _token = '{{ csrf_token() }}';
-        $.ajax({
-            url: url,
-            type: 'post',
-            dataType: 'json',
-            data: {
-                'code': code,
-                '_token': _token
-            },
-            success: function(data) {
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
-                let fourth_level_accounts = data.fourth_level_accounts;
+                    let fourth_level_accounts = data.fourth_level_accounts;
+                    $('.alreadyExistFourthLevelAccount').remove();
+                    for (let index = 0; index < fourth_level_accounts.length; index++) {
+                        const account_data = fourth_level_accounts[index];
 
-                for (let index = 0; index < fourth_level_accounts.length; index++) {
-                    const account_data = fourth_level_accounts[index];
-                    $('.fourth_level_account').append('<li><a href="#">'+account_data.name+'</a></li>');
+                        $('.fourth_level_account').append('<li class="alreadyExistFourthLevelAccount ' +
+                            account_data.code + '" id="' + account_data.code +
+                            '"><a href="#" onclick="fifthLevelAccounts(' + account_data.code + ')">' +
+                            account_data.name + '</a></li>');
+                    }
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
                 }
+            });
+            hideBlockUI('#tree1');
+        }
 
-                hideBlockUI('#loader');
-            },
-            error: function(error) {
-                console.log(error);
-                hideBlockUI('#loader');
+        function fifthLevelAccounts(code) {
+
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fifth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'code': code,
+                        '_token': _token
+                    },
+                    success: function(data) {
+                        let selected_account = data.fourth_level_account;
+
+                        $('.removeAlreadyUl').remove();
+                        $('.' + code + '').append('<ul class="removeAlreadyUl fifthLevelAccounts">\
+                                    <li>\
+                                        <table class="table">\
+                                            <thead>\
+                                            <tr>\
+                                                <th scope="col">Name</th>\
+                                                 <th scope="col">ACCOUNT LEVEL</th>\
+                                                 <th scope="col">ACCOUNT CODES</th>\
+                                                <th scope="col">ACCOUNT NATURE</th>\
+                                                <th scope="col">Balance</th>\
+                                             </thead>\
+                                        <tbody >\
+                                            <tr>\
+                                                <td class="custom_td">' + selected_account.name + ' </td>\
+                                                <td class="custom_td">' + selected_account.level + ' </td>\
+                                                <td class="custom_td">' + selected_account.code + ' </td>\
+                                                <td class="custom_td">' + selected_account.account_type + ' </td>\
+                                                <td class="custom_td">0</td>\
+                                            </tr>\
+                                        </tbody>\
+                                        </table>\
+                                     </li>\
+                                </ul>');
+
+                        let fifth_level_accounts = data.fifth_level_accounts;
+
+
+                        $('.alreadyExistFifthLevelAccount').remove();
+                        for (let index = 0; index < fifth_level_accounts.length; index++) {
+                            const account_data = fifth_level_accounts[index];
+                            console.log(account_data.name)
+                            $('.fifthLevelAccounts').append('<ul><li class="alreadyExistFifthLevelAccount">\
+                                    <table class="table">\
+                                            <thead>\
+                                            <tr>\
+                                                <th scope="col">Name</th>\
+                                                 <th scope="col">ACCOUNT LEVEL</th>\
+                                                 <th scope="col">ACCOUNT CODES</th>\
+                                                <th scope="col">ACCOUNT NATURE</th>\
+                                                <th scope="col">Balance</th>\
+                                             </thead>\
+                                        <tbody >\
+                                            <tr>\
+                                                <td class="custom_td">' + account_data.name + ' </td>\
+                                                <td class="custom_td">' + account_data.level + ' </td>\
+                                                <td class="custom_td">' + account_data.code + ' </td>\
+                                                <td class="custom_td">' + account_data.account_type + ' </td>\
+                                                <td class="custom_td">0</td>\
+                                            </tr>\
+                                        </tbody>\
+                                        </table>\
+                                </li>');
+                            }
+
+
+                            hideBlockUI('#tree1');
+                        },
+                        error: function(error) {
+                            console.log(error);
+                            hideBlockUI('#tree1');
+                        }
+                    });
+
+
+                    // <th class="custom_plus_th" scope="col">\
+                    //                                 <i data-feather="plus" data-bs-toggle="modal" data-bs-target="#new-task-modal">Plus</i>\
+                    //                             </tr>\
+
+                    // <td class="custom_td">0</td>\
+
+
+
+
+                hideBlockUI('#tree1');
             }
-        });
-        hideBlockUI('#loader');
-    }
-</script>
+    </script>
 
     <script>
         $.fn.extend({

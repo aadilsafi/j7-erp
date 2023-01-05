@@ -45,7 +45,6 @@ class ReceiptService implements ReceiptInterface
     {
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
-
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
@@ -245,12 +244,12 @@ class ReceiptService implements ReceiptInterface
                         $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt->id);
                     }
 
-                    if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
-                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
-                            changeImageDirectoryPermission();
-                        }
-                    }
+                    // if (isset($requested_data['attachment'])) {
+                    //     for($i=0; $i<count($requested_data['attachment']); $i++){
+                    //         $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                    //         changeImageDirectoryPermission();
+                    //     }
+                    // }
                     // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);
                 }

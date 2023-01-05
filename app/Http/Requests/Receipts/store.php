@@ -101,10 +101,11 @@ class store extends FormRequest
                 $modeOfPayment = $this->input('receipts.*.mode_of_payment');
                 $discount = str_replace(',', '', $this->input('discounted_amount'));
                 $attachment = $this->attachment;
+                dd($attachment);
                 $amount_received = $this->input('amount_received');
                 $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
                 if ($modeOfPayment[0] != 'Cash'  && $attachment == null) {
-                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online.');
+                    $validator->errors()->add('attachment', 'Attachment is Required if mode of payment is Cheque or Online or Other.');
                 }
                 $amount_in_numbers = (float)str_replace(',', '', $amount_in_numbers[0]);
                 $amount_received = (float)str_replace(',', '', $amount_received);

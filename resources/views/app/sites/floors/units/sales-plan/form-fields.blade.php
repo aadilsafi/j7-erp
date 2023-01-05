@@ -78,7 +78,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="unit_price">Unit Price (Rs)<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" min="0" class="form-control form-control-lg"
+                                    <input type="number" step="0.01" class="form-control form-control-lg"
                                         id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
                                         value="" />
                                 </div>
@@ -394,24 +394,30 @@
 
         <div class="card-body">
 
-            @if (isset($crm_lead))
-                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id"
-                    value="{{ $crm_lead->id }}">
-            @endif
+
             <div class="row mb-1">
                 <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                     <label class="form-label" style="font-size: 15px" for="stackholders">Stakeholders</label>
-                    <select class="form-select" id="stackholders" name="stackholder[stackholder_id]">
+                    <select class="form-select" id="stackholders"
+                        @if (!isset($crm_lead)) name="stackholder[stackholder_id]" @endif>
                         <option value="0">Create new Stakeholder...</option>
                         @forelse ($stakeholders as $stakeholder)
-                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} - {{ $stakeholder->stakeholder_as == 'i' ? $stakeholder->mobile_contact : $stakeholder->office_contact }}
+                            <option value="{{ $stakeholder->id }}">{{ $stakeholder->full_name }} -
+                                {{ $stakeholder->stakeholder_as == 'i' ? $stakeholder->mobile_contact : $stakeholder->office_contact }}
                             </option>
                         @empty
                         @endforelse
                     </select>
                 </div>
             </div>
+            @if (isset($crm_lead))
+                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id"
+                    value="{{ $crm_lead->id }}">
+            @endif
 
+            @if (Auth::user()->hasRole('CRM') && !isset($crm_lead))
+                <input type="hidden" name="stackholder[stackholder_id]" id="stakeholder_id" value="0">
+            @endif
 
 
             <div style="border: 2px solid #eee; border-style: dashed; border-radius: 0;">

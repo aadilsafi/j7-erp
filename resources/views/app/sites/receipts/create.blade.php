@@ -115,11 +115,18 @@
                     @php
 
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
-                        @if(isset($draft_receipt->discounted_amount &&  float()$draft_receipt->discounted_amount->discounted_amount > 0 ))
-                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers - float()$draft_receipt->discounted_amount->discounted_amount;
-                        @else
-                        $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
-                        @endif
+                        if(isset($draft_receipt->discounted_amount) &&  (float)$draft_receipt->discounted_amount > 0 )
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers + (float)$draft_receipt->discounted_amount;
+
+                        }
+                        else
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
+                        }
+
+
+
                     @endphp
                 @endforeach
             @endisset
@@ -414,7 +421,7 @@
             if ($.isNumeric(amount) && amount > 0) {
 
                 var unit_id = $(this).attr('unit_id');
-                var discounted_amount = $('#discounted_amount').val();
+                var discounted_amount = $('#discounted_amount').val().replace(/,/g, "");
                 if (discounted_amount > 0) {
                     amount = parseFloat(amount) + parseFloat(discounted_amount);
                 }
@@ -469,8 +476,8 @@
                                 $('#stackholder_designation').val(response.stakeholders['designation']);
                                 $('#stackholder_ntn').val(response.stakeholders['ntn']);
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
-                                $('#stackholder_contact').val(response.stakeholders['contact']);
-                                $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_contact').val(response.stakeholders['mobile_contact']);
+                                $('#stackholder_address').val(response.stakeholders['residential_address']);
                                 $('#stackholder_mailing_address').val(response.stakeholders[
                                     'mailing_address']);
                                 $('#stackholder_country').val(response.country);
@@ -765,7 +772,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#loader');
             let bankData = {
                 id: 0,
                 name: '',
@@ -797,7 +804,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#loader');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -808,11 +815,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 }
             });
         });

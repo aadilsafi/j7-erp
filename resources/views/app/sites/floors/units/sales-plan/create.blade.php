@@ -400,8 +400,8 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                
-                                $('#is_local').prop( "checked", stakeholderData.is_local );
+
+                                $('#is_local').prop("checked", stakeholderData.is_local);
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
                             }
@@ -578,13 +578,12 @@
                 stackholders.prop('disabled', true);
 
                 $('#stakeholder_id').val('{{ $crm_lead->id ?? 0 }}')
-
             @endif
 
 
             @if (Auth::user()->hasRole('CRM'))
-            stackholders.prop('disabled', true);
-
+                stackholders.prop('disabled', true);
+                $('#stakeholder_id').val('{{ isset($crm_lead) ? $crm_lead->id : 0 }}')
             @endif
 
             var e = $("#sales_source_lead_source");
@@ -967,7 +966,6 @@
                 },
                 'unit[price][unit]': {
                     required: true,
-                    digits: true
                 },
                 'unit[price][total]': {
                     required: true,

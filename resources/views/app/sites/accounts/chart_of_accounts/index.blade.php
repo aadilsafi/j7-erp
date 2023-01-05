@@ -114,15 +114,16 @@
             border-color: inherit;
             border-style: solid;
             border-width: 0;
-            background: white;
+            background: whitesmoke;
         }
 
 
         .custom_plus_th {
-            position: absolute !important;
+            /* position: absolute !important; */
             right: 0;
             cursor: pointer;
-            padding-right: 1.1rem !important;
+            /* padding-right: 1.1rem !important; */
+            text-align: end;
         }
 
         .accordion-body,
@@ -190,7 +191,6 @@
             position: relative;
             padding: 6px;
             padding-left: 0.9rem;
-            font-size: 17px;
         }
 
         .tree ul li:before {
@@ -201,14 +201,14 @@
             border-top: 1px solid;
             margin-top: -1px;
             position: absolute;
-            top: 1.4em;
+            top: 2.21em;
             left: 0
         }
 
         .tree ul li:last-child:before {
             background: #fff;
             height: auto;
-            top: 1em;
+            top: 2.21rem;
             bottom: 0
         }
 
@@ -323,6 +323,8 @@
                                             <td class="custom_td">
                                                 0
                                             </td>
+                                            <td class="custom_td">
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -364,6 +366,8 @@
                                                             </td>
                                                             <td class="custom_td">
                                                                 0
+                                                            </td>
+                                                            <td class="custom_td">
                                                             </td>
 
                                                         </tr>
@@ -414,6 +418,8 @@
                                                                             </td>
                                                                             <td class="custom_td">
                                                                                 0
+                                                                            </td>
+                                                                            <td class="custom_td">
                                                                             </td>
                                                                         </tr>
                                                                     </tbody>
@@ -583,15 +589,14 @@
                                                                         <td class="custom_td">' + selected_account.name + ' </td>\
                                                                         <td class="custom_td">' + selected_account.level + ' </td>\
                                                                         <td class="custom_td">' + selected_account.code + ' </td>\
-                                                                        <td class="custom_td">' + selected_account
-                        .account_type + ' </td>\
+                                                                        <td class="custom_td">' + selected_account.account_type + ' </td>\
                                                                         <td class="custom_td">0</td>\
                                                                     </tr>\
                                                                 </tbody>\
                                                                 </table>\
                                                                 </div>\
                                                              </li>\
-                                                        </ul>');
+                                                            </ul>');
 
                     let fifth_level_accounts = data.fifth_level_accounts;
 
@@ -616,8 +621,7 @@
                                                                         <td class="custom_td">' + account_data.name + ' </td>\
                                                                         <td class="custom_td">' + account_data.level + ' </td>\
                                                                         <td class="custom_td">' + account_data.code + ' </td>\
-                                                                        <td class="custom_td">' + account_data
-                            .account_type + ' </td>\
+                                                                        <td class="custom_td">' + account_data.account_type + ' </td>\
                                                                         <td class="custom_td">0</td>\
                                                                     </tr>\
                                                                 </tbody>\

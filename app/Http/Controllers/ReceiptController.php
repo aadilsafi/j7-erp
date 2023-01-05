@@ -93,7 +93,7 @@ class ReceiptController extends Controller
         ]);
 
         $validator->validate();
-        try {
+        // try {
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
@@ -108,9 +108,9 @@ class ReceiptController extends Controller
             } else {
                 abort(403);
             }
-        } catch (Exception $ex) {
-            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
-        }
+        // } catch (Exception $ex) {
+        //     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
+        // }
     }
 
     /**
@@ -367,7 +367,7 @@ class ReceiptController extends Controller
         $sales_plan = SalesPlan::where('unit_id', $request->unit_id)->where('status', 1)->with('PaidorPartiallyPaidInstallments', 'unPaidInstallments', 'stakeholder')->first();
         $stakeholders = $sales_plan->stakeholder;
         // dd($stakeholders->country->name);
-        $stakeholders->cnic = cnicFormat($stakeholders->cnic);
+        $stakeholders->cnic = $stakeholders->cnic;
         $installmentFullyPaidUnderAmount = [];
         $installmentPartialyPaidUnderAmount = [];
         $calculate_amount = 0;
@@ -469,9 +469,9 @@ class ReceiptController extends Controller
             'amount_to_be_paid' => $request->amount,
             'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
             'stakeholders'  => $stakeholders,
-            'country'       => $stakeholders->country_id ? $stakeholders->country->name : '',
-            'state'         => $stakeholders->state_id ? $stakeholders->state->name : '',
-            'city'          => $stakeholders->city_id ? $stakeholders->city->name : '',
+            'country'       => $stakeholders->country_id > 0 ? $stakeholders->residentialCountry->name : '',
+            'state'         => $stakeholders->state_id > 0 ? $stakeholders->residentialState->name : '',
+            'city'          => $stakeholders->city_id > 0 ? $stakeholders->residentialCity->name : '',
         ], 200);
     }
 

@@ -21,6 +21,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 use Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReceiptService implements ReceiptInterface
 {
@@ -43,7 +45,6 @@ class ReceiptService implements ReceiptInterface
     {
         DB::transaction(function () use ($site_id, $requested_data) {
             $data = $requested_data['receipts'];
-
             for ($i = 0; $i < count($data); $i++) {
                 $amount_in_numbers = str_replace(',', '', $data[$i]['amount_in_numbers']);
                 $discounted_amount = str_replace(',', '', $requested_data['discounted_amount']);
@@ -145,16 +146,14 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
-                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                        for($j=0; $j<count($requested_data['attachment']); $j++){
+                            $receipt->addMedia($requested_data['attachment'][$j])->toMediaCollection('receipt_attachments');
                             changeImageDirectoryPermission();
                         }
                     }
-
-                    if($data[$i]['mode_of_payment'] != 'Other'){
+                    if ($data[$i]['mode_of_payment'] != 'Other') {
                         $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
-                    }
-                    else{
+                    } else {
                         $remaining_amount = str_replace(',', '', $requested_data['amount_received']);
                     }
 
@@ -381,7 +380,7 @@ class ReceiptService implements ReceiptInterface
         }
 
         if ($total_paid_amount >= $total_committed_amount) {
-            if($unit->status_id <= 3){
+            if ($unit->status_id <= 3) {
                 $unit->is_for_rebate = true;
             }
 
@@ -404,6 +403,50 @@ class ReceiptService implements ReceiptInterface
         }
 
         $unit->update();
+        $this->updatePaymentPlanPdf($receipt->salesPlan);
+    }
+
+    // update paymenmt plan pdf
+    public function updatePaymentPlanPdf($salesPlan)
+    {
+        $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+        $fileName =  'Payment-Plan-' . $salesPlan->unit->id . $salesPlan->unit->floor_unit_number . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
+
+        $role = $salesPlan->user->roles->pluck('name');
+
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
+            'rate' => $salesPlan->unit_price,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'total' => $salesPlan->total_price,
+            'sales_person_name' => $salesPlan->user->name,
+            'sales_person_contact' => $salesPlan->user->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->mobile_contact,
+            'amount' => $salesPlan->total_price,
+            'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
+            'paid_amount' => $salesPlan->installments->sum('paid_amount'),
+
+        ];
+        $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
+        $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));
+
+        $pdf->save($path . '/' . $fileName);
     }
 
     public function update($site_id, $id, $inputs)

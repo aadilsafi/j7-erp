@@ -162,7 +162,15 @@ class SalesPlanService implements SalesPlanInterface
             $stakeholderData['mailing_city_id'] = isset($mailing['city']) ? $mailing['city'] : 0;
 
             $stakeholderData['comments'] = $inputs['comments'];
-            if (Stakeholder::find($stakeholderInput['stackholder_id'])->pin_code == null) {
+            if ($stakeholderInput['stackholder_id'] == 0) {
+                $pinCode = createRandomAlphaNumericCode();
+                $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                while ($isPinExists) {
+                    $pinCode = createRandomAlphaNumericCode();
+                    $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                }
+                $stakeholderData['pin_code'] = $pinCode;
+            } elseif (Stakeholder::find($stakeholderInput['stackholder_id'])->pin_code == null) {
                 $pinCode = createRandomAlphaNumericCode();
                 $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
                 while ($isPinExists) {
@@ -379,6 +387,36 @@ class SalesPlanService implements SalesPlanInterface
 
     public function generatePDF($salesPlan, $type = null)
     {
+        $role = $salesPlan->user->pluck('name');
+
+        $data = [
+            'unit_no' => $salesPlan->unit->floor_unit_number,
+            'floor_short_label' => $salesPlan->unit->floor->short_label,
+            'category' => $salesPlan->unit->type->name,
+            'size' => $salesPlan->unit->gross_area,
+            'client_name' => $salesPlan->stakeholder->full_name,
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
+            'rate' => $salesPlan->unit_price,
+            'down_payment_percentage' => $salesPlan->down_payment_percentage,
+            'down_payment_total' =>  $salesPlan->down_payment_total,
+            'discount_percentage' => $salesPlan->discount_percentage,
+            'discount_total' =>  $salesPlan->discount_total,
+            'total' => $salesPlan->total_price,
+            'sales_person_name' => $salesPlan->user->name,
+            'sales_person_contact' => $salesPlan->user->contact,
+            'sales_person_status' => $role[0],
+            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_sales_type' => $salesPlan->sales_type,
+            'indirect_source' => $salesPlan->indirect_source,
+            'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
+            'additional_costs' => $salesPlan->additionalCosts,
+            'validity' =>  $salesPlan->validity,
+            'contact' => $salesPlan->stakeholder->mobile_contact,
+            'amount' => $salesPlan->total_price,
+            'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
+            'paid_amount' => $salesPlan->installments->sum('paid_amount'),
+        ];
         if ($type == 'investment_plan') {
             $path = public_path('app-assets/pdf/sales-plans/investment-plan');
             $fileName =  'Investment-Plan-' . $salesPlan->unit->id . $salesPlan->unit->floor_unit_number . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.' . 'pdf';
@@ -386,35 +424,8 @@ class SalesPlanService implements SalesPlanInterface
             $link = route('download-investment-plan', ['file_name' => $fileName]);
             QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $qrCodeName));
 
-            $role = Auth::user()->roles->pluck('name');
-
-            $data = [
-                'unit_no' => $salesPlan->unit->floor_unit_number,
-                'floor_short_label' => $salesPlan->unit->floor->short_label,
-                'category' => $salesPlan->unit->type->name,
-                'size' => $salesPlan->unit->gross_area,
-                'client_name' => $salesPlan->stakeholder->full_name,
-                'client_number' => $salesPlan->stakeholder->mobile_contact,
-                'rate' => $salesPlan->unit_price,
-                'down_payment_percentage' => $salesPlan->down_payment_percentage,
-                'down_payment_total' =>  $salesPlan->down_payment_total,
-                'discount_percentage' => $salesPlan->discount_percentage,
-                'discount_total' =>  $salesPlan->discount_total,
-                'total' => $salesPlan->total_price,
-                'sales_person_name' => Auth::user()->name,
-                'sales_person_contact' => $salesPlan->stakeholder->contact,
-                'sales_person_status' => $role[0],
-                'sales_person_phone_no' => Auth::user()->phone_no,
-                'sales_person_sales_type' => $salesPlan->sales_type,
-                'indirect_source' => $salesPlan->indirect_source,
-                'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
-                'additional_costs' => $salesPlan->additionalCosts,
-                'validity' =>  $salesPlan->validity,
-                'contact' => $salesPlan->stakeholder->contact,
-                'amount' => $salesPlan->total_price,
-            ];
             $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
-            $pdf = Pdf::setOptions(['dpi' => 140, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image'));
+            $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-01', compact('data', 'image'));
 
             $pdf->save($path . '/' . $fileName);
         } elseif ($type = 'payment_plan') {
@@ -424,35 +435,9 @@ class SalesPlanService implements SalesPlanInterface
             $link = route('authorize-stakeholder', ['file_name' => encryptParams($fileName)]);
             QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $qrCodeName));
 
-            $role = Auth::user()->roles->pluck('name');
 
-            $data = [
-                'unit_no' => $salesPlan->unit->floor_unit_number,
-                'floor_short_label' => $salesPlan->unit->floor->short_label,
-                'category' => $salesPlan->unit->type->name,
-                'size' => $salesPlan->unit->gross_area,
-                'client_name' => $salesPlan->stakeholder->full_name,
-                'client_number' => $salesPlan->stakeholder->mobile_contact,
-                'rate' => $salesPlan->unit_price,
-                'down_payment_percentage' => $salesPlan->down_payment_percentage,
-                'down_payment_total' =>  $salesPlan->down_payment_total,
-                'discount_percentage' => $salesPlan->discount_percentage,
-                'discount_total' =>  $salesPlan->discount_total,
-                'total' => $salesPlan->total_price,
-                'sales_person_name' => Auth::user()->name,
-                'sales_person_contact' => $salesPlan->stakeholder->contact,
-                'sales_person_status' => $role[0],
-                'sales_person_phone_no' => Auth::user()->phone_no,
-                'sales_person_sales_type' => $salesPlan->sales_type,
-                'indirect_source' => $salesPlan->indirect_source,
-                'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
-                'additional_costs' => $salesPlan->additionalCosts,
-                'validity' =>  $salesPlan->validity,
-                'contact' => $salesPlan->stakeholder->contact,
-                'amount' => $salesPlan->total_price,
-            ];
             $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
-            $pdf = Pdf::setOptions(['dpi' => 140, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));
+            $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));
 
             $pdf->save($path . '/' . $fileName);
         }

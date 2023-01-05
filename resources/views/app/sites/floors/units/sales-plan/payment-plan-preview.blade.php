@@ -95,7 +95,7 @@
                                 <div class="card-header">
                                     <div class="row w-100">
                                         <div class="col-10">
-                                            <h3>Payment Plan Preview</h3>
+                                            <h3>1. PRIMARY DATA</h3>
                                         </div>
                                         <div class="col-2 text-center">
                                             <a href="javascript:void(0);"
@@ -143,8 +143,11 @@
                                             </div>
                                         </div>
                                         <div class="col-2 text-center">
-                                            <br>
-                                            <img width="120px" height="120px" src="{{ $qrCodeimg }}" alt="qr code">
+                                            <div class="mt-2">
+                                                <img width="120px" height="120px" src="{{ $qrCodeimg }}"
+                                                    alt="qr code">
+                                            </div>
+
                                         </div>
                                     </div>
 

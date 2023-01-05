@@ -476,8 +476,8 @@
                                 $('#stackholder_designation').val(response.stakeholders['designation']);
                                 $('#stackholder_ntn').val(response.stakeholders['ntn']);
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
-                                $('#stackholder_contact').val(response.stakeholders['contact']);
-                                $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_contact').val(response.stakeholders['mobile_contact']);
+                                $('#stackholder_address').val(response.stakeholders['residential_address']);
                                 $('#stackholder_mailing_address').val(response.stakeholders[
                                     'mailing_address']);
                                 $('#stackholder_country').val(response.country);

@@ -106,15 +106,18 @@ class StakeholderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(stakeholderStoreRequest $request, $site_id)
-    // public function store(Request $request, $site_id)
     {
-
+        $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                $inputs = $request->all();
-                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
-                $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                if (empty($BacklistedStakeholder)) {
+                    $inputs = $request->all();
+                    $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+                    $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                } else {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                }
             } else {
                 abort(403);
             }
@@ -154,7 +157,6 @@ class StakeholderController extends Controller
             $parentStakeholders = [];
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin', 'kinStakeholders']);
             $parentStakeholders = StakeholderNextOfKin::where('kin_id', $stakeholder->id)->get();
-            // dd($parentStakeholders);
             $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields, true, $stakeholder->id);
@@ -258,6 +260,4 @@ class StakeholderController extends Controller
             abort(403);
         }
     }
-
-    
 }

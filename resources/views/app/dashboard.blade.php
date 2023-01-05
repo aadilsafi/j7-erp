@@ -83,7 +83,7 @@
                             </li>
                         </ul> --}}
 
-                        <img class="img-fluid" src="{{ asset('app-assets') }}/images/coming_soon.png" alt="Login V2" />
+                        <img class="img-fluid" width="491" src="{{ asset('app-assets') }}/images/girl.png" alt="Login V2" />
                     </div>
                 </div>
             </div>

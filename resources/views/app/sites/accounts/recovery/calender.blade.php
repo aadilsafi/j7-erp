@@ -204,7 +204,7 @@
                     center: " title",
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
-                contentHeight: 650,
+                contentHeight: 600,
                 displayEventTime:true,
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",
@@ -224,7 +224,7 @@
             });
 
             calendar.render();
-            calendar.updateSize()
+            calendar.updateSize();
 
         });
     </script>

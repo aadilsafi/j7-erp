@@ -53,6 +53,7 @@
             {{-- Printing Modal --}}
             @include('app.sites.floors.units.sales-plan.partials.print-templates', [
                 'salesPlanTemplates' => $salesPlanTemplates,
+                'showTemplateType' => 'investment_plan'
             ])
 
         </div>

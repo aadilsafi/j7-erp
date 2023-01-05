@@ -21,8 +21,9 @@
                     <h1>PAYMENT PLAN</h1>
                 </td>
                 <td class="text-end">
-                    <p>Print Date:{{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</p>
-                    <p>User: {{ Auth::user()->name }}</p>
+                    <img width="90px" height="90px" src="{{ $data['qrCodeimg'] }}" alt="qr code">
+                    <br>
+
                 </td>
             </tr>
         </table>

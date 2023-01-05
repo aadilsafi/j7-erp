@@ -93,7 +93,20 @@
                         <div class="row">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3>1. PRIMARY DATA</h3>
+                                    <div class="row w-100">
+                                        <div class="col-10">
+                                            <h3>Payment Plan Preview</h3>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            <a href="javascript:void(0);"
+                                                class="btn btn-lg btn-relief-outline-primary waves-effect waves-float waves-light ms-3"
+                                                data-bs-toggle="tooltip" data-bs-placement="top" title="Print Sales Plan"
+                                                onclick="openTemplatesModal('{{ encryptParams($salePlan->id) }}');">
+                                                <i class="bi bi-printer" style="font-size: 1.1rem" class="m-10"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="card-body">
@@ -130,11 +143,8 @@
                                             </div>
                                         </div>
                                         <div class="col-2 text-center">
-                                            <div class="mt-2">
-                                                <img width="120px" height="120px" src="{{ $qrCodeimg }}"
-                                                    alt="qr code">
-                                            </div>
-
+                                            <br>
+                                            <img width="120px" height="120px" src="{{ $qrCodeimg }}" alt="qr code">
                                         </div>
                                     </div>
 
@@ -440,10 +450,12 @@
                         </div>
                     </div>
                 </div>
-
-
-
     </form>
+    {{-- Printing Modal --}}
+    @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+        'salesPlanTemplates' => $salesPlanTemplates,
+        'showTemplateType' => 'payment_plan'
+    ])
 @endsection
 
 @section('vendor-js')
@@ -457,6 +469,22 @@
 @endsection
 
 @section('page-js')
+    <script>
+        function openTemplatesModal(sales_plan_id) {
+            $('#sales_plan_id').val(sales_plan_id);
+            $('#modal-sales-plan-template').modal('show');
+        }
+
+        function printSalesPlanTemplate(template_id) {
+            let sales_plan_id = $('#sales_plan_id').val();
+            let url =
+                "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
+                .replace(':sales_plan_id', sales_plan_id)
+                .replace(':id', template_id);
+            window.open(url, '_blank').focus();
+
+        }
+    </script>
 @endsection
 
 @section('custom-js')

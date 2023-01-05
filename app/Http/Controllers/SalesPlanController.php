@@ -230,6 +230,7 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'updated',
+            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
     }

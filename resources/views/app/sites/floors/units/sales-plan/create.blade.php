@@ -803,7 +803,7 @@
 
         function calculateInstallments(action = '') {
 
-            showBlockUI('#create-sales-plan-form');
+            showBlockUI('#installments_acard');
 
             let unitDownPayment = conventToFloatNumber($('#unit_downpayment_total').val()).toFixed(2);
             let unit_rate_total = conventToFloatNumber($('#unit_rate_total').val()).toFixed(2);
@@ -843,7 +843,7 @@
                             $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
                             InstallmentRows = '';
 
-                            showBlockUI('#create-sales-plan-form');
+                            showBlockUI('#additional_expense_card');
                             lastInstallemtDate = response.data.installments[response.data.installments.length -
                                     2]
                                 .date;
@@ -852,7 +852,7 @@
                                 defaultDate: lastInstallemtDate,
                                 minDate: lastInstallemtDate,
                             });
-                            hideBlockUI('#create-sales-plan-form');
+                            hideBlockUI('#additional_expense_card');
 
                             $('#base-installment').val(response.data.baseInstallmentTotal);
                         } else {
@@ -863,11 +863,11 @@
                                 });
                             }
                         }
-                        hideBlockUI('#create-sales-plan-form');
+                        hideBlockUI('#installments_acard');
                     },
                     error: function(errors) {
                         console.error(errors);
-                        hideBlockUI('#create-sales-plan-form');
+                        hideBlockUI('#installments_acard');
                     }
                 });
             }
@@ -932,7 +932,6 @@
         );
 
         function updateTable() {
-            hideBlockUI('#create-sales-plan-form');
             clearTimeout(t);
             t = setTimeout(calculateInstallments, 1500, 1);
         }

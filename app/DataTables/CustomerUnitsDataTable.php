@@ -128,7 +128,6 @@ class CustomerUnitsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('DT_RowIndex')->title('#'),
             Column::make('floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
             Column::make('name')->title('Units'),
             Column::make('type_id')->name('type.name')->title('Type')->orderable(false),
@@ -136,7 +135,7 @@ class CustomerUnitsDataTable extends DataTable
             Column::computed('full_name')->name('salesPlan.stakeholder.full_name')->title('Full Name')->addClass('text-center text-nowrap')->orderable(false),
             Column::computed('father_name')->name('salesPlan.stakeholder.father_name')->title('Father / Husband Name')->addClass('text-center text-nowrap')->orderable(false),
             Column::computed('cnic')->name('salesPlan.stakeholder.cnic')->title('CNIC')->addClass('text-center text-nowrap')->orderable(false),
-            Column::computed('contact')->name('salesPlan.stakeholder.contact')->title('CONTACT')->addClass('text-center text-nowrap')->orderable(false),
+            // Column::computed('contact')->name('salesPlan.stakeholder.contact')->title('CONTACT')->addClass('text-center text-nowrap')->orderable(false),
             // Column::make('created_at')->addClass('text-nowrap'),
             // Column::make('updated_at'),
             Column::computed('actions')->exportable(false)->printable(false)->addClass('text-center text-nowrap')->width(60),

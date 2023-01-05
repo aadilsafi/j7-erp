@@ -258,40 +258,49 @@ class AccountsRecoveryController extends Controller
 
     public function salesPlanDataTable(Request $request, $site_id)
     {
+        try{
+            $filters = [];
+            if ($request->has('filter_floors')) {
+                $filters['filter_floors'] = $request->input('filter_floors');
+            }
+            if ($request->has('filter_unit')) {
+                $filters['filter_unit'] = Str::of($request->input('filter_unit'))->upper()->trim();
+            }
+            if ($request->has('filter_customer')) {
+                $filters['filter_customer'] = trim($request->input('filter_customer'));
+            }
+            if ($request->has('filter_dealer')) {
+                $filters['filter_dealer'] = trim($request->input('filter_dealer'));
+            }
+            if ($request->has('filter_sale_source')) {
+                $filters['filter_sale_source'] = trim($request->input('filter_sale_source'));
+            }
+            if ($request->has('filter_sale_source')) {
+                $filters['filter_sale_source'] = trim($request->input('filter_sale_source'));
+            }
+            if ($request->has('filter_type')) {
+                $filters['filter_type'] = trim($request->input('filter_type'));
+            }
+            if ($request->has('filter_generated_from') && $request->has('filter_generated_to')) {
+                $filters['filter_generated_from'] = trim($request->input('filter_generated_from'));
+                $filters['filter_generated_to'] = trim($request->input('filter_generated_to'));
+            }
+            if ($request->has('filter_approved_from') && $request->has('filter_approved_to')) {
+                $filters['filter_approved_from'] = trim($request->input('filter_approved_from'));
+                $filters['filter_approved_to'] = trim($request->input('filter_approved_to'));
+            }
+    
+            $dataTable = $this->accountRecevoryInterface->generateDataTable($site_id, $filters);
+            return DataTables::of($dataTable)->make(true);
+        }catch(\Exception $e){
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+        }
 
-        $filters = [];
-        if ($request->has('filter_floors')) {
-            $filters['filter_floors'] = $request->input('filter_floors');
-        }
-        if ($request->has('filter_unit')) {
-            $filters['filter_unit'] = Str::of($request->input('filter_unit'))->upper()->trim();
-        }
-        if ($request->has('filter_customer')) {
-            $filters['filter_customer'] = trim($request->input('filter_customer'));
-        }
-        if ($request->has('filter_dealer')) {
-            $filters['filter_dealer'] = trim($request->input('filter_dealer'));
-        }
-        if ($request->has('filter_sale_source')) {
-            $filters['filter_sale_source'] = trim($request->input('filter_sale_source'));
-        }
-        if ($request->has('filter_sale_source')) {
-            $filters['filter_sale_source'] = trim($request->input('filter_sale_source'));
-        }
-        if ($request->has('filter_type')) {
-            $filters['filter_type'] = trim($request->input('filter_type'));
-        }
-        if ($request->has('filter_generated_from') && $request->has('filter_generated_to')) {
-            $filters['filter_generated_from'] = trim($request->input('filter_generated_from'));
-            $filters['filter_generated_to'] = trim($request->input('filter_generated_to'));
-        }
-        if ($request->has('filter_approved_from') && $request->has('filter_approved_to')) {
-            $filters['filter_approved_from'] = trim($request->input('filter_approved_from'));
-            $filters['filter_approved_to'] = trim($request->input('filter_approved_to'));
-        }
-
-        $dataTable = $this->accountRecevoryInterface->generateDataTable($site_id, $filters);
-        return DataTables::of($dataTable)->make(true);
+        
     }
 
     public function getFilteredUnitData(Request $request)

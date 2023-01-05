@@ -151,7 +151,6 @@ class ReceiptService implements ReceiptInterface
                             changeImageDirectoryPermission();
                         }
                     }
-                    dd($data[$i]);
                     if ($data[$i]['mode_of_payment'] != 'Other') {
                         $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
                     } else {

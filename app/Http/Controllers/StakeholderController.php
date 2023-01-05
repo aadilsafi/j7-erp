@@ -116,7 +116,7 @@ class StakeholderController extends Controller
                     $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
                     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
                 } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
                 }
             } else {
                 abort(403);
@@ -216,7 +216,7 @@ class StakeholderController extends Controller
                 $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
                 return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
                 } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
                 }
             } else {
                 abort(403);

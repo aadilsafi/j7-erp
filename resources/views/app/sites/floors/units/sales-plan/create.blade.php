@@ -944,6 +944,7 @@
             return parseFloat(number.toString().replace(/,/g, ''));
         }
 
+        hideBlockUI('#create-sales-plan-form');
 
         var validator = $("#create-sales-plan-form").validate({
             // debug: true,

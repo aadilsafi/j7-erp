@@ -148,7 +148,7 @@
         var selected_city_id = 0;
 
         function getData(unit_id) {
-            showBlockUI('#rebate');
+            showBlockUI('#rebateForm');
             if (unit_id > 0) {
                 var _token = '{{ csrf_token() }}';
                 let url =
@@ -267,9 +267,9 @@
                             $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan
                                     .down_payment_total)
                                 .toLocaleString());
-                            hideBlockUI('#rebate');
+                            hideBlockUI('#rebateForm');
                         } else {
-                            hideBlockUI('#rebate');
+                            hideBlockUI('#rebateForm');
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
@@ -278,13 +278,13 @@
                         }
                     },
                     error: function(error) {
-                        hideBlockUI('#rebate');
+                        hideBlockUI('#rebateForm');
                         console.log(error);
                     }
                 });
             } else {
                 $('.hideDiv').hide();
-                hideBlockUI('#rebate');
+                hideBlockUI('#rebateForm');
 
             }
 
@@ -292,7 +292,7 @@
 
         $(document).on('blur', '#rebate_percentage', function() {
 
-            showBlockUI('#rebate');
+            showBlockUI('#rebateForm');
             let rebate_percentage_value = $('#rebate_percentage').val();
 
             if ($.isNumeric(rebate_percentage_value) && rebate_percentage_value > 0 && rebate_percentage_value <=
@@ -330,7 +330,7 @@
 
             window.setTimeout(function() {
                 // do whatever you want to do
-                hideBlockUI('#rebate');
+                hideBlockUI('#rebateForm');
             }, 700);
         });
 
@@ -343,7 +343,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
 
-            showBlockUI('#stakeholders_card');
+            showBlockUI('#rebateForm');
 
             let stakeholder_id = $(this).val();
 
@@ -610,11 +610,11 @@
 
 
                     }
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('#stakeholders_card');
+                    hideBlockUI('#rebateForm');
                 }
             });
         });
@@ -935,7 +935,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#rebateForm');
             let bankData = {
                 id: 0,
                 name: '',
@@ -967,7 +967,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#rebateForm');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -978,11 +978,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#rebateForm');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#rebateForm');
                 }
             });
         });

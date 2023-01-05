@@ -244,12 +244,12 @@ class ReceiptService implements ReceiptInterface
                         $transaction = $this->financialTransactionInterface->makeReceiptOtherTransaction($receipt->id);
                     }
 
-                    if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
-                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
-                            changeImageDirectoryPermission();
-                        }
-                    }
+                    // if (isset($requested_data['attachment'])) {
+                    //     for($i=0; $i<count($requested_data['attachment']); $i++){
+                    //         $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                    //         changeImageDirectoryPermission();
+                    //     }
+                    // }
                     // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);
                 }

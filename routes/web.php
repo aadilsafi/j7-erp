@@ -1007,6 +1007,8 @@ Route::group([
         Route::post('ajax-get-states/{countryId}', [StateController::class, 'getStates'])->name('ajax-get-states');
         Route::post('ajax-get-stakeholder_types/{stakeholderId}', [PaymentVocuherController::class, 'stakeholder_types'])->name('ajax-get-stakeholder_types');
 
+        Route::get('ajax-recovery-sales-plans', [AccountsRecoveryController::class, 'salesPlanDataTable'])->name('ajax-recovery-sales-plans');
+
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {
             Route::get('cities', [CountryController::class, 'getCities'])->name('cities');

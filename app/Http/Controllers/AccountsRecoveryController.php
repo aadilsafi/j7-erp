@@ -256,7 +256,7 @@ class AccountsRecoveryController extends Controller
         return view('app.sites.accounts.recovery.sales-plan', $data);
     }
 
-    public function salesPlanDataTable(Request $request, $site_id)
+    public function salesPlanDataTable(Request $request)
     {
         return 1;
         try{

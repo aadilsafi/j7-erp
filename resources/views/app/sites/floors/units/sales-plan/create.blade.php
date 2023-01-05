@@ -932,6 +932,7 @@
         );
 
         function updateTable() {
+            hideBlockUI('#create-sales-plan-form');
             clearTimeout(t);
             t = setTimeout(calculateInstallments, 1500, 1);
         }

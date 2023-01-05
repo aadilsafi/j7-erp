@@ -89,7 +89,7 @@
                             No</label>
                         <input type="text" class="form-control form-control-lg" id="sales_source_contact_no"
                             name="sales_source_contact_no" placeholder="Contact No"
-                            value="{{ Auth::user()->phone_no }}" disabled />
+                            value="{{ Auth::user()->contact }}" disabled />
 
                     </div>
 

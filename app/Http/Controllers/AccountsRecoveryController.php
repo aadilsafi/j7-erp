@@ -194,9 +194,15 @@ class AccountsRecoveryController extends Controller
         if (request()->ajax()) {
             // Installments wise (1st, 2nd ...etc)
 
-            // Expenses wise
+        // dd($data);
 
+        return view('app.sites.accounts.recovery.sales-plan', $data);
+    }
 
+    public function salesPlanDataTable(Request $request)
+    {
+        $site_id = encryptParams(1);
+        try{
             $filters = [];
             if ($request->has('filter_floors')) {
                 $filters['filter_floors'] = $request->input('filter_floors');
@@ -227,9 +233,15 @@ class AccountsRecoveryController extends Controller
                 $filters['filter_approved_from'] = trim($request->input('filter_approved_from'));
                 $filters['filter_approved_to'] = trim($request->input('filter_approved_to'));
             }
-
+    
             $dataTable = $this->accountRecevoryInterface->generateDataTable($site_id, $filters);
             return DataTables::of($dataTable)->make(true);
+        }catch(\Exception $e){
+            return [
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
         }
 
         $salesPlans = (new SalesPlan())->with(['installments'])->where(['status' => 1])->get();
@@ -252,7 +264,6 @@ class AccountsRecoveryController extends Controller
 
         return view('app.sites.accounts.recovery.sales-plan', $data);
     }
-
 
     public function getFilteredUnitData(Request $request)
     {

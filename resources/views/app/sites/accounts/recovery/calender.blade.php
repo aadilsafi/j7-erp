@@ -211,7 +211,7 @@
                 //     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
                 // },
                 events: JSON.parse('{!! $events !!}'),
-                // eventColor: '#7367f0',
+                eventColor: '#7367f0',
                 eventClick: function(info) {
                     $('#add-new-sidebar').modal('show');
                     $('#title').val(info.event.title);

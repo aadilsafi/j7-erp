@@ -204,6 +204,7 @@
                     center: " title",
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
+                dayMaxEventRows: 3,
                 contentHeight: 600,
                 displayEventTime:true,
                 // footerToolbar: {

@@ -258,6 +258,7 @@ class AccountsRecoveryController extends Controller
 
     public function salesPlanDataTable(Request $request, $site_id)
     {
+        return 1;
         try{
             $filters = [];
             if ($request->has('filter_floors')) {

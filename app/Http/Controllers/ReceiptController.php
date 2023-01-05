@@ -93,7 +93,7 @@ class ReceiptController extends Controller
         ]);
 
         $validator->validate();
-        // try {
+        try {
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
@@ -108,9 +108,9 @@ class ReceiptController extends Controller
             } else {
                 abort(403);
             }
-        // } catch (Exception $ex) {
-        //     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
-        // }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
+        }
     }
 
     /**

@@ -364,7 +364,7 @@
                         class="text-danger">*</span></label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError optional_contact @error('office_contact') is-invalid @enderror"
-                    id="office_contact" name="individual[office_contact]" placeholder="" required
+                    id="office_contact" name="individual[office_contact]" placeholder=""
                     value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('individual.office_contact') }}" />
                 @error('individual.office_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>

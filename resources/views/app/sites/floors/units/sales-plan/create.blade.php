@@ -308,7 +308,7 @@
                 containerCssClass: "select-lg",
             }).on("change", function(e) {
 
-                showBlockUI('#stakeholders_card');
+                showBlockUI('#create-sales-plan-form');
 
                 let stakeholder_id = $(this).val();
 
@@ -400,7 +400,7 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                
+
                                 $('#is_local').prop("checked", stakeholderData.is_local);
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
@@ -562,11 +562,11 @@
 
 
                         }
-                        hideBlockUI('#stakeholders_card');
+                        hideBlockUI('#create-sales-plan-form');
                     },
                     error: function(errors) {
                         console.error(errors);
-                        hideBlockUI('#stakeholders_card');
+                        hideBlockUI('#create-sales-plan-form');
                     }
                 });
             });
@@ -803,7 +803,7 @@
 
         function calculateInstallments(action = '') {
 
-            showBlockUI('#installments_acard');
+            showBlockUI('#create-sales-plan-form');
 
             let unitDownPayment = conventToFloatNumber($('#unit_downpayment_total').val()).toFixed(2);
             let unit_rate_total = conventToFloatNumber($('#unit_rate_total').val()).toFixed(2);
@@ -843,7 +843,7 @@
                             $('#installments_table tbody#dynamic_installment_rows').html(InstallmentRows);
                             InstallmentRows = '';
 
-                            showBlockUI('#additional_expense_card');
+                            showBlockUI('#create-sales-plan-form');
                             lastInstallemtDate = response.data.installments[response.data.installments.length -
                                     2]
                                 .date;
@@ -852,7 +852,7 @@
                                 defaultDate: lastInstallemtDate,
                                 minDate: lastInstallemtDate,
                             });
-                            hideBlockUI('#additional_expense_card');
+                            hideBlockUI('#create-sales-plan-form');
 
                             $('#base-installment').val(response.data.baseInstallmentTotal);
                         } else {
@@ -863,11 +863,11 @@
                                 });
                             }
                         }
-                        hideBlockUI('#installments_acard');
+                        hideBlockUI('#create-sales-plan-form');
                     },
                     error: function(errors) {
                         console.error(errors);
-                        hideBlockUI('#installments_acard');
+                        hideBlockUI('#create-sales-plan-form');
                     }
                 });
             }

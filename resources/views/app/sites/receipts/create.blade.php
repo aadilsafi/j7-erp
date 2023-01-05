@@ -772,7 +772,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#loader');
             let bankData = {
                 id: 0,
                 name: '',
@@ -804,7 +804,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#loader');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -815,11 +815,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 }
             });
         });

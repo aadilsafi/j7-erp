@@ -78,7 +78,7 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                     <label class="form-label fs-5" for="unit_price">Unit Price (Rs)<span
                                             class="text-danger">*</span></label>
-                                    <input type="number" min="0" class="form-control form-control-lg"
+                                    <input type="number" step="0.01" class="form-control form-control-lg"
                                         id="unit_price" name="unit[price][unit]" placeholder="Unit Price"
                                         value="" />
                                 </div>
@@ -99,7 +99,7 @@
 
                                     @php
                                         $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                        
+
                                         $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                     @endphp
 
@@ -117,7 +117,7 @@
                                                 (%)
                                             </label>
 
-                                            <input type="number" min="0" max="100" step="0.1"
+                                            <input type="number"  step="0.01"
                                                 class="form-control form-control-lg additional-cost-percentage"
                                                 id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"

@@ -204,6 +204,7 @@
                     center: " title",
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
+                aspectRatio: 2,
                 displayEventTime:true,
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",

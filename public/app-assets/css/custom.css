@@ -86,3 +86,7 @@
     width: 18px;
     height: auto;
 }
+
+.bi-clipboard-data{
+    font-size: 0.45rem !important;
+}

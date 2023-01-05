@@ -305,9 +305,11 @@
                 rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
                 let unit_total = parseFloat($('#sales_plan_total').val());
+                    console.log('total price : ' +unit_total)
+                    console.log('rebate percentage : ' +rebate_percentage)
 
                 let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
-
+                    console.log('rebate value : ' +rebate_value)
                 $('#td_rebate').html(rebate_percentage + '%');
 
                 $('#td_rebate_value').html(rebate_value.toLocaleString());

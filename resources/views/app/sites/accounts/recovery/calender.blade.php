@@ -206,7 +206,7 @@
                 },
                 dayMaxEventRows: 3,
                 contentHeight: 600,
-                displayEventTime:true,
+                displayEventTime: true,
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",
                 //     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
@@ -259,7 +259,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -316,7 +317,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -372,7 +374,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -428,7 +431,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -484,7 +488,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -540,7 +545,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');

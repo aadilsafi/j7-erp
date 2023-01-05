@@ -29,7 +29,7 @@ use Redirect;
 class ReceiptController extends Controller
 {
 
-    private $receiptInterface;
+    private $receiptInterface,$customFieldInterface;
 
     public function __construct(
         ReceiptInterface $receiptInterface,
@@ -123,8 +123,7 @@ class ReceiptController extends Controller
     {
         $site = (new Site())->find(decryptParams($site_id));
         $receipt = (new Receipt())->find(decryptParams($id));
-        $image = $receipt->getFirstMediaUrl('receipt_attachments');
-
+        $images = $receipt->getMedia('receipt_attachments');
         $installmentNumbersArray = json_decode($receipt->installment_number);
 
         $lastInstallment = array_pop($installmentNumbersArray);
@@ -146,7 +145,7 @@ class ReceiptController extends Controller
         return view('app.sites.receipts.preview', [
             'site' => $site,
             'receipt' => $receipt,
-            'image' => $image,
+            'images' => $images,
             'unit_data' => $unit_data,
             'paid_installments' => $paid_installments,
             'unpaid_installments' => $unpaid_installments,

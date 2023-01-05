@@ -147,7 +147,10 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
+                        for($i=0; $i<count($requested_data['attachment']); $i++){
+                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
                     }
 
                     if ($data[$i]['mode_of_payment'] != 'Other') {
@@ -243,8 +246,10 @@ class ReceiptService implements ReceiptInterface
                     }
 
                     if (isset($requested_data['attachment'])) {
-                        $receipt->addMedia($requested_data['attachment'])->toMediaCollection('receipt_attachments');
-                        changeImageDirectoryPermission();
+                        for($i=0; $i<count($requested_data['attachment']); $i++){
+                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                            changeImageDirectoryPermission();
+                        }
                     }
                     // dd($transaction);
                     $update_installments =  $this->updateInstallments($receipt);

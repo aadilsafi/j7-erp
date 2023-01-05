@@ -231,7 +231,7 @@
                         <div class="col-lg-3 col-md-3 col-ms-12">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input disabled id="attachment" type="file"
-                                class="filepond @error('attachment') is-invalid @enderror" name="attachment"
+                                class="filepond @error('attachment') is-invalid @enderror" name="attachment[]"
                                 accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -379,11 +379,13 @@
         );
 
         var files = [];
-        @if ($image != '')
+
+        @forelse($images as $image)
             files.push({
-                source: '{{ $image }}',
+                source: '{{ $image->getUrl() }}',
             });
-        @endif
+        @empty
+        @endforelse
 
         FilePond.create(document.getElementById('attachment'), {
             files: files,

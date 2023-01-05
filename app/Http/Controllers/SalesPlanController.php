@@ -33,7 +33,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalesPlanController extends Controller
 {
-    private $salesPlanInterface, $additionalCostInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface;
+    private $salesPlanInterface, $additionalCostInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface,$customFieldInterface;
 
     public function __construct(
         SalesPlanInterface $salesPlanInterface,
@@ -402,7 +402,7 @@ class SalesPlanController extends Controller
             $ntn = $stakeholder->ntn;
             $reg_no = $stakeholder->cnic;
             $strn = $stakeholder->strn;
-            $mobile_contact = $stakeholder->mobile_contact;
+            $mobile_contact = $stakeholder->office_contact;
             $industry = $stakeholder->industry;
 
             if (

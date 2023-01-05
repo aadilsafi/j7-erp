@@ -548,6 +548,9 @@
                 ajax: {
                     url: '{{ route('sites.accounts.recovery.salesPlan', ['site_id' => ':site_id']) }}'
                         .replace(':site_id', "{{ encryptParams($site_id) }}"),
+                        data: {
+                            ajax: true,
+                        },
 
                 },
                 "language": {

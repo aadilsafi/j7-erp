@@ -204,13 +204,15 @@
                     center: " title",
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
-                displayEventTime:true,
+                dayMaxEventRows: 3,
+                contentHeight: 600,
+                displayEventTime: true,
                 // footerToolbar: {
                 //     start: "prevYear,prev,next,nextYear, title",
                 //     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth,today",
                 // },
                 events: JSON.parse('{!! $events !!}'),
-                // eventColor: '#7367f0',
+                eventColor: '#7367f0',
                 eventClick: function(info) {
                     $('#add-new-sidebar').modal('show');
                     $('#title').val(info.event.title);
@@ -221,7 +223,9 @@
                 }
 
             });
+
             calendar.render();
+
         });
     </script>
 
@@ -255,7 +259,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -312,7 +317,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -368,7 +374,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -424,7 +431,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -480,7 +488,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');
@@ -536,7 +545,8 @@
                                 center: " title",
                                 end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                             },
-
+                            dayMaxEventRows: 3,
+                            contentHeight: 600,
                             events: response.events,
                             eventClick: function(info) {
                                 $('#add-new-sidebar').modal('show');

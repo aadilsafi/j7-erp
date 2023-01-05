@@ -67,7 +67,6 @@ class AccountRecevoryService implements AccountRecevoryInterface
                 }
                 return $installmentWithNewKeys;
             })->toArray(), 'array_merge', array());
-            dd($data['installments']);
             return $data;
         });
         return $dataTable;

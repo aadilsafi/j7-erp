@@ -68,7 +68,7 @@ class AccountsRecoveryController extends Controller
             foreach ($salesPlans->unPaidInstallments as $unPaidInstallments) {
                 $events[] = [
                     'id' => $unPaidInstallments->id,
-                    'title' => $salesPlans->unit->name . ' ' . $unPaidInstallments->details . ' ( ' . number_format($unPaidInstallments->amount) . ' ) ',
+                    'title' => $salesPlans->unit->name . ' ' . $unPaidInstallments->details,
                     'paid_amount' => number_format($unPaidInstallments->paid_amount),
                     'remaining_amount' => number_format($unPaidInstallments->remaining_amount),
                     'amount' => number_format($unPaidInstallments->amount),
@@ -192,7 +192,6 @@ class AccountsRecoveryController extends Controller
     public function salesPlan(Request $request, $site_id)
     {
         if (request()->ajax()) {
-
             // Installments wise (1st, 2nd ...etc)
 
             // Expenses wise
@@ -250,8 +249,6 @@ class AccountsRecoveryController extends Controller
             'users' => $this->userInterface->getByAll(decryptParams($site_id)),
             'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id))
         ];
-
-        // dd($data);
 
         return view('app.sites.accounts.recovery.sales-plan', $data);
     }

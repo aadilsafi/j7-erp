@@ -540,7 +540,7 @@
                 processing: true,
 
                 select: true,
-                serverSide: true,
+                // serverSide: true,
                 scrollX: true,
                 debug: true,
                 dom: 'lrtipC',

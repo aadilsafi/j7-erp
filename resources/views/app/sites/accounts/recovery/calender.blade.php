@@ -223,7 +223,7 @@
                 }
 
             });
-
+            calendar.setOption('aspectRatio', 1.8);
             calendar.render();
 
         });

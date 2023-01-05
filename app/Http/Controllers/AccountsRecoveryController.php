@@ -251,8 +251,6 @@ class AccountsRecoveryController extends Controller
             'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id))
         ];
 
-        dd($data);
-
         return view('app.sites.accounts.recovery.sales-plan', $data);
     }
 

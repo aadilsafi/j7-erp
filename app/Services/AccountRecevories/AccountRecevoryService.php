@@ -58,6 +58,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
         }
 
         $salesPlans = $salesPlans->get();
+        dd($salesPlans);
         $dataTable = collect($salesPlans)->transform(function ($salesPlan) use ($site_id) {
             $data['sales_plan'] = $salesPlan;
             $data['installments'] = array_reduce(collect($salesPlan->installments->where('type', 'installment'))->transform(function ($installment) {
@@ -69,7 +70,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
             })->toArray(), 'array_merge', array());
             return $data;
         });
-
+        dd($dataTable);
         return $dataTable;
     }
 }

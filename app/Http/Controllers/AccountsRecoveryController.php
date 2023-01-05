@@ -68,7 +68,7 @@ class AccountsRecoveryController extends Controller
             foreach ($salesPlans->unPaidInstallments as $unPaidInstallments) {
                 $events[] = [
                     'id' => $unPaidInstallments->id,
-                    'title' => $salesPlans->unit->name . ' ' . $unPaidInstallments->details . ' ( ' . number_format($unPaidInstallments->amount) . ' ) ',
+                    'title' => $salesPlans->unit->name . ' ' . $unPaidInstallments->details,
                     'paid_amount' => number_format($unPaidInstallments->paid_amount),
                     'remaining_amount' => number_format($unPaidInstallments->remaining_amount),
                     'amount' => number_format($unPaidInstallments->amount),
@@ -191,24 +191,8 @@ class AccountsRecoveryController extends Controller
 
     public function salesPlan(Request $request, $site_id)
     {
-
-        $salesPlans = (new SalesPlan())->with(['installments'])->where(['status' => 1])->get();
-
-        $maxInstallments = collect($salesPlans)->transform(function ($salesPlan) {
-            return $salesPlan->installments->where('type', 'installment')->count();
-        })->max();
-
-        $data = [
-            'site_id' => decryptParams($site_id),
-            'salesPlans' => $salesPlans,
-            'max_installments' => is_null($maxInstallments) ? 1 : $maxInstallments,
-            'floors' => $this->floorInterface->getByAll($site_id),
-            'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
-                'stakeholder_types'
-            ]),
-            'users' => $this->userInterface->getByAll(decryptParams($site_id)),
-            'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id))
-        ];
+        if (request()->ajax()) {
+            // Installments wise (1st, 2nd ...etc)
 
         // dd($data);
 
@@ -260,7 +244,25 @@ class AccountsRecoveryController extends Controller
             ];
         }
 
-        
+        $salesPlans = (new SalesPlan())->with(['installments'])->where(['status' => 1])->get();
+
+        $maxInstallments = collect($salesPlans)->transform(function ($salesPlan) {
+            return $salesPlan->installments->where('type', 'installment')->count();
+        })->max();
+
+        $data = [
+            'site_id' => decryptParams($site_id),
+            'salesPlans' => $salesPlans,
+            'max_installments' => is_null($maxInstallments) ? 1 : $maxInstallments,
+            'floors' => $this->floorInterface->getByAll($site_id),
+            'stakeholders' => $this->stakeholderInterface->getByAllWith(decryptParams($site_id), [
+                'stakeholder_types'
+            ]),
+            'users' => $this->userInterface->getByAll(decryptParams($site_id)),
+            'types' => $this->unitTypeInterface->getAllWithTree(decryptParams($site_id))
+        ];
+
+        return view('app.sites.accounts.recovery.sales-plan', $data);
     }
 
     public function getFilteredUnitData(Request $request)

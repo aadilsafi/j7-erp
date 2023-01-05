@@ -146,12 +146,11 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
-                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                        for($j=0; $j<count($requested_data['attachment']); $j++){
+                            $receipt->addMedia($requested_data['attachment'][$j])->toMediaCollection('receipt_attachments');
                             changeImageDirectoryPermission();
                         }
                     }
-
                     if ($data[$i]['mode_of_payment'] != 'Other') {
                         $remaining_amount = str_replace(',', '', $requested_data['amount_received']) - str_replace(',', '', $data[$i]['amount_in_numbers']);
                     } else {

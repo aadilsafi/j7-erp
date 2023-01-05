@@ -90,3 +90,6 @@
 .bi-clipboard-data{
     font-size: 0.45rem !important;
 }
+.bi::before, [class^="bi-"]::before, [class*=" bi-"]::before {
+    font-size: 1.4rem;
+}

@@ -163,7 +163,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <label class="form-label fs-5" style="font-size: 15px" for="role_id">Role <span
                 class="text-danger">*</span></label>
-        <select class="form-select form-select-lg" id="role_id" name="role_id[]" multiple="multiple"
+        <select class="form-select select2 form-select-lg" id="role_id" name="role_id[]" multiple="multiple"
             placeholder="Select Roles">
             <option disabled>Select Role</option>
             @foreach ($roles as $key => $value)

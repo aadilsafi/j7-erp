@@ -146,8 +146,8 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
-                            $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
+                        for($j=0; $j<count($requested_data['attachment']); $j++){
+                            $receipt->addMedia($requested_data['attachment'][$j])->toMediaCollection('receipt_attachments');
                             changeImageDirectoryPermission();
                         }
                     }

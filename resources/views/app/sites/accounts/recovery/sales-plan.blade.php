@@ -247,9 +247,6 @@
 
 @section('page-js')
 
-@endsection
-
-@section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
 
@@ -531,8 +528,6 @@
                     }
                 });
             var salesPlanDataTable = $(".dt-complex-header").DataTable({
-                processing: true,
-                serverSide: true,
                 scrollX: true,
                 dom: 'lrtipC',
                

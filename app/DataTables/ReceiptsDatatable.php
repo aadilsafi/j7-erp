@@ -182,7 +182,7 @@ class ReceiptsDatatable extends DataTable
             ->rowGroupDataSrc('unit_id')
 
             ->orders([
-                [0, 'desc'],
+                [1, 'desc'],
                 // [4, 'desc'],
             ]);
 

@@ -66,20 +66,19 @@
     <a href="#" id="btn">Print</a>
 
     <table style="width:100%;" class="template">
-        <tr>
+        <tr class="d-flex align-items-center">
             <th style="width:33%; text-align:start;">
                 <br>
-                <img width="60%" height="50px" src="{{ asset('app-assets') }}/images/logo/j7global-logo.png"
+                <img width="60%" height="" src="{{ asset('app-assets') }}/images/logo/j7global-logo.png"
                     alt="logo">
             </th>
             <th style="width:33%; ">
                 <h1>Sales Plan</h1>
+                Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
             </th>
             <th  style="width:33%; text-align:end;">
-                <img width="70px" height="70px" src="{{ $data['qrCodeimg']}}"
+                <img width="70px" height="" src="{{ $data['qrCodeimg']}}"
                     alt="qr code">
-                <br>
-                Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
             </th>
         </tr>
     </table>

@@ -230,6 +230,7 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'updated',
+            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
     }
@@ -280,9 +281,13 @@ class SalesPlanController extends Controller
 
         $template = SalesPlanTemplate::find(decryptParams($tempalte_id));
 
-        $role = Auth::user()->roles->pluck('name');
-
-        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        $role = $salesPlan->user->roles->pluck('name');
+        if ($template->id == 1) {
+            $qrCodeName = 'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        } else {
+            $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+        }
+        $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $qrCodeName;
         $data = [
             'unit_no' => $salesPlan->unit->floor_unit_number,
             'floor_short_label' => $salesPlan->unit->floor->short_label,
@@ -295,10 +300,10 @@ class SalesPlanController extends Controller
             'discount_percentage' => $salesPlan->discount_percentage,
             'discount_total' =>  $salesPlan->discount_total,
             'total' => $salesPlan->total_price,
-            'sales_person_name' => Auth::user()->name,
+            'sales_person_name' => $salesPlan->user->name,
             'sales_person_contact' => $salesPlan->stakeholder->contact,
             'sales_person_status' => $role[0],
-            'sales_person_phone_no' => Auth::user()->phone_no,
+            'sales_person_phone_no' => $salesPlan->user->phone_no,
             'sales_person_sales_type' => $salesPlan->sales_type,
             'indirect_source' => $salesPlan->indirect_source,
             'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
@@ -306,6 +311,9 @@ class SalesPlanController extends Controller
             'validity' =>  $salesPlan->validity,
             'contact' => $salesPlan->stakeholder->contact,
             'amount' => $salesPlan->total_price,
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
+            'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
+            'paid_amount' => $salesPlan->installments->sum('paid_amount'),
             'qrCodeimg' => $qrCodeimg,
         ];
 
@@ -389,8 +397,7 @@ class SalesPlanController extends Controller
                     'url' =>  route('sites.stakeholders.edit', ['site_id' => encryptParams(1), 'id' => encryptParams($stakeholder->id)]),
                 ], 200);
             }
-        }
-        elseif($stakeholder->stakeholder_as == 'c') {
+        } elseif ($stakeholder->stakeholder_as == 'c') {
 
             $company_name = $stakeholder->full_name;
             $ntn = $stakeholder->ntn;
@@ -421,8 +428,7 @@ class SalesPlanController extends Controller
                 isset($mailing_postal_code) &&
                 isset($mailing_address)
 
-            )
-            {
+            ) {
                 return response()->json([
                     'success' => true,
                 ], 200);

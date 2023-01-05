@@ -219,9 +219,9 @@ class ReceiptsDatatable extends DataTable
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         $columns = [
-            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap')->orderable(false)->searchable(true),
+            Column::make('serial_no')->title('Serial No#')->addClass('text-nowrap')->orderable(false)->searchable(true),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('Identity Number')->addClass('text-nowrap'),
+            Column::make('cnic')->title('Identity No#')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),
             Column::make('discounted_amount')->title('Discounted Amount')->addClass('text-nowrap'),
             Column::make('amount_in_numbers')->title('Paid Amount')->addClass('text-nowrap'),

@@ -99,6 +99,7 @@ class store extends FormRequest
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
                 $modeOfPayment = $this->input('receipts.*.mode_of_payment');
+                $discount = str_replace(',', '', $this->input('discounted_amount'));
                 $attachment = $this->attachment;
                 $amount_received = $this->input('amount_received');
                 $amount_in_numbers = $this->input('receipts.*.amount_in_numbers');
@@ -107,6 +108,10 @@ class store extends FormRequest
                 }
                 $amount_in_numbers = (float)str_replace(',', '', $amount_in_numbers[0]);
                 $amount_received = (float)str_replace(',', '', $amount_received);
+
+                if(isset($discount) && (float)$discount > 0){
+                    $amount_in_numbers = (float)$amount_in_numbers + (float)$discount;
+                }
 
                 if ($amount_in_numbers >  $amount_received) {
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');

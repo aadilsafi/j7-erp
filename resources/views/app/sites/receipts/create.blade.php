@@ -421,7 +421,7 @@
             if ($.isNumeric(amount) && amount > 0) {
 
                 var unit_id = $(this).attr('unit_id');
-                var discounted_amount = $('#discounted_amount').val();
+                var discounted_amount = $('#discounted_amount').val().replace(/,/g, "");
                 if (discounted_amount > 0) {
                     amount = parseFloat(amount) + parseFloat(discounted_amount);
                 }

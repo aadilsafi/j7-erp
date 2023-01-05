@@ -264,5 +264,35 @@ class StakeholderController extends Controller
         }
     }
 
+    public function authorizeStakeholder(Request $request, $file_name)
+    {
+        $file_name = decryptParams($file_name);
+        $id = explode('.', $file_name);
+        $id = explode('-', $id[0]);
+        $stakeholder_id = $id[count($id) - 1];
 
+        $data = [
+            'file_name' => encryptParams($file_name),
+            'stakeholder_id' => encryptParams($stakeholder_id),
+        ];
+        return view('app.sites.stakeholders.authorize', $data);
+    }
+
+    public function verifyPin(Request $request, $file_name, $stakeholder_id)
+    {
+        $file_name = decryptParams($file_name);
+        $stakeholder_id = decryptParams($stakeholder_id);
+        $stakeholder = Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists();
+        if ($stakeholder) {
+            return apiSuccessResponse($file_name);
+        } else {
+            return response()->json(
+                [
+                    'status' => false,
+                    'message' => 'Pin code is not correct',
+                ],
+                500
+            );
+        }
+    }
 }

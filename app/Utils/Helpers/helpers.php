@@ -1085,13 +1085,20 @@ if (!function_exists('getTypeAncesstorData')) {
 if (!function_exists('createRandomAlphaNumericCode')) {
     function createRandomAlphaNumericCode()
     {
-        $alphabet = '1234567890abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $numerics = '0123456789';
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 8; $i++) {
+        $numericLength = strlen($numerics) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 5; $i++) {
+            $n = rand(0, $numericLength);
+            $pass[] = $numerics[$n];
+        }
+        for ($i = 0; $i < 3; $i++) {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
-        return implode($pass); //turn the array into a string
+        $code = implode($pass); //turn the array into a string
+        return str_shuffle($code);
     }
 }

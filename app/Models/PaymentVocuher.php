@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class PaymentVocuher extends Model
 {
-    use HasFactory,LogsActivity;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'site_id',
@@ -66,4 +66,16 @@ class PaymentVocuher extends Model
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
+    public function vendorStackholder()
+    {
+        return $this->belongsTo(Stackholder::class, 'vender_id');
+    }
+    public function dealerStackholder()
+    {
+        return $this->belongsTo(Stackholder::class, 'dealer_id');
+    }
+    public function customerStackholder()
+    {
+        return $this->belongsTo(Stackholder::class, 'customer_id');
+    }
 }

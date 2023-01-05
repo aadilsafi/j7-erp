@@ -175,7 +175,7 @@
 
                         <div class="row mb-1">
                             <div class="col-lg-6 col-md-6 col-sm-12 position-relative">
-                                <label class="form-label fs-5" for="stackholder_address">Address</label>
+                                <label class="form-label fs-5" for="stackholder_address">Residential Address</label>
                                 <textarea class="form-control  form-control-lg" readonly id="stackholder_address" placeholder="Address"
                                     rows="5"></textarea>
                             </div>

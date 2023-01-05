@@ -130,6 +130,14 @@
                     @endif
                 </a>
             </li>
+            <li class="nav-item d-block">
+                <a href="{{ route('batches.clear-all') }}" class="nav-link" id="queueLoadingTopbarIcon clear-all-queues-button" onclick="toggleAccordian()">
+                    @if ($batches->count() > 0)
+                    <i data-feather='x-circle'></i>
+                    Clear all
+                    @endif
+                </a>
+            </li>
 
             {{-- <li class="nav-item dropdown dropdown-language d-lg-block">
                 <a class="nav-link dropdown-toggle d-lg-block" id="dropdown-flag" href="#"

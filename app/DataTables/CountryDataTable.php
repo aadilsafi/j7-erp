@@ -40,7 +40,7 @@ class CountryDataTable extends DataTable
             ->addIndexColumn()
 
             ->editColumn('actions', function ($user) {
-                return view('app.sites.countries.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
+                return view('app.sites.countries.actions', ['site_id' => $this->site_id, 'id' => $user->id]);
             })
             ->editColumn('created_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->created_at);
@@ -67,8 +67,8 @@ class CountryDataTable extends DataTable
 
     public function html(): HtmlBuilder
     {
-        $createPermission =  Auth::user()->hasPermissionTo('sites.users.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
+        $createPermission =  Auth::user()->hasPermissionTo('sites.settings.countries.create');
+        $selectedDeletePermission =  0;
 
         return $this->builder()
             ->setTableId('countries-table')
@@ -83,20 +83,20 @@ class CountryDataTable extends DataTable
             ->lengthMenu([20, 30, 50, 70, 100])
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
-                // ($createPermission  ?
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
-                //     :
-                //     Button::raw('delete-selected')
-                //     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
-                //     ->text('<i class="bi bi-plus"></i> Add New')->attr([
-                //         'onclick' => 'addNew()',
-                //     ])
+                ($createPermission  ?
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
+                    :
+                    Button::raw('delete-selected')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light hidden')
+                    ->text('<i class="bi bi-plus"></i> Add New')->attr([
+                        'onclick' => 'addNew()',
+                    ])
 
-                // ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -141,7 +141,7 @@ class CountryDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [2, 'asc'],
+                [6, 'desc'],
             ]);
     }
 
@@ -153,7 +153,7 @@ class CountryDataTable extends DataTable
     protected function getColumns(): array
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.users.destroy-selected');
-        $editPermission =  Auth::user()->hasPermissionTo('sites.users.edit');
+        $editPermission =  Auth::user()->hasPermissionTo('sites.settings.countries.edit');
         return [
             // ($selectedDeletePermission ?
             //     Column::computed('check')->exportable(false)->printable(false)->width(60)
@@ -168,11 +168,11 @@ class CountryDataTable extends DataTable
             Column::make('created_at')->title('Created At'),
             Column::make('updated_at')->title('Updated At'),
 
-            // ($editPermission ?
-            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
-            //     :
-            //     Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
-            // )
+            ($editPermission ?
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')
+                :
+                Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center')->addClass('hidden')
+            )
 
         ];
     }

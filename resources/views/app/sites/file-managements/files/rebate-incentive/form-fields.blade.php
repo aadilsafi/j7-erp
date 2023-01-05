@@ -282,6 +282,8 @@
                                 <th style="vertical-align: middle;" scope="col">%</th>
                             </tr>
                             <input type="hidden" value="" id="unit_total">
+                            <input type="hidden" value="" id="sales_plan_total">
+
                             <input type="hidden" value="" id="rebate_total" name="rebate_total">
                         </thead>
 

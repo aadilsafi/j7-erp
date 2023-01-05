@@ -78,7 +78,7 @@ class AdditionalCostsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         $createPermission =  Auth::user()->hasPermissionTo('sites.additional-costs.create');
-        $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
+        // $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         $importPermission = Auth::user()->hasPermissionTo('sites.additional-costs.importAdcosts');
         return $this->builder()
             ->setTableId('additional-costs-table')
@@ -109,7 +109,7 @@ class AdditionalCostsDataTable extends DataTable
 
                 ),
 
-                ($importPermission ? 
+                ($importPermission ?
                     Button::raw('import')
                     ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light ')
                     ->text('<i data-feather="upload"></i> Import Additional Costs')
@@ -123,7 +123,7 @@ class AdditionalCostsDataTable extends DataTable
                     ->attr([
                         'onclick' => 'Import()',
                     ])
-                    ),
+                ),
 
                 Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                     Button::make('print')->addClass('dropdown-item'),
@@ -134,45 +134,25 @@ class AdditionalCostsDataTable extends DataTable
                 ]),
                 Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
                 Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
-                ($selectedDeletePermission ?
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                    :
-                    Button::raw('delete-selected')
-                    ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
-                    ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-                    ->attr([
-                        'onclick' => 'deleteSelected()',
-                    ])
-                ),
-
-
+                // ($selectedDeletePermission ?
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                //     ->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                //     :
+                //     Button::raw('delete-selected')
+                //     ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light hidden')
+                //     ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                //     ->attr([
+                //         'onclick' => 'deleteSelected()',
+                //     ])
+                // ),
             )
-            ->rowGroupDataSrc('parent_id')
-            ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var additionalCost = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + additionalCost.id + '\" name=\"chkAdditionalCost[]\" id=\"chkAdditionalCost_' + additionalCost.id + '\" /><label class=\"form-check-label\" for=\"chkAdditionalCost_' + additionalCost.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
-            ])
             ->orders([
-                [2, 'asc'],
-                [8, 'desc'],
+                [1, 'asc'],
+                [7, 'desc'],
             ]);
     }
 
@@ -185,11 +165,6 @@ class AdditionalCostsDataTable extends DataTable
     {
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.additional-costs.destroy-selected');
         return [
-            ($selectedDeletePermission ?
-                Column::computed('check')->exportable(false)->printable(false)->width(60)
-                :
-                Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('hidden')
-            ),
             Column::make('name')->title('Additional Cost')->addClass('text-nowrap'),
             Column::make('parent_id')->title('Parent'),
             Column::make('has_child'),

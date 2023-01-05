@@ -4,7 +4,7 @@
     {{-- {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.units.sales-plans.create', encryptParams($site->id), encryptParams($floor->id), encryptParams($unit->id)) }} --}}
 @endsection
 
-@section('page-title', 'Preview Sales Plan')
+@section('page-title', 'Investment Plan Preview')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -73,7 +73,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Preview Sales Plan</h2>
+                <h2 class="content-header-title float-start mb-0">Investment Plan Preview</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.floors.units.sales-plans.initail-sales-plan', $site->id, encryptParams(1), encryptParams(1), encryptParams(1)) }}
                 </div>
@@ -92,42 +92,62 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="card">
-                                <div class="card-header">
-                                    <h3>1. PRIMARY DATA</h3>
+                                <div class="row w-100">
+                                    <div class="col-10">
+                                        <h3>1. PRIMARY DATA</h3>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-lg btn-relief-outline-primary waves-effect waves-float waves-light ms-3"
+                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Print Sales Plan"
+                                            onclick="openTemplatesModal('{{ encryptParams($salePlan->id) }}');">
+                                            <i class="bi bi-printer" style="font-size: 1.1rem" class="m-10"></i>
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <div class="card-body">
                                     <div class="row mb-1">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="unit_no">Unit No</label>
-                                            <input type="text" class="form-control form-control-lg" id="unit_no"
-                                                name="unit[no]" placeholder="Unit No"
-                                                value="{{ $salePlan->unit->floor_unit_number }}" readonly />
-                                        </div>
+                                        <div class="col-10">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
+                                                    <label class="form-label fs-5" for="unit_no">Unit No</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="unit_no" name="unit[no]" placeholder="Unit No"
+                                                        value="{{ $salePlan->unit->floor_unit_number }}" readonly />
+                                                </div>
 
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="floor_no">Floor No</label>
-                                            <input type="text" class="form-control form-control-lg" id="floor_no"
-                                                name="unit[floor_no]" placeholder="Floor No"
-                                                value="{{ $salePlan->unit->floor->short_label }}" readonly />
-                                        </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
+                                                    <label class="form-label fs-5" for="floor_no">Floor No</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="floor_no" name="unit[floor_no]" placeholder="Floor No"
+                                                        value="{{ $salePlan->unit->floor->short_label }}" readonly />
+                                                </div>
 
-                                        <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="unit_type">Unit Type</label>
-                                            <input type="text" class="form-control form-control-lg" id="unit_type"
-                                                name="unit[type]" placeholder="Unit Type"
-                                                value="{{ $salePlan->unit->type->name }}" readonly />
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
+                                                    <label class="form-label fs-5" for="unit_type">Unit Type</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="unit_type" name="unit[type]" placeholder="Unit Type"
+                                                        value="{{ $salePlan->unit->type->name }}" readonly />
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 position-relative mb-1">
+                                                    <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
+                                                    <input type="text" class="form-control form-control-lg"
+                                                        id="unit_size" name="unit[size]" placeholder="Unit Size(sq.ft)"
+                                                        value="{{ number_format($salePlan->unit->gross_area, 2) }}"
+                                                        readonly />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 text-center">
+                                            <div class="mt-2">
+                                                <img width="120px" height="120px" src="{{ $qrCodeimg }}"
+                                                    alt="qr code">
+                                            </div>
+
                                         </div>
                                     </div>
 
-                                    <div class="row mb-2">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="unit_size">Unit Size(sq.ft)</label>
-                                            <input type="text" class="form-control form-control-lg" id="unit_size"
-                                                name="unit[size]" placeholder="Unit Size(sq.ft)"
-                                                value="{{ number_format($salePlan->unit->gross_area,2) }}" readonly />
-                                        </div>
-                                    </div>
 
                                     {{-- PRICING --}}
                                     <div class="row">
@@ -147,7 +167,7 @@
                                                             <input type="text" min="0"
                                                                 class="form-control form-control-lg" id="unit_price"
                                                                 name="unit[price][unit]" placeholder="Unit Price" readonly
-                                                                value="{{ number_format($salePlan->unit_price,2) }}" />
+                                                                value="{{ number_format($salePlan->unit_price, 2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -156,7 +176,7 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="total-price-unit" name="unit[price][total]"
                                                                 placeholder="Amount"
-                                                                value="{{ number_format($salePlan->unit_price * $salePlan->unit->gross_area ,2) }}" />
+                                                                value="{{ number_format($salePlan->unit_price * $salePlan->unit->gross_area, 2) }}" />
                                                         </div>
                                                     </div>
 
@@ -186,7 +206,7 @@
                                                                         id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"
                                                                         placeholder="{{ $additionalCost->name }}"
-                                                                        value="{{ number_format($additionalCost->pivot->percentage,2) }}" />
+                                                                        value="{{ number_format($additionalCost->pivot->percentage, 2) }}" />
 
                                                                 </div>
 
@@ -199,7 +219,8 @@
                                                                         class="form-control form-control-lg additional-cost-total-price"
                                                                         id="total-price-{{ $additionalCost->slug }}-{{ $key }}"
                                                                         name="unit[additional_cost][{{ $additionalCost->slug }}][total]"
-                                                                        readonly placeholder="Amount" value="{{ number_format($additionalCost->pivot->amount,2) }}" />
+                                                                        readonly placeholder="Amount"
+                                                                        value="{{ number_format($additionalCost->pivot->amount, 2) }}" />
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -216,7 +237,7 @@
                                                                 class="form-control form-control-lg"
                                                                 id="percentage-discount" name="unit[discount][percentage]"
                                                                 placeholder="Discount %"
-                                                                value="{{ number_format($salePlan->discount_percentage,2) }}" />
+                                                                value="{{ number_format($salePlan->discount_percentage, 2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -226,7 +247,7 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="total-price-discount"
                                                                 name="unit[discount][total]" placeholder="Discount"
-                                                                value="{{ number_format($salePlan->discount_total,2) }}" />
+                                                                value="{{ number_format($salePlan->discount_total, 2) }}" />
                                                         </div>
                                                     </div>
 
@@ -244,7 +265,7 @@
                                                             <input type="text" class="form-control form-control-lg"
                                                                 id="unit_rate_total" name="unit[grand_total]"
                                                                 placeholder="Total"
-                                                                value="{{ number_format($salePlan->total_price,2) }}"
+                                                                value="{{ number_format($salePlan->total_price, 2) }}"
                                                                 readonly />
                                                         </div>
                                                     </div>
@@ -262,7 +283,7 @@
                                                                 name="unit[downpayment][percentage]"
                                                                 placeholder="Down Payment %" min="0"
                                                                 max="100"
-                                                                value="{{ number_format($salePlan->down_payment_percentage,2) }}" />
+                                                                value="{{ number_format($salePlan->down_payment_percentage, 2) }}" />
                                                         </div>
 
                                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
@@ -271,7 +292,7 @@
                                                                 (Rs)</label>
                                                             <input type="text" class="form-control form-control-lg"
                                                                 readonly id="unit_downpayment_total"
-                                                                value="{{ number_format($salePlan->down_payment_total,2) }}"
+                                                                value="{{ number_format($salePlan->down_payment_total, 2) }}"
                                                                 name="unit[downpayment][total]" placeholder="Amount" />
                                                         </div>
                                                     </div>
@@ -310,9 +331,9 @@
                                                                 <th scope="col">Installments</th>
                                                                 <th scope="col">Due Date</th>
                                                                 <th scope="col">Total Amount</th>
-                                                                <th scope="col">Paid Amount</th>
-                                                                <th scope="col">Remaining Amount</th>
-                                                                <th scope="col">Status</th>
+                                                                {{-- <th scope="col">Paid Amount</th>
+                                                                <th scope="col">Remaining Amount</th> --}}
+                                                                <th scope="col">Remarks</th>
                                                             </tr>
                                                         </thead>
 
@@ -323,12 +344,12 @@
                                                                     <td>{{ $installment->details }}</td>
                                                                     <td>{{ \Carbon\Carbon::parse($installment->date)->format('F j, Y') }}
                                                                     </td>
-                                                                    <td>{{ number_format($installment->amount,2) }}</td>
-                                                                    <td>{{ number_format($installment->paid_amount,2) }}
+                                                                    <td>{{ number_format($installment->amount, 2) }}</td>
+                                                                    {{-- <td>{{ number_format($installment->paid_amount, 2) }}
                                                                     </td>
-                                                                    <td>{{ number_format($installment->remaining_amount,2) }}
-                                                                    </td>
-                                                                    <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
+                                                                    <td>{{ number_format($installment->remaining_amount, 2) }}
+                                                                    </td> --}}
+                                                                    <td>{{ Str::of($installment->remarks)->replace('_', ' ')->title() }}
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -427,6 +448,12 @@
 
 
     </form>
+
+       {{-- Printing Modal --}}
+       @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+        'salesPlanTemplates' => $salesPlanTemplates,
+        'showTemplateType' => 'investment_plan'
+    ])
 @endsection
 
 @section('vendor-js')
@@ -440,6 +467,22 @@
 @endsection
 
 @section('page-js')
+    <script>
+        function openTemplatesModal(sales_plan_id) {
+            $('#sales_plan_id').val(sales_plan_id);
+            $('#modal-sales-plan-template').modal('show');
+        }
+
+        function printSalesPlanTemplate(template_id) {
+            let sales_plan_id = $('#sales_plan_id').val();
+            let url =
+                "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
+                .replace(':sales_plan_id', sales_plan_id)
+                .replace(':id', template_id);
+            window.open(url, '_blank').focus();
+
+        }
+    </script>
 @endsection
 
 @section('custom-js')

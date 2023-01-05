@@ -21,34 +21,37 @@
                     <h1>PAYMENT PLAN</h1>
                 </td>
                 <td class="text-end">
-                    <p>Print Date:{{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</p>
-                    <p>User: {{ Auth::user()->name }}</p>
+                    <img width="90px" height="90px" src="{{ $data['qrCodeimg'] }}" alt="qr code">
+                    <br>
+
                 </td>
             </tr>
         </table>
 
         <table class="table">
             <tr>
-                <td style="border: 0px solid #eee!important;">
-                    <p class="m-0">{{ $data['client_name'] }} Flat No {{ $data['unit_no'] }}</p>
-                    <p class="m-0">Customer ID : 00000084</p>
+                <td style="border: 0px solid #eee!important; text-align:center;">
+                    <p class="m-0"><strong>{{ $data['client_name'] }}</strong> - Flat No :
+                        <strong>{{ $data['unit_no'] }}</strong>
+                    </p>
                     <p class="m-0">Contact #: {{ $data['contact'] }}</p>
-                    <p class="m-0">Plan Effected From:{{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}
+                    <p class="m-0">Plan Effected From:
+                        <strong>{{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}</strong>
                     </p>
                 </td>
-                <td style="border: 1px solid #eee!important;">
+                <td style="border: 1px solid #eee!important; text-align:center;">
                     <p class="m-0">Total Installments : {{ count($data['instalments']) }}</p>
                     <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span>
-                        {{ count($data['instalments']) }} </p>
-                    <p class="m-0">Total Amount : {{ number_format($data['total']) }}</p>
-                    <p class="m-0">Total Paid Amount: - </p>
-                    <p class="m-0"><span class="text-danger fw-bold">Due Amount:</span>
-                        {{ number_format($data['amount']) }}</p>
-                    <p class="m-0">Total Remaining Amount: {{ number_format($data['total']) }}</p>
+                        {{ $data['remaining_installments'] }}
+                    </p>
+                    <p class="m-0">Total Amount : {{ number_format($data['total'], 2) }}</p>
+                    <p class="m-0">Total Paid Amount: - {{ number_format($data['paid_amount'], 2) }}</p>
+
+                    <p class="m-0">Total Remaining Amount: {{ number_format($data['remaing_amount'], 2) }}</p>
                 </td>
-                <td style="border: 1px solid #eee!important;">
+                <td style="border: 1px solid #eee!important; text-align:center;">
                     <p class="m-0">Invoice # : -</p>
-                    <p>Invoice Date : {{ date_format(new DateTime($data['validity']), 'D d-M-Y') }}</p>
+                    <p>Invoice Date : -</p>
                     <p class="m-0">Account # :-</p>
                     <p class="m-0">Sale Voucher # :-</p>
                 </td>
@@ -74,9 +77,9 @@
                         <td class="text-start">{{ $installment->details }}</td>
                         <td> {{ date_format(new DateTime($installment->date), 'd/m/Y') }}</td>
                         <td>{{ number_format($installment->amount) }}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="fw-bold text-success">UnPaid</span></td>
+                        <td> {{ number_format($installment->paid_amount, 2) }}</td>
+                        <td> {{ number_format($installment->remaining_amount, 2) }}</td>
+                        <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}</td>
                     </tr>
                 @endforeach
 

@@ -32,7 +32,7 @@ use Str;
 
 class StakeholderController extends Controller
 {
-    private $stakeholderInterface;
+    private $stakeholderInterface,$customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, CustomFieldInterface $customFieldInterface)
     {
@@ -260,4 +260,6 @@ class StakeholderController extends Controller
             abort(403);
         }
     }
+
+
 }

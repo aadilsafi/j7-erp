@@ -41,7 +41,7 @@ class CustomerUnitsDataTable extends DataTable
             })
             ->editColumn('cnic', function ($unit) {
                 if (isset($unit->salesPlan[0])) {
-                    return cnicFormat($unit->salesPlan[0]['stakeholder']['cnic']);
+                    return ($unit->salesPlan[0]['stakeholder']['cnic']);
                 }
             })
             ->editColumn('contact', function ($unit) {

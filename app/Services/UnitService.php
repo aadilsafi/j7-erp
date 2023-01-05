@@ -143,7 +143,6 @@ class UnitService implements UnitInterface
 
     public function storeInBulk($site_id, $floor_id, $inputs, $isUnitActive = false)
     {
-
         $user = auth()->user();
         $inputs['total_price'] = floatval($inputs['gross_area']) * floatval($inputs['price_sqft']);
 

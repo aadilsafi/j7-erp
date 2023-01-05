@@ -14,7 +14,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
     public function generateDataTable($site_id, $filters = [])
     {
         $salesPlans = (new SalesPlan())->with(['unit', 'unit.floor', 'unit.type', 'stakeholder', 'stakeholder.dealer_stakeholder', 'additionalCosts', 'installments', 'leadSource', 'receipts'])->where(['status' => 1]);
-
+        dd($salesPlans);
         if (count($filters) > 0) {
             if (isset($filters['filter_floors']) && $filters['filter_floors'] > 0) {
                 $salesPlans = $salesPlans->whereHas('unit.floor', function ($query) use ($filters) {
@@ -58,7 +58,7 @@ class AccountRecevoryService implements AccountRecevoryInterface
         }
 
         $salesPlans = $salesPlans->get();
-        dd($salesPlans);
+
         $dataTable = collect($salesPlans)->transform(function ($salesPlan) use ($site_id) {
             $data['sales_plan'] = $salesPlan;
             $data['installments'] = array_reduce(collect($salesPlan->installments->where('type', 'installment'))->transform(function ($installment) {
@@ -70,7 +70,6 @@ class AccountRecevoryService implements AccountRecevoryInterface
             })->toArray(), 'array_merge', array());
             return $data;
         });
-        dd($dataTable);
         return $dataTable;
     }
 }

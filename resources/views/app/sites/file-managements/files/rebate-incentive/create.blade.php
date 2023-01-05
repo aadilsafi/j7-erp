@@ -262,8 +262,7 @@
                                 .toLocaleString());
                             $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
                                 .toLocaleString());
-                            $('#sales_plan_total').val(parseFloat(response.salesPlan.total_price)
-                                .toLocaleString())
+                            $('#sales_plan_total').val(response.salesPlan.total_price)
 
                             $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan
                                     .down_payment_total)

@@ -115,7 +115,19 @@
                     @php
 
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
-                        $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
+                        if(isset($draft_receipt->discounted_amount) &&  (float)$draft_receipt->discounted_amount->discounted_amount > 0 )
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers - (float)$draft_receipt->discounted_amount->discounted_amount;
+
+                        }
+
+                        else
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
+                        }
+
+
+
                     @endphp
                 @endforeach
             @endisset

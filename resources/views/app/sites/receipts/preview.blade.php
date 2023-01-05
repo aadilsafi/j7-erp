@@ -390,16 +390,20 @@
         FilePond.create(document.getElementById('attachment'), {
             files: files,
             styleButtonRemoveItemPosition: 'right',
-            // imageCropAspectRatio: '1:1',
+            imageCropAspectRatio: '1:1',
             acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles: 2,
-            minFiles: 2,
+            // maxFiles: 2,
+            // minFiles: 2,
             checkValidity: true,
             allowPdfPreview: true,
+            markupItem : true,
+            imagePreviewMarkupShow:true,
+            imageResizeMode:true,
+            imageResizeUpscale:true,
             credits: {
                 label: '',
                 url: ''
@@ -408,8 +412,8 @@
 
         FilePond.setOptions({
             allowPdfPreview: true,
-            imagePreviewHeight: 440,
-            pdfPreviewHeight: 540,
+            // imagePreviewHeight: 440,
+            // pdfPreviewHeight: 540,
             pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>

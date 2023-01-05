@@ -361,7 +361,7 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4">
                  <label class="form-label fs-5" for="office_contact">Office Contact <span
-                        class="text-danger">*</span></label>
+                        class="text-danger"></span></label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError optional_contact @error('office_contact') is-invalid @enderror"
                     id="office_contact" name="individual[office_contact]" placeholder=""

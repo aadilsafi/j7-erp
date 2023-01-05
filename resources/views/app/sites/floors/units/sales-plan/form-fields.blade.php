@@ -117,7 +117,7 @@
                                                 (%)
                                             </label>
 
-                                            <input type="number"  step="0.01"
+                                            <input type="number" min="0" max="100" step="0.01"
                                                 class="form-control form-control-lg additional-cost-percentage"
                                                 id="percentage-{{ $additionalCost->slug }}-{{ $key }}"
                                                 name="unit[additional_cost][{{ $additionalCost->slug }}][percentage]"

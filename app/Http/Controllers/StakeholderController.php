@@ -106,15 +106,18 @@ class StakeholderController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(stakeholderStoreRequest $request, $site_id)
-    // public function store(Request $request, $site_id)
     {
-
+        $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                $inputs = $request->all();
-                $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
-                $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                if (empty($BacklistedStakeholder)) {
+                    $inputs = $request->all();
+                    $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
+                    $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
+                } else {
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                }
             } else {
                 abort(403);
             }
@@ -154,7 +157,6 @@ class StakeholderController extends Controller
             $parentStakeholders = [];
             $stakeholder = $this->stakeholderInterface->getById($site_id, $id, ['contacts', 'stakeholder_types', 'nextOfKin', 'kinStakeholders']);
             $parentStakeholders = StakeholderNextOfKin::where('kin_id', $stakeholder->id)->get();
-            // dd($parentStakeholders);
             $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
             $customFields = collect($customFields)->sortBy('order');
             $customFields = generateCustomFields($customFields, true, $stakeholder->id);
@@ -259,35 +261,5 @@ class StakeholderController extends Controller
         }
     }
 
-    public function authorizeStakeholder(Request $request, $file_name)
-    {
-        $file_name = decryptParams($file_name);
-        $id = explode('.', $file_name);
-        $id = explode('-', $id[0]);
-        $stakeholder_id = $id[count($id) - 1];
 
-        $data = [
-            'file_name' => encryptParams($file_name),
-            'stakeholder_id' => encryptParams($stakeholder_id),
-        ];
-        return view('app.sites.stakeholders.authorize', $data);
-    }
-
-    public function verifyPin(Request $request, $file_name, $stakeholder_id)
-    {
-        $file_name = decryptParams($file_name);
-        $stakeholder_id = decryptParams($stakeholder_id);
-        $stakeholder = Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists();
-        if ($stakeholder) {
-            return apiSuccessResponse($file_name);
-        } else {
-            return response()->json(
-                [
-                    'status' => false,
-                    'message' => 'Pin code is not correct',
-                ],
-                500
-            );
-        }
-    }
 }

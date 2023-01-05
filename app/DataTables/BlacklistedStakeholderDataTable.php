@@ -37,7 +37,7 @@ class BlacklistedStakeholderDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('cnic', function ($stakeholder) {
-                return cnicFormat($stakeholder->cnic);
+                return $stakeholder->cnic;
             })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);

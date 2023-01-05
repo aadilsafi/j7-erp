@@ -118,11 +118,11 @@
                 @enderror
             </div>
             <div class="col-lg-6 col-md-6 position-relative">
-                <label class="form-label fs-5" for="strn">Origin </label>
+                <label class="form-label fs-5" for="strn">Origin</label>
                 <select class="select2" id="origin" name="company[origin]">
                     <option value="0" selected>Select Company Origin</option>
                     @foreach ($country as $countryRow)
-                        <option @if ((isset($stakeholder) && $stakeholder->origin) || old('company.origin') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
+                        <option @if ((isset($stakeholder) && $stakeholder->origin) ?  $stakeholder->origin : old('company.origin') == $countryRow->id) selected @endif value="{{ $countryRow->id }}">
                             {{ $countryRow->name }}</option>
                     @endforeach
                 </select>
@@ -162,7 +162,7 @@
                 <input type="tel"
                     class="form-control form-control-md ContactNoError optional_contact @error('company_office_contact') is-invalid @enderror"
                     id="company_office_contact" name="company[company_office_contact]" placeholder=""
-                    value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('company.company_office_contact') }}" />
+                    value="{{ isset($stakeholder) ? $stakeholder->office_contact : old('company.company_office_contact') }}" required />
                 @error('company.company_office_contact')
                     <div class="invalid-feedback ">{{ $message }}</div>
                 @enderror
@@ -360,7 +360,8 @@
                     value="{{ old('mobileContactCountryDetails') }}">
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4">
-                <label class="form-label fs-5" for="office_contact">Office Contact</label>
+                 <label class="form-label fs-5" for="office_contact">Office Contact <span
+                        class="text-danger">*</span></label>
                 <input type="tel"
                     class="form-control form-control-md OPTContactNoError optional_contact @error('office_contact') is-invalid @enderror"
                     id="office_contact" name="individual[office_contact]" placeholder=""
@@ -481,9 +482,7 @@
                         <select class="select2" id="residential_country" name="residential[country]">
                             <option value="0" selected>Select Country</option>
                             @foreach ($country as $countryRow)
-                                <option @if ((isset($stakeholder) && $stakeholder->residential_country_id) ||
-                                    old('residential_country') == $countryRow->id) selected @endif
-                                    value="{{ $countryRow->id }}">
+                                <option @if ((isset($stakeholder) && $stakeholder->residential_country_id) == $countryRow->id) selected @endif                                    value="{{ $countryRow->id }}">
                                     {{ $countryRow->name }}</option>
                             @endforeach
                         </select>

@@ -11,7 +11,7 @@
                             <option value="">Select Stakeholder</option>
                             @foreach ($stakholders as $row)
                                 <option value="{{ $row->id }}">
-                                    {{ $row->full_name }} ( {{ cnicFormat($row->cnic) }})
+                                    {{ $row->full_name }} ( {{ $row->cnic }})
                                 </option>
                             @endforeach
                             @error('stakeholderAP')

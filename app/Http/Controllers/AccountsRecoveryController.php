@@ -192,7 +192,7 @@ class AccountsRecoveryController extends Controller
     public function salesPlan(Request $request, $site_id)
     {
         if (request()->ajax()) {
-
+            dd($request->all());
             // Installments wise (1st, 2nd ...etc)
 
             // Expenses wise

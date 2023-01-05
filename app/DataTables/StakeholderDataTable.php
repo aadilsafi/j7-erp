@@ -192,7 +192,7 @@ class StakeholderDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('Identity Number')->addClass('text-nowrap')->searchable(true)->orderable(true),
+            Column::make('cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('contact')->title('Contact'),
             Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),

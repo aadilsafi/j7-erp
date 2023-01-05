@@ -396,8 +396,8 @@
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles: 2,
-            minFiles: 2,
+            // maxFiles: 2,
+            // minFiles: 2,
             checkValidity: true,
             allowPdfPreview: true,
             credits: {

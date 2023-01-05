@@ -224,7 +224,6 @@
             });
 
             calendar.render();
-            calendar.updateSize();
 
         });
     </script>

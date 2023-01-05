@@ -412,8 +412,8 @@
 
         FilePond.setOptions({
             allowPdfPreview: true,
-            imagePreviewHeight: 440,
-            pdfPreviewHeight: 540,
+            // imagePreviewHeight: 440,
+            // pdfPreviewHeight: 540,
             pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>

@@ -205,7 +205,6 @@
                     end: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
                 },
                 dayMaxEventRows: 3,
-                height: 600,
                 contentHeight: 600,
                 displayEventTime: true,
                 // footerToolbar: {
@@ -224,7 +223,7 @@
                 }
 
             });
-
+            calendar.setOption('aspectRatio', 1.8);
             calendar.render();
 
         });

@@ -279,8 +279,8 @@ class FinancialTransactionService implements FinancialTransactionInterface
 
         if ($account_action == 1 || $account_action == 8) {
             $saalesPlan = SalesPlan::find($sales_plan);
-            dd($saalesPlan);
-            $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $sales_plan);
+
+            $data['origin_name'] = $saalesPlan->payment_plan_serial_id;
         } else {
             $data['origin_name'] = $data['nature_of_account']->value . '-' . sprintf('%03d', $action_id);
         }

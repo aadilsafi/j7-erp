@@ -177,7 +177,7 @@
             top: 0;
             bottom: 0;
             left: 0;
-            border-left: 1px solid;
+            border-left: 1px solid #978ef4;
             z-index: 1;
 
         }
@@ -186,7 +186,7 @@
             margin: 0;
             padding: 0 1em;
             line-height: 3.5em;
-            color: #369;
+            color: #978ef4;
             font-weight: 700;
             position: relative;
             padding: 6px;
@@ -198,7 +198,7 @@
             display: block;
             width: 10px;
             height: 0;
-            border-top: 1px solid;
+            border-top: 1px solid #978ef4;
             margin-top: -1px;
             position: absolute;
             top: 2.21em;
@@ -218,14 +218,14 @@
 
         .tree li a {
             text-decoration: none;
-            color: #369;
+            color: #978ef4;
         }
 
         .tree li button,
         .tree li button:active,
         .tree li button:focus {
             text-decoration: none;
-            color: #369;
+            color: #978ef4;
             border: none;
             background: transparent;
             margin: 0px 0px 0px 0px;

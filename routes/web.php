@@ -935,8 +935,6 @@ Route::group([
                         Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlan'])->name('salesPlan');
 
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                        Route::get('/sales-plans', [AccountsRecoveryController::class, 'salesPlanDataTable'])->name('salesPlanDataTable');
-
                             Route::post('get-filtered-calender-events', [AccountsRecoveryController::class, 'getFilteredUnitData'])->name('get-filtered-calender-events');
                             Route::post('filter-inventory-aging', [AccountsRecoveryController::class, 'filterInventoryAging'])->name('filter-inventory-aging');
                         });
@@ -1006,8 +1004,6 @@ Route::group([
         Route::post('ajax-get-cities/{stateId}', [CityController::class, 'getCities'])->name('ajax-get-cities');
         Route::post('ajax-get-states/{countryId}', [StateController::class, 'getStates'])->name('ajax-get-states');
         Route::post('ajax-get-stakeholder_types/{stakeholderId}', [PaymentVocuherController::class, 'stakeholder_types'])->name('ajax-get-stakeholder_types');
-
-        Route::get('ajax-recovery-sales-plans', [AccountsRecoveryController::class, 'salesPlanDataTable'])->name('ajax-recovery-sales-plans');
 
         //Countries Routes
         Route::group(['prefix' => 'countries', 'as' => 'countries.'], function () {

@@ -124,6 +124,7 @@
                                         name="filter_type">
                                         <option value="0" selected>Select Unit Type</option>
                                         @foreach ($types as $type)
+                                            {{-- @continue($type->parent_id == 0) --}}
                                             <option value="{{ $type->id }}">
                                                 {{ $loop->index + 1 }} - {{ $type->name }}</option>
                                         @endforeach
@@ -247,6 +248,9 @@
 
 @section('page-js')
 
+@endsection
+
+@section('custom-js')
     <script>
         window['moment-range'].extendMoment(moment);
 
@@ -474,31 +478,41 @@
                             extend: 'copy',
                             text: '<i class="bi bi-clipboard"></i> Copy',
                             className: 'dropdown-item',
-
+                            // exportOptions: {
+                            //     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                            // }
                         },
                         {
                             extend: 'csv',
                             text: '<i class="bi bi-file-earmark-spreadsheet"></i> CSV',
                             className: 'dropdown-item',
-
+                            // exportOptions: {
+                            //     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                            // }
                         },
                         {
                             extend: 'pdf',
                             text: '<i class="bi bi-filetype-pdf"></i> PDF',
                             className: 'dropdown-item',
-
+                            // exportOptions: {
+                            //     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                            // }
                         },
                         {
                             extend: 'excel',
                             text: '<i class="bi bi-file-earmark-spreadsheet"></i>Excel',
                             className: 'dropdown-item',
-
+                            // exportOptions: {
+                            //     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                            // }
                         },
                         {
                             extend: 'print',
                             text: '<i class="bi bi-printer"></i> Print',
                             className: 'dropdown-item',
-
+                            // exportOptions: {
+                            //     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                            // }
                         },
                     ]
                 },
@@ -521,18 +535,25 @@
                     }
                 },
             ];
-            $.fn.dataTable.ext.errMode = 'alert';
-            $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+            $.fn.dataTable.ext.errMode = 'throw';
             var salesPlanDataTable = $(".dt-complex-header").DataTable({
+                processing: true,
+
+                select: true,
+                
                 scrollX: true,
-                dom: 'lrtipC',
                
+                dom: 'lrtipC',
+                // dom: '<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">',
                 ajax: {
-                    url: '{{ route('ajax-recovery-sales-plans') }}',
+                    url: '{{ route('sites.accounts.recovery.salesPlan', ['site_id' => ':site_id']) }}'
+                        .replace(':site_id', "{{ encryptParams($site_id) }}"),
+
+                },
+                "language": {
+                    "processing": '<div class="spinner-grow text-primary" role="status">' +
+                        '<span class="visually-hidden">Loading...</span>' +
+                        '</div>'
                 },
                 columns: dataTableColumns,
                 buttons: buttons,
@@ -543,6 +564,7 @@
             $('#apply_filter').on('click', function(e) {
                 e.preventDefault();
                 hideBlockUI();
+                // showBlockUI('#table-card');
                 let filter_date_from = '',
                     filter_date_to = '';
 
@@ -607,6 +629,7 @@
 
                 salesPlanDataTable.ajax.url(data).load();
 
+                // hideBlockUI('#table-card');
             });
         });
 

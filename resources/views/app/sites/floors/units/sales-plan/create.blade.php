@@ -966,7 +966,6 @@
                 },
                 'unit[price][unit]': {
                     required: true,
-                    digits: true
                 },
                 'unit[price][total]': {
                     required: true,

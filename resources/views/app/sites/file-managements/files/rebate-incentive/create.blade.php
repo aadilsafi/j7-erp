@@ -262,6 +262,9 @@
                                 .toLocaleString());
                             $('#td_unit_total_value').html(parseFloat(response.salesPlan.total_price)
                                 .toLocaleString());
+                            $('#sales_plan_total').val(parseFloat(response.salesPlan.total_price)
+                                .toLocaleString())
+
                             $('#td_unit_downpayment_value').html(parseFloat(response.salesPlan
                                     .down_payment_total)
                                 .toLocaleString());
@@ -301,7 +304,7 @@
 
                 rebate_percentage = (rebate_percentage < 0) ? 0 : rebate_percentage;
 
-                let unit_total = parseFloat($('#unit_total').val());
+                let unit_total = parseFloat($('#sales_plan_total').val());
 
                 let rebate_value = parseFloat((rebate_percentage * unit_total) / 100);
 

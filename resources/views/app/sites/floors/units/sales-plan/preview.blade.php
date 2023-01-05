@@ -171,7 +171,7 @@
                                                         @foreach ($additional_costs as $key => $additionalCost)
                                                             @php
                                                                 $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-                                                                
+
                                                                 $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                                             @endphp
 

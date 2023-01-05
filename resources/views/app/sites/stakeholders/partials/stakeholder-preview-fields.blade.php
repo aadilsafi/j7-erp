@@ -5,9 +5,6 @@
         <div class="">
             <h3><strong>Company Informations: </strong></h3>
         </div>
-        <div class="">
-
-        <h3><strong>Company Informations: </strong></h3>
 
         <div class="">
 

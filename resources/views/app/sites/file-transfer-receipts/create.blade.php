@@ -128,7 +128,7 @@
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment" accept="image/png, image/jpeg, image/gif" />
+                                name="attachment" accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -164,6 +164,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -180,12 +181,13 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,

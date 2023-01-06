@@ -103,10 +103,10 @@ class SalesPlanDataTable extends DataTable
     public function query(SalesPlan $model): QueryBuilder
     {
         if ($this->floor > 0) {
-            return $model->newQuery()->with('stakeholder', 'unit')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+            return $model->newQuery()->with('stakeholder', 'unit')->where('unit_id', $this->unit->id)->orderBy('created_at', 'asc');
         } else {
             if (Auth::user()->hasRole('CRM')) {
-                return $model->newQuery()->with('stakeholder', 'unit')->where('is_from_crm', true)->orderBy('status', 'asc');
+                return $model->newQuery()->with('stakeholder', 'unit')->where('is_from_crm', true)->orderBy('created_at', 'asc');
             } else {
                 return $model->newQuery()->with('stakeholder', 'unit')->orderBy('status', 'asc');
             }
@@ -209,9 +209,9 @@ class SalesPlanDataTable extends DataTable
         $destroyPermission = 0;
 
         $columns = [
-            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
+            Column::make('serial_no')->title('Serial No#')->addClass('text-nowrap'),
             Column::make('payment_plan_serial_id')->title('Payment Plan#')->addClass('text-nowrap'),
-            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
+            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit No#')->addClass('text-nowrap'),
             Column::computed('user_id')->name('user.name')->title('Sales Person')->addClass('text-nowrap'),
             Column::computed('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),

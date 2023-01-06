@@ -151,7 +151,8 @@
                             id: id
                         },
                     },
-                    columns: [{
+                    columns: [
+                        {
                             data: 'name',
                             name: 'name',
                             orderable: true,

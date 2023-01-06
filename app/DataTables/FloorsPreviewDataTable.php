@@ -29,10 +29,11 @@ class FloorsPreviewDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addIndexColumn()
             ->editColumn('type_id', function ($unit) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
-                );
+                // return view(
+                //     'app.components.unit-preview-cell',
+                //     ['id' => $unit->id, 'field' => 'type_id', 'inputtype' => 'select', 'value' => $unit->type->name]
+                // );
+                return $unit->type->name;
             })
             ->editColumn('status_id', function ($unit) {
                 return $unit->status->name;

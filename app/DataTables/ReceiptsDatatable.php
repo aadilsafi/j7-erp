@@ -182,7 +182,7 @@ class ReceiptsDatatable extends DataTable
             ->rowGroupDataSrc('unit_id')
 
             ->orders([
-                [8, 'desc'],
+                [8, 'asc'],
                 // [4, 'desc'],
             ]);
 
@@ -219,7 +219,7 @@ class ReceiptsDatatable extends DataTable
         $selectedActivePermission =  Auth::user()->hasPermissionTo('sites.receipts.make-active-selected');
 
         $columns = [
-            Column::make('serial_no')->title('Serial No#')->addClass('text-nowrap')->orderable(false)->searchable(true),
+            Column::make('serial_no')->title('Serial No#')->addClass('text-nowrap')->orderable(true)->searchable(true),
             Column::make('name')->title('Name')->addClass('text-nowrap'),
             Column::make('cnic')->title('Identity No#')->addClass('text-nowrap'),
             Column::make('amount_received')->title('Amount Received')->addClass('text-nowrap'),

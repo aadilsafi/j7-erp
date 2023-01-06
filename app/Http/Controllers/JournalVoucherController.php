@@ -93,7 +93,7 @@ class JournalVoucherController extends Controller
     public function store(Request $request, $site_id)
     {
 
-        try {
+        // <!-- try { -->
             if (!request()->ajax()) {
                 $inputs = $request->all();
                 $site_id = decryptParams($site_id);
@@ -102,9 +102,9 @@ class JournalVoucherController extends Controller
             } else {
                 abort(403);
             }
-        } catch (Exception $ex) {
-            return redirect()->route('sites.settings.journal-vouchers.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
-        }
+        // } catch (Exception $ex) {
+        //     return redirect()->route('sites.settings.journal-vouchers.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        // }
     }
 
     /**

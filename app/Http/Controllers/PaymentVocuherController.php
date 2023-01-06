@@ -96,6 +96,7 @@ class PaymentVocuherController extends Controller
     {
         $site = (new Site())->find(decryptParams($site_id));
         $payment_voucher = PaymentVocuher::find(decryptParams($id));
+        $images = $payment_voucher->getMedia('payment_voucher_attachments');
         $stakeholder_id = !is_null($payment_voucher->vendor_id) ? $payment_voucher->vendor_id : (!is_null($payment_voucher->dealer_id) ? $payment_voucher->dealer_id  : $payment_voucher->customer_id);
 
         $stakeholder_data = Stakeholder::where('id', $stakeholder_id)->first();
@@ -104,6 +105,7 @@ class PaymentVocuherController extends Controller
                 'site' => $site,
                 'stakeholder_data' => $stakeholder_data,
                 'payment_voucher' => $payment_voucher,
+                'images'=>$images,
             ]
         );
     }

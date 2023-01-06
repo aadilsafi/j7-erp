@@ -46,7 +46,7 @@ class StateDataTable extends DataTable
                 return $user->country->emoji;
             })
             ->editColumn('actions', function ($user) {
-                return view('app.sites.states.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
+                return view('app.sites.locations.states.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })
             ->editColumn('created_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->created_at);

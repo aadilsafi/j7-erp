@@ -50,7 +50,7 @@ class CityDataTable extends DataTable
                 return $user->state->country->emoji;
             })
             ->editColumn('actions', function ($user) {
-                return view('app.sites.cities.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
+                return view('app.sites.locations.cities.actions', ['site_id' => decryptParams($this->site_id), 'id' => $user->id]);
             })
             ->editColumn('created_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->created_at);

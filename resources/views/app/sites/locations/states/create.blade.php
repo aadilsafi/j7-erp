@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="card-body" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                         @csrf
-                        {{ view('app.sites.states.form-fields', ['country' => $country]) }}
+                        {{ view('app.sites.locations.states.form-fields', ['country' => $country]) }}
                     </div>
                 </div>
             </div>

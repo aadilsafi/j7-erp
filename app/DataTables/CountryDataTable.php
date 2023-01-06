@@ -40,7 +40,7 @@ class CountryDataTable extends DataTable
             ->addIndexColumn()
 
             ->editColumn('actions', function ($user) {
-                return view('app.sites.countries.actions', ['site_id' => $this->site_id, 'id' => $user->id]);
+                return view('app.sites.locations.countries.actions', ['site_id' => $this->site_id, 'id' => $user->id]);
             })
             ->editColumn('created_at', function ($fileManagement) {
                 return editDateColumn($fileManagement->created_at);

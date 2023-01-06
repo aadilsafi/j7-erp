@@ -17,7 +17,7 @@ class CityController extends Controller
             'site_id' => $site_id
         ];
 
-        return $dataTable->with($data)->render('app.sites.cities.index', $data);
+        return $dataTable->with($data)->render('app.sites.locations.cities.index', $data);
     }
     public function create($site_id)
     {
@@ -25,7 +25,7 @@ class CityController extends Controller
             'site_id' => $site_id,
             'country' => Country::all()
         ];
-        return view('app.sites.cities.create', $data);
+        return view('app.sites.locations.cities.create', $data);
     }
     public function store(Request $request, $site_id)
     {
@@ -54,7 +54,7 @@ class CityController extends Controller
             'country' => Country::all(),
             'city' => City::find(decryptParams($id))
         ];
-        return view('app.sites.cities.edit', $data);
+        return view('app.sites.locations.cities.edit', $data);
     }
     public function update(Request $request, $site_id, $id)
     {

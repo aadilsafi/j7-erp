@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('file_management', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('unit_id')->nullable();
             $table->bigInteger('sales_plan_id')->nullable();

@@ -26,6 +26,9 @@ return new class extends Migration
 
             $table->tinyInteger('salesplan_validity_days')->default(7);
             $table->tinyInteger('salesplan_installment_days')->default(90);
+            $table->string('salesplan_master_code')->default('12345678');
+            $table->bigInteger('salesplan_default_investment_plan_template')->default(1);
+            $table->bigInteger('salesplan_default_payment_plan_template')->default(2);
 
             $table->string('others_bank_name')->nullable();
             $table->string('others_bank_account_name')->nullable();

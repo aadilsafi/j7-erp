@@ -20,6 +20,7 @@ use App\Models\Type;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FileManagements\FileActions\Cancellation\CancellationInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class FileCancellationController extends Controller
@@ -31,7 +32,7 @@ class FileCancellationController extends Controller
      */
 
 
-    private $financialTransactionInterface;
+    private $financialTransactionInterface , $customFieldInterface ,$cancellationInterface;
 
     public function __construct(
         financialTransactionInterface $financialTransactionInterface,
@@ -186,6 +187,8 @@ class FileCancellationController extends Controller
             $transaction = $this->financialTransactionInterface->makeFileCancellationTransaction($site_id, $unit_id, $customer_id, $file_id);
             $file_cancellation = FileCancellation::where('file_id', decryptParams($file_id))->first();;
             $file_cancellation->status = 1;
+            $file_cancellation->approved_by = Auth::user()->id;
+            $file_cancellation->approved_date =now();
             $file_cancellation->update();
 
             $unit = Unit::find(decryptParams($unit_id));

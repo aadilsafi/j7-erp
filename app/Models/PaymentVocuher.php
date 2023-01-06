@@ -59,6 +59,12 @@ class PaymentVocuher extends Model
         'bank_id',
         'serial_no',
         'cheque_status',
+        'checked_date',
+        'checked_by',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

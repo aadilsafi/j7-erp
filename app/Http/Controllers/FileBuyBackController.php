@@ -22,6 +22,7 @@ use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class FileBuyBackController extends Controller
@@ -32,7 +33,7 @@ class FileBuyBackController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    private $buyBackInterface,$financialTransactionInterface;
+    private $buyBackInterface,$financialTransactionInterface,$customFieldInterface;
 
     public function __construct(
         FinancialTransactionInterface $financialTransactionInterface,
@@ -191,6 +192,8 @@ class FileBuyBackController extends Controller
 
             $file_buy_back = FileBuyBack::where('file_id', decryptParams($file_id))->first();
             $file_buy_back->status = 1;
+            $file_buy_back->approved_by = Auth::user()->id;
+            $file_buy_back->approved_date =now();
             $file_buy_back->update();
 
             $unit = Unit::find(decryptParams($unit_id));

@@ -92,7 +92,7 @@ class JournalVoucherController extends Controller
      */
     public function store(Request $request, $site_id)
     {
-        //
+
         try {
             if (!request()->ajax()) {
                 $inputs = $request->all();
@@ -118,6 +118,7 @@ class JournalVoucherController extends Controller
         //
         if (!request()->ajax()) {
             $JournalVoucher = JournalVoucher::find(decryptParams($id));
+            $images = $JournalVoucher->getMedia('journal_voucher_attachments');
             $JournalVoucherEntries = JournalVoucherEntry::where('journal_voucher_id', $JournalVoucher->id)->get();
             $origin_number = AccountLedger::get();
             if (isset($origin_number) && count($origin_number) > 0) {
@@ -134,6 +135,7 @@ class JournalVoucherController extends Controller
                 'JournalVoucher' => $JournalVoucher,
                 'JournalVoucherEntries' => $JournalVoucherEntries,
                 'origin_number' => $origin_number,
+                'images' => $images,
             ];
             return view('app.sites.journal-vouchers.show', $data);
         } else {

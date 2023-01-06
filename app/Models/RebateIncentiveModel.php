@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class RebateIncentiveModel extends Model
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity ,SoftDeletes;
 
     protected $fillable = [
         'site_id',
@@ -33,6 +34,15 @@ class RebateIncentiveModel extends Model
         'created_date',
         'serial_no',
         // 'cheque_status',
+        'user_id',
+        'checked_date',
+        'checked_by',
+        'approved_by',
+        'approved_date',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

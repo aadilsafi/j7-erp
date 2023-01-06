@@ -17,6 +17,7 @@ use App\Models\BacklistedStakeholder;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\LeadSource;
+use App\Models\SiteConfigration;
 use App\Models\Stakeholder;
 use App\Models\StakeholderNextOfKin;
 use App\Models\StakeholderType;
@@ -32,7 +33,7 @@ use Str;
 
 class StakeholderController extends Controller
 {
-    private $stakeholderInterface,$customFieldInterface;
+    private $stakeholderInterface, $customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, CustomFieldInterface $customFieldInterface)
     {
@@ -116,7 +117,7 @@ class StakeholderController extends Controller
                     $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
                     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
                 } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
                 }
             } else {
                 abort(403);
@@ -209,14 +210,14 @@ class StakeholderController extends Controller
         $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-             if (empty($BacklistedStakeholder)) {
-                $inputs = $request->all();
-                $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
+                if (empty($BacklistedStakeholder)) {
+                    $inputs = $request->all();
+                    $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
 
-                $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
-                return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
+                    $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
                 } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stackholder CNIC Is BlackListed!'));
+                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
                 }
             } else {
                 abort(403);
@@ -286,13 +287,18 @@ class StakeholderController extends Controller
         if ($stakeholder) {
             return apiSuccessResponse($file_name);
         } else {
-            return response()->json(
-                [
-                    'status' => false,
-                    'message' => 'Pin code is not correct',
-                ],
-                500
-            );
+            $masterCode = SiteConfigration::where('salesplan_master_code', $request->pin)->exists();
+            if ($masterCode) {
+                return apiSuccessResponse($file_name);
+            } else {
+                return response()->json(
+                    [
+                        'status' => false,
+                        'message' => 'Pin code is not correct',
+                    ],
+                    500
+                );
+            }
         }
     }
 }

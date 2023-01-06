@@ -269,12 +269,15 @@
                                         {{-- {{ dd($site->siteConfiguration->toArray()) }} --}}
                                         @forelse ($site->siteConfiguration->toArray() as $key => $value)
                                             @if ($key != 'site_id' && explode('_', $key)[0] == 'salesplan')
+                                                @continue($key == 'salesplan_default_investment_plan_template' || $key == 'salesplan_default_payment_plan_template')
+
                                                 <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
                                                     <label class="form-label fs-5"
                                                         for="{{ $key }}">{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg @error('arr_salesplan.' . $key) is-invalid @enderror"
                                                         id="{{ $key }}"
+                                                        {{ $key == 'salesplan_master_code' ? 'maxlength=8' : '' }}
                                                         name="arr_salesplan[{{ $key }}]"
                                                         value="{{ $value }}"
                                                         placeholder="{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}" />
@@ -286,6 +289,7 @@
                                         @empty
                                         @endforelse
                                     </div>
+                                  
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">

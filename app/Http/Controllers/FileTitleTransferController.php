@@ -31,6 +31,7 @@ use App\Services\FileManagements\FileActions\TitleTransfer\TitleTransferInterfac
 use Maatwebsite\Excel\Imports\ModelManager;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class FileTitleTransferController extends Controller
@@ -43,7 +44,7 @@ class FileTitleTransferController extends Controller
 
     private $stakeholderInterface;
     private $titleTransferInterface;
-    private $financialTransactionInterface;
+    private $financialTransactionInterface,$customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, TitleTransferInterface $titleTransferInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface,)
     {
@@ -223,6 +224,8 @@ class FileTitleTransferController extends Controller
             // dd($transaction);
             $file_title_transfer = FileTitleTransfer::where('id', decryptParams($file_id))->first();
             $file_title_transfer->status = 1;
+            $file_title_transfer->approved_by = Auth::user()->id;
+            $file_title_transfer->approved_date =now();
             $file_title_transfer->update();
 
             $stakeholder = Stakeholder::find($file_title_transfer->transfer_person_id);

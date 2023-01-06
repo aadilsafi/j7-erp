@@ -7,6 +7,7 @@ use App\Models\SalesPlan;
 use App\Models\Stakeholder;
 use App\Models\FileManagement;
 use App\Services\FileManagements\FileManagementInterface;
+use Auth;
 
 class FileManagementService implements FileManagementInterface
 {
@@ -46,6 +47,7 @@ class FileManagementService implements FileManagementInterface
         $serail_no =  sprintf('%03d', $serail_no);
 
         $data = [
+            'user_id' => Auth::user()->id,
             'site_id' => decryptParams($site_id),
             'unit_id' => $inputs['application_form']['unit_id'],
             'stakeholder_id' => $inputs['application_form']['stakeholder_id'],

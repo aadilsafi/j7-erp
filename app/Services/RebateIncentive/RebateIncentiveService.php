@@ -15,6 +15,7 @@ use App\Models\Bank;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use Auth;
 use Str;
 
 class RebateIncentiveService implements RebateIncentiveInterface
@@ -190,6 +191,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
             $rebatedata = [
+                'user_id'=> Auth::user()->id,
                 'site_id' => $site_id,
                 'unit_id' => $inputs['unit_id'],
                 'stakeholder_id' => $inputs['stakeholder_id'],

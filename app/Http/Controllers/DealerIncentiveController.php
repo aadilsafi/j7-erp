@@ -13,12 +13,13 @@ use App\Services\DealerIncentive\DealerInterface;
 use Exception;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use Auth;
 use DB;
 
 class DealerIncentiveController extends Controller
 {
 
-    private $dealerIncentiveInterface, $financialTransactionInterface;
+    private $dealerIncentiveInterface, $financialTransactionInterface, $customFieldInterface;
 
     public function __construct(DealerInterface $dealerIncentiveInterface, CustomFieldInterface $customFieldInterface, FinancialTransactionInterface $financialTransactionInterface)
     {
@@ -200,6 +201,8 @@ class DealerIncentiveController extends Controller
 
             $dealer_incentive = DealerIncentiveModel::find(decryptParams($dealer_incentive_id));
             $dealer_incentive->status = 1;
+            $dealer_incentive->approved_by = Auth::user()->id;
+            $dealer_incentive->approved_date = now();
             $dealer_incentive->update();
 
         });

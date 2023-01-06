@@ -289,7 +289,45 @@
                                         @empty
                                         @endforelse
                                     </div>
-                                  
+                                    <div class="row mb-1 g-1">
+                                        {{-- {{ dd($site->siteConfiguration->toArray()) }} --}}
+                                        @forelse ($site->siteConfiguration->toArray() as $key => $value)
+                                            @if ($key != 'site_id' && explode('_', $key)[0] == 'salesplan')
+                                                @continue($key != 'salesplan_default_investment_plan_template' && $key != 'salesplan_default_payment_plan_template')
+                                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                    <label class="form-label fs-5 mt-2 mb-1"
+                                                        for="{{ $key }}">{{ Str::of($key)->remove('salesplan_')->title()->replace('_', ' ') }}</label>
+                                                    <div class="row custom-options-checkable mb-2 g-1">
+                                                        @foreach ($salesPlanTemplates as $k => $template)
+                                                            <div class="col-md-3">
+                                                                <input
+                                                                    class="custom-option-item-check checkClass  @error('arr_salesplan.' . $key) is-invalid @enderror"
+                                                                    type="radio"
+                                                                    id="{{ $key }}{{ $k }}"
+                                                                    {{ $value == $template->id ? 'checked' : '' }}
+                                                                    name="arr_salesplan[{{ $key }}]"
+                                                                    value="{{ $template->id }}">
+                                                                <label class="custom-option-item text-center p-1"
+                                                                    for="{{ $key }}{{ $k }}">
+                                                                    {{-- <i data-feather='dollar-sign'></i> --}}
+                                                                    <img class="" width="50%" heght="50%"
+                                                                        src="{{ asset('app-assets') }}{{ $template->image }}"
+                                                                        alt="Card image cap">
+                                                                    <span
+                                                                        class="custom-option-item-title h4 d-block mt-1">{{ $template->name }}</span>
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+
+                                                    @error('arr_salesplan.' . $key)
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                     <div class="d-flex align-items-center justify-content-end">

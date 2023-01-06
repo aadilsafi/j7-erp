@@ -49,10 +49,10 @@
             </form>
 
             {{-- Printing Modal --}}
-            @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+            {{-- @include('app.sites.floors.units.sales-plan.partials.print-templates', [
                 'salesPlanTemplates' => $salesPlanTemplates,
                 'showTemplateType' => 'investment_plan'
-            ])
+            ]) --}}
 
         </div>
     </div>
@@ -93,8 +93,8 @@
             $('#modal-sales-plan-template').modal('show');
         }
 
-        function printSalesPlanTemplate(template_id) {
-            let sales_plan_id = $('#sales_plan_id').val();
+        function printSalesPlanTemplate(template_id, sales_plan_id) {
+
             let url =
                 "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
                 .replace(':sales_plan_id', sales_plan_id)
@@ -295,25 +295,25 @@
             })
             $('.swal2-radio').empty();
             var radioInput = '<div class="card-body">\
-                                             <div class="row custom-options-checkable g-1">\
-                                                <div class="col-md-6">\
-                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
-                                                        <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
-                                                                    <span class="d-flex justify-content-between flex-wrap mb-50">\
-                                                                        <span class="fw-bolder">Investment Plan</span>\
-                                                                    </span>\
-                                                                </label>\
+                                                 <div class="row custom-options-checkable g-1">\
+                                                    <div class="col-md-6">\
+                                                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
+                                                            <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <span class="fw-bolder">Investment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
+                                                                <div class="col-md-6">\
+                                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
+                                                                    <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
+                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <span class="fw-bolder">Payment Plan</span>\
+                                                                        </span>\
+                                                                    </label>\
+                                                                </div>\
                                                             </div>\
-                                                            <div class="col-md-6">\
-                                                                <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
-                                                                <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
-                                                                    <span class="d-flex justify-content-between flex-wrap mb-50">\
-                                                                        <span class="fw-bolder">Payment Plan</span>\
-                                                                    </span>\
-                                                                </label>\
-                                                            </div>\
-                                                        </div>\
-                                                    </div>'
+                                                        </div>'
             $('.swal2-radio').append(radioInput)
 
         }

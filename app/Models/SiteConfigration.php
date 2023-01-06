@@ -62,6 +62,8 @@ class SiteConfigration extends Model
         'arr_salesplan.salesplan_validity_days' => 'sometimes|numeric|min:0|gt:0',
         'arr_salesplan.salesplan_installment_days' => 'sometimes|numeric|min:0|gt:0',
         'arr_salesplan.salesplan_master_code' => 'sometimes|nullable|max:8|unique:stakeholders,pin_code',
+        'arr_salesplan.salesplan_default_investment_plan_template' => 'sometimes',
+        'arr_salesplan.salesplan_default_payment_plan_template' => 'sometimes',
 
         'arr_others.others_bank_name' => 'sometimes|nullable|between:1,255',
         'arr_others.others_bank_account_name' => 'sometimes|nullable|between:1,255',
@@ -104,5 +106,15 @@ class SiteConfigration extends Model
     public function site()
     {
         return $this->belongsTo(Site::class);
+    }
+
+    public function defaultPaymentPlanTemplate()
+    {
+        return $this->belongsTo(SiteConfigration::class, 'salesplan_default_payment_plan_template', 'id');
+    }
+
+    public function defaultInvestmentPlanTemplate()
+    {
+        return $this->belongsTo(SiteConfigration::class, 'salesplan_default_investment_plan_template', 'id');
     }
 }

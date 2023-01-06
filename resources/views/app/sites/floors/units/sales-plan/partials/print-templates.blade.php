@@ -9,8 +9,8 @@
                 <div class="mb-1">
                     <input type="hidden" name="sales_plan_id" id="sales_plan_id" value="0">
                     @foreach ($salesPlanTemplates as $template)
-                        @continue($showTemplateType == 'investment_plan' && $template->id == 2)
-                        @continue($showTemplateType == 'payment_plan' && $template->id == 1)
+                        @continue($showTemplateType == 'investment_plan' && !is_null($template->salesplan_default_payment_plan_template))
+                        @continue($showTemplateType == 'payment_plan' && !is_null($template->salesplan_default_investment_plan_template))
 
                         <a href="javascript:void(0);"
                             onclick="printSalesPlanTemplate('{{ encryptparams($template->id) }}')">

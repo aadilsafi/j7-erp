@@ -100,7 +100,7 @@
                                         <a href="javascript:void(0);"
                                             class="btn btn-lg btn-relief-outline-primary waves-effect waves-float waves-light ms-3"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Print Sales Plan"
-                                            onclick="openTemplatesModal('{{ encryptParams($salePlan->id) }}');">
+                                            onclick="printSalesPlanTemplate('{{ encryptParams($site->siteConfiguration->salesplan_default_payment_plan_template) }}','{{ encryptParams($salePlan->id) }}');">
                                             <i class="bi bi-printer" style="font-size: 1.1rem" class="m-10"></i>
                                         </a>
                                     </div>
@@ -185,7 +185,7 @@
                                                         @foreach ($additional_costs as $key => $additionalCost)
                                                             @php
                                                                 $additionalCostPercentage = $additionalCost->applicable_on_unit ? $additionalCost->unit_percentage : 0;
-
+                                                                
                                                                 $additionalCostTotalAmount = (1 * $additionalCostPercentage) / 100;
                                                             @endphp
 
@@ -449,11 +449,11 @@
 
     </form>
 
-       {{-- Printing Modal --}}
-       @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+    {{-- Printing Modal --}}
+    {{-- @include('app.sites.floors.units.sales-plan.partials.print-templates', [
         'salesPlanTemplates' => $salesPlanTemplates,
         'showTemplateType' => 'investment_plan'
-    ])
+    ]) --}}
 @endsection
 
 @section('vendor-js')
@@ -473,8 +473,8 @@
             $('#modal-sales-plan-template').modal('show');
         }
 
-        function printSalesPlanTemplate(template_id) {
-            let sales_plan_id = $('#sales_plan_id').val();
+        function printSalesPlanTemplate(template_id, sales_plan_id) {
+
             let url =
                 "{{ route('sites.floors.units.sales-plans.templates.print', ['site_id' => encryptParams($site), 'floor_id' => encryptParams(1), 'unit_id' => encryptParams(1), 'sales_plan_id' => ':sales_plan_id', 'id' => ':id']) }}"
                 .replace(':sales_plan_id', sales_plan_id)

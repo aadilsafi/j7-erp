@@ -76,8 +76,10 @@
                 Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
             </th>
             <th  style="width:33%; text-align:end;">
+                {{-- <div style=" background-image: url('{{asset('app-assets')}}/images/qr_code_border.png');background-repeat: no-repeat; position: relitve;"> --}}
                 <img width="70px" height="" src="{{ $data['qrCodeimg']}}"
                     alt="qr code">
+                    {{-- </div> --}}
             </th>
         </tr>
     </table>

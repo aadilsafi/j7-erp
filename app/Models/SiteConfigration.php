@@ -61,6 +61,7 @@ class SiteConfigration extends Model
 
         'arr_salesplan.salesplan_validity_days' => 'sometimes|numeric|min:0|gt:0',
         'arr_salesplan.salesplan_installment_days' => 'sometimes|numeric|min:0|gt:0',
+        'arr_salesplan.salesplan_master_code' => 'sometimes|nullable|max:8|unique:stakeholders,pin_code',
 
         'arr_others.others_bank_name' => 'sometimes|nullable|between:1,255',
         'arr_others.others_bank_account_name' => 'sometimes|nullable|between:1,255',
@@ -91,6 +92,8 @@ class SiteConfigration extends Model
         'arr_others.others_bank_name.between' => 'The bank name must be between 1 and 255 characters.',
         'arr_others.others_bank_account_name.between' => 'The bank account name must be between 1 and 255 characters.',
         'arr_others.others_bank_account_no.between' => 'The bank account no must be between 1 and 255 characters.',
+        'arr_salesplan.salesplan_master_code.unique' => 'Sales Plan Master code already Exists.',
+        'arr_salesplan.salesplan_master_code.max' => 'Sales Plan Master code must be 8 characters.',
     ];
 
     public function getActivitylogOptions(): LogOptions

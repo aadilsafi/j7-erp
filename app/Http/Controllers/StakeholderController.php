@@ -175,6 +175,7 @@ class StakeholderController extends Controller
                     'stakeholders' => Stakeholder::where('id', '!=', $stakeholder->id)->get(),
                     'stakeholder' => $stakeholder,
                     'images' => $stakeholder->getMedia('stakeholder_cnic'),
+                    'passport_images'=>$stakeholder->getMedia('stakeholder_passport'),
                     'country' => Country::all(),
                     'city' => [],
                     'state' => [],

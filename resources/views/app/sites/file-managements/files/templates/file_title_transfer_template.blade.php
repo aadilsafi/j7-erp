@@ -237,7 +237,7 @@
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                {{ cnicFormat($customer->cnic) }}
+                                {{ $customer->cnic }}
                             </div>
                         </div>
                     </td>
@@ -326,7 +326,7 @@
                                 <strong>CNIC:</strong>
                             </div>
                             <div class="col">
-                                {{ cnicFormat($titleTransferPerson->cnic) }}
+                                {{ $titleTransferPerson->cnic }}
                             </div>
                         </div>
                     </td>

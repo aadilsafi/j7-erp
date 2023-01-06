@@ -80,8 +80,8 @@
                                                 <td>Net Area</td>
                                                 <td>Gross Area</td>
                                                 <td>Price Sqft</td>
-                                                <td>Corner</td>
-                                                <td>Facing</td>
+                                                {{-- <td>Corner</td>
+                                                <td>Facing</td> --}}
                                                 <td>Created at</td>
                                             </tr>
                                         </thead>
@@ -199,18 +199,18 @@
                             orderable: true,
                             searchable: true
                         },
-                        {
-                            data: 'is_corner',
-                            name: 'is_corner',
-                            orderable: true,
-                            searchable: true
-                        },
-                        {
-                            data: 'is_facing',
-                            name: 'is_facing',
-                            orderable: true,
-                            searchable: true
-                        },
+                        // {
+                        //     data: 'is_corner',
+                        //     name: 'is_corner',
+                        //     orderable: true,
+                        //     searchable: true
+                        // },
+                        // {
+                        //     data: 'is_facing',
+                        //     name: 'is_facing',
+                        //     orderable: true,
+                        //     searchable: true
+                        // },
                         {
                             data: 'created_at',
                             name: 'created_at',

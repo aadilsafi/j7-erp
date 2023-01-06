@@ -41,7 +41,7 @@ class UserDataTable extends DataTable
                 return Str::substrReplace($user->contact, '-', 4, 0);
             })
             ->editColumn('cnic', function ($user) {
-                return cnicFormat($user->cnic);
+                return $user->cnic;
             })
             ->editColumn('city_id', function ($user) {
                 return $user->city_id > 0 ? $user->city->name : '-';

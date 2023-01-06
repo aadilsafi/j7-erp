@@ -69,8 +69,8 @@
         }
 
         /* .filepond--item {
-                                                                                                                                    width: calc(20% - 0.5em);
-                                                                                                                                } */
+                                                                                                                                        width: calc(20% - 0.5em);
+                                                                                                                                    } */
     </style>
 @endsection
 
@@ -102,19 +102,33 @@
                     'chequebanks' => $banks,
                 ]) }}
             </div>
-            @isset($draft_receipts)
+            @php
+                $amount_paid = 0;
+                $amount_received = 0;
+            @endphp
+            @isset($draft_receipts[0])
                 @php
-                    $amount_received = 0;
-                    $amount_paid = 0;
+                    $amount_received = $draft_receipts[0]['amount_received'];
                 @endphp
 
                 @foreach ($draft_receipts as $draft_receipt)
                     @php
-                        $amount_received = $draft_receipt->amount_received;
+
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
+                        if(isset($draft_receipt->discounted_amount) &&  (float)$draft_receipt->discounted_amount > 0 )
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers + (float)$draft_receipt->discounted_amount;
+
+                        }
+                        else
+                        {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
+                        }
+
+
+
                     @endphp
                 @endforeach
-                {{-- @dd($amount_received,$amount_paid); --}}
             @endisset
             <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <div class="card sticky-md-top top-lg-100px top-md-100px top-sm-0px"
@@ -129,7 +143,7 @@
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
-                                value="{{ isset($amount_received) ? $amount_received : null }}" />
+                                value="{{ isset($amount_received) ? number_format($amount_received,2) : null }}" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -171,10 +185,10 @@
                                 <label class="form-label" style="font-size: 15px" for="floor">
                                     <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
-                                <input min="0" type="number"
+                                <input  type="text"
                                     class="form-control  @error('amount_in_numbers') is-invalid @enderror"
                                     @if ($amount_received > 0) name="amount_received" @endif
-                                    placeholder="Amount Received" readonly value="{{ $amount_received - $amount_paid }}" />
+                                    placeholder="Amount Received" readonly value="{{ number_format($remaining_amount,2) }}" />
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -183,9 +197,8 @@
 
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
-                            <input id="attachment" type="file"
-                                class="filepond @error('attachment') is-invalid @enderror" name="attachment" multiple
-                                accept="image/png, image/jpeg, image/gif, application/pdf" />
+                            <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
+                                name="attachment[]" multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -277,7 +290,7 @@
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
             allowMultiple: true,
-            maxFiles: 2,
+            // maxFiles: 2,
             checkValidity: true,
             allowPdfPreview: true,
             credits: {
@@ -408,7 +421,7 @@
             if ($.isNumeric(amount) && amount > 0) {
 
                 var unit_id = $(this).attr('unit_id');
-                var discounted_amount = $('#discounted_amount').val();
+                var discounted_amount = $('#discounted_amount').val().replace(/,/g, "");
                 if (discounted_amount > 0) {
                     amount = parseFloat(amount) + parseFloat(discounted_amount);
                 }
@@ -463,8 +476,8 @@
                                 $('#stackholder_designation').val(response.stakeholders['designation']);
                                 $('#stackholder_ntn').val(response.stakeholders['ntn']);
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
-                                $('#stackholder_contact').val(response.stakeholders['contact']);
-                                $('#stackholder_address').val(response.stakeholders['address']);
+                                $('#stackholder_contact').val(response.stakeholders['mobile_contact']);
+                                $('#stackholder_address').val(response.stakeholders['residential_address']);
                                 $('#stackholder_mailing_address').val(response.stakeholders[
                                     'mailing_address']);
                                 $('#stackholder_country').val(response.country);
@@ -759,7 +772,7 @@
             containerCssClass: "select-lg",
         }).on("change", function(e) {
             let bank = parseInt($(this).val());
-            showBlockUI('.bankDiv');
+            showBlockUI('#loader');
             let bankData = {
                 id: 0,
                 name: '',
@@ -791,7 +804,7 @@
                         $('.comments').val(response.bank.comments).attr('readOnly', true);
                         $('.address').val(response.bank.address).attr('readOnly', (response.bank.address
                             .length > 0));
-                        hideBlockUI('.bankDiv');
+                        hideBlockUI('#loader');
                     } else {
 
                         $('#name').val('').removeAttr('readOnly');
@@ -802,11 +815,11 @@
                         $('#comments').val('').removeAttr('readOnly');
                         $('#address').val('').removeAttr('readOnly');
                     }
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 },
                 error: function(errors) {
                     console.error(errors);
-                    hideBlockUI('.bankDiv');
+                    hideBlockUI('#loader');
                 }
             });
         });

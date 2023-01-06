@@ -82,7 +82,7 @@
                     <td width="40%">
                         <div class="row">
                             <div class="col-6 text-nowrap">
-                                <strong>Amount To Be Refunded</strong>
+                                <strong>Refunded Amount</strong>
                             </div>
                             <div class="col">
                                 {{ number_format($buy_back_file->amount_to_be_refunded) }}

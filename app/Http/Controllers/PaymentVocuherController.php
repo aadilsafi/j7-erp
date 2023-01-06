@@ -96,19 +96,10 @@ class PaymentVocuherController extends Controller
     {
         $site = (new Site())->find(decryptParams($site_id));
         $payment_voucher = PaymentVocuher::find(decryptParams($id));
-        if ($payment_voucher->vendor_id == null) {
-            if ($payment_voucher->dealer_id == null) {
-                $stakeholder_id = $payment_voucher->customer_id;
-            } else {
-                $stakeholder_id = $payment_voucher->dealer_id;
-            }
-        } else {
-            $stakeholder_id = $payment_voucher->vendor_id;
-        }
-        $stakeholder_data = Stakeholder::where('id', $stakeholder_id)->first();
+        $stakeholder_id = !is_null($payment_voucher->vendor_id) ? $payment_voucher->vendor_id : (!is_null($payment_voucher->dealer_id) ? $payment_voucher->dealer_id  : $payment_voucher->customer_id);
 
-        return view(
-            'app.sites.payment-voucher.preview',
+        $stakeholder_data = Stakeholder::where('id', $stakeholder_id)->first();
+        return view('app.sites.payment-voucher.preview',
             [
                 'site' => $site,
                 'stakeholder_data' => $stakeholder_data,

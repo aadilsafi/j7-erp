@@ -282,7 +282,7 @@
 
         function showBlockUI(element = null, message = '') {
             blockUIOptions = {
-                message: '<div class=" text-primary" role="status"><img src="{{ asset('app-assets') }}/images/comming-soon/bounce_1.gif"></div><br><div class="text-primary">' +
+                message: '<div class=" text-primary" role="status"><img src="{{ asset('app-assets') }}/images/comming-soon/Loader-current.gif"></div><br><div class="text-primary">' +
                     message + '</div>',
                 css: {
                     backgroundColor: 'transparent',

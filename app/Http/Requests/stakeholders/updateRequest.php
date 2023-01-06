@@ -35,6 +35,8 @@ class updateRequest extends FormRequest
         $rules['individual.ntn'] .= ',' . decryptParams($this->id);
         $rules['individual.passport_no'] .= ',' . decryptParams($this->id);
         $rules['individual.cnic'] .= ',' . decryptParams($this->id);
+        $rules['individual.mobile_contact'] .= ',' . decryptParams($this->id);
+        $rules['individual.office_contact'] .= ',' . decryptParams($this->id);
         $rules['stakeholder_type'] = 'array';
         unset($rules['stakeholder_type']);
 

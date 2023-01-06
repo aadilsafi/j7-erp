@@ -58,7 +58,7 @@
         }
 
         /* .filepond--item {
-                            } */
+                                } */
     </style>
 @endsection
 
@@ -170,8 +170,11 @@
             $('#individualForm').hide();
             $('#common_form').hide()
             $('#stakeholderType').hide();
+            $('#div-next-of-kin').hide();
+            $('#div_stakeholders').hide();
 
             $('#nationality').val({{ $stakeholder->nationality }}).trigger('change');
+            $('#origin').val({{ $stakeholder->origin }}).trigger('change');
 
             var dob = $("#dob").flatpickr({
                 defaultDate: "{{ $stakeholder->date_of_birth }}",

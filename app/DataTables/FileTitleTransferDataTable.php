@@ -176,7 +176,6 @@ class FileTitleTransferDataTable extends DataTable
             $titleTransferRoute = true;
         }
         return [
-            Column::computed('DT_RowIndex')->title('#'),
             Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
             Column::make('floor_unit_number')->name('unit.floor_unit_number')->title('Unit No')->addClass('text-nowrap'),
             Column::make('unit_name')->name('unit.name')->title('Unit Name')->addClass('text-nowrap'),
@@ -185,7 +184,7 @@ class FileTitleTransferDataTable extends DataTable
             Column::make('stakeholder_full_name')->name('stakeholder.full_name')->title('Customer Name')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_father_name')->name('stakeholder.father_name')->title('Father/Husband')->addClass('text-nowrap')->orderable(false),
             Column::make('stakeholder_cnic')->name('stakeholder.cnic')->title('Identity Number')->addClass('text-nowrap')->orderable(false),
-            Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap')->orderable(false),
+            // Column::make('stakeholder_contact')->name('stakeholder.contact')->title('Contact')->addClass('text-nowrap')->orderable(false),
             Column::make('file_status')->name('fileAction.name')->title('File Action Status')->addClass('text-nowrap text-center')->orderable(false),
             // // Column::computed('created_at')->title('Created At')->addClass('text-nowrap'),
             // // Column::computed('updated_at')->title('Updated At')->addClass('text-nowrap'),

@@ -124,15 +124,15 @@ class TypesDataTable extends DataTable
 
 
 
-        // if ($selectedDeletePermission) {
+        if ($selectedDeletePermission) {
 
-        //     $buttons[] = Button::raw('delete-selected')
-        //         ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
-        //         ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
-        //         ->attr([
-        //             'onclick' => 'deleteSelected()',
-        //         ]);
-        // }
+            $buttons[] = Button::raw('delete-selected')
+                ->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light')
+                ->text('<i class="bi bi-trash3-fill"></i> Delete Selected')
+                ->attr([
+                    'onclick' => 'deleteSelected()',
+                ]);
+        }
 
 
         $builder = $this->builder()
@@ -151,21 +151,21 @@ class TypesDataTable extends DataTable
             ->rowGroupDataSrc('parent_id');
         if ($selectedDeletePermission) {
             $builder->columnDefs([
-                // [
-                //     'targets' => 0,
-                //     'className' => 'text-center text-primary',
-                //     'width' => '10%',
-                //     'orderable' => false,
-                //     'searchable' => false,
-                //     'responsivePriority' => 3,
-                //     'render' => "function (data, type, full, setting) {
-                //             var role = JSON.parse(data);
-                //             return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                //         }",
-                //     'checkboxes' => [
-                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                //     ]
-                // ],
+                [
+                    'targets' => 0,
+                    'className' => 'text-center text-primary',
+                    'width' => '10%',
+                    'orderable' => false,
+                    'searchable' => false,
+                    'responsivePriority' => 3,
+                    'render' => "function (data, type, full, setting) {
+                            var role = JSON.parse(data);
+                            return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                        }",
+                    'checkboxes' => [
+                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                    ]
+                ],
             ]);
         }
         return $builder;

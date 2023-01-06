@@ -112,8 +112,8 @@ class store extends FormRequest
 
                 if(isset($discount) && (float)$discount > 0){
                     $amount_in_numbers = (float)$amount_in_numbers + (float)$discount;
+                    $amount_received = (float) $amount_received + (float)$discount;
                 }
-
                 if ($amount_in_numbers >  $amount_received) {
                     $validator->errors()->add('invalid_amount', 'Invalid Amount. Amount to be paid should not be greater than Amount Received.');
                 }

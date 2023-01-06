@@ -19,6 +19,9 @@
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -39,6 +42,10 @@
 
         .custom_row {
             background-color: #f3f2f7;
+        }
+
+        .filepond--item {
+            width: calc(50% - 0.5em);
         }
     </style>
 @endsection
@@ -119,8 +126,7 @@
                                 <input readonly type="text"
                                     class="form-control form-control-md @error('voucher_name') is-invalid @enderror"
                                     id="user_name" name="user_name" placeholder="Checked Date"
-                                    @if (isset($JournalVoucher->checked_date))  value="{{ date_format(new DateTime($JournalVoucher->checked_date), 'D d-M-Y') }}" @else value= "-" @endif
-                                    />
+                                    @if (isset($JournalVoucher->checked_date)) value="{{ date_format(new DateTime($JournalVoucher->checked_date), 'D d-M-Y') }}" @else value= "-" @endif />
 
                             </div>
 
@@ -139,9 +145,22 @@
                                     class="form-control form-control-md @error('remarks') is-invalid @enderror"
                                     id="remarks"
                                     @if (isset($JournalVoucher->approved_date)) value="{{ date_format(new DateTime($JournalVoucher->approved_date), 'D d-M-Y') }}" @else value= "-" @endif
-                                     placeholder="Posted Date"/>
+                                    placeholder="Posted Date" />
 
                             </div>
+                        </div>
+
+                        <div class="row mb-1">
+                            <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                <label class="form-label fs-5" for="type_name">Attachment</label>
+                                <input disabled id="attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="attachment[]"
+                                    multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
                         </div>
 
                     </div>
@@ -149,7 +168,11 @@
                 {{-- Form Repeater --}}
                 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
                     <div class="card-header">
-                        <h3>Journal Voucher Entries ( @if(isset($JournalVoucher->jve_number))  {{ $JournalVoucher->jve_number }} @else  JVE-{{  $origin_number }}  @endif )</h3>
+                        <h3>Journal Voucher Entries ( @if (isset($JournalVoucher->jve_number))
+                                {{ $JournalVoucher->jve_number }}
+                            @else
+                                JVE-{{ $origin_number }}
+                            @endif )</h3>
                     </div>
 
                     <div class="card-body">
@@ -207,7 +230,8 @@
                                                                                 </div>
 
                                                                                 <div class="col-2  position-relative">
-                                                                                    <input type="text" value=" {{ date_format(new DateTime($JournalVoucherEntry->created_date), 'D d-M-Y') }}"
+                                                                                    <input type="text"
+                                                                                        value=" {{ date_format(new DateTime($JournalVoucherEntry->created_date), 'D d-M-Y') }}"
                                                                                         class="form-control  form-control-md @error('voucher_name') is-invalid @enderror"
                                                                                         id="" readonly
                                                                                         value="" />
@@ -215,26 +239,27 @@
 
                                                                                 <div class="col position-relative">
                                                                                     <input type="number"
-                                                                                        @if (isset($JournalVoucherEntry) &&   $JournalVoucherEntry->debit > 0) value="{{ $JournalVoucherEntry->debit }}"  @else value="0" @endif
+                                                                                        @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->debit > 0) value="{{ $JournalVoucherEntry->debit }}"  @else value="0" @endif
                                                                                         class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
-                                                                                        id="debit" name="debit" readonly
-                                                                                        placeholder="Debit" />
+                                                                                        id="debit" name="debit"
+                                                                                        readonly placeholder="Debit" />
 
                                                                                 </div>
                                                                                 <div class="col position-relative">
                                                                                     <input type="number"
-                                                                                        @if (isset($JournalVoucherEntry) &&   $JournalVoucherEntry->credit > 0) value="{{ $JournalVoucherEntry->credit }}" @else value="0" @endif
+                                                                                        @if (isset($JournalVoucherEntry) && $JournalVoucherEntry->credit > 0) value="{{ $JournalVoucherEntry->credit }}" @else value="0" @endif
                                                                                         class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
-                                                                                        id="credit" name="credit" readonly
-                                                                                        placeholder="Credit"  />
+                                                                                        id="credit" name="credit"
+                                                                                        readonly placeholder="Credit" />
 
                                                                                 </div>
                                                                                 <div class="col-3 position-relative">
                                                                                     <input type="text"
-                                                                                        @if (isset($JournalVoucherEntry)) value="{{ ucfirst($JournalVoucherEntry->remarks) }}"  @endif
+                                                                                        @if (isset($JournalVoucherEntry)) value="{{ ucfirst($JournalVoucherEntry->remarks) }}" @endif
                                                                                         class="form-control form-control-md @error('remarks') is-invalid @enderror"
-                                                                                        id="remarks" name="remarks" readonly
-                                                                                        placeholder="Remarks" value="" />
+                                                                                        id="remarks" name="remarks"
+                                                                                        readonly placeholder="Remarks"
+                                                                                        value="" />
                                                                                 </div>
 
 
@@ -267,14 +292,14 @@
 
                                             <input readonly id="total_debit" type="text" required placeholder=" Debit"
                                                 name="total_debit"
-                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit,2) }}" @else value="0" @endif
+                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_debit, 2) }}" @else value="0" @endif
                                                 class="form-control form-control-md" />
 
                                         </div>
 
                                         <div class="col position-relative">
                                             <input
-                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit,2) }}" @else value="0" @endif
+                                                @if (isset($JournalVoucher)) value="{{ number_format($JournalVoucher->total_credit, 2) }}" @else value="0" @endif
                                                 readonly id="total_credit" type="text" required placeholder=" Credit"
                                                 name="total_credit" class="form-control form-control-md" />
                                         </div>
@@ -300,6 +325,13 @@
 
 @section('vendor-js')
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.typevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagecrop.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.imagesizevalidation.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.filesizevalidation.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
+    <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -307,24 +339,71 @@
 @endsection
 
 @section('custom-js')
-<script>
-    $(document).ready(function() {
-        $("#created_date").flatpickr({
-            defaultDate: "{{ $JournalVoucher->created_date }}",
-            // minDate: "today",
-            altInput: !0,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
 
-        $(".voucher_date").flatpickr({
-            // defaultDate: "today",
-            // minDate: "today",
-            altInput: !0,
-            altFormat: "F j, Y",
-            dateFormat: "Y-m-d",
-        });
+    <script>
+        FilePond.registerPlugin(
+            FilePondPluginImagePreview,
+            FilePondPluginFileValidateType,
+            FilePondPluginFileValidateSize,
+            FilePondPluginImageValidateSize,
+            FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
+        );
 
-    });
-</script>
+        var files = [];
+
+        @forelse($images as $image)
+            files.push({
+                source: '{{ $image->getUrl() }}',
+            });
+        @empty
+        @endforelse
+
+        FilePond.create(document.getElementById('attachment'), {
+            files: files,
+            styleButtonRemoveItemPosition: 'right',
+            // imagePreviewMarkupShow:true,
+            // stylePanelLayout:'circle',
+            // styleItemPanelAspectRatio:'center',
+            // imageCropAspectRatio: '5:5',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
+            // maxFiles: 2,
+            checkValidity: true,
+            allowPdfPreview: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+        FilePond.setOptions({
+            allowPdfPreview: true,
+            pdfPreviewHeight: 320,
+            pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $("#created_date").flatpickr({
+                defaultDate: "{{ $JournalVoucher->created_date }}",
+                // minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
+            $(".voucher_date").flatpickr({
+                // defaultDate: "today",
+                // minDate: "today",
+                altInput: !0,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+            });
+
+        });
+    </script>
 @endsection

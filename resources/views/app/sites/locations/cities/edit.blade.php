@@ -52,7 +52,7 @@
                     <div class="card-body">
                         @csrf
                         @method('put')
-                        {{ view('app.sites.cities.form-fields', ['city' => $city], ['country' => $country]) }}
+                        {{ view('app.sites.locations.cities.form-fields', ['city' => $city], ['country' => $country]) }}
                     </div>
                 </div>
             </div>

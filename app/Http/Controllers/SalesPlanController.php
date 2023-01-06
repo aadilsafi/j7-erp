@@ -33,7 +33,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalesPlanController extends Controller
 {
-    private $salesPlanInterface, $additionalCostInterface,$customFieldInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface;
+    private $salesPlanInterface, $additionalCostInterface, $customFieldInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface;
 
     public function __construct(
         SalesPlanInterface $salesPlanInterface,
@@ -62,7 +62,8 @@ class SalesPlanController extends Controller
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
             'unit' => decryptParams($unit_id) > 0 ? (new Unit())->find(decryptParams($unit_id)) : [],
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
+            'siteConfigurations' => (new Site())->find(decryptParams($site_id))->siteConfiguration,
+
         ];
         return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
     }
@@ -210,7 +211,6 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'initial',
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.investment-plan-preview', $data);
     }
@@ -231,7 +231,6 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'updated',
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
     }
@@ -484,7 +483,7 @@ class SalesPlanController extends Controller
         }
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
-            'approved_by'=>Auth::user()->id,
+            'approved_by' => Auth::user()->id,
             'approved_date' => $request->approve_date . date(' H:i:s'),
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);

@@ -25,6 +25,7 @@ use App\Models\State;
 use App\Models\TempStakeholder;
 use App\Utils\Enums\StakeholderTypeEnum;
 use Exception;
+use File;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\HeadingRowImport;
 use Redirect;
@@ -268,16 +269,28 @@ class StakeholderController extends Controller
 
     public function authorizeStakeholder(Request $request, $file_name)
     {
-        $file_name = decryptParams($file_name);
-        $id = explode('.', $file_name);
-        $id = explode('-', $id[0]);
-        $stakeholder_id = $id[count($id) - 1];
+        $path = public_path('app-assets/pdf/sales-plans/payment-plan');
+        $file_path = $path . '/' . decryptParams($file_name);
+        if (file_exists($file_path)) {
+            $file_name = decryptParams($file_name);
 
-        $data = [
-            'file_name' => encryptParams($file_name),
-            'stakeholder_id' => encryptParams($stakeholder_id),
-        ];
-        return view('app.sites.stakeholders.authorize', $data);
+            $id = explode('.', $file_name);
+            $id = explode('-', $id[0]);
+            $stakeholder_id = $id[count($id) - 1];
+
+            $data = [
+                'file_name' => encryptParams($file_name),
+                'stakeholder_id' => encryptParams($stakeholder_id),
+            ];
+            return view('app.sites.stakeholders.authorize', $data);
+        } else {
+            return response()->json(
+                [
+                    'message' => 'File Does Not Exist',
+                ],
+                500
+            );
+        }
     }
 
     public function verifyPin(Request $request, $file_name, $stakeholder_id)

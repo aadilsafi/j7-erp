@@ -116,6 +116,16 @@
                                 @enderror
                             </div>
                             <hr>
+                            <div class="d-block mb-1">
+                                <label class="form-label fs-5" for="type_name">Passport Attachment</label>
+                                <input id="passport_attachment" type="file"
+                                    class="filepond @error('attachment') is-invalid @enderror" name="passport_attachment[]" multiple
+                                    accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                @error('attachment')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <hr>
                             @can('sites.stakeholders.update')
                                 <button id="saveButton" type="submit"
                                     class="btn w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 buttonToBlockUI mb-1">
@@ -768,6 +778,29 @@
             maxFiles: 2,
             minFiles: 1,
             // required: true,
+            checkValidity: true,
+            credits: {
+                label: '',
+                url: ''
+            }
+        });
+        var files = [];
+
+        @forelse($passport_images as $image)
+            files.push({
+                source: '{{ $image->getUrl() }}',
+            });
+        @empty
+        @endforelse
+        FilePond.create(document.getElementById('passport_attachment'), {
+            files: files,
+            styleButtonRemoveItemPosition: 'right',
+            imageCropAspectRatio: '1:1',
+            acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+            maxFileSize: '1536KB',
+            ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
+            storeAsFile: true,
+            allowMultiple: true,
             checkValidity: true,
             credits: {
                 label: '',

@@ -20,7 +20,8 @@
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/filepond.min.css">
-    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('app-assets') }}/vendors/filepond/plugins/filepond.preview.min.css">
 @endsection
 
 @section('custom-css')
@@ -42,6 +43,22 @@
         .custom_row {
             background-color: #f3f2f7;
         }
+
+        .filepond--drop-label {
+            color: #7367F0 !important;
+        }
+
+        .filepond--item-panel {
+            background-color: #7367F0;
+        }
+
+        .filepond--panel-root {
+            background-color: #e3e0fd;
+        }
+
+        /* .filepond--item {
+            width: calc(50% - 0.5em);
+        } */
     </style>
 @endsection
 

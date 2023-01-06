@@ -43,6 +43,10 @@
         .custom_row {
             background-color: #f3f2f7;
         }
+
+        .filepond--item {
+            width: calc(50% - 0.5em);
+        }
     </style>
 @endsection
 
@@ -361,7 +365,7 @@
             // imagePreviewMarkupShow:true,
             // stylePanelLayout:'circle',
             // styleItemPanelAspectRatio:'center',
-            imageCropAspectRatio: '5:5',
+            // imageCropAspectRatio: '5:5',
             acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],

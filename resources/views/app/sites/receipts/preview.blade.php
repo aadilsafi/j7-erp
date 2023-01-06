@@ -29,10 +29,9 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
-
-        /* .filepond--item {
-                                                    width: calc(20% - 0.5em);
-                                                } */
+        .filepond--item {
+            width: calc(50% - 0.5em);
+        }
     </style>
 @endsection
 

@@ -294,26 +294,26 @@
                 }
             })
             $('.swal2-radio').empty();
-            var radioInput = '<div class="card-body">\
-                                                 <div class="row custom-options-checkable g-1">\
-                                                    <div class="col-md-6">\
+            var radioInput = '<div class="row custom-options-checkable g-1" width="100%">\
+                                                    <div class="col">\
                                                         <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
                                                             <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
                                                                         <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <i class="bi bi-file-earmark-bar-graph"></i>\
                                                                             <span class="fw-bolder">Investment Plan</span>\
                                                                         </span>\
                                                                     </label>\
                                                                 </div>\
-                                                                <div class="col-md-6">\
+                                                                <div class="col">\
                                                                     <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
                                                                     <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
                                                                         <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                            <i class="bi bi-credit-card-2-front"></i>\
                                                                             <span class="fw-bolder">Payment Plan</span>\
                                                                         </span>\
                                                                     </label>\
                                                                 </div>\
-                                                            </div>\
-                                                        </div>'
+                                                            </div>'
             $('.swal2-radio').append(radioInput)
 
         }

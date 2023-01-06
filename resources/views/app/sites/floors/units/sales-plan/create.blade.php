@@ -400,7 +400,7 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                
+
                                 $('#is_local').prop( "checked", stakeholderData.is_local );
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');

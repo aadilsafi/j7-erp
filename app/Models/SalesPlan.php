@@ -35,6 +35,13 @@ class SalesPlan extends Model
         'is_from_crm',
         'investment_plan_serial_id',
         'payment_plan_serial_id',
+        'checked_by',
+        'checked_date',
+        'approved_by',
+        'reverted_by',
+        'reverted_date',
+        'dis_approved_by',
+        'dis_approved_date',
     ];
 
     protected $casts = [

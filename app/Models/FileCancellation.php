@@ -30,6 +30,15 @@ class FileCancellation extends Model
         'status',
         'comments',
         'serial_no',
+        'user_id',
+        'checked_date',
+        'checked_by',
+        'approved_by',
+        'approved_date',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

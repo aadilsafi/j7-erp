@@ -44,6 +44,7 @@ class RefundService implements RefundServiceRefundInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
             $data = [
+                'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'file_id' => $file->id,
                 'sales_plan_id' => $file->sales_plan_id,

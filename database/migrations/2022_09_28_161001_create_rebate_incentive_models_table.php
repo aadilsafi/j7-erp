@@ -37,6 +37,16 @@ return new class extends Migration
             $table->timestamp('created_date')->nullable();
             $table->string('serial_no')->nullable()->default('RI-');
             $table->boolean('cheque_status')->default(0);
+            $table->bigInteger('user_id')->nullable();
+            $table->timestamp('checked_date')->nullable();
+            $table->bigInteger('checked_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
+            $table->timestamp('approved_date')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
+            $table->timestamp('reverted_date')->nullable();
+            $table->bigInteger('cheque_active_by')->nullable();
+            $table->timestamp('cheque_active_date')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

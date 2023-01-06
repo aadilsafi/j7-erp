@@ -27,6 +27,7 @@ use App\Services\FileManagements\FileActions\Resale\ResaleInterface;
 use App\Services\CustomFields\CustomFieldInterface;
 use App\Services\FileManagements\FileActions\BuyBack\BuyBackInterface;
 use Arr;
+use Auth;
 use DB;
 
 class FileReleaseController extends Controller
@@ -39,7 +40,7 @@ class FileReleaseController extends Controller
 
     private $stakeholderInterface;
     private $resaleInterface;
-    private $buyBackInterface;
+    private $buyBackInterface,$customFieldInterface;
 
     public function __construct(StakeholderInterface $stakeholderInterface, ResaleInterface $resaleInterface, CustomFieldInterface $customFieldInterface, BuyBackInterface $buyBackInterface)
     {
@@ -227,6 +228,8 @@ class FileReleaseController extends Controller
 
             $file_resale = FileResale::where('file_id', decryptParams($file_id))->first();
             $file_resale->status = 1;
+            $file_resale->approved_by = Auth::user()->id;
+            $file_resale->approved_date =now();
             $file_resale->update();
 
             $unit = Unit::find(decryptParams($unit_id));

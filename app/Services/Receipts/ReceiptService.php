@@ -111,6 +111,7 @@ class ReceiptService implements ReceiptInterface
                 $max = Receipt::max('id') + 1;
 
                 $receiptData = [
+                    'user_id' => Auth::user()->id,
                     'site_id' => decryptParams($site_id),
                     'unit_id'  => $data[$i]['unit_id'],
                     'sales_plan_id'  => $sales_plan[0]['id'],
@@ -167,6 +168,7 @@ class ReceiptService implements ReceiptInterface
                     if (isset($draft_receipt_data)) {
                         foreach ($draft_receipt_data as $draftReceiptData) {
                             $receiptDraftData = [
+                                'user_id' => $draftReceiptData->user_id,
                                 'site_id' => $draftReceiptData->site_id,
                                 'unit_id'  => $draftReceiptData->unit_id,
                                 'sales_plan_id'  => $draftReceiptData->sales_plan_id,
@@ -511,6 +513,8 @@ class ReceiptService implements ReceiptInterface
 
         $data = [
             'status' => 1,
+            'cheque_active_by' => Auth::user()->id,
+            'cheque_active_date' => now(),
         ];
 
         for ($i = 0; $i < count($id); $i++) {

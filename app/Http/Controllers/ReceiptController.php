@@ -29,7 +29,7 @@ use Redirect;
 class ReceiptController extends Controller
 {
 
-    private $receiptInterface;
+    private $receiptInterface,$customFieldInterface;
 
     public function __construct(
         ReceiptInterface $receiptInterface,

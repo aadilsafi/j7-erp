@@ -8,6 +8,7 @@ use App\Models\Stakeholder;
 use App\Models\StakeholderType;
 use App\Models\Unit;
 use App\Services\DealerIncentive\DealerInterface;
+use Auth;
 use Illuminate\Support\Facades\DB;
 
 class DealerService implements DealerInterface
@@ -40,6 +41,7 @@ class DealerService implements DealerInterface
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
             $dealerIncentive = [
+                'user_id' => Auth::user()->id,
                 'site_id' => decryptParams($site_id),
                 'dealer_id' => $inputs['dealer_id'],
                 'dealer_data' => json_encode(Stakeholder::find($inputs['dealer_id'])),

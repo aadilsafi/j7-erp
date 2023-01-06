@@ -16,6 +16,7 @@ use DB;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\PaymentVoucher\store;
+use Auth;
 
 class PaymentVocuherController extends Controller
 {
@@ -106,7 +107,8 @@ class PaymentVocuherController extends Controller
         }
         $stakeholder_data = Stakeholder::where('id', $stakeholder_id)->first();
 
-        return view('app.sites.payment-voucher.preview',
+        return view(
+            'app.sites.payment-voucher.preview',
             [
                 'site' => $site,
                 'stakeholder_data' => $stakeholder_data,
@@ -277,6 +279,8 @@ class PaymentVocuherController extends Controller
 
             $transaction = $this->financialTransactionInterface->makePaymentVoucherTransaction($payment_voucher, $stakeholder_id);
             $payment_voucher->status = 1;
+            $payment_voucher->approved_by = Auth::user()->id;
+            $payment_voucher->approved_date = now();
             $payment_voucher->update();
         });
         return redirect()->route('sites.payment-voucher.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
@@ -289,6 +293,8 @@ class PaymentVocuherController extends Controller
             if ($payment_voucher->status == 1) {
                 $transaction = $this->financialTransactionInterface->makePaymentVoucherChequeActiveTransaction($payment_voucher);
                 $payment_voucher->cheque_status = 1;
+                $payment_voucher->cheque_active_by = Auth::user()->id;
+                $payment_voucher->cheque_active_date = now();
                 $payment_voucher->update();
             }
         });

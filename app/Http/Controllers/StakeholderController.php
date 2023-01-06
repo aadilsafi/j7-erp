@@ -300,7 +300,7 @@ class StakeholderController extends Controller
         $data = [
             'file_name' => $file_name,
             'stakeholder_id' => $stakeholder_id,
-            'stakeholder'   => Stakeholder::where('id', $stakeholder_id)->first(),
+            'stakeholder'   => Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists(),
         ];
         return $data;
        

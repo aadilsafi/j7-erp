@@ -126,6 +126,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -153,6 +154,7 @@
         //     FilePondPluginFileValidateSize,
         //     FilePondPluginImageValidateSize,
         //     FilePondPluginImageCrop,
+        //     FilePondPluginPdfPreview,
         // );
 
         // FilePond.create(document.getElementById('attachment'), {
@@ -299,7 +301,7 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                $('#is_local').prop( "checked", stakeholderData.is_local );
+                                $('#is_local').prop("checked", stakeholderData.is_local);
 
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');

@@ -83,6 +83,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -99,6 +100,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
         $(".expenses-list").repeater({
             initEmpty: true,

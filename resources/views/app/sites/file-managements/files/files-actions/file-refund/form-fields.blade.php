@@ -108,7 +108,7 @@
                                                     <input id="attachment" type="file"
                                                         class="filepond attachment @error('image') is-invalid @enderror"
                                                         name="attachments[image]"
-                                                        accept="image/png, image/jpeg, image/gif , application/pdf" />
+                                                        accept="image/png, image/jpeg,image/gif,application/pdf" />
                                                     @error('attachments.image')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror

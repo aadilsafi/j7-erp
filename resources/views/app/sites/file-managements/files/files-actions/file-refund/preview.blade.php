@@ -138,7 +138,7 @@
                     files: [files[key]],
                     styleButtonRemoveItemPosition: 'right',
                     imageCropAspectRatio: '1:1',
-                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
                     maxFileSize: '1536KB',
                     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
                     storeAsFile: true,

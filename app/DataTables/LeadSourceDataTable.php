@@ -24,6 +24,7 @@ class LeadSourceDataTable extends DataTable
     {
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
+            ->addIndexColumn()
             ->editColumn('check', function ($leadSource) {
                 return $leadSource;
             })
@@ -118,21 +119,21 @@ class LeadSourceDataTable extends DataTable
             ->buttons($buttons)
             // ->rowGroupDataSrc('parent_id')
             ->columnDefs([
-                [
-                    'targets' => 0,
-                    'className' => 'text-center text-primary',
-                    'width' => '10%',
-                    'orderable' => false,
-                    'searchable' => false,
-                    'responsivePriority' => 3,
-                    'render' => "function (data, type, full, setting) {
-                        var role = JSON.parse(data);
-                        return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
-                    }",
-                    'checkboxes' => [
-                        'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
-                    ]
-                ],
+                // [
+                //     'targets' => 0,
+                //     'className' => 'text-center text-primary',
+                //     'width' => '10%',
+                //     'orderable' => false,
+                //     'searchable' => false,
+                //     'responsivePriority' => 3,
+                //     'render' => "function (data, type, full, setting) {
+                //         var role = JSON.parse(data);
+                //         return '<div class=\"form-check\"> <input class=\"form-check-input dt-checkboxes\" onchange=\"changeTableRowColor(this)\" type=\"checkbox\" value=\"' + role.id + '\" name=\"chkRole[]\" id=\"chkRole_' + role.id + '\" /><label class=\"form-check-label\" for=\"chkRole_' + role.id + '\"></label></div>';
+                //     }",
+                //     'checkboxes' => [
+                //         'selectAllRender' =>  '<div class="form-check"> <input class="form-check-input" onchange="changeAllTableRowColor()" type="checkbox" value="" id="checkboxSelectAll" /><label class="form-check-label" for="checkboxSelectAll"></label></div>',
+                //     ]
+                // ],
             ])
             ->orders([
                 [2, 'desc'],
@@ -147,7 +148,8 @@ class LeadSourceDataTable extends DataTable
     protected function getColumns(): array
     {
         $columns = [
-            Column::computed('check')->exportable(false)->printable(false)->width(60),
+            // Column::computed('check')->exportable(false)->printable(false)->width(60),
+            Column::computed('DT_RowIndex')->title('#'),
             Column::make('name')->title('Lead Source'),
         ];
 

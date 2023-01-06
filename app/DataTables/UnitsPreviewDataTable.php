@@ -28,12 +28,14 @@ class UnitsPreviewDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->editColumn('type_id', function ($unit) {
-                return view('app.components.unit-preview-cell',
-                    ['id'=>$unit->id,'field'=>'type_id','inputtype'=>'select','value'=>$unit->type->name]);
+                // return view('app.components.unit-preview-cell',
+                //     ['id'=>$unit->id,'field'=>'type_id','inputtype'=>'select','value'=>$unit->type->name]);
+                return $unit->type->name;
             })
             ->editColumn('status_id', function ($unit) {
-                return view('app.components.unit-preview-cell',
-                    ['id'=>$unit->id,'field'=>'status_id','inputtype'=>'select','value'=>$unit->status->name]);
+                // return view('app.components.unit-preview-cell',
+                //     ['id'=>$unit->id,'field'=>'status_id','inputtype'=>'select','value'=>$unit->status->name]);
+                return $unit->status->name;
             })
             ->editColumn('name', function ($unit) {
                 return view('app.components.unit-preview-cell',
@@ -59,14 +61,14 @@ class UnitsPreviewDataTable extends DataTable
                 return view('app.components.unit-preview-cell',
                                 ['id'=>$unit->id,'field'=>'price_sqft','inputtype'=>'number','value'=>$unit->price_sqft]);
             })
-            ->editColumn('is_corner', function ($unit) {
-                return view('app.components.checkbox',
-                 ['id' => $unit->id, 'data'=> 'null' ,'field' => 'is_corner', 'is_true' => $unit->is_corner]);
-            })
-            ->editColumn('is_facing', function ($unit) {
-                return view('app.components.checkbox',
-                 ['id' => $unit->id,'data'=> $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]);
-            })
+            // ->editColumn('is_corner', function ($unit) {
+            //     return view('app.components.checkbox',
+            //      ['id' => $unit->id, 'data'=> 'null' ,'field' => 'is_corner', 'is_true' => $unit->is_corner]);
+            // })
+            // ->editColumn('is_facing', function ($unit) {
+            //     return view('app.components.checkbox',
+            //      ['id' => $unit->id,'data'=> $unit, 'field' => 'is_facing', 'is_true' => $unit->is_facing]);
+            // })
             ->editColumn('created_at', function ($unit) {
                 return editDateColumn($unit->created_at);
             })
@@ -116,7 +118,7 @@ class UnitsPreviewDataTable extends DataTable
                 ],
             ])
             ->orders([
-                [10, 'desc'],
+                [8, 'desc']
             ])
             ;
     }
@@ -137,8 +139,8 @@ class UnitsPreviewDataTable extends DataTable
             Column::make('net_area'),
             Column::make('gross_area'),
             Column::make('price_sqft'),
-            Column::make('is_corner'),
-            Column::make('is_facing'),
+            // Column::make('is_corner'),
+            // Column::make('is_facing'),
             Column::make('created_at')->addClass('text-nowrap'),
         ];
     }

@@ -38,7 +38,7 @@ class JournalVouchersService implements JournalVouchersInterface
             ];
             $journal_voucher = $this->model()->create($voucher_data);
 
-            if (count($inputs['attachment']) > 0) {
+            if (isset($inputs['attachment'])&& count($inputs['attachment']) > 0) {
                 for ($j = 0; $j < count($inputs['attachment']); $j++) {
                     $journal_voucher->addMedia($inputs['attachment'][$j])->toMediaCollection('journal_voucher_attachments');
                     changeImageDirectoryPermission();

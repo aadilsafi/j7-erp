@@ -53,6 +53,7 @@
                 </th>
                 <th style="width:33%; ">
                     <h1 style="margin-top: 0; text-align: center;">PAYMENT PLAN</h1>
+                    Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
                 </th>
                 <th  style="width:33%; text-align:end;">
                     <img width="100px" height="" src="{{ $data['qrCodeimg']}}"
@@ -106,7 +107,7 @@
                     Detail
                 </th>
                 <th style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
-                     Taotal Amount
+                     Total Amount
                 </th>
                 <th style="  border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
                     PAID AMOUNT

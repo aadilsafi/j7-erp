@@ -72,7 +72,7 @@
                     alt="logo">
             </th>
             <th style="width:33%; ">
-                <h1 style="margin-top: 0;">Sales Plan</h1>
+                <h1 style="margin-top: 0;">Investment Plan</h1>
                 Date : {{  date_format (new DateTime(), ' d-M-Y , h:i:s a') }}
             </th>
             <th  style="width:33%; text-align:end;">

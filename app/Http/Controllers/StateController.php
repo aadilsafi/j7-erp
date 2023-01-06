@@ -31,7 +31,7 @@ class StateController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:states,name',
-            'short_label' => 'required|unique:states,iso2',
+            'short_label' => 'required',
             'country_id' => 'required|exists:countries,id'
         ]);
 
@@ -58,7 +58,7 @@ class StateController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:states,name,' . decryptParams($id),
-            'short_label' => 'required|unique:states,iso2,' . decryptParams($id),
+            'short_label' => 'required',
             'country_id' => 'required|exists:countries,id'
         ]);
 

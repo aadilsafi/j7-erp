@@ -158,7 +158,7 @@
         </div>
     </div>
 
-    @if (Route::current()->getName() == 'sites.file-managements.file-title-transfer.preview')
+    @if (Route::current()->getName() != 'sites.file-managements.file-title-transfer.preview')
         <div id="titleTransferPersonInformaton" class="col-lg-12 col-md-12 col-sm-12 position-relative">
             <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
                 id="stakeholders_card">

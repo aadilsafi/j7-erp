@@ -297,6 +297,13 @@ class StakeholderController extends Controller
     {
         $file_name = decryptParams($file_name);
         $stakeholder_id = decryptParams($stakeholder_id);
+        $data = [
+            'file_name' => $file_name,
+            'stakeholder_id' => $stakeholder_id,
+            'stakeholder'   => Stakeholder::where('id', $stakeholder_id)->first(),
+        ];
+        return $data;
+       
         $stakeholder = Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists();
         if ($stakeholder) {
             return apiSuccessResponse($file_name);

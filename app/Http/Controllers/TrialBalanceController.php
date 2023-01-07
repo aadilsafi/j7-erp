@@ -48,6 +48,7 @@ class TrialBalanceController extends Controller
 
     public function filterTrialBalance(Request $request)
     {
+        $last_date = substr($request->to_date, 0, 10);
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
         $account_head_code = $request->account_head_code;
@@ -64,11 +65,12 @@ class TrialBalanceController extends Controller
             })
             ->where('account_head_code', $account_head_code)->get();
 
-        dd($account_ledgers);
 
 
+            dd($last_date);
         if (count($account_ledgers) > 0) {
 
+            $lastExistAccount = AccountLedger::where('id',$account_ledgers[0])->first;
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .

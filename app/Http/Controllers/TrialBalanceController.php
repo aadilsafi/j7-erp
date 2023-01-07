@@ -75,6 +75,7 @@ class TrialBalanceController extends Controller
 
             $last_Accounts_data = AccountLedger::where('account_head_code', $account_head_code)->where('created_date' , '<', $start_date)->get();
             $last_opened_balance = 0.0;
+            $amount = 0.0;
             if(isset($last_Accounts_data) && count($last_Accounts_data)>0)
             {
                 foreach($last_Accounts_data as $last_data){

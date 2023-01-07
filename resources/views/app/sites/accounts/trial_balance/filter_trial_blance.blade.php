@@ -158,7 +158,7 @@
                                                     @endphp
                                                     <td>{{ $i }}</td>
                                                     <td class="text-nowrap">
-                                                        {{ account_number_format($account_ledger->account_head_code) }}
+                                                        {{ $account_head->name }}
                                                     </td>
                                                     @if ($i > 1)
                                                         <td>{{ number_format($starting_balance[$starting_balance_index - 1]) }}

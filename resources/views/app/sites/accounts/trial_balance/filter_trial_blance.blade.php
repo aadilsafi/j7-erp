@@ -128,7 +128,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-nowrap">#</th>
-                                                <th class="text-nowrap">Account Codes</th>
+                                                <th class="text-nowrap">Account Name</th>
                                                 <th class="text-nowrap">Opening Balance</th>
                                                 <th class="text-nowrap">Debit</th>
                                                 <th class="text-nowrap">Credit</th>

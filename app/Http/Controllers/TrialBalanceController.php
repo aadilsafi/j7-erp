@@ -95,8 +95,6 @@ class TrialBalanceController extends Controller
             }
 
         if (count($account_ledgers) > 0) {
-
-            $lastExistAccount = AccountLedger::where('id',$account_ledgers[0])->first;
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .

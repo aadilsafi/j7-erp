@@ -101,7 +101,7 @@ class TrialBalanceController extends Controller
                 }
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
-                    '<td>' . acount_name . '</td>' .
+                    '<td>' . $acount_name . '</td>' .
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : 0) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .

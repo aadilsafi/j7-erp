@@ -83,17 +83,16 @@ class TrialBalanceController extends Controller
                     if($acount_nature == 'debit')
                     {
                         $amount = (float)$last_data->debit - (float)$last_data->credit;
-                        $last_opened_balance = (float)$last_Accounts_data + (float)$amount;
+                        $last_opened_balance = (float)$last_opened_balance + (float)$amount;
                     }
                     else
                     {
                         $amount =  (float)$last_data->credit - (float)$last_data->debit ;
-                        $last_opened_balance = (float)$last_Accounts_data + (float)$amount;
+                        $last_opened_balance = (float)$last_opened_balance + (float)$amount;
                     }
                 }
 
             }
-            dd($acount_nature, $last_opened_balance);
 
         if (count($account_ledgers) > 0) {
 

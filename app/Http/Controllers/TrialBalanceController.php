@@ -70,7 +70,7 @@ class TrialBalanceController extends Controller
 
             $date=date_create($last_date);
             $last_date = date_sub($date,date_interval_create_from_date_string("1 days"));
-            $getOnlyDate = date_format($last_date,"Y/m/d");
+            $getOnlyDate = date_format($last_date,"Y-m-d");
 
             $last_Accounts_data = AccountLedger::where('created_date','<=',$getOnlyDate) ->where('account_head_code', $account_head_code)->get();
 

@@ -51,7 +51,7 @@ class TrialBalanceController extends Controller
         $start_date = substr($request->to_date, 0, 10);
         $end_date =  substr($request->to_date, 14, 10);
         $account_head_code = $request->account_head_code;
-
+        $acount_name = AccountHead::find($account_head_code)->name;
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
             $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
             // $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
@@ -66,12 +66,13 @@ class TrialBalanceController extends Controller
 
         // dd($account_ledgers);
 
+
         if (count($account_ledgers) > 0) {
 
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .
-                '<th class="text-nowrap">Account Codes asdasd</th>' .
+                '<th class="text-nowrap">Account Codes</th>' .
                 '<th class="text-nowrap">Opening Balance</th>' .
                 '<th class="text-nowrap">Debit</th>' .
                 '<th class="text-nowrap">Credit</th>' .
@@ -100,7 +101,7 @@ class TrialBalanceController extends Controller
                 }
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
-                    '<td>' . account_number_format($account_ledger->account_head_code) . '</td>' .
+                    '<td>' . acount_name . '</td>' .
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : 0) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .

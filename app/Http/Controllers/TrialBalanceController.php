@@ -67,7 +67,7 @@ class TrialBalanceController extends Controller
 
 
 
-            dd($last_date);
+            dd($last_date,$request->to_date ,$request->to_date -1);
         if (count($account_ledgers) > 0) {
 
             $lastExistAccount = AccountLedger::where('id',$account_ledgers[0])->first;

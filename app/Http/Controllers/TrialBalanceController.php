@@ -53,6 +53,7 @@ class TrialBalanceController extends Controller
         $end_date =  substr($request->to_date, 14, 10);
         $account_head_code = $request->account_head_code;
         $acount_name = AccountHead::find($account_head_code)->name;
+        $acount_nature = AccountHead::find($account_head_code)->account_type;
         $account_ledgers = AccountLedger::when(($start_date && $end_date), function ($query) use ($start_date, $end_date) {
             $query->whereDate('created_date', '>=', $start_date)->whereDate('created_date', '<=', $end_date);
             // $query->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date);
@@ -73,8 +74,23 @@ class TrialBalanceController extends Controller
             $getOnlyDate = date_format($last_date,"Y-m-d");
 
             $last_Accounts_data = AccountLedger::where('account_head_code', $account_head_code)->where('created_date' , '<', $start_date)->get();
+            $last_opened_balance = 0.0;
+            if(isset($last_Accounts_data) && count($last_Accounts_data)>0)
+            {
+                foreach($last_Accounts_data as $last_data){
+                    if($acount_nature == 'debit')
+                    {
+                        $amount = (float)$last_data->debit - (float)$last_data->credit;
+                        $last_opened_balance = (float)$last_Accounts_data + (float)$amount;
+                    }
+                    else
+                    {
+                        $amount =  (float)$last_data->credit - (float)$last_data->debit ;
+                        $last_opened_balance = (float)$last_Accounts_data + (float)$amount;
+                    }
+                }
 
-
+            }
 
 
             dd($last_Accounts_data,$getOnlyDate,$end_date);
@@ -115,7 +131,7 @@ class TrialBalanceController extends Controller
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
                     '<td>' . $acount_name . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : 0) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
                     '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .

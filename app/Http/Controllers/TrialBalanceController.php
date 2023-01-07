@@ -78,6 +78,7 @@ class TrialBalanceController extends Controller
             if(isset($last_Accounts_data) && count($last_Accounts_data)>0)
             {
                 foreach($last_Accounts_data as $last_data){
+                    dd($last_data);
                     if($acount_nature == 'debit')
                     {
                         $amount = (float)$last_data->debit - (float)$last_data->credit;
@@ -91,6 +92,8 @@ class TrialBalanceController extends Controller
                 }
 
             }
+
+
         if (count($account_ledgers) > 0) {
 
             $lastExistAccount = AccountLedger::where('id',$account_ledgers[0])->first;

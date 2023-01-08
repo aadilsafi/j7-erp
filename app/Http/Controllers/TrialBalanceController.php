@@ -133,7 +133,14 @@ class TrialBalanceController extends Controller
                     if($i==2){
                         $new_starting_balance = ($closingBalance + $starting_balance[$starting_balance_index - 1]);
                         $starting_balance[$starting_balance_index] = $new_starting_balance;
-                        $opening_balance = $new_starting_balance + $closingBalance;
+
+                        if ($acount_nature == 'debit') {
+                            $ending_balance =  $account_ledger[0]['debit'] - $account_ledger[0]['credit'];
+                            $opening_balance = $ending_balance + $closingBalance;
+                        } else {
+                            $ending_balance =  $account_ledger[0]['credit'] - $account_ledger[0]['debit'] ;
+                            $opening_balance = $ending_balance + $closingBalance;
+                        }
                     }
                     else{
                         $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);

@@ -129,7 +129,7 @@ class TrialBalanceController extends Controller
                 }else{
                     $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->credit - (float)$account_ledger->debit);
                 }
-                dd($starting_balance);
+
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
                     '<td>' . $acount_name . '</td>' .

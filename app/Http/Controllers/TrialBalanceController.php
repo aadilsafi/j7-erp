@@ -136,10 +136,10 @@ class TrialBalanceController extends Controller
 
                         if ($acount_nature == 'debit') {
                             $ending_balance =  $account_ledgers[0]['debit'] - $account_ledgers[0]['credit'];
-                            $opening_balance = $ending_balance + $closingBalance;
+                            $opening_balance = $ending_balance + $last_opened_balance;
                         } else {
                             $ending_balance =  $account_ledgers[0]['credit'] - $account_ledgers[0]['debit'] ;
-                            $opening_balance = $ending_balance + $closingBalance;
+                            $opening_balance = $ending_balance + $last_opened_balance;
                         }
                     }
                     else{

@@ -111,10 +111,10 @@ class TrialBalanceController extends Controller
             $ending_balance = 0;
             foreach ($account_ledgers as $account_ledger) {
                 if ($acount_nature == 'debit') {
-                    $ending_balance = $last_opened_balance + ( $account_ledger->debit - $account_ledger->credit);
+                    $ending_balance =  $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
                 } else {
-                    $ending_balance = $last_opened_balance + ( $account_ledger->credit - $account_ledger->debit );
+                    $ending_balance =  $account_ledger->credit - $account_ledger->debit ;
                     array_push($starting_balance, $ending_balance);
                 }
 

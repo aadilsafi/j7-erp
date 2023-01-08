@@ -197,7 +197,7 @@
                         <td style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
                             @if (isset($additionalCost->unit_percentage) )
-                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size'], 2)) }}
+                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']), 2) }}
                             @else
                                 -
                             @endif

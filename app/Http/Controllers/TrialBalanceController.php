@@ -110,7 +110,7 @@ class TrialBalanceController extends Controller
             $starting_balance = [];
             $ending_balance = 0;
             foreach ($account_ledgers as $account_ledger) {
-                if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
+                if ($acount_nature == 'debit') {
 
                     $ending_balance = $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
@@ -120,11 +120,11 @@ class TrialBalanceController extends Controller
                 }
 
                 if ($i > 1) {
-                    $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
+                    $new_starting_balance = ($last_opened_balance + $starting_balance[$starting_balance_index - 1]);
                     $starting_balance[$starting_balance_index] = $new_starting_balance;
                 }
 
-                if($account_ledger->account_type == 'debit'){
+                if($acount_nature == 'debit'){
                     $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->debit - (float)$account_ledger->credit);
                 }else{
                     $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->credit - (float)$account_ledger->debit);
@@ -136,7 +136,7 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $closingBalance : $closingBalance) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $closingBalance) . '</td>' .
 
                     '<td>' .
                     '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')

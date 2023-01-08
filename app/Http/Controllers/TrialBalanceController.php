@@ -111,7 +111,6 @@ class TrialBalanceController extends Controller
             $ending_balance = 0;
             foreach ($account_ledgers as $account_ledger) {
                 if ($acount_nature == 'debit') {
-
                     $ending_balance = $last_opened_balance + ( $account_ledger->debit - $account_ledger->credit);
                     array_push($starting_balance, $ending_balance);
                 } else {
@@ -127,7 +126,7 @@ class TrialBalanceController extends Controller
                 }
 
                 if ($i > 1) {
-                    $new_starting_balance = ($last_opened_balance + $starting_balance[$starting_balance_index - 1]);
+                    $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
                     $starting_balance[$starting_balance_index] = $new_starting_balance;
                 }
 

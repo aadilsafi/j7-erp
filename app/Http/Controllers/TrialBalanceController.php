@@ -67,8 +67,6 @@ class TrialBalanceController extends Controller
             ->where('account_head_code', $account_head_code)->get();
 
 
-
-
             $date=date_create($last_date);
             $last_date = date_sub($date,date_interval_create_from_date_string("1 days"));
             $getOnlyDate = date_format($last_date,"Y-m-d");
@@ -132,7 +130,7 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $last_opened_balance) . '</td>' .
 
                     '<td>' .
                     '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')
@@ -263,7 +261,7 @@ class TrialBalanceController extends Controller
                 $credits = $account->accountLedgers->pluck('credit')->sum();
                 $debits = $account->accountLedgers->pluck('debit')->sum();
                 $ending = 0;
-                if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
+                if ($account->account_type == 'debit') {
                     $ending = number_format($debits - $credits);
                 } else {
                     $ending = number_format($credits - $debits);

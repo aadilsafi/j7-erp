@@ -197,7 +197,7 @@ class AccountsRecoveryController extends Controller
         // dd($data);
         }
 
-        return view('app.sites.accounts.recovery.sales-plan', $data);
+        // return view('app.sites.accounts.recovery.sales-plan', $data);
     }
 
     public function salesPlanDataTable(Request $request)

@@ -144,9 +144,6 @@ class TrialBalanceController extends Controller
                 }
 
 
-
-
-
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
                     '<td>' . $acount_name . '</td>' .

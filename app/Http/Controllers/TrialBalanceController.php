@@ -127,14 +127,10 @@ class TrialBalanceController extends Controller
 
                 if ($i > 1) {
 
-                    if($i==2){
+
                         $new_starting_balance = ($closingBalance + $starting_balance[$starting_balance_index - 1]);
                         $starting_balance[$starting_balance_index] = $new_starting_balance + $last_opened_balance;
-                    }
-                    else{
-                        $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
-                        $starting_balance[$starting_balance_index] = $new_starting_balance;
-                    }
+
 
                 }
 

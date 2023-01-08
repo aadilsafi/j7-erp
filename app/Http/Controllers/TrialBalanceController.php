@@ -136,7 +136,7 @@ class TrialBalanceController extends Controller
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $closingBalance) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $closingBalance : $closingBalance) . '</td>' .
 
                     '<td>' .
                     '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')

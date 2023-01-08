@@ -124,13 +124,19 @@ class TrialBalanceController extends Controller
                     $starting_balance[$starting_balance_index] = $new_starting_balance;
                 }
 
+                if($account_ledger->account_type == 'debit'){
+                    $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->debit - (float)$account_ledger->credit);
+                }else{
+                    $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->credit - (float)$account_ledger->debit);
+                }
+
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
                     '<td>' . $acount_name . '</td>' .
                     '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $last_opened_balance) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $closingBalance) . '</td>' .
 
                     '<td>' .
                     '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')

@@ -133,7 +133,7 @@
                                                 <th class="text-nowrap">Debit</th>
                                                 <th class="text-nowrap">Credit</th>
                                                 <th class="text-nowrap">Closing Balance</th>
-                                                <th class="text-nowrap">Transactions At</th>
+                                                <th class="text-nowrap">Transaction At</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -157,9 +157,9 @@
                                                         }
                                                     @endphp
                                                     <td>{{ $i }}</td>
-                                                    <td class="text-nowrap">
+                                                    {{-- <td class="text-nowrap">
                                                         {{ $account_head->name }}
-                                                    </td>
+                                                    </td> --}}
                                                     @if ($i > 1)
                                                         <td>{{ number_format($starting_balance[$starting_balance_index - 1]) }}
                                                         </td>
@@ -203,7 +203,7 @@
                                                 <th></th>
                                                 <th></th>
                                                 {{-- <th>{{number_format(collect($starting_balance)->sum())}}</th> --}}
-                                                <th></th>
+                                                {{-- <th></th> --}}
                                                 <th>{{ number_format($account_ledgers->pluck('debit')->sum()) }}</th>
                                                 <th>{{ number_format($account_ledgers->pluck('credit')->sum()) }}</th>
                                                 <th></th>
@@ -251,6 +251,7 @@
 
             flatpicker_to_date = $("#to_date").flatpickr({
                 mode: "range",
+                maxDate:'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -317,9 +318,7 @@
             $('#to_date').val('');
 
             flatpicker_to_date.clear();
-
-            $('#apply_filter').trigger('click');
-
+            $('#example').dataTable().fnClearTable();
             hideBlockUI('#loader');
         }
     </script>

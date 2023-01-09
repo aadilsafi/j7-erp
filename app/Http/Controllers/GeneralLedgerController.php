@@ -11,7 +11,7 @@ use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 
-class TrialBalanceController extends Controller
+class GeneralLedgerController extends Controller
 {
     //
 
@@ -67,8 +67,6 @@ class TrialBalanceController extends Controller
             ->where('account_head_code', $account_head_code)->get();
 
 
-
-
             $date=date_create($last_date);
             $last_date = date_sub($date,date_interval_create_from_date_string("1 days"));
             $getOnlyDate = date_format($last_date,"Y-m-d");
@@ -98,7 +96,7 @@ class TrialBalanceController extends Controller
             $table =  '<thead>' .
                 '<tr>' .
                 '<th class="text-nowrap">#</th>' .
-                '<th class="text-nowrap">Account Name</th>' .
+                // '<th class="text-nowrap">Account Name</th>' .
                 '<th class="text-nowrap">Opening Balance</th>' .
                 '<th class="text-nowrap">Debit</th>' .
                 '<th class="text-nowrap">Credit</th>' .
@@ -112,27 +110,54 @@ class TrialBalanceController extends Controller
             $starting_balance = [];
             $ending_balance = 0;
             foreach ($account_ledgers as $account_ledger) {
-                if (substr($account_ledger->account_head_code, 0, 2) == 10 || substr($account_ledger->account_head_code, 0, 2) == 12) {
-
-                    $ending_balance = $account_ledger->debit - $account_ledger->credit;
+                if ($acount_nature == 'debit') {
+                    $ending_balance =  $account_ledger->debit - $account_ledger->credit;
                     array_push($starting_balance, $ending_balance);
                 } else {
-                    $ending_balance = $account_ledger->credit - $account_ledger->debit;
+                    $ending_balance =  $account_ledger->credit - $account_ledger->debit ;
                     array_push($starting_balance, $ending_balance);
                 }
 
-                if ($i > 1) {
-                    $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
-                    $starting_balance[$starting_balance_index] = $new_starting_balance;
+                // For First time
+                if($acount_nature == 'debit'){
+                    $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->debit - (float)$account_ledger->credit);
+                }else{
+                    $closingBalance = (float)$last_opened_balance  + ((float)$account_ledger->credit - (float)$account_ledger->debit);
                 }
+
+                $opening_balance = 0.0;
+
+
+                if ($i > 1) {
+
+                    if($i==2){
+                        $new_starting_balance = ($closingBalance + $starting_balance[$starting_balance_index - 1]);
+                        $starting_balance[$starting_balance_index] = $new_starting_balance;
+
+                        if ($acount_nature == 'debit') {
+                            $ending_balance =  $account_ledgers[0]['debit'] - $account_ledgers[0]['credit'];
+                            $opening_balance = $ending_balance + $last_opened_balance;
+                        } else {
+                            $ending_balance =  $account_ledgers[0]['credit'] - $account_ledgers[0]['debit'] ;
+                            $opening_balance = $ending_balance + $last_opened_balance;
+                        }
+                    }
+                    else{
+                        $new_starting_balance = ($ending_balance + $starting_balance[$starting_balance_index - 1]);
+                        $starting_balance[$starting_balance_index] = $new_starting_balance;
+                        $opening_balance = $starting_balance[$starting_balance_index - 1];
+                    }
+
+                }
+
 
                 $table .= '<tr>' .
                     '<td>' . $i . '</td>' .
-                    '<td>' . $acount_name . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $starting_balance[$starting_balance_index - 1] : $last_opened_balance) . '</td>' .
+                    // '<td>' . $acount_name . '</td>' .
+                    '<td>' . number_format(($i > 1) ?  $opening_balance : $last_opened_balance) . '</td>' .
                     '<td>' . number_format($account_ledger->debit) . '</td>' .
                     '<td>' . number_format($account_ledger->credit) . '</td>' .
-                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $ending_balance) . '</td>' .
+                    '<td>' . number_format(($i > 1) ? $new_starting_balance : $closingBalance) . '</td>' .
 
                     '<td>' .
                     '<span>' . date_format(new DateTime($account_ledger->created_date), 'h:i:s')
@@ -263,7 +288,7 @@ class TrialBalanceController extends Controller
                 $credits = $account->accountLedgers->pluck('credit')->sum();
                 $debits = $account->accountLedgers->pluck('debit')->sum();
                 $ending = 0;
-                if ((substr($account->code, 0, 2) == 10) || (substr($account->code, 0, 2) == 12)) {
+                if ($account->account_type == 'debit') {
                     $ending = number_format($debits - $credits);
                 } else {
                     $ending = number_format($credits - $debits);

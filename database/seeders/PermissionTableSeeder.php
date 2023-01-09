@@ -1847,16 +1847,16 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // Accounts trial-balance
+            // Accounts general-ledger
             [
-                'name' => 'sites.accounts.trial-balance.index',
+                'name' => 'sites.accounts.general-ledger.index',
                 'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'sites.accounts.trial-balance.filter-trial-blance',
+                'name' => 'sites.accounts.general-ledger.filter-trial-blance',
                 'show_name' => 'Can View Accounts Trial Balance',
                 'guard_name' => 'web',
                 'created_at' => now(),

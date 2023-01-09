@@ -422,7 +422,6 @@ class ReceiptService implements ReceiptInterface
             'category' => $salesPlan->unit->type->name,
             'size' => $salesPlan->unit->gross_area,
             'client_name' => $salesPlan->stakeholder->full_name,
-            'client_number' => $salesPlan->stakeholder->mobile_contact,
             'rate' => $salesPlan->unit_price,
             'down_payment_percentage' => $salesPlan->down_payment_percentage,
             'down_payment_total' =>  $salesPlan->down_payment_total,
@@ -436,14 +435,18 @@ class ReceiptService implements ReceiptInterface
             'sales_person_sales_type' => $salesPlan->sales_type,
             'indirect_source' => $salesPlan->indirect_source,
             'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
-            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'additional_costs' => $salesPlan->additionalCosts,
             'validity' =>  $salesPlan->validity,
-            'contact' => $salesPlan->stakeholder->mobile_contact,
+            'contact' => $salesPlan->stakeholder->contact,
             'amount' => $salesPlan->total_price,
+            'serial_no' => $salesPlan->serial_no,
+            'pp_serial_no' => $salesPlan->payment_plan_serial_id,
+            'approveBy' => $salesPlan->approveBy->name,
+            'created_date' => $salesPlan->created_date,
+            'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
             'paid_amount' => $salesPlan->installments->sum('paid_amount'),
-
+            'client_number' => $salesPlan->stakeholder->mobile_contact,
         ];
         $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
         $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));

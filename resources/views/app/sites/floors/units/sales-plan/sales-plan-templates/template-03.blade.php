@@ -73,7 +73,7 @@
                     alt="logo">
             </th>
             <th style="width:33%; ">
-                <h1 style="margin-top: 0;">Investment Plan</h1>
+                <h1 style="margin-top: 0;">Payment Plan</h1>
 
             </th>
             <th style="width:33%; text-align:end;">
@@ -81,7 +81,7 @@
                 <img width="70px" height="" src="{{ $data['qrCodeimg'] }}" alt="qr code">
                 {{-- </div> --}}
                 <br>
-                <h2 style="margin-inline-end: 10px">{{ $data['serial_no'] }}</h2>
+                <h2 style="margin-inline-end: 10px">{{ $data['pp_serial_no'] ?? $data['serial_no'] }}</h2>
             </th>
         </tr>
     </table>
@@ -264,7 +264,7 @@
         </table>
         <br><br><br>
         <h3 style="text-align: start; margin-top: 50px;" class="mt-1">
-            3 . Installment Details
+            4 . Installment Details
         </h3>
 
         <table class="installmenttable" style=" width:100%; text-transform: uppercase; border-collapse: collapse;">
@@ -273,59 +273,73 @@
                     NO
                 </th>
                 <th style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
-                    Date
+                    Due Date
                 </th>
                 <th style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
                     Detail
                 </th>
                 <th style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
-                    Amount
+                    Total Amount
                 </th>
                 <th style="  border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
-                    Remarks
+                    PAID AMOUNT
+                </th>
+                <th style="  border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
+                    REMAINING AMOUNT
+                </th>
+                <th style="  border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">
+                    STATUS
                 </th>
             </tr>
-            @php
-                $totalInstallmentAmount = 0;
-            @endphp
-            @foreach ($data['instalments'] as $key => $instalment)
-                <tr>
-                    <th style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
-                        {{ $loop->index + 1 }}
-                    </th>
-                    <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
-                        {{ date_format(new DateTime($instalment->date), 'd/m/Y') }}
-                    </td>
-                    <td style=" white-space: nowrap; border: 1px solid black;text-align: center; padding: 6px;">
-                        @if ($instalment->details)
-                            {{ $instalment->details }}
+            <tbody>
+                @foreach ($data['instalments'] as $key => $instalment)
+                    <tr>
+                        <th style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                            {{ $loop->index + 1 }}
+                        </th>
+                        <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                            {{ date_format(new DateTime($instalment->date), 'd/m/Y') }}
+                        </td>
+                        <td style=" white-space: nowrap; border: 1px solid black;text-align: center; padding: 6px;">
+                            @if ($instalment->details)
+                                {{ $instalment->details }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
+                            {{ number_format($instalment->amount, 2) }}
+                        </td>
+                        <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
+                            {{ number_format($instalment->paid_amount, 2) }}
+                        </td>
+                        <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
+                            {{ number_format($instalment->remaining_amount, 2) }}
+                        </td>
+                        @if ($instalment->status == 'paid')
+                            <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                                <span
+                                    style="color: green; font-weight: bold;">{{ Str::of($instalment->status)->replace('_', ' ')->title() }}</span>
+                            </td>
+                        @elseif($instalment->status == 'partially_paid')
+                            <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                                <span
+                                    style="color: rgb(255, 123, 0); font-weight: bold;">{{ Str::of($instalment->status)->replace('_', ' ')->title() }}
+                                    {{ \Carbon\Carbon::parse($instalment->date)->isPast() ? ', Due' : '' }}</span>
+                            </td>
+                        @elseif($instalment->status == 'unpaid' && \Carbon\Carbon::parse($instalment->date)->isPast())
+                            <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                                <span style="color: red; font-weight: bold;">Due</span>
+                            </td>
                         @else
-                            -
+                            <td style="white-space: nowrap;  border: 1px solid black;text-align: center; padding: 6px;">
+                                <span>{{ Str::of($instalment->status)->replace('_', ' ')->title() }}</span>
+                            </td>
                         @endif
-                    </td>
-                    <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
-                        {{ number_format($instalment->amount, 2) }}
-                    </td>
-                    <td style="border: 1px solid black;text-align: center; padding: 6px;">
-                        @if ($instalment->remarks)
-                            {{ $instalment->remarks }}
-                        @else
-                            -
-                        @endif
-                    </td>
-                </tr>
-                @php
-                    $totalInstallmentAmount = $totalInstallmentAmount + $instalment->amount;
-                @endphp
-            @endforeach
-            <tr>
-                <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
-                <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
-                <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
-                <th style="border: 1px solid black;text-align: end; padding: 8px; text-transform: uppercase;">
-                    {{ number_format($totalInstallmentAmount, 2) }}</th>
-                <th style="border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;"></th>
-            </tr>
+                    </tr>
+                @endforeach
+
+            </tbody>
         </table>
 
 
@@ -343,9 +357,16 @@
 
         </table>
         <br>
-        <div class="mt-2">
-            <h3><strong>Print Date : </strong> {{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</h3>
-        </div>
+        <table class="mt-2" width="100%">
+            <td width="50%">
+                <h3><strong>Creation Date : </strong> {{ \Carbon\Carbon::parse($data['created_date'])->format('d-M-Y , h:i:s a') }}</h3>
+                <h3><strong>Print Date : </strong> {{ date_format(new DateTime(), ' d-M-Y , h:i:s a') }}</h3>
+            </td>
+            <td style="text-align: end" width="50%">
+                <h3><strong>Approve By: </strong> <u>{{ $data['approveBy'] }}</u></h3>
+                <h3 style="text-align: center"><strong>Sign : </strong> </h3>
+            </td>
+        </table>
     </div>
 
 </body>

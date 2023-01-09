@@ -414,8 +414,9 @@ class SalesPlanService implements SalesPlanInterface
             'amount' => $salesPlan->total_price,
             'serial_no' => $salesPlan->serial_no,
             'pp_serial_no' => $salesPlan->payment_plan_serial_id,
-            'approveBy' => $salesPlan->approveBy->name,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
             'created_date' => $salesPlan->created_date,
+            'total_installments' => $salesPlan->installments->count(),
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
             'paid_amount' => $salesPlan->installments->sum('paid_amount'),
@@ -439,7 +440,6 @@ class SalesPlanService implements SalesPlanInterface
             $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
             $link = route('authorize-stakeholder', ['file_name' => encryptParams($fileName)]);
             QrCode::format('png')->size(200)->generate($link, public_path('app-assets/pdf/sales-plans/qrcodes/' . $qrCodeName));
-
 
             $image = base64_encode(file_get_contents(public_path('app-assets/images/logo/j7global-logo.png')));
             $pdf = Pdf::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif', 'isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true, 'chroot' => public_path()])->setPaper('letter', 'portrait')->loadView('app.sites.floors.units.sales-plan.sales-plan-templates.pdf-template-02', compact('data', 'image'));

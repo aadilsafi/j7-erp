@@ -212,7 +212,129 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mb-1">
+                    <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                        <div class="card m-0"
+                            style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
+                            <div class="card-header">
+                                <h3>Contact Persons</h3>
+                            </div>
+                            <div class="card-body">
+                                @if (!isset($customer_file))
+                                    <div class="row my-2">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                            <label class="form-label fs-5" for="contact_persons">Customer Conatct
+                                                persons
+                                            </label>
+                                            <select class="form-select form-select-lg select2" id="contact_persons"
+                                                name="application_form[contact_persons][]" multiple>
 
+                                                @foreach ($customer->contacts as $contact)
+                                                    <option value="{{ $contact->id }}">{{ $contact->full_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('contact_persons')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                @else
+                                    @forelse ($customer_file->stakeholderConatcts as $key => $cp)
+                                        <div class="mb-2">
+
+                                            <div class="row mb-1">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="full_name}">Full
+                                                        Name</label>
+                                                    <input type="text" class="form-control form-control-md "
+                                                        id="full_name" placeholder="Stakeholder Name" disabled
+                                                        value="{{ $cp->full_name }}" />
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="father_name">Father / Husband
+                                                        Name</label>
+                                                    <input type="text" class="form-control form-control-md "
+                                                        disabled id="father_name" placeholder="Father / Husband Name"
+                                                        value="{{ $cp['father_name'] }}" />
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="occupation">Occupation</label>
+                                                    <input type="text" disabled
+                                                        class="form-control form-control-md "
+                                                        id="occupation_{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][occupation]"
+                                                        placeholder="Occupation" value="{{ $cp['occupation'] }}" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5"
+                                                        for="designation">Designation</label>
+                                                    <input type="text" disabled
+                                                        class="form-control form-control-md "
+                                                        id="designation_{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][designation]"
+                                                        placeholder="Designation" value="{{ $cp['designation'] }}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="contact">Contact</label>
+                                                    <input type="text" disabled
+                                                        class="form-control form-control-md"
+                                                        id="contact_{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][contact]"
+                                                        placeholder="Contact Number" value="{{ $cp['contact'] }}" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="contact">Email</label>
+                                                    <input type="text" disabled
+                                                        class="form-control form-control-md"
+                                                        id="email{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][email]"
+                                                        placeholder="Email" value="{{ $cp['email'] }}" />
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="cnic">CNIC</label>
+                                                    <input type="text" disabled
+                                                        class="unique cp_cnic form-control form-control-md"
+                                                        id="cnic_{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][cnic]"
+                                                        placeholder="CNIC Without Dashes"
+                                                        value="{{ $cp['cnic'] }}" />
+
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                                                    <label class="form-label fs-5" for="ntn">NTN</label>
+                                                    <input type="test" disabled
+                                                        class="form-control form-control-md "
+                                                        id="ntn_{{ $key }}"
+                                                        name="contact-persons[{{ $key }}][ntn]"
+                                                        placeholder="NTN Number" value="{{ $cp['ntn'] }}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-1">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
+                                                    <label class="form-label fs-5" for="address">Stakeholder
+                                                        Address</label>
+                                                    <textarea class="form-control" dsabled name="contact-persons[{{ $key }}][address]"
+                                                        id="address_{{ $key }}" rows="3" placeholder="Stakeholder Address" disabled>{{ $cp['address'] }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                    @empty
+                                    @endforelse
+
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {{-- Next Of KIN Data --}}
                 @forelse ($nextOfKin as $kin)
                     <div class="row mb-1">
@@ -1520,7 +1642,7 @@
                                 <h3>Customer</h3>
                             </div>
                             <input type="hidden" name="application_form[stakeholder_id]"
-                            value="{{ $customer->id }}">
+                                value="{{ $customer->id }}">
                             <div class="card-body">
                                 {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $customer, 'hideBorders' => true]) }}
                             </div>

@@ -42,6 +42,8 @@ use App\Services\JournalVouchers\JournalVouchersInterface;
 use App\Services\JournalVouchers\JournalVouchersService;
 use App\Services\PaymentVoucher\paymentService;
 use App\Services\PaymentVoucher\paymentInterface;
+use App\Services\BlackListStackholder\BlacklistStackholderInterface;
+use App\Services\BlackListStackholder\BlackListStackholderService;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\Telescope;
 
@@ -89,7 +91,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(paymentInterface::class, paymentService::class);
         $this->app->bind(JournalVouchersInterface::class, JournalVouchersService::class);
         $this->app->bind(TransferFileReceiptInterface::class, TransferFileReceiptService::class);
-
+        $this->app->bind(BlacklistStackholderInterface::class,  BlackListStackholderService::class);
         Telescope::ignoreMigrations();
 
         // if ($this->app->environment('local')) {

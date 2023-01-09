@@ -545,6 +545,11 @@ Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTra
     $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
 });
 
+Breadcrumbs::for('sites.blacklisted-stakeholders.edit', function (BreadcrumbTrail $trail, $site_id) {
+       $trail->parent('dashboard');
+    $trail->push('Edit  Blacklisted Stakeholder'); });
+
+
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.countries.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');

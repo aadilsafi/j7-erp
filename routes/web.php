@@ -949,6 +949,7 @@ Route::group([
                         });
                     });
                     //trial-balance
+
                     Route::group(['prefix' => 'general-ledger', 'as' => 'general-ledger.'], function () {
                         Route::get('/', [GeneralLedgerController::class, 'index'])->name('index');
                         Route::get('/filter-trial-blance/{account_head_code_id}', [GeneralLedgerController::class, 'filter'])->name('filter-trial-blance');

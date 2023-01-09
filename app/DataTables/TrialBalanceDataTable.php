@@ -86,7 +86,7 @@ class TrialBalanceDataTable extends DataTable
             })
             ->editColumn('fitter_trial_balance', function ($accountHead) {
                 if (count($accountHead->accountLedgers) > 0) {
-                    return view('app.sites.accounts.trial_balance.action', ['site_id' => ($this->site_id), 'account_head_code' => $accountHead->code]);
+                    return view('app.sites.accounts.general_ledger.action', ['site_id' => ($this->site_id), 'account_head_code' => $accountHead->code]);
                 }
             })
             ->rawColumns(array_merge($columns, ['action', 'check']));

@@ -40,7 +40,7 @@ use App\Http\Controllers\{
     ImageImportController,
     LedgerController,
     SalesPlanImportController,
-    TrialBalanceController,
+    GeneralLedgerController,
     JournalEntryController,
     FirstLevelAccountController,
     SecondLevelAccountController,
@@ -949,14 +949,14 @@ Route::group([
                         });
                     });
                     //trial-balance
-                    Route::group(['prefix' => 'trial-balance', 'as' => 'trial-balance.'], function () {
-                        Route::get('/', [TrialBalanceController::class, 'index'])->name('index');
-                        Route::get('/filter-trial-blance/{account_head_code_id}', [TrialBalanceController::class, 'filter'])->name('filter-trial-blance');
+                    Route::group(['prefix' => 'general-ledger', 'as' => 'general-ledger.'], function () {
+                        Route::get('/', [GeneralLedgerController::class, 'index'])->name('index');
+                        Route::get('/filter-trial-blance/{account_head_code_id}', [GeneralLedgerController::class, 'filter'])->name('filter-trial-blance');
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                            Route::Post('filter-data-trial-balance', [TrialBalanceController::class, 'filterTrialBalance'])->name('filter-data-trial-balance');
+                            Route::Post('filter-data-trial-balance', [GeneralLedgerController::class, 'filterTrialBalance'])->name('filter-data-trial-balance');
                         });
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
-                            Route::Post('filter-by-user-data-trial-balance', [TrialBalanceController::class, 'filterByDate'])->name('filter-by-user-data-trial-balance');
+                            Route::Post('filter-by-user-data-trial-balance', [GeneralLedgerController::class, 'filterByDate'])->name('filter-by-user-data-trial-balance');
                         });
                     });
                     // Accounts ledger

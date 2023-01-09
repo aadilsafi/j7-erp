@@ -742,7 +742,7 @@
 
             {{-- Accounts Menu --}}
             @canany(['sites.accounts.recovery.inventory-aging', 'sites.accounts.charts-of-accounts.index',
-                'sites.accounts.journal-entry.index', 'sites.accounts.trial-balance.index',
+                'sites.accounts.journal-entry.index', 'sites.accounts.general-ledger.index',
                 'sites.settings.journal-vouchers.index'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="#">
@@ -781,13 +781,14 @@
                                 </a>
                             </li>
                         @endcan
-                        @can('sites.accounts.trial-balance.index')
+                        {{-- Trail balcne  or General Ledger --}}
+                        @can('sites.accounts.general-ledger.index')
                             <li
-                                class="nav-item {{ request()->routeIs('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                class="nav-item {{ request()->routeIs('sites.accounts.general-ledger.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
                                 <a class="d-flex align-items-center"
-                                    href="{{ route('sites.accounts.trial-balance.index', ['site_id' => encryptParams($site_id)]) }}">
+                                    href="{{ route('sites.accounts.general-ledger.index', ['site_id' => encryptParams($site_id)]) }}">
                                     <i data-feather='dollar-sign'></i>
-                                    <span class="menu-title text-truncate" data-i18n="Email">Trial Balance</span>
+                                    <span class="menu-title text-truncate" data-i18n="Email">General Ledger</span>
                                 </a>
                             </li>
                         @endcan

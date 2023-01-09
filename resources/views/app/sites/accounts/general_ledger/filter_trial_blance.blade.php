@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.trial-balance.index', encryptParams($site_id)) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.accounts.general-ledger.index', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Trial Balance Filter')
+@section('page-title', 'General Ledger Filter')
 
 @section('page-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets') }}/css/plugins/forms/form-validation.css">
@@ -35,9 +35,9 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Trial Balance ({{ $account_head->name }})</h2>
+                <h2 class="content-header-title float-start mb-0">General Ledger ( {{ $account_head->name }}  {{ account_number_format($account_head->code) }} )</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.accounts.trial-balance.index', encryptParams($site_id)) }}
+                    {{ Breadcrumbs::render('sites.accounts.general-ledger.index', encryptParams($site_id)) }}
                 </div>
             </div>
         </div>
@@ -46,7 +46,7 @@
 
 @section('content')
 
-    <section class="app-user-view-connections">
+    <section id="loader" class="app-user-view-connections">
         <div class="row removeInvalidMessages">
             <div class="col-xl-12 col-lg-12">
                 <div class="tab-content">
@@ -128,7 +128,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-nowrap">#</th>
-                                                <th class="text-nowrap">Account Codes</th>
+                                                {{-- <th class="text-nowrap">Account Name</th> --}}
                                                 <th class="text-nowrap">Opening Balance</th>
                                                 <th class="text-nowrap">Debit</th>
                                                 <th class="text-nowrap">Credit</th>
@@ -158,7 +158,7 @@
                                                     @endphp
                                                     <td>{{ $i }}</td>
                                                     <td class="text-nowrap">
-                                                        {{ account_number_format($account_ledger->account_head_code) }}
+                                                        {{ $account_head->name }}
                                                     </td>
                                                     @if ($i > 1)
                                                         <td>{{ number_format($starting_balance[$starting_balance_index - 1]) }}
@@ -279,10 +279,10 @@
                     data_data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
                         filter_date_to;
                 }
-                console.log(data_data);
                 let url =
-                    "{{ route('sites.accounts.trial-balance.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
+                    "{{ route('sites.accounts.general-ledger.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
                 var _token = '{{ csrf_token() }}';
+                showBlockUI('#loader');
                 $.ajax({
                     url: url,
                     type: 'post',
@@ -294,17 +294,16 @@
                         'account_head_code': '{{ $account_ledgers[0]->account_head_code }}',
                     },
                     success: function(data) {
-
-                        console.log((data))
                         if (data.status == true) {
                             $('#example').html(data.data);
                         } else {
                             console.log(data.data);
                         }
-
+                        hideBlockUI('#loader');
                     },
                     error: function(error) {
                         console.log(error);
+                        hideBlockUI('#loader');
                     }
                 });
 
@@ -312,13 +311,16 @@
         });
 
         function resetFilter() {
+            showBlockUI('#loader');
 
             $('#form_date').val('');
             $('#to_date').val('');
+
             flatpicker_to_date.clear();
 
             $('#apply_filter').trigger('click');
 
+            hideBlockUI('#loader');
         }
     </script>
 @endsection

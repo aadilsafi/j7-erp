@@ -113,7 +113,7 @@ class TrialBalanceDataTable extends DataTable
             ->processing()
             ->deferRender()
             ->dom('BlfrtipC')
-            ->lengthMenu([5000])
+            ->lengthMenu([10,20,50,100,500])
             ->scrollX(true)
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons(
@@ -150,7 +150,7 @@ class TrialBalanceDataTable extends DataTable
             Column::make('debit')->title('Debit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('credit')->title('Credit')->addClass('text-nowrap')->searchable(false)->orderable(false),
             Column::make('ending_balance')->title('Closing Balance')->addClass('text-nowrap')->searchable(false)->orderable(false),
-            Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(false),
+            Column::make('created_at')->title('Transactions At')->addClass('text-nowrap')->searchable(false)->orderable(true),
             Column::make('fitter_trial_balance')->title('Action')->addClass('text-nowrap')->searchable(false)->orderable(false),
         ];
     }

@@ -414,7 +414,7 @@ class SalesPlanService implements SalesPlanInterface
             'amount' => $salesPlan->total_price,
             'serial_no' => $salesPlan->serial_no,
             'pp_serial_no' => $salesPlan->payment_plan_serial_id,
-            'approveBy' => $salesPlan->approveBy->name,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
             'created_date' => $salesPlan->created_date,
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),

@@ -313,7 +313,7 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
             'serial_no' => $salesPlan->serial_no,
             'pp_serial_no' => $salesPlan->payment_plan_serial_id,
-            'approveBy' => $salesPlan->approveBy->name,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
             'created_date' => $salesPlan->created_date,
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
@@ -492,13 +492,14 @@ class SalesPlanController extends Controller
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
 
-        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
+
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
         $user = User::find($salesPlan->user_id);
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
+        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
 
         if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');

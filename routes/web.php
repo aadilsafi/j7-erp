@@ -946,6 +946,10 @@ Route::group([
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-fourth-level-accounts', [ChartsOfAccountsController::class, 'getFourthLevelAccounts'])->name('get-fourth-level-accounts');
                             Route::post('get-fifth-level-accounts', [ChartsOfAccountsController::class, 'getFifthLevelAccounts'])->name('get-fifth-level-accounts');
+                            // calculae balance
+                            Route::post('get-first-level-balance', [ChartsOfAccountsController::class, 'getFirstLevelBalance'])->name('get-first-level-balance');
+                            Route::post('get-second-level-balance', [ChartsOfAccountsController::class, 'getSecondLevelBalance'])->name('get-second-level-balance');
+                            Route::post('get-third-level-balance', [ChartsOfAccountsController::class, 'getThirdLevelBalance'])->name('get-third-level-balance');
                         });
                     });
                     //trial-balance

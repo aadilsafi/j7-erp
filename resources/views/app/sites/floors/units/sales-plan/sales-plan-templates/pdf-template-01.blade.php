@@ -64,7 +64,7 @@
                 <h1>Sales Plan</h1>
             </th>
             <th style="width:33%; text-align:end;">
-               
+
 
             </th>
         </tr>
@@ -187,7 +187,7 @@
                         <td style="text-align: end; border-bottom: 1px solid black;">
                             &nbsp;&nbsp;
                             @if (isset($additionalCost->unit_percentage))
-                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']) ,2) }}
+                                {{ number_format(($additionalCost->unit_percentage / 100) * ($data['rate'] * $data['size']), 2) }}
                             @else
                                 -
                             @endif
@@ -251,41 +251,9 @@
 
         </table>
 
-        <h3 style="text-align: start;">
-            3 . Sales Source
-        </h3>
-
-        <table style="width:100%;text-transform: uppercase;">
-            <tr>
-                <th style="text-align: start; white-space: nowrap;">Sales Person </th>
-                <td style="text-align: end; border-bottom: 1px solid black;  white-space: nowrap;">
-                    {{ $data['sales_person_name'] }}
-                    &nbsp;&nbsp;
-                </td>
-                <th style="text-align: start;"> &nbsp;&nbsp;&nbsp;Status </th>
-                <td style="text-align: end; border-bottom: 1px solid black;">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ $data['sales_person_status'] }}&nbsp;&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: start; white-space: nowrap;">Contact NO </th>
-                <td style="text-align: end; border-bottom: 1px solid black;">
-                    {{ $data['sales_person_phone_no'] }}&nbsp;&nbsp;
-                </td>
-                <th style="text-align: start; white-space: nowrap;">&nbsp;&nbsp;&nbsp;Sales Type </th>
-                <td style="text-align: end; border-bottom: 1px solid black;">
-                    {{ $data['sales_person_sales_type'] }}&nbsp;&nbsp;
-                </td>
-            </tr>
-            <tr>
-                <th style="text-align: start; white-space: nowrap;">Indirect Source </th>
-                <td style="text-align: end; border-bottom: 1px solid black;"> {{ $data['indirect_source'] }} </td>
-            </tr>
-        </table>
 
         <h3 style="text-align: start;">
-            4 . Installment Details
+            3 . Installment Details
         </h3>
 
         <table class="installmenttable" style=" width:100%; text-transform: uppercase; border-collapse: collapse;">
@@ -325,7 +293,7 @@
                         @endif
                     </td>
                     <td style="white-space: nowrap;  border: 1px solid black;text-align: end; padding: 6px;">
-                        {{ number_format($instalment->amount ,2) }}
+                        {{ number_format($instalment->amount, 2) }}
                     </td>
                     <td style="border: 1px solid black;text-align: center; padding: 6px;">
                         @if ($instalment->remarks)
@@ -350,22 +318,17 @@
         </table>
 
         <h3 style="text-align: start;">
-            5 . Availability Note
+            4 . Contact Person
         </h3>
 
-        <table style="width:100%;text-transform: uppercase;">
+        <table style="width:80%;text-transform: uppercase;">
             <tr>
-                <th style="text-align: start;">Availability </th>
-                <th style="text-align: start;"> _______________</th>
-                <th style="text-align: start; white-space: nowrap;">Verified By GM Sales </th>
-                <th style="text-align: start;"> _______________</th>
+                <th style="text-align: start;"><strong>Name </strong></th>
+                <td> <u>{{ $data['sales_person_name'] }}</u></td>
+                <th style="text-align: start; white-space: nowrap;">Number </th>
+                <td><u> {{ $data['sales_person_phone_no'] }}</u></td>
             </tr>
-            <tr>
-                <th style="text-align: start; white-space: nowrap;">Client Sign </th>
-                <th style="text-align: start;"> _______________</th>
-                <th style="text-align: start; white-space: nowrap;">Authorized Sign </th>
-                <th style="text-align: start;"> _______________</th>
-            </tr>
+
         </table>
 
     </div>

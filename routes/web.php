@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     AdditionalCostController,
     ArtisanCommandController,
     BankController,
+    BinController,
     DashboardController,
     RoleController,
     PermissionController,
@@ -335,6 +336,19 @@ Route::group([
                             Route::get('edit', [CityController::class, 'edit'])->name('edit');
                             Route::put('update', [CityController::class, 'update'])->name('update');
                             Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    // Bin Route
+                    Route::group(['prefix' => 'bin', 'as' => 'bin.'], function () {
+
+                        Route::get('type', [BinController::class, 'type'])->name('type');
+                        Route::get('unit', [BinController::class, 'unit'])->name('unit');
+                        Route::post('additionalcosts', [BinController::class, 'additionalcosts'])->name('additionalcosts');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::put('restore', [BinController::class, 'restore'])->name('restore');
+                            Route::get('delete', [BinController::class, 'destroy'])->name('destroy');
                         });
                     });
 

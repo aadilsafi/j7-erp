@@ -392,6 +392,51 @@
                                 </ul>
                             </li>
                         @endif
+
+
+
+                        {{-- @if (Auth::user()->can('sites.settings.countries.index'))
+                            <li class="nav-item ">
+                                <a class="d-flex align-items-center" href="javascript:void(0)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                    <span class="menu-title text-truncate"
+                                        data-i18n="{{ __('lang.leftbar.roles_and_permissions') }}">Recycle Bin</span>
+                                </a>
+                                <ul class="menu-content">
+                                    @can('sites.settings.bin.type')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.settings.bin.type') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.settings.bin.type', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="fa-sharp fa-solid fa-bars"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Types</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('sites.bin.states.unit')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.bin.states.unit') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.bin.states.unit', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="fa-sharp fa-solid fa-door-open"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Units</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('sites.bin.cities.additonalcosts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.bin.cities.additonalcosts') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.bin.cities.additonalcosts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="fa-solid fa-dollar-sign"></i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Additional Costs</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endif --}}
                     </ul>
                 </li>
             @endcanany

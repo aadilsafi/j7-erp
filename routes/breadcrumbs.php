@@ -680,3 +680,9 @@ Breadcrumbs::for('sites.sales_plan.show', function (BreadcrumbTrail $trail, $sit
     $trail->parent('dashboard');
     $trail->push('Sales Plans', route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams($site_id), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)]));
 });
+//Bin Breadcrumbs
+Breadcrumbs::for('sites.bin.index', function (BreadcrumbTrail $trail, $site_id) {
+    $trail->parent('dashboard');
+    $trail->push('Bin', route('sites.settings.bin.type', ['site_id' => $site_id]));
+});
+

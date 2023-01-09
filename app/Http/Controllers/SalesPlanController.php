@@ -33,7 +33,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalesPlanController extends Controller
 {
-    private $salesPlanInterface, $additionalCostInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface,$customFieldInterface;
+    private $salesPlanInterface, $additionalCostInterface, $customFieldInterface, $stakeholderInterface, $leadSourceInterface, $financialTransactionInterface;
 
     public function __construct(
         SalesPlanInterface $salesPlanInterface,
@@ -62,7 +62,8 @@ class SalesPlanController extends Controller
             'site' => decryptParams($site_id),
             'floor' => decryptParams($floor_id),
             'unit' => decryptParams($unit_id) > 0 ? (new Unit())->find(decryptParams($unit_id)) : [],
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
+            'siteConfigurations' => (new Site())->find(decryptParams($site_id))->siteConfiguration,
+
         ];
         return $dataTable->with($data)->render('app.sites.SalesPlan.index', $data);
     }
@@ -210,7 +211,6 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'initial',
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.investment-plan-preview', $data);
     }
@@ -231,7 +231,6 @@ class SalesPlanController extends Controller
             'installments' => $installments,
             'qrCodeimg' => $qrCodeimg,
             'preview' => 'updated',
-            'salesPlanTemplates' => (new SalesPlanTemplate())->all(),
         ];
         return view('app.sites.floors.units.sales-plan.payment-plan-preview', $data);
     }
@@ -302,9 +301,9 @@ class SalesPlanController extends Controller
             'discount_total' =>  $salesPlan->discount_total,
             'total' => $salesPlan->total_price,
             'sales_person_name' => $salesPlan->user->name,
-            'sales_person_contact' => $salesPlan->stakeholder->contact,
+            'sales_person_contact' => $salesPlan->user->contact,
             'sales_person_status' => $role[0],
-            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_phone_no' => $salesPlan->user->contact,
             'sales_person_sales_type' => $salesPlan->sales_type,
             'indirect_source' => $salesPlan->indirect_source,
             'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
@@ -312,6 +311,10 @@ class SalesPlanController extends Controller
             'validity' =>  $salesPlan->validity,
             'contact' => $salesPlan->stakeholder->contact,
             'amount' => $salesPlan->total_price,
+            'serial_no' => $salesPlan->serial_no,
+            'pp_serial_no' => $salesPlan->payment_plan_serial_id,
+            'approveBy' => $salesPlan->approveBy->name,
+            'created_date' => $salesPlan->created_date,
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
             'paid_amount' => $salesPlan->installments->sum('paid_amount'),
@@ -475,12 +478,16 @@ class SalesPlanController extends Controller
             if ($salePlan->status == 1) {
                 $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
             }
+
             $salePlan->status = 2;
+            $salePlan->dis_approved_by = Auth::user()->id;
+            $salePlan->dis_approved_date = now();
             // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
             $salePlan->update();
         }
         $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
             'status' => 1,
+            'approved_by' => Auth::user()->id,
             'approved_date' => $request->approve_date . date(' H:i:s'),
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
@@ -523,10 +530,13 @@ class SalesPlanController extends Controller
             $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($request->salesPlanID);
             $salesPlan->unit->status_id = 1;
             $salesPlan->unit->save();
-
+            $salesPlan->dis_approved_by = Auth::user()->id;
+            $salesPlan->dis_approved_date = now();
             $salesPlan->status = 2;
             $salesPlan->save();
         } else {
+            $salesPlan->dis_approved_by = Auth::user()->id;
+            $salesPlan->dis_approved_date = now();
             $salesPlan->status = 2;
             $salesPlan->save();
         }

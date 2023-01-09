@@ -93,7 +93,7 @@ class ReceiptController extends Controller
         ]);
 
         $validator->validate();
-        // try {
+        try {
             if (!request()->ajax()) {
                 $data = $request->all();
                 $record = $this->receiptInterface->store($site_id, $data);
@@ -108,9 +108,9 @@ class ReceiptController extends Controller
             } else {
                 abort(403);
             }
-        // } catch (Exception $ex) {
-        //     return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
-        // }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger($ex->getMessage());
+        }
     }
 
     /**
@@ -469,9 +469,9 @@ class ReceiptController extends Controller
             'amount_to_be_paid' => $request->amount,
             'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
             'stakeholders'  => $stakeholders,
-            'country'       => $stakeholders->country_id > 0 ? $stakeholders->residentialCountry->name : '',
-            'state'         => $stakeholders->state_id > 0 ? $stakeholders->residentialState->name : '',
-            'city'          => $stakeholders->city_id > 0 ? $stakeholders->residentialCity->name : '',
+            'country'       => $stakeholders->residentialCountry->name ,
+            'state'         =>  $stakeholders->residentialState->name ,
+            'city'          => $stakeholders->residentialCity->name ,
         ], 200);
     }
 

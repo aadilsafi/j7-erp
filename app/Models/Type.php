@@ -10,6 +10,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+use function PHPUnit\Framework\returnCallback;
+
 class Type extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
@@ -26,7 +28,7 @@ class Type extends Model
     ];
 
     protected $casts = [
-        'site_id'=> 'integer',
+        'site_id' => 'integer',
         'name' => 'string',
         'parent_id' => 'integer',
         'slug' => 'string',
@@ -53,7 +55,7 @@ class Type extends Model
 
     public function modelable()
     {
-        return $this->morphOne(AccountHead::class,'modelable');
+        return $this->morphOne(AccountHead::class, 'modelable');
     }
 
     public function CustomFieldValues()

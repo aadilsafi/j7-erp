@@ -37,7 +37,7 @@ class FileRefundController extends Controller
      *
      */
 
-    private $refundInterface;
+    private $refundInterface,$customFieldInterface;
 
     public function __construct(
         RefundInterface $refundInterface,
@@ -243,6 +243,8 @@ class FileRefundController extends Controller
 
             $file_refund = FileRefund::where('file_id', decryptParams($file_id))->first();
             $file_refund->status = 1;
+            $file_refund->approved_by = Auth::user()->id;
+            $file_refund->approved_date =now();
             $file_refund->update();
 
             $salesPlan = SalesPlan::find($file_refund->sales_plan_id);

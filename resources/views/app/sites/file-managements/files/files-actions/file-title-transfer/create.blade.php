@@ -126,6 +126,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -153,6 +154,7 @@
         //     FilePondPluginFileValidateSize,
         //     FilePondPluginImageValidateSize,
         //     FilePondPluginImageCrop,
+        //     FilePondPluginPdfPreview,
         // );
 
         // FilePond.create(document.getElementById('attachment'), {
@@ -299,7 +301,7 @@
                                     true :
                                     false);
                                 $('#source').val(stakeholderData.source).trigger('change');
-                                $('#is_local').prop( "checked", stakeholderData.is_local );
+                                $('#is_local').prop("checked", stakeholderData.is_local);
 
                                 $('#nationality').val(stakeholderData.nationality).trigger(
                                     'change');
@@ -602,6 +604,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         $(".expenses-list").repeater({
@@ -633,7 +636,7 @@
                 FilePond.create(inputElement, {
                     styleButtonRemoveItemPosition: 'right',
                     imageCropAspectRatio: '1:1',
-                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
                     maxFileSize: '1536KB',
                     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
                     storeAsFile: true,

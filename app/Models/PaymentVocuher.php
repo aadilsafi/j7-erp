@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class PaymentVocuher extends Model
+class PaymentVocuher extends Model implements HasMedia
 {
-    use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity,InteractsWithMedia;
 
     protected $fillable = [
         'site_id',
@@ -59,6 +61,12 @@ class PaymentVocuher extends Model
         'bank_id',
         'serial_no',
         'cheque_status',
+        'checked_date',
+        'checked_by',
+        'reverted_by',
+        'reverted_date',
+        'cheque_active_by',
+        'cheque_active_date',
     ];
 
     public function getActivitylogOptions(): LogOptions

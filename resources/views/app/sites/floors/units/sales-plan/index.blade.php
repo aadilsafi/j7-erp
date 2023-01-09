@@ -51,10 +51,10 @@
             </form>
 
             {{-- Printing Modal --}}
-            @include('app.sites.floors.units.sales-plan.partials.print-templates', [
+            {{-- @include('app.sites.floors.units.sales-plan.partials.print-templates', [
                 'salesPlanTemplates' => $salesPlanTemplates,
                 'showTemplateType' => 'investment_plan'
-            ])
+            ]) --}}
 
         </div>
     </div>
@@ -110,25 +110,25 @@
             })
             $('.swal2-radio').empty();
             var radioInput = '<div class="card-body">\
-                                                 <div class="row custom-options-checkable g-1">\
-                                                    <div class="col-md-6">\
-                                                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
-                                                            <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
-                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
-                                                                            <span class="fw-bolder">Investment Plan</span>\
-                                                                        </span>\
-                                                                    </label>\
+                                                     <div class="row custom-options-checkable g-1">\
+                                                        <div class="col-md-6">\
+                                                            <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios1" value="investment_plan"/>\
+                                                                <label class="custom-option-item p-1" for="customOptionsCheckableRadios1">\
+                                                                            <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                                <span class="fw-bolder">Investment Plan</span>\
+                                                                            </span>\
+                                                                        </label>\
+                                                                    </div>\
+                                                                    <div class="col-md-6">\
+                                                                        <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
+                                                                        <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
+                                                                            <span class="d-flex justify-content-between flex-wrap mb-50">\
+                                                                                <span class="fw-bolder">Payment Plan</span>\
+                                                                            </span>\
+                                                                        </label>\
+                                                                    </div>\
                                                                 </div>\
-                                                                <div class="col-md-6">\
-                                                                    <input class="custom-option-item-check" type="radio" name="customOptionsCheckableRadios" id="customOptionsCheckableRadios2" value="payment_plan" />\
-                                                                    <label class="custom-option-item p-1" for="customOptionsCheckableRadios2">\
-                                                                        <span class="d-flex justify-content-between flex-wrap mb-50">\
-                                                                            <span class="fw-bolder">Payment Plan</span>\
-                                                                        </span>\
-                                                                    </label>\
-                                                                </div>\
-                                                            </div>\
-                                                        </div>'
+                                                            </div>'
             $('.swal2-radio').append(radioInput)
         }
 

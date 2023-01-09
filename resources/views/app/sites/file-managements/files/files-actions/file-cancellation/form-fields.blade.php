@@ -92,7 +92,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                         <label class="form-label fs-5" for="type_name">Attachment</label>
                                         <input id="attachment" type="file" class="filepond attachment" disabled
-                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif" />
+                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif,application/pdf" />
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +121,7 @@
                                                     <input id="attachment" type="file"
                                                         class="filepond attachment @error('image') is-invalid @enderror"
                                                         name="attachment[image]"
-                                                        accept="image/png, image/jpeg, image/gif" />
+                                                        accept="image/png, image/jpeg, image/gif,application/pdf" />
                                                     @error('image')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror

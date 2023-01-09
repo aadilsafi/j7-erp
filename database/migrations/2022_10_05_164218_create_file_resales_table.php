@@ -34,6 +34,15 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->longText('comments')->nullable();
             $table->string('serial_no')->nullable()->default('FRS-');
+            $table->bigInteger('user_id')->nullable();
+            $table->timestamp('checked_date')->nullable();
+            $table->bigInteger('checked_by')->nullable();
+            $table->bigInteger('approved_by')->nullable();
+            $table->timestamp('approved_date')->nullable();
+            $table->bigInteger('reverted_by')->nullable();
+            $table->timestamp('reverted_date')->nullable();
+            $table->bigInteger('cheque_active_by')->nullable();
+            $table->timestamp('cheque_active_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

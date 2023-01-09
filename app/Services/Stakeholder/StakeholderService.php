@@ -140,6 +140,14 @@ class StakeholderService implements StakeholderInterface
                 Log::info("changeImageDirectoryPermission => " . $returnValue);
             }
 
+            if (isset($inputs['passport_attachment'])) {
+                foreach ($inputs['passport_attachment'] as $attachment) {
+                    $stakeholder->addMedia($attachment)->toMediaCollection('stakeholder_passport');
+                }
+                $returnValue = changeImageDirectoryPermission();
+                Log::info("changeImageDirectoryPermission => " . $returnValue);
+            }
+
             if (isset($inputs['next-of-kins']) && count($inputs['next-of-kins']) > 0) {
                 $nextOfKins = [];
                 foreach ($inputs['next-of-kins'] as $nok) {

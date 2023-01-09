@@ -183,14 +183,14 @@ class TransferReceiptController extends Controller
         $transferFiles = FileTitleTransfer::find($request->transfer_file_id);
 
         $fileOwner = json_decode($transferFiles->stakeholder_data);
-        $fileOwner->country = $transferFiles->stakeholder->country->name ?? '';
-        $fileOwner->state = $transferFiles->stakeholder->stae->name ?? '';
-        $fileOwner->city = $transferFiles->stakeholder->city->name ?? '';
+        $fileOwner->country = $transferFiles->stakeholder->residentialCountry->name ?? '';
+        $fileOwner->state = $transferFiles->stakeholder->residentialState->name ?? '';
+        $fileOwner->city = $transferFiles->stakeholder->residentialCity->name ?? '';
 
         $transferOwner = json_decode($transferFiles->transfer_person_data);
-        $transferOwner->country = $transferFiles->transferStakeholder->country->name ?? '';
-        $transferOwner->state = $transferFiles->transferStakeholder->state->name ?? '';
-        $transferOwner->city = $transferFiles->transferStakeholder->city->name ?? '';
+        $transferOwner->country = $transferFiles->transferStakeholder->residentialCountry->name ?? '';
+        $transferOwner->state = $transferFiles->transferStakeholder->residentialState->name ?? '';
+        $transferOwner->city = $transferFiles->transferStakeholder->residentialCity->name ?? '';
 
         $stakeholderType = StakeholderType::where('stakeholder_id', $transferFiles->stakeholder_id)->get();
         $customerApAccount  = StakeholderType::where(['stakeholder_id' => $transferFiles->stakeholder_id, 'type' => 'C'])->first();

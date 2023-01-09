@@ -20,7 +20,6 @@ class JournalVouchersService implements JournalVouchersInterface
     public function store($site_id, $inputs)
     {
         DB::transaction(function () use ($site_id, $inputs) {
-
             $voucher_amount = str_replace(',', '', $inputs['total_debit']) - str_replace(',', '', $inputs['total_credit']);
 
             $voucher_data = [
@@ -30,15 +29,21 @@ class JournalVouchersService implements JournalVouchersInterface
                 'user_name' => $inputs['user_name'],
                 // 'name' =>  $inputs['voucher_name'],
                 'voucher_amount' => $voucher_amount,
-                'total_debit'=> str_replace(',', '', $inputs['total_debit']),
+                'total_debit' => str_replace(',', '', $inputs['total_debit']),
                 'total_credit' => str_replace(',', '', $inputs['total_credit']),
                 'status' => 'pending',
                 'remarks' => $inputs['remarks'],
                 'voucher_date' => $inputs['created_date'],
                 'created_date' => $inputs['created_date'],
             ];
-
             $journal_voucher = $this->model()->create($voucher_data);
+
+            if (isset($inputs['attachment'])&& count($inputs['attachment']) > 0) {
+                for ($j = 0; $j < count($inputs['attachment']); $j++) {
+                    $journal_voucher->addMedia($inputs['attachment'][$j])->toMediaCollection('journal_voucher_attachments');
+                    changeImageDirectoryPermission();
+                }
+            }
 
             $voucher_entires = $inputs['journal-voucher-entries'];
 
@@ -85,7 +90,7 @@ class JournalVouchersService implements JournalVouchersInterface
                 'user_name' => $inputs['user_name'],
                 'name' =>  $inputs['voucher_name'],
                 'voucher_amount' => $voucher_amount,
-                'total_debit'=> str_replace(',', '', $inputs['total_debit']),
+                'total_debit' => str_replace(',', '', $inputs['total_debit']),
                 'total_credit' => str_replace(',', '', $inputs['total_credit']),
                 'status' => 'pending',
                 'remarks' => $inputs['remarks'],
@@ -124,7 +129,6 @@ class JournalVouchersService implements JournalVouchersInterface
             }
         });
         return true;
-
     }
 
     public function destroy($site_id, $inputs)

@@ -128,7 +128,7 @@
                         <div class="d-block mb-1">
                             <label class="form-label fs-5" for="type_name">Attachment</label>
                             <input id="attachment" type="file" class="filepond @error('attachment') is-invalid @enderror"
-                                name="attachment" accept="image/png, image/jpeg, image/gif" />
+                                name="attachment" accept="image/png, image/jpeg, image/gif,application/pdf" />
                             @error('attachment')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -164,6 +164,7 @@
     <script src="{{ asset('app-assets') }}/vendors/filepond/filepond.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/forms/repeater/jquery.repeater.min.js"></script>
     <script src="{{ asset('app-assets') }}/js/scripts/forms/form-repeater.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -180,12 +181,13 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         FilePond.create(document.getElementById('attachment'), {
             styleButtonRemoveItemPosition: 'right',
             imageCropAspectRatio: '1:1',
-            acceptedFileTypes: ['image/png', 'image/jpeg'],
+            acceptedFileTypes: ['image/png', 'image/jpeg','application/pdf'],
             maxFileSize: '1536KB',
             ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
             storeAsFile: true,
@@ -321,9 +323,9 @@
                         $('#transferOwner_full_name').val(stakeholderData.full_name);
                         $('#transferOwner_father_name').val(stakeholderData.father_name);
                         $('#transferOwner_cnic').val(stakeholderData.cnic);
-                        $('#transferOwner_contact').val(stakeholderData.contact);
+                        $('#transferOwner_contact').val(stakeholderData.mobile_contact);
                         $('#transferOwner_email').val(stakeholderData.email);
-                        $('#transferOwner_address').text(stakeholderData.address);
+                        $('#transferOwner_address').text(stakeholderData.residential_address);
                         $('#transferOwner_occupation').val(stakeholderData.occupation);
                         $('#transferOwner_designation').val(stakeholderData.designation);
                         $('#transferOwner_ntn').val(stakeholderData.ntn);
@@ -332,15 +334,15 @@
                         $('#transferOwner_city').val(stakeholderData.city);
 
                         $('#transferOwner_optional_contact').val(stakeholderData
-                            .optional_contact);
+                            .office_contact);
                         $('#transferOwner_optional_email').val(stakeholderData
-                            .optional_email);
+                            .office_email);
                         $('#transferOwner_comments').text(stakeholderData.comments);
                         $('#transferOwner_mailing_address').val(stakeholderData.mailing_address);
                         $('#transferOwner_nationality').val(stakeholderData.nationality);
                         if (stakeholderData.stakeholder_as == 'c') {
                             $('#transferOwner_company_name').val(stakeholderData.full_name);
-                            $('#transferOwner_industry').val(stakeholderData.occupation);
+                            $('#transferOwner_industry').val(stakeholderData.industry);
                             $('#transferOwner_registration').val(stakeholderData.cnic);
                             $('#transferOwner_ntn').val(stakeholderData.ntn);
                             $('#companyForm').show();
@@ -357,9 +359,9 @@
                         $('#fileOwner_full_name').val(fileOwnerData.full_name);
                         $('#fileOwner_father_name').val(fileOwnerData.father_name);
                         $('#fileOwner_cnic').val(fileOwnerData.cnic);
-                        $('#fileOwner_contact').val(fileOwnerData.contact);
+                        $('#fileOwner_contact').val(fileOwnerData.mobile_contact);
                         $('#fileOwner_email').val(fileOwnerData.email);
-                        $('#fileOwner_address').text(fileOwnerData.address);
+                        $('#fileOwner_address').text(fileOwnerData.residential_address);
                         $('#fileOwner_occupation').val(fileOwnerData.occupation);
                         $('#fileOwner_designation').val(fileOwnerData.designation);
                         $('#fileOwner_ntn').val(fileOwnerData.ntn);
@@ -368,15 +370,15 @@
                         $('#fileOwner_city').val(fileOwnerData.city);
 
                         $('#fileOwner_optional_contact').val(fileOwnerData
-                            .optional_contact);
+                            .office_contact);
                         $('#fileOwner_optional_email').val(fileOwnerData
-                            .optional_email);
+                            .office_email);
                         $('#fileOwner_comments').text(fileOwnerData.comments);
                         $('#fileOwner_mailing_address').val(fileOwnerData.mailing_address);
                         $('#fileOwner_nationality').val(fileOwnerData.nationality);
                         if (fileOwnerData.stakeholder_as == 'c') {
                             $('#fileOwner_company_name').val(fileOwnerData.full_name);
-                            $('#fileOwner_industry').val(fileOwnerData.occupation);
+                            $('#fileOwner_industry').val(fileOwnerData.industry);
                             $('#fileOwner_registration').val(fileOwnerData.cnic);
                             $('#fileOwner_ntn').val(fileOwnerData.ntn);
                             $('#OwnerCompanyForm').show();

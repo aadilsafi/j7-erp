@@ -16,7 +16,7 @@ class CountryController extends Controller
             'site_id' => $site_id
         ];
 
-        return $dataTable->with($data)->render('app.sites.countries.index', $data);
+        return $dataTable->with($data)->render('app.sites.locations.countries.index', $data);
     }
 
     public function create($site_id)
@@ -24,7 +24,7 @@ class CountryController extends Controller
         $data = [
             'site_id' => $site_id,
         ];
-        return view('app.sites.countries.create', $data);
+        return view('app.sites.locations.countries.create', $data);
     }
 
     public function store(Request $request, $site_id)
@@ -51,7 +51,7 @@ class CountryController extends Controller
             'site_id' => decryptParams($site_id),
             'country' => Country::find(decryptParams($id))
         ];
-        return view('app.sites.countries.edit', $data);
+        return view('app.sites.locations.countries.edit', $data);
     }
     public function update(Request $request, $site_id, $id)
     {

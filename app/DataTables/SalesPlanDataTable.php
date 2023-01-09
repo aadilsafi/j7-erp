@@ -72,13 +72,23 @@ class SalesPlanDataTable extends DataTable
                 return $data[$salesPlan->status];
             })
             ->editColumn('investment_plan_serial_id', function ($salesPlan) {
-              return  $salesPlan->investment_plan_serial_id != null ? $salesPlan->investment_plan_serial_id : '-';
+                return  $salesPlan->investment_plan_serial_id != null ? $salesPlan->investment_plan_serial_id : '-';
             })
             ->editColumn('payment_plan_serial_id', function ($salesPlan) {
                 return  $salesPlan->payment_plan_serial_id != null ? $salesPlan->payment_plan_serial_id : '-';
-              })
+            })
             ->editColumn('actions', function ($salesPlan) {
-                return view('app.sites.floors.units.sales-plan.actions', ['site_id' => $salesPlan->unit->floor->site->id, 'floor_id' => $salesPlan->unit->floor_id, 'unit_id' => $salesPlan->unit_id, 'id' => $salesPlan->id, 'created_date' => $salesPlan->created_date, 'status' => $salesPlan->status, 'unit_status' => $salesPlan->unit->status_id, 'sales_plan_id' => $salesPlan->id]);
+                return view('app.sites.floors.units.sales-plan.actions', [
+                    'site_id' => $salesPlan->unit->floor->site->id,
+                    'floor_id' => $salesPlan->unit->floor_id,
+                    'unit_id' => $salesPlan->unit_id,
+                    'id' => $salesPlan->id,
+                    'created_date' => $salesPlan->created_date,
+                    'status' => $salesPlan->status,
+                    'unit_status' => $salesPlan->unit->status_id,
+                    'sales_plan_id' => $salesPlan->id,
+                    'template_id' => $this->siteConfigurations->salesplan_default_investment_plan_template,
+                ]);
             })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
@@ -93,10 +103,10 @@ class SalesPlanDataTable extends DataTable
     public function query(SalesPlan $model): QueryBuilder
     {
         if ($this->floor > 0) {
-            return $model->newQuery()->with('stakeholder', 'unit')->where('unit_id', $this->unit->id)->orderBy('status', 'asc');
+            return $model->newQuery()->with('stakeholder', 'unit')->where('unit_id', $this->unit->id)->orderBy('created_at', 'asc');
         } else {
             if (Auth::user()->hasRole('CRM')) {
-                return $model->newQuery()->with('stakeholder', 'unit')->where('is_from_crm', true)->orderBy('status', 'asc');
+                return $model->newQuery()->with('stakeholder', 'unit')->where('is_from_crm', true)->orderBy('created_at', 'asc');
             } else {
                 return $model->newQuery()->with('stakeholder', 'unit')->orderBy('status', 'asc');
             }
@@ -184,7 +194,7 @@ class SalesPlanDataTable extends DataTable
             //     ],
             // ])
             ->orders([
-                [0, 'desc'],
+                [0, 'asc'],
             ]);
     }
 
@@ -199,9 +209,9 @@ class SalesPlanDataTable extends DataTable
         $destroyPermission = 0;
 
         $columns = [
-            Column::make('serial_no')->title('Serial Number')->addClass('text-nowrap'),
+            Column::make('serial_no')->title('Serial No#')->addClass('text-nowrap'),
             Column::make('payment_plan_serial_id')->title('Payment Plan#')->addClass('text-nowrap'),
-            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit Number')->addClass('text-nowrap'),
+            Column::computed('unit_id')->name('unit.floor_unit_number')->title('Unit No#')->addClass('text-nowrap'),
             Column::computed('user_id')->name('user.name')->title('Sales Person')->addClass('text-nowrap'),
             Column::computed('stakeholder_id')->name('stakeholder.full_name')->title('Stakeholder'),
             Column::computed('salesplanstatus')->visible(false),

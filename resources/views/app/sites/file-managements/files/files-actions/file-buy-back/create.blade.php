@@ -29,8 +29,8 @@
         }
 
         /* .filepond--item {
-                                                                                    width: calc(20% - 0.5em);
-                                                                                } */
+                                                                                        width: calc(20% - 0.5em);
+                                                                                    } */
     </style>
 @endsection
 
@@ -118,6 +118,7 @@
 
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment.min.js"></script>
     <script src="{{ asset('app-assets') }}/vendors/js/extensions/moment-range.min.js"></script>
+    <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
 @endsection
 
 @section('page-js')
@@ -135,6 +136,7 @@
             FilePondPluginFileValidateSize,
             FilePondPluginImageValidateSize,
             FilePondPluginImageCrop,
+            FilePondPluginPdfPreview,
         );
 
         $("#payment_due_date").flatpickr({
@@ -168,7 +170,7 @@
                 FilePond.create(inputElement, {
                     styleButtonRemoveItemPosition: 'right',
                     imageCropAspectRatio: '1:1',
-                    acceptedFileTypes: ['image/png', 'image/jpeg'],
+                    acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
                     maxFileSize: '1536KB',
                     ignoredFiles: ['.ds_store', 'thumbs.db', 'desktop.ini'],
                     storeAsFile: true,

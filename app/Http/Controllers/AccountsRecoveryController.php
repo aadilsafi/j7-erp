@@ -195,8 +195,9 @@ class AccountsRecoveryController extends Controller
             // Installments wise (1st, 2nd ...etc)
 
         // dd($data);
+        }
 
-        return view('app.sites.accounts.recovery.sales-plan', $data);
+        // return view('app.sites.accounts.recovery.sales-plan', $data);
     }
 
     public function salesPlanDataTable(Request $request)
@@ -233,7 +234,7 @@ class AccountsRecoveryController extends Controller
                 $filters['filter_approved_from'] = trim($request->input('filter_approved_from'));
                 $filters['filter_approved_to'] = trim($request->input('filter_approved_to'));
             }
-    
+
             $dataTable = $this->accountRecevoryInterface->generateDataTable($site_id, $filters);
             return DataTables::of($dataTable)->make(true);
         }catch(\Exception $e){

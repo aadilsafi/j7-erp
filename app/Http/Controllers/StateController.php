@@ -16,7 +16,7 @@ class StateController extends Controller
             'site_id' => $site_id
         ];
 
-        return $dataTable->with($data)->render('app.sites.states.index', $data);
+        return $dataTable->with($data)->render('app.sites.locations.states.index', $data);
     }
 
     public function create($site_id)
@@ -25,13 +25,13 @@ class StateController extends Controller
             'site_id' => $site_id,
             'country' => Country::all()
         ];
-        return view('app.sites.states.create', $data);
+        return view('app.sites.locations.states.create', $data);
     }
     public function store(Request $request, $site_id)
     {
         $request->validate([
             'name' => 'required|unique:states,name',
-            'short_label' => 'required|unique:states,iso2',
+            'short_label' => 'required',
             'country_id' => 'required|exists:countries,id'
         ]);
 
@@ -52,13 +52,13 @@ class StateController extends Controller
             'country' => Country::all(),
             'state' => State::find(decryptParams($id))
         ];
-        return view('app.sites.states.edit', $data);
+        return view('app.sites.locations.states.edit', $data);
     }
     public function update(Request $request, $site_id, $id)
     {
         $request->validate([
             'name' => 'required|unique:states,name,' . decryptParams($id),
-            'short_label' => 'required|unique:states,iso2,' . decryptParams($id),
+            'short_label' => 'required',
             'country_id' => 'required|exists:countries,id'
         ]);
 

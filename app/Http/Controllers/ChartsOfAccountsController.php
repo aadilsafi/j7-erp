@@ -135,6 +135,9 @@ class ChartsOfAccountsController extends Controller
         $ending_code = (string)$ending_code.'0000';
         $fourth_level_accounts = AccountHead::where('level',4)->whereBetween('code', [$starting_code, $ending_code])->get();
 
+        foreach($fourth_level_accounts  as $key => $fourth_level_account){
+            $fourth_level_accounts[$key]['formated_code'] = account_number_format ($fourth_level_account->code);
+        }
         return response()->json([
             'success' => true,
             'site_id' => $site_id,
@@ -151,7 +154,26 @@ class ChartsOfAccountsController extends Controller
         $ending_code = (int)$request->code + 1;
         $ending_code = (string)$ending_code.'0000';
         $fourth_level_account = AccountHead::where('code',$request->code)->first();
+        $fourth_level_account->formated_code = account_number_format($fourth_level_account->code );
+        $fourth_level_account->account_type = ucfirst($fourth_level_account->account_type);
         $fifth_level_accounts = AccountHead::where('level',5)->whereBetween('code', [$starting_code, $ending_code])->get();
+
+        $fourth_level_balance = 0.0;
+
+
+        foreach($fifth_level_accounts  as $key => $fifth_level_account){
+            $fifth_level_accounts[$key]['formated_code'] = account_number_format ($fifth_level_account->code);
+            $fifth_level_accounts[$key]['account_type'] = ucfirst($fifth_level_account->account_type);
+            if($fifth_level_account->account_type == 'debit'){
+                $fourth_level_balance =(float)$fourth_level_balance + ((float)$fifth_level_account->debit - (float)$fifth_level_account->credit);
+                $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_account->debit - (float)$fifth_level_account->credit;
+            }
+            else{
+                $fourth_level_balance =(float)$fourth_level_balance + ((float)$fifth_level_account->credit - (float)$fifth_level_account->debit);
+                $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_account->credit - (float)$fifth_level_account->debit;
+            }
+
+        }
 
         return response()->json([
             'success' => true,
@@ -160,6 +182,7 @@ class ChartsOfAccountsController extends Controller
             'ending_code' => $ending_code,
             'fourth_level_account'=> $fourth_level_account,
             'fifth_level_accounts'=> $fifth_level_accounts,
+            'fourth_level_balance'=> $fourth_level_balance,
         ], 200);
     }
 

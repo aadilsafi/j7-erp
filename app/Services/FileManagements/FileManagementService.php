@@ -7,6 +7,7 @@ use App\Models\SalesPlan;
 use App\Models\Stakeholder;
 use App\Models\FileManagement;
 use App\Services\FileManagements\FileManagementInterface;
+use Auth;
 
 class FileManagementService implements FileManagementInterface
 {
@@ -46,6 +47,7 @@ class FileManagementService implements FileManagementInterface
         $serail_no =  sprintf('%03d', $serail_no);
 
         $data = [
+            'user_id' => Auth::user()->id,
             'site_id' => decryptParams($site_id),
             'unit_id' => $inputs['application_form']['unit_id'],
             'stakeholder_id' => $inputs['application_form']['stakeholder_id'],
@@ -63,6 +65,10 @@ class FileManagementService implements FileManagementInterface
         ];
         $file = $this->model()->create($data);
 
+        // attach conatct person to file if selected 
+        if (isset($inputs['application_form']['contact_persons'])) {
+            $file->stakeholderConatcts()->attach($inputs['application_form']['contact_persons'], ['site_id' => decryptParams($site_id)]);
+        }
         if (isset($inputs['application_form']['photo'])) {
             $file->addMedia($inputs['application_form']['photo'])->toMediaCollection('application_form_photo');
             changeImageDirectoryPermission();

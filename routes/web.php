@@ -781,6 +781,31 @@ Route::group([
 
                     Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
                     Route::get('/view-files', [FileManagementController::class, 'viewFiles'])->name('view-files');
+
+                    Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
+                        Route::get('/units', [FileManagementController::class, 'units'])->name('units');
+
+                        Route::group(['prefix' => 'units/{unit_id}', 'as' => 'units.'], function () {
+
+                            //Files Routes
+                            Route::group(['prefix' => 'files', 'as' => 'files.'], function () {
+                                Route::get('/', [FileManagementController::class, 'index'])->name('index');
+
+                                Route::get('/show/{file_id}', [FileManagementController::class, 'show'])->name('show');
+                                Route::get('/print/{file_id}', [FileManagementController::class, 'print'])->name('print');
+
+                                Route::get('create', [FileManagementController::class, 'create'])->name('create');
+                                Route::post('store', [FileManagementController::class, 'store'])->name('store');
+
+                                Route::get('delete-selected', [FileManagementController::class, 'destroySelected'])->name('destroy-selected');
+
+                                Route::group(['prefix' => '/{id}'], function () {
+                                    Route::get('edit', [FileManagementController::class, 'edit'])->name('edit');
+                                    Route::put('update', [FileManagementController::class, 'update'])->name('update');
+                                });
+                            });
+                        });
+                    });
                     // rebate incentive form
                     Route::group(['prefix' => 'rebate-incentive', 'as' => 'rebate-incentive.'], function () {
 
@@ -896,30 +921,7 @@ Route::group([
                         Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
                     });
 
-                    Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
-                        Route::get('/units', [FileManagementController::class, 'units'])->name('units');
-
-                        Route::group(['prefix' => 'units/{unit_id}', 'as' => 'units.'], function () {
-
-                            //Files Routes
-                            Route::group(['prefix' => 'files', 'as' => 'files.'], function () {
-                                Route::get('/', [FileManagementController::class, 'index'])->name('index');
-
-                                Route::get('/show/{file_id}', [FileManagementController::class, 'show'])->name('show');
-                                Route::get('/print/{file_id}', [FileManagementController::class, 'print'])->name('print');
-
-                                Route::get('create', [FileManagementController::class, 'create'])->name('create');
-                                Route::post('store', [FileManagementController::class, 'store'])->name('store');
-
-                                Route::get('delete-selected', [FileManagementController::class, 'destroySelected'])->name('destroy-selected');
-
-                                Route::group(['prefix' => '/{id}'], function () {
-                                    Route::get('edit', [FileManagementController::class, 'edit'])->name('edit');
-                                    Route::put('update', [FileManagementController::class, 'update'])->name('update');
-                                });
-                            });
-                        });
-                    });
+                   
                 });
 
                 // Accounts Routes

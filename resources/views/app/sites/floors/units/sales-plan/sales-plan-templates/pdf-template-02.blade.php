@@ -70,7 +70,7 @@
                     </p>
                 </td>
                 <td style="border: 1px solid #eee!important; text-align:center;">
-                    <p class="m-0">Total Installments : {{ count($data['installments']) }}</p>
+                    <p class="m-0">Total Installments : {{ count($data['instalments']) }}</p>
                     <p class="mt-0"><span class="text-danger fw-bold">Remaining Installments :</span>
                         {{ $data['remaining_installments'] }}
                     </p>
@@ -108,7 +108,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data['installments'] as $key => $installment)
+                @foreach ($data['instalments'] as $key => $installment)
                     <tr>
                         <td
                             style=" border: 1px solid black;text-align: center; padding: 8px; text-transform: uppercase;">

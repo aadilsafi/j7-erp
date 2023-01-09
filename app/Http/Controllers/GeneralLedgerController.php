@@ -25,7 +25,7 @@ class GeneralLedgerController extends Controller
                     'site' => $site,
                     'account_head' => $account_head,
                 ];
-                return $dataTable->with($data)->render('app.sites.accounts.trial_balance.index', $data);
+                return $dataTable->with($data)->render('app.sites.accounts.general_ledger.index', $data);
             }
             return redirect()->route('dashboard')->withWarning(__('lang.commons.data_not_found'));
         } catch (Exception $ex) {
@@ -43,7 +43,7 @@ class GeneralLedgerController extends Controller
             'account_head' => $account_head,
         ];
 
-        return view('app.sites.accounts.trial_balance.filter_trial_blance', $data);
+        return view('app.sites.accounts.general_ledger.filter_trial_blance', $data);
     }
 
     public function filterTrialBalance(Request $request)
@@ -309,7 +309,7 @@ class GeneralLedgerController extends Controller
                     '</span>' .
 
                     '</td>' .
-                    '<td>' . view('app.sites.accounts.trial_balance.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]) . '</td>' .
+                    '<td>' . view('app.sites.accounts.general_ledger.action', ['site_id' => ($request->site_id), 'account_head_code' => $account->code]) . '</td>' .
                     '</tr>';
                 $i++;
             }
@@ -336,9 +336,8 @@ class GeneralLedgerController extends Controller
                 '<tr>' .
                 '<td></td>' .
                 '<td></td>' .
-                '<td class="text-nowrap">No Record Found Of </td>' .
-                '<td></td>' .
-                '<td></td>' .
+                '<td > </td>' .
+                '<td class="text-nowrap" colspan="2">No data available in table</td>' .
                 '<td></td>' .
                 '<td></td>' .
                 '</tr>' .

@@ -279,10 +279,10 @@
                     data_data += '&filter_generated_from=' + filter_date_from + '&filter_generated_to=' +
                         filter_date_to;
                 }
-                console.log(data_data);
                 let url =
                     "{{ route('sites.accounts.general-ledger.ajax-filter-data-trial-balance', ['site_id' => encryptParams($site_id)]) }}";
                 var _token = '{{ csrf_token() }}';
+                showBlockUI('#loader');
                 $.ajax({
                     url: url,
                     type: 'post',
@@ -294,17 +294,16 @@
                         'account_head_code': '{{ $account_ledgers[0]->account_head_code }}',
                     },
                     success: function(data) {
-
-                        console.log((data))
                         if (data.status == true) {
                             $('#example').html(data.data);
                         } else {
                             console.log(data.data);
                         }
-
+                        hideBlockUI('#loader');
                     },
                     error: function(error) {
                         console.log(error);
+                        hideBlockUI('#loader');
                     }
                 });
 
@@ -312,13 +311,16 @@
         });
 
         function resetFilter() {
+            showBlockUI('#loader');
 
             $('#form_date').val('');
             $('#to_date').val('');
+
             flatpicker_to_date.clear();
 
             $('#apply_filter').trigger('click');
 
+            hideBlockUI('#loader');
         }
     </script>
 @endsection

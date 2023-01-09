@@ -227,6 +227,20 @@
         </div>
     </div>
 
+    <div id="transferownerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+        <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+            id="">
+            <input type="hidden" value="{{ $customer->id }}" name="customer_id">
+            <div class="card-header justify-content-between">
+                <h3> Transfer Owner Informaton </h3>
+            </div>
+
+            <div class="card-body">
+                {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $transfer_customer, 'hideBorders' => true]) }}
+            </div>
+        </div>
+    </div>
+
     <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
             id="stakeholders_card">

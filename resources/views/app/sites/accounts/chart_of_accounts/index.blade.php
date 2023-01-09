@@ -289,7 +289,7 @@
 
                 @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
                     <li class="ps-3 main_accets_lik">
-                        <i class="fa-regular fa-folder custom_folder_icon"></i><a class="custom_accets_link" href="#">
+                        <i class="fa-regular fa-folder custom_folder_icon"></i><a onclick="getFristLevelBalance({{ $account_of_head->code }})" class="custom_accets_link" href="#">
                             {{ $account_of_head->name }}</a>
                         <ul>
                             <li id="{{ $account_of_head->id }}">
@@ -320,10 +320,10 @@
                                                 <td class="custom_td">
                                                     {{ ucfirst($account_of_head->account_type) }}
                                                 </td>
-                                                <td class="custom_td">
-                                                    0
+                                                <td class="custom_td first_level_balance">
+                                                   0.0
                                                 </td>
-                                                <td class="custom_td">
+                                                <td class="custom_td ">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -334,7 +334,7 @@
                             @foreach ($account_of_heads as $key => $account_of_head_full_array)
                                 @if (Str::length($account_of_head_full_array->code) == 4 and
                                     $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
-                                    <li class="ps-2"><a href="#">{{ $account_of_head_full_array->name }}</a>
+                                    <li class="ps-2"><a href="#" onclick="getSecondLevelBalance({{ $account_of_head_full_array->code }})">{{ $account_of_head_full_array->name }}</a>
                                         <ul>
                                             <li id="{{ $account_of_head_full_array->id }}">
                                                 <div class="table-responsive">
@@ -366,10 +366,10 @@
                                                                 <td class="custom_td">
                                                                     {{ ucfirst($account_of_head_full_array->account_type) }}
                                                                 </td>
-                                                                <td class="custom_td">
+                                                                <td class="custom_td second_level_balance">
                                                                     0
                                                                 </td>
-                                                                <td class="custom_td">
+                                                                <td class="custom_td ">
                                                                 </td>
 
                                                             </tr>
@@ -419,7 +419,7 @@
                                                                                 <td class="custom_td">
                                                                                     {{ ucfirst($account_of_head_3->account_type) }}
                                                                                 </td>
-                                                                                <td class="custom_td">
+                                                                                <td class="custom_td third_level_balance">
                                                                                     0
                                                                                 </td>
                                                                                 <td class="custom_td">
@@ -429,123 +429,55 @@
                                                                     </table>
                                                                 </div>
                                                             </li>
-                                                            @foreach ($account_of_heads->where('level', 4) as $key_forth => $account_of_head_4)
-                                                                {{-- @php
-                                                                                                    $value_5 = 0;
-                                                                                                @endphp --}}
-                                                                @if (Str::length($account_of_head_4->code) == 10 and
-                                                                    $account_of_head_3->code == substr($account_of_head_4->code, 0, 6))
-                                                                    <li class="ps-3">
-                                                                        <a
-                                                                            href="#">{{ $account_of_head_4->name }}</a>
-                                                                        <ul>
-                                                                            <li>
-                                                                                <table class="table">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th scope="col">Name</th>
-                                                                                            <th scope="col">ACCOUNT
-                                                                                                LEVEl</th>
-                                                                                            <th scope="col">ACCOUNT
-                                                                                                CODES</th>
-                                                                                            <th scope="col">ACCOUNT
-                                                                                                NATURE</th>
-                                                                                            <th scope="col">Balance</th>
-                                                                                            <th class="custom_plus_th"
-                                                                                                scope="col">
-                                                                                                <i data-feather='plus'
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#new-task-modal"></i>
-                                                                                            </th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td class="custom_td">
-                                                                                                {{ $account_of_head_4->name }}
-                                                                                            </td>
-                                                                                            <td class="custom_td">
-                                                                                                {{ $account_of_head_4->level }}
-                                                                                            </td>
-                                                                                            <td class="custom_td">
-                                                                                                {{ account_number_format($account_of_head_4->code) }}
-                                                                                            </td>
-                                                                                            <td class="custom_td">
-                                                                                                {{ ucfirst($account_of_head_4->account_type) }}
-                                                                                            </td>
-                                                                                            <td class="custom_td">
-                                                                                                0
-                                                                                            </td>
-                                                                                            <td class="custom_td">
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
+                                                            {{-- <li >
+                                                            <a href="#">4 Level</a>
+                                                            <ul>
+                                                                <li>
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody >
 
-                                                                            </li>
+                                                                        </tbody>
+                                                                    </table>
 
-                                                                            <li id="fifth-level-accounts" class="ps-5">
-                                                                                <table class="table">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th scope="col">Name
-                                                                                            </th>
-                                                                                            <th scope="col">
-                                                                                                ACCOUNT
-                                                                                                LEVEl</th>
-                                                                                            <th scope="col">
-                                                                                                ACCOUNT
-                                                                                                CODES</th>
-                                                                                            <th scope="col">
-                                                                                                ACCOUNT
-                                                                                                NATURE</th>
-                                                                                            <th scope="col">
-                                                                                                Balance</th>
-                                                                                            <th class="custom_plus_th"
-                                                                                                scope="col">
-                                                                                                <i data-feather='plus'
-                                                                                                    data-bs-toggle="modal"
-                                                                                                    data-bs-target="#new-task-modal"></i>
-                                                                                            </th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody id="fifth-level-accounts">
-                                                                                        @foreach ($account_of_heads->where('level', 5) as $key_fiveth => $account_of_head_5)
-                                                                                            @if (Str::length($account_of_head_5->code) > 10 and
-                                                                                                $account_of_head_4->code == substr($account_of_head_5->code, 0, 10))
-                                                                                                {{-- @dd(trim($accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('credit')->sum() - $accountLedgers_all->where('account_head_code',$account_of_head_5->code)->pluck('debit')->sum())); --}}
-                                                                                                <tr>
-                                                                                                    <td class="custom_td">
-                                                                                                        {{ $account_of_head_5->name }}
-                                                                                                    </td>
-                                                                                                    <td class="custom_td">
-                                                                                                        {{ $account_of_head_5->level }}
-                                                                                                    </td>
-                                                                                                    <td class="custom_td">
-                                                                                                        {{ account_number_format($account_of_head_5->code) }}
-                                                                                                    </td>
-                                                                                                    <td class="custom_td">
-                                                                                                        {{ ucfirst($account_of_head_5->account_type) }}
-                                                                                                    </td>
-                                                                                                    <td class="custom_td">
-                                                                                                        @if ($account_of_head_5->account_type == 'debit')
-                                                                                                            {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum(),'-')) }}
-                                                                                                        @else
-                                                                                                            {{ number_format(trim($accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('credit')->sum() -$accountLedgers_all->where('account_head_code', $account_of_head_5->code)->pluck('debit')->sum(),'-')) }}
-                                                                                                        @endif
-                                                                                                    </td>
-                                                                                                    <td class="custom_td">
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </li>
-                                                                @endif
-                                                            @endforeach
+                                                                </li>
+
+
+
+                                                                <li id="fifth-level-accounts">
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Name</th>
+                                                                                <th scope="col">ACCOUNT LEVEl</th>
+                                                                                <th scope="col">ACCOUNT CODES</th>
+                                                                                <th scope="col">ACCOUNT NATURE</th>
+                                                                                <th scope="col">Balance</th>
+                                                                                <th class="custom_plus_th" scope="col">
+                                                                                    <i data-feather='plus' data-bs-toggle="modal"
+                                                                                        data-bs-target="#new-task-modal"></i>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody id="fifth-level-accounts">
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </li>
+                                                            </ul>
+                                                        </li> --}}
                                                         </ul>
                                                     </li>
                                                 @endif
@@ -559,7 +491,6 @@
                 @endforeach
             </ul>
         </div>
-
     </section>
 @endsection
 
@@ -587,141 +518,190 @@
 @section('custom-js')
 
     <script>
-        // function getFourthLevelAccounts(code) {
-        //     // alert(code);
-        //     showBlockUI('#tree1');
-        //     let url =
-        //         "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
-        //     var _token = '{{ csrf_token() }}';
-        //     $.ajax({
-        //         url: url,
-        //         type: 'post',
-        //         dataType: 'json',
-        //         data: {
-        //             'code': code,
-        //             '_token': _token
-        //         },
-        //         success: function(data) {
+        function getFourthLevelAccounts(code) {
+            // alert(code);
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
-        //             let fourth_level_accounts = data.fourth_level_accounts;
-        //             $('.alreadyExistFourthLevelAccount').remove();
-        //             for (let index = 0; index < fourth_level_accounts.length; index++) {
-        //                 const account_data = fourth_level_accounts[index];
+                    $('.third_level_balance').html(data.balance);
 
-        //                 $('.fourth_level_account').append('<li class="alreadyExistFourthLevelAccount ' +
-        //                     account_data.code + '" id="' + account_data.code +
-        //                     '"><a class="ps-1" href="#" onclick="fifthLevelAccounts(' + account_data.code +
-        //                     ')">' +
-        //                     account_data.name + '</a></li>');
-        //             }
+                    let fourth_level_accounts = data.fourth_level_accounts;
+                    $('.alreadyExistFourthLevelAccount').remove();
+                    // $('.fourth_level_account').append(fourth_level_accounts);
+                    for (let index = 0; index < fourth_level_accounts.length; index++) {
+                        const account_data = fourth_level_accounts[index];
 
-        //             hideBlockUI('#tree1');
-        //         },
-        //         error: function(error) {
-        //             console.log(error);
-        //             hideBlockUI('#tree1');
-        //         }
-        //     });
-        //     hideBlockUI('#tree1');
-        // }
+                        $('.fourth_level_account').append('<li class="alreadyExistFourthLevelAccount ' +
+                           account_data.code + '" id="' + account_data.code +
+                            '"><a class="ps-1" href="#" onclick="fifthLevelAccounts(' + account_data.code +
+                            ')">' +
+                            account_data.name + '</a></li>');
+                    }
 
-        // function fifthLevelAccounts(code) {
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
 
-        //     showBlockUI('#tree1');
-        //     let url =
-        //         "{{ route('sites.accounts.charts-of-accounts.ajax-get-fifth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
-        //     var _token = '{{ csrf_token() }}';
-        //     $.ajax({
-        //         url: url,
-        //         type: 'post',
-        //         dataType: 'json',
-        //         data: {
-        //             'code': code,
-        //             '_token': _token
-        //         },
-        //         success: function(data) {
-        //             let selected_account = data.fourth_level_account;
+        function fifthLevelAccounts(code) {
 
-        //             $('.removeAlreadyUl').remove();
-        //             $('.' + code + '').append('<ul class="removeAlreadyUl fifthLevelAccounts">\
-        //                                                     <li>\
-        //                                                         <div class="table-responsive">\
-        //                                                         <table class="table">\
-        //                                                             <thead>\
-        //                                                             <tr>\
-        //                                                                 <th scope="col">Name</th>\
-        //                                                                  <th scope="col">ACCOUNT LEVEL</th>\
-        //                                                                  <th scope="col">ACCOUNT CODES</th>\
-        //                                                                 <th scope="col">ACCOUNT NATURE</th>\
-        //                                                                 <th scope="col">Balance</th>\
-        //                                                              </thead>\
-        //                                                         <tbody >\
-        //                                                             <tr>\
-        //                                                                 <td class="custom_td">' + selected_account.name + ' </td>\
-        //                                                                 <td class="custom_td">' + selected_account.level + ' </td>\
-        //                                                                 <td class="custom_td">' + selected_account.code + ' </td>\
-        //                                                                 <td class="custom_td">' + selected_account.account_type + ' </td>\
-        //                                                                 <td class="custom_td">0</td>\
-        //                                                             </tr>\
-        //                                                         </tbody>\
-        //                                                         </table>\
-        //                                                         </div>\
-        //                                                      </li>\
-        //                                                     </ul>');
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-fifth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+                    let selected_account = data.fourth_level_account;
 
-        //             let fifth_level_accounts = data.fifth_level_accounts;
+                    $('.removeAlreadyUl').remove();
+                    $('.' + code + '').append('<ul class="removeAlreadyUl fifthLevelAccounts">\
+                                                                <li>\
+                                                                    <div class="table-responsive">\
+                                                                    <table class="table">\
+                                                                        <thead>\
+                                                                        <tr>\
+                                                                            <th scope="col">Name</th>\
+                                                                             <th scope="col">ACCOUNT LEVEL</th>\
+                                                                             <th scope="col">ACCOUNT CODES</th>\
+                                                                            <th scope="col">ACCOUNT NATURE</th>\
+                                                                            <th scope="col">Balance</th>\
+                                                                         </thead>\
+                                                                    <tbody >\
+                                                                        <tr>\
+                                                                            <td class="custom_td">' + selected_account
+                        .name + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .level + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .formated_code + ' </td>\
+                                                                            <td class="custom_td">' + selected_account
+                        .account_type + ' </td>\
+                                                                            <td class="custom_td">'+data.fourth_level_balance+'</td>\
+                                                                        </tr>\
+                                                                    </tbody>\
+                                                                    </table>\
+                                                                    </div>\
+                                                                 </li>\
+                                                                 <li class="ps-4 alreadyExistFifthLevelAccount">\
+                                                            <div class="table-responsive">\
+                                                                <table class="table">\
+                                                                        <thead>\
+                                                                        <tr>\
+                                                                            <th scope="col">Name</th>\
+                                                                             <th scope="col">ACCOUNT LEVEL</th>\
+                                                                             <th scope="col">ACCOUNT CODES</th>\
+                                                                            <th scope="col">ACCOUNT NATURE</th>\
+                                                                            <th scope="col">Balance</th>\
+                                                                         </thead>\
+                                                                    <tbody class="fifth_level_accounts">\
+                                                                    </tbody>\
+                                                                    </table>\
+                                                                    </div>\
+                                                            </li>\
+                                                                </ul>');
 
+                    let fifth_level_accounts = data.fifth_level_accounts;
 
-        //             $('.alreadyExistFifthLevelAccount').remove();
-        //             for (let index = 0; index < fifth_level_accounts.length; index++) {
-        //                 const account_data = fifth_level_accounts[index];
-        //                 console.log(account_data.name)
-        //                 $('.fifthLevelAccounts').append('<li class="ps-3 alreadyExistFifthLevelAccount">\
-        //                                                 <div class="table-responsive">\
-        //                                                     <table class="table">\
-        //                                                             <thead>\
-        //                                                             <tr>\
-        //                                                                 <th scope="col">Name</th>\
-        //                                                                  <th scope="col">ACCOUNT LEVEL</th>\
-        //                                                                  <th scope="col">ACCOUNT CODES</th>\
-        //                                                                 <th scope="col">ACCOUNT NATURE</th>\
-        //                                                                 <th scope="col">Balance</th>\
-        //                                                              </thead>\
-        //                                                         <tbody >\
-        //                                                             <tr>\
-        //                                                                 <td class="custom_td">' + account_data.name + ' </td>\
-        //                                                                 <td class="custom_td">' + account_data.level + ' </td>\
-        //                                                                 <td class="custom_td">' + account_data.code + ' </td>\
-        //                                                                 <td class="custom_td">' + account_data.account_type + ' </td>\
-        //                                                                 <td class="custom_td">0</td>\
-        //                                                             </tr>\
-        //                                                         </tbody>\
-        //                                                         </table>\
-        //                                                         </div>\
-        //                                                 </li>');
-        //             }
+                    // $('.fifth_level_accounts').empty();
+                    // $('.alreadyExistFifthLevelAccount').remove();
+                    for (let index = 0; index < fifth_level_accounts.length; index++) {
+                        const account_data = fifth_level_accounts[index];
 
-
-        //             hideBlockUI('#tree1');
-        //         },
-        //         error: function(error) {
-        //             console.log(error);
-        //             hideBlockUI('#tree1');
-        //         }
-        //     });
+                        $('.fifth_level_accounts').append('<tr>\
+                                                                <td class="custom_td">' + account_data.name + ' </td>\
+                                                                <td class="custom_td">' + account_data.level + ' </td>\
+                                                                <td class="custom_td">' + account_data.formated_code + ' </td>\
+                                                                <td class="custom_td">' + account_data.account_type + ' </td>\
+                                                                <td class="custom_td">' + account_data.balance + '</td>\
+                                                            </tr>');
+                    }
 
 
-        //     // <th class="custom_plus_th" scope="col">\
-        //     //                                 <i data-feather="plus" data-bs-toggle="modal" data-bs-target="#new-task-modal">Plus</i>\
-        //     //                             </tr>\
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
 
-        //     // <td class="custom_td">0</td>\
+        function getFristLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-first-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
+                    $('.first_level_balance').html(data.balance);
 
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+        function getSecondLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-second-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
+                    $('.second_level_balance').html(data.balance);
 
-        //     hideBlockUI('#tree1');
-        // }
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
     </script>
 
     <script>

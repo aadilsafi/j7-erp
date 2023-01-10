@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\BlackListStackholder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\BacklistedStakeholder;
 class UpdateRequest extends FormRequest
 {
     /**
@@ -21,15 +23,16 @@ class UpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'string', 'between:1,120'],
-            'fatherName' => ['required', 'string', 'between:1,120'],
-            'cnic' => "required|unique:backlisted_stakeholders",
-            'country' => ['required'],
-            'province' => ['required'],
-            'district' => ['required'],
 
+        $id=decryptParams($this->id);
 
-        ];
+             $rules =  (new BacklistedStakeholder())->rules;
+             $rules['cnic'] = ['required', Rule::unique('backlisted_stakeholders')->ignore($id)];
+             $rules['country'] = ['required'];
+             $rules['district'] = ['required'];
+             $rules['province'] = ['required'];
+
+            return $rules;
+
     }
 }

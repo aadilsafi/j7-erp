@@ -156,9 +156,9 @@ class BacklistedStakeholderController extends Controller
      */
     public function update(UpdateRequest $request, $site_id, $id)
     {
+        // dd($id);
 
         $id = decryptParams($id);
-
         try
         {
             if (!request()->ajax())
@@ -206,4 +206,3 @@ class BacklistedStakeholderController extends Controller
     }
 
 }
-

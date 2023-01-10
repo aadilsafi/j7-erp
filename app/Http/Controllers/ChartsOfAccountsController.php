@@ -341,14 +341,15 @@ class ChartsOfAccountsController extends Controller
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
-                        $debit = $ledger->debit;
+                        $debit = (float)$debit + (float)$ledger->debit;
                     }
                     if (isset($ledger->credit)) {
-                        $credit = $ledger->credit;
+                        $credit = (float)$credit + (float)$ledger->credit;
                     }
-                    $balance = $balance + ((float)$debit - (float)$credit);
+
                 }
             }
+            $balance = $balance + ((float)$debit - (float)$credit);
         } else {
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
@@ -356,14 +357,14 @@ class ChartsOfAccountsController extends Controller
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
-                        $debit = $ledger->debit;
+                        $debit = (float)$debit + (float)$ledger->debit;
                     }
                     if (isset($ledger->credit)) {
-                        $credit = $ledger->credit;
+                        $credit = (float)$credit + (float)$ledger->credit;
                     }
-                    $balance = $balance + ((float)$credit - (float)$debit);
                 }
             }
+            $balance = $balance + ((float)$credit - (float)$debit);
         }
 
         return response()->json([

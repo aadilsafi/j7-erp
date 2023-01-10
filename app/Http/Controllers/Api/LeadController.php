@@ -21,9 +21,22 @@ class LeadController extends Controller
                 'name' => 'required|string',
                 'contact_no' => 'required|unique:stakeholders,mobile_contact',
                 'lead_as' => 'required|string',
-                'country_id' => 'sometimes|nullable|exists:countries,id',
-                'state_id'  => 'sometimes|nullable|exists:states,id',
-                'city_id'   => 'sometimes|nullable|exists:cities,id',
+                'cnic' => 'sometimes|nullable',
+                'email' => 'sometimes|nullable|email',
+                'office_email' => 'sometimes|nullable|email',
+                'office_contact' => 'sometimes|nullable',
+                'primary_address' => 'sometimes|nullable',
+                'primay_address_postal_code' => 'sometimes|nullable',
+                'primay_address_country_id' => 'sometimes|nullable|exists:countries,id',
+                'primay_address_state_id'  => 'sometimes|nullable|exists:states,id',
+                'primay_address_city_id'   => 'sometimes|nullable|exists:cities,id',
+                'other_address' => 'sometimes|nullable',
+                'other_address_postal_code' => 'sometimes|nullable',
+                'other_address_country_id' => 'sometimes|nullable|exists:countries,id',
+                'other_address_state_id'  => 'sometimes|nullable|exists:states,id',
+                'other_address_city_id'   => 'sometimes|nullable|exists:cities,id',
+                'description' => 'sometimes|nullable',
+                'refered_by' => 'sometimes|nullable'
             ]);
 
             if ($validation->fails()) {

@@ -60,6 +60,8 @@ class LeadController extends Controller
                 'site_id' => '1',
                 'crm_id' => $request->crm_id,
                 'full_name' => $request->name,
+                'father_name' => $request->father_name,
+                'date_of_birth' => $request->date_of_birth,
                 'mobile_contact' => strpos($request->contact_no, '+') == 0 ?  $request->contact_no : '+' . $request->contact_no,
                 'stakeholder_as' => $request->lead_as,
                 'residential_country_id' => $request->primay_address_country_id,

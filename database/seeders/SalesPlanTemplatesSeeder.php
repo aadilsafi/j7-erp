@@ -31,7 +31,13 @@ class SalesPlanTemplatesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'name' => 'Template 03',
+                'slug' => 'template-03',
+                'image' => '/images/SalesTemplate/template01.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
     }

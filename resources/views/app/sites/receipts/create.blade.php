@@ -482,7 +482,11 @@
                                 $('#stackholder_country').val(response.country);
                                 $('#stackholder_state').val(response.state);
                                 $('#stackholder_city').val(response.city);
+                                if(response.stakeholders['stakeholder_as'] == 'c'){
+                                   
+                                $('#stackholder_contact').val(response.stakeholders['office_contact']);
 
+                                }
                                 created_date.set('minDate', new Date(response.sales_plan[
                                     'created_date']));
 

@@ -63,6 +63,11 @@ class SalesPlan extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function approveBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'id');
+    }
+
     public function stakeholder()
     {
         return $this->belongsTo(Stakeholder::class);

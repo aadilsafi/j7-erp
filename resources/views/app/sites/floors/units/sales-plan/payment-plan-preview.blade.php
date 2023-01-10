@@ -356,8 +356,27 @@
                                                                         </td>
                                                                         <td>{{ number_format($installment->remaining_amount, 2) }}
                                                                         </td>
-                                                                        <td>{{ Str::of($installment->status)->replace('_', ' ')->title() }}
-                                                                        </td>
+                                                                        @if ($installment->status == 'paid')
+                                                                            <td>
+                                                                                <span
+                                                                                    style="color: green; font-weight: bold;">{{ Str::of($installment->status)->replace('_', ' ')->title() }}</span>
+                                                                            </td>
+                                                                        @elseif($installment->status == 'partially_paid')
+                                                                            <td>
+                                                                                <span
+                                                                                    style="color: rgb(255, 123, 0); font-weight: bold;">{{ Str::of($installment->status)->replace('_', ' ')->title() }}
+                                                                                    {{ \Carbon\Carbon::parse($installment->date)->isPast() ? ', Due' : '' }}</span>
+                                                                            </td>
+                                                                        @elseif($installment->status == 'unpaid' && \Carbon\Carbon::parse($installment->date)->isPast())
+                                                                            <td>
+                                                                                <span
+                                                                                    style="color: red; font-weight: bold;">Due</span>
+                                                                            </td>
+                                                                        @else
+                                                                            <td>
+                                                                                <span>{{ Str::of($installment->status)->replace('_', ' ')->title() }}</span>
+                                                                            </td>
+                                                                        @endif
                                                                     @endif
                                                                 </tr>
                                                             @endforeach

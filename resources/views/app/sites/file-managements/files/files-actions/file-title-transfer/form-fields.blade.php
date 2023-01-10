@@ -11,8 +11,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="amount_to_be_refunded">Transfer Charges <span
                                 class="text-danger">*</span></label>
-                        <input type="text"  onchange="calculateTransferAmount()" required
-                            name="transfer_rate" class="form-control amountFormat form-control-lg"
+                        <input type="text" onchange="calculateTransferAmount()" required name="transfer_rate"
+                            class="form-control amountFormat form-control-lg"
                             {{ isset($transfer_file) ? 'disabled' : '' }} id="transfer_rate"
                             placeholder="Transfer Charges"
                             value="{{ isset($transfer_file) ? number_format($transfer_file->transfer_rate) : '' }}" />
@@ -85,7 +85,8 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 position-relative mt-1">
                                         <label class="form-label fs-5" for="type_name">Attachment</label>
                                         <input id="attachment" type="file" class="filepond attachment" disabled
-                                            name="attachment[image]" accept="image/png, image/jpeg, image/gif,application/pdf" />
+                                            name="attachment[image]"
+                                            accept="image/png, image/jpeg, image/gif,application/pdf" />
                                     </div>
                                 </div>
                             </div>
@@ -226,6 +227,21 @@
             </div>
         </div>
     </div>
+    @if (isset($transfer_file))
+        <div id="transferownerInformation" class="col-lg-12 col-md-12 col-sm-12 position-relative">
+            <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
+                id="">
+                <input type="hidden" value="{{ $customer->id }}" name="customer_id">
+                <div class="card-header justify-content-between">
+                    <h3> Transfer Owner Informaton </h3>
+                </div>
+
+                <div class="card-body">
+                    {{ view('app.sites.stakeholders.partials.stakeholder-preview-fields', ['stakeholder' => $transfer_customer, 'hideBorders' => true]) }}
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div id="unitData" class="col-lg-12 col-md-12 col-sm-12 position-relative">
         <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;"
@@ -265,20 +281,20 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_occupation">Gross Area</label>
-                        <input type="text" readonly value="{{ number_format($unit->gross_area,2) }}"
+                        <input type="text" readonly value="{{ number_format($unit->gross_area, 2) }}"
                             class="form-control form-control-lg" id="stackholder_occupation" placeholder="Unit No" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_full_name">Price Per Sqft</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price,2) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->unit_price, 2) }}"
                             class="form-control form-control-lg" id="stackholder_full_name"
                             placeholder="Unit Name" />
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
                         <label class="form-label fs-5" for="stackholder_father_name">Total Price</label>
-                        <input type="text" readonly value="{{ number_format($salesPlan->total_price,2) }}"
+                        <input type="text" readonly value="{{ number_format($salesPlan->total_price, 2) }}"
                             class="form-control form-control-lg" id="stackholder_father_name"
                             placeholder="Unit Type" />
                     </div>
@@ -331,9 +347,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount,2) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount,2) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount, 2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>
@@ -351,9 +367,9 @@
                                                         <td>{{ $intsallment->details }}</td>
                                                         <td>{{ \Carbon\Carbon::parse($intsallment->date)->format('F j, Y') }}
                                                         </td>
-                                                        <td>{{ number_format($intsallment->amount,2) }}</td>
-                                                        <td>{{ number_format($intsallment->paid_amount,2) }}</td>
-                                                        <td>{{ number_format($intsallment->remaining_amount,2) }}</td>
+                                                        <td>{{ number_format($intsallment->amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->paid_amount, 2) }}</td>
+                                                        <td>{{ number_format($intsallment->remaining_amount, 2) }}</td>
                                                         <td>{{ Str::of($intsallment->status)->replace('_', ' ')->title() }}
                                                         </td>
                                                     </tr>

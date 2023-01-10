@@ -1086,19 +1086,19 @@ if (!function_exists('createRandomAlphaNumericCode')) {
     function createRandomAlphaNumericCode()
     {
         $numerics = '0123456789';
-        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $pass = array(); //remember to declare $pass as an array
-        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
-        $numericLength = strlen($numerics) - 1; //put the length -1 in cache
-        for ($i = 0; $i < 5; $i++) {
+        $alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $pass = array();
+        $alphaLength = strlen($alphabet) - 1;
+        $numericLength = strlen($numerics) - 1;
+        for ($i = 0; $i < 4; $i++) {
             $n = rand(0, $numericLength);
             $pass[] = $numerics[$n];
         }
-        for ($i = 0; $i < 3; $i++) {
+        for ($i = 0; $i < 2; $i++) {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
-        $code = implode($pass); //turn the array into a string
+        $code = implode($pass);
         return str_shuffle($code);
     }
 }

@@ -41,7 +41,7 @@ class AccountHead extends Model
 
     public function accountLedgers()
     {
-        return $this->HasMany(AccountLedger::class);
+        return $this->HasMany(AccountLedger::class, 'account_head_code', 'code');
     }
     public function accountLedgersWithCreditAndDebit()
     {

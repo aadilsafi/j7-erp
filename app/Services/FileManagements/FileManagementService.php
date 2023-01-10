@@ -65,6 +65,10 @@ class FileManagementService implements FileManagementInterface
         ];
         $file = $this->model()->create($data);
 
+        // attach conatct person to file if selected 
+        if (isset($inputs['application_form']['contact_persons'])) {
+            $file->stakeholderConatcts()->attach($inputs['application_form']['contact_persons'], ['site_id' => decryptParams($site_id)]);
+        }
         if (isset($inputs['application_form']['photo'])) {
             $file->addMedia($inputs['application_form']['photo'])->toMediaCollection('application_form_photo');
             changeImageDirectoryPermission();

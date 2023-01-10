@@ -301,9 +301,9 @@ class SalesPlanController extends Controller
             'discount_total' =>  $salesPlan->discount_total,
             'total' => $salesPlan->total_price,
             'sales_person_name' => $salesPlan->user->name,
-            'sales_person_contact' => $salesPlan->stakeholder->contact,
+            'sales_person_contact' => $salesPlan->user->contact,
             'sales_person_status' => $role[0],
-            'sales_person_phone_no' => $salesPlan->user->phone_no,
+            'sales_person_phone_no' => $salesPlan->user->contact,
             'sales_person_sales_type' => $salesPlan->sales_type,
             'indirect_source' => $salesPlan->indirect_source,
             'instalments' => collect($salesPlan->installments)->sortBy('installment_order'),
@@ -311,6 +311,10 @@ class SalesPlanController extends Controller
             'validity' =>  $salesPlan->validity,
             'contact' => $salesPlan->stakeholder->contact,
             'amount' => $salesPlan->total_price,
+            'serial_no' => $salesPlan->serial_no,
+            'pp_serial_no' => $salesPlan->payment_plan_serial_id,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
+            'created_date' => $salesPlan->created_date,
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
             'paid_amount' => $salesPlan->installments->sum('paid_amount'),
@@ -488,13 +492,14 @@ class SalesPlanController extends Controller
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
 
-        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
+
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
         $user = User::find($salesPlan->user_id);
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
+        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
 
         if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');

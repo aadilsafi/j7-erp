@@ -103,4 +103,8 @@ class FileManagement extends Model implements HasMedia
     {
         return $this->morphMany(CustomFieldValue::class, 'modelable');
     }
+    public function stakeholderConatcts()
+    {
+        return $this->belongsToMany(StakeholderContact::class, 'file_stakeholder_contacts')->withPivot('site_id');
+    }
 }

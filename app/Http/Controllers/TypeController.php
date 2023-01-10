@@ -435,7 +435,7 @@ class TypeController extends Controller
                     'site_id' => decryptParams($site_id),
                     'code' => $accountCode,
                     'account_type'=> 'debit',
-                    'name' => 'Accounts Receviable - ' . $data[$key]['name'],
+                    'name' => 'Accounts Receivable - ' . $data[$key]['name'],
                     'level' => 3,
                 ]);
             }

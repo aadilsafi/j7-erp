@@ -741,7 +741,7 @@ class AccountHeadSeeder extends Seeder
                 'modelable_id' => null,
                 'modelable_type' => null,
                 'code' => '101007',
-                'name' => 'Long Term Other Receviables',
+                'name' => 'Long Term Other Receivables',
                 'level' => 3,
                 'account_type' => 'debit',
                 'opening_balance' => null,

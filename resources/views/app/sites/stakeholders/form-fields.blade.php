@@ -199,7 +199,7 @@
                                             <select class="form-select contact-person-select"
                                                 data-id="{{ $key }}"
                                                 name="contact-persons[{{ $key }}][stakeholder_contact_id]">
-                                                <option value="0">Create new Stakeholder...</option>
+                                                <option value="0" selected>Create new Stakeholder...</option>
                                                 @forelse ($contactStakeholders as $cstakeholder)
                                                     @continue(isset($stakeholder) && $cstakeholder->id == $stakeholder->id)
                                                     <option value="{{ $cstakeholder->id }}"

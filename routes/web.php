@@ -590,10 +590,10 @@ Route::group([
                 Route::group(['prefix' => 'blacklisted-stakeholders', 'as' => 'blacklisted-stakeholders.'], function () {
                     Route::get('/', [BacklistedStakeholderController::class, 'index'])->name('index');
 
+
                     Route::get('create', [BacklistedStakeholderController::class, 'create'])->name('create');
                     Route::post('store', [BacklistedStakeholderController::class, 'store'])->name('store');
-
-                    Route::get('delete-selected', [BacklistedStakeholderController::class, 'destroySelected'])->name('destroy-selected');
+                    Route::get('delete-selected', [BacklistedStakeholderController::class, 'destroy'])->name('destroy-selected');
                     Route::group(['prefix' => '/{id}'], function () {
                         Route::get('edit', [BacklistedStakeholderController::class, 'edit'])->name('edit');
                         Route::put('update', [BacklistedStakeholderController::class, 'update'])->name('update');

@@ -47,7 +47,7 @@
     <div class="card">
         <div class="card-body">
 
-            <form action="{{ route('sites.stakeholders.destroy-selected', ['site_id' => $site_id]) }}"
+            <form action="{{ route('sites.blacklisted-stakeholders.destroy-selected', ['site_id' => $site_id]) }}"
                 id="stakeholder-table-form" method="get">
                 {{ $dataTable->table() }}
             </form>
@@ -112,7 +112,7 @@
         }
 
         function addNew() {
-            location.href = '{{ route('sites.stakeholders.create', ['site_id' => $site_id]) }}';
+            location.href = '{{ route('sites.blacklisted-stakeholders.create', ['site_id' => $site_id]) }}';
         }
 
         function Import() {

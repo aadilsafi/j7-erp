@@ -194,7 +194,9 @@ class ChartsOfAccountsController extends Controller
                     }
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
-                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit,2);
+                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                    $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_accounts[$key]['balance'];
+                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'],2);
                 }
             } else {
                 $debit = 0.0;
@@ -208,7 +210,9 @@ class ChartsOfAccountsController extends Controller
                         $credit = $ledger->credit;
                     }
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
-                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit,2);
+                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                    $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_accounts[$key]['balance'];
+                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'],2);
                 }
             }
         }

@@ -36,7 +36,9 @@ class LeadController extends Controller
                 'other_address_state_id'  => 'sometimes|nullable|exists:states,id',
                 'other_address_city_id'   => 'sometimes|nullable|exists:cities,id',
                 'description' => 'sometimes|nullable',
-                'refered_by' => 'sometimes|nullable'
+                'refered_by' => 'sometimes|nullable',
+                'is_local' => 'sometimes|nullable',
+                'nationality' => 'sometimes|nullable|exists:countries,id'
             ]);
 
             if ($validation->fails()) {
@@ -52,9 +54,24 @@ class LeadController extends Controller
                 'full_name' => $request->name,
                 'mobile_contact' => strpos($request->contact_no, '+') == 0 ?  $request->contact_no : '+' . $request->contact_no,
                 'stakeholder_as' => $request->lead_as,
-                'residential_country_id' => $request->country_id,
-                'residential_state_id' => $request->state_id,
-                'residential_city_id' => $request->city_id,
+                'residential_country_id' => $request->primay_address_country_id,
+                'residential_state_id' => $request->primay_address_state_id,
+                'residential_city_id' => $request->primay_address_city_id,
+                'residential_address' => $request->primary_address,
+                'residential_postal_code' => $request->primay_address_postal_code,
+                'mailing_country_id' => $request->other_address_country_id,
+                'mailing_state_id' => $request->other_address_state_id,
+                'mailing_city_id' => $request->other_address_city_id,
+                'mailing_address' => $request->other_address,
+                'mailing_postal_code' => $request->other_address_postal_code,
+                'cnic' => $request->cnic,
+                'designation' => $request->designation,
+                'nationality' => $request->nationality,
+                'occupation' => $request->occupation,
+                'email' => $request->email,
+                'office_email' => $request->office_email,
+                'office_contact' => $request->office_contact,
+                'comments' => $request->description,
             ]);
             $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
 

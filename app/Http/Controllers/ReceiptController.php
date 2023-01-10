@@ -359,6 +359,7 @@ class ReceiptController extends Controller
             'dealerPayableAmount' => $dealerPayableAmount,
             'vendorPayableAmount' => $vendorPayableAmount,
             'total_payable_amount' => $total_payable_amount,
+            'salesPlan'=> $sales_plan,
         ], 200);
     }
 

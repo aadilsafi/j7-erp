@@ -67,9 +67,11 @@
         .filepond--panel-root {
             background-color: #e3e0fd;
         }
+
         /* .filepond--item {
-            width: calc(50% - 0.5em);
-        }                                                                                                         } */ */
+                width: calc(50% - 0.5em);
+            }                                                                                                         } */
+        */
     </style>
 @endsection
 
@@ -114,17 +116,11 @@
                     @php
 
                         $amount_paid = $amount_paid + $draft_receipt->amount_in_numbers;
-                        if(isset($draft_receipt->discounted_amount) &&  (float)$draft_receipt->discounted_amount > 0 )
-                        {
-                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers + (float)$draft_receipt->discounted_amount;
-
-                        }
-                        else
-                        {
+                        if (isset($draft_receipt->discounted_amount) && (float) $draft_receipt->discounted_amount > 0) {
+                            $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers + (float) $draft_receipt->discounted_amount;
+                        } else {
                             $remaining_amount = $draft_receipt->amount_received - $draft_receipt->amount_in_numbers;
                         }
-
-
 
                     @endphp
                 @endforeach
@@ -142,7 +138,7 @@
                                 class="form-control amountFormat @error('amount_in_numbers') is-invalid @enderror"
                                 @if ($amount_received == 0) name="amount_received" @endif
                                 placeholder="Amount Received" @if ($amount_received > 0) readonly @endif
-                                value="{{ isset($amount_received) ? number_format($amount_received,2) : null }}" />
+                                value="{{ isset($amount_received) ? number_format($amount_received, 2) : null }}" />
                             @error('amount_in_numbers')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -184,10 +180,10 @@
                                 <label class="form-label" style="font-size: 15px" for="floor">
                                     <h6 style="font-size: 15px"> Amount Remaining</h6>
                                 </label>
-                                <input  type="text"
-                                    class="form-control  @error('amount_in_numbers') is-invalid @enderror"
+                                <input type="text" class="form-control  @error('amount_in_numbers') is-invalid @enderror"
                                     @if ($amount_received > 0) name="amount_received" @endif
-                                    placeholder="Amount Received" readonly value="{{ number_format($remaining_amount,2) }}" />
+                                    placeholder="Amount Received" readonly
+                                    value="{{ number_format($remaining_amount, 2) }}" />
                                 @error('amount_in_numbers')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -310,7 +306,7 @@
             $(".online-mode-of-payment").trigger('change');
             $("#transaction_date").flatpickr({
                 defaultDate: 'today',
-                // minDate: '',
+                maxDate: 'totday',
                 // altInput: !0,
                 dateFormat: "Y-m-d",
             });
@@ -403,7 +399,7 @@
 
         var created_date = $("#created_date").flatpickr({
             defaultDate: "today",
-            minDate: '',
+            maxDate: 'today',
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",
@@ -476,15 +472,17 @@
                                 $('#stackholder_ntn').val(response.stakeholders['ntn']);
                                 $('#stackholder_cnic').val(response.stakeholders['cnic']);
                                 $('#stackholder_contact').val(response.stakeholders['mobile_contact']);
-                                $('#stackholder_address').val(response.stakeholders['residential_address']);
+                                $('#stackholder_address').val(response.stakeholders[
+                                    'residential_address']);
                                 $('#stackholder_mailing_address').val(response.stakeholders[
                                     'mailing_address']);
                                 $('#stackholder_country').val(response.country);
                                 $('#stackholder_state').val(response.state);
                                 $('#stackholder_city').val(response.city);
-                                if(response.stakeholders['stakeholder_as'] == 'c'){
-                                   
-                                $('#stackholder_contact').val(response.stakeholders['office_contact']);
+                                if (response.stakeholders['stakeholder_as'] == 'c') {
+
+                                    $('#stackholder_contact').val(response.stakeholders[
+                                        'office_contact']);
 
                                 }
                                 created_date.set('minDate', new Date(response.sales_plan[
@@ -628,6 +626,16 @@
                         if (response.vendorPayableAmount <= 0) {
                             $('#vendor_ap_amount_paid').attr('readonly', true);
                         }
+
+                        $("#created_date").flatpickr({
+                            defaultDate: "today",
+                            maxDate: 'today',
+                            minDate:response.salesPlan.approved_date,
+                            altInput: !0,
+                            altFormat: "F j, Y",
+                            dateFormat: "Y-m-d",
+                        });
+
 
                         hideBlockUI('#loader');
                     } else {

@@ -204,9 +204,9 @@ class ChartsOfAccountsController extends Controller
                 if (isset($ledger->credit)) {
                     $credit = $ledger->credit;
                 }
-                $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
+                $fourth_level_balance = (float)$fourth_level_balance + ((float)$credit - (float)$debit);
 
-                $fifth_level_accounts[$key]['balance'] = number_format((float)$debit - (float)$credit, 2);
+                $fifth_level_accounts[$key]['balance'] = number_format((float)$credit - (float)$debit, 2);
             }
         }
         return response()->json([

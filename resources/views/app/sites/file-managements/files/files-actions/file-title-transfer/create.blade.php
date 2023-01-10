@@ -188,6 +188,7 @@
                 defaultDate: "today",
                 minDate: '{{ $salesPlan->approved_date }}',
                 altInput: !0,
+                maxDate: 'today',
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
             });

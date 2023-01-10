@@ -204,6 +204,7 @@
             $(".online-mode-of-payment").trigger('change');
             $("#transaction_date").flatpickr({
                 defaultDate: 'today',
+                maxDate: 'today',
                 // minDate: '',
                 // altInput: !0,
                 dateFormat: "Y-m-d",

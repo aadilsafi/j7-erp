@@ -193,7 +193,7 @@ class ChartsOfAccountsController extends Controller
                 }
                 $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
-                $fifth_level_accounts[$key]['balance'] = number_format((float)$debit - (float)$credit, 2);
+                $fifth_level_accounts[$key]['balance'] = (float)$debit - (float)$credit;
             } else {
                 $debit = 0.0;
                 $credit = 0.0;
@@ -206,7 +206,7 @@ class ChartsOfAccountsController extends Controller
                 }
                 $fourth_level_balance = (float)$fourth_level_balance + ((float)$credit - (float)$debit);
 
-                $fifth_level_accounts[$key]['balance'] = number_format((float)$credit - (float)$debit, 2);
+                $fifth_level_accounts[$key]['balance'] = (float)$credit - (float)$debit;
             }
         }
         return response()->json([

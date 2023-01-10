@@ -39,6 +39,14 @@ class LeadController extends Controller
                 'refered_by' => 'sometimes|nullable',
                 'is_local' => 'sometimes|nullable',
                 'nationality' => 'sometimes|nullable|exists:countries,id'
+            ],[
+                'nationality.exists' => 'Selected nationlity Country not Exists.',
+                'primay_address_country_id.exists' => 'Selected primary address country not Exists.',
+                'primay_address_state_id.exists' => 'Selected primary address state not Exists.',
+                'primay_address_city_id.exists' => 'Selected primary address city not Exists.',
+                'other_address_country_id.exists' => 'Selected other address country not Exists.',
+                'other_address_state_id.exists' => 'Selected other address state not Exists.',
+                'other_address_city_id.exists' => 'Selected other address city not Exists.',
             ]);
 
             if ($validation->fails()) {

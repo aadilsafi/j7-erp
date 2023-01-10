@@ -233,11 +233,12 @@ class ChartsOfAccountsController extends Controller
         $allAccounts =  AccountHead::whereBetween('code', [$starting_code, $ending_code])->get();
 
         $balance = 0.0;
+        $debit = 0.0;
+        $credit = 0.0;
 
         if ($nature == 'debit') {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
+
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
@@ -251,8 +252,7 @@ class ChartsOfAccountsController extends Controller
             }
         } else {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
+
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
@@ -283,11 +283,12 @@ class ChartsOfAccountsController extends Controller
         $allAccounts =  AccountHead::whereBetween('code', [$starting_code, $ending_code])->get();
 
         $balance = 0.0;
+        $debit = 0.0;
+        $credit = 0.0;
 
         if ($nature == 'debit') {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
+
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
@@ -301,8 +302,6 @@ class ChartsOfAccountsController extends Controller
             }
         } else {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
@@ -333,11 +332,12 @@ class ChartsOfAccountsController extends Controller
         $allAccounts =  AccountHead::whereBetween('code', [$starting_code, $ending_code])->get();
 
         $balance = 0.0;
+        $debit = 0.0;
+        $credit = 0.0;
 
         if ($nature == 'debit') {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
+
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {
@@ -353,8 +353,7 @@ class ChartsOfAccountsController extends Controller
 
         } else {
             foreach ($allAccounts as $account) {
-                $debit = 0.0;
-                $credit = 0.0;
+
                 $ledger = AccountLedger::where('account_head_code', $account->code)->get();
                 foreach ($ledger as $ledger) {
                     if (isset($ledger->debit)) {

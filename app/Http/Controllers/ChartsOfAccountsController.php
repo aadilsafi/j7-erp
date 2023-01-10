@@ -9,6 +9,7 @@ use App\Models\Site;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Action;
+use PDO;
 
 class ChartsOfAccountsController extends Controller
 {
@@ -195,8 +196,7 @@ class ChartsOfAccountsController extends Controller
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
                     $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
-                    $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_accounts[$key]['balance'];
-                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'],2);
+
                 }
             } else {
                 $debit = 0.0;
@@ -211,8 +211,6 @@ class ChartsOfAccountsController extends Controller
                     }
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
                     $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
-                    $fifth_level_accounts[$key]['balance'] = (float)$fifth_level_accounts[$key]['balance'];
-                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'],2);
                 }
             }
         }

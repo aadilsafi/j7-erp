@@ -921,7 +921,7 @@ Route::group([
                         Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
                     });
 
-                   
+
                 });
 
                 // Accounts Routes
@@ -954,7 +954,7 @@ Route::group([
                             Route::post('get-third-level-balance', [ChartsOfAccountsController::class, 'getThirdLevelBalance'])->name('get-third-level-balance');
                         });
                     });
-                    //trial-balance
+                    //trial-balance / General Ledger
 
                     Route::group(['prefix' => 'general-ledger', 'as' => 'general-ledger.'], function () {
                         Route::get('/', [GeneralLedgerController::class, 'index'])->name('index');

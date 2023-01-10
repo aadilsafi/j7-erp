@@ -309,8 +309,6 @@ class ChartsOfAccountsController extends Controller
             'success' => true,
             'site_id' => $site_id,
             'balance' => number_format($balance, 2),
-            's' => $starting_code,
-            'e' => $ending_code,
         ], 200);
     }
 
@@ -357,8 +355,7 @@ class ChartsOfAccountsController extends Controller
             'success' => true,
             'site_id' => $site_id,
             'balance' => number_format($balance, 2),
-            's' => $starting_code,
-            'e' => $ending_code,
         ], 200);
     }
+
 }

@@ -383,10 +383,9 @@
                                                 @if (Str::length($account_of_head_3->code) == 6 and
                                                     $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
                                                     <li class="ps-2">
-                                                        <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})"
+                                                        <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }}) ,getThirdLevelBalance({{ $account_of_head_3->code }})"
                                                             href="#">{{ $account_of_head_3->name }}</a>
                                                         <ul>
-
                                                             <li class="fourth_level_account"
                                                                 id="{{ $account_of_head_3->id }}">
                                                                 <div class="table-responsive">
@@ -519,7 +518,6 @@
 
     <script>
         function getFourthLevelAccounts(code) {
-            // alert(code);
             showBlockUI('#tree1');
             let url =
                 "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
@@ -534,7 +532,7 @@
                 },
                 success: function(data) {
 
-                    $('.third_level_balance').html(data.balance);
+                    // $('.third_level_balance').html(data.balance);
 
                     let fourth_level_accounts = data.fourth_level_accounts;
                     $('.alreadyExistFourthLevelAccount').remove();
@@ -692,6 +690,33 @@
                 success: function(data) {
 
                     $('.second_level_balance').html(data.balance);
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+
+        function getThirdLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-third-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
+
+                    $('.third_level_balance').html(data.balance);
 
                     hideBlockUI('#tree1');
                 },

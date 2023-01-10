@@ -348,8 +348,9 @@ class ChartsOfAccountsController extends Controller
                     }
 
                 }
+                $balance = $balance + ((float)$debit - (float)$credit);
             }
-            $balance = $balance + ((float)$debit - (float)$credit);
+
         } else {
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
@@ -363,8 +364,9 @@ class ChartsOfAccountsController extends Controller
                         $credit = (float)$credit + (float)$ledger->credit;
                     }
                 }
+                $balance = $balance + ((float)$credit - (float)$debit);
             }
-            $balance = $balance + ((float)$credit - (float)$debit);
+
         }
 
         return response()->json([

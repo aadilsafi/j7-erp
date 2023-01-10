@@ -184,29 +184,33 @@ class ChartsOfAccountsController extends Controller
             if ($fifth_level_account->account_type == 'debit') {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
-                }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
+                $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
-                $fifth_level_accounts[$key]['balance'] = (float)$debit - (float)$credit;
+                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                }
             } else {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
-                }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $fourth_level_balance = (float)$fourth_level_balance + ((float)$credit - (float)$debit);
+                $ledger = AccountLedger::where('account_head_code', $fifth_level_account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
-                $fifth_level_accounts[$key]['balance'] = (float)$credit - (float)$debit;
+                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                }
             }
         }
         return response()->json([
@@ -357,5 +361,4 @@ class ChartsOfAccountsController extends Controller
             'balance' => number_format($balance, 2),
         ], 200);
     }
-
 }

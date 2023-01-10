@@ -64,74 +64,74 @@ class ImportReceiptsDataTable extends DataTable
             //         ['id' => $data->id, 'field' => 'validity', 'inputtype' => 'text', 'value' => $data->validity]
             //     );
             // })
-            ->editColumn('mode_of_payment', function ($data) {
-                $values = ['cash' => 'Cash', 'cheque' => 'Cheque', 'online' => 'Online', 'other' => 'Other'];
-                return view(
-                    'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'mode_of_payment', 'values' => $values, 'selectedValue' => $data->mode_of_payment]
-                );
-            })
-            ->editColumn('cheque_no', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'cheque_no', 'inputtype' => 'number', 'value' => $data->cheque_no]
-                );
-            })
-            ->editColumn('bank_name', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'bank_name', 'inputtype' => 'text', 'value' => $data->bank_name]
-                );
-            })
-            ->editColumn('bank_acount_number', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'bank_acount_number', 'inputtype' => 'text', 'value' => $data->bank_acount_number]
-                );
-            })
-            ->editColumn('online_transaction_no', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'online_transaction_no', 'inputtype' => 'number', 'value' => $data->online_transaction_no]
-                );
-            })
-            ->editColumn('transaction_date', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'transaction_date', 'inputtype' => 'text', 'value' => $data->transaction_date]
-                );
-            })
-            ->editColumn('other_payment_mode_value', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'other_payment_mode_value', 'inputtype' => 'number', 'value' => $data->other_payment_mode_value]
-                );
-            })
-            ->editColumn('amount', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'amount', 'inputtype' => 'number', 'value' => $data->amount]
-                );
-            })
-            ->editColumn('installment_no', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'installment_no', 'inputtype' => 'number', 'value' => $data->installment_no]
-                );
-            })
-            ->editColumn('image_url', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'image_url', 'inputtype' => 'text', 'value' => $data->image_url]
-                );
-            })
-            ->editColumn('status', function ($data) {
-                $values = ['active' => 'Active', 'inactive' => 'In Active', 'cancel' => 'Cancel'];
-                return view(
-                    'app.components.input-select-fields',
-                    ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
-                );
-            })
+            // ->editColumn('mode_of_payment', function ($data) {
+            //     $values = ['cash' => 'Cash', 'cheque' => 'Cheque', 'online' => 'Online', 'other' => 'Other'];
+            //     return view(
+            //         'app.components.input-select-fields',
+            //         ['id' => $data->id, 'field' => 'mode_of_payment', 'values' => $values, 'selectedValue' => $data->mode_of_payment]
+            //     );
+            // })
+            // ->editColumn('cheque_no', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'cheque_no', 'inputtype' => 'number', 'value' => $data->cheque_no]
+            //     );
+            // })
+            // ->editColumn('bank_name', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'bank_name', 'inputtype' => 'text', 'value' => $data->bank_name]
+            //     );
+            // })
+            // ->editColumn('bank_acount_number', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'bank_acount_number', 'inputtype' => 'text', 'value' => $data->bank_acount_number]
+            //     );
+            // })
+            // ->editColumn('online_transaction_no', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'online_transaction_no', 'inputtype' => 'number', 'value' => $data->online_transaction_no]
+            //     );
+            // })
+            // ->editColumn('transaction_date', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'transaction_date', 'inputtype' => 'text', 'value' => $data->transaction_date]
+            //     );
+            // })
+            // ->editColumn('other_payment_mode_value', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'other_payment_mode_value', 'inputtype' => 'number', 'value' => $data->other_payment_mode_value]
+            //     );
+            // })
+            // ->editColumn('amount', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'amount', 'inputtype' => 'number', 'value' => $data->amount]
+            //     );
+            // })
+            // ->editColumn('installment_no', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'installment_no', 'inputtype' => 'number', 'value' => $data->installment_no]
+            //     );
+            // })
+            // ->editColumn('image_url', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'image_url', 'inputtype' => 'text', 'value' => $data->image_url]
+            //     );
+            // })
+            // ->editColumn('status', function ($data) {
+            //     $values = ['active' => 'Active', 'inactive' => 'In Active', 'cancel' => 'Cancel'];
+            //     return view(
+            //         'app.components.input-select-fields',
+            //         ['id' => $data->id, 'field' => 'status', 'values' => $values, 'selectedValue' => $data->status]
+            //     );
+            // })
             ->setRowId('id');
     }
 
@@ -176,76 +176,17 @@ class ImportReceiptsDataTable extends DataTable
             Column::computed('total_price')->title('Price')->searchable(true),
             Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
             Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
-            Column::computed('mode_of_payment')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'mode_of_payment'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('amount')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'amount'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('installment_no')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'installment_no'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('cheque_no')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'cheque_no'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('bank_name')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'bank_name'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('bank_acount_number')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'bank_acount_number'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('online_transaction_no')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'online_transaction_no'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('transaction_date')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'transaction_date'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('other_payment_mode_value')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'other_payment_mode_value'
-            ])->render())->addClass('removeTolltip'),
-
-            Column::computed('status')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'status'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('image_url')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'image_url'
-            ])->render())->addClass('removeTolltip'),
+            Column::computed('mode_of_payment')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('amount')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('cheque_no')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('bank_name')->addClass('removeTolltip'),
+            Column::computed('bank_acount_number')->addClass('removeTolltip'),
+            Column::computed('online_transaction_no')->addClass('removeTolltip'),
+            Column::computed('transaction_date')->addClass('removeTolltip'),
+            Column::computed('created_date')->addClass('removeTolltip'),
+            Column::computed('other_payment_mode_value')->addClass('removeTolltip'),
+            Column::computed('status')->addClass('removeTolltip'),
+            Column::computed('image_url')->addClass('removeTolltip'),
         ];
     }
 }

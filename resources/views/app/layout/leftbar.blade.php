@@ -274,7 +274,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.floors.SalesPlanImport.importSalesPlan')
+                                     @can('sites.floors.SalesPlanImport.importSalesPlan')
                                         <li class="nav-item ">
                                             <a class="d-flex align-items-center" href="javascript:void(0)">
 
@@ -291,7 +291,7 @@
                                                     </a>
                                                 </li>
                                     @endcan
-                                    @can('sites.floors.spadcostsImport.importspadcosts')
+                                   @can('sites.floors.spadcostsImport.importspadcosts')
                                                 <li
                                                     class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
                                                     <a class="d-flex align-items-center"
@@ -312,9 +312,9 @@
                                                         </span>
                                                     </a>
                                                 </li>
-                                    @endcan
+                                    @endcan 
                                             </ul>
-                                        </li> --}}
+                                        </li> 
                                     @can('sites.banks.importBanks')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.banks.importBanks') || request()->routeIs('sites.banks.storePreview') ? 'active' : null }}">
@@ -336,7 +336,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.receipts.importReceipts')
+                                    @can('sites.receipts.importReceipts')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.receipts.importReceipts') || request()->routeIs('sites.receipts.storePreview') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -346,7 +346,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                    @endcan --}}
+                                    @endcan
                                 </ul>
                             </li>
                         @endcan

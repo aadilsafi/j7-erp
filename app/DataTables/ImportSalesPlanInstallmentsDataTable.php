@@ -32,36 +32,36 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->editColumn('due_date', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'due_date', 'inputtype' => 'text', 'value' => $data->due_date]
-                );
-            })
-            ->editColumn('type', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'type', 'inputtype' => 'text', 'value' => $data->type]
-                );
-            })
-            ->editColumn('label', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'label', 'inputtype' => 'text', 'value' => $data->label]
-                );
-            })
-            ->editColumn('installment_no', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'installment_no', 'inputtype' => 'number', 'value' => $data->installment_no]
-                );
-            })
-            ->editColumn('total_amount', function ($data) {
-                return view(
-                    'app.components.unit-preview-cell',
-                    ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
-                );
-            })
+            // ->editColumn('due_date', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'due_date', 'inputtype' => 'text', 'value' => $data->due_date]
+            //     );
+            // })
+            // ->editColumn('type', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'type', 'inputtype' => 'text', 'value' => $data->type]
+            //     );
+            // })
+            // ->editColumn('label', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'label', 'inputtype' => 'text', 'value' => $data->label]
+            //     );
+            // })
+            // ->editColumn('installment_no', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'installment_no', 'inputtype' => 'number', 'value' => $data->installment_no]
+            //     );
+            // })
+            // ->editColumn('total_amount', function ($data) {
+            //     return view(
+            //         'app.components.unit-preview-cell',
+            //         ['id' => $data->id, 'field' => 'total_amount', 'inputtype' => 'number', 'value' => $data->total_amount]
+            //     );
+            // })
             ->setRowId('id');
     }
 
@@ -106,46 +106,12 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
             Column::computed('total_price')->title('Price')->searchable(true),
             Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
             Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
-            Column::computed('type')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'type'
-            ])->render())->addClass('removeTolltip')->searchable(true),
-            Column::computed('label')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'label'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('due_date')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'due_date'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-            Column::computed('installment_no')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'installment_no'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('total_amount')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-
-                'name' => 'total_amount'
-            ])->render())->addClass('removeTolltip'),
-            Column::computed('due_date')->title(view('app.components.select-fields', [
-                'db_fields' => $this->db_fields,
-                'is_disable' => false,
-                'spInstallment' => true,
-                'name' => 'due_date'
-            ])->render())->searchable(true)->addClass('removeTolltip'),
-
+            Column::computed('type')->addClass('removeTolltip')->searchable(true),
+            Column::computed('label')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('due_date')->searchable(true)->addClass('removeTolltip'),
+            Column::computed('installment_no')->addClass('removeTolltip'),
+            Column::computed('total_amount')->addClass('removeTolltip'),
+            Column::computed('due_date')->searchable(true)->addClass('removeTolltip'),
         ];
     }
 }

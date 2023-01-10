@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('rebate_incentive_models', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('unit_id')->nullable();
             $table->bigInteger('stakeholder_id')->constrained('stakeholders');

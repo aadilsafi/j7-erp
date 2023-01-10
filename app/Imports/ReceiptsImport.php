@@ -48,6 +48,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
         }
 
         return new TempReceipt([
+            'doc_no' => $row['doc_no'],
             'unit_short_label' => $row['unit_short_label'],
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'total_price' => $row['total_price'],
@@ -55,13 +56,11 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
             'mode_of_payment' => $row['mode_of_payment'],
             'amount' => $row['amount'],
-            'installment_no' => $row['installment'],
             'cheque_no' => $row['cheque_no'],
-            'bank_name' => $row['bank_name'],
             'bank_acount_number' => $row['bank_acount_number'],
             'online_transaction_no' => $row['online_transaction_no'],
             'transaction_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['transaction_date']))->format('Y-m-d'),
-            'other_payment_mode_value' => $row['other_payment_mode_value'],
+            'creation_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d'),
             'status' => $row['status'],
             'image_url' => $row['image_url'],
         ]);
@@ -90,7 +89,6 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'mode_of_payment' =>  ['required'],
             'amount' => ['required'],
             'status' => ['required'],
-            'installment' => ['required']
         ];
     }
 

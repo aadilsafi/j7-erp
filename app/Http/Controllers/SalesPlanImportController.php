@@ -19,10 +19,20 @@ use Exception;
 use Illuminate\Http\Request;
 use Redirect;
 use Str;
+use App\Services\{
+    SalesPlan\Interface\SalesPlanInterface,
+    Stakeholder\Interface\StakeholderInterface,
+};
 
 class SalesPlanImportController extends Controller
 {
+    private $salesPlanInterface;
 
+    public function __construct(
+        SalesPlanInterface $salesPlanInterface,
+    ) {
+        $this->salesPlanInterface = $salesPlanInterface;
+    }
     // Sales Plan Additional Costs
     public function ImportPreviewAdcosts(Request $request, $site_id)
     {
@@ -77,15 +87,6 @@ class SalesPlanImportController extends Controller
     public function saveImportAdcosts(Request $request, $site_id)
     {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-
-        ]);
-
-        $validator->validate();
 
         $model = new TempSalesPlanAdditionalCost();
         $tempdata = $model->cursor();
@@ -131,7 +132,7 @@ class SalesPlanImportController extends Controller
 
         TempSalesPlanAdditionalCost::query()->truncate();
 
-        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Data Imported!');
     }
     public function getInputAdcosts(Request $request)
     {
@@ -408,7 +409,6 @@ class SalesPlanImportController extends Controller
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
-                'db_fields' =>  $model->getFillable(),
             ];
             return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.import.importspInstallmentsPreview', $data);
         }
@@ -416,17 +416,10 @@ class SalesPlanImportController extends Controller
     public function saveImportInstallments(Request $request, $site_id)
     {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            // 'fields.*.distinct' => 'Field can not be duplicated',
-        ]);
+        $salesPlansIds = [];
 
-        $validator->validate();
+        DB::transaction(function () use ($site_id, $request, &$salesPlansIds) {
 
-
-        DB::transaction(function () use ($site_id, $request) {
             $model = new TempSalePlanInstallment();
             $tempdata = $model->cursor();
             $tempCols = $model->getFillable();
@@ -446,6 +439,8 @@ class SalesPlanImportController extends Controller
                     ->where('down_payment_total', $data[$key]['down_payment_total'])
                     ->where('validity', $data[$key]['validity'])
                     ->first();
+
+                $salesPlansIds[$salePlan->id] = $salePlan->id;
 
                 $data[$key]['sales_plan_id'] = $salePlan->id;
 
@@ -487,7 +482,14 @@ class SalesPlanImportController extends Controller
             TempSalePlanInstallment::query()->truncate();
         });
 
-        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        foreach ($salesPlansIds as $id) {
+            $saleplan = SalesPlan::find($id);
+            $this->salesPlanInterface->generatePDF($saleplan, 'investment_plan');
+            if ($saleplan->status == '1') {
+                $this->salesPlanInterface->generatePDF($saleplan, 'payment_plan');
+            }
+        }
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Imported!');
     }
     public function getInputInstallments(Request $request)
     {

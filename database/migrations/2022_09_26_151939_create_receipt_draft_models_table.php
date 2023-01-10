@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('receipt_draft_models', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('unit_id')->nullable();
             $table->bigInteger('sales_plan_id')->nullable();

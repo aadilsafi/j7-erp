@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('temp_sale_plans', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->string('unit_short_label');
             $table->bigInteger('stakeholder_cnic');
             $table->float('unit_price');
@@ -28,6 +29,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('comment')->nullable();
             $table->string('approved_date')->nullable();
+            $table->string('created_date')->nullable();
             $table->timestamps();
         });
     }

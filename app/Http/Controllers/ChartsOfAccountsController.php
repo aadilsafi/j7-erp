@@ -194,7 +194,7 @@ class ChartsOfAccountsController extends Controller
                     }
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
 
-                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit, 2);
                 }
             } else {
                 $debit = 0.0;
@@ -208,8 +208,7 @@ class ChartsOfAccountsController extends Controller
                         $credit = $ledger->credit;
                     }
                     $fourth_level_balance = (float)$fourth_level_balance + ((float)$debit - (float)$credit);
-
-                    $fifth_level_accounts[$key]['balance'] = $fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit;
+                    $fifth_level_accounts[$key]['balance'] = number_format($fifth_level_accounts[$key]['balance'] + (float)$debit - (float)$credit, 2);
                 }
             }
         }
@@ -239,27 +238,31 @@ class ChartsOfAccountsController extends Controller
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$debit - (float)$credit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$debit - (float)$credit);
             }
         } else {
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$credit - (float)$debit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$credit - (float)$debit);
             }
         }
 
@@ -285,27 +288,31 @@ class ChartsOfAccountsController extends Controller
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$debit - (float)$credit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$debit - (float)$credit);
             }
         } else {
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$credit - (float)$debit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$credit - (float)$debit);
             }
         }
 
@@ -331,27 +338,31 @@ class ChartsOfAccountsController extends Controller
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$debit - (float)$credit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$debit - (float)$credit);
             }
         } else {
             foreach ($allAccounts as $account) {
                 $debit = 0.0;
                 $credit = 0.0;
-                $ledger = AccountLedger::where('account_head_code', $account->code)->first();
-                if (isset($ledger->debit)) {
-                    $debit = $ledger->debit;
+                $ledger = AccountLedger::where('account_head_code', $account->code)->get();
+                foreach ($ledger as $ledger) {
+                    if (isset($ledger->debit)) {
+                        $debit = $ledger->debit;
+                    }
+                    if (isset($ledger->credit)) {
+                        $credit = $ledger->credit;
+                    }
+                    $balance = $balance + ((float)$credit - (float)$debit);
                 }
-                if (isset($ledger->credit)) {
-                    $credit = $ledger->credit;
-                }
-                $balance = $balance + ((float)$credit - (float)$debit);
             }
         }
 

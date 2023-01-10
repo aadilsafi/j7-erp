@@ -7,7 +7,8 @@
         @endphp
 
         @if (!is_null(old('stakeholder_type')))
-            $('#stakeholderType').trigger('change');
+            $('#stakeholder_type').trigger('change');
+            $("#stakeholder_as").trigger('change');
         @endif
 
         @if (!is_null(old('residential.country')))

@@ -130,8 +130,8 @@
                             <div class="d-block mb-1">
                                 <label class="form-label fs-5" for="type_name">Passport Attachment</label>
                                 <input id="passport_attachment" type="file"
-                                    class="filepond @error('attachment') is-invalid @enderror" name="passport_attachment[]" multiple
-                                    accept="image/png, image/jpeg, image/gif, application/pdf" />
+                                    class="filepond @error('attachment') is-invalid @enderror" name="passport_attachment[]"
+                                    multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
                                 @error('attachment')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -287,7 +287,9 @@
         $(".contact-persons-list").repeater({
             // initEmpty: true,
             show: function() {
-                $(this).slideDown(), feather && feather.replace({
+                $(this).slideDown(function() {
+                    $(this).find('.contact-person-select').select2().val(0).trigger('change');
+                }), feather && feather.replace({
                     width: 14,
                     height: 14
                 })

@@ -306,7 +306,7 @@
             $(".online-mode-of-payment").trigger('change');
             $("#transaction_date").flatpickr({
                 defaultDate: 'today',
-                maxDate: 'totday',
+                maxDate: 'today',
                 // altInput: !0,
                 dateFormat: "Y-m-d",
             });
@@ -485,8 +485,8 @@
                                         'office_contact']);
 
                                 }
-                                created_date.set('minDate', new Date(response.sales_plan[
-                                    'created_date']));
+                                // created_date.set('minDate', new Date(response.sales_plan[
+                                //     'created_date']));
 
                                 var total_installments = 1;
                                 var order = null;

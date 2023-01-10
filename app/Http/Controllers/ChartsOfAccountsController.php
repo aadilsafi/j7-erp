@@ -348,7 +348,7 @@ class ChartsOfAccountsController extends Controller
                     }
 
                 }
-                $balance = $balance + ((float)$debit - (float)$credit);
+                $balance = (float)$debit - (float)$credit;
             }
 
         } else {
@@ -363,7 +363,7 @@ class ChartsOfAccountsController extends Controller
                         $credit = (float)$credit + (float)$ledger->credit;
                     }
                 }
-                $balance = $balance + ((float)$credit - (float)$debit);
+                $balance = (float)$credit - (float)$debit;
             }
 
         }

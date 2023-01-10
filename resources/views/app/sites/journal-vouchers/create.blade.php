@@ -207,6 +207,7 @@
             $("#created_date").flatpickr({
                 defaultDate: "today",
                 // minDate: "today",
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -215,6 +216,7 @@
             $("#voucher_date").flatpickr({
                 defaultDate: "today",
                 // minDate: "today",
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",
@@ -238,6 +240,7 @@
                 // initializeSelect2();
                 $(".voucher_date").flatpickr({
                     defaultDate: "today",
+                    maxDate: 'today',
                     // minDate: "today",
                     altInput: !0,
                     altFormat: "F j, Y",

@@ -188,7 +188,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
         $unit->save();
         $account_type = 'debit';
 
-        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receviable', (string)$accountHead, 4, $account_type);
+        $this->saveAccountHead($unit->floor->site->id, $unit, $unit->floor_unit_number . ' Receivable', (string)$accountHead, 4, $account_type);
 
         return (string)$accountHead;
     }

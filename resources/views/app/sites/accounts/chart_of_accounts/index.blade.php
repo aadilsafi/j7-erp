@@ -289,7 +289,7 @@
 
                 @foreach ($account_of_heads->where('level', 1) as $key_first => $account_of_head)
                     <li class="ps-3 main_accets_lik">
-                        <i class="fa-regular fa-folder custom_folder_icon"></i><a class="custom_accets_link" href="#">
+                        <i class="fa-regular fa-folder custom_folder_icon"></i><a onclick="getFristLevelBalance({{ $account_of_head->code }})" class="custom_accets_link" href="#">
                             {{ $account_of_head->name }}</a>
                         <ul>
                             <li id="{{ $account_of_head->id }}">
@@ -320,10 +320,10 @@
                                                 <td class="custom_td">
                                                     {{ ucfirst($account_of_head->account_type) }}
                                                 </td>
-                                                <td class="custom_td">
-                                                    0
+                                                <td class="custom_td first_level_balance">
+                                                   0.0
                                                 </td>
-                                                <td class="custom_td">
+                                                <td class="custom_td ">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -334,7 +334,7 @@
                             @foreach ($account_of_heads as $key => $account_of_head_full_array)
                                 @if (Str::length($account_of_head_full_array->code) == 4 and
                                     $account_of_heads[$key_first]->code == substr($account_of_head_full_array->code, 0, 2))
-                                    <li class="ps-2"><a href="#">{{ $account_of_head_full_array->name }}</a>
+                                    <li class="ps-2"><a href="#" onclick="getSecondLevelBalance({{ $account_of_head_full_array->code }})">{{ $account_of_head_full_array->name }}</a>
                                         <ul>
                                             <li id="{{ $account_of_head_full_array->id }}">
                                                 <div class="table-responsive">
@@ -366,10 +366,10 @@
                                                                 <td class="custom_td">
                                                                     {{ ucfirst($account_of_head_full_array->account_type) }}
                                                                 </td>
-                                                                <td class="custom_td">
+                                                                <td class="custom_td second_level_balance">
                                                                     0
                                                                 </td>
-                                                                <td class="custom_td">
+                                                                <td class="custom_td ">
                                                                 </td>
 
                                                             </tr>
@@ -383,10 +383,9 @@
                                                 @if (Str::length($account_of_head_3->code) == 6 and
                                                     $account_of_head_full_array->code == substr($account_of_head_3->code, 0, 4))
                                                     <li class="ps-2">
-                                                        <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }})"
+                                                        <a onclick="getFourthLevelAccounts({{ $account_of_head_3->code }}) ,getThirdLevelBalance({{ $account_of_head_3->code }})"
                                                             href="#">{{ $account_of_head_3->name }}</a>
                                                         <ul>
-
                                                             <li class="fourth_level_account"
                                                                 id="{{ $account_of_head_3->id }}">
                                                                 <div class="table-responsive">
@@ -419,7 +418,7 @@
                                                                                 <td class="custom_td">
                                                                                     {{ ucfirst($account_of_head_3->account_type) }}
                                                                                 </td>
-                                                                                <td class="custom_td">
+                                                                                <td class="custom_td third_level_balance">
                                                                                     0
                                                                                 </td>
                                                                                 <td class="custom_td">
@@ -519,7 +518,6 @@
 
     <script>
         function getFourthLevelAccounts(code) {
-            // alert(code);
             showBlockUI('#tree1');
             let url =
                 "{{ route('sites.accounts.charts-of-accounts.ajax-get-fourth-level-accounts', ['site_id' => encryptParams($site->id)]) }}";
@@ -533,6 +531,8 @@
                     '_token': _token
                 },
                 success: function(data) {
+
+                    // $('.third_level_balance').html(data.balance);
 
                     let fourth_level_accounts = data.fourth_level_accounts;
                     $('.alreadyExistFourthLevelAccount').remove();
@@ -596,7 +596,7 @@
                                                                             <td class="custom_td">' + selected_account
                         .formated_code + ' </td>\
                                                                             <td class="custom_td">' + selected_account
-                        .account_type.toUpperCase() + ' </td>\
+                        .account_type + ' </td>\
                                                                             <td class="custom_td">'+data.fourth_level_balance+'</td>\
                                                                         </tr>\
                                                                     </tbody>\
@@ -645,17 +645,86 @@
                     hideBlockUI('#tree1');
                 }
             });
+            hideBlockUI('#tree1');
+        }
 
+        function getFristLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-first-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
-            // <th class="custom_plus_th" scope="col">\
-            //                                 <i data-feather="plus" data-bs-toggle="modal" data-bs-target="#new-task-modal">Plus</i>\
-            //                             </tr>\
+                    $('.first_level_balance').html(data.balance);
 
-            // <td class="custom_td">0</td>\
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
+        function getSecondLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-second-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
+                    $('.second_level_balance').html(data.balance);
 
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
+            hideBlockUI('#tree1');
+        }
 
+        function getThirdLevelBalance(code) {
+            showBlockUI('#tree1');
+            let url =
+                "{{ route('sites.accounts.charts-of-accounts.ajax-get-third-level-balance', ['site_id' => encryptParams($site->id)]) }}";
+            var _token = '{{ csrf_token() }}';
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    'code': code,
+                    '_token': _token
+                },
+                success: function(data) {
 
+                    $('.third_level_balance').html(data.balance);
+
+                    hideBlockUI('#tree1');
+                },
+                error: function(error) {
+                    console.log(error);
+                    hideBlockUI('#tree1');
+                }
+            });
             hideBlockUI('#tree1');
         }
     </script>

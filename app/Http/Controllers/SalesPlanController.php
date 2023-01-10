@@ -285,7 +285,11 @@ class SalesPlanController extends Controller
         if ($template->id == 1) {
             $qrCodeName = 'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
         } else {
-            $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+            if ($salesPlan->status == 0) {
+                $qrCodeName = 'Investment-Plan-' . $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+            } else {
+                $qrCodeName = 'Payment-Plan-' .  $salesPlan->unit->id . '-' . $salesPlan->id . '-' .  $salesPlan->stakeholder->id . '.png';
+            }
         }
         $qrCodeimg =  asset('app-assets') . '/pdf/sales-plans/qrcodes/' . $qrCodeName;
         $data = [
@@ -313,7 +317,7 @@ class SalesPlanController extends Controller
             'amount' => $salesPlan->total_price,
             'serial_no' => $salesPlan->serial_no,
             'pp_serial_no' => $salesPlan->payment_plan_serial_id,
-            'approveBy' => $salesPlan->approveBy->name,
+            'approveBy' => $salesPlan->approveBy->name ?? '',
             'created_date' => $salesPlan->created_date,
             'remaining_installments' => $salesPlan->installments->where('remaining_amount', '>', 0)->count(),
             'remaing_amount' => $salesPlan->installments->sum('remaining_amount'),
@@ -492,13 +496,14 @@ class SalesPlanController extends Controller
             'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
         ]);
 
-        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
+
 
         $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
         $user = User::find($salesPlan->user_id);
 
         $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
+        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
 
         if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
             return apiErrorResponse('invalid_amout');
@@ -929,20 +934,13 @@ class SalesPlanController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.No Record Found'));
         } else {
-            $required = [
-                'unit_short_label',
-                'stakeholder_cnic',
-                'unit_price',
-                'total_price',
-            ];
+
             $dataTable = new ImportSalesPlanDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
-                'required_fields' => $required,
-
             ];
             return $dataTable->with($data)->render('app.sites.floors.units.sales-plan.import.importSalesPlanPreview', $data);
         }
@@ -951,14 +949,6 @@ class SalesPlanController extends Controller
     public function saveImport(Request $request, $site_id)
     {
 
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-
-        ]);
-
         $status  = [
             0 => 'pending',
             1 => 'approved',
@@ -966,11 +956,10 @@ class SalesPlanController extends Controller
             3 => 'cancelled',
         ];
 
-        $validator->validate();
-
         $model = new TempSalePlan();
         $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
+        $serail = SalesPlan::max('id') + 1;
 
         foreach ($tempdata as $key => $items) {
             foreach ($tempCols as $k => $field) {
@@ -990,6 +979,16 @@ class SalesPlanController extends Controller
             $data[$key]['stakeholder_id'] = $stakeholder->id;
             $data[$key]['stakeholder_data'] = json_encode($stakeholder);
 
+            if($stakeholder->pin_code == null) {
+                $pinCode = createRandomAlphaNumericCode();
+                $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                while ($isPinExists) {
+                    $pinCode = createRandomAlphaNumericCode();
+                    $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
+                }
+                $stakeholder->pin_code = $pinCode;
+                $stakeholder->update();
+            }
             $leadSource = LeadSource::where('name', Str::title($data[$key]['lead_source']))->first();
             if ($leadSource) {
                 $data[$key]['lead_source_id'] = $leadSource->id;
@@ -1000,8 +999,35 @@ class SalesPlanController extends Controller
                 ]);
                 $data[$key]['lead_source_id'] = $leadSource->id;
             }
-            $data[$key]['is_imported'] = true;
 
+
+            $serail_no =  sprintf('%03d', $serail++);
+            $data[$key]['is_imported'] = true;
+            $data[$key]['serial_no'] =  'SI-' . $serail_no;
+            $data[$key]['investment_plan_serial_id'] = 'IP-' . $serail_no;
+            if ($data[$key]['status'] == '1') {
+                $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
+                $payment_plan = collect($payment_plan)->last();
+
+                if (isset($payment_plan)) {
+                    if ($payment_plan->payment_plan_serial_id == null) {
+                        $payment_serial_number = 001;
+                        $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                    } else {
+                        $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
+                        $payment_serial_number = (int)$payment_serial_number + 1;
+                        $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                    }
+                } else {
+                    $payment_serial_number = 001;
+                    $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                }
+
+                $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
+                $data[$key]['approved_by'] = Auth::user()->id;
+
+                
+            }
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
@@ -1023,8 +1049,7 @@ class SalesPlanController extends Controller
         }
 
         TempSalePlan::query()->truncate();
-
-        return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+        return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Imported!');
     }
 
     public function downloadInvestmentPlan($file_name)

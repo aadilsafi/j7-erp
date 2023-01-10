@@ -14,6 +14,7 @@ class RebateIncentiveModel extends Model
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'unit_id',
         'stakeholder_id',
         'stakeholder_data',

@@ -136,6 +136,7 @@
             var created_date = $("#created_date").flatpickr({
                 defaultDate: "today",
                 minDate: '{{ $salesPlan->created_date }}',
+                maxDate: 'today',
                 altInput: !0,
                 altFormat: "F j, Y",
                 dateFormat: "Y-m-d",

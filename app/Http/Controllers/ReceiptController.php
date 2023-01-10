@@ -359,6 +359,7 @@ class ReceiptController extends Controller
             'dealerPayableAmount' => $dealerPayableAmount,
             'vendorPayableAmount' => $vendorPayableAmount,
             'total_payable_amount' => $total_payable_amount,
+            'salesPlan'=> $sales_plan,
         ], 200);
     }
 
@@ -562,16 +563,6 @@ class ReceiptController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-
-        $validator = \Validator::make($request->all(), [
-            'fields.*' => 'required',
-        ], [
-            'fields.*.required' => 'Must Select all Fields',
-            'fields.*.distinct' => 'Field can not be duplicated',
-
-        ]);
-
-        $validator->validate();
 
         $this->receiptInterface->ImportReceipts($site_id);
 

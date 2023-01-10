@@ -144,9 +144,7 @@ class BankController extends Controller
         if ($model->count() == 0) {
             return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
         } else {
-            $required = [
-
-            ];
+            $required = [];
             $dataTable = new ImportBanksDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
@@ -161,58 +159,61 @@ class BankController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
-        DB::transaction(function () use ($request, $site_id) {
-            // $validator = \Validator::make($request->all(), [
-            //     'fields.*' => 'required',
-            // ], [
-            //     'fields.*.required' => 'Must Select all Fields',
-            //     'fields.*.distinct' => 'Field can not be duplicated',
+        // DB::transaction(function () use ($request, $site_id) {
 
-            // ]);
+        $model = new TempBank();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
 
-            // $validator->validate();
-            $model = new TempBank();
-            $tempdata = $model->cursor();
-            $tempCols = $model->getFillable();
+        $stakeholder = [];
+        foreach ($tempdata as $key => $items) {
 
-            $stakeholder = [];
-            foreach ($tempdata as $key => $items) {
+            $bank_last_account_head = Bank::get();
+            $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
 
-                $bank_last_account_head = Bank::get();
-                $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
-
-                if ($bank_last_account_head_code == '10209010001010') {
-                    $account_head_code = (float)$bank_last_account_head_code + 1;
-                } else {
-                    $account_head_code = '10209010001011';
-                }
-
-                foreach ($tempCols as $k => $field) {
-                    $data[$key][$field] = $items[$tempCols[$k]];
-                }
-                $data[$key]['site_id'] = decryptParams($site_id);
-
-                $data[$key]['slug'] = $data[$key]['name'];
-                $data[$key]['name'] = Str::title(Str::replace('-', ' ', $data[$key]['name']));
-                $data[$key]['branch'] = $data[$key]['address'];
-                $data[$key]['status'] = true;
-                $data[$key]['is_imported'] = true;
-                $data[$key]['account_head_code'] = (string)$account_head_code;
-
-                $bank = Bank::create($data[$key]);
-
-                $acountHeadData = [
-                    'site_id' => decryptParams($site_id),
-                    'modelable_id' => null,
-                    'modelable_type' => null,
-                    'code' => $bank->account_head_code,
-                    'name' => $bank->name,
-                    'account_type'=> 'debit',
-                    'level' => 5,
-                ];
-                $accountHead =  AccountHead::create($acountHeadData);
+            if ($bank_last_account_head_code == '10209010001010') {
+                $account_head_code = (float)$bank_last_account_head_code + 1;
+            } else {
+                $account_head_code = '10209010001011';
             }
-        });
+
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+            $data[$key]['site_id'] = decryptParams($site_id);
+
+            $data[$key]['slug'] = $data[$key]['name'];
+            $data[$key]['name'] = Str::title(Str::replace('-', ' ', $data[$key]['name']));
+            $data[$key]['branch'] = $data[$key]['address'];
+            $data[$key]['status'] = true;
+            $data[$key]['is_imported'] = true;
+            $data[$key]['account_head_code'] = (string)$account_head_code;
+
+            $bank_last_account_head = Bank::get();
+            $bank_last_account_head_code = collect($bank_last_account_head)->last()->account_head_code;
+            $bank_starting_code = '10209010001010';
+
+            if ((float)$bank_last_account_head_code >= (float)$bank_starting_code) {
+                $account_head_code = (float)$bank_last_account_head_code + 1;
+            } else {
+                $account_head_code =  (float)$bank_starting_code + 1;
+            }
+
+            $data[$key]['account_head_code'] = (string)$account_head_code;
+            $bank = Bank::create($data[$key]);
+
+            $acountHeadData = [
+                'site_id' => decryptParams($site_id),
+                'modelable_id' => null,
+                'modelable_type' => null,
+                'code' => $bank->account_head_code,
+                'name' => $bank->name,
+                'account_type' => 'debit',
+                'level' => 5,
+            ];
+            $accountHead =  AccountHead::create($acountHeadData);
+        }
+        // });
 
         TempBank::query()->truncate();
         return redirect()->route('sites.receipts.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));

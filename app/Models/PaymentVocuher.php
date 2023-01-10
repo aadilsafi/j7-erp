@@ -15,6 +15,7 @@ class PaymentVocuher extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'user_id',
         'customer_id',
         'dealer_id',

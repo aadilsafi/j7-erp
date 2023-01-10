@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('file_cancellations', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('file_id')->nullable();
             $table->bigInteger('unit_id')->nullable();

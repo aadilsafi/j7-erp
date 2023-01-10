@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('payment_vocuhers', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('customer_id')->nullable();

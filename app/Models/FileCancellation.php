@@ -15,6 +15,7 @@ class FileCancellation extends Model
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'file_id',
         'unit_id',
         'sales_plan_id',

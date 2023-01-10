@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     AdditionalCostController,
     ArtisanCommandController,
     BankController,
+    BinController,
     DashboardController,
     RoleController,
     PermissionController,
@@ -335,6 +336,19 @@ Route::group([
                             Route::get('edit', [CityController::class, 'edit'])->name('edit');
                             Route::put('update', [CityController::class, 'update'])->name('update');
                             Route::get('delete', [CityController::class, 'destroy'])->name('destroy');
+                        });
+                    });
+
+                    // Bin Route
+                    Route::group(['prefix' => 'bin', 'as' => 'bin.'], function () {
+
+                        Route::get('type', [BinController::class, 'type'])->name('type');
+                        Route::get('unit', [BinController::class, 'unit'])->name('unit');
+                        Route::post('additionalcosts', [BinController::class, 'additionalcosts'])->name('additionalcosts');
+
+                        Route::group(['prefix' => '/{id}'], function () {
+                            Route::put('restore', [BinController::class, 'restore'])->name('restore');
+                            Route::get('delete', [BinController::class, 'destroy'])->name('destroy');
                         });
                     });
 
@@ -921,7 +935,7 @@ Route::group([
                         Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
                     });
 
-                   
+
                 });
 
                 // Accounts Routes
@@ -948,9 +962,13 @@ Route::group([
                         Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
                             Route::post('get-fourth-level-accounts', [ChartsOfAccountsController::class, 'getFourthLevelAccounts'])->name('get-fourth-level-accounts');
                             Route::post('get-fifth-level-accounts', [ChartsOfAccountsController::class, 'getFifthLevelAccounts'])->name('get-fifth-level-accounts');
+                            // calculae balance
+                            Route::post('get-first-level-balance', [ChartsOfAccountsController::class, 'getFirstLevelBalance'])->name('get-first-level-balance');
+                            Route::post('get-second-level-balance', [ChartsOfAccountsController::class, 'getSecondLevelBalance'])->name('get-second-level-balance');
+                            Route::post('get-third-level-balance', [ChartsOfAccountsController::class, 'getThirdLevelBalance'])->name('get-third-level-balance');
                         });
                     });
-                    //trial-balance
+                    //trial-balance / General Ledger
 
                     Route::group(['prefix' => 'general-ledger', 'as' => 'general-ledger.'], function () {
                         Route::get('/', [GeneralLedgerController::class, 'index'])->name('index');

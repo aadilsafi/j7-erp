@@ -147,7 +147,7 @@ class ReceiptService implements ReceiptInterface
                     $receipt = ReceiptDraftModel::create($receiptData);
 
                     if (isset($requested_data['attachment'])) {
-                        for($j=0; $j<count($requested_data['attachment']); $j++){
+                        for ($j = 0; $j < count($requested_data['attachment']); $j++) {
                             $receipt->addMedia($requested_data['attachment'][$j])->toMediaCollection('receipt_attachments');
                             changeImageDirectoryPermission();
                         }
@@ -246,7 +246,7 @@ class ReceiptService implements ReceiptInterface
                     }
 
                     if (isset($requested_data['attachment'])) {
-                        for($i=0; $i<count($requested_data['attachment']); $i++){
+                        for ($i = 0; $i < count($requested_data['attachment']); $i++) {
                             $receipt->addMedia($requested_data['attachment'][$i])->toMediaCollection('receipt_attachments');
                             changeImageDirectoryPermission();
                         }
@@ -647,6 +647,8 @@ class ReceiptService implements ReceiptInterface
             unset($data[$key]['amount']);
             unset($data[$key]['bank_name']);
             unset($data[$key]['image_url']);
+            $max = Receipt::max('id') + 1;
+            $data[$key]['serial_no'] = sprintf('%03d', $max++);
 
             $receipt = Receipt::create($data[$key]);
 
@@ -658,17 +660,20 @@ class ReceiptService implements ReceiptInterface
                 if ($receipt->status == 0) {
                     $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
                 } else {
-                    $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                    if ($receipt->status == 1) {
+                        $transaction = $this->financialTransactionInterface->makeReceiptChequeTransaction($receipt->id);
+                        $transaction = $this->financialTransactionInterface->makeReceiptActiveTransaction($receipt->id);
+                    }
                 }
             }
 
             if ($receipt->mode_of_payment == "Online") {
                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
             }
-            if ($receipt->mode_of_payment == "Cheque") {
-                $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
-                changeImageDirectoryPermission();
-            }
+            // if ($receipt->mode_of_payment == "Cheque") {
+            //     $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
+            //     changeImageDirectoryPermission();
+            // }
             $update_installments =  $this->updateInstallments($receipt);
         }
 

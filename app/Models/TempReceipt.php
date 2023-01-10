@@ -11,6 +11,7 @@ class TempReceipt extends Model
 
     protected $fillable = [
         'unit_short_label',
+        'doc_no',
         'stakeholder_cnic',
         'total_price',
         'down_payment_total',

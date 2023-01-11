@@ -179,6 +179,7 @@ class FourthLevelAccountsDatatable extends DataTable
             Column::make('name')->title('Name'),
             Column::make('level')->title('Account Level')->addClass('text-nowrap ')->searchable(false)->orderable(false),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap ')->orderable(false),
+            Column::make('account_type')->title('Account Type')->addClass('text-nowrap ')->orderable(false),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             // (

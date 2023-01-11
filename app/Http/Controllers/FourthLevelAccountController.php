@@ -58,6 +58,7 @@ class FourthLevelAccountController extends Controller
     public function store(FirstLevelStore $request, $site_id)
     {
         //
+        
         try {
             if (!request()->ajax()) {
                 $data = $request->all();

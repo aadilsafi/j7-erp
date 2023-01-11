@@ -62,6 +62,9 @@ class SecondLevelAccountsDatatable extends DataTable
             ->editColumn('actions', function ($ledger) {
                 return view('app.roles.actions', ['id' => $ledger->id]);
             })
+            ->editColumn('account_type', function ($ledger) {
+               return ucfirst($ledger->account_type);
+            })
             ->setRowId('id')
             ->rawColumns(array_merge($columns, ['action', 'check']));
     }

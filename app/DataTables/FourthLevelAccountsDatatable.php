@@ -59,6 +59,9 @@ class FourthLevelAccountsDatatable extends DataTable
             ->editColumn('check', function ($ledger) {
                 return $ledger;
             })
+            ->editColumn('account_type', function ($ledger) {
+               return ucfirst($ledger->account_type);
+            })
             ->editColumn('actions', function ($ledger) {
                 return view('app.roles.actions', ['id' => $ledger->id]);
             })

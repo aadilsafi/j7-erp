@@ -5,7 +5,8 @@
             <li class="nav-item me-auto">
                 <a class="navbar-brand" href="{{ route('dashboard') }}">
                     <span class="brand-logo">
-                        <img class="img-fluid custom_side_full_logo" src="{{ asset('app-assets') }}//images/logo/j7 logo_s.png" />
+                        <img class="img-fluid custom_side_full_logo"
+                            src="{{ asset('app-assets') }}//images/logo/j7 logo_s.png" />
                     </span>
                     {{-- <h2 class="brand-text">{{ env('APP_NAME') }}</h2> --}}
                     <img class="img-fluid custom_side_icon" src="{{ asset('app-assets') }}/images/logo/logo icon.png" />
@@ -290,8 +291,8 @@
                                                         <span class="menu-title text-truncate" data-i18n="Types">Sales Plan</span>
                                                     </a>
                                                 </li>
-                                    @endcan
-                                    @can('sites.floors.spadcostsImport.importspadcosts')
+                                            @endcan
+                                            @can('sites.floors.spadcostsImport.importspadcosts')
                                                 <li
                                                     class="nav-item {{ request()->routeIs('sites.floors.spadcostsImport.importspadcosts') || request()->routeIs('sites.floors.spadcostsImport.storePreview') ? 'active' : null }}">
                                                     <a class="d-flex align-items-center"
@@ -301,8 +302,8 @@
                                                             Costs</span>
                                                     </a>
                                                 </li>
-                                    @endcan
-                                    @can('sites.floors.spInstallmentsImport.ImportInstallments')
+                                            @endcan
+                                            @can('sites.floors.spInstallmentsImport.ImportInstallments')
                                                 <li
                                                     class="nav-item {{ request()->routeIs('sites.floors.spInstallmentsImport.ImportInstallments') || request()->routeIs('sites.floors.spInstallmentsImport.storePreviewInstallments') ? 'active' : null }}">
                                                     <a class="d-flex align-items-center"
@@ -312,9 +313,9 @@
                                                         </span>
                                                     </a>
                                                 </li>
-                                    @endcan
-                                            </ul>
-                                        </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
                                     @can('sites.banks.importBanks')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.banks.importBanks') || request()->routeIs('sites.banks.storePreview') ? 'active' : null }}">
@@ -336,7 +337,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                 - @can('sites.receipts.importReceipts')
+                                    @can('sites.receipts.importReceipts')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.receipts.importReceipts') || request()->routeIs('sites.receipts.storePreview') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -346,7 +347,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                    @endcan 
+                                    @endcan
                                 </ul>
                             </li>
                         @endcan

@@ -339,6 +339,7 @@ class ReceiptService implements ReceiptInterface
         $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
         $instalment_numbers = [];
         $total_paid_amount = 0;
+        $purpose = [];
 
         for ($i = 0; $i < count($total_calculated_installments); $i++) {
             $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
@@ -601,7 +602,7 @@ class ReceiptService implements ReceiptInterface
                 ->where('unit_id', $unitId->id)
                 ->where('total_price', $data[$key]['total_price'])
                 ->where('down_payment_total', $data[$key]['down_payment_total'])
-                ->where('validity', $data[$key]['validity'])
+                ->where('approved_date', $data[$key]['validity'])
                 ->first();
 
             $data[$key]['site_id'] = decryptParams($site_id);

@@ -38,11 +38,11 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'down_payment_percentage' => $row['down_payment_percentage'],
             'down_payment_total' => $row['down_payment_total'],
             'lead_source' => $row['lead_source'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
-            'created_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d') ?? null,
+            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'),
+            'created_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d 00:00:00') ?? null,
             'status' => 'approved',
             'comment' => $row['comment'],
-            'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d') : null,
+            'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d 00:00:00') : null,
         ]);
     }
 
@@ -60,6 +60,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     public function rules(): array
     {
         return [
+            'doc_no' =>  ['required', 'unique:App\Models\SalesPlan,doc_no', 'distinct'],
             'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
             'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
             'unit_price' =>  ['required', 'numeric', 'gt:0'],

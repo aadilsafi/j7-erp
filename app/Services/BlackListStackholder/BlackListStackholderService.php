@@ -46,6 +46,8 @@ class BlackListStackholderService implements BlacklistStackholderInterface
     public function update($site_id, $inputs, $id)
     {
 
+        $blacklist = BacklistedStakeholder::find($id);
+        
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 

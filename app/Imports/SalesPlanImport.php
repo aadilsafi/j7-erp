@@ -28,6 +28,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     {
 
         return new TempSalePlan([
+            'doc_no' => $row['doc_no'],
             'unit_short_label' => $row['unit_short_label'],
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'unit_price' => $row['unit_price'],
@@ -38,6 +39,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'down_payment_total' => $row['down_payment_total'],
             'lead_source' => $row['lead_source'],
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
+            'created_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d') ?? null,
             'status' => 'approved',
             'comment' => $row['comment'],
             'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d') : null,

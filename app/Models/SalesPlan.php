@@ -13,6 +13,7 @@ class SalesPlan extends Model
 
     protected $fillable = [
         'unit_id',
+        'doc_no',
         'user_id',
         'stakeholder_id',
         'kin_data',

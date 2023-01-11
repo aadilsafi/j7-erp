@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transfer_receipts', function (Blueprint $table) {
             $table->id();
+            $table->string('doc_no')->nullable();
             $table->bigInteger('site_id')->nullable();
             $table->string('serial_no')->nullable()->default('FT-REC-');
             $table->bigInteger('unit_id')->nullable();

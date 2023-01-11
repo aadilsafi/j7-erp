@@ -16,7 +16,7 @@ class LogController extends Controller
     {
         $site_id = decryptParams($site_id);
         $activityLogs = Activity::orderBy('id','DESC')->paginate();
-        // dd($activityLogs->links()->elements);
+
 
         return view('app.sites.settings.activity-logs.index', compact('activityLogs','site_id'));
     }

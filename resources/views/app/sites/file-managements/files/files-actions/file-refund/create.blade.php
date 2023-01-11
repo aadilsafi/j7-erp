@@ -139,6 +139,7 @@
         $("#payment_due_date").flatpickr({
             defaultDate: "today",
             minDate: '{{ $salesPlan->approved_date }}',
+            maxDate: 'today',
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",

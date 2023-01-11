@@ -15,6 +15,7 @@ class FileRefund extends Model
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'file_id',
         'sales_plan_id',
         'unit_id',

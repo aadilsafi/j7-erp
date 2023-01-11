@@ -18,6 +18,7 @@ class Receipt extends Model implements HasMedia
 
     protected $fillable = [
         'site_id',
+        'doc_no',
         'unit_id',
         'sales_plan_id',
         'bank_id',

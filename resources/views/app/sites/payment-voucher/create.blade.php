@@ -530,6 +530,7 @@
         $("#transaction_date").flatpickr({
             defaultDate: "today",
             // minDate: "today",
+            maxDate: 'today',
             altInput: !0,
             altFormat: "F j, Y",
             dateFormat: "Y-m-d",

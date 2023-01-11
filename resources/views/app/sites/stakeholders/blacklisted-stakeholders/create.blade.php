@@ -55,13 +55,13 @@
                                         <button type="submit"
                                             class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
                                             <i data-feather='save'></i>
-                                            Save BlackList StacKholder
+                                            Save 
                                         </button>
                                     @endcan
 
                                 </div>
                                 <div class="col-md-12">
-                                    <a href="{{ route('sites.floors.index', ['site_id' => encryptParams($site_id)]) }}"
+                                    <a href="{{ route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
                                         <i data-feather='x'></i>
                                         {{ __('lang.commons.cancel') }}

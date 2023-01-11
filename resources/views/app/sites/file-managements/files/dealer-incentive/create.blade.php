@@ -114,21 +114,7 @@
                         showBlockUI('#loader');
                         if (response.success) {
                             $('.hideDiv').css("display", "block");
-                            // $.each(response.units, function(i, item) {
-                            //     // $('.unit_id').append($('<option>', {
-                            //     //     value: item.id + '_' + item.gross_area,
-                            //     //     text: item.name,
-                            //     // }));
 
-                            //     $('#dynamic_unit_rows').append('<tr>',
-                            //         '<td class="checkedInput"><input type="checkbox" ></td>',
-                            //         '<td>'+item.name+'</td>',
-                            //         '<td>'+item.floor_unit_number+'</td>',
-                            //         '<td>'+item.gross_area.toLocaleString()+'</td>',
-                            //         '<td>'+item.price_sqft.toLocaleString()+'</td></tr>',
-                            //     );
-
-                            // });
                             $('#dynamic_unit_rows').empty();
                             for (var i = 0; i <= response.units.length; i++) {
                                 if (response.units[i] != null) {
@@ -180,14 +166,10 @@
         function CalculateTotalArea(e) {
             $('.hideDiv').css("display", "block");
             showBlockUI('#loader');
-            // var selectedValues = $('#unit_id').val();
             let element = [];
             let ids = [];
             let total_area = 0.0;
-            // for (let index = 0; index < selectedValues.length; index++) {
-            //     element = selectedValues[index].split("_");
-            //     total_area = parseFloat(total_area) + parseFloat(element[1]);
-            // }
+
 
             $("input:checkbox[name='unit_ids\\[\\]']:checked").each(function() {
                 element.push($(this).attr('area'));

@@ -606,13 +606,14 @@ class ReceiptService implements ReceiptInterface
                 ->where('approved_date', $data[$key]['validity'])
                 ->first();
 
+                
             $data[$key]['site_id'] = decryptParams($site_id);
             $data[$key]['sales_plan_id'] = $salePlan->id;
             $data[$key]['unit_id'] = $unitId->id;
             $data[$key]['name'] = $stakeholder->full_name;
             $data[$key]['cnic'] = $stakeholder->cnic;
             $data[$key]['phone_no'] = $stakeholder->contact;
-            $data[$key]['amount_in_numbers'] = $data[$key]['amount'];
+            $data[$key]['amount_in_numbers'] = $data[$key]['amount'] + $data[$key]['discounted_amount'];
             $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
             $data[$key]['amount_received'] = $data[$key]['amount'];
             $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];

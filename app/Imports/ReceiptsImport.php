@@ -63,6 +63,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'creation_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d 00:00:00'),
             'status' => $row['status'],
             'image_url' => $row['image_url'],
+            'discounted_amount' => $row['discounted_amount'],
         ]);
     }
 

@@ -14,6 +14,7 @@ class TempReceipt extends Model
         'doc_no',
         'stakeholder_cnic',
         'total_price',
+        'discounted_amount',
         'down_payment_total',
         'validity',
         'mode_of_payment',

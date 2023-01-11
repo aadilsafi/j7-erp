@@ -69,8 +69,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'down_payment_percentage' =>  ['required'],
             'lead_source' =>  ['required'],
             'validity' =>  ['required'],
-            // 'status' =>  ['required'],
-            'approved_date' =>  ['sometimes', 'nullable'],
+            'approved_date' =>  ['required'],
         ];
     }
 

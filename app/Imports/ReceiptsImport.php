@@ -39,6 +39,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             ->where('total_price', $row['total_price'])
             ->where('down_payment_total', $row['down_payment_total'])
             ->where('approved_date', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'))
+            ->orderBy('id', 'desc')
             ->first();
         if (!$salePlan) {
             $error = ['Could not find sales Plan'];

@@ -37,7 +37,7 @@ class SalesPlanAdditionalCostsImport implements ToModel, WithChunkReading, WithB
             ->where('unit_id', $unitId->id)
             ->where('total_price', $row['total_price'])
             ->where('down_payment_total', $row['down_payment_total'])
-            ->where('validity', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'))
+            ->where('validity', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'))
             ->first();
         if (!$salePlan) {
             $error = ['Could not find sales Plan'];
@@ -51,7 +51,7 @@ class SalesPlanAdditionalCostsImport implements ToModel, WithChunkReading, WithB
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'total_price' => $row['total_price'],
             'down_payment_total' => $row['down_payment_total'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
+            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'),
             'additional_costs_name' => $row['additional_costs_name'],
             'percentage' => $row['percentage'],
             'total_amount' => $row['total_amount'],

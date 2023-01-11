@@ -38,7 +38,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             ->where('unit_id', $unitId->id)
             ->where('total_price', $row['total_price'])
             ->where('down_payment_total', $row['down_payment_total'])
-            ->where('validity', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'))
+            ->where('approved_date', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'))
             ->first();
         if (!$salePlan) {
             $error = ['Could not find sales Plan'];
@@ -53,16 +53,17 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
             'stakeholder_cnic' => $row['stakeholder_cnic'],
             'total_price' => $row['total_price'],
             'down_payment_total' => $row['down_payment_total'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d'),
+            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'),
             'mode_of_payment' => $row['mode_of_payment'],
             'amount' => $row['amount'],
             'cheque_no' => $row['cheque_no'],
             'bank_acount_number' => $row['bank_acount_number'],
             'online_transaction_no' => $row['online_transaction_no'],
-            'transaction_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['transaction_date']))->format('Y-m-d'),
-            'creation_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d'),
+            'transaction_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['transaction_date']))->format('Y-m-d 00:00:00'),
+            'creation_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d 00:00:00'),
             'status' => $row['status'],
             'image_url' => $row['image_url'],
+            'discounted_amount' => $row['discounted_amount'],
         ]);
     }
 
@@ -80,11 +81,12 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
     public function rules(): array
     {
         return [
+            'doc_no' =>  ['required', 'unique:receipts,doc_no', 'distinct'],
             'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
             'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
             'total_price' =>  ['required', 'numeric', 'gt:0'],
             'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
-            'validity' =>  ['required'],
+            'sales_plan_approval_date' =>  ['required'],
             'bank_acount_number' => ['sometimes', 'nullable', 'exists:banks,account_number'],
             'mode_of_payment' =>  ['required'],
             'amount' => ['required'],

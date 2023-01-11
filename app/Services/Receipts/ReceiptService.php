@@ -339,6 +339,7 @@ class ReceiptService implements ReceiptInterface
         $total_calculated_installments = array_merge($installmentFullyPaidUnderAmount, $installmentPartialyPaidUnderAmount);
         $instalment_numbers = [];
         $total_paid_amount = 0;
+        $purpose = [];
 
         for ($i = 0; $i < count($total_calculated_installments); $i++) {
             $installment = SalesPlanInstallments::find($total_calculated_installments[$i]['id']);
@@ -367,6 +368,7 @@ class ReceiptService implements ReceiptInterface
         $token_price = ($site_token_percentage / 100) * $totalAmountOfSalesPlan;
         $installment_date = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->where('status', 'paid')->orWhere('status', 'partially_paid')->latest("id")->first()->date;
 
+        // dd($sales_plan,$approved_sales_plan_date, $sales_plan->installments);
         $total_committed_amount = SalesPlanInstallments::where('sales_plan_id', $sales_plan->id)->whereDate('date', '<=', $approved_sales_plan_date)->get();
         $total_committed_amount = collect($total_committed_amount)->sum('amount');
 
@@ -601,16 +603,17 @@ class ReceiptService implements ReceiptInterface
                 ->where('unit_id', $unitId->id)
                 ->where('total_price', $data[$key]['total_price'])
                 ->where('down_payment_total', $data[$key]['down_payment_total'])
-                ->where('validity', $data[$key]['validity'])
+                ->where('approved_date', $data[$key]['validity'])
                 ->first();
 
+                
             $data[$key]['site_id'] = decryptParams($site_id);
             $data[$key]['sales_plan_id'] = $salePlan->id;
             $data[$key]['unit_id'] = $unitId->id;
             $data[$key]['name'] = $stakeholder->full_name;
             $data[$key]['cnic'] = $stakeholder->cnic;
             $data[$key]['phone_no'] = $stakeholder->contact;
-            $data[$key]['amount_in_numbers'] = $data[$key]['amount'];
+            $data[$key]['amount_in_numbers'] = $data[$key]['amount'] + $data[$key]['discounted_amount'];
             $data[$key]['amount_in_words'] = numberToWords($data[$key]['amount']);
             $data[$key]['amount_received'] = $data[$key]['amount'];
             $data[$key]['other_value'] =  $data[$key]['other_payment_mode_value'];

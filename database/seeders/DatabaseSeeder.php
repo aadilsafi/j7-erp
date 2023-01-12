@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use DB;
+use File;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -61,6 +62,30 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/investment-plan/*')) as $key => $path) {
+            $test = File::delete($path);
+            if($test) {
+                $this->command->info('Deleted: ' . $path);
+            }
+        }
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/payment-plan/*')) as $key => $path) {
+            $test = File::delete($path);
+            if($test) {
+                $this->command->info('Deleted: ' . $path);
+            }
+        }
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/qrcodes/*')) as $key => $path) {
+            $test = File::delete($path);
+            if($test) {
+                $this->command->info('Deleted: ' . $path);
+            }
+        }
+        foreach (File::glob(public_path('app-assets/server-uploads/attachments/*')) as $key => $path) {
+            $test = File::deleteDirectory($path);
+            if($test) {
+                $this->command->info('Deleted: ' . $path);
+            }
+        }
         if (DB::connection()->getName() == 'pgsql') {
             $tablesToCheck = array('countries', 'states', 'cities', 'roles', 'permissions', 'users', 'banks');
             foreach ($tablesToCheck as $tableToCheck) {

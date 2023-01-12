@@ -1076,8 +1076,8 @@ Route::get('/logs', function () {
 });
 
 
-Route::get('/deletedPdfs/{sure}', function($sure){
-    if($sure){
+Route::get('/deletedPdfs/{sure}', function ($sure) {
+    if ($sure) {
         foreach (File::glob(public_path('app-assets/pdf/sales-plans/investment-plan/*')) as $key => $path) {
             $test = File::delete($path);
         }
@@ -1089,7 +1089,6 @@ Route::get('/deletedPdfs/{sure}', function($sure){
         }
         return $test;
     }
-   
 })->name('deletedPdfs');
 // Route::get('/recoverTypes', function(){
 //     $types = Type::withTrashed()->forceDelete();

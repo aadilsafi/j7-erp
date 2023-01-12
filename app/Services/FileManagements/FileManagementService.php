@@ -6,6 +6,7 @@ use App\Models\Unit;
 use App\Models\SalesPlan;
 use App\Models\Stakeholder;
 use App\Models\FileManagement;
+use App\Models\TempFiles;
 use App\Services\FileManagements\FileManagementInterface;
 use Auth;
 
@@ -96,5 +97,72 @@ class FileManagementService implements FileManagementInterface
         $this->model()->whereIn('id', $inputs)->delete();
 
         return true;
+    }
+
+    public function saveImport($site_id)
+    {
+        $model = new TempFiles();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
+
+        $url = [];
+
+        foreach ($tempdata as $key => $items) {
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+
+            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
+            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+
+            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
+                ->where('unit_id', $unitId->id)
+                ->where('total_price', $data[$key]['total_price'])
+                ->where('down_payment_total', $data[$key]['down_payment_total'])
+                ->where('approved_date', $data[$key]['sales_plan_approval_date'])
+                ->first();
+
+
+            $serail_no = $this->model()::max('id') + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
+
+            $data[$key]['site_id'] = decryptParams($site_id);
+            $data[$key]['user_id'] = Auth::user()->id;
+            $data[$key]['stakeholder_id'] = $stakeholder->id;
+            $data[$key]['stakeholder_data'] = json_encode($stakeholder);
+            $data[$key]['sales_plan_id'] = $salePlan->id;
+            $data[$key]['unit_id'] = $unitId->id;
+            $data[$key]['unit_data'] = json_encode(Unit::find($unitId->id));
+            $data[$key]['serial_no'] = 'UF-' . $serail_no;
+            $data[$key]['status'] = 1;
+            $data[$key]['file_action_id'] = 1;
+            $data[$key]['is_imported'] = true;
+
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+
+            $url = $data[$key]['image_url'];
+
+            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['stakeholder_cnic']);
+            unset($data[$key]['total_price']);
+            unset($data[$key]['down_payment_total']);
+            unset($data[$key]['sales_plan_approval_date']);
+            unset($data[$key]['other_payment_mode_value']);
+            unset($data[$key]['online_transaction_no']);
+            unset($data[$key]['installment_no']);
+            unset($data[$key]['amount']);
+            unset($data[$key]['bank_name']);
+            unset($data[$key]['image_url']);
+
+            $file = $this->model()->create($data[$key]);
+
+            if (isset($url)) {
+                $file->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('application_form_photo');
+                changeImageDirectoryPermission();
+            }
+        }
+        TempFiles::truncate();
+        return $file;
     }
 }

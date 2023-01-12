@@ -1264,6 +1264,42 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // sites.file-managements.importFiles
+            // sites.file-managements.importFilesPreview
+            // sites.file-managements.saveImport
+            // sites.file-managements.storePreview
+
+            // Import Files 
+            [
+                'name' => 'sites.file-managements.importFiles',
+                'show_name' => 'Can Import Files',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.importFilesPreview',
+                'show_name' => 'Can View Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.storePreview',
+                'show_name' => 'Can View store Preview of Import File',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
             // file management rebate incentive
             [
                 'name' => 'sites.file-managements.rebate-incentive.index',
@@ -2237,7 +2273,7 @@ class PermissionTableSeeder extends Seeder
             ],
             // Journal Vouchers Entries
             [
-                'name'=>'sites.settings.journal-vouchers.journal-vouchers-entries.show',
+                'name' => 'sites.settings.journal-vouchers.journal-vouchers-entries.show',
                 'show_name' => 'Can View Journal Vouchers Entires',
                 'guard_name' => 'web',
                 'created_at' => now(),

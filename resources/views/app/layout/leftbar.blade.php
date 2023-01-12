@@ -101,7 +101,7 @@
                 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks', 'sites.settings.import.images.index',
                 'sites.settings.countries.index', 'sites.settings.states.index', 'sites.settings.cities.index',
                 'sites.floors.SalesPlanImport.importSalesPlan', 'sites.floors.spadcostsImport.importspadcosts',
-                'sites.floors.spInstallmentsImport.ImportInstallments'])
+                'sites.floors.spInstallmentsImport.ImportInstallments','sites.file-managements.importFiles'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
@@ -358,6 +358,17 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @can('sites.file-managements.importFiles')
+                                    <li
+                                        class="nav-item {{ request()->routeIs('sites.file-managements.importFiles') || request()->routeIs('sites.file-managements.storePreview') ? 'active' : null }}">
+                                        <a class="d-flex align-items-center"
+                                            href="{{ route('sites.file-managements.importFiles', ['site_id' => encryptParams($site_id)]) }}">
+                                            <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                            <span class="menu-title" data-i18n="Types">Files
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endcan
                                 </ul>
                             </li>
                         @endcanany

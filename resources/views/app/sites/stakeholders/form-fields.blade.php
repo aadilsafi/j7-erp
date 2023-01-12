@@ -235,16 +235,20 @@
                                                 placeholder="Father / Husband Name"
                                                 value="{{ $oldContactPersons['father_name'] }}" />
                                         </div>
-
                                         <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
-                                            <label class="form-label fs-5" for="occupation">Occupation</label>
-                                            <input type="text"
-                                                class="form-control form-control-md @error('occupation') is-invalid @enderror"
-                                                id="occupation_{{ $key }}"
-                                                name="contact-persons[{{ $key }}][occupation]"
-                                                placeholder="Occupation"
-                                                value="{{ $oldContactPersons['occupation'] }}" />
+                                            <label class="form-label fs-5" for="cnic">CNIC</label>
+                                            <input type="number"
+                                                class="unique cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
+                                                id="cnic_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][cnic]"
+                                                placeholder="CNIC Without Dashes"
+                                                value="{{ $oldContactPersons['cnic'] }}" />
+                                            @error('contact-persons.cnic')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+
                                         </div>
+
 
                                     </div>
 
@@ -276,17 +280,15 @@
 
                                     <div class="row mb-1">
 
+
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">
-                                            <label class="form-label fs-5" for="cnic">CNIC</label>
-                                            <input type="number"
-                                                class="unique cp_cnic form-control form-control-md @error('cnic') is-invalid @enderror"
-                                                id="cnic_{{ $key }}"
-                                                name="contact-persons[{{ $key }}][cnic]"
-                                                placeholder="CNIC Without Dashes"
-                                                value="{{ $oldContactPersons['cnic'] }}" />
-                                            @error('contact-persons.cnic')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            <label class="form-label fs-5" for="occupation">Occupation</label>
+                                            <input type="text"
+                                                class="form-control form-control-md @error('occupation') is-invalid @enderror"
+                                                id="occupation_{{ $key }}"
+                                                name="contact-persons[{{ $key }}][occupation]"
+                                                placeholder="Occupation"
+                                                value="{{ $oldContactPersons['occupation'] }}" />
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 position-relative">

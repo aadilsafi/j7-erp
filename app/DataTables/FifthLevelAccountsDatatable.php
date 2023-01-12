@@ -87,6 +87,7 @@ class FifthLevelAccountsDatatable extends DataTable
         return $this->builder()
             ->setTableId('fifth-level-table')
             ->columns($this->getColumns())
+            ->addTableClass(['table-hover'])
             ->minifiedAjax()
             ->scrollX(true)
             // ->select()

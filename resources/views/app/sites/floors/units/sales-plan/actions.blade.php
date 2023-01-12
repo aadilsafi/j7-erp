@@ -48,11 +48,11 @@
     @canany('sites.floors.units.sales-plans.initail-sales-plan', 'sites.floors.units.sales-plans.updated-sales-plan')
         <a id="selectPreview" data-id="{{ $id }}"
             @if ($status != 1) href="{{ $initialLink }}"
-            @else 
+            @else
             onclick="selectPreview({{ $id }}, '{{ $initialLink }}','{{ $updatedLink }}')" @endif
             class="btn btn-relief-outline-primary waves-effect waves-float waves-light me-1" style="margin: 5px"
             data-bs-toggle="tooltip" data-bs-placement="top" title="Preview Sales Plan">
-            <i class="bi bi-eye-fill"></i>
+            <i class="bi bi-eye-fill" style="color:blue"></i>
         </a>
     @endcanany
 

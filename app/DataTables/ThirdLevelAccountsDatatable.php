@@ -86,6 +86,7 @@ class ThirdLevelAccountsDatatable extends DataTable
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.third-level.destroy-selected');
         return $this->builder()
             ->setTableId('third-level-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->scrollX(true)

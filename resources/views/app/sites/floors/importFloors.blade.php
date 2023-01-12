@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.floors.import', $site_id) }}
 @endsection
 
-@section('page-title', 'Import Floor')
+@section('page-title', 'Import Floors')
 
 @section('page-vendor')
 @endsection
@@ -30,7 +30,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Floor</h2>
+                <h2 class="content-header-title float-start mb-0">Import Floors</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.floors.import', $site_id) }}
                 </div>

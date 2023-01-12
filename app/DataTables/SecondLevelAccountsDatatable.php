@@ -86,6 +86,7 @@ class SecondLevelAccountsDatatable extends DataTable
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.second-level.destroy-selected');
         return $this->builder()
             ->setTableId('second-level-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             // ->select()

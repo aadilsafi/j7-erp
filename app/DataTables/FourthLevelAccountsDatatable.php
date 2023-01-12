@@ -85,6 +85,7 @@ class FourthLevelAccountsDatatable extends DataTable
         $createPermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.fourth-level.create');
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.fourth-level.destroy-selected');
         return $this->builder()
+        ->addTableClass(['table-hover'])
             ->setTableId('fourth-level-table')
             ->columns($this->getColumns())
             ->minifiedAjax()

@@ -471,6 +471,7 @@ class AdditionalCostController extends Controller
             'CompanyStakeholdersImport',
             'IndividualStakeholdersImport',
             'StakeholdersKinsImport',
+            'StakeholdersContacts',
             'FloorsSample',
             'UnitsTypesSample',
             'AdditionalCostsSample',
@@ -481,6 +482,7 @@ class AdditionalCostController extends Controller
             'BanksImport',
             'ReceiptsImport',
             'FilesImport',
+            'FilesStakeholderConatcts'
         ];
 
         $path = public_path('app-assets/ImportSamples/' . $order . '-' . $names[$order] . '.xlsx');

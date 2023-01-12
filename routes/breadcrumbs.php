@@ -546,8 +546,9 @@ Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTra
 });
 
 Breadcrumbs::for('sites.blacklisted-stakeholders.edit', function (BreadcrumbTrail $trail, $site_id) {
-       $trail->parent('dashboard');
-    $trail->push('Edit  Blacklisted Stakeholder'); });
+    $trail->parent('dashboard');
+    $trail->push('Edit  Blacklisted Stakeholder');
+});
 
 
 //Countries Breadcrumbs
@@ -691,3 +692,18 @@ Breadcrumbs::for('sites.bin.index', function (BreadcrumbTrail $trail, $site_id) 
     $trail->push('Bin', route('sites.settings.bin.type', ['site_id' => $site_id]));
 });
 
+// Import Files 
+Breadcrumbs::for('sites.files.import', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import Files', route('sites.index'));
+});
+
+Breadcrumbs::for('sites.files.contacts.import', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import Files Contacts', route('sites.index'));
+});
+
+Breadcrumbs::for('sites.stakeholders.import.contacts', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import Stakeholder Contacts', route('sites.index'));
+});

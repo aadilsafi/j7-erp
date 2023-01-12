@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.show', $site_id) }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.files.import', $site_id) }}
 @endsection
 
 @section('page-title', 'Import Files')
@@ -32,7 +32,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Files</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.receipts.show', $site_id) }}
+                    {{ Breadcrumbs::render('sites.files.import', $site_id) }}
                 </div>
             </div>
         </div>
@@ -111,7 +111,7 @@
                                     {{ __('lang.commons.cancel') }}
                                 </a>
 
-                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 12]) }}"
+                                <a href="{{ route('sites.import.sample-download', ['site_id' => $site_id, 'order' => 13]) }}"
                                     class="mt-1 btn w-100 btn-relief-outline-info waves-effect waves-float waves-light">
                                     <i data-feather='download'></i>
                                     Download Sample

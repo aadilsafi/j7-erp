@@ -55,6 +55,7 @@ use App\Http\Controllers\{
     JournalVoucherController,
     TransferReceiptController,
     JournalVoucherEntriesController,
+    StakeholderContactsImportControler,
     StakeholderImportController,
 };
 use App\Models\PaymentVocuher;
@@ -596,6 +597,14 @@ Route::group([
                             Route::get('storePreview', [StakeholderKinsImportControler::class, 'storePreview'])->name('storePreview');
                             Route::post('saveImport', [StakeholderKinsImportControler::class, 'saveImport'])->name('saveImport');
                         });
+
+                        // import Stakeholder Contacts
+                        Route::group(['prefix' => 'contacts', 'as' => 'contacts.'], function () {
+                            Route::view('/', 'app.sites.stakeholders.import.importContacts', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                            Route::post('preview', [StakeholderContactsImportControler::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                            Route::get('storePreview', [StakeholderContactsImportControler::class, 'storePreview'])->name('storePreview');
+                            Route::post('saveImport', [StakeholderContactsImportControler::class, 'saveImport'])->name('saveImport');
+                        });
                     });
 
                     Route::group(['prefix' => '/{id}/ajax', 'as' => 'ajax-'], function () {
@@ -805,6 +814,14 @@ Route::group([
                         Route::post('preview', [FileManagementController::class, 'ImportPreview'])->name('importFilesPreview');
                         Route::get('storePreview', [FileManagementController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport', [FileManagementController::class, 'saveImport'])->name('saveImport');
+
+                        // import files Conatcts
+                        Route::group(['prefix' => 'contacts'], function () {
+                            Route::view('/', 'app.sites.file-managements.import.importFilesContacts', ['preview' => false])->name('importFilesContacts');
+                            Route::post('preview', [FileManagementController::class, 'ImportContactsPreview'])->name('importFilesContactsPreview');
+                            Route::get('storePreview', [FileManagementController::class, 'storeContactsPreview'])->name('storeFileContactsPreview');
+                            Route::post('saveImport', [FileManagementController::class, 'saveContactsImport'])->name('saveFileContactsImport');
+                        });
                     });
 
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {

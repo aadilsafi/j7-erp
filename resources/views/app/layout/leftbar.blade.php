@@ -101,7 +101,7 @@
                 'sites.floors.unitsImport.importUnits', 'sites.banks.importBanks', 'sites.settings.import.images.index',
                 'sites.settings.countries.index', 'sites.settings.states.index', 'sites.settings.cities.index',
                 'sites.floors.SalesPlanImport.importSalesPlan', 'sites.floors.spadcostsImport.importspadcosts',
-                'sites.floors.spInstallmentsImport.ImportInstallments','sites.file-managements.importFiles'])
+                'sites.floors.spInstallmentsImport.ImportInstallments', 'sites.file-managements.importFiles'])
                 <li class="nav-item">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather='settings'></i>
@@ -241,6 +241,17 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    {{-- @can('sites.stakeholders.contacts.importStakeholders')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.stakeholders.contacts.importStakeholders') || request()->routeIs('sites.stakeholders.contacts.importStakeholdersPreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.stakeholders.contacts.importStakeholders', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i data-feather='user'></i>
+                                                <span class="menu-title text-truncate" data-i18n="Users">Stakeholders
+                                                    Contacts</span>
+                                            </a>
+                                        </li>
+                                    @endcan --}}
                                     @can('sites.floors.importFloors')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">
@@ -359,16 +370,27 @@
                                         </li>
                                     @endcan
                                     @can('sites.file-managements.importFiles')
-                                    <li
-                                        class="nav-item {{ request()->routeIs('sites.file-managements.importFiles') || request()->routeIs('sites.file-managements.storePreview') ? 'active' : null }}">
-                                        <a class="d-flex align-items-center"
-                                            href="{{ route('sites.file-managements.importFiles', ['site_id' => encryptParams($site_id)]) }}">
-                                            <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
-                                            <span class="menu-title" data-i18n="Types">Files
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endcan
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-managements.importFiles') || request()->routeIs('sites.file-managements.storePreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-managements.importFiles', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title" data-i18n="Types">Files
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    {{-- @can('sites.file-managements.importFilesContacts')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.file-managements.importFilesContacts') || request()->routeIs('sites.file-managements.storeFileContactsPreview') ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.file-managements.importFilesContacts', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-folder2" style="margin-bottom: 10px;"></i>
+                                                <span class="menu-title" data-i18n="Types">Files Conatcts
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan --}}
                                 </ul>
                             </li>
                         @endcanany

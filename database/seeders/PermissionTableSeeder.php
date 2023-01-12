@@ -908,6 +908,36 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+
+            // stakeholder Conatcts Import
+            [
+                'name' => 'sites.stakeholders.contacts.importStakeholders',
+                'show_name' => 'Can Import Stakeholders Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.importStakeholdersPreview',
+                'show_name' => 'Can View Stakeholders Contacts Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.storePreview',
+                'show_name' => 'Can View store Preview',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.stakeholders.contacts.saveImport',
+                'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
             // Blacklisted Stakeholders
             // Stakeholders
             [
@@ -1295,6 +1325,36 @@ class PermissionTableSeeder extends Seeder
             [
                 'name' => 'sites.file-managements.saveImport',
                 'show_name' => 'Can Save Import file',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            // Import files Conatcts
+            [
+                'name' => 'sites.file-managements.importFilesContacts',
+                'show_name' => 'Can Import Files Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.importFilesContactsPreview',
+                'show_name' => 'Can View Import file Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.storeFileContactsPreview',
+                'show_name' => 'Can View store Preview of Import File Contacts',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.file-managements.saveFileContactsImport',
+                'show_name' => 'Can Save Import file Contacts',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),

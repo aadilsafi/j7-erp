@@ -589,7 +589,7 @@ class ReceiptService implements ReceiptInterface
         $tempdata = $model->cursor();
         $tempCols = $model->getFillable();
 
-        $url = [];
+        $url = null;
 
         foreach ($tempdata as $key => $items) {
             foreach ($tempCols as $k => $field) {
@@ -606,7 +606,7 @@ class ReceiptService implements ReceiptInterface
                 ->where('approved_date', $data[$key]['validity'])
                 ->first();
 
-                
+
             $data[$key]['site_id'] = decryptParams($site_id);
             $data[$key]['sales_plan_id'] = $salePlan->id;
             $data[$key]['unit_id'] = $unitId->id;
@@ -673,10 +673,11 @@ class ReceiptService implements ReceiptInterface
             if ($receipt->mode_of_payment == "Online") {
                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
             }
-            // if ($receipt->mode_of_payment == "Cheque") {
-            //     $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
-            //     changeImageDirectoryPermission();
-            // }
+            if ($url != null && $url != '') {
+                $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
+                changeImageDirectoryPermission();
+            }
+            $url = null;
             $update_installments =  $this->updateInstallments($receipt);
         }
 

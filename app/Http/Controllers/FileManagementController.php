@@ -13,14 +13,19 @@ use App\Models\UnitStakeholder;
 use App\DataTables\CustomersDataTable;
 use App\Utils\Enums\StakeholderTypeEnum;
 use App\DataTables\CustomerUnitsDataTable;
+use App\DataTables\ImportFilesDataTable;
 use App\DataTables\ViewFilesDatatable;
 use App\Services\FileManagements\FileManagementInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Http\Requests\File\store;
+use App\Imports\FilesImport;
 use App\Models\FileManagement;
 use App\Models\ModelTemplate;
 use App\Models\StakeholderNextOfKin;
+use App\Models\TempFiles;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Redirect;
+use Spatie\Activitylog\Facades\CauserResolver;
 
 class FileManagementController extends Controller
 {
@@ -213,5 +218,70 @@ class FileManagementController extends Controller
         return $pdf->download('invoice.pdf');
 
         // return view('app.sites.file-managements.files.preview', $data);
+    }
+
+    // import Functions 
+
+    public function ImportPreview(Request $request, $site_id)
+    {
+        try {
+
+            if ($request->hasfile('attachment')) {
+                $request->validate([
+                    'attachment' => 'required|mimes:xlsx',
+                ]);
+                // $headings = (new HeadingRowImport)->toArray($request->file('attachment'));
+                // dd(array_intersect($model->getFillable(),$headings[0][0]));
+                //validate header row and return with error
+
+                TempFiles::query()->truncate();
+
+                $model = new TempFiles();
+                $import = new FilesImport($model->getFillable());
+                $import->import($request->file('attachment'));
+
+                return redirect()->route('sites.file-managements.storePreview', ['site_id' => $site_id]);
+            } else {
+                return Redirect::back()->withDanger('Select File to Import');
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+            }
+            return Redirect::back()->with(['data' => $e->failures()]);
+        }
+    }
+
+    public function storePreview(Request $request, $site_id)
+    {
+        $model = new TempFiles();
+        $dataTable = new ImportFilesDataTable($site_id);
+
+        if ($model->count() == 0) {
+            return redirect()->route('sites.file-managements.customers', ['site_id' => $site_id])->withSuccess('No Data Found');
+        } else {
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.file-managements.import.importFilesPreview', $data);
+        }
+    }
+
+    public function saveImport(Request $request, $site_id)
+    {
+        try {
+            $this->fileManagementInterface->saveImport($site_id);
+            return redirect()->route('sites.file-managements.view-files', ['site_id' => $site_id])->withSuccess('Data Imported Successfully');
+        } catch (\Throwable $th) {
+            return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger($th->getMessage());
+        }
     }
 }

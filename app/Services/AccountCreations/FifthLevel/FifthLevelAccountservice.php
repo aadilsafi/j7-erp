@@ -14,12 +14,13 @@ class FifthLevelAccountservice implements FifthLevelAccountinterface
     // Store
     public function store($site_id, $inputs)
     {
+       
         DB::transaction(function () use ($site_id, $inputs) {
-
             $data = [
                 'site_id' => decryptParams($site_id),
                 'code' => $inputs['fourth_level'].$inputs['account_code'],
                 'name' => $inputs['name'],
+                'account_type'=>$inputs['account_type'],
                 'level' => 5,
             ];
 

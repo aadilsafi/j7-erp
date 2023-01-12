@@ -59,6 +59,9 @@ class ThirdLevelAccountsDatatable extends DataTable
             ->editColumn('check', function ($ledger) {
                 return $ledger;
             })
+            ->editColumn('account_type', function ($ledger) {
+               return ucfirst($ledger->account_type);
+            })
             ->editColumn('actions', function ($ledger) {
                 return view('app.roles.actions', ['id' => $ledger->id]);
             })
@@ -179,6 +182,7 @@ class ThirdLevelAccountsDatatable extends DataTable
             Column::make('name')->title('Name'),
             Column::make('level')->title('Account Level')->addClass('text-nowrap ')->searchable(false)->orderable(false),
             Column::make('code')->title('Account Codes')->addClass('text-nowrap ')->orderable(false),
+            Column::make('account_type')->title('Account Type')->addClass('text-nowrap ')->orderable(false),
             Column::make('created_at')->addClass('text-nowrap'),
             Column::make('updated_at')->addClass('text-nowrap'),
             // (

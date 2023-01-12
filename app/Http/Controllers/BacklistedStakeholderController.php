@@ -156,27 +156,22 @@ class BacklistedStakeholderController extends Controller
      */
     public function update(UpdateRequest $request, $site_id, $id)
     {
-        // dd($id);
-
-        $id = decryptParams($id);
         try
         {
-            if (!request()->ajax())
+            $id = decryptParams($id);
+            if(!request()->ajax())
             {
                 $inputs = $request->all();
                 $record = $this
                     ->blacklistStackholderInterface
                     ->update($site_id, $inputs, $id);
                 return redirect()->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id) ])->withSuccess(__('lang.commons.data_updated'));
-            }
-            else
-            {
+            }else{
                 abort(403);
-            }
-        }
-        catch(Exception $ex)
+               }
+        } catch(Exception $ex)
         {
-            return redirect()->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id) ])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
+            return redirect()->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id)) ])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }
 
     }
@@ -190,16 +185,10 @@ class BacklistedStakeholderController extends Controller
     public function destroy(Request $request, $site_id)
     {
         $site_id = decryptParams($site_id);
-        try
-        {
-            $stakeholder = $this
-                ->blacklistStackholderInterface
-                ->destroySelected($request->input('chkRole'));
-            return redirect()
-                ->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id) ])->withSuccess(__('lang.commons.data_deleted'));
-
-        }
-        catch(Exception $ex)
+        try {
+            $stakeholder = $this->blacklistStackholderInterface->destroySelected($request->input('chkRole'));
+            return redirect()->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams($site_id) ])->withSuccess(__('lang.commons.data_deleted'));
+        }catch(Exception $ex)
         {
             return redirect()->route('sites.blacklisted-stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id)) ])->withDanger(__('lang.commons.something_went_wrong') . ' ' . $ex->getMessage());
         }

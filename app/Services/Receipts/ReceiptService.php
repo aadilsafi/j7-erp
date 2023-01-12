@@ -673,10 +673,10 @@ class ReceiptService implements ReceiptInterface
             if ($receipt->mode_of_payment == "Online") {
                 $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
             }
-            if ($url != null && $url != '') {
-                $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
-                changeImageDirectoryPermission();
-            }
+            // if ($url != null && $url != '') {
+            //     $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
+            //     changeImageDirectoryPermission();
+            // }
             $url = null;
             $update_installments =  $this->updateInstallments($receipt);
         }

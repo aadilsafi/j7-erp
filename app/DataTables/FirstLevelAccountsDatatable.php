@@ -86,6 +86,7 @@ class FirstLevelAccountsDatatable extends DataTable
         $selectedDeletePermission =  Auth::user()->hasPermissionTo('sites.settings.accounts.first-level.destroy-selected');
         return $this->builder()
             ->setTableId('first-level-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->scrollX(true)

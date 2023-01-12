@@ -76,6 +76,7 @@ class PermissionsDataTable extends DataTable
         return $this->builder()
             ->setTableId('permissions-table')
             ->columns($this->getColumns())
+            ->addTableClass(['table-hover'])
             ->minifiedAjax()
             // ->stateSave()
             ->serverSide()

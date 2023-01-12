@@ -20,9 +20,9 @@
         <div class="row breadcrumbs-top">
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Project Site Configuration</h2>
-                {{-- <div class="breadcrumb-wrapper">
+                <div class="breadcrumb-wrapper">
                      {{ Breadcrumbs::render('sites.index') }}
-                </div> --}}
+                </div>
             </div>
         </div>
     </div>

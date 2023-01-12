@@ -36,7 +36,7 @@ class store extends FormRequest
         return [
             "application_form.registration_no.required" => "Registration Number Required.",
             "application_form.application_no.required" => "Application Number Required.",
-            "application_form.registration_no.unique" => "Registration Number Already Existed.",
+            "application_form.note_serial_number.unique" => "Note Serial Number Already Existed.",
             "application_form.application_no.unique" => "Application Number Already Existed.",
             'application_form.photo' => 'Applicant Picture  Required',
         ];

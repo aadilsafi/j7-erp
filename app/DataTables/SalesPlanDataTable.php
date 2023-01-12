@@ -66,7 +66,14 @@ class SalesPlanDataTable extends DataTable
                 return editDateColumn($salesPlan->created_date);
             })
             ->editColumn('approved_date', function ($salesPlan) {
-                return $salesPlan->approved_date;
+
+                if(isset($salesPlan->approved_date)){
+                    return editDateColumn($salesPlan->approved_date);
+                }
+                else
+                {
+                   return '-';
+                }
             })
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);

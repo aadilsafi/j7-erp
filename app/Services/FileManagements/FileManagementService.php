@@ -6,7 +6,11 @@ use App\Models\Unit;
 use App\Models\SalesPlan;
 use App\Models\Stakeholder;
 use App\Models\FileManagement;
+use App\Models\FileStakeholderConatct;
+use App\Models\FileStakeholderContact;
+use App\Models\StakeholderContact;
 use App\Models\TempFiles;
+use App\Models\TempFilesStakeholderContact;
 use App\Services\FileManagements\FileManagementInterface;
 use Auth;
 
@@ -163,6 +167,64 @@ class FileManagementService implements FileManagementInterface
             }
         }
         TempFiles::truncate();
+        return $file;
+    }
+
+    public function saveFileContactsImport($site_id)
+    {
+        $model = new TempFilesStakeholderContact();
+        $tempdata = $model->cursor();
+        $tempCols = $model->getFillable();
+
+        $url = [];
+
+        foreach ($tempdata as $key => $items) {
+            foreach ($tempCols as $k => $field) {
+                $data[$key][$field] = $items[$tempCols[$k]];
+            }
+
+            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
+            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+
+            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
+                ->where('unit_id', $unitId->id)
+                ->where('total_price', $data[$key]['total_price'])
+                ->where('down_payment_total', $data[$key]['down_payment_total'])
+                ->where('approved_date', $data[$key]['sales_plan_approval_date'])
+                ->first();
+
+            $data[$key]['site_id'] = decryptParams($site_id);
+            // $data[$key]['is_imported'] = true;
+
+            $file = FileManagement::where('stakeholder_id', $stakeholder->id)
+                ->where('unit_id', $unitId->id)
+                ->where('sales_plan_id', $salePlan->id)
+                ->where('stakeholder_id', $stakeholder->id)
+                ->first();
+          
+            $data[$key]['file_management_id'] = $file->id;
+            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic',$data[$key]['conatct_cnic'])->first()->id;
+            $data[$key]['created_at'] = now();
+            $data[$key]['updated_at'] = now();
+   
+           
+            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['stakeholder_cnic']);
+            unset($data[$key]['total_price']);
+            unset($data[$key]['down_payment_total']);
+            unset($data[$key]['sales_plan_approval_date']);
+            unset($data[$key]['other_payment_mode_value']);
+            unset($data[$key]['online_transaction_no']);
+            unset($data[$key]['installment_no']);
+            unset($data[$key]['sales_plan_id']);
+            unset($data[$key]['stakeholder_id']);
+            unset($data[$key]['conatct_cnic']);
+            unset($data[$key]['kin_cnic']);
+           
+            $file = FileStakeholderContact::create($data[$key]);
+
+        }
+        TempFilesStakeholderContact::truncate();
         return $file;
     }
 }

@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ImportStakeholdersContactsDataTable;
 use App\DataTables\ImportStakeholdersKinsDataTable;
+use App\Imports\StakeholderConatctsImport;
 use App\Imports\StakeholderKinsImport;
 use App\Models\BacklistedStakeholder;
 use App\Models\Stakeholder;
+use App\Models\StakeholderContact;
 use App\Models\StakeholderNextOfKin;
 use App\Models\TempKins;
+use App\Models\TempStakeholder;
 use App\Models\TempStakeholderContact;
 use DB;
 use Exception;
@@ -26,12 +30,12 @@ class StakeholderContactsImportControler extends Controller
                 $request->validate([
                     'attachment' => 'required|mimes:xlsx'
                 ]);
-            
+
                 TempStakeholderContact::query()->truncate();
-                $import = new StakeholderKinsImport($model->getFillable());
+                $import = new StakeholderConatctsImport($model->getFillable());
                 $import->import($request->file('attachment'));
 
-                return redirect()->route('sites.stakeholders.kins.storePreview', ['site_id' => $site_id]);
+                return redirect()->route('sites.stakeholders.contacts.storePreview', ['site_id' => $site_id]);
             } else {
                 return Redirect::back()->withDanger('Select File to Import');
             }
@@ -50,43 +54,29 @@ class StakeholderContactsImportControler extends Controller
 
     public function storePreview(Request $request, $site_id)
     {
-        $model = new TempKins();
+        $model = new TempStakeholderContact();
 
         if ($model->count() == 0) {
-            return redirect()->route('sites.floors.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
+            return redirect()->route('sites.stakeholders.index', ['site_id' => $site_id])->withSuccess('No Data Found');
         } else {
 
-            $required = [
-                'stakeholder_cnic',
-                'kin_cnic',
-                'relation',
-            ];
 
-            $dataTable = new ImportStakeholdersKinsDataTable($site_id);
+            $dataTable = new ImportStakeholdersContactsDataTable($site_id);
             $data = [
                 'site_id' => decryptParams($site_id),
                 'final_preview' => true,
                 'preview' => false,
                 'db_fields' =>  $model->getFillable(),
-                'required_fields' => $required,
             ];
-            return $dataTable->with($data)->render('app.sites.stakeholders.importKinsPreview', $data);
+            return $dataTable->with($data)->render('app.sites.stakeholders.import.importContactsPreview', $data);
         }
     }
 
     public function saveImport(Request $request, $site_id)
     {
         DB::transaction(function () use ($request, $site_id) {
-            // $validator = \Validator::make($request->all(), [
-            //     'fields.*' => 'required',
-            // ], [
-            //     'fields.*.required' => 'Must Select all Fields',
-            //     'fields.*.distinct' => 'Field can not be duplicated',
 
-            // ]);
-
-            // $validator->validate();
-            $model = new TempKins();
+            $model = new TempStakeholderContact();
             $tempdata = $model->cursor();
             $tempCols = $model->getFillable();
 
@@ -94,22 +84,20 @@ class StakeholderContactsImportControler extends Controller
                 foreach ($tempCols as $k => $field) {
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
-                $data[$key]['site_id'] = decryptParams($site_id);
+                // $data[$key]['site_id'] = decryptParams($site_id);
                 $data[$key]['is_imported'] = true;
 
                 $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
                 $data[$key]['stakeholder_id'] = $stakeholder->id;
 
-                $kin = Stakeholder::where('cnic', $data[$key]['kin_cnic'])->first();
-                $data[$key]['kin_id'] = $kin->id;
-
                 unset($data[$key]['stakeholder_cnic']);
                 unset($data[$key]['kin_cnic']);
 
-                StakeholderNextOfKin::create($data[$key]);
+                $contact = StakeholderContact::create($data[$key]);
+                //    dd($contact);
             }
         });
-        TempKins::query()->truncate();
+        TempStakeholderContact::query()->truncate();
 
         return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
     }

@@ -29,32 +29,37 @@ class StakeholderConatctsImport implements ToModel, WithChunkReading, WithBatchI
     {
         return new TempStakeholderContact(
             [
-                'stakeholder_cnic' => $row['identity_number'],
+                'stakeholder_cnic' => $row['stakeholder_cnic'],
                 'full_name' => $row['full_name'],
                 'father_name' => $row['father_name'],
                 'cnic' => $row['cnic'],
-                
+                'designation' =>    $row['designation'],
+                'contact_no' => $row['contact_no'],
+                'occupation' => $row['occupation'],
+                'address' => $row['address'],
+                'ntn' => $row['ntn'],
             ]
         );
     }
 
     public function chunkSize(): int
     {
-        return 50;
+        return 500;
     }
 
     public function batchSize(): int
     {
-        return 50;
+        return 500;
     }
 
 
     public function rules(): array
     {
         return [
-            'identity_number' => ['required', 'exists:App\Models\Stakeholder,cnic'],
-            'kin_cnic' => ['required', 'exists:App\Models\Stakeholder,cnic'],
-            'relation' => ['required'],
+            'stakeholder_cnic' => ['required', 'exists:App\Models\Stakeholder,cnic'],
+            'full_name' => ['required'],
+            'father_name' => ['sometimes'],
+            'cnic' => ['required', 'unique:App\Models\StakeholderContact,cnic', 'distinct'],
         ];
     }
     public function customValidationMessages()

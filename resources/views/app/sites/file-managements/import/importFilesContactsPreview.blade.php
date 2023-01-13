@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.receipts.create', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Files')
+@section('page-title', 'Import Files Contacts')
 
 @section('page-vendor')
 @endsection
@@ -30,7 +30,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Files</h2>
+                <h2 class="content-header-title float-start mb-0">Import Files Contacts</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.receipts.create', encryptParams($site_id)) }}
                 </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.file-managements.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.file-managements.saveFileContactsImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}

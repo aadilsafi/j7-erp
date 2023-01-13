@@ -470,9 +470,9 @@ class ReceiptController extends Controller
             'amount_to_be_paid' => $request->amount,
             'already_paid'  => $sales_plan->PaidorPartiallyPaidInstallments,
             'stakeholders'  => $stakeholders,
-            'country'       => $stakeholders->residentialCountry->name ,
-            'state'         =>  $stakeholders->residentialState->name ,
-            'city'          => $stakeholders->residentialCity->name ,
+            'country'       => $stakeholders->residentialCountry->name?? '' ,
+            'state'         =>  $stakeholders->residentialState->name ?? '' ,
+            'city'          => $stakeholders->residentialCity->name ?? '' ,
         ], 200);
     }
 

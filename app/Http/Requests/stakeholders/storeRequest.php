@@ -36,15 +36,15 @@ class storeRequest extends FormRequest
      */
     public function withValidator($validator)
     {
-        // if (!$validator->fails()) {
+       
         $validator->after(function ($validator) {
-
-            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('cnic'))->first();
+        $cnic=(array_key_exists('individual',$this->input()) ? $this->input()['individual']['cnic'] : '');
+        $blacklisted = BacklistedStakeholder::where('cnic', $cnic)->first();
             if ($blacklisted) {
                 $validator->errors()->add('cnic', 'CNIC is BlackListed.');
             }
         });
-        // }
+
     }
 
     /**

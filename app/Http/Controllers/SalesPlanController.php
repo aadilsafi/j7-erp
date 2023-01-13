@@ -6,6 +6,7 @@ use App\DataTables\ImportSalesPlanDataTable;
 use App\DataTables\SalesPlanDataTable;
 use App\Exceptions\GeneralException;
 use App\Imports\SalesPlanImport;
+use App\Models\BacklistedStakeholder;
 use App\Models\{Country, SalesPlan, Floor, LeadSource, Site, Stakeholder, TempSalePlan, Unit, User};
 use Illuminate\Http\Request;
 use App\Models\SalesPlanTemplate;
@@ -145,12 +146,14 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-
+       
         try {
             $validator = Validator::make($request->all(), [
-                'stackholder.cnic' => 'unique:backlisted_stakeholders,cnic'
+                'individual.cnic' => 'unique:backlisted_stakeholders,cnic',
+                'individual.mobile_contact' =>'required,unique:stakeholders,mobile_contact'.$request->stackholder['stackholder_id'],
+
             ], [
-                'stackholder.cnic' => 'This CNIC is BlackListed.'
+                'individual.cnic' => 'This CNIC is BlackListed.'
             ]);
 
             if ($validator->fails()) {
@@ -218,6 +221,7 @@ class SalesPlanController extends Controller
     public function updatedPreview($site_id, $floor_id = null, $unit_id = null, $id)
     {
         //
+
         $salePlan = SalesPlan::find(decryptParams($id));
         $installments = $salePlan->installments;
         $qrCodeName = 'Payment-Plan-' .  $salePlan->unit->id . '-' . $salePlan->id . '-' .  $salePlan->stakeholder->id . '.png';
@@ -1026,7 +1030,7 @@ class SalesPlanController extends Controller
                 $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
                 $data[$key]['approved_by'] = Auth::user()->id;
 
-                
+
             }
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();

@@ -1063,7 +1063,7 @@ class SalesPlanController extends Controller
                 //         return apiErrorResponse('invalid_amout');
                 //     }
                 // }
-            }
+            // }
         });
         TempSalePlan::query()->truncate();
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Imported!');

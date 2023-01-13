@@ -104,7 +104,7 @@ class TypesDataTable extends DataTable
 
         if ($importPermission) {
             $importButton =  Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light p-1')
                 ->text('<i data-feather="upload"></i> Import Types')
                 ->attr([
                     'onclick' => 'Import()',

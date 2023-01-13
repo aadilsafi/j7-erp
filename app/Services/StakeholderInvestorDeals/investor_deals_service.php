@@ -18,7 +18,7 @@ class investor_deals_service implements investor_deals_interface
     // Store
     public function store($site_id, $inputs)
     {
-
+        dd($inputs);
     }
 
 }

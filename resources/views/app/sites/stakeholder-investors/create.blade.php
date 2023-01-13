@@ -70,7 +70,7 @@
 @endsection
 
 @section('content')
-    <form id="stakeholderForm" class="form form-vertical" enctype="multipart/form-data"
+    <form id="stakeholderInvestorDealForm" class="form form-vertical" enctype="multipart/form-data"
         action="{{ route('sites.investors-deals.store', ['site_id' => encryptParams($site_id)]) }}" method="POST">
 
         <div class="row">
@@ -128,7 +128,7 @@
                                 <div class="d-block mb-1">
                                     <label class="form-label fs-5" for="type_name">Attachment<span
                                             class="text-danger">*</span></label>
-                                    <input id="attachment" type="file"
+                                    <input  id="attachment" type="file"
                                         class="filepond @error('attachment') is-invalid @enderror" name="attachment[]"
                                         multiple accept="image/png, image/jpeg, image/gif, application/pdf" />
                                     @error('attachment')
@@ -136,15 +136,16 @@
                                     @enderror
                                 </div>
 
-                                <div class="col-md-12">
-                                    @can('sites.investors-deals.store')
-                                        <button type="submit"
-                                            class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
+                                <hr>
+                                @can('sites.investors-deals.store')
+                                    <div class="col-md-12">
+                                        <a id="saveButton" href="#"
+                                            class="btn text-nowrap w-100 btn-relief-outline-success waves-effect waves-float waves-light me-1 mb-1">
                                             <i data-feather='save'></i>
                                             Save
-                                        </button>
-                                    @endcan
-                                </div>
+                                        </a>
+                                    </div>
+                                @endcan
                                 <div class="col-md-12">
                                     <a href="{{ route('sites.investors-deals.index', ['site_id' => encryptParams($site_id)]) }}"
                                         class="btn btn-relief-outline-danger w-100 waves-effect waves-float waves-light">
@@ -182,20 +183,9 @@
 @section('custom-js')
     {{ view('app.sites.stakeholders.partials.stakeholder_form_scripts') }}
     <script>
-        var validator = $("#stakeholderForm").validate({
-            ignore: [],
-            ignore: 'input[type=hidden]',
+        var validator = $("#stakeholderInvestorDealForm").validate({
+
             rules: {
-                // 'stakeholder_as': {
-                //     required: function() {
-                //         return $("#stakeholder_as").val() == 0;
-                //     }
-                // },
-                'stakeholder_type': {
-                    required: function() {
-                        return $("#stakeholder_type").val() == 0;
-                    }
-                },
                 'residential[address_type]': {
                     required: function() {
                         return $('#stakeholder_type').val() != 'L';
@@ -357,15 +347,8 @@
                 'doc_number': {
                     required: true,
                 },
-                'attachment': {
-                    required: true,
-                },
-                'unit-deals[0][unit]': {
-                    required: true,
-                },
-                'unit-deals[0][received_amount]': {
-                    required: true,
-                },
+
+
             },
             messages: {
                 'individual[nationality]': {
@@ -456,7 +439,6 @@
 
             var parentForm = $(element).closest('form');
             var unitRepeated = 0;
-            console.log(value)
             if (value != '') {
                 $(parentForm.find('.all_units_id')).each(function() {
                     if ($(this).val() === value) {
@@ -468,6 +450,10 @@
 
         }, "Units can't be duplicated");
 
+        $("#saveButton").click(function() {
+            $("#stakeholderInvestorDealForm").submit();
+        });
+
 
         $(document).ready(function() {
             $(this).find('.all_units').select2({});
@@ -477,16 +463,36 @@
             show: function() {
                 $(this).slideDown(function() {
                     $(this).find('.all_units').select2().val('').trigger('change');
+                    calculateTotalReceivedAmount();
                 }), feather && feather.replace({
                     width: 14,
                     height: 14
                 })
             },
             hide: function(e) {
+
                 $(this).slideUp(e)
+                $(this).find('.received_amount').val(0);
+                calculateTotalReceivedAmount();
             }
 
         });
+
+        $(document).on('change', '.received_amount', function(e) {
+            calculateTotalReceivedAmount()
+        });
+
+        function calculateTotalReceivedAmount(){
+            let sum = 0;
+            $('.received_amount').each(index => {
+                let value = $("input[name='unit-deals[" + index + "][received_amount]']").val();
+                value = value.replace(/,/g, "");
+                if (value > 0) {
+                    sum = parseFloat(sum) + parseFloat(value);
+                }
+            });
+            $('.total_recieved').val(sum.toLocaleString());
+        }
 
         var cp_state = 0;
         var cp_city = 0;
@@ -818,8 +824,5 @@
             pdfComponentExtraParams: 'toolbar=0&view=fit&page=1'
         });
     </script>
-
-
-
 
 @endsection

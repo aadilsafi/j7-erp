@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\DataTables\StakeholderInvestorsDatatable;
 use App\Models\Country;
 use App\Models\LeadSource;
-use App\Models\StakeholderInvestor;
 use App\Models\StakeholderType;
 use App\Models\Unit;
 use App\Services\StakeholderInvestorDeals\investor_deals_interface;
@@ -70,7 +69,6 @@ class StakeholderInvestorController extends Controller
     public function store(Request $request,$site_id)
     {
         //
-        // dd($request->all());
         try {
             if (!request()->ajax()) {
 
@@ -95,7 +93,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function show(StakeholderInvestor $stakeholderInvestor)
+    public function show($id)
     {
         //
     }
@@ -106,7 +104,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function edit(StakeholderInvestor $stakeholderInvestor)
+    public function edit()
     {
         //
     }
@@ -118,7 +116,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StakeholderInvestor $stakeholderInvestor)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -129,37 +127,11 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StakeholderInvestor $stakeholderInvestor)
+    public function destroy($id)
     {
         //
     }
 
-    public function getUnitsData(Request $request ,$site_id)
-    {
-
-        // $unit_ids = $request->unit_ids;
-
-        // foreach($unit_ids as $key=> $unit_id){
-
-        // }
-
-        // $unitTable = '';
-        // if ($unit) {
-        //     $loopKey = 1;
-        //     foreach ($unit as $incentive) {
-
-        //             $paid_unit = Unit::find(1);
-        //             $unitTable .= '<tr class="text-nowrap text-center">';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $loopKey++ . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->name . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->floor_unit_number . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->gross_area . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $incentive->dealer_incentive . '</td>';
-        //             $unitTable .= '</tr>';
-
-        //     }
-        // }
-    }
 
     public function checkInvestor(Request $request ,$site_id)
     {

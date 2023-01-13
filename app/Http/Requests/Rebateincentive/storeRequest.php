@@ -74,6 +74,7 @@ class storeRequest extends FormRequest
         // if (!$validator->fails()) {
         $validator->after(function ($validator) {
         $cnic=(array_key_exists('individual',$this->input()) ? $this->input()['individual']['cnic'] : '');
+        dd($cnic);
         $blacklisted = BacklistedStakeholder::where('cnic', $cnic)->first();
             if ($blacklisted) {
                 $validator->errors()->add('cnic', 'CNIC is BlackListed.');

@@ -30,6 +30,7 @@ use Redirect;
 use Str;
 use Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use DB;
 
 class SalesPlanController extends Controller
 {
@@ -452,77 +453,78 @@ class SalesPlanController extends Controller
         }
     }
 
-    public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id)
+    public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id, $generatePdf = true)
     {
-        $salesPlan = SalesPlan::find($request->salesPlanID);
-        $unit_id =  $salesPlan->unit->id;
+        $response =  DB::transaction(function () use ($request, $generatePdf) {
+            $salesPlan = SalesPlan::find($request->salesPlanID);
+            $unit_id =  $salesPlan->unit->id;
 
-        $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
-        $payment_plan = collect($payment_plan)->last();
+            $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
+            $payment_plan = collect($payment_plan)->last();
 
-        if (isset($payment_plan)) {
-            if ($payment_plan->payment_plan_serial_id == null) {
+            if (isset($payment_plan)) {
+                if ($payment_plan->payment_plan_serial_id == null) {
+                    $payment_serial_number = 001;
+                    $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                } else {
+                    $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
+                    $payment_serial_number = (int)$payment_serial_number + 1;
+                    $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                }
+            } else {
                 $payment_serial_number = 001;
                 $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-            } else {
-                $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
-                $payment_serial_number = (int)$payment_serial_number + 1;
-                $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-            }
-        } else {
-            $payment_serial_number = 001;
-            $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-        }
-
-
-
-        $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', $unit_id)->get();
-        foreach ($salesPlan as $salesPlan) {
-            $salePlan = SalesPlan::find($salesPlan->id);
-            if ($salePlan->status == 1) {
-                $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
             }
 
-            $salePlan->status = 2;
-            $salePlan->dis_approved_by = Auth::user()->id;
-            $salePlan->dis_approved_date = now();
-            // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
-            $salePlan->update();
-        }
-        $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
-            'status' => 1,
-            'approved_by' => Auth::user()->id,
-            'approved_date' => $request->approve_date . date(' H:i:s'),
-            'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
-        ]);
+            $salesPlan = (new SalesPlan())->where('status', '!=', 3)->where('unit_id', $unit_id)->get();
+            foreach ($salesPlan as $salesPlan) {
+                $salePlan = SalesPlan::find($salesPlan->id);
+                if ($salePlan->status == 1) {
+                    $transaction = $this->financialTransactionInterface->makeDisapproveSalesPlanTransaction($salesPlan->id);
+                }
 
+                $salePlan->status = 2;
+                $salePlan->dis_approved_by = Auth::user()->id;
+                $salePlan->dis_approved_date = now();
+                // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
+                $salePlan->update();
+            }
+            $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
+                'status' => 1,
+                'approved_by' => Auth::user()->id,
+                'approved_date' => $request->approve_date . date(' H:i:s'),
+                'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
+            ]);
 
+            $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
 
-        $salesPlan = SalesPlan::with('stakeholder', 'stakeholder.stakeholderAsCustomer')->find($request->salesPlanID);
+            $user = User::find($salesPlan->user_id);
 
-        $user = User::find($salesPlan->user_id);
+            $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
+            if ($generatePdf) {
+                $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
+            }
 
-        $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salesPlan->id);
-        $this->salesPlanInterface->generatePDF((new SalesPlan())->find($request->salesPlanID), 'payment_plan');
+            if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
+                return apiErrorResponse('invalid_amout');
+            }
 
-        if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
-            return apiErrorResponse('invalid_amout');
-        }
+            $currentURL = URL::current();
+            $notificaionData = [
+                'title' => 'Sales Plan Approved Notification',
+                'description' => Auth::User()->name . ' approved generated sales plan.',
+                'message' => 'xyz message',
+                'url' => str_replace('/approve-sales-plan', '', $currentURL),
+            ];
 
-        $currentURL = URL::current();
-        $notificaionData = [
-            'title' => 'Sales Plan Approved Notification',
-            'description' => Auth::User()->name . ' approved generated sales plan.',
-            'message' => 'xyz message',
-            'url' => str_replace('/approve-sales-plan', '', $currentURL),
-        ];
+            Notification::send($user, new ApprovedSalesPlanNotification($notificaionData));
 
-        Notification::send($user, new ApprovedSalesPlanNotification($notificaionData));
-
-        return response()->json([
-            'success' => true,
-            'message' => "Sales Plan Approved Sucessfully",
-        ], 200);
+            return response()->json([
+                'success' => true,
+                'message' => "Sales Plan Approved Sucessfully",
+            ], 200);
+        });
+        return $response;
     }
 
     public function disApproveSalesPlan(Request $request)
@@ -948,109 +950,113 @@ class SalesPlanController extends Controller
 
     public function saveImport(Request $request, $site_id)
     {
+        DB::transaction(function () use ($request, $site_id) {
+            $status  = [
+                0 => 'pending',
+                1 => 'approved',
+                2 => 'disapproved',
+                3 => 'cancelled',
+            ];
 
-        $status  = [
-            0 => 'pending',
-            1 => 'approved',
-            2 => 'disapproved',
-            3 => 'cancelled',
-        ];
+            $model = new TempSalePlan();
+            $tempdata = $model->cursor();
+            $tempCols = $model->getFillable();
+            $serail = SalesPlan::max('id') + 1;
 
-        $model = new TempSalePlan();
-        $tempdata = $model->cursor();
-        $tempCols = $model->getFillable();
-        $serail = SalesPlan::max('id') + 1;
+            foreach ($tempdata as $key => $items) {
+                foreach ($tempCols as $k => $field) {
+                    $data[$key][$field] = $items[$tempCols[$k]];
+                }
 
-        foreach ($tempdata as $key => $items) {
-            foreach ($tempCols as $k => $field) {
-                $data[$key][$field] = $items[$tempCols[$k]];
-            }
+                // $data[$key]['site_id'] = decryptParams($site_id);
+                $data[$key]['user_id'] = Auth::user()->id;
+                $data[$key]['comments'] = $data[$key]['comment'];
 
-            // $data[$key]['site_id'] = decryptParams($site_id);
-            $data[$key]['user_id'] = Auth::user()->id;
-            $data[$key]['comments'] = $data[$key]['comment'];
+                $data[$key]['status'] = array_search($data[$key]['status'], $status);
 
-            $data[$key]['status'] = array_search($data[$key]['status'], $status);
+                $unit = Unit::where('floor_unit_number', $data[$key]['unit_short_label'])->first();
+                $data[$key]['unit_id'] = $unit->id;
 
-            $unit = Unit::where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-            $data[$key]['unit_id'] = $unit->id;
+                $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
+                $data[$key]['stakeholder_id'] = $stakeholder->id;
+                $data[$key]['stakeholder_data'] = json_encode($stakeholder);
 
-            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
-            $data[$key]['stakeholder_id'] = $stakeholder->id;
-            $data[$key]['stakeholder_data'] = json_encode($stakeholder);
-
-            if($stakeholder->pin_code == null) {
-                $pinCode = createRandomAlphaNumericCode();
-                $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
-                while ($isPinExists) {
+                if ($stakeholder->pin_code == null) {
                     $pinCode = createRandomAlphaNumericCode();
                     $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
-                }
-                $stakeholder->pin_code = $pinCode;
-                $stakeholder->update();
-            }
-            $leadSource = LeadSource::where('name', Str::title($data[$key]['lead_source']))->first();
-            if ($leadSource) {
-                $data[$key]['lead_source_id'] = $leadSource->id;
-            } else {
-                $leadSource = LeadSource::create([
-                    'site_id' => decryptParams($site_id),
-                    'name' => $data[$key]['lead_source']
-                ]);
-                $data[$key]['lead_source_id'] = $leadSource->id;
-            }
-
-
-            $serail_no =  sprintf('%03d', $serail++);
-            $data[$key]['is_imported'] = true;
-            $data[$key]['serial_no'] =  'SI-' . $serail_no;
-            $data[$key]['investment_plan_serial_id'] = 'IP-' . $serail_no;
-            if ($data[$key]['status'] == '1') {
-                $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
-                $payment_plan = collect($payment_plan)->last();
-
-                if (isset($payment_plan)) {
-                    if ($payment_plan->payment_plan_serial_id == null) {
-                        $payment_serial_number = 001;
-                        $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-                    } else {
-                        $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
-                        $payment_serial_number = (int)$payment_serial_number + 1;
-                        $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                    while ($isPinExists) {
+                        $pinCode = createRandomAlphaNumericCode();
+                        $isPinExists = Stakeholder::where('pin_code', $pinCode)->exists();
                     }
+                    $stakeholder->pin_code = $pinCode;
+                    $stakeholder->update();
+                }
+                $leadSource = LeadSource::where('name', Str::title($data[$key]['lead_source']))->first();
+                if ($leadSource) {
+                    $data[$key]['lead_source_id'] = $leadSource->id;
                 } else {
-                    $payment_serial_number = 001;
-                    $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                    $leadSource = LeadSource::create([
+                        'site_id' => decryptParams($site_id),
+                        'name' => $data[$key]['lead_source']
+                    ]);
+                    $data[$key]['lead_source_id'] = $leadSource->id;
                 }
 
-                $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
-                $data[$key]['approved_by'] = Auth::user()->id;
 
-                if($data[$key]['approved_date'] == null) {
-                    $data[$key]['approved_date'] = today()->format('Y-m-d 00:00:00');
+                $serail_no =  sprintf('%03d', $serail++);
+                $data[$key]['is_imported'] = true;
+                $data[$key]['serial_no'] =  'SI-' . $serail_no;
+                $data[$key]['investment_plan_serial_id'] = 'IP-' . $serail_no;
+                // if ($data[$key]['status'] == '1') {
+                //     $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
+                //     $payment_plan = collect($payment_plan)->last();
+
+                //     if (isset($payment_plan)) {
+                //         if ($payment_plan->payment_plan_serial_id == null) {
+                //             $payment_serial_number = 001;
+                //             $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                //         } else {
+                //             $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
+                //             $payment_serial_number = (int)$payment_serial_number + 1;
+                //             $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                //         }
+                //     } else {
+                //         $payment_serial_number = 001;
+                //         $payment_serial_number =  sprintf('%03d', $payment_serial_number);
+                //     }
+
+                //     $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
+                //     $data[$key]['approved_by'] = Auth::user()->id;
+
+
+
+                // }
+                if ($data[$key]['approved_date'] == null) {
+                    $data[$key]['approved_date'] = today()->format('Y-m-d');
                 }
+                $data[$key]['created_at'] = now();
+                $data[$key]['updated_at'] = now();
 
+                unset($data[$key]['stakeholder_cnic']);
+                unset($data[$key]['unit_short_label']);
+                unset($data[$key]['lead_source']);
+                unset($data[$key]['comment']);
+
+                // dd($data);
+
+                $salePlan = SalesPlan::create($data[$key]);
+
+                $request->request->add(['salesPlanID' => $salePlan->id, 'approve_date' => $data[$key]['approved_date']]);
+                $result = $this->approveSalesPlan($request, $salePlan->id, 1, 1,false);
+
+                // if ($data[$key]['status'] == '1') {
+                //     $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
+                //     if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
+                //         return apiErrorResponse('invalid_amout');
+                //     }
+                // }
             }
-            $data[$key]['created_at'] = now();
-            $data[$key]['updated_at'] = now();
-
-            unset($data[$key]['stakeholder_cnic']);
-            unset($data[$key]['unit_short_label']);
-            unset($data[$key]['lead_source']);
-            unset($data[$key]['comment']);
-
-            // dd($data);
-
-            $salePlan = SalesPlan::create($data[$key]);
-
-            if ($data[$key]['status'] == '1') {
-                $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
-                if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
-                    return apiErrorResponse('invalid_amout');
-                }
-            }
-        }
-
+        });
         TempSalePlan::query()->truncate();
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Imported!');
     }

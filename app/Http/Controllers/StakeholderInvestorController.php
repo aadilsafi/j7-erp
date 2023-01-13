@@ -70,7 +70,7 @@ class StakeholderInvestorController extends Controller
     public function store(Request $request,$site_id)
     {
         //
-        dd($request->all());
+        // dd($request->all());
         try {
             if (!request()->ajax()) {
 

@@ -67,7 +67,7 @@ class FileCancellationController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 

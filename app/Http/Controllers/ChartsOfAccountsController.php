@@ -182,7 +182,7 @@ class ChartsOfAccountsController extends Controller
         foreach ($fifth_level_accounts  as $key => $fifth_level_account) {
             $fifth_level_accounts[$key]['formated_code'] = account_number_format($fifth_level_account->code);
             $fifth_level_accounts[$key]['account_type'] = ucfirst($fifth_level_account->account_type);
-            if ($fifth_level_account->account_type == 'debit') {
+            if ($fifth_level_account->account_type == 'Debit') {
                 dd('debit');
                 $debit = 0.0;
                 $credit = 0.0;

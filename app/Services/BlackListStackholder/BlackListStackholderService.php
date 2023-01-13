@@ -36,7 +36,9 @@ class BlackListStackholderService implements BlacklistStackholderInterface
 
         $data = ['name' => ($inputs['name']) , 'fatherName' => ($inputs['fatherName']) , 'cnic' => filter_strip_tags($inputs['cnic']) , 'province' => $province->name, 'district' => $cityName->name, 'country_id' => $inputs['country'], 'state_id' => $inputs['province'], 'city_id' => $inputs['district'],
 
+
         ];
+         dd($data);
 
         $StoreBlackList = BacklistedStakeholder::create($data);
         return $StoreBlackList;
@@ -47,7 +49,7 @@ class BlackListStackholderService implements BlacklistStackholderInterface
     {
 
         $blacklist = BacklistedStakeholder::find($id);
-        
+
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
 

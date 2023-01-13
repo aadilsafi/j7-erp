@@ -96,6 +96,7 @@ class store extends FormRequest
 
     public function withValidator($validator)
     {
+     
         if (!$validator->fails()) {
             $validator->after(function ($validator) {
                 $modeOfPayment = $this->input('mode_of_payment');

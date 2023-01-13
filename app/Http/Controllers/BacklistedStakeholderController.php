@@ -75,6 +75,7 @@ class BacklistedStakeholderController extends Controller
      */
     public function store(StoreRequest $request, $site_id)
     {
+        //  dd($request->all());
 
         try
         {

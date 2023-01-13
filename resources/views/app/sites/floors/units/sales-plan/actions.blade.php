@@ -65,3 +65,8 @@
     @endcan
 
 </div>
+<style>
+    .btn-relief-outline-primary:hover .bi-eye-fill {
+        color: white !important;
+    }
+</style>

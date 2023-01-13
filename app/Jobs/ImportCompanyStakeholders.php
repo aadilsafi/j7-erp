@@ -68,6 +68,10 @@ class ImportCompanyStakeholders implements ShouldQueue
             $data[$key]['is_imported'] = true;
             $data[$key]['full_name'] = $data[$key]['company_name'];
             $data[$key]['cnic'] = $data[$key]['registration'];
+
+            $data[$key]['mobile_contact'] = strpos($data[$key]['mobile_contact'], '+') == 0 ?  $data[$key]['mobile_contact'] : '+' . $data[$key]['mobile_contact'];
+            $data[$key]['office_contact'] = strpos($data[$key]['office_contact'], '+') == 0 ?  $data[$key]['office_contact'] : '+' . $data[$key]['office_contact'];
+            
             if ($data[$key]['origin'] != "null") {
                 $data[$key]['origin'] = 167;
             } else {
@@ -79,7 +83,7 @@ class ImportCompanyStakeholders implements ShouldQueue
                 }
             }
 
-            // residential address 
+            // residential address
 
             if ($data[$key]['residential_country'] != "null") {
                 $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['residential_country'])])->first();
@@ -116,7 +120,7 @@ class ImportCompanyStakeholders implements ShouldQueue
                 $data[$key]['mailing_city_id'] = $data[$key]['residential_city_id'];
                 $data[$key]['mailing_postal_code'] = $data[$key]['residential_postal_code'];
             } else {
-                // mailing address 
+                // mailing address
 
                 if ($data[$key]['mailing_country'] != "null") {
                     $country = Country::whereRaw('LOWER(name) = (?)', [strtolower($data[$key]['mailing_country'])])->first();
@@ -199,6 +203,14 @@ class ImportCompanyStakeholders implements ShouldQueue
                     'stakeholder_id' => $stakeholder->id,
                     'type' => 'L',
                     'stakeholder_code' => 'L-00' . $stakeholder->id,
+                    'status' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'stakeholder_id' => $stakeholder->id,
+                    'type' => 'I',
+                    'stakeholder_code' => 'I-00' . $stakeholder->id,
                     'status' => 1,
                     'created_at' => now(),
                     'updated_at' => now(),

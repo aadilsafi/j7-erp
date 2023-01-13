@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('total_price')->nullable();
             $table->string('down_payment_total')->nullable();
             $table->string('sales_plan_approval_date')->nullable();
-            $table->string('conatct_cnic')->nullable();
+            $table->string('contact_cnic')->nullable();
             $table->string('kin_cnic')->nullable();
             $table->timestamps();
         });

@@ -5,8 +5,8 @@
             <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
                 <label class="form-label" style="font-size: 15px" for="stakeholder_as">Stakeholder As
                     <span class="text-danger">*</span></label>
-                <select class="form-select form-select-lg" id="stakeholder_as" name="stakeholder_as">
-                    <option value="0" selected>Select Stakeholder As</option>
+                <select required class="form-select form-select-lg" id="stakeholder_as" name="stakeholder_as">
+                    <option value="" selected>Select Stakeholder As</option>
                     <option value="i" {{ old('stakeholder_as') == 'i' ? 'selected' : '' }}>Individual</option>
                     <option value="c" {{ old('stakeholder_as') == 'c' ? 'selected' : '' }}>Company</option>
                 </select>

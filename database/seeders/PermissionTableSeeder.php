@@ -2557,6 +2557,64 @@ class PermissionTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            // Stakeholder Investor Routes
+            [
+                'name' => 'sites.investors-deals.index',
+                'show_name' => 'Can View  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.create',
+                'show_name' => 'Can Create Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.store',
+                'show_name' => 'Can Store  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.preview',
+                'show_name' => 'Can Preview  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.check-investor',
+                'show_name' => 'Can Check  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.approve-investor',
+                'show_name' => 'Can Approve  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.revert-investor',
+                'show_name' => 'Can Revert  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'sites.investors-deals.dis-approve',
+                'show_name' => 'Can Disapprove  Investor Deals',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
 
             // Outside Sales Plan Permission
 

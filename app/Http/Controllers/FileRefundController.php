@@ -71,7 +71,7 @@ class FileRefundController extends Controller
         if (!request()->ajax()) {
             $unit = Unit::find(decryptParams($unit_id));
             $file = FileManagement::where('id', decryptParams($file_id))->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $salesPlan = SalesPlan::find($file->sales_plan_id);
 
@@ -129,7 +129,7 @@ class FileRefundController extends Controller
         $file_refund = FileRefund::find(decryptParams($id));
         $unit = Unit::find(decryptParams($unit_id));
         $file = FileManagement::where('id', $file_refund->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->orWhere('status', 2)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->orWhere('status', 2)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $file_refund->amount_to_be_refunded;
         foreach ($files_labels as $key => $file) {
@@ -403,7 +403,7 @@ class FileRefundController extends Controller
         $template = Template::find(decryptParams($template_id));
 
         $file = FileManagement::where('id', $file_refund->file_id)->first();
-        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+        $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
         $salesPlan = SalesPlan::find($file->sales_plan_id);
         $total_paid_amount = $file_refund->amount_to_be_refunded;
         $unit_data = json_decode($file_refund->unit_data);

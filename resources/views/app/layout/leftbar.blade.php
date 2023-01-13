@@ -241,7 +241,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.stakeholders.contacts.importStakeholders')
+                                    @can('sites.stakeholders.contacts.importStakeholders')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.stakeholders.contacts.importStakeholders') || request()->routeIs('sites.stakeholders.contacts.importStakeholdersPreview') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -251,7 +251,7 @@
                                                     Contacts</span>
                                             </a>
                                         </li>
-                                    @endcan --}}
+                                    @endcan
                                     @can('sites.floors.importFloors')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.floors.importFloors') || request()->routeIs('sites.floors.storePreview') ? 'active' : null }}">
@@ -380,7 +380,7 @@
                                             </a>
                                         </li>
                                     @endcan
-                                    {{-- @can('sites.file-managements.importFilesContacts')
+                                    @can('sites.file-managements.importFilesContacts')
                                         <li
                                             class="nav-item {{ request()->routeIs('sites.file-managements.importFilesContacts') || request()->routeIs('sites.file-managements.storeFileContactsPreview') ? 'active' : null }}">
                                             <a class="d-flex align-items-center"
@@ -390,7 +390,7 @@
                                                 </span>
                                             </a>
                                         </li>
-                                    @endcan --}}
+                                    @endcan
                                 </ul>
                             </li>
                         @endcanany
@@ -780,6 +780,29 @@
                                 </ul>
                             </li>
                         @endcanany
+
+                        @canany(['sites.investors-deals.index'])
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 4</span>
+                                </a>
+                                <ul>
+                                    @can('sites.investors-deals.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.investors-deals.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.investors-deals.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-people"></i>
+                                                </i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Investors Deals</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
+
                     </ul>
                 </li>
             @endcanany

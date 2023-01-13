@@ -15,7 +15,7 @@ class TempFilesStakeholderContact extends Model
         'total_price',
         'down_payment_total',
         'sales_plan_approval_date',
-        'conatct_cnic',
+        'contact_cnic',
         'kin_cnic',
     ];
 }

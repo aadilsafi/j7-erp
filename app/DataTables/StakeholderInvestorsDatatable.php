@@ -10,17 +10,17 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use App\Services\Stakeholder\Interface\StakeholderInterface;
+use App\Services\StakeholderInvestorDeals\investor_deals_interface;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class StakeholderInvestorsDatatable extends DataTable
 {
 
-    private $stakeholderInterface;
+    private $StakeholderInvestorInterface;
 
-    public function __construct(StakeholderInterface $stakeholderInterface)
+    public function __construct(investor_deals_interface $StakeholderInvestorInterface)
     {
-        $this->stakeholderInterface = $stakeholderInterface;
+        $this->StakeholderInvestorInterface = $StakeholderInvestorInterface;
     }
 
     /**
@@ -36,43 +36,29 @@ class StakeholderInvestorsDatatable extends DataTable
             ->addIndexColumn()
 
             ->editColumn('cnic', function ($stakeholder) {
-                return $stakeholder->cnic;
+                return $stakeholder->investor->cnic;
             })
             ->editColumn('contact', function ($stakeholder) {
-                if ($stakeholder->stakeholder_as == 'i') {
-                    return $stakeholder->mobile_contact;
+                if ($stakeholder->investor->stakeholder_as == 'i') {
+                    return $stakeholder->investor->mobile_contact;
                 } else {
-                    return $stakeholder->office_contact;
+                    return $stakeholder->investor->office_contact;
                 }
             })
-            ->editColumn('nationality', function ($stakeholder) {
-                return  $stakeholder->nationalityCountry->name;
-            })
+            // ->editColumn('nationality', function ($stakeholder) {
+            //     return  $stakeholder->nationalityCountry->name;
+            // })
             ->editColumn('created_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->created_at);
             })
             ->editColumn('updated_at', function ($stakeholder) {
                 return editDateColumn($stakeholder->updated_at);
             })
-            ->editColumn('actions', function ($stakeholder) {
-                return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $stakeholder->id]);
-            })
+            // ->editColumn('actions', function ($stakeholder) {
+            //     return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $stakeholder->id]);
+            // })
             ->editColumn('check', function ($stakeholder) {
                 return $stakeholder;
-            })
-            ->editColumn('satkeholderAs', function ($stakeholder) {
-                if ($stakeholder->stakeholder_as == "i") {
-                    return 'Individual';
-                } elseif ($stakeholder->stakeholder_as == "c") {
-                    return 'Company';
-                }
-            })
-            ->editColumn('crm_lead', function ($stakeholder) {
-                if ($stakeholder->crm_id > 0) {
-                    return '<span class="badge badge-glow bg-success">Yes</span>';
-                } else {
-                    return '<span class="badge badge-glow bg-warning">No</span>';
-                }
             })
             ->setRowId('id')
 
@@ -96,7 +82,7 @@ class StakeholderInvestorsDatatable extends DataTable
      */
     public function query(): QueryBuilder
     {
-        return $this->stakeholderInterface->model()->newQuery()->with(['residentialCity', 'residentialCountry'])->where('site_id', decryptParams($this->site_id))->orderBy('stakeholders.id', 'desc');
+        return $this->StakeholderInvestorInterface->model()->newQuery()->with(['investor', 'user'])->where('site_id', decryptParams($this->site_id))->orderBy('created_at', 'desc');
     }
 
     public function html(): HtmlBuilder
@@ -148,11 +134,11 @@ class StakeholderInvestorsDatatable extends DataTable
             ->deferRender()
             ->dom('BlfrtipC')
             ->lengthMenu([30, 50, 70, 100, 200, 500, 1000])
-            ->rowGroupDataSrc('satkeholderAs')
+            // ->rowGroupDataSrc('satkeholderAs')
             ->dom('<"card-header pt-0"<"head-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>> C<"clear">')
             ->buttons($buttons)
             ->orders([
-                [8, 'desc'],
+                // [8, 'desc'],
             ]);
     }
 
@@ -168,15 +154,11 @@ class StakeholderInvestorsDatatable extends DataTable
 
         $columns = [
             Column::computed('DT_RowIndex')->title('#'),
-            Column::make('full_name')->title('Name'),
+            Column::computed('full_name')->name('investor.name')->title('Investor Name'),
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
-            Column::computed('contact')->title('Contact'),
-            Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
-            Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),
-            Column::make('nationality')->title('Nationality')->orderable(true),
-            Column::computed('crm_lead')->title('CRM Lead')->addClass('text-nowrap'),
-            Column::computed('satkeholderAs')->visible(false),
+            Column::computed('cnic')->name('investor.cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
+            Column::computed('contact')->name('investor.contact')->title('Contact'),
+
         ];
 
         $columns[] = Column::make('created_at')->addClass('text-nowrap');

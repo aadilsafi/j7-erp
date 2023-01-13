@@ -65,6 +65,16 @@ class SalesPlanDataTable extends DataTable
             ->editColumn('created_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->created_date);
             })
+            ->editColumn('approved_date', function ($salesPlan) {
+
+                if(isset($salesPlan->approved_date)){
+                    return editDateColumn($salesPlan->approved_date);
+                }
+                else
+                {
+                   return '-';
+                }
+            })
             ->editColumn('updated_at', function ($salesPlan) {
                 return editDateColumn($salesPlan->updated_at);
             })
@@ -218,6 +228,7 @@ class SalesPlanDataTable extends DataTable
             Column::make('status')->title('Status')->addClass('text-center'),
             // Column::make('investment_plan_serial_id')->title('Investment Plan#')->addClass('text-nowrap'),
             Column::make('created_at')->title('Created At')->addClass('text-nowrap'),
+            Column::make('approved_date')->title('Approved At')->addClass('text-nowrap'),
         ];
 
         if ($destroyPermission) {

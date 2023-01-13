@@ -82,6 +82,7 @@ class AdditionalCostsDataTable extends DataTable
         $importPermission = Auth::user()->hasPermissionTo('sites.additional-costs.importAdcosts');
         return $this->builder()
             ->setTableId('additional-costs-table')
+            ->addTableClass(['table-hover'])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->serverSide()
@@ -111,7 +112,7 @@ class AdditionalCostsDataTable extends DataTable
 
                 ($importPermission ?
                     Button::raw('import')
-                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light ')
+                    ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light p-1 ')
                     ->text('<i data-feather="upload"></i> Import Additional Costs')
                     ->attr([
                         'onclick' => 'Import()',

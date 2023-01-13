@@ -25,6 +25,7 @@ class FirstLevelStore  extends FormRequest
         return [
             'account_code' => 'required||unique:account_heads,code',
             'name' => 'required||unique:account_heads,name',
+            'account_type' => 'required',
         ];
     }
 }

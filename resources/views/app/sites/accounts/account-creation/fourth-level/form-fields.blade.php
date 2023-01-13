@@ -1,7 +1,7 @@
 <div class="card" style="border: 2px solid #7367F0; border-style: dashed; border-radius: 0;">
     <div class="card-body">
         <div class="row mb-1">
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="name">Account Name <span class="text-danger">*</span></label>
                 <input type="text" class="form-control form-control-md @error('account_code') is-invalid @enderror"
                     id="name" name="name" placeholder="Account Name"
@@ -13,7 +13,7 @@
                 @enderror
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="second_level">Third Level Code <span
                         class="text-danger">*</span></label>
                 <select class="select2" name="third_level" id="third_level">
@@ -29,7 +29,7 @@
                 @enderror
             </div>
 
-            <div class="col-lg-4 col-md-4 col-sm-4 position-relative">
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
                 <label class="form-label fs-5" for="account_code">Account Code <span
                         class="text-danger">*</span></label>
                 <input type="number" maxLength="2"
@@ -40,6 +40,20 @@
                     <div class="invalid-feedback">{{ $message }}</div>
                 @else
                     <p class="m-0"><small class="text-muted">Enter Four Digit Code.</small></p>
+                @enderror
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 position-relative">
+                <label class="form-label fs-5" for="account_code">Select Acount Type<span
+                        class="text-danger">*</span></label>
+                <select class="form-control" id="state" class="state" name="account_type" required>
+                    <option value="" selected>Select Acount Type</option>
+                    <option value="debit">Debit</option>
+                    <option value="credit">Credit</option>
+                </select>
+                @error('account_type')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @else
+                    <p class="m-0"><small class="text-muted">Enter Acount Type.</small></p>
                 @enderror
             </div>
         </div>

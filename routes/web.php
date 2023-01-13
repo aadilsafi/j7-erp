@@ -55,6 +55,7 @@ use App\Http\Controllers\{
     JournalVoucherController,
     TransferReceiptController,
     JournalVoucherEntriesController,
+    StakeholderContactsImportControler,
     StakeholderImportController,
     StakeholderInvestorController,
 };
@@ -560,6 +561,7 @@ Route::group([
                         Route::get('delete', [TypeController::class, 'destroy'])->name('destroy');
                     });
 
+                    // import types
                     Route::group(['prefix' => 'import'], function () {
                         Route::view('/', 'app.sites.types.importTypes')->name('importTypes');
                         Route::post('preview', [TypeController::class, 'ImportPreview'])->name('importTypesPreview');
@@ -582,17 +584,27 @@ Route::group([
                         Route::get('delete', [StakeholderController::class, 'destroy'])->name('destroy');
                     });
 
+                    // import Stakeholders
                     Route::group(['prefix' => 'import'], function () {
                         Route::view('/', 'app.sites.stakeholders.importStakeholders')->name('importStakeholders');
                         Route::post('preview', [StakeholderImportController::class, 'ImportPreview'])->name('importStakeholdersPreview');
                         Route::get('storePreview/{type}', [StakeholderImportController::class, 'storePreview'])->name('storePreview');
                         Route::post('saveImport/{type}', [StakeholderImportController::class, 'saveImport'])->name('saveImport');
 
+                        // import Stakeholder Kins
                         Route::group(['prefix' => 'kins', 'as' => 'kins.'], function () {
                             Route::view('/', 'app.sites.stakeholders.importKins', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
                             Route::post('preview', [StakeholderKinsImportControler::class, 'ImportPreview'])->name('importStakeholdersPreview');
                             Route::get('storePreview', [StakeholderKinsImportControler::class, 'storePreview'])->name('storePreview');
                             Route::post('saveImport', [StakeholderKinsImportControler::class, 'saveImport'])->name('saveImport');
+                        });
+
+                        // import Stakeholder Contacts
+                        Route::group(['prefix' => 'contacts', 'as' => 'contacts.'], function () {
+                            Route::view('/', 'app.sites.stakeholders.import.importContacts', ['preview' => false, 'final_preview' => false])->name('importStakeholders');
+                            Route::post('preview', [StakeholderContactsImportControler::class, 'ImportPreview'])->name('importStakeholdersPreview');
+                            Route::get('storePreview', [StakeholderContactsImportControler::class, 'storePreview'])->name('storePreview');
+                            Route::post('saveImport', [StakeholderContactsImportControler::class, 'saveImport'])->name('saveImport');
                         });
                     });
 
@@ -797,6 +809,22 @@ Route::group([
                     Route::get('/customers', [FileManagementController::class, 'customers'])->name('customers');
                     Route::get('/view-files', [FileManagementController::class, 'viewFiles'])->name('view-files');
 
+                    // import files
+                    Route::group(['prefix' => 'import'], function () {
+                        Route::view('/', 'app.sites.file-managements.import.importFiles', ['preview' => false])->name('importFiles');
+                        Route::post('preview', [FileManagementController::class, 'ImportPreview'])->name('importFilesPreview');
+                        Route::get('storePreview', [FileManagementController::class, 'storePreview'])->name('storePreview');
+                        Route::post('saveImport', [FileManagementController::class, 'saveImport'])->name('saveImport');
+
+                        // import files Conatcts
+                        Route::group(['prefix' => 'contacts'], function () {
+                            Route::view('/', 'app.sites.file-managements.import.importFilesContacts', ['preview' => false])->name('importFilesContacts');
+                            Route::post('preview', [FileManagementController::class, 'ImportContactsPreview'])->name('importFilesContactsPreview');
+                            Route::get('storePreview', [FileManagementController::class, 'storeContactsPreview'])->name('storeFileContactsPreview');
+                            Route::post('saveImport', [FileManagementController::class, 'saveContactsImport'])->name('saveFileContactsImport');
+                        });
+                    });
+
                     Route::group(['prefix' => 'customers/{customer_id}', 'as' => 'customers.'], function () {
                         Route::get('/units', [FileManagementController::class, 'units'])->name('units');
 
@@ -935,8 +963,6 @@ Route::group([
                         Route::get('create/{unit_id}/{customer_id}', [UnitShiftingController::class, 'create'])->name('create');
                         Route::post('store', [UnitShiftingController::class, 'store'])->name('store');
                     });
-
-
                 });
 
                 // Accounts Routes
@@ -1088,6 +1114,21 @@ Route::get('/logs', function () {
     return Activity::latest()->get();
 });
 
+
+Route::get('/deletedPdfs/{sure}', function ($sure) {
+    if ($sure) {
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/investment-plan/*')) as $key => $path) {
+            $test = File::delete($path);
+        }
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/payment-plan/*')) as $key => $path) {
+            $test = File::delete($path);
+        }
+        foreach (File::glob(public_path('app-assets/pdf/sales-plans/qrcodes/*')) as $key => $path) {
+            $test = File::delete($path);
+        }
+        return $test;
+    }
+})->name('deletedPdfs');
 // Route::get('/recoverTypes', function(){
 //     $types = Type::withTrashed()->forceDelete();
 //     return $types;

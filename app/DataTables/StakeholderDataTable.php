@@ -118,7 +118,7 @@ class StakeholderDataTable extends DataTable
         $selectedDeletePermission = 0;
 
         $buttons = [
-            Button::make('export')->addClass('btn btn-relief-outline-secondary waves-effect waves-float waves-light dropdown-toggle')->buttons([
+            Button::make('export')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light dropdown-toggle')->buttons([
                 Button::make('print')->addClass('dropdown-item'),
                 Button::make('copy')->addClass('dropdown-item'),
                 Button::make('csv')->addClass('dropdown-item'),
@@ -128,12 +128,12 @@ class StakeholderDataTable extends DataTable
 
 
             Button::make('reset')->addClass('btn btn-relief-outline-danger waves-effect waves-float waves-light'),
-            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light'),
+            Button::make('reload')->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light '),
         ];
 
         if ($importPermission) {
             $importbutton = Button::raw('import')
-                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light')
+                ->addClass('btn btn-relief-outline-primary waves-effect waves-float waves-light p-1')
                 ->text('<i data-feather="upload"></i> Import Stakeholders')
                 ->attr([
                     'onclick' => 'Import()',
@@ -192,21 +192,21 @@ class StakeholderDataTable extends DataTable
             Column::computed('DT_RowIndex')->title('#'),
             Column::make('full_name')->title('Name'),
             // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
-            Column::make('cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
+            Column::make('cnic')->title('Identity No #')->addClass('text-center')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('contact')->title('Contact'),
             Column::computed('residential_city_id')->name('residentialCity.name')->title('City')->addClass('text-nowrap')->searchable(true)->orderable(true),
             Column::computed('residential_country_id')->name('residentialCountry.name')->title('Country')->searchable(true)->orderable(true),
             Column::make('nationality')->title('Nationality')->orderable(true),
-            Column::computed('crm_lead')->title('CRM Lead')->addClass('text-nowrap'),
+            Column::computed('crm_lead')->title('CRM Lead')->addClass('text-center')->addClass('text-nowrap'),
             Column::computed('satkeholderAs')->visible(false),
         ];
         if (count($this->customFields) > 0) {
             foreach ($this->customFields as $customfields) {
-                $columns[] = Column::computed($customfields->slug)->addClass('text-nowrap')->title($customfields->name);
+                $columns[] = Column::computed($customfields->slug)->addClass('text-center')->addClass('text-nowrap')->title($customfields->name);
             }
         }
-        $columns[] = Column::make('created_at')->addClass('text-nowrap');
-        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+        $columns[] = Column::make('created_at')->addClass('text-center')->addClass('text-nowrap');
+        $columns[] = Column::make('updated_at')->addClass('text-center')->addClass('text-nowrap');
 
         if ($selectedDeletePermission) {
             $checkColumn = Column::computed('check')->exportable(false)->printable(false)->width(60)->addClass('text-center');

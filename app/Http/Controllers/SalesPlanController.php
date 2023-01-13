@@ -151,7 +151,7 @@ class SalesPlanController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'individual.cnic' => 'unique:backlisted_stakeholders,cnic',
-                'individual.mobile_contact' =>'required,unique:stakeholders,mobile_contact'.$request->stackholder['stackholder_id'],
+                'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact'.$request->stackholder['stackholder_id'],
 
             ], [
                 'individual.cnic' => 'This CNIC is BlackListed.'

@@ -17,7 +17,7 @@ use Exception;
 class LeadSourceController extends Controller
 {
 
-    private $leadSourceInterface;
+    private $leadSourceInterface,$customFieldInterface;
 
     public function __construct(LeadSourceInterface $leadSourceInterface, CustomFieldInterface $customFieldInterface)
     {

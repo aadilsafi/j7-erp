@@ -65,7 +65,7 @@ class Stakeholder extends Model implements HasMedia
 
     public $rules = [
         'stakeholder_as' => 'required|bail|in:i,c',
-        'stakeholder_type' => 'required|in:C,V,D,L,K',
+        'stakeholder_type' => 'required|in:C,V,D,L,K,I',
 
         // as individual validations
         'individual.full_name' => 'exclude_if:stakeholder_as,c|required|string|min:1|max:50',

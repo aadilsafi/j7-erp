@@ -197,7 +197,7 @@
                                                         <div class="row mb-1">
 
                                                             <div class="col-3 position-relative">
-                                                                <select class=" form-control accountsSelect "
+                                                                <select required class=" form-control accountsSelect "
                                                                     name="account_number" id="fifth_level">
                                                                     <option value="">Select Account Codes
                                                                     </option>
@@ -259,25 +259,25 @@
                                                             </div>
 
                                                             <div class="col-3  position-relative">
-                                                                <input type="date"
+                                                                <input required type="date"
                                                                     class="form-control voucher_date form-control-md @error('voucher_name') is-invalid @enderror"
                                                                     id="voucher_date" name="voucher_date"
                                                                     value="" />
                                                             </div>
 
                                                             <div class="col position-relative">
-                                                                <input type="number"
+                                                                <input required type="number"
                                                                     @if (isset($JournalVoucherEntry))   value="{{ $JournalVoucherEntry->debit }}" @endif
                                                                     class="form-control debitInput form-control-md @error('debit') is-invalid @enderror"
-                                                                    id="debit"  min="1"  name="debit" placeholder="Debit"
+                                                                    id="debit"  min="0"  value="0" name="debit" placeholder="Debit"
                                                                     value="" />
 
                                                             </div>
                                                             <div class="col position-relative">
-                                                                <input type="number"
+                                                                <input required type="number"
                                                                     @if (isset($JournalVoucherEntry)) value="{{ $JournalVoucherEntry->credit }}" @endif
                                                                     class="form-control creditInput form-control-md @error('credit') is-invalid @enderror"
-                                                                    id="credit"  min="1"  name="credit"
+                                                                    id="credit"  min="0" value="0" name="credit"
                                                                     placeholder="Credit" value="" />
 
                                                             </div>

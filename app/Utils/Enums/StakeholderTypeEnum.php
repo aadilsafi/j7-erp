@@ -15,4 +15,5 @@ enum StakeholderTypeEnum: string
     case DEALER = 'D';
     case NEXT_OF_KIN = 'K';
     case LEAD = 'L';
+    case INVESTOR = 'I';
 }

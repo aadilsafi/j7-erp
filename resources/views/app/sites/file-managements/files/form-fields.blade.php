@@ -223,7 +223,7 @@
                                 @if (!isset($customer_file))
                                     <div class="row my-2">
                                         <div class="col-lg-12 col-md-12 col-sm-12 position-relative">
-                                            <label class="form-label fs-5" for="contact_persons">Customer Conatct
+                                            <label class="form-label fs-5" for="contact_persons">Customer Contact
                                                 persons
                                             </label>
                                             <select class="form-select form-select-lg select2" id="contact_persons"

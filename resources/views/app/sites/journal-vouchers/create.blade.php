@@ -233,6 +233,8 @@
             show: function() {
                 $(this).slideDown(function() {
                     $(this).find('.accountsSelect').select2({});
+                    $(this).find('.creditInput').val(0);
+                    $(this).find('.debitInput').val(0);
                 }), feather && feather.replace({
                     width: 14,
                     height: 14
@@ -249,6 +251,8 @@
 
             },
             hide: function(e) {
+                $('.creditInput').trigger('change')
+                $('.debitInput').trigger('change')
                 $(this).slideUp(e)
             }
 

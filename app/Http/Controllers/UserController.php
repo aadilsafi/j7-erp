@@ -17,7 +17,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    private $userInterface;
+    private $userInterface,$customFieldInterface;
 
     public function __construct(UserInterface $userInterface, CustomFieldInterface $customFieldInterface)
     {

@@ -1094,7 +1094,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             $customerAAccountRecievable =  $this->findOrCreateCustomerAccount($sales_plan->unit->id, $accountUnitHeadCode, $stakeholderTypeA);
 
             $file = FileManagement::where('id', $fileTitleTransfer->file_id)->first();
-            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->where('status', 1)->get();
+            $receipts = Receipt::where('sales_plan_id', $file->sales_plan_id)->get();
             $total_paid_amount = $receipts->sum('amount_in_numbers');
             $remainingSalesPlanAmount = (int)$sales_plan->total_price -  (int)$total_paid_amount;
 

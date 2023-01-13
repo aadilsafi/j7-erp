@@ -1004,11 +1004,11 @@
                 },
 
                 // 3. STAKEHOLDER DATA (LEAD'S DATA)
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'company[company_name]': {
                     required: function() {
                         return $("#stakeholder_as").val() == 'c';

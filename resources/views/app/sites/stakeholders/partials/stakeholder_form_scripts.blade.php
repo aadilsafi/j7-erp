@@ -498,11 +498,11 @@
 
         var validator = $("#stakeholderForm").validate({
             rules: {
-                'stakeholder_as': {
-                    required: function() {
-                        return $("#stakeholder_as").val() == 0;
-                    }
-                },
+                // 'stakeholder_as': {
+                //     required: function() {
+                //         return $("#stakeholder_as").val() == 0;
+                //     }
+                // },
                 'stakeholder_type': {
                     required: function() {
                         return $("#stakeholder_type").val() == 0;

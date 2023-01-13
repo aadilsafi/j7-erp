@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.import.kins', encryptParams($site_id)) }}
 @endsection
 
-@section('page-title', 'Import Stakeholders Kins')
+@section('page-title', 'Import Stakeholders Contacts')
 
 @section('page-vendor')
 @endsection
@@ -30,7 +30,7 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Stakeholders Kins</h2>
+                <h2 class="content-header-title float-start mb-0">Import Stakeholders Contacts</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.stakeholders.import.kins', encryptParams($site_id)) }}
                 </div>
@@ -43,7 +43,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form action="{{ route('sites.stakeholders.kins.saveImport', ['site_id' => encryptParams($site_id)]) }}"
+            <form action="{{ route('sites.stakeholders.contacts.saveImport', ['site_id' => encryptParams($site_id)]) }}"
                 id="teams-table-form" method="post">
                 @csrf
                 {{-- <form action="{{ route('storePreviewtest') }}" id="teams-table-form" method="get"> --}}

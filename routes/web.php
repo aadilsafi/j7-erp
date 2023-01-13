@@ -821,7 +821,7 @@ Route::group([
                             Route::view('/', 'app.sites.file-managements.import.importFilesContacts', ['preview' => false])->name('importFilesContacts');
                             Route::post('preview', [FileManagementController::class, 'ImportContactsPreview'])->name('importFilesContactsPreview');
                             Route::get('storePreview', [FileManagementController::class, 'storeContactsPreview'])->name('storeFileContactsPreview');
-                            Route::post('saveImport', [FileManagementController::class, 'saveContactsImport'])->name('saveFileContactsImport');
+                            Route::post('saveImport', [FileManagementController::class, 'saveFileContactsImport'])->name('saveFileContactsImport');
                         });
                     });
 

@@ -203,7 +203,7 @@ class FileManagementService implements FileManagementInterface
                 ->first();
           
             $data[$key]['file_management_id'] = $file->id;
-            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic',$data[$key]['conatct_cnic'])->first()->id;
+            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic',$data[$key]['contact_cnic'])->first()->id;
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
    
@@ -218,7 +218,7 @@ class FileManagementService implements FileManagementInterface
             unset($data[$key]['installment_no']);
             unset($data[$key]['sales_plan_id']);
             unset($data[$key]['stakeholder_id']);
-            unset($data[$key]['conatct_cnic']);
+            unset($data[$key]['contact_cnic']);
             unset($data[$key]['kin_cnic']);
            
             $file = FileStakeholderContact::create($data[$key]);

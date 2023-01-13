@@ -56,7 +56,7 @@ class FilesConatctsImport implements ToModel, WithChunkReading, WithBatchInserts
             'total_price' => $row['total_price'],
             'down_payment_total' => $row['down_payment_total'],
             'sales_plan_approval_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'),
-            'conatct_cnic' => $row['conatct_cnic'],
+            'contact_cnic' => $row['contact_cnic'],
             'kin_cnic' => $row['kin_cnic'],
         ]);
     }
@@ -80,7 +80,7 @@ class FilesConatctsImport implements ToModel, WithChunkReading, WithBatchInserts
             'total_price' =>  ['required', 'numeric', 'gt:0'],
             'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
             'sales_plan_approval_date' =>  ['required'],
-            'conatct_cnic' => ['sometimes', 'nullable', 'exists:App\Models\StakeholderContact,cnic'],
+            'contact_cnic' => ['sometimes', 'nullable', 'exists:App\Models\StakeholderContact,cnic'],
             'kin_cnic' => ['sometimes', 'nullable', 'exists:App\Models\Stakeholder,cnic'],
         ];
     }

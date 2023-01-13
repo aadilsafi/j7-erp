@@ -73,7 +73,7 @@ class ImportFilesContactsDataTable extends DataTable
             Column::computed('total_price')->title('Price')->searchable(true),
             Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
             Column::computed('sales_plan_approval_date')->title('Sales Plan Approval Date')->addClass('text-nowrap'),
-            Column::computed('conatct_cnic')->title('Contact Cnic')->addClass('text-nowrap'),
+            Column::computed('contact_cnic')->title('Contact Cnic')->addClass('text-nowrap'),
             Column::computed('kin_cnic')->addClass('text-nowrap'),
         ];
     }

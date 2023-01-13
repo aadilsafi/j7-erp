@@ -68,6 +68,10 @@ class ImportCompanyStakeholders implements ShouldQueue
             $data[$key]['is_imported'] = true;
             $data[$key]['full_name'] = $data[$key]['company_name'];
             $data[$key]['cnic'] = $data[$key]['registration'];
+
+            $data[$key]['mobile_contact'] = strpos($data[$key]['mobile_contact'], '+') == 0 ?  $data[$key]['mobile_contact'] : '+' . $data[$key]['mobile_contact'];
+            $data[$key]['office_contact'] = strpos($data[$key]['office_contact'], '+') == 0 ?  $data[$key]['office_contact'] : '+' . $data[$key]['office_contact'];
+            
             if ($data[$key]['origin'] != "null") {
                 $data[$key]['origin'] = 167;
             } else {

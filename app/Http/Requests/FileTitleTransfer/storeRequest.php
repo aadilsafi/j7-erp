@@ -33,6 +33,7 @@ class storeRequest extends FormRequest
             'attachments' => 'bail|required_if:checkAttachment,1',
             'attachments.*.attachment_label' => 'required_if:checkAttachment,1',
             'attachments.*.image' => 'required_if:checkAttachment,1',
+            'individual.mobile_contact' =>'required,unique:stakeholders,mobile_contact,'. $this->input('stackholder.stackholder_id'),
             // 'stackholder.stackholder_id' => 'required',
             // 'stackholder.full_name' => 'required_if:stackholder.stackholder_id,0',
             // 'stackholder.father_name' => 'required_if:stackholder.stackholder_id,0',
@@ -52,8 +53,8 @@ class storeRequest extends FormRequest
     {
         // if (!$validator->fails()) {
         $validator->after(function ($validator) {
-
-            $blacklisted = BacklistedStakeholder::where('cnic', $this->input('stackholder.cnic'))->first();
+        $cnic=(array_key_exists('individual',$this->input()) ? $this->input()['individual']['cnic'] : '');
+        $blacklisted = BacklistedStakeholder::where('cnic', $cnic)->first();
             if ($blacklisted) {
                 $validator->errors()->add('cnic', 'CNIC is BlackListed.');
             }

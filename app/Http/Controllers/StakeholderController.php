@@ -109,17 +109,17 @@ class StakeholderController extends Controller
      */
     public function store(stakeholderStoreRequest $request, $site_id)
     {
-        $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
+        // $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                if (empty($BacklistedStakeholder)) {
+                // if (empty($BacklistedStakeholder)) {
                     $inputs = $request->all();
                     $customFields = $this->customFieldInterface->getAllByModel(decryptParams($site_id), get_class($this->stakeholderInterface->model()));
                     $record = $this->stakeholderInterface->store($site_id, $inputs, $customFields);
                     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withSuccess(__('lang.commons.data_saved'));
-                } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
-                }
+                // } else {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
+                // }
             } else {
                 abort(403);
             }
@@ -209,18 +209,18 @@ class StakeholderController extends Controller
     {
         $site_id = decryptParams($site_id);
         $id = decryptParams($id);
-        $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
+        // $BacklistedStakeholder = BacklistedStakeholder::where('cnic', $request->individual['cnic'])->first();
         try {
             if (!request()->ajax()) {
-                if (empty($BacklistedStakeholder)) {
+                // if (empty($BacklistedStakeholder)) {
                     $inputs = $request->all();
                     $customFields = $this->customFieldInterface->getAllByModel($site_id, get_class($this->stakeholderInterface->model()));
 
                     $record = $this->stakeholderInterface->update($site_id, $id, $inputs, $customFields);
                     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams($site_id)])->withSuccess(__('lang.commons.data_updated'));
-                } else {
-                    return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
-                }
+                // } else {
+                //     return redirect()->route('sites.stakeholders.index', ['site_id' => encryptParams(decryptParams($site_id))])->withDanger(__('Stakeholder CNIC Is BlackListed!'));
+                // }
             } else {
                 abort(403);
             }
@@ -297,7 +297,7 @@ class StakeholderController extends Controller
     {
         $file_name = decryptParams($file_name);
         $stakeholder_id = decryptParams($stakeholder_id);
-       
+
         $stakeholder = Stakeholder::where('id', $stakeholder_id)->where('pin_code', $request->pin)->exists();
         if ($stakeholder) {
             return apiSuccessResponse($file_name);

@@ -747,6 +747,29 @@
                                 </ul>
                             </li>
                         @endcanany
+
+                        @canany(['sites.investors-deals.index'])
+                            <li>
+                                <a class="d-flex align-items-center" href="#">
+                                    <i class="bi bi-bar-chart-steps" style="margin-bottom: 10px;"></i>
+                                    <span class="menu-title text-truncate" data-i18n="file-managements">Step 4</span>
+                                </a>
+                                <ul>
+                                    @can('sites.investors-deals.index')
+                                        <li
+                                            class="nav-item {{ request()->routeIs('sites.investors-deals.index', ['site_id' => encryptParams($site_id)]) ? 'active' : null }}">
+                                            <a class="d-flex align-items-center"
+                                                href="{{ route('sites.investors-deals.index', ['site_id' => encryptParams($site_id)]) }}">
+                                                <i class="bi bi-people"></i>
+                                                </i>
+                                                <span class="menu-title text-truncate" data-i18n="Email">Investors Deals</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcanany
+
                     </ul>
                 </li>
             @endcanany

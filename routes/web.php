@@ -56,6 +56,7 @@ use App\Http\Controllers\{
     TransferReceiptController,
     JournalVoucherEntriesController,
     StakeholderImportController,
+    StakeholderInvestorController,
 };
 use App\Models\PaymentVocuher;
 use App\Models\Type;
@@ -996,6 +997,27 @@ Route::group([
                     });
                 });
 
+                // Stakeholder Investors
+                Route::group(['prefix' => 'investors-deals', 'as' => 'investors-deals.'], function () {
+                    Route::get('/', [StakeholderInvestorController::class, 'index'])->name('index');
+                    Route::get('create', [StakeholderInvestorController::class, 'create'])->name('create');
+                    Route::post('store', [StakeholderInvestorController::class, 'store'])->name('store');
+
+                    Route::get('destroy-selected', [StakeholderInvestorController::class, 'destroySelected'])->name('destroy-selected');
+
+                    Route::group(['prefix' => '/{id}'], function () {
+                        Route::get('edit', [StakeholderInvestorController::class, 'edit'])->name('edit');
+                        Route::put('update', [StakeholderInvestorController::class, 'update'])->name('update');
+                        Route::get('preview', [StakeholderInvestorController::class, 'show'])->name('preview');
+                        Route::get('check-investor', [StakeholderInvestorController::class, 'checkInvestor'])->name('check-investor');
+                        Route::get('approve-investor', [StakeholderInvestorController::class, 'approveInvestor'])->name('approve-investor');
+                        Route::get('revert-investor', [StakeholderInvestorController::class, 'revertInvestor'])->name('revert-investor');
+                        Route::get('dis-approve-investor', [StakeholderInvestorController::class, 'disapproveInvestor'])->name('dis-approve-investor');
+                    });
+                    Route::group(['prefix' => '/ajax', 'as' => 'ajax-'], function () {
+                        Route::post('get-units-data', [StakeholderInvestorController::class, 'getUnitsData'])->name('get-units-data');
+                    });
+                });
                 Route::get('import/sample-download/{order}', [AdditionalCostController::class, 'downloadSample'])->name('import.sample-download');
             });
         });

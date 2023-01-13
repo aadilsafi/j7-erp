@@ -683,7 +683,9 @@ class ReceiptService implements ReceiptInterface
                 $url = null;
                 $update_installments =  $this->updateInstallments($receipt);
             }
-        });
+
         return $receipt;
+
+        });
     }
 }

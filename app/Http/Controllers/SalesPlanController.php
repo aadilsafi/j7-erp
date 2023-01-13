@@ -1026,7 +1026,10 @@ class SalesPlanController extends Controller
                 $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
                 $data[$key]['approved_by'] = Auth::user()->id;
 
-                
+                if($data[$key]['approved_date'] == null) {
+                    $data[$key]['approved_date'] = today()->format('Y-m-d 00:00:00');
+                }
+
             }
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();

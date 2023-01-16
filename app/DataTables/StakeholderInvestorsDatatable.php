@@ -49,6 +49,16 @@ class StakeholderInvestorsDatatable extends DataTable
                 }
 
             })
+            ->editColumn('deal_status', function ($stakeholder_investor_deal) {
+                if($stakeholder_investor_deal->deal_status == "close"){
+                    return '<span class="badge badge-glow bg-warning">Close</span>';
+                }
+                else if($stakeholder_investor_deal->deal_status == "open"){
+                    return '<span class="badge badge-glow bg-success">Open</span>';
+                }
+
+            })
+
             ->editColumn('contact', function ($stakeholder_investor_deal) {
                 if ($stakeholder_investor_deal->investor->stakeholder_as == 'i') {
                     return $stakeholder_investor_deal->investor->mobile_contact;
@@ -178,6 +188,7 @@ class StakeholderInvestorsDatatable extends DataTable
             Column::make('total_received_amount')->title('Amount Receivable')->addClass('text-nowrap'),
             Column::make('total_payable_amount')->title('Amount Payable')->addClass('text-nowrap'),
             Column::make('status')->title('Status')->addClass('text-nowrap'),
+            Column::make('deal_status')->title('Deal Status')->addClass('text-nowrap'),
         ];
 
         $columns[] = Column::make('created_date')->addClass('text-nowrap');

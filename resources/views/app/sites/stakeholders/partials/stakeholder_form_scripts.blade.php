@@ -6,7 +6,7 @@
             $data = old();
         @endphp
 
-        @if (isset(old('stakeholder_type')))
+        @if (!is_null(old('stakeholder_type')))
             $('#stakeholder_type').trigger('change');
             $("#stakeholder_as").trigger('change');
             $('#residential_country').val({{ old('residential.country') }}).trigger('change');

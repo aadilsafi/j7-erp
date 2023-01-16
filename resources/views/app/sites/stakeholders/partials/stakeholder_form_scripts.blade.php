@@ -6,18 +6,12 @@
             $data = old();
         @endphp
 
-        @if (!is_null(old('stakeholder_type')))
+        @if (isset(old('stakeholder_type')))
             $('#stakeholder_type').trigger('change');
             $("#stakeholder_as").trigger('change');
-        @endif
-
-        @if (!is_null(old('residential.country')))
-            $('#residential_country').val({{ old('residential.country') }});
+            $('#residential_country').val({{ old('residential.country') }}).trigger('change');
             $('#residential_country').trigger('change')
-        @endif
-
-        @if (!is_null(old('mailing.country')))
-            $('#mailing_country').val({{ old('mailing.country') }});
+            $('#mailing_country').val({{ old('mailing.country') }}).trigger('change');
             $('#mailing_country').trigger('change')
         @endif
 
@@ -33,7 +27,7 @@
 
             if ($(this).val() == 'L') {
                 $('.showRequired').hide();
-            }  else {
+            } else {
                 $('.showRequired').show();
 
             }
@@ -215,7 +209,8 @@
 
 
                             @if (!is_null(old('residential.state')))
-                                $('#residential_state').val({{ old('residential.state') }});
+                                $('#residential_state').val({{ old('residential.state') }})
+                                    .trigger('change');
                                 $('#residential_state').trigger('change')
                             @endif
                         } else {

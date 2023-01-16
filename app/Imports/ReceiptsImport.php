@@ -34,15 +34,15 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
     public function model(array $row)
     {
         if (strtolower($row['mode_of_payment']) == 'cheque') {
-            if (Str::length($row['cheque_no'])) {
-                $error = ['Cheque No is not required in Case of Cheque.'];
+            if (Str::length($row['cheque_no']) == 0) {
+                $error = ['Cheque No is required in Case of Cheque.'];
                 $failures[] = new Failure($this->getRowNumber(), 'cheque_no', $error, $row);
 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
             }
 
-            if (Str::length($row['bank_acount_number'])) {
-                $error = ['Bank Account Number is not required in Case of Cheque.'];
+            if (Str::length($row['bank_acount_number']) == 0) {
+                $error = ['Bank Account Number is required in Case of Cheque.'];
                 $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
@@ -50,15 +50,15 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
         }
 
         if (strtolower($row['mode_of_payment']) == 'online') {
-            if (Str::length($row['online_transaction_no'])) {
-                $error = ['Online Transaction No is not required in Case of Online.'];
+            if (Str::length($row['online_transaction_no']) == 0) {
+                $error = ['Online Transaction No is required in Case of Online.'];
                 $failures[] = new Failure($this->getRowNumber(), 'online_transaction_no', $error, $row);
 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
             }
 
-            if (Str::length($row['bank_acount_number'])) {
-                $error = ['Bank Account Number is not required in Case of Online.'];
+            if (Str::length($row['bank_acount_number']) == 0) {
+                $error = ['Bank Account Number is required in Case of Online.'];
                 $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);

@@ -37,6 +37,7 @@ class AccountLedger extends Model
         'transfer_receipt_id',
         'manual_entry',
         'journal_voucher_id',
+        'investor_deal_id',
     ];
 
     protected $casts = [
@@ -88,4 +89,10 @@ class AccountLedger extends Model
     {
         return $this->belongsTo(DealerIncentiveModel::class, 'dealer_incentive_id', 'id');
     }
+
+    public function investorDeal()
+    {
+        return $this->belongsTo(DealerIncentiveModel::class, 'investor_deal_id', 'id');
+    }
+
 }

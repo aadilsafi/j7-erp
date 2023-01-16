@@ -5,11 +5,13 @@ namespace App\Services\StakeholderInvestorDeals;
 use App\Exceptions\GeneralException;
 use App\Models\Stakeholder;
 use App\Models\StakeholderInvestor;
+use App\Models\StakeholderInvestorDeal;
 use App\Models\StakeholderType;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\Stakeholder\Interface\StakeholderInterface;
 use App\Services\StakeholderInvestorDeals\investor_deals_interface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use Auth;
 use DB;
 use Exception;
 use Illuminate\Support\Str;
@@ -35,16 +37,15 @@ class investor_deals_service implements investor_deals_interface
     // Store
     public function store($site_id, $inputs)
     {
-        dd($inputs,$site_id);
         DB::transaction(function () use ($site_id, $inputs) {
             $individual = $inputs['individual'];
 
             $company = $inputs['company'];
 
-            if (isset($individual['cnic']) &&  $inputs['dealer_id'] == 0 && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
+            if (isset($individual['cnic']) &&  $inputs['investor_id'] == null && $inputs['stakeholder_as'] == 'i' && $this->stakeholderInterface->model()->where('cnic', $individual['cnic'])->exists()) {
                 throw new GeneralException('Stakeholder CNIC already exists');
             }
-            if (isset($company['cnic']) &&  $inputs['dealer_id'] == 0 && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $company['cnic'])->exists()) {
+            if (isset($company['cnic']) &&  $inputs['investor_id'] == null && $inputs['stakeholder_as'] == 'c' && $this->stakeholderInterface->model()->where('cnic', $company['cnic'])->exists()) {
                 throw new GeneralException('Company Registration No already exists');
             }
 
@@ -176,11 +177,52 @@ class investor_deals_service implements investor_deals_interface
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }
 
-            $investor_Data = [
-                'site_id' =>$site_id,
+            $serail_no = $this->model()::max('id') + 1;
+            $serail_no =  sprintf('%03d', $serail_no);
+
+            $unit_deals = $inputs['unit-deals'];
+            $total_received_amount = 0.0;
+            foreach ($unit_deals as $unit_deal) {
+                $total_received_amount = (float)$total_received_amount + (float)str_replace(',', '', $unit_deal['received_amount']);
+            }
+
+            $investor_data = [
+                'site_id' => $site_id,
+                'user_id' => Auth::user()->id,
+                'investor_id' => $stakeholder->id,
+                'serial_number' => 'ID-' . $serail_no,
+                'doc_no' => $inputs['doc_number'],
+                'total_received_amount' => $total_received_amount,
+                'total_payable_amount' => 0.0,
+                'created_date' => $inputs['created_date'],
+                'status' => 'pending',
+                'deal_status' => 'open',
             ];
 
+            $stakeholder_investor = $this->model()->create($investor_data);
+
+            if (isset($inputs['attachment'])&& count($inputs['attachment']) > 0) {
+                for ($j = 0; $j < count($inputs['attachment']); $j++) {
+                    $stakeholder_investor->addMedia($inputs['attachment'][$j])->toMediaCollection('investor_deal_receivable_attachments');
+                    changeImageDirectoryPermission();
+                }
+            }
+
+            foreach ($unit_deals as $unit_deal_data) {
+                $investor_deal = new StakeholderInvestorDeal();
+                $investor_deal->site_id = $site_id;
+                $investor_deal->stakeholder_investor_id = $site_id;
+                $investor_deal->site_id = $site_id;
+                $investor_deal->site_id = $stakeholder_investor->id;
+                $investor_deal->unit_id = $unit_deal_data['unit'];
+                $investor_deal->received_amount = $unit_deal_data['received_amount'];
+                $investor_deal->remarks = $unit_deal_data['remarks'];
+                $investor_deal->status = 'active';
+                $investor_deal->created_date = $inputs['created_date'];
+                $investor_deal->save();
+            }
 
         });
+        return true;
     }
 }

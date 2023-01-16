@@ -34,40 +34,59 @@ class StakeholderInvestorsDatatable extends DataTable
         $columns = array_column($this->getColumns(), 'data');
         $editColumns = (new EloquentDataTable($query))
             ->addIndexColumn()
-
-            ->editColumn('cnic', function ($stakeholder) {
-                return $stakeholder->investor->cnic;
+            ->editColumn('full_name', function ($stakeholder_investor_deal) {
+                return $stakeholder_investor_deal->investor->full_name;
             })
-            ->editColumn('contact', function ($stakeholder) {
-                if ($stakeholder->investor->stakeholder_as == 'i') {
-                    return $stakeholder->investor->mobile_contact;
+            ->editColumn('cnic', function ($stakeholder_investor_deal) {
+                return $stakeholder_investor_deal->investor->cnic;
+            })
+            ->editColumn('status', function ($stakeholder_investor_deal) {
+                if($stakeholder_investor_deal->status == "pending"){
+                    return '<span class="badge badge-glow bg-warning">Pending</span>';
+                }
+                else if($stakeholder_investor_deal->status == "approved"){
+                    return '<span class="badge badge-glow bg-success">Approved</span>';
+                }
+
+            })
+            ->editColumn('contact', function ($stakeholder_investor_deal) {
+                if ($stakeholder_investor_deal->investor->stakeholder_as == 'i') {
+                    return $stakeholder_investor_deal->investor->mobile_contact;
                 } else {
-                    return $stakeholder->investor->office_contact;
+                    return $stakeholder_investor_deal->investor->office_contact;
                 }
             })
-            // ->editColumn('nationality', function ($stakeholder) {
-            //     return  $stakeholder->nationalityCountry->name;
-            // })
-            ->editColumn('created_at', function ($stakeholder) {
-                return editDateColumn($stakeholder->created_at);
+            ->editColumn('total_received_amount', function ($stakeholder_investor_deal) {
+                return  number_format((float)$stakeholder_investor_deal->total_received_amount, 2);
             })
-            ->editColumn('updated_at', function ($stakeholder) {
-                return editDateColumn($stakeholder->updated_at);
+            ->editColumn('total_payable_amount', function ($stakeholder_investor_deal) {
+                if(isset($stakeholder_investor_deal->total_payable_amount)){
+                    return  number_format((float)$stakeholder_investor_deal->total_payable_amount, 2);
+                }
+                else{
+                    return '-';
+                }
             })
-            // ->editColumn('actions', function ($stakeholder) {
-            //     return view('app.sites.stakeholders.actions', ['site_id' => decryptParams($this->site_id), 'id' => $stakeholder->id]);
-            // })
-            ->editColumn('check', function ($stakeholder) {
-                return $stakeholder;
+            ->editColumn('created_date', function ($stakeholder_investor_deal) {
+                return editDateColumn($stakeholder_investor_deal->created_date);
+            })
+            ->editColumn('updated_at', function ($stakeholder_investor_deal) {
+                return editDateColumn($stakeholder_investor_deal->updated_at);
+            })
+            ->editColumn('check', function ($stakeholder_investor_deal) {
+                return $stakeholder_investor_deal;
             })
             ->setRowId('id')
 
             ->rawColumns(array_merge($columns, ['action', 'check']))
-            ->editColumn('residential_country_id', function ($stakeholder) {
-                return  $stakeholder->residentialCountry != null ? $stakeholder->residentialCountry->name : '-';
+            ->editColumn('residential_country_id', function ($stakeholder_investor_deal) {
+                return  $stakeholder_investor_deal->residentialCountry != null ? $stakeholder_investor_deal->residentialCountry->name : '-';
             })
-            ->editColumn('residential_city_id', function ($stakeholder) {
-                return  $stakeholder->residentialCity != null ? $stakeholder->residentialCity->name : '-';
+            ->editColumn('residential_city_id', function ($stakeholder_investor_deal) {
+                return  $stakeholder_investor_deal->residentialCity != null ? $stakeholder_investor_deal->residentialCity->name : '-';
+            })
+            ->editColumn('actions', function ($stakeholder_investor_deal) {
+                return view('app.sites.stakeholder-investors.actions', ['site_id' => $this->site_id, 'id' => $stakeholder_investor_deal->id, 'status' => $stakeholder_investor_deal->status]);
             });
 
 
@@ -150,20 +169,20 @@ class StakeholderInvestorsDatatable extends DataTable
     protected function getColumns(): array
     {
 
-
-
         $columns = [
-            Column::computed('DT_RowIndex')->title('#'),
-            Column::computed('full_name')->name('investor.name')->title('Investor Name'),
-            // Column::make('father_name')->title('Father / Husband Name')->addClass('text-nowrap'),
+            Column::make('serial_number')->title('Sr#')->addClass('text-nowrap'),
+            Column::make('doc_no')->title('Document#')->addClass('text-nowrap'),
+            Column::computed('full_name')->name('investor.full_name')->title('Investor Name')->searchable(true)->orderable(true),
             Column::computed('cnic')->name('investor.cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
-            Column::computed('contact')->name('investor.contact')->title('Contact'),
-
+            Column::computed('contact')->name('investor.mobile_contact')->title('Contact')->searchable(false)->orderable(false),
+            Column::make('total_received_amount')->title('Amount Receivable')->addClass('text-nowrap'),
+            Column::make('total_payable_amount')->title('Amount Payable')->addClass('text-nowrap'),
+            Column::make('status')->title('Status')->addClass('text-nowrap'),
         ];
 
-        $columns[] = Column::make('created_at')->addClass('text-nowrap');
-        $columns[] = Column::make('updated_at')->addClass('text-nowrap');
-
+        $columns[] = Column::make('created_date')->addClass('text-nowrap');
+        // $columns[] = Column::make('updated_at')->addClass('text-nowrap');
+        $columns[] = Column::computed('actions')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
 
         return $columns;

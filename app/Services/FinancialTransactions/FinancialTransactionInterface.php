@@ -61,4 +61,7 @@ interface FinancialTransactionInterface
 
     public function makeVendorApAccount($stakeholder_id);
 
+    public function makeInvestorDealReceivableTransaction($id);
+
+
 }

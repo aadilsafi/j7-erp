@@ -145,8 +145,6 @@ class FileManagementService implements FileManagementInterface
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
-            $url = $data[$key]['image_url'];
-
             unset($data[$key]['unit_short_label']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
@@ -160,11 +158,6 @@ class FileManagementService implements FileManagementInterface
             unset($data[$key]['image_url']);
 
             $file = $this->model()->create($data[$key]);
-
-            if (isset($url)) {
-                $file->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('application_form_photo');
-                changeImageDirectoryPermission();
-            }
         }
         TempFiles::truncate();
         return $file;
@@ -201,13 +194,13 @@ class FileManagementService implements FileManagementInterface
                 ->where('sales_plan_id', $salePlan->id)
                 ->where('stakeholder_id', $stakeholder->id)
                 ->first();
-          
+
             $data[$key]['file_management_id'] = $file->id;
-            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic',$data[$key]['contact_cnic'])->first()->id;
+            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic', $data[$key]['contact_cnic'])->first()->id;
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
-   
-           
+
+
             unset($data[$key]['unit_short_label']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
@@ -220,9 +213,8 @@ class FileManagementService implements FileManagementInterface
             unset($data[$key]['stakeholder_id']);
             unset($data[$key]['contact_cnic']);
             unset($data[$key]['kin_cnic']);
-           
-            $file = FileStakeholderContact::create($data[$key]);
 
+            $file = FileStakeholderContact::create($data[$key]);
         }
         TempFilesStakeholderContact::truncate();
         return $file;

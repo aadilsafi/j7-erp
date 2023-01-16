@@ -10,11 +10,7 @@ class TempSalePlanInstallment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'unit_short_label',
-        'stakeholder_cnic',
-        'total_price',
-        'down_payment_total',
-        'validity',
+        'sales_plan_doc_no',
         'type',
         'label',
         'due_date',

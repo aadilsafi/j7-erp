@@ -41,7 +41,9 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['validity']))->format('Y-m-d 00:00:00'),
             'created_date' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['creation_date']))->format('Y-m-d 00:00:00') ?? null,
             'status' => 'approved',
+            'user_email' => $row['user_email'],
             'comment' => $row['comment'],
+            'approve_by_user_email' => $row['approve_by_user_email'],
             'approved_date' => strtolower($row['approved_date']) != 'null' ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['approved_date']))->format('Y-m-d 00:00:00') : null,
         ]);
     }
@@ -60,6 +62,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
     public function rules(): array
     {
         return [
+            'user_email' => ['required', 'exists:users,email'],
             'doc_no' =>  ['required', 'unique:App\Models\SalesPlan,doc_no', 'distinct'],
             'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
             'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
@@ -70,6 +73,7 @@ class SalesPlanImport implements ToModel, WithChunkReading, WithBatchInserts, Wi
             'lead_source' =>  ['required'],
             'validity' =>  ['required'],
             'approved_date' =>  ['required'],
+            'approve_by_user_email' =>  ['required', 'exists:App\Models\User,email'],
         ];
     }
 

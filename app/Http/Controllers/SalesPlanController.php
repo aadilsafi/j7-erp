@@ -147,11 +147,10 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-
         try {
-            $validator = Validator::make($request->all(), [
-                'individual.cnic' => 'unique:backlisted_stakeholders,cnic',
-                'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact',
+            $validator = Validator::make($request->individual, [
+                'cnic' => ['unique:backlisted_stakeholders,cnic'],
+                'mobile_contact' => ['unique:stakeholders,mobile_contact,' . (int)$request->stackholder['stackholder_id']],
 
             ], [
                 'individual.cnic' => 'This CNIC is BlackListed.'
@@ -458,9 +457,13 @@ class SalesPlanController extends Controller
         }
     }
 
-    public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id, $generatePdf = true)
+    public function approveSalesPlan(Request $request, $site_id, $floor_id, $unit_id, $generatePdf = true, $userId = 0)
     {
-        $response =  DB::transaction(function () use ($request, $generatePdf) {
+        if ($userId == 0) {
+            $userId = Auth::user()->id;
+        }
+        $response =  DB::transaction(function () use ($request, $generatePdf, $userId) {
+
             $salesPlan = SalesPlan::find($request->salesPlanID);
             $unit_id =  $salesPlan->unit->id;
 
@@ -489,14 +492,14 @@ class SalesPlanController extends Controller
                 }
 
                 $salePlan->status = 2;
-                $salePlan->dis_approved_by = Auth::user()->id;
+                $salePlan->dis_approved_by = $userId;
                 $salePlan->dis_approved_date = now();
                 // $salePlan->approved_date = $request->approve_date . date(' H:i:s');
                 $salePlan->update();
             }
             $salesPlan = (new SalesPlan())->where('id', $request->salesPlanID)->update([
                 'status' => 1,
-                'approved_by' => Auth::user()->id,
+                'approved_by' => $userId,
                 'approved_date' => $request->approve_date . date(' H:i:s'),
                 'payment_plan_serial_id' => 'PP-' . $payment_serial_number,
             ]);
@@ -973,8 +976,14 @@ class SalesPlanController extends Controller
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
 
+                $user = User::where('email', $data[$key]['user_email'])->first();
+                if (!$user) {
+                    $userId = Auth::user()->id;
+                } else {
+                    $userId = $user->id;
+                }
                 // $data[$key]['site_id'] = decryptParams($site_id);
-                $data[$key]['user_id'] = Auth::user()->id;
+                $data[$key]['user_id'] = $userId;
                 $data[$key]['comments'] = $data[$key]['comment'];
 
                 $data[$key]['status'] = array_search($data[$key]['status'], $status);
@@ -1012,59 +1021,35 @@ class SalesPlanController extends Controller
                 $data[$key]['is_imported'] = true;
                 $data[$key]['serial_no'] =  'SI-' . $serail_no;
                 $data[$key]['investment_plan_serial_id'] = 'IP-' . $serail_no;
-                // if ($data[$key]['status'] == '1') {
-                //     $payment_plan = SalesPlan::where('payment_plan_serial_id', '!=', null)->get();
-                //     $payment_plan = collect($payment_plan)->last();
 
-                //     if (isset($payment_plan)) {
-                //         if ($payment_plan->payment_plan_serial_id == null) {
-                //             $payment_serial_number = 001;
-                //             $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-                //         } else {
-                //             $payment_serial_number = substr($payment_plan->payment_plan_serial_id, 3);
-                //             $payment_serial_number = (int)$payment_serial_number + 1;
-                //             $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-                //         }
-                //     } else {
-                //         $payment_serial_number = 001;
-                //         $payment_serial_number =  sprintf('%03d', $payment_serial_number);
-                //     }
-
-                //     $data[$key]['payment_plan_serial_id'] = 'PP-' . $payment_serial_number;
-                //     $data[$key]['approved_by'] = Auth::user()->id;
-
-
-            }
-            $data[$key]['created_at'] = now();
-            $data[$key]['updated_at'] = now();
-
-
-                // }
-                if ($data[$key]['approved_date'] == null) {
-                    $data[$key]['approved_date'] = today()->format('Y-m-d');
-                }
                 $data[$key]['created_at'] = now();
                 $data[$key]['updated_at'] = now();
 
+                if ($data[$key]['approved_date'] == null) {
+                    $data[$key]['approved_date'] = today()->format('Y-m-d');
+                }
+
+
+                $data[$key]['created_at'] = now();
+                $data[$key]['updated_at'] = now();
+
+                $approvalUser = User::where('email', $data[$key]['approve_by_user_email'])->first();
+                if (!$approvalUser) {
+                    $approvalUserId = $userId;
+                } else {
+                    $approvalUserId = $approvalUser->id;
+                }
                 unset($data[$key]['stakeholder_cnic']);
                 unset($data[$key]['unit_short_label']);
                 unset($data[$key]['lead_source']);
-                unset($data[$key]['comment']);
-
-                // dd($data);
+                unset($data[$key]['user_email']);
+                unset($data[$key]['approve_by_user_email']);
 
                 $salePlan = SalesPlan::create($data[$key]);
 
-                $request->request->add(['salesPlanID' => $salePlan->id, 'approve_date' => $data[$key]['approved_date']]);
-                $result = $this->approveSalesPlan($request, $salePlan->id, 1, 1,false);
-
-                // if ($data[$key]['status'] == '1') {
-                //     $transaction = $this->financialTransactionInterface->makeSalesPlanTransaction($salePlan->id);
-                //     if (is_a($transaction, 'Exception') && is_a($transaction, 'GeneralException')) {
-                //         return apiErrorResponse('invalid_amout');
-                //     }
-                // }
-            // }
+                $request->request->add(['salesPlanID' => $salePlan->id, 'approve_date' => Carbon::parse($salePlan->approved_date)->format('Y-m-d')]);
+                $result = $this->approveSalesPlan($request, $salePlan->id, 1, 1, false, $approvalUserId);
+            }
         });
         TempSalePlan::query()->truncate();
         return redirect()->route('sites.floors.units.sales-plans.index', ['site_id' => encryptParams(decryptParams($site_id)), 'floor_id' => encryptParams(0), 'unit_id' => encryptParams(0)])->withSuccess('Sales Plan Imported!');

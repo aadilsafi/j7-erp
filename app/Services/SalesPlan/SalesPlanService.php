@@ -120,7 +120,7 @@ class SalesPlanService implements SalesPlanInterface
                     'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
                     'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
-                    'nationality' => $individual['nationality'],
+                    'nationality' => $individual['nationality'] ?? 167,
                 ];
             } else if ($stakeholder_as == 'c') {
                 $stakeholderData = [

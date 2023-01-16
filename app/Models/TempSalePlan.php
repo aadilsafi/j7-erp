@@ -24,6 +24,8 @@ class TempSalePlan extends Model
         'status',
         'comment',
         'created_date',
-        'approved_date'
+        'approved_date',
+        'user_email',
+        'approve_by_user_email',
     ];
 }

@@ -10,13 +10,8 @@ class TempReceipt extends Model
     use HasFactory;
 
     protected $fillable = [
-        'unit_short_label',
         'doc_no',
-        'stakeholder_cnic',
-        'total_price',
-        'discounted_amount',
-        'down_payment_total',
-        'validity',
+        'sales_plan_doc_no',
         'mode_of_payment',
         'cheque_no',
         'bank_name',
@@ -27,6 +22,7 @@ class TempReceipt extends Model
         'amount',
         'status',
         'image_url',
-        'installment_no'
+        'installment_no',
+        'discounted_amount',
     ];
 }

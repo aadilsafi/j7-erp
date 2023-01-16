@@ -16,11 +16,7 @@ return new class extends Migration
         Schema::create('temp_files', function (Blueprint $table) {
             $table->id();
             $table->string('doc_no')->nullable();
-            $table->string('unit_short_label')->nullable();
-            $table->string('stakeholder_cnic')->nullable();
-            $table->string('total_price')->nullable();
-            $table->string('down_payment_total')->nullable();
-            $table->string('sales_plan_approval_date')->nullable();
+            $table->string('sales_plan_doc_no')->nullable();
             $table->string('registration_no')->nullable();
             $table->string('application_no')->nullable();
             $table->string('note_serial_number')->nullable();

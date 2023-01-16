@@ -15,11 +15,7 @@ return new class extends Migration
     {
         Schema::create('temp_files_stakeholder_contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('unit_short_label')->nullable();
-            $table->string('stakeholder_cnic')->nullable();
-            $table->string('total_price')->nullable();
-            $table->string('down_payment_total')->nullable();
-            $table->string('sales_plan_approval_date')->nullable();
+            $table->string('file_doc_no')->nullable();
             $table->string('contact_cnic')->nullable();
             $table->string('kin_cnic')->nullable();
             $table->timestamps();

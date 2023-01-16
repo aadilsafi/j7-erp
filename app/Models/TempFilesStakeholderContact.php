@@ -10,11 +10,7 @@ class TempFilesStakeholderContact extends Model
     use HasFactory;
 
     protected $fillable = [
-        'unit_short_label',
-        'stakeholder_cnic',
-        'total_price',
-        'down_payment_total',
-        'sales_plan_approval_date',
+        'file_doc_no',
         'contact_cnic',
         'kin_cnic',
     ];

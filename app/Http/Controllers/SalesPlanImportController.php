@@ -428,16 +428,8 @@ class SalesPlanImportController extends Controller
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
 
-                // $data[$key]['site_id'] = decryptParams($site_id);
-
-                $stakeholderId = Stakeholder::select('id')->where('cnic', $data[$key]['stakeholder_cnic'])->first();
-                $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-
-                $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
-                    ->where('unit_id', $unitId->id)
-                    ->where('total_price', $data[$key]['total_price'])
-                    ->where('down_payment_total', $data[$key]['down_payment_total'])
-                    ->where('validity', $data[$key]['validity'])
+            
+                $salePlan = SalesPlan::where('doc_no', $data[$key]['sales_plan_doc_no'])
                     ->first();
 
                 $salesPlansIds[$salePlan->id] = $salePlan->id;
@@ -466,7 +458,7 @@ class SalesPlanImportController extends Controller
                 $data[$key]['created_at'] = now();
                 $data[$key]['updated_at'] = now();
 
-                unset($data[$key]['unit_short_label']);
+                unset($data[$key]['sales_plan_doc_no']);
                 unset($data[$key]['stakeholder_cnic']);
                 unset($data[$key]['total_price']);
                 unset($data[$key]['total_amount']);

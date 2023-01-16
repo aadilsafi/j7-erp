@@ -28,8 +28,10 @@ return new class extends Migration
             $table->date('validity');
             $table->string('status');
             $table->string('comment')->nullable();
+            $table->string('user_email')->nullable();
             $table->string('approved_date')->nullable();
             $table->string('created_date')->nullable();
+            $table->string('approve_by_user_email')->nullable();
             $table->timestamps();
         });
     }

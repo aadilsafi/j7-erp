@@ -148,20 +148,22 @@ class ImportSalesPlanDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('stakeholder_cnic')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('total_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('unit_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('discount_percentage')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('discount_total')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('down_payment_percentage')->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('down_payment_total')->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('lead_source')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('created_date')->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('validity')->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('status')->title('Status')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('comment')->addClass('removeTolltip')->addClass('text-nowrap'),
-            Column::computed('approved_date')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('user_email')->addClass('text-nowrap'),
+            Column::make('unit_short_label')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('stakeholder_cnic')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('total_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('unit_price')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('discount_percentage')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('discount_total')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('down_payment_percentage')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('down_payment_total')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('lead_source')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('created_date')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('validity')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('status')->title('Status')->searchable(true)->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('comment')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('approved_date')->addClass('removeTolltip')->addClass('text-nowrap'),
+            Column::make('approve_by_user_email')->addClass('removeTolltip')->addClass('text-nowrap'),
         ];
     }
 }

@@ -16,11 +16,7 @@ return new class extends Migration
         Schema::create('temp_receipts', function (Blueprint $table) {
             $table->id();
             $table->string('doc_no')->nullable();
-            $table->string('unit_short_label')->nullable();
-            $table->bigInteger('stakeholder_cnic')->nullable();
-            $table->float('total_price')->nullable();
-            $table->float('down_payment_total')->nullable();
-            $table->date('validity')->nullable();
+            $table->string('sales_plan_doc_no')->nullable();
             $table->string('mode_of_payment')->nullable();
             $table->string('cheque_no')->nullable();
             $table->string('bank_name')->nullable();

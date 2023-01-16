@@ -101,17 +101,13 @@ class ImportSalesPlanInstallmentsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
-            Column::computed('type')->addClass('removeTolltip')->searchable(true),
-            Column::computed('label')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('due_date')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('installment_no')->addClass('removeTolltip'),
-            Column::computed('total_amount')->addClass('removeTolltip'),
-            Column::computed('due_date')->searchable(true)->addClass('removeTolltip'),
+            Column::make('sales_plan_doc_no')->addClass('text-nowrap'),
+            Column::make('type')->addClass('removeTolltip')->searchable(true),
+            Column::make('label')->searchable(true)->addClass('removeTolltip'),
+            Column::make('due_date')->searchable(true)->addClass('removeTolltip'),
+            Column::make('installment_no')->addClass('removeTolltip'),
+            Column::make('total_amount')->addClass('removeTolltip'),
+            Column::make('due_date')->searchable(true)->addClass('removeTolltip'),
         ];
     }
 }

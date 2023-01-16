@@ -15,14 +15,10 @@ return new class extends Migration
     {
         Schema::create('temp_sales_plan_additional_costs', function (Blueprint $table) {
             $table->id();
-            $table->string('unit_short_label');
-            $table->bigInteger('stakeholder_cnic');
-            $table->float('total_price');
-            $table->float('down_payment_total');
-            $table->date('validity');
-            $table->string('additional_costs_name');
-            $table->integer('percentage');
-            $table->float('total_amount');
+            $table->string('sales_plan_doc_no')->nullable();
+            $table->string('additional_costs_name')->nullable();
+            $table->integer('percentage')->nullable();
+            $table->float('total_amount')->nullable();
             $table->timestamps();
         });
     }

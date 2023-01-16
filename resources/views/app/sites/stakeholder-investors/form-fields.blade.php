@@ -50,7 +50,7 @@
                     </div> --}}
 
                     <div class="col-3 position-relative">
-                        <p>Received Amount</p>
+                        <p>Amount Receivable</p>
                     </div>
 
                     {{-- <div class="col-3 position-relative">
@@ -111,7 +111,7 @@
                                                             <input type="text" required
                                                                 class="form-control amountFormat received_amount form-control-md @error('received_amount') is-invalid @enderror"
                                                                 id="received_amount" name="received_amount"
-                                                                placeholder="Received Amount" value="" />
+                                                                placeholder="Amount Receivable" value="" />
 
                                                         </div>
                                                         {{-- <div class="col-3 position-relative">
@@ -154,7 +154,7 @@
 
 
                         <div class="col-4 position-relative">
-                            <p>Total Received Amount</p>
+                            <p>Total Amount Receivable</p>
                         </div>
 
                         <div class="col-3 position-relative">

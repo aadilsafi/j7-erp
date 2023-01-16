@@ -226,6 +226,14 @@ class SalesPlanService implements SalesPlanInterface
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
                 ];
                 $stakeholderType = (new StakeholderType())->insert($stakeholderTypeData);
             }

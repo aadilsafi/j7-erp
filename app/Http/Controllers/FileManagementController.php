@@ -291,67 +291,65 @@ class FileManagementController extends Controller
 
     // import files Contacts
 
+    public function ImportContactsPreview(Request $request, $site_id)
+    {
+        try {
 
+            if ($request->hasfile('attachment')) {
+                $request->validate([
+                    'attachment' => 'required|mimes:xlsx',
+                ]);
 
-       public function ImportContactsPreview(Request $request, $site_id)
-       {
-           try {
-   
-               if ($request->hasfile('attachment')) {
-                   $request->validate([
-                       'attachment' => 'required|mimes:xlsx',
-                   ]);
-  
-                   TempFilesStakeholderContact::query()->truncate();
-   
-                   $model = new TempFilesStakeholderContact();
-              
-                   $import = new FilesConatctsImport($model->getFillable());
-                   $import->import($request->file('attachment'));
-   
-                   return redirect()->route('sites.file-managements.storeFileContactsPreview', ['site_id' => $site_id]);
-               } else {
-                   return Redirect::back()->withDanger('Select File to Import');
-               }
-           } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-   
-               if (count($e->failures()) > 0) {
-                   $data = [
-                       'site_id' => decryptParams($site_id),
-                       'errorData' => $e->failures()
-                   ];
-               }
-               return Redirect::back()->with(['data' => $e->failures()]);
-           }
-       }
-   
-       public function storeContactsPreview(Request $request, $site_id)
-       {
-           $model = new TempFilesStakeholderContact();
-           $dataTable = new ImportFilesContactsDataTable($site_id);
-   
-           if ($model->count() == 0) {
-               return redirect()->route('sites.file-managements.customers', ['site_id' => $site_id])->withSuccess('No Data Found');
-           } else {
-   
-               $data = [
-                   'site_id' => decryptParams($site_id),
-                   'final_preview' => true,
-                   'preview' => false,
-                   'db_fields' =>  $model->getFillable(),
-               ];
-               return $dataTable->with($data)->render('app.sites.file-managements.import.importFilesContactsPreview', $data);
-           }
-       }
-   
-       public function saveFileContactsImport(Request $request, $site_id)
-       {
-       
+                TempFilesStakeholderContact::query()->truncate();
+
+                $model = new TempFilesStakeholderContact();
+
+                $import = new FilesConatctsImport($model->getFillable());
+                $import->import($request->file('attachment'));
+
+                return redirect()->route('sites.file-managements.storeFileContactsPreview', ['site_id' => $site_id]);
+            } else {
+                return Redirect::back()->withDanger('Select File to Import');
+            }
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+
+            if (count($e->failures()) > 0) {
+                $data = [
+                    'site_id' => decryptParams($site_id),
+                    'errorData' => $e->failures()
+                ];
+            }
+            return Redirect::back()->with(['data' => $e->failures()]);
+        }
+    }
+
+    public function storeContactsPreview(Request $request, $site_id)
+    {
+        $model = new TempFilesStakeholderContact();
+        $dataTable = new ImportFilesContactsDataTable($site_id);
+
+        if ($model->count() == 0) {
+            return redirect()->route('sites.file-managements.customers', ['site_id' => $site_id])->withSuccess('No Data Found');
+        } else {
+
+            $data = [
+                'site_id' => decryptParams($site_id),
+                'final_preview' => true,
+                'preview' => false,
+                'db_fields' =>  $model->getFillable(),
+            ];
+            return $dataTable->with($data)->render('app.sites.file-managements.import.importFilesContactsPreview', $data);
+        }
+    }
+
+    public function saveFileContactsImport(Request $request, $site_id)
+    {
+
         //    try {
-               $this->fileManagementInterface->saveFileContactsImport($site_id);
-               return redirect()->route('sites.file-managements.view-files', ['site_id' => $site_id])->withSuccess('Data Imported Successfully');
+        $this->fileManagementInterface->saveFileContactsImport($site_id);
+        return redirect()->route('sites.file-managements.view-files', ['site_id' => $site_id])->withSuccess('Data Imported Successfully');
         //    } catch (\Throwable $th) {
         //        return redirect()->route('sites.file-managements.view-files', ['site_id' => encryptParams(decryptParams($site_id))])->withdanger($th->getMessage());
         //    }
-       }
+    }
 }

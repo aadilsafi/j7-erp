@@ -147,11 +147,10 @@ class SalesPlanController extends Controller
      */
     public function store(Request $request, $site_id, $floor_id = null, $unit_id = null)
     {
-
         try {
-            $validator = Validator::make($request->all(), [
-                'individual.cnic' => 'unique:backlisted_stakeholders,cnic',
-                'individual.mobile_contact' =>'required|unique:stakeholders,mobile_contact',
+            $validator = Validator::make($request->individual, [
+                'cnic' => ['unique:backlisted_stakeholders,cnic'],
+                'mobile_contact' => ['unique:stakeholders,mobile_contact,NULL,' . (int)$request->stackholder['stackholder_id']],
 
             ], [
                 'individual.cnic' => 'This CNIC is BlackListed.'

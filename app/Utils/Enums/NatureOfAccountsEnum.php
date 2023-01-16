@@ -25,4 +25,5 @@ enum NatureOfAccountsEnum: string
     case TITLE_TRANSFER_RECEIPT = 'TF';
     case MANUAL_ENTRY = 'ME';
     case REVERTED_MANUAL_ENTRY = 'RME';
+    case INVESTOR_DEAL = 'ID';
 }

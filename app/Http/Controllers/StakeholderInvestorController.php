@@ -3,23 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\StakeholderInvestorsDatatable;
+use App\Models\AccountLedger;
 use App\Models\Country;
 use App\Models\LeadSource;
+use App\Models\StakeholderInvestor;
 use App\Models\StakeholderType;
 use App\Models\Unit;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\StakeholderInvestorDeals\investor_deals_interface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 
 class StakeholderInvestorController extends Controller
 {
 
-    private $StakeholderInvestorInterface;
+    private $StakeholderInvestorInterface,$financialTransactionInterface;
 
-    public function __construct(investor_deals_interface $StakeholderInvestorInterface)
+    public function __construct(investor_deals_interface $StakeholderInvestorInterface ,FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->StakeholderInvestorInterface = $StakeholderInvestorInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
     /**
      * Display a listing of the resource.
@@ -82,7 +87,6 @@ class StakeholderInvestorController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-
             return redirect()->route('sites.investors-deals.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -138,17 +142,18 @@ class StakeholderInvestorController extends Controller
 
     }
 
-    public function approveInvestor(Request $request ,$site_id)
+    public function approveInvestor($site_id,$id)
+    {
+        $transaction = $this->financialTransactionInterface->makeInvestorDealReceivableTransaction($id);
+        return redirect()->route('sites.investors-deals.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function revertInvestor($site_id,$id)
     {
 
     }
 
-    public function revertInvestor(Request $request ,$site_id)
-    {
-
-    }
-
-    public function disapproveInvestor(Request $request ,$site_id)
+    public function disapproveInvestor($site_id,$id)
     {
 
     }

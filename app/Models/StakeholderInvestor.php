@@ -19,7 +19,7 @@ class StakeholderInvestor extends Model implements HasMedia
         return LogOptions::defaults()->useLogName(get_class($this))->logFillable()->logOnlyDirty()->dontSubmitEmptyLogs();
     }
 
-    protected $fillabe = [
+    protected $fillable = [
         'site_id',
         'investor_id',
         'user_id',
@@ -38,6 +38,7 @@ class StakeholderInvestor extends Model implements HasMedia
         'reverted_date',
         'jve_number',
         'status',
+        'deal_status',
         'remarks',
     ];
 

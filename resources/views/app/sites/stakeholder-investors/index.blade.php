@@ -140,10 +140,10 @@
                         '{{ route('sites.investors-deals.approve-investor', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}'
                         .replace(':id', id);
                     location.href = url;
-                    // hideBlockUI('#stakeholder-table-form');
+                    hideBlockUI('#stakeholder-table-form');
                 }
             });
-            // hideBlockUI('#stakeholder-table-form');
+            hideBlockUI('#stakeholder-table-form');
 
 
         }

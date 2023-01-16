@@ -51,10 +51,10 @@ class StakeholderInvestorsDatatable extends DataTable
             })
             ->editColumn('deal_status', function ($stakeholder_investor_deal) {
                 if($stakeholder_investor_deal->deal_status == "close"){
-                    return '<span class="badge badge-glow bg-warning">Open</span>';
+                    return '<span class="badge badge-glow bg-warning">Close</span>';
                 }
                 else if($stakeholder_investor_deal->deal_status == "open"){
-                    return '<span class="badge badge-glow bg-success">Close</span>';
+                    return '<span class="badge badge-glow bg-success">Open</span>';
                 }
 
             })

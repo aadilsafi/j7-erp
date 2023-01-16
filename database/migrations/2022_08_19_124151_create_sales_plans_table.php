@@ -16,6 +16,9 @@ return new class extends Migration
         Schema::create('sales_plans', function (Blueprint $table) {
             $table->id();
             $table->string('doc_no')->nullable();
+            $table->string('serial_no')->nullable()->default('SI-');
+            $table->string('investment_plan_serial_id')->nullable();
+            $table->string('payment_plan_serial_id')->nullable();
             $table->bigInteger('unit_id')->nullable();
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('stakeholder_id')->nullable();
@@ -30,17 +33,16 @@ return new class extends Migration
             $table->bigInteger('lead_source_id')->nullable();
             $table->timestamp('validity')->nullable();
             $table->double('status')->default(0);
-            $table->text('comments')->nullable();
-            $table->timestamp('approved_date')->nullable();
-            $table->timestamp('created_date')->nullable();
-            $table->boolean('cancel')->default(0);
-            $table->string('serial_no')->nullable()->default('SI-');
-            $table->boolean('is_from_crm')->default(false);
             $table->bigInteger('checked_by')->nullable();
             $table->timestamp('checked_date')->nullable();
             $table->bigInteger('approved_by')->nullable();
             $table->bigInteger('dis_approved_by')->nullable();
             $table->timestamp('dis_approved_date')->nullable();
+            $table->text('comments')->nullable();
+            $table->timestamp('approved_date')->nullable();
+            $table->timestamp('created_date')->nullable();
+            $table->boolean('cancel')->default(0);
+            $table->boolean('is_from_crm')->default(false);
             $table->bigInteger('reverted_by')->nullable();
             $table->timestamp('reverted_date')->nullable();
             $table->timestamps();

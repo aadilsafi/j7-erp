@@ -120,7 +120,7 @@ class SalesPlanService implements SalesPlanInterface
                     'source' => $individual['source'] ?? 0,
                     'date_of_birth' => $individual['dob'],
                     'is_local' => isset($individual['is_local']) ? $individual['is_local'] : 0,
-                    'nationality' => $individual['nationality'],
+                    'nationality' => $individual['nationality'] ?? 167,
                 ];
             } else if ($stakeholder_as == 'c') {
                 $stakeholderData = [
@@ -223,6 +223,14 @@ class SalesPlanService implements SalesPlanInterface
                         'type' => StakeholderTypeEnum::LEAD->value,
                         'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
                         'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],

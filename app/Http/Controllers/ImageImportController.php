@@ -120,7 +120,7 @@ class ImageImportController extends Controller
     {
         $files = $request->file('attachment');
         $ext = $files[0]->getClientOriginalExtension();
-        $name = str_replace($ext, '', Str::slug('Receipts-' . time() . '-' . $files[0]->getClientOriginalName()));
+        $name = str_replace($ext, '', Str::slug('Img-' . time() . '-' . $files[0]->getClientOriginalName()));
         $name = $name . '.' . $ext;
         $destinationPath = public_path('app-assets/images/temporaryfiles/Receipts');
         $file = $files[0]->move($destinationPath, $name);

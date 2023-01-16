@@ -201,6 +201,11 @@ class AccountActionSeeder extends Seeder
                 'name' => 'Reverted Manual Entry',
                 'slug' => 'reverted-manual-entry',
             ],
+            [
+                'site_id' => 1,
+                'name' => 'Investor Deal',
+                'slug' => 'investor-deal',
+            ],
         ];
 
         foreach ($data as $item) {

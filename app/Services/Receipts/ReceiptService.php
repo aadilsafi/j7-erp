@@ -17,22 +17,27 @@ use App\Models\StakeholderType;
 use App\Models\TempReceipt;
 use App\Services\Receipts\Interface\ReceiptInterface;
 use App\Services\FinancialTransactions\FinancialTransactionInterface;
+use App\Services\SalesPlan\Interface\SalesPlanInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\{URL, Auth, DB, Notification};
 use Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Barryvdh\DomPDF\Facade\Pdf;
+use File;
 
 class ReceiptService implements ReceiptInterface
 {
 
     private $financialTransactionInterface;
+    private $salesPlanInterface;
 
     public function __construct(
-        FinancialTransactionInterface $financialTransactionInterface
+        FinancialTransactionInterface $financialTransactionInterface,
+        SalesPlanInterface $salesPlanInterface
     ) {
         $this->financialTransactionInterface = $financialTransactionInterface;
+        $this->salesPlanInterface = $salesPlanInterface;
     }
 
     public function model()
@@ -586,8 +591,8 @@ class ReceiptService implements ReceiptInterface
 
     public function ImportReceipts($site_id)
     {
-        // dd(Receipt::first());
-        DB::transaction(function () use ($site_id) {
+        $salesPlansIds = [];
+        DB::transaction(function () use ($site_id, &$salesPlansIds) {
             $model = new TempReceipt();
             $tempdata = $model->cursor();
             $tempCols = $model->getFillable();
@@ -599,17 +604,11 @@ class ReceiptService implements ReceiptInterface
                     $data[$key][$field] = $items[$tempCols[$k]];
                 }
 
-                $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
-                $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-
-                $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
-                    ->where('unit_id', $unitId->id)
-                    ->where('total_price', $data[$key]['total_price'])
-                    ->where('down_payment_total', $data[$key]['down_payment_total'])
-                    ->where('approved_date', $data[$key]['validity'])
+                $salePlan = SalesPlan::where('doc_no', $data[$key]['sales_plan_doc_no'])
                     ->first();
-
-
+                $salesPlansIds[$salePlan->id] = $salePlan->id;
+                $unitId = $salePlan->unit;
+                $stakeholder = $salePlan->stakeholder;
                 $data[$key]['site_id'] = decryptParams($site_id);
                 $data[$key]['sales_plan_id'] = $salePlan->id;
                 $data[$key]['unit_id'] = $unitId->id;
@@ -646,7 +645,7 @@ class ReceiptService implements ReceiptInterface
                 unset($data[$key]['stakeholder_cnic']);
                 unset($data[$key]['total_price']);
                 unset($data[$key]['down_payment_total']);
-                unset($data[$key]['validity']);
+                unset($data[$key]['sales_plan_doc_no']);
                 unset($data[$key]['other_payment_mode_value']);
                 unset($data[$key]['online_transaction_no']);
                 unset($data[$key]['installment_no']);
@@ -676,16 +675,27 @@ class ReceiptService implements ReceiptInterface
                 if ($receipt->mode_of_payment == "Online") {
                     $transaction = $this->financialTransactionInterface->makeReceiptOnlineTransaction($receipt->id);
                 }
-                // if ($url != null && $url != '') {
-                //     $receipt->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('receipt_attachments');
-                //     changeImageDirectoryPermission();
-                // }
+                if ($url != null && $url != '') {
+                    $isFileExists = File::exists(public_path('app-assets/images/Import/' . $url));
+                    if ($isFileExists) {
+                        $tempPath = (public_path('app-assets/images/temporaryfiles/Receipts/'));
+                        $destinationPath = public_path('app-assets/images/Import/');
+        
+                        $newfile = File::copy(public_path('app-assets/images/Import/' . $url), $destinationPath . $url);
+                        $receipt->addMedia($newfile)->toMediaCollection('receipt_attachments');
+                        changeImageDirectoryPermission();
+                    }
+                }
                 $url = null;
                 $update_installments =  $this->updateInstallments($receipt);
             }
 
-        return $receipt;
-
+            return $receipt;
         });
+
+        foreach ($salesPlansIds as $id) {
+            $saleplan = SalesPlan::find($id);
+            $this->salesPlanInterface->generatePDF($saleplan, 'payment_plan');
+        }
     }
 }

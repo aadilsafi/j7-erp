@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.investors-deals.index', $site_id) }}
 @endsection
 
-@section('page-title','Investors Deals')
+@section('page-title', 'Investors Deals')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -115,6 +115,37 @@
             location.href = '{{ route('sites.investors-deals.create', ['site_id' => $site_id]) }}';
         }
 
+        function approve(id) {
+            showBlockUI('#stakeholder-table-form');
 
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning',
+                text: 'Are You Sure!!',
+                showCancelButton: true,
+                cancelButtonText: 'No, Cancel',
+                confirmButtonText: 'Yes',
+                confirmButtonClass: 'btn-success',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'btn btn-relief-outline-success waves-effect waves-float waves-light me-1',
+                    cancelButton: 'btn btn-relief-outline-danger waves-effect waves-float waves-light me-1'
+                },
+                showLoaderOnConfirm: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showBlockUI('#stakeholder-table-form');
+
+                    let url =
+                        '{{ route('sites.investors-deals.approve-investor', ['site_id' => encryptParams($site_id), 'id' => ':id']) }}'
+                        .replace(':id', id);
+                    location.href = url;
+                    hideBlockUI('#stakeholder-table-form');
+                }
+            });
+            hideBlockUI('#stakeholder-table-form');
+
+
+        }
     </script>
 @endsection

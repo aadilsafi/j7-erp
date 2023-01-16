@@ -116,16 +116,10 @@ class FileManagementService implements FileManagementInterface
                 $data[$key][$field] = $items[$tempCols[$k]];
             }
 
-            $stakeholder = Stakeholder::where('cnic', $data[$key]['stakeholder_cnic'])->first();
-            $unitId = Unit::select('id')->where('floor_unit_number', $data[$key]['unit_short_label'])->first();
-
-            $salePlan = SalesPlan::where('stakeholder_id', $stakeholder->id)
-                ->where('unit_id', $unitId->id)
-                ->where('total_price', $data[$key]['total_price'])
-                ->where('down_payment_total', $data[$key]['down_payment_total'])
-                ->where('approved_date', $data[$key]['sales_plan_approval_date'])
+            $salePlan = SalesPlan::where('doc_no', $data[$key]['sales_plan_doc_no'])
                 ->first();
-
+                $unitId = $salePlan->unit;
+                $stakeholder = $salePlan->stakeholder;
 
             $serail_no = $this->model()::max('id') + 1;
             $serail_no =  sprintf('%03d', $serail_no);
@@ -145,9 +139,7 @@ class FileManagementService implements FileManagementInterface
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
 
-            $url = $data[$key]['image_url'];
-
-            unset($data[$key]['unit_short_label']);
+            unset($data[$key]['sales_plan_doc_no']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
             unset($data[$key]['down_payment_total']);
@@ -160,11 +152,6 @@ class FileManagementService implements FileManagementInterface
             unset($data[$key]['image_url']);
 
             $file = $this->model()->create($data[$key]);
-
-            if (isset($url)) {
-                $file->addMedia(public_path('app-assets/images/Import/' . $url))->toMediaCollection('application_form_photo');
-                changeImageDirectoryPermission();
-            }
         }
         TempFiles::truncate();
         return $file;
@@ -201,13 +188,13 @@ class FileManagementService implements FileManagementInterface
                 ->where('sales_plan_id', $salePlan->id)
                 ->where('stakeholder_id', $stakeholder->id)
                 ->first();
-          
+
             $data[$key]['file_management_id'] = $file->id;
-            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic',$data[$key]['contact_cnic'])->first()->id;
+            $data[$key]['stakeholder_contact_id'] = StakeholderContact::where('cnic', $data[$key]['contact_cnic'])->first()->id;
             $data[$key]['created_at'] = now();
             $data[$key]['updated_at'] = now();
-   
-           
+
+
             unset($data[$key]['unit_short_label']);
             unset($data[$key]['stakeholder_cnic']);
             unset($data[$key]['total_price']);
@@ -220,9 +207,8 @@ class FileManagementService implements FileManagementInterface
             unset($data[$key]['stakeholder_id']);
             unset($data[$key]['contact_cnic']);
             unset($data[$key]['kin_cnic']);
-           
-            $file = FileStakeholderContact::create($data[$key]);
 
+            $file = FileStakeholderContact::create($data[$key]);
         }
         TempFilesStakeholderContact::truncate();
         return $file;

@@ -8,6 +8,7 @@ use App\Models\TempReceipt;
 use App\Models\TempSalePlanInstallment;
 use App\Models\Unit;
 use Carbon\Carbon;
+use File;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -16,6 +17,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
 use Maatwebsite\Excel\Concerns\RemembersRowNumber;
+use Str;
 
 class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, WithHeadingRow, WithValidation
 {
@@ -31,29 +33,58 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
 
     public function model(array $row)
     {
-        $stakeholderId = Stakeholder::select('id')->where('cnic', $row['stakeholder_cnic'])->first();
-        $unitId = Unit::select('id')->where('floor_unit_number', $row['unit_short_label'])->first();
+        if (strtolower($row['mode_of_payment']) == 'cheque') {
+            if (Str::length($row['cheque_no']) == 0) {
+                $error = ['Cheque No is required in Case of Cheque.'];
+                $failures[] = new Failure($this->getRowNumber(), 'cheque_no', $error, $row);
 
-        $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
-            ->where('unit_id', $unitId->id)
-            ->where('total_price', $row['total_price'])
-            ->where('down_payment_total', $row['down_payment_total'])
-            ->where('approved_date', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'))
-            ->first();
-        if (!$salePlan) {
-            $error = ['Could not find sales Plan'];
-            $failures[] = new Failure($this->getRowNumber(), 'unit_short_label', $error, $row);
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
 
-            throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            if (Str::length($row['bank_acount_number']) == 0) {
+                $error = ['Bank Account Number is required in Case of Cheque.'];
+                $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        }
+
+        if (strtolower($row['mode_of_payment']) == 'online') {
+            if (Str::length($row['online_transaction_no']) == 0) {
+                $error = ['Online Transaction No is required in Case of Online.'];
+                $failures[] = new Failure($this->getRowNumber(), 'online_transaction_no', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+
+            if (Str::length($row['bank_acount_number']) == 0) {
+                $error = ['Bank Account Number is required in Case of Online.'];
+                $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        }
+
+        if (Str::length($row['image_url']) > 0) {
+            $isFileExists = File::exists(public_path('app-assets/images/Import/' . $row['image_url']));
+            if (!$isFileExists) {
+                $error = ['Image does not exists'];
+                $failures[] = new Failure($this->getRowNumber(), 'image_url', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        } else {
+            if (strtolower($row['mode_of_payment']) != 'cash') {
+                $error = ['Image is required'];
+                $failures[] = new Failure($this->getRowNumber(), 'image_url', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
         }
 
         return new TempReceipt([
             'doc_no' => $row['doc_no'],
-            'unit_short_label' => $row['unit_short_label'],
-            'stakeholder_cnic' => $row['stakeholder_cnic'],
-            'total_price' => $row['total_price'],
-            'down_payment_total' => $row['down_payment_total'],
-            'validity' => Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'),
+            'sales_plan_doc_no' => $row['sales_plan_doc_no'],
             'mode_of_payment' => $row['mode_of_payment'],
             'amount' => $row['amount'],
             'cheque_no' => $row['cheque_no'],
@@ -82,11 +113,7 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
     {
         return [
             'doc_no' =>  ['required', 'unique:receipts,doc_no', 'distinct'],
-            'unit_short_label' =>  ['required', 'exists:App\Models\Unit,floor_unit_number'],
-            'stakeholder_cnic' =>  ['required', 'exists:App\Models\Stakeholder,cnic'],
-            'total_price' =>  ['required', 'numeric', 'gt:0'],
-            'down_payment_total' =>  ['required', 'numeric', 'gt:0'],
-            'sales_plan_approval_date' =>  ['required'],
+            'sales_plan_doc_no' => ['required', 'exists:sales_plans,doc_no'],
             'bank_acount_number' => ['sometimes', 'nullable', 'exists:banks,account_number'],
             'mode_of_payment' =>  ['required'],
             'amount' => ['required'],

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->tinyInteger('level')->default(1);
             $table->timestamp('opening_balance_date')->nullable();
             $table->timestamp('closing_balance_date')->nullable();
+            $table->boolean('credit_entry')->default(1);
+            $table->boolean('debit_entry')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });

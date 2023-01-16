@@ -11,11 +11,7 @@ class TempFiles extends Model
 
     protected $fillable = [
         'doc_no',
-        'unit_short_label',
-        'stakeholder_cnic',
-        'total_price',
-        'down_payment_total',
-        'sales_plan_approval_date',
+        'sales_plan_doc_no',
         'registration_no',
         'application_no',
         'note_serial_number',

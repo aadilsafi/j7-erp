@@ -33,6 +33,7 @@ return new class extends Migration
             $table->timestamp('reverted_date')->nullable();
             $table->string('jve_number')->nullable();
             $table->string('status')->nullable();
+            $table->string('deal_status')->nullable();
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -3,24 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\StakeholderInvestorsDatatable;
+use App\Models\AccountLedger;
 use App\Models\Country;
 use App\Models\LeadSource;
 use App\Models\StakeholderInvestor;
 use App\Models\StakeholderType;
 use App\Models\Unit;
+use App\Services\FinancialTransactions\FinancialTransactionInterface;
 use App\Services\StakeholderInvestorDeals\investor_deals_interface;
 use App\Utils\Enums\StakeholderTypeEnum;
+use DB;
 use Exception;
 use Illuminate\Http\Request;
 
 class StakeholderInvestorController extends Controller
 {
 
-    private $StakeholderInvestorInterface;
+    private $StakeholderInvestorInterface,$financialTransactionInterface;
 
-    public function __construct(investor_deals_interface $StakeholderInvestorInterface)
+    public function __construct(investor_deals_interface $StakeholderInvestorInterface ,FinancialTransactionInterface $financialTransactionInterface)
     {
         $this->StakeholderInvestorInterface = $StakeholderInvestorInterface;
+        $this->financialTransactionInterface = $financialTransactionInterface;
     }
     /**
      * Display a listing of the resource.
@@ -70,7 +74,6 @@ class StakeholderInvestorController extends Controller
     public function store(Request $request,$site_id)
     {
         //
-        // dd($request->all());
         try {
             if (!request()->ajax()) {
 
@@ -84,7 +87,6 @@ class StakeholderInvestorController extends Controller
                 abort(403);
             }
         } catch (Exception $ex) {
-
             return redirect()->route('sites.investors-deals.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
         }
     }
@@ -95,7 +97,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function show(StakeholderInvestor $stakeholderInvestor)
+    public function show($id)
     {
         //
     }
@@ -106,7 +108,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function edit(StakeholderInvestor $stakeholderInvestor)
+    public function edit()
     {
         //
     }
@@ -118,7 +120,7 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StakeholderInvestor $stakeholderInvestor)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -129,54 +131,29 @@ class StakeholderInvestorController extends Controller
      * @param  \App\Models\StakeholderInvestor  $stakeholderInvestor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StakeholderInvestor $stakeholderInvestor)
+    public function destroy($id)
     {
         //
     }
 
-    public function getUnitsData(Request $request ,$site_id)
-    {
-
-        // $unit_ids = $request->unit_ids;
-
-        // foreach($unit_ids as $key=> $unit_id){
-
-        // }
-
-        // $unitTable = '';
-        // if ($unit) {
-        //     $loopKey = 1;
-        //     foreach ($unit as $incentive) {
-
-        //             $paid_unit = Unit::find(1);
-        //             $unitTable .= '<tr class="text-nowrap text-center">';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $loopKey++ . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->name . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->floor_unit_number . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $paid_unit->gross_area . '</td>';
-        //             $unitTable .= '<td class="text-nowrap text-center">' . $incentive->dealer_incentive . '</td>';
-        //             $unitTable .= '</tr>';
-
-        //     }
-        // }
-    }
 
     public function checkInvestor(Request $request ,$site_id)
     {
 
     }
 
-    public function approveInvestor(Request $request ,$site_id)
+    public function approveInvestor($site_id,$id)
+    {
+        $transaction = $this->financialTransactionInterface->makeInvestorDealReceivableTransaction($id);
+        return redirect()->route('sites.investors-deals.index', ['site_id' => decryptParams($site_id)])->withSuccess(__('lang.commons.data_saved'));
+    }
+
+    public function revertInvestor($site_id,$id)
     {
 
     }
 
-    public function revertInvestor(Request $request ,$site_id)
-    {
-
-    }
-
-    public function disapproveInvestor(Request $request ,$site_id)
+    public function disapproveInvestor($site_id,$id)
     {
 
     }

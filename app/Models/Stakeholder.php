@@ -256,4 +256,9 @@ class Stakeholder extends Model implements HasMedia
     {
         return $this->belongsTo(LeadSource::class, 'source');
     }
+
+    public function investors()
+    {
+        return $this->hasMany(StakeholderInvestor::class,'id','investor_id');
+    }
 }

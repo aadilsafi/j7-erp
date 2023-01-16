@@ -566,7 +566,7 @@ class ReceiptController extends Controller
 
         $this->receiptInterface->ImportReceipts($site_id);
 
-        TempReceipt::query()->truncate();
+        // TempReceipt::query()->truncate();
 
         return redirect()->route('sites.receipts.index', ['site_id' => $site_id])->withSuccess(__('lang.commons.data_saved'));
     }

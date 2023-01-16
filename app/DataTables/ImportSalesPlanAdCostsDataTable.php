@@ -119,11 +119,7 @@ class ImportSalesPlanAdCostsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
+            Column::make('sales_plan_doc_no')->addClass('text-nowrap'),
             Column::computed('additional_costs_name')->searchable(true)->addClass('removeTolltip'),
             Column::computed('percentage')->addClass('removeTolltip'),
             Column::computed('total_amount')->addClass('removeTolltip'),

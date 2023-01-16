@@ -171,22 +171,18 @@ class ImportReceiptsDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('validity')->title('Validity')->addClass('text-nowrap'),
-            Column::computed('mode_of_payment')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('amount')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('cheque_no')->searchable(true)->addClass('removeTolltip'),
-            Column::computed('bank_name')->addClass('removeTolltip'),
-            Column::computed('bank_acount_number')->addClass('removeTolltip'),
-            Column::computed('online_transaction_no')->addClass('removeTolltip'),
-            Column::computed('transaction_date')->addClass('removeTolltip'),
-            Column::computed('created_date')->addClass('removeTolltip'),
-            Column::computed('other_payment_mode_value')->addClass('removeTolltip'),
-            Column::computed('status')->addClass('removeTolltip'),
-            Column::computed('image_url')->addClass('removeTolltip'),
+            Column::make('sales_plan_doc_no')->addClass('text-nowrap'),
+            Column::make('mode_of_payment')->searchable(true)->addClass('text-nowrap'),
+            Column::make('amount')->searchable(true)->addClass('text-nowrap'),
+            Column::make('cheque_no')->searchable(true)->addClass('text-nowrap'),
+            Column::make('bank_name')->addClass('text-nowrap'),
+            Column::make('bank_acount_number')->addClass('text-nowrap'),
+            Column::make('online_transaction_no')->addClass('text-nowrap'),
+            Column::make('transaction_date')->addClass('text-nowrap'),
+            Column::make('created_date')->addClass('text-nowrap'),
+            Column::make('other_payment_mode_value')->addClass('text-nowrap'),
+            Column::make('status')->addClass('text-nowrap'),
+            Column::make('image_url')->addClass('text-nowrap'),
         ];
     }
 }

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('created_date')->nullable();
             $table->string('other_payment_mode_value')->nullable();
             $table->float('amount')->nullable();
+            $table->string('discounted_amount')->default(0);
             $table->string('installment_no')->nullable();
             $table->string('status')->nullable();
             $table->string('image_url')->nullable()->nullable();

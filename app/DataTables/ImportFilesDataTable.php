@@ -169,11 +169,7 @@ class ImportFilesDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::computed('unit_short_label')->title('Unit')->addClass('text-nowrap')->searchable(true),
-            Column::computed('stakeholder_cnic')->title('CNIC')->searchable(true),
-            Column::computed('total_price')->title('Price')->searchable(true),
-            Column::computed('down_payment_total')->title('DP Price')->addClass('text-nowrap'),
-            Column::computed('sales_plan_approval_date')->title('Sales Plan Approval Date')->addClass('text-nowrap'),
+            Column::make('sales_plan_doc_no')->addClass('text-nowrap'),
             Column::computed('registration_no')->title('Registration No')->addClass('text-nowrap'),
             Column::computed('application_no')->title('Application No')->addClass('text-nowrap'),
             Column::computed('note_serial_number')->title('Note Serial no')->addClass('text-nowrap'),

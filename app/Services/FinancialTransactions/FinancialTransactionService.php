@@ -1777,7 +1777,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 'modelable_id' => 1,
                 'modelable_type' => 'App\Models\StakeholderType',
                 'code' => (string)$account,
-                'name' =>  $investor_deal->investor->full_name . ' Investor Deal Receivable# ' . $investor_deal->serial_number,
+                'name' =>  $investor_deal->investor->full_name . ' Investor  A/R  ' . $investor_deal->serial_number,
                 'level' => 5,
                 'account_type' => 'debit',
             ];
@@ -1790,7 +1790,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
                 'modelable_id' => 1,
                 'modelable_type' => 'App\Models\StakeholderType',
                 'code' => (string)$account,
-                'name' =>  $investor_deal->investor->full_name . ' Investor Deal Receivable# ' . $investor_deal->serial_number,
+                'name' =>  $investor_deal->investor->full_name . ' Investor  A/R ' . $investor_deal->serial_number,
                 'level' => 5,
                 'account_type' => 'debit',
             ];
@@ -1818,7 +1818,7 @@ class FinancialTransactionService implements FinancialTransactionInterface
             'modelable_id' => 1,
             'modelable_type' => 'App\Models\StakeholderType',
             'code' => (string)$investor_payable_account_code,
-            'name' =>  $investor_deal->investor->full_name . ' Investor Deal Payable# ' . $investor_deal->serial_number,
+            'name' =>  $investor_deal->investor->full_name . ' Investor  A\P ',
             'level' => 5,
             'account_type' => 'credit',
         ];

@@ -33,25 +33,49 @@ class ReceiptsImport implements ToModel, WithChunkReading, WithBatchInserts, Wit
 
     public function model(array $row)
     {
-        // $stakeholderId = Stakeholder::select('id')->where('cnic', $row['stakeholder_cnic'])->first();
-        // $unitId = Unit::select('id')->where('floor_unit_number', $row['unit_short_label'])->first();
+        if (strtolower($row['mode_of_payment']) == 'cheque') {
+            if (Str::length($row['cheque_no'])) {
+                $error = ['Cheque No is not required in Case of Cheque.'];
+                $failures[] = new Failure($this->getRowNumber(), 'cheque_no', $error, $row);
 
-        // $salePlan = SalesPlan::where('stakeholder_id', $stakeholderId->id)
-        //     ->where('unit_id', $unitId->id)
-        //     ->where('total_price', $row['total_price'])
-        //     ->where('down_payment_total', $row['down_payment_total'])
-        //     ->where('approved_date', Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['sales_plan_approval_date']))->format('Y-m-d 00:00:00'))
-        //     ->first();
-        // if (!$salePlan) {
-        //     $error = ['Could not find sales Plan'];
-        //     $failures[] = new Failure($this->getRowNumber(), 'unit_short_label', $error, $row);
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
 
-        //     throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
-        // }
+            if (Str::length($row['bank_acount_number'])) {
+                $error = ['Bank Account Number is not required in Case of Cheque.'];
+                $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        }
+
+        if (strtolower($row['mode_of_payment']) == 'online') {
+            if (Str::length($row['online_transaction_no'])) {
+                $error = ['Online Transaction No is not required in Case of Online.'];
+                $failures[] = new Failure($this->getRowNumber(), 'online_transaction_no', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+
+            if (Str::length($row['bank_acount_number'])) {
+                $error = ['Bank Account Number is not required in Case of Online.'];
+                $failures[] = new Failure($this->getRowNumber(), 'bank_acount_number', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        }
+
         if (Str::length($row['image_url']) > 0) {
             $isFileExists = File::exists(public_path('app-assets/images/Import/' . $row['image_url']));
             if (!$isFileExists) {
                 $error = ['Image does not exists'];
+                $failures[] = new Failure($this->getRowNumber(), 'image_url', $error, $row);
+
+                throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);
+            }
+        } else {
+            if (strtolower($row['mode_of_payment']) != 'cash') {
+                $error = ['Image is required'];
                 $failures[] = new Failure($this->getRowNumber(), 'image_url', $error, $row);
 
                 throw new \Maatwebsite\Excel\Validators\ValidationException(\Illuminate\Validation\ValidationException::withMessages($error), $failures);

@@ -11,7 +11,7 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 // Roles Breadcrumbs
 Breadcrumbs::for('roles.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Role & Permission');
+    // $trail->push('Role & Permission');
     $trail->push(__('lang.roles.role_plural'), route('roles.index'));
 });
 
@@ -29,7 +29,7 @@ Breadcrumbs::for('roles.edit', function (BreadcrumbTrail $trail) {
 // Permisisons Breadcrumbs
 Breadcrumbs::for('permissions.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Role & Permission');
+    // $trail->push('Role & Permission');
     $trail->push(__('lang.permissions.permission_plural'), route('permissions.index'));
 });
 

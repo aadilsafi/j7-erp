@@ -83,7 +83,8 @@
     <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create File Transfer Receipts</h2>
+                <h2 class="content-header-title float-start mb-0">Create File Transfer Receipt
+</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.file-transfer-receipts.create', encryptParams($site_id)) }}
                 </div>

@@ -3,7 +3,6 @@
 @section('seo-breadcrumb')
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.index', $site_id) }}
 @endsection
-
 @section('page-title', __('Stakeholders'))
 
 @section('page-vendor')

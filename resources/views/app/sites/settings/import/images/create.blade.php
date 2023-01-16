@@ -1,8 +1,8 @@
 @extends('app.layout.layout')
 
-@section('seo-breadcrumb')
+{{-- @section('seo-breadcrumb')
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.settings.import') }}
-@endsection
+@endsection --}}
 
 @section('page-title', 'Import Images')
 @section('page-vendor')
@@ -24,9 +24,9 @@
         <div class="row breadcrumbs-top">
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Images</h2>
-                <div class="breadcrumb-wrapper">
+                {{-- <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.settings.import') }}
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

@@ -11,6 +11,7 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 // Roles Breadcrumbs
 Breadcrumbs::for('roles.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
+    $trail->push('Role & Permission');
     $trail->push(__('lang.roles.role_plural'), route('roles.index'));
 });
 
@@ -21,12 +22,14 @@ Breadcrumbs::for('roles.create', function (BreadcrumbTrail $trail) {
 
 Breadcrumbs::for('roles.edit', function (BreadcrumbTrail $trail) {
     $trail->parent('roles.index');
+
     $trail->push(__('lang.commons.edit') . ' ' . __('lang.roles.role_singular'));
 });
 
 // Permisisons Breadcrumbs
 Breadcrumbs::for('permissions.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
+    $trail->push('Role & Permission');
     $trail->push(__('lang.permissions.permission_plural'), route('permissions.index'));
 });
 
@@ -43,7 +46,7 @@ Breadcrumbs::for('permissions.edit', function (BreadcrumbTrail $trail) {
 // Sites Breadcrumbs
 Breadcrumbs::for('sites.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Sites Configuration', route('sites.index'));
+    $trail->push('Project Site Configurations', route('sites.index'));
 });
 
 Breadcrumbs::for('sites.create', function (BreadcrumbTrail $trail) {
@@ -72,7 +75,9 @@ Breadcrumbs::for('sites.types.edit', function (BreadcrumbTrail $trail, $site_id)
     $trail->push('Edit Type');
 });
 Breadcrumbs::for('sites.types.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.types.index', $site_id);
+     $trail->parent('dashboard');
+     $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Types');
 });
 
@@ -92,7 +97,9 @@ Breadcrumbs::for('sites.additional-costs.edit', function (BreadcrumbTrail $trail
     $trail->push('Edit Additional Cost');
 });
 Breadcrumbs::for('sites.additional-costs.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.additional-costs.index', $site_id);
+    $trail->parent('dashboard');
+     $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Additional Costs');
 });
 //Floor Breadcrumbs
@@ -106,7 +113,9 @@ Breadcrumbs::for('sites.floors.create', function (BreadcrumbTrail $trail, $site_
     $trail->push('Create Floor');
 });
 Breadcrumbs::for('sites.floors.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.floors.index', $site_id);
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Floors');
 });
 
@@ -153,7 +162,9 @@ Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $s
 });
 
 Breadcrumbs::for('sites.floors.units.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.floors.index', $site_id);
+     $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Units');
 });
 //Unit Sales Plan Breadcrumbs
@@ -163,8 +174,8 @@ Breadcrumbs::for('sites.floors.units.sales-plans.index', function (BreadcrumbTra
 });
 
 Breadcrumbs::for('sites.floors.units.sales-plans.create', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
-    $trail->parent('sites.sales_plan.show', $site_id);
-    $trail->push('Sales Plan Create');
+    $trail->push('Sales Plans');
+    $trail->push('Create Sales Plan');
 });
 
 Breadcrumbs::for('sites.floors.units.sales-plans.initail-sales-plan', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id) {
@@ -173,57 +184,87 @@ Breadcrumbs::for('sites.floors.units.sales-plans.initail-sales-plan', function (
 });
 
 //Stakholders Breadcrumbs
+// Breadcrumbs::for('sites.stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
+//     $trail->parent('dashboard');
+//     $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+//     });
 Breadcrumbs::for('sites.stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('dashboard');
+    //  $trail->parent('sites.stakeholders.index', $site_id);
     $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('External Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.stakeholders.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.stakeholders.index', encryptParams($site_id));
-    $trail->push('Create Stakeholder');
+     $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('External Stakeholders');
+    $trail->push('Create External Stakeholder');
 });
 
 Breadcrumbs::for('sites.stakeholders.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.stakeholders.index', encryptParams($site_id));
-    $trail->push('Edit Stakeholder');
+    $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('External Stakeholders');
+    $trail->push('Edit External Stakeholder');
 });
 Breadcrumbs::for('sites.stakeholders.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.stakeholders.index', $site_id);
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Stakeholders');
 });
 Breadcrumbs::for('sites.stakeholders.import.kins', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.stakeholders.index', $site_id);
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Stakeholders Kins');
 });
 //Users Breadcrumbs
 Breadcrumbs::for('sites.users.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
     $trail->push('Users', route('sites.users.index', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.users.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
+    $trail->push('Users');
     $trail->push('Create Users');
 });
 
 Breadcrumbs::for('sites.users.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.users.index', encryptParams($site_id));
+    $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
+    $trail->push('Users');
     $trail->push('Edit Users');
+
 });
 
 //Teams Breadcrumbs
 Breadcrumbs::for('sites.teams.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
     $trail->push('Teams', route('sites.teams.index', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.teams.create', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.teams.index', encryptParams($site_id));
+   $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
+    $trail->push('Teams');
     $trail->push('Create Team');
 });
 
 Breadcrumbs::for('sites.teams.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.teams.index', encryptParams($site_id));
+    $trail->parent('dashboard');
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Internal');
+    $trail->push('Teams');
     $trail->push('Edit Team');
 });
 
@@ -245,7 +286,7 @@ Breadcrumbs::for('sites.lead-sources.edit', function (BreadcrumbTrail $trail, $s
 
 //receipts Breadcrumbs
 Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (BreadcrumbTrail $trail, $site_id, $floor_id, $unit_id, $sales_plan_id) {
-    $trail->parent('sites.floors.units.sales-plans.index', $site_id, $floor_id, $unit_id);
+        $trail->push('Edit Lead Source');
     $trail->push('Receipts');
 });
 
@@ -253,7 +294,9 @@ Breadcrumbs::for('sites.floors.units.sales-plans.receipts.index', function (Brea
 //receipts Breadcrumbs Main
 Breadcrumbs::for('sites.receipts.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('Receipts', route('sites.receipts.index', ['site_id' => $site_id]));
+    $trail->push('File Management');
+    $trail->push('Step 1');
+    $trail->push('Receipts');
 });
 
 Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $site_id) {
@@ -262,15 +305,19 @@ Breadcrumbs::for('sites.receipts.create', function (BreadcrumbTrail $trail, $sit
 });
 
 Breadcrumbs::for('sites.receipts.show', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.receipts.index', $site_id);
-    $trail->push(' Receipt Details');
+    // $trail->parent('sites.receipts.index', $site_id);
+    $trail->parent('dashboard');
+     $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push(' Import');
+    $trail->push('Import Receipts');
 });
 
 //File Management Breadcrumbs
 
 Breadcrumbs::for('sites.file-managements.view-files', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('View Customer Files', route('sites.file-managements.view-files', ['site_id' => $site_id]));
+    $trail->push('File Management');
+    $trail->push('Customer Files', route('sites.file-managements.view-files', ['site_id' => $site_id]));
 });
 
 Breadcrumbs::for('sites.file-managements.customers', function (BreadcrumbTrail $trail, $site_id) {
@@ -466,7 +513,10 @@ Breadcrumbs::for('sites.accounts.general-ledger.index', function (BreadcrumbTrai
 });
 
 Breadcrumbs::for('sites.banks.import', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('sites.receipts.index', $site_id);
+    // $trail->parent('sites.receipts.index', $site_id);
+    $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.first-level.index', ['site_id' => $site_id]));
+     $trail->push('Import');
     $trail->push('Import Banks');
 });
 // accounts first level
@@ -535,26 +585,36 @@ Breadcrumbs::for('sites.settings.accounts.fifth-level.create', function (Breadcr
     $trail->push('Create 5th Level Account', route('sites.settings.accounts.fifth-level.create', ['site_id' => $site_id]));
 });
 //Images Import
-Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail,) {
+Breadcrumbs::for('sites.settings.import', function (BreadcrumbTrail $trail,$site_id) {
     $trail->parent('dashboard');
     $trail->push('Import');
-    $trail->push('Import Images', route('sites.index'));
+    $trail->push('Preview Images');
 });
 // BlackListed Stakeholders
 Breadcrumbs::for('sites.blacklisted-stakeholders.index', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('dashboard');
+    //  $trail->parent('sites.stakeholders.index', encryptParams($site_id));
+    $trail->push('Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
     $trail->push('Blacklisted Stakeholders', route('sites.blacklisted-stakeholders.index', ['site_id' => $site_id]));
 });
 
+Breadcrumbs::for('sites.blacklisted-stakeholders.create', function (BreadcrumbTrail $trail, $site_id) {
+ $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+ $trail->push('Blacklisted Stakeholders');
+    $trail->push('Create Blacklisted Stakeholder');
+});
+
 Breadcrumbs::for('sites.blacklisted-stakeholders.edit', function (BreadcrumbTrail $trail, $site_id) {
-    $trail->parent('dashboard');
-    $trail->push('Edit  Blacklisted Stakeholder');
+    $trail->push('Stakeholders', route('sites.stakeholders.index', ['site_id' => $site_id]));
+    $trail->push('Blacklisted Stakeholders');
+    $trail->push('Edit Blacklisted Stakeholder');
 });
 
 
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.countries.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
+     $trail->push('Settings', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+    $trail->push('Locations');
     $trail->push('Countries', route('sites.settings.countries.index', ['site_id' => $site_id]));
 });
 //Countries Breedcrumbs
@@ -570,6 +630,8 @@ Breadcrumbs::for('sites.countries.edit', function (BreadcrumbTrail $trail, $site
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.states.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+    $trail->push('Locations');
     $trail->push('States', route('sites.settings.states.index', ['site_id' => $site_id]));
 });
 //Countries Breadcrumbs
@@ -587,6 +649,8 @@ Breadcrumbs::for('sites.states.edit', function (BreadcrumbTrail $trail, $site_id
 //Countries Breadcrumbs
 Breadcrumbs::for('sites.cities.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
+     $trail->push('Settings', route('sites.settings.accounts.fifth-level.index', ['site_id' => $site_id]));
+    $trail->push('Locations');
     $trail->push('Cities', route('sites.settings.cities.index', ['site_id' => $site_id]));
 });
 //Countries Breadcrumbs
@@ -670,7 +734,9 @@ Breadcrumbs::for('sites.settings.journal-vouchers.journal-vouchers-entries.show'
 //file-transfer-receipts
 Breadcrumbs::for('sites.file-transfer-receipts.index', function (BreadcrumbTrail $trail, $site_id) {
     $trail->parent('dashboard');
-    $trail->push('File Transfer Receipts', route('sites.file-transfer-receipts.index', ['site_id' => $site_id]));
+    $trail->push('File Management');
+    $trail->push('Step 1');
+    $trail->push('File Transfer Receipts');
 });
 
 Breadcrumbs::for('sites.file-transfer-receipts.create', function (BreadcrumbTrail $trail, $site_id) {
@@ -704,17 +770,23 @@ Breadcrumbs::for('sites.investors-deals.create', function (BreadcrumbTrail $trai
 });
 
 // Import Files
-Breadcrumbs::for('sites.files.import', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.files.import', function (BreadcrumbTrail $trail,$site_id) {
     $trail->parent('dashboard');
+    $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
     $trail->push('Import Files', route('sites.index'));
 });
 
 Breadcrumbs::for('sites.files.contacts.import', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
+     $trail->push('Import');
     $trail->push('Import Files Contacts', route('sites.index'));
 });
 
-Breadcrumbs::for('sites.stakeholders.import.contacts', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('sites.stakeholders.import.contacts', function (BreadcrumbTrail $trail,$site_id) {
     $trail->parent('dashboard');
-    $trail->push('Import Stakeholder Contacts', route('sites.index'));
+     $trail->push('Settings', route('sites.settings.custom-fields.index', ['site_id' => $site_id]));
+    $trail->push('Import');
+
+ $trail->push('Import Stakeholders Contacts', route('sites.index'));
 });

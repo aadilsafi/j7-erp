@@ -4,7 +4,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.stakeholders.edit', $site_id) }}
 @endsection
 
-@section('page-title', 'Edit Stakeholder')
+@section('page-title', 'Edit External Stakeholders')
 
 @section('page-vendor')
 @endsection
@@ -63,10 +63,10 @@
 @endsection
 
 @section('breadcrumbs')
-    <div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Edit Stakeholder</h2>
+                <h2 class="content-header-title float-start mb-0">Create External Stakeholders</h2>
                 <div class="breadcrumb-wrapper">
                     {{ Breadcrumbs::render('sites.stakeholders.edit', $site_id) }}
                 </div>

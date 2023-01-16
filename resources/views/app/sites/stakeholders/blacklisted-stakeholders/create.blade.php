@@ -5,7 +5,7 @@
     {{ Breadcrumbs::view('breadcrumbs::json-ld', 'sites.blacklisted-stakeholders.index', $site_id) }}
 @endsection
 
-@section('page-title', 'Create BlackList Stack Holder')
+@section('page-title', 'Create BlackList StackHolder')
 
 @section('page-vendor')
 @endsection
@@ -18,12 +18,12 @@
 @endsection
 
 @section('breadcrumbs')
-    <div class="content-header-left col-md-9 col-12 mb-2">
+    <div class="content-header-left col-md-12 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Create BlackList StackHolder</h2>
+                <h2 class="content-header-title float-start mb-0">Create BlackList StackHolder </h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('sites.blacklisted-stakeholders.index', $site_id) }}
+                    {{ Breadcrumbs::render('sites.blacklisted-stakeholders.create', $site_id) }}
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
                                         <button type="submit"
                                             class="btn btn-relief-outline-success w-100 waves-effect waves-float waves-light buttonToBlockUI me-1">
                                             <i data-feather='save'></i>
-                                            Save 
+                                            Save
                                         </button>
                                     @endcan
 

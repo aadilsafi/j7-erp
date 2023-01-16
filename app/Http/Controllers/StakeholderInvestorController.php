@@ -74,7 +74,7 @@ class StakeholderInvestorController extends Controller
     public function store(Request $request,$site_id)
     {
         //
-        // try {
+        try {
             if (!request()->ajax()) {
 
                 $inputs = $request->all();
@@ -86,9 +86,9 @@ class StakeholderInvestorController extends Controller
             } else {
                 abort(403);
             }
-        // } catch (Exception $ex) {
-        //     return redirect()->route('sites.investors-deals.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
-        // }
+        } catch (Exception $ex) {
+            return redirect()->route('sites.investors-deals.create', ['site_id' => encryptParams($site_id)])->withDanger(__('lang.commons.something_went_wrong'));
+        }
     }
 
     /**

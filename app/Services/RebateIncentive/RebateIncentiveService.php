@@ -140,7 +140,7 @@ class RebateIncentiveService implements RebateIncentiveInterface
                 'id' =>$inputs['dealer_id'],
             ], $stakeholderData);
 
-            if ($inputs['dealer_id'] == 0) {
+            if ($inputs['dealer_id'] == 0 || $inputs['dealer_id'] == null) {
                 $stakeholderTypeCode = Str::of($stakeholder->id)->padLeft(3, '0');
                 $stakeholderTypeData  = [
                     [
@@ -180,6 +180,14 @@ class RebateIncentiveService implements RebateIncentiveInterface
                         'type' => StakeholderTypeEnum::LEAD->value,
                         'stakeholder_code' => StakeholderTypeEnum::LEAD->value . '-' . $stakeholderTypeCode,
                         'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                    [
+                        'stakeholder_id' => $stakeholder->id,
+                        'type' => StakeholderTypeEnum::INVESTOR->value,
+                        'stakeholder_code' => StakeholderTypeEnum::INVESTOR->value . '-' . $stakeholderTypeCode,
+                        'status' => 0,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ],

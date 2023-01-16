@@ -172,8 +172,8 @@ class StakeholderInvestorsDatatable extends DataTable
         $columns = [
             Column::make('serial_number')->title('Sr#')->addClass('text-nowrap'),
             Column::make('doc_no')->title('Document#')->addClass('text-nowrap'),
-            Column::computed('full_name')->name('investor.full_name')->title('Investor Name')->searchable(true)->orderable(true),
-            Column::computed('cnic')->name('investor.cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(true),
+            Column::computed('full_name')->name('investor.full_name')->title('Investor Name')->searchable(true)->orderable(false),
+            Column::computed('cnic')->name('investor.cnic')->title('Identity No #')->addClass('text-nowrap')->searchable(true)->orderable(false),
             Column::computed('contact')->name('investor.mobile_contact')->title('Contact')->searchable(false)->orderable(false),
             Column::make('total_received_amount')->title('Amount Receivable')->addClass('text-nowrap'),
             Column::make('total_payable_amount')->title('Amount Payable')->addClass('text-nowrap'),

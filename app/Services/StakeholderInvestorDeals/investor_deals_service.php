@@ -51,7 +51,7 @@ class investor_deals_service implements investor_deals_interface
 
 
             if (!isset($inputs['stakeholder_as'])) {
-                $leadStakeholder = Stakeholder::find($inputs['dealer_id']);
+                $leadStakeholder = Stakeholder::find($inputs['investor_id']);
                 $stakeholder_as = $leadStakeholder->stakeholder_as;
             } else {
                 $stakeholder_as = $inputs['stakeholder_as'];
